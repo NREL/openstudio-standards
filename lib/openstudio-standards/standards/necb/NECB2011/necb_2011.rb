@@ -455,7 +455,7 @@ class NECB2011 < Standard
 
     # output_meters = check_output_meters(output_meters: output_meters) if oerd_utility_pricing
     assign_building_activity(model)
-    assign_building_structure(model, @activity.category)
+    assign_building_structure(model, @activity.category, @activity.liveload)
     apply_loads(model: model,
                 lights_type: lights_type,
                 lights_scale: lights_scale,
@@ -1061,11 +1061,12 @@ class NECB2011 < Standard
   # Assigns BTAP building STRUCTURE.
   #
   # @param model [OpenStudio::Model::Model] a model
-  # @param category [String] a building category (e.g. "residential")
+  # @param cat [:to_s] a building category (e.g. "residential")
+  # @param lload [:to_f] non-occupant liveload (kg/m2 of floor area)
   #
   # @return [Symbol] BTAP building STRUCTURE (see logs if failed)
-  def assign_building_structure(model = nil, category = "commerce")
-    @structure = BTAP::Structure.new(model, category)
+  def assign_building_structure(model = nil, cat = "commerce", lload = 30)
+    @structure = BTAP::Structure.new(model, cat, lload)
   end
 
   ##

@@ -34,15 +34,15 @@ class NECB_Activity_Tests < Minitest::Test
     @epws = ["CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw"]
 
     @buildings = [
-      # 'FullServiceRestaurant',
-      # 'HighriseApartment',
+      'FullServiceRestaurant',
+      'HighriseApartment',
       'Hospital',
       'LargeHotel',
       'LargeOffice',
-      # 'LEEPMidriseApartment',
-      # 'LEEPPointTower',
-      # 'LEEPTownHouse',
-      # 'LEEPMultiTower',
+      'LEEPMidriseApartment',
+      'LEEPPointTower',
+      'LEEPTownHouse',
+      'LEEPMultiTower',
       'LowRiseApartment',
       'MediumOffice',
       'MidriseApartment',
@@ -137,14 +137,12 @@ class NECB_Activity_Tests < Minitest::Test
             if attics.include?(building)
               err_msg = "BTAP::Activity #{id} conditioned (#{cas})?"
               assert_equal(prop, "unconditioned", err_msg)
-              fdback << "'#{space.nameString}' : UNCONDITIONED"
             else
               err_msg = "BTAP::Activity #{id} plenum (#{cas})?"
               assert(plnums.include?(building), err_msg)
 
               err_msg = "BTAP::Activity #{id} unconditioned (#{cas})?"
               assert_equal(prop, "nonresconditioned", err_msg)
-              fdback << "'#{space.nameString}' : INDIRECTLYCONDITIONED"
             end
           end
 
@@ -156,6 +154,10 @@ class NECB_Activity_Tests < Minitest::Test
           assert(a.activity.is_a?(String), err_msg)
           err_msg = "BTAP::Activity category (#{cas})?"
           assert(a.category.is_a?(String), err_msg)
+          err_msg = "BTAP::Activity liveload (#{cas})?"
+          assert(a.liveload.is_a?(Numeric), err_msg)
+
+          load = "liveload #{a.liveload.round} kg/m2"
 
           if a.activity.empty?
             fdback << "Empty BTAP::Activity activity (#{cas})!"
@@ -167,10 +169,8 @@ class NECB_Activity_Tests < Minitest::Test
             fdback << "Common BTAP::Activity (#{cas})!"
             @test_passed = false
           else
-            fdback << "#{cas} : #{a.activity} (#{a.category})"
+            fdback << "#{cas} : #{a.activity} (#{a.category}) : #{load}"
           end
-
-
 
           a.feedback[:logs].each { |log| puts log }
         end                   # |template |

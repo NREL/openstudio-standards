@@ -68,13 +68,13 @@ module BTAP
     if File.exists?(@@data[:bldg][:file])
       table = CSV.open(@@data[:bldg][:file], headers: true).read
 
-      # 35 unique entries (rows), 5 columns per row, e.g.:
+      # 35 unique entries (rows), 6 columns per row, e.g.:
       #    COL1 COL2     COL3  COL4                             COL5        COL6
       #  ______ ____ ________ _____ ________________________________ ___________
-      #  "care,  25, housing, care, health/clinic/multi/residential, residential"
+      #  "care,  20, housing, care, health/clinic/multi/residential, residential"
       #
       #   COL1: BTAP building ACTIVITY e.g. "care"
-      #   COL2: NECB occupancy density e.g. 25 m2/occupant
+      #   COL2: non-occupant liveload  e.g. 20 kg/m2 (1/8 of NECB min. liveload)
       #   COL2: BTAP building CATEGORY e.g. "housing"
       #   COL3: selected sub-string(s) e.g. "care", as in "Long-term care"
       #   COL4: rejected sub-string(s) e.g. "health", "multi", "residential"
@@ -103,12 +103,12 @@ module BTAP
       table.each do |row|
         key = row[0]
 
-        @@data[:bldg][:activity][key]             = {}
-        @@data[:bldg][:activity][key][:density  ] = row[1].to_i
-        @@data[:bldg][:activity][key][:category ] = row[2].to_s
-        @@data[:bldg][:activity][key][:includes ] = row[3].to_s.split("/")
-        @@data[:bldg][:activity][key][:excludes ] = row[4].to_s.split("/")
-        @@data[:bldg][:activity][key][:fallback ] = row[5].to_s
+        @@data[:bldg][:activity][key]            = {}
+        @@data[:bldg][:activity][key][:liveload] = row[1].to_f
+        @@data[:bldg][:activity][key][:category] = row[2].to_s
+        @@data[:bldg][:activity][key][:includes] = row[3].to_s.split("/")
+        @@data[:bldg][:activity][key][:excludes] = row[4].to_s.split("/")
+        @@data[:bldg][:activity][key][:fallback] = row[5].to_s
       end
 
       # Keep CSV table. Ensure building activities & categories uniqueness. Add
@@ -209,6 +209,9 @@ module BTAP
     # @return [String] building type CATEGORY (e.g. "industry")
     attr_reader :category
 
+    # @return [Float] expected non-occupant liveload (e.g. 90 kg/m2)
+    attr_reader :liveload
+
     # @return [Hash] logged messages
     attr_reader :feedback
 
@@ -275,6 +278,7 @@ module BTAP
       # Determine activities of occupied spaces in the model, then building.
       @activities = self.getSpaceActivities(model)
       @activity   = self.getBuildingActivity(model)
+      @liveload   = data[:bldg][:activity][@activity][:liveload]
 
       # Assign building category.
       unless @activity.empty?
@@ -489,24 +493,4 @@ module BTAP
       activity
     end
   end
-
-  # ---- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---- #
-  # Temporary testing.
-  # require "openstudio"
-
-  # model    = OpenStudio::Model::Model.new
-  # activity = BTAP::Activity.new(model)
-
-  # puts activity.data[:space][:table].headers
-  # puts activity.data[:bldg][:activity].size # 34
-  # puts activity.data[:bldg][:activities].size # 35 = 34 + "common"
-
-  # activity.data[:bldg][:activity].each do |k, v|
-  #   puts "#{k} : #{v[:includes]}"
-  #   puts "#{k} : #{v[:fallback].class} : #{v[:fallback]}"
-  # end
-
-  # activity.data[:space][:activity].values.each_with_index do |v, i|
-  #   raise "BLDG?" unless activity.data[:bldg][:activities].include?(v[:bldgtype])
-  # end
 end

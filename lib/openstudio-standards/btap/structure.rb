@@ -291,6 +291,12 @@ module BTAP
     # @return [Symbol] building finish (e.g. :light)
     attr_reader :finish
 
+    # @return [Float] estimated dead load, in kg/m2 of floor area
+    attr_reader :deadload
+
+    # @return [Float] estimated non-occupant live load, in kg/m2 of floor area
+    attr_reader :liveload
+
     # @return [Float] calculated embodied carbon of STRUCTURE (CO2-e kg/m2)
     attr_reader :co2
 
@@ -302,11 +308,12 @@ module BTAP
     # Initialize BTAP STRUCTURE parameters.
     #
     # @param model [OpenStudio::Model::Model] a model
-    # @param cat [String] building category
-    def initialize(model = nil, cat = "commerce")
-      mth        = "BTAP::Structure::#{__callee__}"
-      @feedback  = {logs: []}
-      lgs        = @feedback[:logs]
+    # @param cat [:to_s] building category
+    # @param lload [:to_f] non-occupant liveload (kg/m2 of floor area)
+    def initialize(model = nil, cat = "commerce", lload = 30)
+      mth       = "BTAP::Structure::#{__callee__}"
+      @feedback = {logs: []}
+      lgs       = @feedback[:logs]
 
       unless model.is_a?(OpenStudio::Model::Model)
         lgs << "Invalid or empty OpenStudio model (#{mth})"
@@ -330,10 +337,20 @@ module BTAP
         return
       end
 
-      bldg       = model.getBuilding
+      if lload.respond_to?(:to_f)
+        lload = lload.to_f
+      else
+        lgs << "Invalid live load (kg/m2): #{lload.class} (#{mth})"
+        return
+      end
+
+      # Cap internal mass density to 1000 kg/m3, and thickness to 6".
+      rho  = 1000.0
+      th   = 0.150
+      bldg = model.getBuilding
+
       @category  = cat
       @structure = data[:category][cat][:small]
-      @co2       = 0
 
       # Switch to :large structure, instead of default :small.
       if data[:category][cat].key?(:stories)
@@ -376,6 +393,179 @@ module BTAP
       @finish = :light
       @finish = :none  if @framing == :cmu
       @finish = :heavy if @category == "robust"
+
+      # 'Dead load' refers to the self-weight of structural elements of a
+      # building, as well as non-structural fixtures that are permanently
+      # attached to the building. They are considered 'dead' as they typically
+      # do not move around during the life of the building. If/once a building
+      # is resold, its new owners recover dead load as 'real estate assets'.
+      # Dead load typically falls under design scopes of architects/engineers.
+      # Although there are obvious design constraints to consider (e.g. fire
+      # safety, $), designers do get to make design decisions when it comes to
+      # dead load, e.g.:
+      #   - between steel vs concrete post/beam/slab structural options
+      #   - between light-gauge steel vs CMU wall construction options
+      #   - between foam vs fibrous insulation options
+      #
+      # Most dead load is modelled explicitely in OpenStudio, like envelope and
+      # interzone sub/surfaces. Rough estimates of embodied carbon (in CO2-e
+      # kg/m2) can be reasonably associated to selected construction assemblies
+      # (based on m2), such as the embodied carbon of chosen insulation
+      # materials or framing options. Other dead load, like lighting and HVAC,
+      # are not modelled explicitely. Here, the 'deadload' attribute represents
+      # a mass floor area density estimate (kg/m2) of non-modelled structural
+      # and non-structural items like fixed furniture, partitions, columns,
+      # beams and bracing.
+
+      # First, isolate occupied spaces.
+      cspaces  = model.getSpaces.select { |sp| sp.partofTotalFloorArea }
+      floor_m2 = TBD.facets(cspaces, "all", "floor").map(&:grossArea).sum
+
+      # In OpenStudio, partitions are usually limited to interzone walls between
+      # zones, in order to save on simulation times. Partitions typically absent
+      # from a model include walls surrounding lobbies, stairwells, WCs and
+      # technical rooms, as well as separations between similar rooms (e.g.
+      # multiple, side-by-side enclosed offices, a row of hotel rooms).
+      # Comparing BTAP prototype models and samples of building plans for
+      # similar facilities suggest matching modelled partition m2 (or total
+      # floor m2) as a suitable basis to determine the weight of non-modelled
+      # partitions. As this estimate may be more on the high side for many
+      # prototype models, fixed appliances (e.g. fixtures, counters, doors and
+      # windows) are considered included.
+      # partition_m2 = TBD.facets(cspaces, "surface", "wall").map(&:grossArea).sum
+      # partition_m2 = floor_m2 if partition_m2 > floor_m2
+      partition_m2 = floor_m2
+
+      # For wood-framed partitions, representative material volumes (per m2):
+      #  - 16% wood-framing: 0.0224 m3/m2 x 540 kg/m3 =  12.1 kg/m2 (35.7%)
+      #  - 84% insulation  : 0.1176 m3/m2 x  19 kg/m3 =   2.2 kg/m2 ( 6.5%)
+      #  - drywall (2x)    : 0.0250 m3/m2 x 785 kg/m3 =  19.6 kg/m2 (57.8%)
+      #                                               =  33.9 kg/m2
+      #
+      # For steel-framed partitions, representative material volumes (per m2):
+      #  - 1% steel-framing:   1.25 x 2.5 x 1.5 kg/m  =   4.7 kg/m2 (17.3%)
+      #  - 99% insulation  : 0.1504 m3/m2 x  19 kg/m3 =   2.9 kg/m2 (10.7%)
+      #  - drywall (2x)    : 0.0250 m3/m2 x 785 kg/m3 =  19.6 kg/m2 (72.0%)
+      #                                               =  27.2 kg/m2
+      # For CMU partitions, representative material volumes (per m2):
+      #  - 10" medium weight CMU                      = 250.0 kg/m2 (approx.)
+
+      case @framing
+      when :cmu  then partition_kgm2 = 250.0 * partition_m2 / floor_m2
+      when :wood then partition_kgm2 =  33.9 * partition_m2 / floor_m2
+      else            partition_kgm2 =  27.2 * partition_m2 / floor_m2
+      end
+
+      # Structural dead load - not explicitely modelled - include columns,
+      # bracing, connectors, etc. For BTAP purposes, some basic assumptions are
+      # required:
+      #   - 9m x 9m spans
+      #   - approx. 15 columns / 1000 m2 of floor area
+      #   - approx. 14" x 14" columns (0.126 m2)
+      #     - if structure :steel or :metal (HP14x102):
+      #       - 152 kg/m (x 125% for bracing, etc.)   = 190 kg/m
+      #     - if structure :concrete
+      #       - concrete: 2240 kg/m3 x 0.126 m2 x 97% = 274 kg/m
+      #       - rebar:    7850 kg/m3 x 0.126 m2 x  3% =  30 kg/m
+      #                                               = 304 kg/m (+11%)
+      #     - if structure :cmu (mix of load bearing walls + smaller pours)
+      #       - 1/2 :concrete                         = 150 kg/m
+      #     - if structure :clt
+      #       - wood:     540 kg/m3 x 0.126 m2 x 97%  =  66 kg/m
+      #       - anchors: 7850 kg/m3 x 0.126 m2 x 3%   =  30 kg/m
+      #                                               =  96 kg/m (+45%)
+      #     - if structure :wood
+      #       - 1/2 :clt                              =  48 kg/m
+
+      # Fetch approx. total column height (m) in building (including plenums).
+      column_m = 0
+
+      model.getSpaces.each do |space|
+        column_m += BTAP::Geometry::Spaces.space_height(space) * 15 / 1000
+      end
+
+      case @structure
+      when :steel then column_kgm2 = 190 * column_m / floor_m2
+      when :metal then column_kgm2 = 190 * column_m / floor_m2
+      when :cmu   then column_kgm2 = 150 * column_m / floor_m2
+      when :wood  then column_kgm2 =  48 * column_m / floor_m2
+      when :clt   then column_kgm2 =  96 * column_m / floor_m2
+      else             column_kgm2 = 304 * column_m / floor_m2
+      end
+
+      @deadload = partition_kgm2 + column_kgm2
+
+      # The 'liveload' attribute represents the mass area density (kg/m2) of
+      # dynamic, yet uniform floor live load from non-permament items like
+      # furniture, documents, copiers and computers, i.e. not real estate
+      # assets. Architects and engineers deal with (fixed) live load as design
+      # constraint - not as potential design option. Non-occupant live load is
+      # taken into account when setting internal mass. Yet as a non-real estate
+      # item, live load is not considered when tallying embodied carbon.
+      #
+      # Within BTAP, non-occupant live load estimates are stored in the
+      # "NECB_building_types.csv" file, parsed/stored in a BTAP::Activity
+      # instance (1x per building activity). These estimates are initially based
+      # on NBC Part 4 minimum live load requirements (kPa), as well as data from
+      # established structural engineering resources. Minimum live load kPa (or
+      # psf) estimates, corresponding to hundreds of kg/m2 of floor area, are
+      # strictly for structural dimensioning/safety purposes. They are not (or
+      # are very rarely) representative of actual day-to-day loads. Back of the
+      # envelope calculations suggest reducing live load code requirements down
+      # to 1/8th of their initial values for internal mass purposes. These
+      # code requirements also include occupants, which should be set aside -
+      # by substracting the total building population mass:
+      #
+      #   - NECB building occupant density (occupant/m2) x avg. 80 kg/adult
+      #
+      # This gives for instance a resulting live load estimate of 20 kg/m2 for
+      # housing (low) and a 90 kg/m2 for manufacturing (high). It is obviously
+      # challenging to pin down a single-number estimate for several building
+      # types, including bigbox retail and warehousing. Grain of salt.
+      @liveload = lload
+
+      # Add internal mass objects, 1x instance per occupied space.
+      cspaces.each do |space|
+        matID = "#{space.nameString} : Mass Material"
+        conID = "#{space.nameString} : Mass Construction"
+        defID = "#{space.nameString} : Mass Definition"
+        mssID = "#{space.nameString} : Mass"
+
+        # Calculate total mass of internal mass (kg), then thickness.
+        kg = space.floorArea * (@liveload + @deadload)
+        # th = kg / rho / space.floorArea
+        m2 = kg / rho / th
+
+        mat = OpenStudio::Model::StandardOpaqueMaterial.new(model)
+        mat.setName(matID)
+        mat.setRoughness("MediumRough")
+        mat.setThickness(th)
+        mat.setConductivity(1.0)
+        mat.setDensity(rho)
+        mat.setSpecificHeat(1000)
+        mat.setThermalAbsorptance(0.9)
+        mat.setSolarAbsorptance(0.7)
+        mat.setVisibleAbsorptance(0.7)
+
+        con = OpenStudio::Model::Construction.new(model)
+        con.setName(conID)
+        layers = OpenStudio::Model::MaterialVector.new
+        layers << mat
+        con.setLayers(layers)
+
+        df = OpenStudio::Model::InternalMassDefinition.new(model)
+        df.setName(defID)
+        df.setConstruction(con)
+        df.setSurfaceArea(space.floorArea)
+        df.setSurfaceArea(m2)
+
+        mass = OpenStudio::Model::InternalMass.new(df)
+        mass.setName(mssID)
+        mass.setSpace(space)
+      end
+
+      # @todo
+      @co2 = 0
 
       true
     end

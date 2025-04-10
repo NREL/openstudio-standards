@@ -156,10 +156,49 @@ class NECB_Structure_Tests < Minitest::Test
           assert(s.category.is_a?(String), err_msg)
           err_msg = "BTAP::Structure structure #{s.structure.class} (#{cas})?"
           assert(s.structure.is_a?(Symbol), err_msg)
+          err_msg = "BTAP::Structure liveload #{s.liveload.class} (#{cas})?"
+          assert(s.liveload.respond_to?(:to_f), err_msg)
+          err_msg = "BTAP::Structure deadload #{s.deadload.class} (#{cas})?"
+          assert(s.deadload.respond_to?(:to_f), err_msg)
           err_msg = "BTAP::Structure missing categories (#{cas})?"
           assert(s.data.key?(:category), err_msg)
           err_msg = "BTAP::Structure missing structures (#{cas})?"
           assert(s.data.key?(:structure), err_msg)
+
+          tload    = s.liveload + s.deadload
+          cspaces  = model.getSpaces.select { |sp| sp.partofTotalFloorArea }
+          floor_m2 = TBD.facets(cspaces, "all", "floor").map(&:grossArea).sum
+          kg       = 0
+
+          model.getInternalMasss.each do |imass|
+            id      = imass.nameString
+            m2      = imass.surfaceArea
+            err_msg = "BTAP::Structure #{id} (#{cas})?"
+            refute_empty(m2, err_msg)
+            m2      = m2.get
+            c       = imass.internalMassDefinition.construction
+            err_msg = "BTAP::Structure #{id} construction (#{cas})?"
+            refute_empty(c, err_msg)
+            c       = c.get.to_LayeredConstruction
+            err_msg = "BTAP::Structure #{id} layered construction (#{cas})?"
+            refute_empty(c, err_msg)
+            layers  = c.get.layers
+            err_msg = "BTAP::Structure #{id} construction layers (#{cas})?"
+            assert(layers.size == 1, err_msg)
+            mat     = layers.first.to_StandardOpaqueMaterial
+            err_msg = "BTAP::Structure #{id} material (#{cas})?"
+            refute_empty(mat, err_msg)
+            mat     = mat.get
+            m3      = mat.thickness * m2
+            kg     += m3 * mat.density
+          end
+
+          kgm2 = kg / floor_m2
+
+          unless kgm2.round == (s.liveload + s.deadload).round
+            fdback << "BTAP::Structure internal mass #{kgm2.round} (#{cas})!"
+            @test_passed = false
+          end
 
           unless s.data[:category].include?(s.category)
             fdback << "BTAP::Structure invalid category #{s.category} (#{cas})!"
@@ -171,15 +210,61 @@ class NECB_Structure_Tests < Minitest::Test
             @test_passed = false
           end
 
-          fdback << "#{cas} : #{s.category} (#{s.structure}, #{nst})" if @test_passed
+          if @test_passed
+            fdback << "#{cas} : #{s.category} (#{s.structure}, #{nst}) : #{kgm2.round} kg/m2 (#{s.framing})"
+          end
 
           s.feedback[:logs].each { |log| puts log }
         end                   # |template |
       end                     # |building |
     end                       # |epw      |
 
-    # Temporary.
     fdback.each { |msg| puts msg }
+    # If partition m2 (deadload) based floor space m2 or modelled partition m2:
+    # FullServiceRestaurant  : commerce (steel,     1 storey ) : 50 kg/m2 (steel)
+    # QuickServiceRestaurant : commerce (steel,     1 storey ) : 50 kg/m2 (steel)
+    # LEEPTownHouse          : housing  (wood,      4 stories) : 47 kg/m2 (wood )
+    # LowRiseApartment       : housing  (wood,      3 stories) : 47 kg/m2 (wood )
+    # MidriseApartment       : housing  (wood,      4 stories) : 47 kg/m2 (wood )
+    # HighriseApartment      : housing  (concrete, 10 stories) : 40 kg/m2 (steel)
+    # LEEPMidriseApartment   : housing  (concrete,  6 stories) : 40 kg/m2 (steel)
+    # LEEPMultiTower         : housing  (concrete, 60 stories) : 40 kg/m2 (steel)
+    # LEEPPointTower         : housing  (concrete, 23 stories) : 40 kg/m2 (steel)
+    # SmallHotel             : lodging  (concrete,  4 stories) : 48 kg/m2 (steel)
+    # LargeHotel             : lodging  (concrete,  6 stories) : 48 kg/m2 (steel)
+    # Hospital               : public   (concrete,  5 stories) : 47 kg/m2 (steel)
+    # Outpatient             : public   (concrete,  3 stories) : 48 kg/m2 (steel)
+    # SmallOffice            : commerce (steel,     1 storey ) : 48 kg/m2 (steel)
+    # MediumOffice           : commerce (steel,     3 stories) : 48 kg/m2 (steel)
+    # LargeOffice            : commerce (steel,    12 stories) : 48 kg/m2 (steel)
+    # RetailStandalone       : commerce (steel,     1 storey ) : 65 kg/m2 (steel)
+    # RetailStripMall        : commerce (steel,     1 storey ) : 65 kg/m2 (steel)
+    # PrimarySchool          : public   (steel,     1 storey ) : 41 kg/m2 (steel)
+    # SecondarySchool        : public   (steel,     2 stories) : 41 kg/m2 (steel)
+    # Warehouse              : industry (steel,     1 storey ) : 88 kg/m2 (steel)
+
+    # If partition m2 (deadload) strictly-based on floor space m2:
+    # FullServiceRestaurant  : commerce (steel,     1 storey ) : 30 kg/m2 (steel)
+    # QuickServiceRestaurant : commerce (steel,     1 storey ) : 34 kg/m2 (steel)
+    # LEEPTownHouse          : housing  (wood,      4 stories) : 47 kg/m2 (wood )
+    # LowRiseApartment       : housing  (wood,      3 stories) : 47 kg/m2 (wood )
+    # MidriseApartment       : housing  (wood,      4 stories) : 47 kg/m2 (wood )
+    # LEEPMidriseApartment   : housing  (concrete,  6 stories) : 40 kg/m2 (steel)
+    # HighriseApartment      : housing  (concrete, 10 stories) : 40 kg/m2 (steel)
+    # LEEPMultiTower         : housing  (concrete, 60 stories) : 40 kg/m2 (steel)
+    # LEEPPointTower         : housing  (concrete, 23 stories) : 40 kg/m2 (steel)
+    # SmallHotel             : lodging  (concrete,  4 stories) : 48 kg/m2 (steel)
+    # LargeHotel             : lodging  (concrete,  6 stories) : 42 kg/m2 (steel)
+    # Hospital               : public   (concrete,  5 stories) : 44 kg/m2 (steel)
+    # Outpatient             : public   (concrete,  3 stories) : 48 kg/m2 (steel)
+    # SmallOffice            : commerce (steel,     1 storey ) : 47 kg/m2 (steel)
+    # MediumOffice           : commerce (steel,     3 stories) : 35 kg/m2 (steel)
+    # LargeOffice            : commerce (steel,    12 stories) : 30 kg/m2 (steel)
+    # RetailStandalone       : commerce (steel,     1 storey ) : 55 kg/m2 (steel)
+    # RetailStripMall        : commerce (steel,     1 storey ) : 65 kg/m2 (steel)
+    # PrimarySchool          : public   (steel,     1 storey ) : 37 kg/m2 (steel)
+    # SecondarySchool        : public   (steel,     2 stories) : 33 kg/m2 (steel)
+    # Warehouse              : industry (steel,     1 storey ) : 67 kg/m2 (steel)
 
     # Save test results to file.
     # File.open(@test_results_file, 'w') do |f|
