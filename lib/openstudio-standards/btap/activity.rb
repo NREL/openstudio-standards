@@ -74,7 +74,7 @@ module BTAP
       #  "care,  20, housing, care, health/clinic/multi/residential, residential"
       #
       #   COL1: BTAP building ACTIVITY e.g. "care"
-      #   COL2: non-occupant liveload  e.g. 20 kg/m2 (1/8 of NECB min. liveload)
+      #   COL2: non-occupant liveload  e.g. 20 kg/m2, ~1/12 of NECB min liveload
       #   COL2: BTAP building CATEGORY e.g. "housing"
       #   COL3: selected sub-string(s) e.g. "care", as in "Long-term care"
       #   COL4: rejected sub-string(s) e.g. "health", "multi", "residential"
