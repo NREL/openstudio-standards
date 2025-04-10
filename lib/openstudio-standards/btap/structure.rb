@@ -512,14 +512,14 @@ module BTAP
       # strictly for structural dimensioning/safety purposes. They are not (or
       # are very rarely) representative of actual day-to-day loads. Back of the
       # envelope calculations suggest reducing live load code requirements down
-      # to 1/8th of their initial values for internal mass purposes. These
+      # to ~1/12th of their initial values for internal mass purposes. These
       # code requirements also include occupants, which should be set aside -
       # by substracting the total building population mass:
       #
       #   - NECB building occupant density (occupant/m2) x avg. 80 kg/adult
       #
-      # This gives for instance a resulting live load estimate of 20 kg/m2 for
-      # housing (low) and a 90 kg/m2 for manufacturing (high). It is obviously
+      # This gives for instance a resulting live load estimate of 23 kg/m2 for
+      # housing (low) and a 61 kg/m2 for manufacturing (high). It is obviously
       # challenging to pin down a single-number estimate for several building
       # types, including bigbox retail and warehousing. Grain of salt.
       @liveload = lload
