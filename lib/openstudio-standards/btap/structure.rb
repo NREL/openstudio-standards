@@ -135,7 +135,6 @@ module BTAP
     #   - typical engineered wood joists + FINISH
     #   - similar engineered wood rafters + FINISH (if flat or cathedral roof)
     #   - anchored engineered wood joist balconies
-    #   - standard 2"x4" wood-framed interzone walls
     #
     # FRAMING may also determine above-grade exterior wall composition (e.g.
     # wool-insulated wood-framed exterior walls, if FRAMING == "wood"). This
@@ -186,30 +185,6 @@ module BTAP
     @@data[:structure][:cmu     ][:frames] = [:wood, :steel]
     @@data[:structure][:wood    ][:frames] = [:steel       ]
     @@data[:structure][:clt     ][:frames] = [:clt, :steel ]
-
-    # --- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- --- #
-    # STRUCTURE options hold "co2" carbon intensities (in CO2-e kg/m2), which
-    # are placeholders for now (to be replaced at some point by 3rd-party
-    # estimates). They're meant to specifically track the carbon footprint of
-    # the STRUCTURE (not the envelope, nor interior partitions, nor integrated
-    # furniture). These estimates should include the embodied carbon of
-    # above-grade, structural floors per se, in addition to the embodied carbon
-    # of structural elements that can't (or are unlikely to) be represented in
-    # an OpenStudio model, e.g.:
-    #   - columns
-    #   - bracing
-    #   - stairwells and elevator shafts
-    @@data[:structure][:steel   ][:co2] = 203
-    @@data[:structure][:metal   ][:co2] = 202
-    @@data[:structure][:concrete][:co2] = 205
-    @@data[:structure][:cmu     ][:co2] = 204
-    @@data[:structure][:wood    ][:co2] = 200
-    @@data[:structure][:clt     ][:co2] = 201
-
-    # Once refined, these CO2-e kg/m2 estimates are expected to differ
-    # considerably between STRUCTURE options, possibly affected by regional
-    # considerations (i.e. national vs local estimates), number of building
-    # stories, structural requirements, etc. - to be set parametrically.
 
     # --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- #
     # To simplify data management, building TYPES (e.g. those listed in Table
@@ -297,12 +272,11 @@ module BTAP
     # @return [Float] estimated non-occupant live load, in kg/m2 of floor area
     attr_reader :liveload
 
-    # @return [Float] calculated embodied carbon of STRUCTURE (CO2-e kg/m2)
+    # @return [Hash] calculated embodied carbon (CO2-e kg)
     attr_reader :co2
 
     # @return [Hash] logged messages
     attr_reader :feedback
-
 
     ##
     # Initialize BTAP STRUCTURE parameters.
@@ -415,11 +389,16 @@ module BTAP
       # are not modelled explicitely. Here, the 'deadload' attribute represents
       # a mass floor area density estimate (kg/m2) of non-modelled structural
       # and non-structural items like fixed furniture, partitions, columns,
-      # beams and bracing.
+      # beams, shear walls and bracing.
 
-      # First, isolate occupied spaces.
-      cspaces  = model.getSpaces.select { |sp| sp.partofTotalFloorArea }
-      floor_m2 = TBD.facets(cspaces, "all", "floor").map(&:grossArea).sum
+      # First, isolate occupied spaces & floors, as well as exposed surfaces.
+      cspaces   = model.getSpaces.select { |sp| sp.partofTotalFloorArea }
+      floor_m2  = TBD.facets(cspaces, "all", "floor").map(&:grossArea).sum
+      ofloor_m2 = TBD.facets(cspaces, "outdoors", "floor").map(&:grossArea).sum
+      ifloor_m2 = TBD.facets(cspaces, "surface", "floor").map(&:grossArea).sum
+      roof_m2   = TBD.facets(cspaces, "outdoors", "roofceiling").map(&:grossArea).sum
+      wall_m2   = TBD.facets(cspaces, "outdoors", "walls").map(&:grossArea).sum
+      iwall_m2  = TBD.facets(cspaces, "surface", "wall").map(&:grossArea).sum
 
       # In OpenStudio, partitions are usually limited to interzone walls between
       # zones, in order to save on simulation times. Partitions typically absent
@@ -432,7 +411,7 @@ module BTAP
       # partitions. As this estimate may be more on the high side for many
       # prototype models, fixed appliances (e.g. fixtures, counters, doors and
       # windows) are considered included.
-      # partition_m2 = TBD.facets(cspaces, "surface", "wall").map(&:grossArea).sum
+      # partition_m2 = iwall_m2
       # partition_m2 = floor_m2 if partition_m2 > floor_m2
       partition_m2 = floor_m2
 
@@ -533,7 +512,6 @@ module BTAP
 
         # Calculate total mass of internal mass (kg), then thickness.
         kg = space.floorArea * (@liveload + @deadload)
-        # th = kg / rho / space.floorArea
         m2 = kg / rho / th
 
         mat = OpenStudio::Model::StandardOpaqueMaterial.new(model)
@@ -564,18 +542,93 @@ module BTAP
         mass.setSpace(space)
       end
 
-      # @todo
-      @co2 = 0
+      # Embodied CO2-e kg (A1-A3) of a model is tallied separately as follows:
+      @co2              = {}
+      @co2[:structure ] = 0
+      @co2[:insulation] = 0
+      @co2[:cladding  ] = 0
+
+      # The :structure key/value pair includes above grade 'structures' (e.g.
+      # slabs, columns) and 'framing' (e.g. wood-framed vs steel-framed). Why
+      # grouped together? In many smaller-scale facilities, structure and
+      # framing are synonymous, or at least tightly coupled, e.g.:
+      #   - load-bearing wood-framed walls in small-scale residential
+      #   - load-bearing CMU walls in small-scale industrial
+      #   - metal buildings
+      #
+      # Below-grade structures (rebar + poured concrete) are ignored - no
+      # alternative options are considered for the moment, e.g. lower carbon
+      # concrete mixes.
+      #
+      # Upon initialization, only the :structure tally is set. It is assumed
+      # that structure (and main framing) do not change with NECB U-factor
+      # requirements, e.g.:
+      #   - NECB 2011 vs 2020
+      #   - Vancouver vs Calgary
+      #
+      # Once default construction sets are (later) established (+), followed by
+      # TBD uprating assemblies as per NECB 2017 & 2020 requirements (++),
+      # embodied carbon tallies can be updated/reset, which would include:
+      #   - cladding
+      #   - insulation
+      #   - secondary framing (proportional to insulation thicknesses)
+      #
+      #  (+) openstudio-standards/standards/necb/NECB2011/building_envelope.rb
+      # (++) openstudio-standards/btap/bridging.rb
+
+      # Start with occupied floors & roofs (exclude slabs on grade).
+      m2 = ofloor_m2 + ifloor_m2 + roof_m2
+
+      case @structure
+      when :wood     then # engineered I-joists + plywood
+        floor_kg    = 50.0 * m2
+        floor_m3    = floor_kg / 540.0                  # kg/m3
+        floor_co2kg = floor_m3 * 55.0 / floor_kg        # kgCO2-e/kg
+      when :concrete then # 200mm flat slab, 3% rebar + accessories
+        floor_m3    = 0.200 * m2
+        floor_kgm3  = (0.03 * 7850.0) + (0.97 * 2240.0) # kg/m3
+        floor_co2kg = (0.03 *  0.854) + (0.97 *  0.250) # kgCO2-e/kg
+        floor_kg    = floor_m3 * floor_kgm3
+      else # :steel, includes joists/fasteners
+        floor_m3    = 0.125 * m2
+        floor_kgm3  = (0.08 * 7850.0) + (0.92 * 2240.0) # kg/m3
+        floor_co2kg = (0.08 * 0.854 ) + (0.92 *  0.250) # kgCO2-e/kg
+        floor_kg    = floor_m3 * floor_kgm3
+      end
+
+      @co2[:structure] += floor_co2kg * floor_kg
+
+      # Add exposed walls and interior partitions.
+      m2 = wall_m2 + iwall_m2 + partition_m2
+
+      case @framing
+      when :wood then # basic 2x6 construction, 16% of framing cavity
+        wall_kg    =  12.1 * m2
+        wall_co2kg =  55.0 / 540.0 # 55 kgCO2-e/m3 / density
+      when :cmu  then # 250mm medium weight CMU, 200 kgCO2-e/m3
+        wall_m3    = 0.250 * m2    # nominal m3
+        wall_kg    = 250.0 * m2    # volume-weighted concrete/air/grout
+        wall_kgm3  = 0.250 / 250.0
+        wall_co2kg = 200.0 / wall_kgm3 # 200 kgCO2-e/m3 / density
+      else # :steel, 1% lightweight steel-framing
+        wall_kg    =   4.7 * m2
+        wall_co2kg = 2.440
+      end
+
+      @co2[:structure] += wall_co2kg * wall_kg
+
+      # wall_m2  = TBD.facets(cspaces, "outdoors", "walls").map(&:grossArea).sum
+      # iwall_m2  = TBD.facets(cspaces, "surface", "wall").map(&:grossArea).sum
 
       true
     end
 
     ##
-    # Returns embodied carbon, strictly related to building STRUCTURE.
+    # Updates and returns embodied carbon estimates (A1-A3).
     #
     # @param model [OpenStudio::Model::Model] a model
     #
-    # @return [Float] STRUCTURE related embodied carbon (CO2-e kg/m2)
+    # @return [Hash] embodied carbon tally (CO2-e kg, A1-A3)
     def tallyCO2(model)
       mth = "BTAP::Structure::#{__callee__}"
       cl  = OpenStudio::Model::Model
@@ -586,10 +639,9 @@ module BTAP
         return 0
       end
 
-      # - tally above-grade vs below-grade floor areas
-      # - apply associated CO2-e kg/m2
-      # - return
-      #   @todo
+      # @todo
+
+      @co2
     end
   end
 end

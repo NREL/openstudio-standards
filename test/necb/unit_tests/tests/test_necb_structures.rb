@@ -211,7 +211,8 @@ class NECB_Structure_Tests < Minitest::Test
           end
 
           if @test_passed
-            fdback << "#{cas} : #{s.category} (#{s.structure}, #{nst}) : #{kgm2.round} kg/m2 (#{s.framing})"
+            co2m2 = ": #{(s.co2[:structure]/floor_m2).round} kgCO2-e/m2 (A1-A3)"
+            fdback << "#{cas} : #{s.category} (#{s.structure}, #{nst})" + co2m2
           end
 
           s.feedback[:logs].each { |log| puts log }
@@ -220,51 +221,6 @@ class NECB_Structure_Tests < Minitest::Test
     end                       # |epw      |
 
     fdback.each { |msg| puts msg }
-    # If partition m2 (deadload) based floor space m2 or modelled partition m2:
-    # FullServiceRestaurant  : commerce (steel,     1 storey ) : 50 kg/m2 (steel)
-    # QuickServiceRestaurant : commerce (steel,     1 storey ) : 50 kg/m2 (steel)
-    # LEEPTownHouse          : housing  (wood,      4 stories) : 47 kg/m2 (wood )
-    # LowRiseApartment       : housing  (wood,      3 stories) : 47 kg/m2 (wood )
-    # MidriseApartment       : housing  (wood,      4 stories) : 47 kg/m2 (wood )
-    # HighriseApartment      : housing  (concrete, 10 stories) : 40 kg/m2 (steel)
-    # LEEPMidriseApartment   : housing  (concrete,  6 stories) : 40 kg/m2 (steel)
-    # LEEPMultiTower         : housing  (concrete, 60 stories) : 40 kg/m2 (steel)
-    # LEEPPointTower         : housing  (concrete, 23 stories) : 40 kg/m2 (steel)
-    # SmallHotel             : lodging  (concrete,  4 stories) : 48 kg/m2 (steel)
-    # LargeHotel             : lodging  (concrete,  6 stories) : 48 kg/m2 (steel)
-    # Hospital               : public   (concrete,  5 stories) : 47 kg/m2 (steel)
-    # Outpatient             : public   (concrete,  3 stories) : 48 kg/m2 (steel)
-    # SmallOffice            : commerce (steel,     1 storey ) : 48 kg/m2 (steel)
-    # MediumOffice           : commerce (steel,     3 stories) : 48 kg/m2 (steel)
-    # LargeOffice            : commerce (steel,    12 stories) : 48 kg/m2 (steel)
-    # RetailStandalone       : commerce (steel,     1 storey ) : 65 kg/m2 (steel)
-    # RetailStripMall        : commerce (steel,     1 storey ) : 65 kg/m2 (steel)
-    # PrimarySchool          : public   (steel,     1 storey ) : 41 kg/m2 (steel)
-    # SecondarySchool        : public   (steel,     2 stories) : 41 kg/m2 (steel)
-    # Warehouse              : industry (steel,     1 storey ) : 88 kg/m2 (steel)
-
-    # If partition m2 (deadload) strictly-based on floor space m2:
-    # FullServiceRestaurant  : commerce (steel,     1 storey ) : 30 kg/m2 (steel)
-    # QuickServiceRestaurant : commerce (steel,     1 storey ) : 34 kg/m2 (steel)
-    # LEEPTownHouse          : housing  (wood,      4 stories) : 47 kg/m2 (wood )
-    # LowRiseApartment       : housing  (wood,      3 stories) : 47 kg/m2 (wood )
-    # MidriseApartment       : housing  (wood,      4 stories) : 47 kg/m2 (wood )
-    # LEEPMidriseApartment   : housing  (concrete,  6 stories) : 40 kg/m2 (steel)
-    # HighriseApartment      : housing  (concrete, 10 stories) : 40 kg/m2 (steel)
-    # LEEPMultiTower         : housing  (concrete, 60 stories) : 40 kg/m2 (steel)
-    # LEEPPointTower         : housing  (concrete, 23 stories) : 40 kg/m2 (steel)
-    # SmallHotel             : lodging  (concrete,  4 stories) : 48 kg/m2 (steel)
-    # LargeHotel             : lodging  (concrete,  6 stories) : 42 kg/m2 (steel)
-    # Hospital               : public   (concrete,  5 stories) : 44 kg/m2 (steel)
-    # Outpatient             : public   (concrete,  3 stories) : 48 kg/m2 (steel)
-    # SmallOffice            : commerce (steel,     1 storey ) : 47 kg/m2 (steel)
-    # MediumOffice           : commerce (steel,     3 stories) : 35 kg/m2 (steel)
-    # LargeOffice            : commerce (steel,    12 stories) : 30 kg/m2 (steel)
-    # RetailStandalone       : commerce (steel,     1 storey ) : 55 kg/m2 (steel)
-    # RetailStripMall        : commerce (steel,     1 storey ) : 65 kg/m2 (steel)
-    # PrimarySchool          : public   (steel,     1 storey ) : 37 kg/m2 (steel)
-    # SecondarySchool        : public   (steel,     2 stories) : 33 kg/m2 (steel)
-    # Warehouse              : industry (steel,     1 storey ) : 67 kg/m2 (steel)
 
     # Save test results to file.
     # File.open(@test_results_file, 'w') do |f|
