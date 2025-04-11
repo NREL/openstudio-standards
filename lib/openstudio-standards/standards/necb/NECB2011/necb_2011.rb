@@ -1962,7 +1962,7 @@ class NECB2011 < Standard
       space_type_apply_internal_loads(space_type: space_type, lights_type: lights_type, lights_scale: lights_scale)
 
       # Schedules
-      space_type_apply_internal_load_schedules(space_type, true, true, true, true, true, true, true)
+      space_type_apply_internal_load_schedules(space_type, true, true, true, true, true, true)
     end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying space types (loads)')
