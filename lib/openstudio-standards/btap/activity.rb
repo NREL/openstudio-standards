@@ -28,7 +28,7 @@ module BTAP
     # 'categories' - more abstract than NECB-specific building/space types.
     #
     # Consider the following: the NECB2011 designates as "Parking garage"
-    # (builing type) what subsequent NECB editions refer to as "Storage garage".
+    # (building type) what subsequent NECB editions refer to as "Storage garage".
     # From the NECB2020 definitions:
     #
     #   'Storage garage' means a building or part thereof intended for the
@@ -41,7 +41,7 @@ module BTAP
     # building 'activity' (e.g. a facility where vehicles are parked/stored).
     # BTAP should instead rely on abstract 'activity' designations, e.g.
     # 'parking'. This requires module/class methods to extract specific keywords
-    # embedded in existing BTAP NECB building/space type datasets) - see below.
+    # embedded in existing BTAP NECB building/space type datasets - see below.
     #
     # Once 'activity' assignments are completed (for spaces and building),
     # building 'categories' are auto-assigned (e.g. "housing" vs "industry").
@@ -75,30 +75,30 @@ module BTAP
       #
       #   COL1: BTAP building ACTIVITY e.g. "care"
       #   COL2: non-occupant liveload  e.g. 20 kg/m2, ~1/12 of NECB min liveload
-      #   COL2: BTAP building CATEGORY e.g. "housing"
-      #   COL3: selected sub-string(s) e.g. "care", as in "Long-term care"
-      #   COL4: rejected sub-string(s) e.g. "health", "multi", "residential"
-      #   COL5: fallback (if missing)  e.g. "residential"
+      #   COL3: BTAP building CATEGORY e.g. "housing"
+      #   COL4: selected sub-string(s) e.g. "care", as in "Long-term care"
+      #   COL5: rejected sub-string(s) e.g. "health", "multi", "residential"
+      #   COL6: fallback (if missing)  e.g. "residential"
       #
       # Contrary to the aforementioned 'parking' case (where fortunately there
       # is an obvious one-to-one match between "Parking garage" (NECB2011) and
       # "Storage garage" (NECB2020)), there is no direct match here for a
       # long-term care facility when using the NECB2011. In this case, the
-      # fallback 'activity' is 'residential' (COL5). So in any cross-comparison
+      # fallback 'activity' is 'residential' (COL6). So in any cross-comparison
       # of long-term care facilities between NECB editions, the NECB2011 variant
       # would be akin to a MURB.
       #
       # A "long-term care" facility (e.g. NECB2020 building type, currently
-      # found in BTAP datasets) would be identified as beloging to activity
-      # 'care' by catching the substring "care" (COL3) in any of the
-      # NECB buidling types (e.g. JSON, CSV, XLSX files). As the same substring
+      # found in BTAP datasets) would be identified as belonging to activity
+      # 'care' by catching the substring "care" (COL4) in any of the
+      # NECB building types (e.g. JSON, CSV, XLSX files). As the same substring
       # "care" is also found in both NECB building types:
       #
       #   - Long-term care, and
       #   - Health-care clinic
       #
-      # ... rejected substrings (COL4) prune out unwanted picks. By selecting
-      # COL3 substrings, then rejecting COL4 substrings, there should be a
+      # ... rejected substrings (COL6) prune out unwanted picks. By selecting
+      # COL4 substrings, then rejecting COL5 substrings, there should be a
       # single selected row. See NECB unit test test_necb_activities.rb.
       table.each do |row|
         key = row[0]
@@ -136,9 +136,9 @@ module BTAP
       #   COL1: BTAP space ACTIVITY    e.g. "units::care"
       #   COL2: selected sub-string(s) e.g. "unit"
       #   COL3: rejected sub-string    e.g. "museum"
-      #   COL4: fallback (if missing)  e,g, "units::residential"
+      #   COL4: fallback (if missing)  e.g. "units::residential"
       #
-      # First, BTAP space 'activity' enties are namespaced, e.g.:
+      # First, BTAP space 'activity' entries are namespaced, e.g.:
       #   - "units": 1-word descriptor of the nature of the space 'activity'
       #   - "care": references a building 'activity', see @@data[:bldg]
       #

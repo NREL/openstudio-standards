@@ -50,7 +50,7 @@ module BTAP
     #
     # --- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- --- #
     # Although "wood" framed walls constitute the load-bearing components of a
-    # "wood" framed building STRUCTURE (ex. low-rise housing), they can equally
+    # "wood" framed building STRUCTURE (e.g. low-rise housing), they can equally
     # be found as non-load-bearing components in a "clt" post-beam STRUCTURE.
     # Light gauge "steel" framed walls are much more common in a non-residential
     # STRUCTURE (e.g. "steel" post/frame, "concrete" post & beam, and even
@@ -221,7 +221,7 @@ module BTAP
     @@data[:category]["industry"  ][:height ] =  3.5
     @@data[:category]["recreation"][:height ] = 10.0
 
-    # For instance, a multi-unit residential buildings (MURB) would have a
+    # For instance, a multi-unit residential building (MURB) would have a
     # typical "wood" framed, load-bearing envelope/STRUCTURE up to (and
     # including) 4 stories above-grade. This default STRUCTURE assignment
     # switches to reinforced "concrete" post + flat slab beyond 5 stories.
@@ -381,12 +381,12 @@ module BTAP
       #   - between light-gauge steel vs CMU wall construction options
       #   - between foam vs fibrous insulation options
       #
-      # Most dead load is modelled explicitely in OpenStudio, like envelope and
+      # Most dead load is modelled explicitly in OpenStudio, like envelope and
       # interzone sub/surfaces. Rough estimates of embodied carbon (in CO2-e
       # kg/m2) can be reasonably associated to selected construction assemblies
       # (based on m2), such as the embodied carbon of chosen insulation
       # materials or framing options. Other dead load, like lighting and HVAC,
-      # are not modelled explicitely. Here, the 'deadload' attribute represents
+      # are not modelled explicitly. Here, the 'deadload' attribute represents
       # a mass floor area density estimate (kg/m2) of non-modelled structural
       # and non-structural items like fixed furniture, partitions, columns,
       # beams, shear walls and bracing.
@@ -435,7 +435,7 @@ module BTAP
       else            partition_kgm2 =  27.2 * partition_m2 / floor_m2
       end
 
-      # Structural dead load - not explicitely modelled - include columns,
+      # Structural dead load - not explicitly modelled - include columns,
       # bracing, connectors, etc. For BTAP purposes, some basic assumptions are
       # required:
       #   - 9m x 9m spans
@@ -475,7 +475,7 @@ module BTAP
       @deadload = partition_kgm2 + column_kgm2
 
       # The 'liveload' attribute represents the mass area density (kg/m2) of
-      # dynamic, yet uniform floor live load from non-permament items like
+      # dynamic, yet uniform floor live load from non-permanent items like
       # furniture, documents, copiers and computers, i.e. not real estate
       # assets. Architects and engineers deal with (fixed) live load as design
       # constraint - not as potential design option. Non-occupant live load is
@@ -493,7 +493,7 @@ module BTAP
       # envelope calculations suggest reducing live load code requirements down
       # to ~1/12th of their initial values for internal mass purposes. These
       # code requirements also include occupants, which should be set aside -
-      # by substracting the total building population mass:
+      # by subtracting the total building population mass:
       #
       #   - NECB building occupant density (occupant/m2) x avg. 80 kg/adult
       #
@@ -587,7 +587,7 @@ module BTAP
       when :concrete then # 200mm flat slab, 3% rebar + accessories
         floor_m3    = 0.200 * m2
         floor_kgm3  = (0.03 * 7850.0) + (0.97 * 2240.0) # kg/m3
-        floor_co2kg = (0.03 *  0.854) + (0.97 *  0.250) # kgCO2-e/kg
+        floor_co2kg = (0.03 * 0.854 ) + (0.97 *  0.250) # kgCO2-e/kg
         floor_kg    = floor_m3 * floor_kgm3
       else # :steel, includes joists/fasteners
         floor_m3    = 0.125 * m2
@@ -616,9 +616,6 @@ module BTAP
       end
 
       @co2[:structure] += wall_co2kg * wall_kg
-
-      # wall_m2  = TBD.facets(cspaces, "outdoors", "walls").map(&:grossArea).sum
-      # iwall_m2  = TBD.facets(cspaces, "surface", "wall").map(&:grossArea).sum
 
       true
     end
