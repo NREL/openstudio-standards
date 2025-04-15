@@ -554,6 +554,10 @@ module OpenstudioStandards
         # remove refrigeration equipment
         if remove_objects
           model.getRefrigerationSystems.each(&:remove)
+          model.getRefrigerationCases.each(&:remove)
+          model.getRefrigerationWalkIns.each(&:remove)
+          model.getRefrigerationCompressorRacks.each(&:remove)
+          model.getRefrigerationCompressors.each(&:remove)
         end
 
         # Add refrigerated cases and walkins
