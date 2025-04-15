@@ -61,7 +61,11 @@ class Standard
     vrf_outdoor_unit.setAvailabilitySchedule(availability_schedule)
 
     # set cops
-    vrf_outdoor_unit.setRatedCoolingCOP(cooling_cop)
+    if model.version < OpenStudio::VersionString.new('2.9.0')
+      vrf_outdoor_unit.setRatedCoolingCOP(cooling_cop)
+    else
+      vrf_outdoor_unit.setGrossRatedCoolingCOP(cooling_cop)
+    end
     vrf_outdoor_unit.setRatedHeatingCOP(heating_cop)
 
     # heat recovery

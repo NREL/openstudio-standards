@@ -29,6 +29,10 @@ module OpenstudioStandards
   # Daylighting Module
   require_relative 'openstudio-standards/daylighting/space'
 
+  # Exterior Lighting Module
+  require_relative 'openstudio-standards/exterior_lighting/create'
+  require_relative 'openstudio-standards/exterior_lighting/information'
+
   # Schedules Module
   require_relative 'openstudio-standards/schedules/create'
   require_relative 'openstudio-standards/schedules/modify'
@@ -62,6 +66,7 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/create_typical/space_type_ratios'
   require_relative 'openstudio-standards/create_typical/create_typical'
   require_relative 'openstudio-standards/create_typical/space_type_blend'
+  require_relative 'openstudio-standards/create_typical/space_type_information'
 
   # QAQC Module
   require_relative 'openstudio-standards/qaqc/calibration'
@@ -101,6 +106,7 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/utilities/array'
   require_relative 'openstudio-standards/utilities/object_info'
   require_relative 'openstudio-standards/utilities/assertion'
+  require_relative 'openstudio-standards/utilities/ruleset_check'
 
   stds = 'openstudio-standards/standards'
   proto = 'openstudio-standards/prototypes'
@@ -275,6 +281,7 @@ module OpenstudioStandards
   require_relative "#{stds}/Standards.HeaderedPumpsVariableSpeed"
   require_relative "#{stds}/Standards.HeatExchangerSensLat"
   require_relative "#{stds}/Standards.Model"
+  require_relative "#{stds}/Standards.Motor"
   require_relative "#{stds}/Standards.PlanarSurface"
   require_relative "#{stds}/Standards.PlantLoop"
   require_relative "#{stds}/Standards.PumpConstantSpeed"
@@ -328,6 +335,7 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.CoolingTowerVariableSpeed"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.FanVariableVolume"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.Model"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.Motor"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.PlantLoop"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.Space"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.ThermalZone"
@@ -343,6 +351,7 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.CoolingTowerVariableSpeed"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.FanVariableVolume"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.Model"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.Motor"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.Space"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.ThermalZone"
   # 90.1-2019
@@ -357,6 +366,7 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.CoolingTowerVariableSpeed"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.FanVariableVolume"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.Model"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.Motor"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.Space"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.ThermalZone"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.WaterHeaterMixed"
@@ -391,6 +401,7 @@ module OpenstudioStandards
   # 90.1-PRM-2019
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm_2019/ashrae_90_1_prm_2019"
   require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm_2019/ashrae_90_1_prm_2019.Model"
+  require_relative "#{stds}/ashrae_90_1_prm/ashrae_90_1_prm_2019/ashrae_90_1_prm_2019_WaterHeaterMixed"
   # DOE 1980-2004
   require_relative "#{stds}/ashrae_90_1/doe_ref_1980_2004/doe_ref_1980_2004.AirConditionerVariableRefrigerantFlow"
   require_relative "#{stds}/ashrae_90_1/doe_ref_1980_2004/doe_ref_1980_2004.AirLoopHVAC"
@@ -520,7 +531,6 @@ module OpenstudioStandards
   require_relative "#{proto}/common/objects/Prototype.hvac_systems"
   require_relative "#{proto}/common/objects/Prototype.Model.elevators"
   require_relative "#{proto}/common/objects/Prototype.Model.transformers"
-  require_relative "#{proto}/common/objects/Prototype.Model.exterior_lights"
   require_relative "#{proto}/common/objects/Prototype.Model.hvac"
   require_relative "#{proto}/common/objects/Prototype.Model"
   require_relative "#{proto}/common/objects/Prototype.Pump"
