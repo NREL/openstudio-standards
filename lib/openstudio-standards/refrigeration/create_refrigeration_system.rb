@@ -18,7 +18,7 @@ module OpenstudioStandards
                                          refrigerant: 'R404a')
       # Add refrigeration system
       ref_system = OpenStudio::Model::RefrigerationSystem.new(model)
-      ref_system.setName('Refrigeration System')
+      ref_system.setName("#{operation_type} Refrigeration System")
       ref_system.setRefrigerationSystemWorkingFluidType(refrigerant)
       ref_system.setSuctionTemperatureControlType('ConstantSuctionTemperature')
 
