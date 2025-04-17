@@ -6,7 +6,7 @@ class TestRefrigerationCreateTypicalRefrigeration < Minitest::Test
     @refrig = OpenstudioStandards::Refrigeration
   end
 
-  def test_typical_refrigeration_equipment_list
+  def test_typical_refrigeration_equipment_list_supermarket
     model = OpenStudio::Model::Model.new
 
     args = {}
@@ -16,6 +16,36 @@ class TestRefrigerationCreateTypicalRefrigeration < Minitest::Test
 
     # equipment list
     result = @refrig.typical_refrigeration_equipment_list(model)
+    assert_equal(7, result[:cases].size)
+    assert_equal(6, result[:walkins].size)
+  end
+
+  def test_typical_refrigeration_equipment_list_secondary_school
+    model = OpenStudio::Model::Model.new
+
+    args = {}
+    args['total_bldg_floor_area'] = 50000.0
+    args['bldg_type_a'] = 'SecondarySchool'
+    result = @geo.create_bar_from_building_type_ratios(model, args)
+
+    # equipment list
+    result = @refrig.typical_refrigeration_equipment_list(model)
+    assert_equal(0, result[:cases].size)
+    assert_equal(2, result[:walkins].size)
+  end
+
+  def test_typical_refrigeration_equipment_list_deer_ese
+    model = OpenStudio::Model::Model.new
+
+    args = {}
+    args['total_bldg_floor_area'] = 50000.0
+    args['bldg_type_a'] = 'ESe'
+    result = @geo.create_bar_from_building_type_ratios(model, args)
+
+    # equipment list
+    result = @refrig.typical_refrigeration_equipment_list(model)
+    assert_equal(0, result[:cases].size)
+    assert_equal(2, result[:walkins].size)
   end
 
   def test_create_typical_refrigeration_supermarket

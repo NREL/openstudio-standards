@@ -14,11 +14,18 @@ module OpenstudioStandards
       # get refrigeration equipment list based on space types and area
       ref_equip_list = OpenstudioStandards::Refrigeration.typical_refrigeration_equipment_list(model)
 
+      if ref_equip_list[:cases].empty? && ref_equip_list[:walkins].empty?
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Refrigeration', "The model space types do not typical have refrigeration cases or walkins. No refrigeration system will be added.")
+        return true
+      end
+
       # Find the thermal zones most suited for holding the display cases
-      thermal_zone_case = OpenstudioStandards::Refrigeration.refrigeration_case_zone(model)
-      if !ref_equip_list[:cases].empty? &&  thermal_zone_case.nil?
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Refrigeration', "Attempted to add display cases to the model, but could find no thermal zone to put them into.")
-        return false
+      unless ref_equip_list[:cases].empty?
+        thermal_zone_case = OpenstudioStandards::Refrigeration.refrigeration_case_zone(model)
+        if thermal_zone_case.nil?
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Refrigeration', "Attempted to add display cases to the model, but could find no thermal zone to put them into.")
+          return false
+        end
       end
 
       medium_temperature_cases = []
@@ -37,10 +44,12 @@ module OpenstudioStandards
       end
 
       # Find the thermal zones most suited for holding the walkins
-      thermal_zone_walkin = OpenstudioStandards::Refrigeration.refrigeration_walkin_zone(model)
-      if !ref_equip_list[:walkins].empty? && thermal_zone_walkin.nil?
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Refrigeration', "Attempted to add walkins to the model, but could find no thermal zone to put them into.")
-        return false
+      unless ref_equip_list[:walkins].empty?
+        thermal_zone_walkin = OpenstudioStandards::Refrigeration.refrigeration_walkin_zone(model)
+        if thermal_zone_walkin.nil?
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Refrigeration', "Attempted to add walkins to the model, but could find no thermal zone to put them into.")
+          return false
+        end
       end
 
       medium_temperature_walkins = []
