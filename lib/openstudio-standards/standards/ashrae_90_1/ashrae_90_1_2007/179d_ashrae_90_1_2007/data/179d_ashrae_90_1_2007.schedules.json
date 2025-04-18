@@ -15,6 +15,34 @@
       ]
     },
     {
+      "name": "ACM_HighriseApartment_ACTIVITY_SCH",
+      "template": "179d-90.1-2007",
+      "category": "Activity",
+      "units": "W",
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "ACM 2005 Table 2-3 High-Rise Residential, 179D",
+      "values": [
+        117.0
+      ]
+    },
+    {
+      "name": "ACM_MidriseApartment_ACTIVITY_SCH",
+      "template": "179d-90.1-2007",
+      "category": "Activity",
+      "units": "W",
+      "day_types": "Default|WntrDsn|SmrDsn",
+      "start_date": "2014-01-01T00:00:00+00:00",
+      "end_date": "2014-12-31T00:00:00+00:00",
+      "type": "Constant",
+      "notes": "ACM 2005 Table 2-3 Multi-family, 179D",
+      "values": [
+        147.0
+      ]
+    },
+    {
       "name": "ACM_Office_ACTIVITY_SCH",
       "template": "179d-90.1-2007",
       "category": "Activity",
