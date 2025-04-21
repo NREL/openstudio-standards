@@ -64,8 +64,8 @@ class Standard
       (template == 'BTAP1980TO2010'))
       if search_criteria.keys.include?('equipment_type')
         equipment_type = search_criteria['equipment_type']
-        if equipment_type == 'PTAC'
-          search_criteria['application'] = coil_dx_ptac_application(coil_cooling_dx_single_speed)
+        if ['PTAC', 'PTHP'].include?(equipment_type)
+          search_criteria['application'] = coil_dx_packaged_terminal_application(coil_cooling_dx_single_speed)
         end
       elsif !coil_dx_heat_pump?(coil_cooling_dx_single_speed)
         search_criteria['equipment_type'] = 'Air Conditioners'
@@ -241,8 +241,8 @@ class Standard
       (template == 'BTAP1980TO2010'))
       if search_criteria.keys.include?('equipment_type')
         equipment_type = search_criteria['equipment_type']
-        if equipment_type == 'PTAC'
-          search_criteria['application'] = coil_dx_ptac_application(coil_cooling_dx_single_speed)
+        if ['PTAC', 'PTHP'].include?(equipment_type)
+          search_criteria['application'] = coil_dx_packaged_terminal_application(coil_cooling_dx_single_speed)
         end
       elsif !coil_dx_heat_pump?(coil_cooling_dx_single_speed)
         search_criteria['equipment_type'] = 'Air Conditioners'
@@ -288,7 +288,7 @@ class Standard
     if ac_props['cool_cap_fflow']
       cool_cap_fflow = model_add_curve(coil_cooling_dx_single_speed.model, ac_props['cool_cap_fflow'])
     else
-      cool_cap_fflow_curve_name = coil_dx_cap_fff(coil_cooling_dx_single_speed, equipment_type_field)
+      cool_cap_fflow_curve_name = coil_dx_cap_fflow(coil_cooling_dx_single_speed, equipment_type_field)
       cool_cap_fflow = model_add_curve(coil_cooling_dx_single_speed.model, cool_cap_fflow_curve_name)
     end
     if cool_cap_fflow
@@ -318,7 +318,7 @@ class Standard
     if ac_props['cool_eir_fflow']
       cool_eir_fflow = model_add_curve(coil_cooling_dx_single_speed.model, ac_props['cool_eir_fflow'])
     else
-      cool_eir_fflow_curve_name = coil_dx_eir_fff(coil_cooling_dx_single_speed, equipment_type_field)
+      cool_eir_fflow_curve_name = coil_dx_eir_fflow(coil_cooling_dx_single_speed, equipment_type_field)
       cool_eir_fflow = model_add_curve(coil_cooling_dx_single_speed.model, cool_eir_fflow_curve_name)
     end
     if cool_eir_fflow

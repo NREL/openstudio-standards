@@ -26,15 +26,6 @@ module CoilDX
       sub_category = 'CRAC'
     end
 
-    if coil_dx.airLoopHVAC.empty? && coil_dx.containingZoneHVACComponent.is_initialized
-      containing_comp = coil_dx.containingZoneHVACComponent.get
-      # PTHP
-      if containing_comp.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
-        sub_category = 'PTHP'
-      end
-      # @todo Add other zone hvac systems
-    end
-
     return sub_category
   end
 
@@ -191,23 +182,21 @@ module CoilDX
       search_criteria['heating_type'] = htg_type
     end
 
-    # The heating side of unitary heat pumps don't have a heating type as part of the search
-    if coil_dx.to_CoilHeatingDXSingleSpeed.is_initialized &&
-       coil_dx_heat_pump?(coil_dx) &&
-       coil_dx.airLoopHVAC.empty? && coil_dx.containingHVACComponent.is_initialized
-      containing_comp = coil_dx.containingHVACComponent.get
-      if containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAir.is_initialized
-        search_criteria['heating_type'] = nil
-      end
-      # @todo Add other unitary systems
-    end
-
     # Get the equipment type
     if equipment_type && coil_dx.airLoopHVAC.empty? && coil_dx.containingZoneHVACComponent.is_initialized
       containing_comp = coil_dx.containingZoneHVACComponent.get
       # PTAC
       if containing_comp.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
         search_criteria['equipment_type'] = 'PTAC'
+        search_criteria['subcategory'] = nil
+        unless (template == 'NECB2011') || (template == 'NECB2015') || (template == 'NECB2017') || (template == 'NECB2020') || (template == 'BTAPPRE1980') ||
+               (template == 'BTAP1980TO2010')
+          search_criteria['heating_type'] = nil
+        end
+      end
+      # PTHP
+      if containing_comp.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
+        search_criteria['equipment_type'] = 'PTHP'
         search_criteria['subcategory'] = nil
         unless (template == 'NECB2011') || (template == 'NECB2015') || (template == 'NECB2017') || (template == 'NECB2020') || (template == 'BTAPPRE1980') ||
                (template == 'BTAP1980TO2010')
@@ -224,7 +213,7 @@ module CoilDX
   # @param coil_dx [OpenStudio::Model::StraightComponent] coil cooling object, allowable types:
   #   CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilCoolingDXMultiSpeed
   # @return [String] PTAC application
-  def coil_dx_ptac_application(coil_dx)
+  def coil_dx_packaged_terminal_application(coil_dx)
     case template
     when '90.1-2004', '90.1-2007'
       return 'New Construction'
@@ -243,6 +232,12 @@ module CoilDX
     case equipment_type
     when 'PTAC'
       return 'PSZ-Fine Storage DX Coil Cap-FT'
+    when 'PSZ-AC'
+      return 'CoilClgDXQRatio_fTwbToadbSI'
+    when 'PTHP'
+      return 'DXHEAT-NECB2011-REF-CAPFT'
+    when 'PSZ-HP'
+      return 'DXHEAT-NECB2011-REF-CAPFT'
     else
       return 'CoilClgDXQRatio_fTwbToadbSI'
     end
@@ -254,10 +249,16 @@ module CoilDX
   #   CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilCoolingDXMultiSpeed
   # @param equipment_type [String] Type of equipment
   # @return [String] PTAC application
-  def coil_dx_cap_fff(coil_dx, equipment_type = 'Air Conditioners')
+  def coil_dx_cap_fflow(coil_dx, equipment_type = 'Air Conditioners')
     case equipment_type
     when 'PTAC'
       return 'DX Coil Cap-FF'
+    when 'PSZ-AC'
+      return 'CoilClgDXSnglQRatio_fCFMRatio'
+    when 'PTHP'
+      return 'DXHEAT-NECB2011-REF-CAPFFLOW'
+    when 'PSZ-HP'
+      return 'DXHEAT-NECB2011-REF-CAPFFLOW'
     else
       return 'CoilClgDXSnglQRatio_fCFMRatio'
     end
@@ -273,6 +274,12 @@ module CoilDX
     case equipment_type
     when 'PTAC'
       return 'PSZ-AC DX Coil EIR-FT'
+    when 'PSZ-AC'
+      return 'CoilClgDXEIRRatio_fTwbToadbSI'
+    when 'PTHP'
+      return 'DXHEAT-NECB2011-REF-EIRFT'
+    when 'PSZ-HP'
+      return 'DXHEAT-NECB2011-REF-EIRFT'
     else
       return 'CoilClgDXEIRRatio_fTwbToadbSI'
     end
@@ -284,10 +291,16 @@ module CoilDX
   #   CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilCoolingDXMultiSpeed
   # @param equipment_type [String] Type of equipment
   # @return [String] PTAC application
-  def coil_dx_eir_fff(coil_dx, equipment_type = 'Air Conditioners')
+  def coil_dx_eir_fflow(coil_dx, equipment_type = 'Air Conditioners')
     case equipment_type
     when 'PTAC'
       return 'Split DX Coil EIR-FF'
+    when 'PSZ-AC'
+      return 'CoilClgDXSnglEIRRatio_fCFMRatio'
+    when 'PTHP'
+      return 'DXHEAT-NECB2011-REF-EIRFFLOW'
+    when 'PSZ-HP'
+      return 'DXHEAT-NECB2011-REF-EIRFFLOW'
     else
       return 'CoilClgDXSnglEIRRatio_fCFMRatio'
     end
@@ -303,6 +316,12 @@ module CoilDX
     case equipment_type
     when 'PTAC'
       return 'HPACCOOLPLFFPLR'
+    when 'PSZ-AC'
+      return 'CoilClgDXEIRRatio_fQFrac'
+    when 'PTHP'
+      return 'DXHEAT-NECB2011-REF-PLFFPLR'
+    when 'PSZ-HP'
+      return 'DXHEAT-NECB2011-REF-PLFFPLR'
     else
       return 'CoilClgDXEIRRatio_fQFrac'
     end

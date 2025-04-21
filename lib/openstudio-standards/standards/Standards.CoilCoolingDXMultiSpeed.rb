@@ -132,7 +132,7 @@ class Standard
     if ac_props['cool_cap_fflow']
       cool_cap_fflow = model_add_curve(coil_coolingcoil_cooling_dx_multi_speed_dx_two_speed.model, ac_props['cool_cap_fflow'])
     else
-      cool_cap_fflow_curve_name = coil_dx_cap_fff(coil_cooling_dx_multi_speed)
+      cool_cap_fflow_curve_name = coil_dx_cap_fflow(coil_cooling_dx_multi_speed)
       cool_cap_fflow = model_add_curve(coil_cooling_dx_multi_speed.model, cool_cap_fflow_curve_name)
     end
     if cool_cap_fflow
@@ -166,7 +166,7 @@ class Standard
     if ac_props['cool_eir_fflow']
       cool_eir_fflow = model_add_curve(coil_cooling_dx_multi_speed.model, ac_props['cool_eir_fflow'])
     else
-      cool_eir_fflow_curve_name = coil_dx_eir_fff(coil_cooling_dx_multi_speed)
+      cool_eir_fflow_curve_name = coil_dx_eir_fflow(coil_cooling_dx_multi_speed)
       cool_eir_fflow = model_add_curve(coil_cooling_dx_multi_speed.model, cool_eir_fflow_curve_name)
     end
     if cool_eir_fflow
