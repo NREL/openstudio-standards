@@ -24,6 +24,9 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
 
     templates.each do |template|
       standard = get_standard(template)
+      primary_heating_fuel = "Electricity"
+      standard.fuel_type_set = SystemFuels.new()
+      standard.fuel_type_set.set_defaults(standards_data: standard.standards_data, primary_heating_fuel: primary_heating_fuel)
       expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_chiller_cop_expected_results.csv")
 
       # Initialize hashes for storing expected chiller cop data from file.
@@ -155,6 +158,10 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
     fan_type = 'AF_or_BI_rdg_fancurve'
     test_chiller_cap = [1000000.0, 3000000.0]
 
+    primary_heating_fuel = boiler_fueltype
+    standard.fuel_type_set = SystemFuels.new()
+    standard.fuel_type_set.set_defaults(standards_data: standard.standards_data, primary_heating_fuel: primary_heating_fuel)
+
     chiller_types.each do |chiller_type|
       test_chiller_cap.each do |chiller_cap|
         name = "sys6_ChillerType_#{chiller_type}-Chiller_cap-#{chiller_cap}watts"
@@ -238,6 +245,10 @@ class NECB_HVAC_Chiller_Test < Minitest::Test
     save_intermediate_models = false
 
     expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_chiller_curves_expected_results.csv")
+
+    primary_heating_fuel = 'Electricity'
+    standard.fuel_type_set = SystemFuels.new()
+    standard.fuel_type_set.set_defaults(standards_data: standard.standards_data, primary_heating_fuel: primary_heating_fuel)
 
     chiller_curve_names = {}
     chiller_curve_names['Scroll'] = []

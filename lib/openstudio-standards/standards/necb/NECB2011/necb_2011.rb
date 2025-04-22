@@ -215,6 +215,11 @@ class NECB2011 < Standard
                                    custom_weather_folder: nil,
                                    debug: false,
                                    sizing_run_dir: Dir.pwd,
+                                   hvac_system_primary: nil,
+                                   hvac_system_dwelling_units: nil,
+                                   hvac_system_washrooms: nil,
+                                   hvac_system_corridor: nil,
+                                   hvac_system_storage: nil,
                                    primary_heating_fuel: 'Electricity',
                                    swh_fuel: nil,
                                    dcv_type: 'NECB_Default',
@@ -271,7 +276,8 @@ class NECB2011 < Standard
                                    tbd_interpolate: false,
                                    necb_hdd: true,
                                    boiler_fuel: nil,
-                                   boiler_cap_ratio: nil)
+                                   boiler_cap_ratio: nil,
+                                   airloop_fancoils_heating: nil)
     model = load_building_type_from_library(building_type: building_type)
     return model_apply_standard(model: model,
                                 tbd_option: tbd_option,
@@ -279,6 +285,11 @@ class NECB2011 < Standard
                                 epw_file: epw_file,
                                 custom_weather_folder: custom_weather_folder,
                                 sizing_run_dir: sizing_run_dir,
+                                hvac_system_primary: nil,
+                                hvac_system_dwelling_units: nil,
+                                hvac_system_washrooms: nil,
+                                hvac_system_corridor: nil,
+                                hvac_system_storage: nil,
                                 primary_heating_fuel: primary_heating_fuel,
                                 swh_fuel: swh_fuel,
                                 dcv_type: dcv_type, # Four options: (1) 'NECB_Default', (2) 'No_DCV', (3) 'Occupancy_based_DCV' , (4) 'CO2_based_DCV'
@@ -333,7 +344,8 @@ class NECB2011 < Standard
                                 baseline_system_zones_map_option: baseline_system_zones_map_option,  # Three options: (1) 'NECB_Default'/'none'/nil (i.e. 'one_sys_per_bldg'), (2) 'one_sys_per_dwelling_unit', (3) 'one_sys_per_bldg'
                                 necb_hdd: necb_hdd,
                                 boiler_fuel: boiler_fuel,
-                                boiler_cap_ratio: boiler_cap_ratio
+                                boiler_cap_ratio: boiler_cap_ratio,
+                                airloop_fancoils_heating: airloop_fancoils_heating
                                 )
   end
 
@@ -357,6 +369,11 @@ class NECB2011 < Standard
                            sizing_run_dir: Dir.pwd,
                            necb_reference_hp: false,
                            necb_reference_hp_supp_fuel: 'DefaultFuel',
+                           hvac_system_primary: 'NECB_Default',
+                           hvac_system_dwelling_units: 'NECB_Default',
+                           hvac_system_washrooms: 'NECB_Default',
+                           hvac_system_corridor: 'NECB_Default',
+                           hvac_system_storage: 'NECB_Default',
                            primary_heating_fuel: 'Electricity',
                            swh_fuel: nil,
                            dcv_type: 'NECB_Default',
@@ -411,7 +428,8 @@ class NECB2011 < Standard
                            baseline_system_zones_map_option: nil,
                            necb_hdd: true,
                            boiler_fuel: nil,
-                           boiler_cap_ratio: nil)
+                           boiler_cap_ratio: nil,
+                           airloop_fancoils_heating: nil)
 
     apply_weather_data(model: model, epw_file: epw_file, custom_weather_folder: custom_weather_folder)
     primary_heating_fuel = validate_primary_heating_fuel(primary_heating_fuel: primary_heating_fuel, model: model)
@@ -424,10 +442,20 @@ class NECB2011 < Standard
     boiler_fuel = convert_arg_to_string(variable: boiler_fuel, default: nil)
     boiler_cap_ratio = convert_arg_to_string(variable: boiler_cap_ratio, default: nil)
     swh_fuel = convert_arg_to_string(variable: swh_fuel, default: nil)
+    airloop_fancoils_heating = convert_arg_to_bool(variable: airloop_fancoils_heating, default: false)
+
+    # Check if custom systems are assigned to dwelling units, washrooms, corridors, and storage rooms.  If they are, set
+    # them to be the same as the primary system type.  If no primary system type is defined then set them to be nil.
+    hvac_system_dwelling_units, hvac_system_corridor, hvac_system_storage, hvac_system_washrooms = reset_hvac_system_if_required(hvac_system_primary: hvac_system_primary,
+                                                                                                                                 hvac_system_dwelling_units: hvac_system_dwelling_units,
+                                                                                                                                 hvac_system_corridor: hvac_system_corridor,
+                                                                                                                                 hvac_system_storage: hvac_system_storage,
+                                                                                                                                 hvac_system_washrooms: hvac_system_washrooms)
 
     boiler_cap_ratios = set_boiler_cap_ratios(boiler_cap_ratio: boiler_cap_ratio, boiler_fuel: boiler_fuel) unless boiler_cap_ratio.nil? && boiler_fuel.nil?
     self.fuel_type_set.set_boiler_fuel(standards_data: @standards_data, boiler_fuel: boiler_fuel, boiler_cap_ratios: boiler_cap_ratios) unless boiler_fuel.nil?
     self.fuel_type_set.set_swh_fuel(swh_fuel: swh_fuel) unless swh_fuel.nil? || swh_fuel.to_s.downcase == 'defaultfuel'
+    self.fuel_type_set.set_airloop_fancoils_heating() if airloop_fancoils_heating
 
     # Ensure the volume calculation in all spaces is done automatically
     model.getSpaces.sort.each do |space|
@@ -474,6 +502,11 @@ class NECB2011 < Standard
     apply_kiva_foundation(model)
     apply_systems_and_efficiencies(model: model,
                                    sizing_run_dir: sizing_run_dir,
+                                   hvac_system_primary: hvac_system_primary,
+                                   hvac_system_dwelling_units: hvac_system_dwelling_units,
+                                   hvac_system_washrooms: hvac_system_washrooms,
+                                   hvac_system_corridor: hvac_system_corridor,
+                                   hvac_system_storage: hvac_system_storage,
                                    primary_heating_fuel: primary_heating_fuel,
                                    dcv_type: dcv_type,
                                    ecm_system_name: ecm_system_name,
@@ -546,6 +579,11 @@ class NECB2011 < Standard
 
   def apply_systems_and_efficiencies(model:,
                                      sizing_run_dir:,
+                                     hvac_system_primary: 'NECB_Default',
+                                     hvac_system_dwelling_units: 'NECB_Default',
+                                     hvac_system_washrooms: 'NECB_Default',
+                                     hvac_system_corridor: 'NECB_Default',
+                                     hvac_system_storage: 'NECB_Default',
                                      primary_heating_fuel:,
                                      dcv_type: 'NECB_Default',
                                      ecm_system_name: 'NECB_Default',
@@ -577,6 +615,11 @@ class NECB2011 < Standard
 
     # Create Default Systems.
     apply_systems(model: model,
+                  hvac_system_primary: hvac_system_primary,
+                  hvac_system_dwelling_units: hvac_system_dwelling_units,
+                  hvac_system_washrooms: hvac_system_washrooms,
+                  hvac_system_corridor: hvac_system_corridor,
+                  hvac_system_storage: hvac_system_storage,
                   sizing_run_dir: sizing_run_dir,
                   shw_scale: shw_scale,
                   baseline_system_zones_map_option: baseline_system_zones_map_option)
@@ -2494,6 +2537,23 @@ class NECB2011 < Standard
     }
     return boiler_cap_ratios
   end
+
+  # Until someone has time to allow dwelling units, washrooms, cooridors, and storage rooms can get their own custom
+  # system types (beyond the default necb_system), this metod will set the system type for those rooms to either be
+  # their default or to the primary system type (if one is defined and the other sytems are not set to default)
+  def reset_hvac_system_if_required(hvac_system_primary: nil, hvac_system_dwelling_units: nil, hvac_system_corridor: nil, hvac_system_storage: nil, hvac_system_washrooms: nil)
+    if hvac_system_primary.nil? || hvac_system_primary.to_s.downcase == "necb_default"
+      hvac_system_dwelling_units = "NECB_Default"
+      hvac_system_corridor = "NECB_Default"
+      hvac_system_storage = "NECB_Default"
+      hvac_system_washrooms = "NECB_Default"
+    else
+      hvac_system_dwelling_units = hvac_system_primary unless hvac_system_dwelling_units.nil? || hvac_system_dwelling_units.to_s.downcase == "necb_default"
+      hvac_system_corridor = hvac_system_primary unless hvac_system_corridor.nil? || hvac_system_corridor.to_s.downcase == "necb_default"
+      hvac_system_storage = hvac_system_primary unless hvac_system_storage.nil? || hvac_system_storage.to_s.downcase == "necb_default"
+      hvac_system_washrooms = hvac_system_primary unless hvac_system_washrooms.nil? || hvac_system_washrooms.to_s.downcase == "necb_default"
+    end
+    return hvac_system_dwelling_units, hvac_system_corridor, hvac_system_storage, hvac_system_washrooms
+  end
+
 end
-
-
