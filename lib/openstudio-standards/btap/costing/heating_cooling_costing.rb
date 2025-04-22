@@ -9,6 +9,9 @@ class BTAPCosting
     #Global flag to determine if a GSHP is present
     @gshp_flag = false
 
+    #Global flag to determine if a AWHP is present
+    @awhp_flag = false
+
     totalCost = 0.0
 
     # Get regional cost factors for this province and city
@@ -102,6 +105,18 @@ class BTAPCosting
           end
           plant_loop_info[:boilers] << gshp_info
           @gshp_flag = true
+        elsif supply_comp.to_HeatPumpPlantLoopEIRHeating.is_initialized
+          awhp = supply_comp.to_HeatPumpPlantLoopEIRHeating.get
+          awhp_info = {}
+          awhp_info[:fueltype] = 'Airtowaterhp'
+          awhp_info[:name] = awhp.name.to_s
+          if awhp.isReferenceCapacityAutosized.to_bool
+            awhp_info[:nominal_capacity] = awhp.autosizedReferenceCapacity.to_f/1000.0
+          else
+            awhp_info[:nominal_capacity] = awhp.referenceCapacity.to_f/1000.0
+          end
+          plant_loop_info[:boilers] << awhp_info
+          @awhp_flag = true
         end
       end
     end
@@ -116,7 +131,7 @@ class BTAPCosting
       # 06-Sep-2019 JTB: Added check for no 'Primary' or 'Secondary' label and assume primary.
       #    This boiler prefix name seemed to disappear after the heat pump work was committed.
       numBoilers += 1
-      if boiler[:name] =~ /primary/i || (boiler[:name] !~ /primary/i && boiler[:name] !~ /secondary/ && numBoilers == 1) || (@gshp_flag)
+      if boiler[:name] =~ /primary/i || (boiler[:name] !~ /primary/i && boiler[:name] !~ /secondary/ && numBoilers == 1) || (boiler[:fuel_type] == 'wshp') || (boiler[:fuel_type] == 'Airtowaterhp')
         primaryFuel = boiler[:fueltype]
         primaryCap = boiler[:nominal_capacity]
         matCost, labCost = getHVACCost(boiler[:name], boiler[:fueltype], boiler[:nominal_capacity], false)
@@ -201,6 +216,11 @@ class BTAPCosting
         elsif boiler[:fueltype].to_s.downcase == 'elecboilers' || boiler[:fueltype].to_s.downcase == 'wshp'
           # Electric boilers require only conduit
           utilCost += metalConduitCost * util_dist + elecWireCost * util_dist / 100
+        elsif boiler[:fuel_type].to_s.downcase == 'airtowaterhp'
+          # Add heating buffer tank for awhp
+          materialHash = get_cost_info(mat: 'solartank', size: 450)
+          matCost, labCost = getRSMeansCost('solartank', materialHash, multiplier)
+          utilCost = matCost * regional_material / 100.0 + labCost * regional_installation / 100.0
         end
 
       elsif boiler[:name] =~ /secondary/i || numBoilers > 1
@@ -226,7 +246,7 @@ class BTAPCosting
         flueVentCost = 0.0; flueElbowCost = 0.0; flueTopCost = 0.0
 
         # Check if need a flue header (i.e., there are both primary and secondary/backup boilers)
-        if thisBoilerCost > 0.0 && ( (backupBoiler && primaryFuel != 'ElecBoilers') || (boiler[:fueltype] != 'ElecBoilers') )
+        if thisBoilerCost > 0.0 && ( (backupBoiler && primaryFuel != 'ElecBoilers') || (boiler[:fueltype] != 'ElecBoilers') || (boiler[:fueltype] != 'wshp') || (boiler[:fueltype] != 'Airtowaterhp'))
           # 6 inch diameter header (#384)
           materialHash = get_cost_info(mat: 'Venting', size: 6)
           matCost, labCost = getCost('flue header', materialHash, multiplier)
@@ -357,6 +377,7 @@ class BTAPCosting
     plant_loop_info = {}
     plant_loop_info[:chillers] = []
     plant_loop_info[:chillerpumps] = []
+    awhp_chiller = false
 
     # Iterate through the plant loops to get chiller & pump data...
     model.getPlantLoops.each do |plant_loop|
@@ -403,6 +424,19 @@ class BTAPCosting
             end
           end
           chiller_info[:reference_capacity] = chiller.referenceCapacity.to_f / 1000 # kW
+        elsif supply_comp.to_HeatPumpPlantLoopEIRCooling.is_initialized
+          chiller = supply_comp.to_HeatPumpPlantLoopEIRCooling.get
+          chiller_info = {}
+          chiller_info[:name] = chiller.name.get
+          chiller_info[:type] = 'Airtowaterhp'
+          chiller_info[:fuel] = 'Electric'
+          if chiller.isReferenceCapacityAutosized
+            chiller_info[:reference_capacity] = chiller.autosizedReferenceCapacity.to_f / 1000 # kW
+          else
+            chiller_info[:reference_capacity] = chiller.referenceCapacity.to_f / 1000 # kW
+          end
+          awhp_chiller = true
+          plant_loop_info[:chillers] << chiller_info
         elsif supply_comp.to_PumpConstantSpeed.is_initialized
           csPump = supply_comp.to_PumpConstantSpeed.get
           csPump_info = {}
@@ -449,7 +483,24 @@ class BTAPCosting
       # 06-Sep-2019 JTB: Added check for no 'Primary' or 'Secondary' label and assume primary.
       #    This chiller prefix name seemed to disappear after the heat pump work was committed.
       numChillers += 1
-      if (chiller[:name].to_s.downcase =~ /primary/i || (chiller[:name] !~ /primary/i && chiller[:name] !~ /secondary/i && numChillers == 1)) || (@gshp_flag)
+      if chiller[:type].to_s.downcase == 'airtowaterhp'
+        primaryFuel = chiller[:fuel]
+        primaryCap = chiller[:reference_capacity] #kW
+        # Add cooling buffer tank for awhp
+        materialHash = get_cost_info(mat: 'solartank', size: 450)
+        matCost, labCost = getRSMeansCost('solartank', materialHash, multiplier) #Costing for AWHP only buffer tank, AWHP included in boiler cost
+        thisChillerCost = matCost * regional_material / 100.0 + labCost * regional_installation / 100.0
+        # Include 2 expansion tanks for awhp
+        materialHash = get_cost_info(mat: 'ExpansionTanks', size: 60)
+        matCost, labCost = getRSMeansCost('ExpansionTanks', materialHash, multiplier) #Costing for AWHP only buffer tank, AWHP included in boiler cost
+        thisChillerCost += (matCost * regional_material / 100.0 + labCost * regional_installation / 100.0) * 2
+        # Inclide glycol cost
+        materalHash = get_cost_info(mat: 'glycol')
+        matCost, labCost = getRSMeansCost('solartank', materialHash, multiplier) #Costing for AWHP only buffer tank, AWHP included in boiler cost
+        thisChillerCost += (matCost * regional_material / 100.0 + labCost * regional_installation / 100.0) * 2
+
+        flueVentCost = 0.0 ; flueElbowCost = 0.0 ; flueTopCost = 0.0 ; headerCost = 0.0
+      elsif ((chiller[:name].to_s.downcase =~ /primary/i || (chiller[:name] !~ /primary/i && chiller[:name] !~ /secondary/i && numChillers == 1)) || (@gshp_flag))
         primaryFuel = chiller[:fuel]
         primaryCap = chiller[:reference_capacity] #kW
         if not chiller[:name].include?("ChillerElectricEIR_VSDCentrifugalWaterChiller")
@@ -550,7 +601,6 @@ class BTAPCosting
         else
           headerCost = 0.0
         end
-
       end
       chillerCost += thisChillerCost
       flueCost += flueVentCost * ht_roof + flueElbowCost + flueTopCost + headerCost
@@ -574,16 +624,19 @@ class BTAPCosting
       pumpSize = pump[:size]; pumpName = pump[:name]
       pumpFlow += pump[:water_flow_m3_per_s].to_f
       matCost, labCost = getHVACCost(pumpName, 'Pumps', pumpSize, false)
-      pumpCost += matCost * regional_material / 100.0 + labCost * regional_installation / 100.0
+      indpumpCost = matCost * regional_material / 100.0 + labCost * regional_installation / 100.0
       if pump[:name] =~ /variable/i
         # Cost the VFD controller for the variable pump costed above
         matCost, labCost = getHVACCost(pumpName, 'VFD', pumpSize, false)
-        pumpCost += matCost * reg_mat_elec / 100.0 + labCost * reg_lab_elec / 100.0
+        indpumpCost += matCost * reg_mat_elec / 100.0 + labCost * reg_lab_elec / 100.0
+      end
+      if awhp_chiller
+        pumpCost += indpumpCost * 2
       else
-
+        pumpCost += indpumpCost
       end
     end
-    if numChillers > 1 && numPumps < 2
+    if (numChillers > 1 && numPumps < 2)
       # Add pump costing for additional chillers
       pumpCost *= 2.0
       numPumps = 2  # reset the number of pumps for piping costs below
@@ -598,7 +651,7 @@ class BTAPCosting
     if numChillers > 0
       # 1 inch Steel pipe
       matCost, labCost = getHVACCost('1 inch steel pipe', 'SteelPipe', 1)
-      pipingToPumpCost += 10.0 * numPumps * (matCost * regional_material / 100.0 + labCost * regional_installation / 100.0)
+      pipingToPumpCost = 10.0 * numPumps * (matCost * regional_material / 100.0 + labCost * regional_installation / 100.0)
 
       # 1 inch Steel pipe insulation
       matCost, labCost = getHVACCost('1 inch pipe insulation', 'PipeInsulation', 1)
@@ -615,6 +668,7 @@ class BTAPCosting
 
     if numChillers > 0
       # Double pump piping cost to account for second chiller
+      pipingToPumpCost *= 2 if awhp_chiller
       pipingToPumpCost *= numChillers
 
       hdrDistributionCost = getHeaderPipingDistributionCost(numAGFlrs, mechRmInBsmt, regional_material, regional_installation, reg_mat_elec, reg_lab_elec,

@@ -483,12 +483,12 @@
         "longest_distance_to_ext_ft": 156.6,
         "wiring_and_gas_connections_distance_ft": 169.2,
         "equipment_cost": 1720993,
-        "flue_cost": 17281,
-        "wiring_and_gas_connections_cost": 18762,
+        "flue_cost": 4531,
+        "wiring_and_gas_connections_cost": 3819,
         "pump_cost": 55039,
         "piping_to_pump_cost": 5125,
         "header_distribution_cost": 89693,
-        "total_cost": 1906892
+        "total_cost": 1879199
       },
       {
         "type": "chillers",
@@ -1633,10 +1633,10 @@
     "envelope": 13035932,
     "thermal_bridging": 0,
     "lighting": 9931148,
-    "heating_and_cooling": 16027732,
+    "heating_and_cooling": 16000039,
     "shw": 338964,
     "ventilation": 2578852,
     "renewables": 0,
-    "grand_total": 41912628
+    "grand_total": 41884935
   }
 }
