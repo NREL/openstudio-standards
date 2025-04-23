@@ -240,7 +240,7 @@ class BTAPDatapoint
         model.setSqlFile(sql)
 
         @cost_result = nil
-        if @options[:perform_costing]
+        if @options[:enable_costing]
           # Perform costing
           costs_path = File.join(input_folder_cache, 'costs.csv')
           local_cost_factors_path = File.join(input_folder_cache, 'local_cost_factors.csv')
