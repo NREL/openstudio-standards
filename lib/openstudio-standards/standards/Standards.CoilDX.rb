@@ -162,6 +162,7 @@ module CoilDX
     search_criteria = {}
     search_criteria['template'] = template
 
+    # Cooling type
     search_criteria['cooling_type'] = case coil_dx.iddObjectType.valueName.to_s
                                       when 'OS_Coil_Cooling_DX_SingleSpeed',
                                            'OS_Coil_Cooling_DX_TwoSpeed',
@@ -173,13 +174,20 @@ module CoilDX
                                         'AirCooled'
                                       end
 
-    # Get the coil_dx_subcategory(coil_dx)
+    # Subcategory
     search_criteria['subcategory'] = coil_dx_subcategory(coil_dx)
 
     # Add the heating type to the search criteria
-    htg_type = coil_dx_heating_type(coil_dx, necb_ref_hp)
-    unless htg_type.nil?
-      search_criteria['heating_type'] = htg_type
+    case coil_dx.iddObjectType.valueName.to_s
+    when 'OS_Coil_Cooling_DX_SingleSpeed',
+         'OS_Coil_Cooling_DX_TwoSpeed',
+         'OS_Coil_Cooling_DX_VariableSpeed',
+         'OS_Coil_Cooling_DX_MultiSpeed',
+         'OS_AirConditioner_VariableRefrigerantFlow'
+      htg_type = coil_dx_heating_type(coil_dx, necb_ref_hp)
+      unless htg_type.nil?
+        search_criteria['heating_type'] = htg_type
+      end
     end
 
     # Get the equipment type
@@ -219,6 +227,20 @@ module CoilDX
       return 'New Construction'
     when '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
       return 'Standard Size'
+    end
+  end
+
+  # Determine what electric power phase value should be used for efficiency lookups for DX coils
+  #
+  # @param coil_dx [OpenStudio::Model::StraightComponent] coil cooling object, allowable types:
+  #   CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilCoolingDXMultiSpeed
+  # @return [String] Electric power phase
+  def coil_dx_electric_power_phase(coil_dx)
+    case template
+    when '90.1-2019'
+      return 3
+    else
+      return nil
     end
   end
 

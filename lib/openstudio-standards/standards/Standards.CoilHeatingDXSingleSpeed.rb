@@ -105,34 +105,46 @@ class Standard
   # @param rename [Boolean] if true, object will be renamed to include capacity and efficiency level
   # @param necb_ref_hp [Boolean] for compatability with NECB ruleset only.
   # @return [Double] full load efficiency (COP)
-  def coil_heating_dx_single_speed_standard_minimum_cop(coil_heating_dx_single_speed, rename = false, necb_ref_hp = false)
-    # Get the search criteria
-    search_criteria = coil_dx_find_search_criteria(coil_heating_dx_single_speed, necb_ref_hp)
-    sub_category = search_criteria['subcategory']
-    suppl_heating_type = search_criteria['heating_type']
+  def coil_heating_dx_single_speed_standard_minimum_cop(coil_heating_dx_single_speed, rename = false, necb_ref_hp = false, equipment_type = false)
     coil_efficiency_data = standards_data['heat_pumps_heating']
-    equipment_type = coil_efficiency_data[0].keys.include?('equipment_type') ? true : false
-
-    # Additional search criteria
-    if coil_efficiency_data[0].keys.include?('equipment_type') || ((template == 'NECB2011') || (template == 'NECB2015') || (template == 'NECB2017') || (template == 'NECB2020') || (template == 'BTAPPRE1980') ||
-      (template == 'BTAP1980TO2010'))
-      if search_criteria.keys.include?('equipment_type')
-        equipment_type = search_criteria['equipment_type']
-        if ['PTHP'].include?(equipment_type)
-          search_criteria['application'] = coil_dx_packaged_terminal_application(coil_heating_dx_single_speed)
-        end
-      elsif !coil_dx_heat_pump?(coil_heating_dx_single_speed)
-        search_criteria['equipment_type'] = 'Heat Pumps'
-      end
-    end
-    if coil_efficiency_data[0].keys.include?('region')
-      search_criteria['region'] = nil # non-nil values are currently used for residential products
-    end
 
     # Get the capacity
     capacity_w = coil_heating_dx_single_speed_find_capacity(coil_heating_dx_single_speed, necb_ref_hp)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
+
+    # Get the search criteria
+    search_criteria = coil_dx_find_search_criteria(coil_heating_dx_single_speed, necb_ref_hp, equipment_type)
+    equipment_type = coil_efficiency_data[0].keys.include?('equipment_type') ? true : false
+
+    # Additional search criteria for new data format (from BESD)
+    # NECB/BTAP use the old format
+    # DEER CBES use the old format
+    # 'equipment_type' is only included in data coming from the BESD
+    if coil_efficiency_data[0].keys.include?('equipment_type') || ((template == 'NECB2011') || (template == 'NECB2015') || (template == 'NECB2017') || (template == 'NECB2020') || (template == 'BTAPPRE1980') ||
+      (template == 'BTAP1980TO2010'))
+      if search_criteria.keys.include?('equipment_type')
+        equipment_type = search_criteria['equipment_type']
+        if equipment_type == 'PTHP'
+          search_criteria['application'] = coil_dx_packaged_terminal_application(coil_heating_dx_single_speed)
+        end
+      elsif coil_dx_heat_pump?(coil_heating_dx_single_speed)
+        search_criteria['equipment_type'] = 'Heat Pumps'
+      end
+      # Single Package/Split System is only used for units less than 65 kBtu/h
+      if capacity_btu_per_hr >= 65000
+        search_criteria['rating_condition'] = '47F db/43F wb outdoor air'
+        search_criteria['subcategory'] = nil
+      else
+        electric_power_phase = coil_dx_electric_power_phase(coil_heating_dx_single_speed)
+        if !electric_power_phase.nil?
+          search_criteria['electric_power_phase'] = electric_power_phase
+        end
+      end
+    end
+
+    sub_category = search_criteria['subcategory']
+    suppl_heating_type = search_criteria['heating_type']
 
     # find object
     hp_props = model_find_object(coil_efficiency_data, search_criteria, capacity_btu_per_hr, Date.today)
@@ -140,7 +152,7 @@ class Standard
     # Check to make sure properties were found
     if hp_props.nil?
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{coil_heating_dx_single_speed.name}, cannot find efficiency info using #{search_criteria}, cannot apply efficiency standard.")
-      return cop # value of nil
+      return false
     end
 
     cop = nil
@@ -220,10 +232,28 @@ class Standard
   # @param necb_ref_hp [Boolean] for compatability with NECB ruleset only.
   # @return [Hash] hash of coil objects
   def coil_heating_dx_single_speed_apply_efficiency_and_curves(coil_heating_dx_single_speed, sql_db_vars_map, necb_ref_hp = false)
-    successfully_set_all_properties = true
-
     # Get the search criteria
     search_criteria = coil_dx_find_search_criteria(coil_heating_dx_single_speed, necb_ref_hp)
+    sub_category = search_criteria['subcategory']
+    suppl_heating_type = search_criteria['heating_type']
+    coil_efficiency_data = standards_data['heat_pumps_heating']
+    equipment_type = coil_efficiency_data[0].keys.include?('equipment_type') ? true : false
+
+    # Additional search criteria
+    if coil_efficiency_data[0].keys.include?('equipment_type') || ((template == 'NECB2011') || (template == 'NECB2015') || (template == 'NECB2017') || (template == 'NECB2020') || (template == 'BTAPPRE1980') ||
+      (template == 'BTAP1980TO2010'))
+      if search_criteria.keys.include?('equipment_type')
+        equipment_type = search_criteria['equipment_type']
+        if ['PTHP'].include?(equipment_type)
+          search_criteria['application'] = coil_dx_packaged_terminal_application(coil_heating_dx_single_speed)
+        end
+      elsif !coil_dx_heat_pump?(coil_heating_dx_single_speed)
+        search_criteria['equipment_type'] = 'Heat Pumps'
+      end
+    end
+    if coil_efficiency_data[0].keys.include?('region')
+      search_criteria['region'] = nil # non-nil values are currently used for residential products
+    end
 
     # Get the capacity
     capacity_w = coil_heating_dx_single_speed_find_capacity(coil_heating_dx_single_speed, necb_ref_hp)
@@ -236,8 +266,7 @@ class Standard
     # Check to make sure properties were found
     if hp_props.nil?
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{coil_heating_dx_single_speed.name}, cannot find efficiency info using #{search_criteria}, cannot apply efficiency standard.")
-      successfully_set_all_properties = false
-      return sql_db_vars_map
+      return false
     end
 
     equipment_type_field = search_criteria['equipment_type']
@@ -253,7 +282,6 @@ class Standard
       coil_heating_dx_single_speed.setTotalHeatingCapacityFunctionofTemperatureCurve(heat_cap_ft)
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{coil_heating_dx_single_speed.name}, cannot find heat_cap_ft curve, will not be set.")
-      successfully_set_all_properties = false
     end
 
     # Make the HEAT-CAP-FFLOW curve
@@ -268,7 +296,6 @@ class Standard
       coil_heating_dx_single_speed.setTotalHeatingCapacityFunctionofFlowFractionCurve(heat_cap_fflow)
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{coil_heating_dx_single_speed.name}, cannot find heat_cap_fflow curve, will not be set.")
-      successfully_set_all_properties = false
     end
 
     # Make the HEAT-EIR-FT curve
@@ -283,7 +310,6 @@ class Standard
       coil_heating_dx_single_speed.setEnergyInputRatioFunctionofTemperatureCurve(heat_eir_ft)
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{coil_heating_dx_single_speed.name}, cannot find heat_eir_ft curve, will not be set.")
-      successfully_set_all_properties = false
     end
 
     # Make the HEAT-EIR-FFLOW curve
@@ -298,7 +324,6 @@ class Standard
       coil_heating_dx_single_speed.setEnergyInputRatioFunctionofFlowFractionCurve(heat_eir_fflow)
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{coil_heating_dx_single_speed.name}, cannot find heat_eir_fflow curve, will not be set.")
-      successfully_set_all_properties = false
     end
 
     # Make the HEAT-PLF-FPLR curve
@@ -313,14 +338,13 @@ class Standard
       coil_heating_dx_single_speed.setPartLoadFractionCorrelationCurve(heat_plf_fplr)
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{coil_heating_dx_single_speed.name}, cannot find heat_plf_fplr curve, will not be set.")
-      successfully_set_all_properties = false
     end
 
     # Preserve the original name
     orig_name = coil_heating_dx_single_speed.name.to_s
 
     # Find the minimum COP and rename with efficiency rating
-    cop = coil_heating_dx_single_speed_standard_minimum_cop(coil_heating_dx_single_speed, true, necb_ref_hp)
+    cop = coil_heating_dx_single_speed_standard_minimum_cop(coil_heating_dx_single_speed, true, necb_ref_hp, equipment_type)
 
     # Map the original name to the new name
     sql_db_vars_map[coil_heating_dx_single_speed.name.to_s] = orig_name

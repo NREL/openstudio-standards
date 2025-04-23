@@ -58,8 +58,7 @@ class Standard
     # Check to make sure properties were found
     if ac_props.nil?
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXTwoSpeed', "For #{coil_cooling_dx_two_speed.name}, cannot find efficiency info using #{search_criteria}, cannot apply efficiency standard.")
-      successfully_set_all_properties = false
-      return successfully_set_all_properties
+      return false
     end
 
     # Get the minimum efficiency standards
@@ -143,8 +142,6 @@ class Standard
   # @param sql_db_vars_map [Hash] hash map
   # @return [Hash] hash of coil objects
   def coil_cooling_dx_two_speed_apply_efficiency_and_curves(coil_cooling_dx_two_speed, sql_db_vars_map)
-    successfully_set_all_properties = true
-
     # Get the search criteria
     search_criteria = coil_dx_find_search_criteria(coil_cooling_dx_two_speed)
 
@@ -177,8 +174,7 @@ class Standard
     # Check to make sure properties were found
     if ac_props.nil?
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXTwoSpeed', "For #{coil_cooling_dx_two_speed.name}, cannot find efficiency info using #{search_criteria}, cannot apply efficiency standard.")
-      successfully_set_all_properties = false
-      return sql_db_vars_map
+      return false
     end
 
     # Make the total COOL-CAP-FT curve
@@ -194,7 +190,6 @@ class Standard
       coil_cooling_dx_two_speed.setLowSpeedTotalCoolingCapacityFunctionOfTemperatureCurve(cool_cap_ft)
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXTwoSpeed', "For #{coil_cooling_dx_two_speed.name}, cannot find cool_cap_ft curve, will not be set.")
-      successfully_set_all_properties = false
     end
 
     # Make the total COOL-CAP-FFLOW curve
@@ -209,7 +204,6 @@ class Standard
       coil_cooling_dx_two_speed.setTotalCoolingCapacityFunctionOfFlowFractionCurve(cool_cap_fflow)
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXTwoSpeed', "For #{coil_cooling_dx_two_speed.name}, cannot find cool_cap_fflow curve, will not be set.")
-      successfully_set_all_properties = false
     end
 
     # Make the COOL-EIR-FT curve
@@ -225,7 +219,6 @@ class Standard
       coil_cooling_dx_two_speed.setLowSpeedEnergyInputRatioFunctionOfTemperatureCurve(cool_eir_ft)
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXTwoSpeed', "For #{coil_cooling_dx_two_speed.name}, cannot find cool_eir_ft curve, will not be set.")
-      successfully_set_all_properties = false
     end
 
     # Make the COOL-EIR-FFLOW curve
@@ -240,7 +233,6 @@ class Standard
       coil_cooling_dx_two_speed.setEnergyInputRatioFunctionOfFlowFractionCurve(cool_eir_fflow)
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXTwoSpeed', "For #{coil_cooling_dx_two_speed.name}, cannot find cool_eir_fflow curve, will not be set.")
-      successfully_set_all_properties = false
     end
 
     # Make the COOL-PLF-FPLR curve
@@ -255,7 +247,6 @@ class Standard
       coil_cooling_dx_two_speed.setPartLoadFractionCorrelationCurve(cool_plf_fplr)
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXTwoSpeed', "For #{coil_cooling_dx_two_speed.name}, cannot find cool_plf_fplr curve, will not be set.")
-      successfully_set_all_properties = false
     end
 
     # Preserve the original name

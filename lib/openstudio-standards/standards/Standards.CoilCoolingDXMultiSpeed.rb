@@ -7,8 +7,6 @@ class Standard
   # @param sql_db_vars_map [Hash] hash map
   # @return [Hash] hash of coil objects
   def coil_cooling_dx_multi_speed_apply_efficiency_and_curves(coil_cooling_dx_multi_speed, sql_db_vars_map)
-    successfully_set_all_properties = true
-
     # Define the criteria to find the chiller properties
     # in the hvac standards data set.
     search_criteria = {}
@@ -68,8 +66,7 @@ class Standard
       capacity_w = coil_cooling_dx_multi_speed.autosizedSpeed4GrossRatedTotalCoolingCapacity.get
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXMultiSpeed', "For #{coil_cooling_dx_multi_speed.name} capacity is not available, cannot apply efficiency standard.")
-      successfully_set_all_properties = false
-      return successfully_set_all_properties
+      return false
     end
 
     # Volume flow rate
@@ -106,8 +103,7 @@ class Standard
     # Check to make sure properties were found
     if ac_props.nil?
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXMultiSpeed', "For #{coil_cooling_dx_multi_speed.name}, cannot find efficiency info using #{search_criteria}, cannot apply efficiency standard.")
-      successfully_set_all_properties = false
-      return successfully_set_all_properties
+      return false
     end
 
     # Make the COOL-CAP-FT curve
@@ -124,7 +120,6 @@ class Standard
       end
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXMultiSpeed', "For #{coil_cooling_dx_multi_speed.name}, cannot find cool_cap_ft curve, will not be set.")
-      successfully_set_all_properties = false
     end
 
     # Make the COOL-CAP-FFLOW curve
@@ -141,7 +136,6 @@ class Standard
       end
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXMultiSpeed', "For #{coil_cooling_dx_multi_speed.name}, cannot find cool_cap_fflow curve, will not be set.")
-      successfully_set_all_properties = false
     end
 
     # Make the COOL-EIR-FT curve
@@ -158,7 +152,6 @@ class Standard
       end
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXMultiSpeed', "For #{coil_cooling_dx_multi_speed.name}, cannot find cool_eir_ft curve, will not be set.")
-      successfully_set_all_properties = false
     end
 
     # Make the COOL-EIR-FFLOW curve
@@ -175,7 +168,6 @@ class Standard
       end
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXMultiSpeed', "For #{coil_cooling_dx_multi_speed.name}, cannot find cool_eir_fflow curve, will not be set.")
-      successfully_set_all_properties = false
     end
 
     # Make the COOL-PLF-FPLR curve
@@ -192,7 +184,6 @@ class Standard
       end
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXMultiSpeed', "For #{coil_cooling_dx_multi_speed.name}, cannot find cool_plf_fplr curve, will not be set.")
-      successfully_set_all_properties = false
     end
 
     # Get the minimum efficiency standards
@@ -249,8 +240,7 @@ class Standard
       capacity_w = coil_cooling_dx_multi_speed.autosizedSpeed4GrossRatedTotalCoolingCapacity.get
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXMultiSpeed', "For #{coil_cooling_dx_multi_speed.name} capacity is not available, cannot apply efficiency standard.")
-      successfully_set_all_properties = false
-      return successfully_set_all_properties
+      return false
     end
 
     return capacity_w
