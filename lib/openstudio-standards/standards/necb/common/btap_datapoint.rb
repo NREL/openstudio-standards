@@ -77,7 +77,6 @@ class BTAPDatapoint
     @dp_output_folder = File.join(output_folder, @options[:datapoint_id])
 
     # Show versions in yml file.
-    @options[:btap_costing_git_revision] = Git::Revision.commit_short
     @options[:os_git_revision] = OpenstudioStandards.git_revision
 
     # Get users' inputs for the parameters needed for the calculation af net present value
@@ -241,7 +240,7 @@ class BTAPDatapoint
         model.setSqlFile(sql)
 
         @cost_result = nil
-        if defined?(BTAPCosting)
+        if @options[:perform_costing]
           # Perform costing
           costs_path = File.join(input_folder_cache, 'costs.csv')
           local_cost_factors_path = File.join(input_folder_cache, 'local_cost_factors.csv')
