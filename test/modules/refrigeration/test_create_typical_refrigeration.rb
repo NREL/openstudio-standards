@@ -16,8 +16,8 @@ class TestRefrigerationCreateTypicalRefrigeration < Minitest::Test
 
     # equipment list
     result = @refrig.typical_refrigeration_equipment_list(model)
-    assert_equal(7, result[:cases].size)
-    assert_equal(6, result[:walkins].size)
+    assert_equal(8, result[:cases].size)
+    assert_equal(14, result[:walkins].size)
   end
 
   def test_typical_refrigeration_equipment_list_secondary_school

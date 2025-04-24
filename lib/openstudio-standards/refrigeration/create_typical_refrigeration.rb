@@ -56,6 +56,7 @@ module OpenstudioStandards
       low_temperature_walkins = []
       ref_equip_list[:walkins].each do |walkin|
         ref_walkin = OpenstudioStandards::Refrigeration.create_walkin(model,
+                                                                      name: walkin[:walkin_name],
                                                                       template: template,
                                                                       walkin_type: walkin[:walkin_type],
                                                                       thermal_zone: thermal_zone_walkin)
@@ -139,9 +140,9 @@ module OpenstudioStandards
           area_modifier = total_space_floor_area_ft2 / ref_walkin[:reference_space_type_area_ft2]
           # round to the nearest 120 ft2, with a minimum size of 80 ft2 and maximum size of 480 ft2
           walkin_size_ft2 = [[80.0, 120.0 * ((ref_walkin[:size_ft2] * area_modifier) / 120.0).round].max, 480.0].min.to_int
-          walkin_name = "#{ref_walkin[:walkin_type]} - #{walkin_size_ft2}SF"
-          walkin_name = "#{walkin_name} with no glass door" if walkin_name.include? 'Cooler'
-          walkins_list << { walkin_type: walkin_name }
+          walkin_lookup_name = "#{ref_walkin[:walkin_type]} - #{walkin_size_ft2}SF"
+          walkin_lookup_name = "#{walkin_lookup_name} with no glass door" if walkin_lookup_name.include? 'Cooler'
+          walkins_list << { walkin_name: ref_walkin[:walkin_name], walkin_type: walkin_lookup_name }
         end
       end
 

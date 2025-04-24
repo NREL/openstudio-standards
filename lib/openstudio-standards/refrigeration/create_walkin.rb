@@ -7,11 +7,13 @@ module OpenstudioStandards
     # Adds a refrigerated walkin to the model.
     #
     # @param model [OpenStudio::Model::Model] OpenStudio model object
+    # @param name [String] Name of the refrigeration walkin
     # @param template [String] Technology or standards level, either 'old', 'new', or 'advanced'
     # @param walkin_type [String] The walkin type. See refrigeration_walkins data for valid options under walkin_type.
     # @param thermal_zone [OpenStudio::Model::ThermalZone] OpenStudio ThermalZone object
     # @return [OpenStudio::Model::RefrigerationWalkIn] the refrigeration walkin
     def self.create_walkin(model,
+                           name: nil,
                            template: 'new',
                            walkin_type: 'Walk-in Cooler - 120SF with no glass door',
                            thermal_zone: nil)
@@ -32,9 +34,13 @@ module OpenstudioStandards
       end
       walkins_properties = walkins_properties[0]
 
+      if name.nil?
+        name = "#{walkin_type} #{template}"
+      end
+
       # add walkin
       ref_walkin = OpenStudio::Model::RefrigerationWalkIn.new(model, model.alwaysOnDiscreteSchedule)
-      ref_walkin.setName(walkin_type)
+      ref_walkin.setName(name)
       ref_walkin.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
       ref_walkin.setRatedCoilCoolingCapacity(walkins_properties[:rated_capacity])
       ref_walkin.setOperatingTemperature(walkins_properties[:operating_temperature])
