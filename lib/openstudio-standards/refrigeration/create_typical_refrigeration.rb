@@ -15,7 +15,7 @@ module OpenstudioStandards
       ref_equip_list = OpenstudioStandards::Refrigeration.typical_refrigeration_equipment_list(model)
 
       if ref_equip_list[:cases].empty? && ref_equip_list[:walkins].empty?
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Refrigeration', "The model space types do not typical have refrigeration cases or walkins. No refrigeration system will be added.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Refrigeration', 'The model space types do not typical have refrigeration cases or walkins. No refrigeration system will be added.')
         return true
       end
 
@@ -23,7 +23,7 @@ module OpenstudioStandards
       unless ref_equip_list[:cases].empty?
         thermal_zone_case = OpenstudioStandards::Refrigeration.refrigeration_case_zone(model)
         if thermal_zone_case.nil?
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Refrigeration', "Attempted to add display cases to the model, but could find no thermal zone to put them into.")
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Refrigeration', 'Attempted to add display cases to the model, but could find no thermal zone to put them into.')
           return false
         end
       end
@@ -47,7 +47,7 @@ module OpenstudioStandards
       unless ref_equip_list[:walkins].empty?
         thermal_zone_walkin = OpenstudioStandards::Refrigeration.refrigeration_walkin_zone(model)
         if thermal_zone_walkin.nil?
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Refrigeration', "Attempted to add walkins to the model, but could find no thermal zone to put them into.")
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Refrigeration', 'Attempted to add walkins to the model, but could find no thermal zone to put them into.')
           return false
         end
       end
@@ -123,6 +123,7 @@ module OpenstudioStandards
 
         next unless space_type.standardsSpaceType.is_initialized
         next unless space_type.standardsBuildingType.is_initialized
+
         standards_space_type = space_type.standardsSpaceType.get
         standards_building_type = space_type.standardsBuildingType.get
 
