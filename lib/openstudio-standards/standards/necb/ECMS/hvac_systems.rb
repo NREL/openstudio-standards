@@ -270,7 +270,11 @@ class ECMS
     outdoor_vrf_unit.setName('VRF Outdoor Unit')
     outdoor_vrf_unit.setHeatPumpWasteHeatRecovery(true)
     outdoor_vrf_unit.setRatedHeatingCOP(4.0)
-    outdoor_vrf_unit.setRatedCoolingCOP(4.0)
+    if model.version < OpenStudio::VersionString.new('2.9.0')
+      outdoor_vrf_unit.setRatedCoolingCOP(4.0)
+    else
+      outdoor_vrf_unit.setGrossRatedCoolingCOP(4.0)
+    end
     outdoor_vrf_unit.setMinimumOutdoorTemperatureinHeatingMode(-25.0)
     outdoor_vrf_unit.setHeatingPerformanceCurveOutdoorTemperatureType('WetBulbTemperature')
     outdoor_vrf_unit.setMasterThermostatPriorityControlType('ThermostatOffsetPriority')
@@ -2122,7 +2126,7 @@ class ECMS
            loop_spm_type: 'Scheduled',
            loop_setpoint: 50.0,
            loop_temp_diff: 5.0)
-    # set additional parameters for heating heat pump 
+    # set additional parameters for heating heat pump
     hw_loop_htg_eqpt.setCondenserType('AirSoure')
     hw_loop_htg_eqpt.setMinimumSourceInletTemperature(-15.0)
     hw_loop_htg_eqpt.setReferenceCoefficientofPerformance(3.0)
@@ -2256,7 +2260,7 @@ class ECMS
     else
       raise("apply_efficiency_ecm_hs15_cawhp_fancoils: capacity of boiler #{primary_boiler.name.to_s} is not defined")
     end
-    # If two boilers are present set their capacities by multiplying the total capacity by the defined primary and secondary 
+    # If two boilers are present set their capacities by multiplying the total capacity by the defined primary and secondary
     # boiler capacity ratios, respectively.
     hw_boiler_cap = [ 1.0 ]
     if hw_boilers.size > 1
@@ -3289,8 +3293,13 @@ class ECMS
     end
 
     # Set COP
-    airconditioner_variablerefrigerantflow.setRatedCoolingCOP(cop.to_f) unless cop.nil?
-
+    unless cop.nil?
+      if airconditioner_variablerefrigerantflow.model.version < OpenStudio::VersionString.new('2.9.0')
+        airconditioner_variablerefrigerantflow.setRatedCoolingCOP(cop.to_f)
+      else
+        airconditioner_variablerefrigerantflow.setGrossRatedCoolingCOP(cop.to_f)
+      end
+    end
   end
 
   # =============================================================================================================================

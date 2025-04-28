@@ -105,9 +105,8 @@ class Standard
   # @param set_electric_equipment [Boolean] if true, set the electric equipment density
   # @param set_gas_equipment [Boolean] if true, set the gas equipment density
   # @param set_ventilation [Boolean] if true, set the ventilation rates (per-person and per-area)
-  # @param set_infiltration [Boolean] if true, set the infiltration rates
   # @return [Boolean] returns true if successful, false if not
-  def space_type_apply_internal_loads(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration)
+  def space_type_apply_internal_loads(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation)
     # Skip plenums
     # Check if the space type name
     # contains the word plenum.
@@ -437,50 +436,6 @@ class Standard
 
     end
 
-    # Infiltration
-    infiltration_have_info = false
-    infiltration_per_area_ext = space_type_properties['infiltration_per_exterior_area'].to_f
-    infiltration_per_area_ext_wall = space_type_properties['infiltration_per_exterior_wall_area'].to_f
-    infiltration_ach = space_type_properties['infiltration_air_changes'].to_f
-    unless infiltration_per_area_ext.zero? && infiltration_per_area_ext_wall.zero? && infiltration_ach.zero?
-      infiltration_have_info = true
-    end
-
-    if set_infiltration && infiltration_have_info
-      # Remove all but the first instance
-      instances = space_type.spaceInfiltrationDesignFlowRates.sort
-      if instances.empty?
-        instance = OpenStudio::Model::SpaceInfiltrationDesignFlowRate.new(space_type.model)
-        instance.setName("#{space_type.name} Infiltration")
-        instance.setSpaceType(space_type)
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} had no infiltration objects, one has been created.")
-        instances << instance
-      elsif instances.size > 1
-        instances.each_with_index do |inst, i|
-          next if i.zero?
-
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "Removed #{inst.name} from #{space_type.name}.")
-          inst.remove
-        end
-      end
-
-      # Modify each instance
-      space_type.spaceInfiltrationDesignFlowRates.sort.each do |inst|
-        unless infiltration_per_area_ext.zero?
-          inst.setFlowperExteriorSurfaceArea(OpenStudio.convert(infiltration_per_area_ext.to_f, 'ft^3/min*ft^2', 'm^3/s*m^2').get.round(13))
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set infiltration to #{ventilation_ach} per ft^2 exterior surface area.")
-        end
-        unless infiltration_per_area_ext_wall.zero?
-          inst.setFlowperExteriorWallArea(OpenStudio.convert(infiltration_per_area_ext_wall.to_f, 'ft^3/min*ft^2', 'm^3/s*m^2').get)
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set infiltration to #{infiltration_per_area_ext_wall} per ft^2 exterior wall area.")
-        end
-        unless infiltration_ach.zero?
-          inst.setAirChangesperHour(infiltration_ach)
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set infiltration to #{ventilation_ach} ACH.")
-        end
-      end
-    end
-
     return true
   end
 
@@ -612,12 +567,11 @@ class Standard
   # @param set_lights [Boolean] if true, set the lighting schedule
   # @param set_electric_equipment [Boolean] if true, set the electric schedule schedule
   # @param set_gas_equipment [Boolean] if true, set the gas equipment density
-  # @param set_infiltration [Boolean] if true, set the infiltration schedule
   # @param make_thermostat [Boolean] if true, makes a thermostat for this space type from the
   #   schedules listed for the space type.  This thermostat is not hooked to any zone by this method,
   #   but may be found and used later.
   # @return [Boolean] returns true if successful, false if not
-  def space_type_apply_internal_load_schedules(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, set_infiltration, make_thermostat)
+  def space_type_apply_internal_load_schedules(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, make_thermostat)
     # Get the standards data
     space_type_properties = space_type_get_standards_data(space_type)
 
@@ -670,15 +624,6 @@ class Standard
       unless gas_equip_sch.nil?
         default_sch_set.setGasEquipmentSchedule(model_add_schedule(space_type.model, gas_equip_sch))
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set gas equipment schedule to #{gas_equip_sch}.")
-      end
-    end
-
-    # Infiltration
-    if set_infiltration
-      infiltration_sch = space_type_properties['infiltration_schedule']
-      unless infiltration_sch.nil?
-        default_sch_set.setInfiltrationSchedule(model_add_schedule(space_type.model, infiltration_sch))
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set infiltration schedule to #{infiltration_sch}.")
       end
     end
 
