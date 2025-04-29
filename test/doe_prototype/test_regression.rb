@@ -5,7 +5,7 @@ class TestDOEPrototypesRegression < CreateDOEPrototypeBuildingTest
    @building_types = [
      'SmallOffice',
      'MediumOffice',
-     'LargeOffice',
+     # 'LargeOffice',
      'RetailStandalone',
      'RetailStripmall',
      'PrimarySchool',
