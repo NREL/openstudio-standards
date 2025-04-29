@@ -34,6 +34,7 @@ module OpenstudioStandards
       ref_rack.setHeatRejectionZone(thermal_zone)
       ref_rack.setCondenserType('AirCooled')
 
+      # @todo add cop and curves for compressor racks
       # ref_rack.setDesignCompressorRackCOP(Double)
       # ref_rack.setCompressorRackCOPFunctionofTemperatureCurve(&Curve)
       # ref_rack.setDesignCondenserFanPower(Double)
