@@ -8,9 +8,11 @@ module OpenstudioStandards
     #
     # @param model [OpenStudio::Model::Model] OpenStudio model object
     # @param template [String] Technology or standards level, either 'old', 'new', or 'advanced'
+    # @param separate_system_size_limit [Float] The area in square feet above which a refrigeration system will be split into multiple systems
     # @return [Boolean] returns true if successful, false if not
     def self.create_typical_refrigeration(model,
-                                          template: 'new')
+                                          template: 'new',
+                                          separate_system_size_limit: 20000.0)
       # get refrigeration equipment list based on space types and area
       ref_equip_list = OpenstudioStandards::Refrigeration.typical_refrigeration_equipment_list(model)
 
@@ -68,7 +70,6 @@ module OpenstudioStandards
       end
 
       refrigeration_space_type_area = OpenStudio.convert(model.getBuilding.floorArea, 'm^2', 'ft^2').get
-      separate_system_size_limit = 20_000.0
       if refrigeration_space_type_area < separate_system_size_limit
         # each case is self-contained
         medium_temperature_cases.each { |ref_equip| OpenstudioStandards::Refrigeration.create_compressor_rack(model, ref_equip, template: template) }
