@@ -141,7 +141,7 @@ module OpenstudioStandards
         ref_walkins.each do |ref_walkin|
           area_modifier = total_space_floor_area_ft2 / ref_walkin[:reference_space_type_area_ft2]
           # round to the nearest 120 ft2, with a minimum size of 80 ft2 and maximum size of 480 ft2
-          walkin_size_ft2 = [[80.0, 120.0 * ((ref_walkin[:size_ft2] * area_modifier) / 120.0).round].max, 480.0].min.to_int
+          walkin_size_ft2 = (120.0 * ((ref_walkin[:size_ft2] * area_modifier) / 120.0).round).clamp(80.0, 480.0).to_int
           walkin_lookup_name = "#{ref_walkin[:walkin_type]} - #{walkin_size_ft2}SF"
           walkin_lookup_name = "#{walkin_lookup_name} with no glass door" if walkin_lookup_name.include? 'Cooler'
           walkins_list << { walkin_name: ref_walkin[:walkin_name], walkin_type: walkin_lookup_name }
