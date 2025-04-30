@@ -2,12 +2,18 @@ require_relative '../../helpers/minitest_helper'
 
 class TestRefrigerationCreateCase < Minitest::Test
   def setup
+    @geo = OpenstudioStandards::Geometry
     @refrig = OpenstudioStandards::Refrigeration
   end
 
   def test_create_case
     model = OpenStudio::Model::Model.new
-    zone = OpenStudio::Model::ThermalZone.new(model)
+    args = {}
+    args['total_bldg_floor_area'] = 50000.0
+    args['bldg_type_a'] = 'SuperMarket'
+    args['bar_division_method'] = 'Multiple Space Types - Simple Sliced'
+    result = @geo.create_bar_from_building_type_ratios(model, args)
+    zone = model.getThermalZoneByName('Zone SuperMarket Sales A  - Story ground').get
 
     # default case
     case1 = @refrig.create_case(model)

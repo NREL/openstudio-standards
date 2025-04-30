@@ -10,18 +10,28 @@ module OpenstudioStandards
     # @param template [String] Technology or standards level, either 'old', 'new', or 'advanced'
     # @param case_type [String] The case type. See refrigeration_cases data for valid options under case_name.
     # @param case_length [String] The case length in meters.
-    # @param thermal_zone [OpenStudio::Model::ThermalZone] OpenStudio ThermalZone object
+    # @param thermal_zone [OpenStudio::Model::ThermalZone] Thermal zone with the case. If nil, will look up from the model.
     # @return [OpenStudio::Model::RefrigerationCase] the refrigeration case
     def self.create_case(model,
                          template: 'new',
                          case_type: 'Vertical Open - All',
                          case_length: nil,
                          thermal_zone: nil)
+      # get thermal zone if not provided
+      if thermal_zone.nil?
+        # Find the thermal zones most suited for holding the display cases
+        thermal_zone = OpenstudioStandards::Refrigeration.refrigeration_case_zone(model)
+        if thermal_zone.nil?
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Refrigeration', 'Attempted to add display cases to the model, but could find no thermal zone to put them into.')
+          return nil
+        end
+      end
+
       # load refrigeration cases data
       cases_csv = "#{__dir__}/data/refrigerated_cases.csv"
       unless File.exist?(cases_csv)
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Refrigeration', "Unable to find file: #{cases_csv}")
-        return false
+        return nil
       end
       cases_tbl = CSV.table(cases_csv, encoding: 'ISO8859-1:utf-8')
       cases_hsh = cases_tbl.map(&:to_hash)
@@ -66,7 +76,7 @@ module OpenstudioStandards
       ref_case.setUnderCaseHVACReturnAirFraction(0.0)
       ref_case.resetRefrigeratedCaseRestockingSchedule
       ref_case.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
-      ref_case.setThermalZone(thermal_zone) unless thermal_zone.nil?
+      ref_case.setThermalZone(thermal_zone)
       ref_case.setRatedAmbientTemperature(OpenStudio.convert(75.0, 'F', 'C').get)
 
       # place holders for schedules until data provided from ORNL

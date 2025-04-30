@@ -10,18 +10,28 @@ module OpenstudioStandards
     # @param name [String] Name of the refrigeration walkin
     # @param template [String] Technology or standards level, either 'old', 'new', or 'advanced'
     # @param walkin_type [String] The walkin type. See refrigeration_walkins data for valid options under walkin_type.
-    # @param thermal_zone [OpenStudio::Model::ThermalZone] OpenStudio ThermalZone object
+    # @param thermal_zone [OpenStudio::Model::ThermalZone] Thermal zone with the walkin. If nil, will look up from the model.
     # @return [OpenStudio::Model::RefrigerationWalkIn] the refrigeration walkin
     def self.create_walkin(model,
                            name: nil,
                            template: 'new',
                            walkin_type: 'Walk-in Cooler - 120SF with no glass door',
                            thermal_zone: nil)
+      # get thermal zone if not provided
+      if thermal_zone.nil?
+        # Find the thermal zones most suited for holding the walkin
+        thermal_zone = OpenstudioStandards::Refrigeration.refrigeration_walkin_zone(model)
+        if thermal_zone.nil?
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Refrigeration', 'Attempted to add walkins to the model, but could find no thermal zone to put them into.')
+          return nil
+        end
+      end
+
       # load refrigeration walkin data
       walkins_csv = "#{__dir__}/data/refrigerated_walkins.csv"
       unless File.exist?(walkins_csv)
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Refrigeration', "Unable to find file: #{walkins_csv}")
-        return false
+        return nil
       end
       walkins_tbl = CSV.table(walkins_csv, encoding: 'ISO8859-1:utf-8')
       walkins_hsh = walkins_tbl.map(&:to_hash)
@@ -30,7 +40,7 @@ module OpenstudioStandards
       walkins_properties = walkins_hsh.select { |r| (r[:template] == template) && (r[:walkin_name] == walkin_type) }
       if walkins_properties.empty?
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Refrigeration', "Unable to find walkin properties for walkin #{template} #{walkin_type}.")
-        return false
+        return nil
       end
       walkins_properties = walkins_properties[0]
 
@@ -66,7 +76,7 @@ module OpenstudioStandards
       ref_walkin.setZoneBoundaryHeightofGlassReachInDoorsFacingZone(walkins_properties[:height_of_stocking_doors_facing_zone])
       ref_walkin.setZoneBoundaryStockingDoorUValueFacingZone(walkins_properties[:stocking_door_u])
       ref_walkin.zoneBoundaries.each { |zb| zb.setStockingDoorOpeningProtectionTypeFacingZone(walkins_properties[:stocking_door_opening_protection]) }
-      ref_walkin.setZoneBoundaryThermalZone(thermal_zone) unless thermal_zone.nil?
+      ref_walkin.setZoneBoundaryThermalZone(thermal_zone)
 
       # place holders for schedules until data provided from ORNL
       i = 0

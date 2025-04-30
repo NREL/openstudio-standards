@@ -30,6 +30,7 @@ module OpenstudioStandards
         end
       end
 
+      # create cases
       medium_temperature_cases = []
       low_temperature_cases = []
       ref_equip_list[:cases].each do |ref_case|
@@ -54,6 +55,7 @@ module OpenstudioStandards
         end
       end
 
+      # create walkins
       medium_temperature_walkins = []
       low_temperature_walkins = []
       ref_equip_list[:walkins].each do |walkin|
