@@ -461,9 +461,7 @@ module OpenstudioStandards
         hash['RetailSales'] = { ratio: 0.8, space_type_gen: true, default: true }
         hash['StockRoom'] = { ratio: 0.2, space_type_gen: true, default: false }
       when 'SCn'
-        hash['WarehouseCond'] = { ratio: 0.951, space_type_gen: true, default: true }
-        hash['OfficeGeneral'] = { ratio: 0.049, space_type_gen: true, default: false }
-
+        hash['WarehouseCond'] = { ratio: 1.0, space_type_gen: true, default: true }
       when 'SUn'
         hash['WarehouseUnCond'] = { ratio: 1.0, space_type_gen: true, default: true }
       when 'WRf'
