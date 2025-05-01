@@ -50,3 +50,5 @@ coverage/
 /data/standards/export
 /data/geometry/../*.osw
 /.venv
+/utilities/btap_cli/input
+/utilities/btap_cli/output
