@@ -126,6 +126,11 @@ class BTAPDatapoint
                                        epw_file: @options[:epw_file],
                                        custom_weather_folder: weather_folder,
                                        sizing_run_dir: File.join(@dp_temp_folder, 'sizing_folder'),
+                                       hvac_system_primary: @options[:hvac_system_primary],
+                                       hvac_system_dwelling_units: @options[:hvac_system_dwelling_units],
+                                       hvac_system_washrooms: @options[:hvac_system_washrooms],
+                                       hvac_system_corridor: @options[:hvac_system_corridor],
+                                       hvac_system_storage: @options[:hvac_system_storage],
                                        primary_heating_fuel: @options[:primary_heating_fuel],
                                        necb_reference_hp: @options[:necb_reference_hp],
                                        necb_reference_hp_supp_fuel: @options[:necb_reference_hp_supp_fuel],
@@ -185,6 +190,7 @@ class BTAPDatapoint
                                        boiler_fuel: @options[:boiler_fuel],
                                        boiler_cap_ratio: @options[:boiler_cap_ratio],
                                        swh_fuel: @options[:swh_fuel],
+                                       airloop_fancoils_heating: @options[:airloop_fancoils_heating],
                                        oerd_utility_pricing: @oerd_utility_pricing
                                        )
       end
