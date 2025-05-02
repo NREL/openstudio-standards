@@ -102,11 +102,10 @@ class NECB2011
                                   hw_loop,
                                   model,
                                   zone)
-
       end
     else
       zones.each do |zone|
-        air_loop = add_system_3_and_8_airloop(heating_coil_type, model, system_data, zone, necb_reference_hp: necb_reference_hp, necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel)
+        air_loop = add_system_3_and_8_airloop(heating_coil_type, model, system_data, zone, necb_reference_hp: necb_reference_hp, necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel, hw_loop: hw_loop)
         add_sys3_and_8_zone_equip(air_loop,
                                   baseboard_type,
                                   hw_loop,

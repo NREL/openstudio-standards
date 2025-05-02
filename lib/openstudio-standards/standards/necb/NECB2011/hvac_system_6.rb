@@ -138,7 +138,6 @@ class NECB2011
           vav_terminal.setFixedMinimumAirFlowRate(system_data[:ZoneVAVMinFlowFactorPerFloorArea] * zone.floorArea)
           vav_terminal.setMaximumReheatAirTemperature(system_data[:ZoneVAVMaxReheatTemp])
           vav_terminal.setDamperHeatingAction(system_data[:ZoneVAVDamperAction])
-
         end
         sys_name_pars = {}
         sys_name_pars['sys_hr'] = 'none'
