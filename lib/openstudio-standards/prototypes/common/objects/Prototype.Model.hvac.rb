@@ -421,7 +421,7 @@ class Standard
                                 system['condenser_fan_pwr_curve_name'],
                                 thermal_zones[0])
 
-      # When multiple cases and walk-ins asssigned to a system
+      # When multiple cases and walk-ins assigned to a system
       when 'Refrigeration_system'
         model_add_refrigeration_system(model,
                                        system['compressor_type'],

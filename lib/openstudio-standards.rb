@@ -33,6 +33,15 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/exterior_lighting/create'
   require_relative 'openstudio-standards/exterior_lighting/information'
 
+  # Refrigeration Module
+  require_relative 'openstudio-standards/refrigeration/create_case'
+  require_relative 'openstudio-standards/refrigeration/create_compressor'
+  require_relative 'openstudio-standards/refrigeration/create_compressor_rack'
+  require_relative 'openstudio-standards/refrigeration/create_refrigeration_system'
+  require_relative 'openstudio-standards/refrigeration/create_typical_refrigeration'
+  require_relative 'openstudio-standards/refrigeration/create_walkin'
+  require_relative 'openstudio-standards/refrigeration/information'
+
   # Schedules Module
   require_relative 'openstudio-standards/schedules/create'
   require_relative 'openstudio-standards/schedules/modify'
@@ -587,12 +596,10 @@ module OpenstudioStandards
   # DOE Ref 1980-2004
   require_relative "#{proto}/ashrae_90_1/doe_ref_1980_2004/doe_ref_1980_2004.AirTerminalSingleDuctVAVReheat"
   require_relative "#{proto}/ashrae_90_1/doe_ref_1980_2004/doe_ref_1980_2004.Model.elevators"
-  require_relative "#{proto}/ashrae_90_1/doe_ref_1980_2004/doe_ref_1980_2004.refrigeration"
   # DOE Ref Pre-1980
   require_relative "#{proto}/ashrae_90_1/doe_ref_pre_1980/doe_ref_pre_1980.AirTerminalSingleDuctVAVReheat"
   require_relative "#{proto}/ashrae_90_1/doe_ref_pre_1980/doe_ref_pre_1980.CoilHeatingGas"
   require_relative "#{proto}/ashrae_90_1/doe_ref_pre_1980/doe_ref_pre_1980.Model.elevators"
-  require_relative "#{proto}/ashrae_90_1/doe_ref_pre_1980/doe_ref_pre_1980.refrigeration"
   # NREL ZNE Ready 2017
   require_relative "#{proto}/ashrae_90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.AirTerminalSingleDuctVAVReheat"
   require_relative "#{proto}/ashrae_90_1/nrel_nze_ready_2017/nrel_zne_ready_2017.FanConstantVolume"
@@ -614,7 +621,6 @@ module OpenstudioStandards
   require_relative "#{proto}/deer/deer.Model"
   # CBES Common
   require_relative "#{proto}/cbes/cbes.Model.elevators"
-  require_relative "#{proto}/cbes/cbes.refrigeration"
   # CBES T24 2008
   require_relative "#{proto}/cbes/cbes_t24_2008/cbes_t24_2008.FanConstantVolume"
   require_relative "#{proto}/cbes/cbes_t24_2008/cbes_t24_2008.FanOnOff"

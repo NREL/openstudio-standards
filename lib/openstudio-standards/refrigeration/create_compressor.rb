@@ -1,0 +1,72 @@
+module OpenstudioStandards
+  # The Refrigeration module provides methods to create, modify, and get information about refrigeration
+  module Refrigeration
+    # @!group Create Refrigeration Compressor
+    # Methods to add refrigeration system compressor
+
+    # Adds a refrigeration system compressor to the model.
+    #
+    # @param model [OpenStudio::Model::Model] OpenStudio model object
+    # @param template [String] Technology or standards level, either 'old', 'new', or 'advanced'
+    # @param operation_type [String] Temperature regime, either 'MT' Medium Temperature, or 'LT' Low Temperature
+    # @return [OpenStudio::Model::RefrigerationCompressor] the refrigeration compressor
+    def self.create_compressor(model,
+                               template: 'new',
+                               operation_type: 'MT')
+      # load refrigeration compressor data
+      compressors_csv = "#{__dir__}/data/refrigeration_compressors.csv"
+      unless File.exist?(compressors_csv)
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Refrigeration', "Unable to find file: #{compressors_csv}")
+        return false
+      end
+      compressors_tbl = CSV.table(compressors_csv, encoding: 'ISO8859-1:utf-8')
+      compressors_hsh = compressors_tbl.map(&:to_hash)
+
+      # get case properties
+      compressor_properties = compressors_hsh.select { |r| (r[:template] == template) && (r[:operation_type] == operation_type) }
+      pc = compressor_properties.select { |r| r[:curve_type] == 'Power' }[0]
+      cc = compressor_properties.select { |r| r[:curve_type] == 'Capacity' }[0]
+
+      # TODO: replace with curve data once curves are refactored
+      std = Standard.build('90.1-2013')
+
+      # create power curve
+      power_coeffs = []
+      power_coeffs << pc[:coefficient1]
+      power_coeffs << pc[:coefficient2]
+      power_coeffs << pc[:coefficient3]
+      power_coeffs << pc[:coefficient4]
+      power_coeffs << pc[:coefficient5]
+      power_coeffs << pc[:coefficient6]
+      power_coeffs << pc[:coefficient7]
+      power_coeffs << pc[:coefficient8]
+      power_coeffs << pc[:coefficient9]
+      power_coeffs << pc[:coefficient10]
+      power_curve = std.create_curve_bicubic(model, power_coeffs, pc[:curve_name], pc[:min_val_x], pc[:max_val_x], pc[:min_val_y], pc[:max_val_y], nil, nil)
+
+      # create capacity curve
+      capacity_coeffs = []
+      capacity_coeffs << cc[:coefficient1]
+      capacity_coeffs << cc[:coefficient2]
+      capacity_coeffs << cc[:coefficient3]
+      capacity_coeffs << cc[:coefficient4]
+      capacity_coeffs << cc[:coefficient5]
+      capacity_coeffs << cc[:coefficient6]
+      capacity_coeffs << cc[:coefficient7]
+      capacity_coeffs << cc[:coefficient8]
+      capacity_coeffs << cc[:coefficient9]
+      capacity_coeffs << cc[:coefficient10]
+      capacity_curve = std.create_curve_bicubic(model, capacity_coeffs, cc[:curve_name], cc[:min_val_x], cc[:max_val_x], cc[:min_val_y], cc[:max_val_y], nil, nil)
+
+      # Make the compressor
+      compressor = OpenStudio::Model::RefrigerationCompressor.new(model)
+      compressor.setName("#{template} #{operation_type} Refrigeration Compressor")
+      compressor.setRefrigerationCompressorPowerCurve(power_curve)
+      compressor.setRefrigerationCompressorCapacityCurve(capacity_curve)
+
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Refrigeration', "Added refrigeration compressor #{compressor.name}.")
+
+      return compressor
+    end
+  end
+end
