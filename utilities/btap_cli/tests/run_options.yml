@@ -31,6 +31,7 @@
 :infiltration_scale: NECB_Default
 :lights_scale: NECB_Default
 :lights_type: NECB_Default
+:necb_hdd: NECB_Default
 :nv_delta_temp_in_out: NECB_Default
 :nv_temp_out_min: NECB_Default
 :nv_opening_fraction: NECB_Default
@@ -38,7 +39,7 @@
 :oa_scale: NECB_Default
 :occupancy_loads_scale: NECB_Default
 :overhead_door_cond: NECB_Default
-:primary_heating_fuel: FuelOilNo2
+:primary_heating_fuel: NaturalGasHPGasBackup
 :pv_ground_azimuth_angle: NECB_Default
 :pv_ground_module_description: NECB_Default
 :pv_ground_tilt_angle: NECB_Default
@@ -55,10 +56,14 @@
 :skylight_cond: NECB_Default
 :skylight_solar_trans: NECB_Default
 :srr_set: NECB_Default
-:template: NECB2017
+:swh_fuel: NECB_Default
+:template: NECB2020
 :npv_start_year: NECB_Default
 :npv_end_year: NECB_Default
 :npv_discount_rate: NECB_Default
+:npv_discount_rate_carbon: NECB_Default
+:oerd_utility_pricing: NECB_Default
+:utility_pricing_year: NECB_Default
 :tbd_option: NECB_Default
 :output_variables: [
   {    key: '*',     variable: 'Zone Air Temperature',     frequency: 'hourly'}
