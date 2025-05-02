@@ -10,7 +10,10 @@ class TestRefrigerationCreateRefrigerationSystem < Minitest::Test
     zone = OpenStudio::Model::ThermalZone.new(model)
 
     # default case
-    case1 = @refrig.create_case(model)
+    case1 = @refrig.create_case(model,
+                                template: 'new',
+                                case_length:5.0,
+                                thermal_zone: zone)
 
     # old case
     case2 = @refrig.create_case(model,
