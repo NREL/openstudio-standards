@@ -28,12 +28,11 @@ class NECB2011 < Standard
   def convert_arg_to_bool(variable:, default:)
     return default if variable.nil?
     if variable.is_a? String
-      return default if variable.to_s.downcase == 'necb_default'
-      return false if variable.to_s.downcase == 'false'
       return true if variable.to_s.downcase == 'true'
+      return false
     end
-    return false if variable == false
-    return variable
+    return true if variable == true
+    return default
   end
 
   # This method checks if a variable is a string.  If it is anything but a string it returns the default.  If it is a
@@ -216,7 +215,7 @@ class NECB2011 < Standard
                                    debug: false,
                                    sizing_run_dir: Dir.pwd,
                                    primary_heating_fuel: 'Electricity',
-                                   swh_fuel: 'NECB_Default',
+                                   swh_fuel: nil,
                                    dcv_type: 'NECB_Default',
                                    lights_type: 'NECB_Default',
                                    lights_scale: 1.0,
@@ -271,7 +270,8 @@ class NECB2011 < Standard
                                    tbd_interpolate: false,
                                    necb_hdd: true,
                                    boiler_fuel: nil,
-                                   boiler_cap_ratio: nil)
+                                   boiler_cap_ratio: nil,
+                                   oerd_utility_pricing: nil)
     model = load_building_type_from_library(building_type: building_type)
     return model_apply_standard(model: model,
                                 tbd_option: tbd_option,
@@ -333,7 +333,8 @@ class NECB2011 < Standard
                                 baseline_system_zones_map_option: baseline_system_zones_map_option,  # Three options: (1) 'NECB_Default'/'none'/nil (i.e. 'one_sys_per_bldg'), (2) 'one_sys_per_dwelling_unit', (3) 'one_sys_per_bldg'
                                 necb_hdd: necb_hdd,
                                 boiler_fuel: boiler_fuel,
-                                boiler_cap_ratio: boiler_cap_ratio
+                                boiler_cap_ratio: boiler_cap_ratio,
+                                oerd_utility_pricing: oerd_utility_pricing
                                 )
   end
 
@@ -357,8 +358,8 @@ class NECB2011 < Standard
                            sizing_run_dir: Dir.pwd,
                            necb_reference_hp: false,
                            necb_reference_hp_supp_fuel: 'DefaultFuel',
-                           primary_heating_fuel: 'DefaultFuel',
-                           swh_fuel: 'DefaultFuel',
+                           primary_heating_fuel: 'Electricity',
+                           swh_fuel: nil,
                            dcv_type: 'NECB_Default',
                            lights_type: 'NECB_Default',
                            lights_scale: 'NECB_Default',
@@ -411,29 +412,33 @@ class NECB2011 < Standard
                            baseline_system_zones_map_option: nil,
                            necb_hdd: true,
                            boiler_fuel: nil,
-                           boiler_cap_ratio: nil)
+                           boiler_cap_ratio: nil,
+                           oerd_utility_pricing: nil)
 
-    primary_heating_fuel = validate_primary_heating_fuel(primary_heating_fuel: primary_heating_fuel)
+    apply_weather_data(model: model, epw_file: epw_file, custom_weather_folder: custom_weather_folder)
+    primary_heating_fuel = validate_primary_heating_fuel(primary_heating_fuel: primary_heating_fuel, model: model)
     self.fuel_type_set = SystemFuels.new()
-    swh_fuel = swh_fuel.nil? ? 'NECB_Default' : swh_fuel.to_s
-    self.fuel_type_set.set_defaults(standards_data: @standards_data, primary_heating_fuel: primary_heating_fuel, swh_fuel: swh_fuel)
-    swh_fuel = self.fuel_type_set.swh_fueltype if swh_fuel.to_s.downcase == 'necb_default'
+    self.fuel_type_set.set_defaults(standards_data: @standards_data, primary_heating_fuel: primary_heating_fuel)
     clean_and_scale_model(model: model, rotation_degrees: rotation_degrees, scale_x: scale_x, scale_y: scale_y, scale_z: scale_z)
     fdwr_set = convert_arg_to_f(variable: fdwr_set, default: -1)
     srr_set = convert_arg_to_f(variable: srr_set, default: -1)
     necb_hdd = convert_arg_to_bool(variable: necb_hdd, default: true)
     boiler_fuel = convert_arg_to_string(variable: boiler_fuel, default: nil)
     boiler_cap_ratio = convert_arg_to_string(variable: boiler_cap_ratio, default: nil)
+    swh_fuel = convert_arg_to_string(variable: swh_fuel, default: nil)
+    oerd_utility_pricing = convert_arg_to_bool(variable: oerd_utility_pricing, default: false)
 
     boiler_cap_ratios = set_boiler_cap_ratios(boiler_cap_ratio: boiler_cap_ratio, boiler_fuel: boiler_fuel) unless boiler_cap_ratio.nil? && boiler_fuel.nil?
     self.fuel_type_set.set_boiler_fuel(standards_data: @standards_data, boiler_fuel: boiler_fuel, boiler_cap_ratios: boiler_cap_ratios) unless boiler_fuel.nil?
+    self.fuel_type_set.set_swh_fuel(swh_fuel: swh_fuel) unless swh_fuel.nil? || swh_fuel.to_s.downcase == 'defaultfuel'
 
     # Ensure the volume calculation in all spaces is done automatically
     model.getSpaces.sort.each do |space|
       space.autocalculateVolume
     end
 
-    apply_weather_data(model: model, epw_file: epw_file, custom_weather_folder: custom_weather_folder)
+    output_meters = check_output_meters(output_meters: output_meters) if oerd_utility_pricing
+
     apply_loads(model: model,
                 lights_type: lights_type,
                 lights_scale: lights_scale,
@@ -475,7 +480,6 @@ class NECB2011 < Standard
     apply_systems_and_efficiencies(model: model,
                                    sizing_run_dir: sizing_run_dir,
                                    primary_heating_fuel: primary_heating_fuel,
-                                   swh_fuel: swh_fuel,
                                    dcv_type: dcv_type,
                                    ecm_system_name: ecm_system_name,
                                    ecm_system_zones_map_option: ecm_system_zones_map_option,
@@ -548,7 +552,6 @@ class NECB2011 < Standard
   def apply_systems_and_efficiencies(model:,
                                      sizing_run_dir:,
                                      primary_heating_fuel:,
-                                     swh_fuel:,
                                      dcv_type: 'NECB_Default',
                                      ecm_system_name: 'NECB_Default',
                                      ecm_system_zones_map_option: 'NECB_Default',
@@ -579,8 +582,6 @@ class NECB2011 < Standard
 
     # Create Default Systems.
     apply_systems(model: model,
-                  primary_heating_fuel: primary_heating_fuel,
-                  swh_fuel: swh_fuel,
                   sizing_run_dir: sizing_run_dir,
                   shw_scale: shw_scale,
                   baseline_system_zones_map_option: baseline_system_zones_map_option)
@@ -2458,7 +2459,16 @@ class NECB2011 < Standard
 
   # This method is defined and used by the vintage classes to address he issue with the heat pump fuel types.  This
   # method does nothing when creating NECB reference buildings.
-  def validate_primary_heating_fuel(primary_heating_fuel:)
+  def validate_primary_heating_fuel(primary_heating_fuel:, model:)
+    if primary_heating_fuel.to_s.downcase == 'defaultfuel' || primary_heating_fuel.to_s.downcase == 'necb_default'
+      epw = OpenStudio::EpwFile.new(model.weatherFile.get.path.get)
+      default_fuel = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.stateProvinceRegion) }['fueltype_set']
+      if default_fuel.nil?
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.swh', "Could not find a default fuel for #{epw.stateProvinceRegion}.  Using Electricity as the fuel type instead.")
+        return 'Electricity'
+      end
+      return default_fuel
+    end
     return primary_heating_fuel
   end
 
@@ -2510,6 +2520,28 @@ class NECB2011 < Standard
     }
     return boiler_cap_ratios
   end
+
+  # This method checks if the output_meters argument contains a net electricity meter with 'timestep' frequency.  If one
+  # is then the method does nothing.  If one is not then it is added.  This is used in conjunction with the
+  # 'oerd_utility_pricing' argument.  If that argument is present then a net electricity meter with 'timestep' frequency
+  # is required to determine the peak net electricity usage.
+  def check_output_meters(output_meters: nil)
+    if output_meters.nil?
+      output_meters = [
+        {
+          "name" => "ElectricityNet:Facility",
+          "frequency" => "Hourly"
+        }
+      ]
+    else
+      electnet_facility = output_meters.select { |output_meter| (output_meter["name"].to_s.downcase == "electricitynet:facility") && (output_meter["frequency"].to_s.downcase == "zone timestep") }
+      if electnet_facility.empty?
+        output_meters << {
+          "name" => "ElectricityNet:Facility",
+          "frequency" => "Hourly"
+        }
+      end
+    end
+    return output_meters
+  end
 end
-
-
