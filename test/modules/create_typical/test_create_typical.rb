@@ -235,7 +235,8 @@ class TestCreateTypical < Minitest::Test
     starting_size = model.getModelObjects.size
     result = @create.create_typical_building_from_model(model, template,
                                                         climate_zone: climate_zone,
-                                                        sizing_run_directory: output_dir)
+                                                        sizing_run_directory: output_dir,
+                                                        refrigeration_template: 'advanced')
     ending_size = model.getModelObjects.size
     assert(result)
     assert(starting_size < ending_size)

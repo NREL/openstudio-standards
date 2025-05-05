@@ -39,6 +39,11 @@ module OpenstudioStandards
       # get case properties
       case_properties = cases_hsh.select { |r| (r[:template] == template) && (r[:case_name] == case_type) }[0]
 
+      if case_properties.nil?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Refrigeration', "Unable to find case data for template #{template} case type #{case_type}.")
+        return nil
+      end
+
       # add case
       ref_case = OpenStudio::Model::RefrigerationCase.new(model, model.alwaysOnDiscreteSchedule)
       ref_case.setName(case_type)

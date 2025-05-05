@@ -17,13 +17,19 @@ module OpenstudioStandards
       compressors_csv = "#{__dir__}/data/refrigeration_compressors.csv"
       unless File.exist?(compressors_csv)
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Refrigeration', "Unable to find file: #{compressors_csv}")
-        return false
+        return nil
       end
       compressors_tbl = CSV.table(compressors_csv, encoding: 'ISO8859-1:utf-8')
       compressors_hsh = compressors_tbl.map(&:to_hash)
 
       # get case properties
       compressor_properties = compressors_hsh.select { |r| (r[:template] == template) && (r[:operation_type] == operation_type) }
+
+      if compressor_properties.nil?
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Refrigeration', "Unable to find compressor for template #{template} operation type #{operation_type}.")
+        return nil
+      end
+
       pc = compressor_properties.select { |r| r[:curve_type] == 'Power' }[0]
       cc = compressor_properties.select { |r| r[:curve_type] == 'Capacity' }[0]
 
