@@ -179,5 +179,24 @@ module OpenstudioStandards
 
       return area_length_count_hash
     end
+
+    # get exterior lighting properties by lighting generation
+    #
+    # @param lighting_generation [String] lighting generation
+    # @return [Hash] hash of exterior lighting properties
+    def self.model_get_exterior_lighting_properties(lighting_generation: 'default',
+                                                    lighting_zone: 3)
+      # load typical exterior lighting data
+      data = JSON.parse(File.read("#{__dir__}/data/typical_exterior_lighting.json"))
+      exterior_lighting_properties = data['exterior_lighting'].select { |hash| (hash['lighting_generation'] == lighting_generation) && (hash['lighting_zone'] == lighting_zone) }[0]
+
+      # make sure lighting properties were found
+      if exterior_lighting_properties.nil?
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ExteriorLighting', "Exterior lighting properties not found for lighting generation #{lighting_generation}, exterior lighting zone #{lighting_zone}.")
+        return nil
+      end
+
+      return exterior_lighting_properties
+    end
   end
 end
