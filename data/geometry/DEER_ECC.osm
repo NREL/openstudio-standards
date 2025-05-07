@@ -4480,7 +4480,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   ECC,                                    !- Standards Building Type
-  Classroom;                              !- Standards Space Type
+  classroom/lecture/training;      !- Standards Space Type
 
 OS:SpaceType,
   {d5e359bc-8c03-4b97-b9f5-07a4a83b7fea}, !- Handle
@@ -4500,7 +4500,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   ECC,                                    !- Standards Building Type
-  Dining;                                 !- Standards Space Type
+  dining;      !- Standards Space Type
 
 OS:SpaceType,
   {f6068a7c-4a5d-4520-82b5-fd8a5ecb7a9b}, !- Handle
@@ -4510,7 +4510,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   ECC,                                    !- Standards Building Type
-  Kitchen;                                !- Standards Space Type
+  food preparation;      !- Standards Space Type
 
 OS:SpaceType,
   {7d775c0c-2a17-4d45-898a-caea84b8ea64}, !- Handle
@@ -4520,7 +4520,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   ECC,                                    !- Standards Building Type
-  OfficeGeneral;                          !- Standards Space Type
+  office;      !- Standards Space Type
 
 OS:SpaceType,
   {de5a5701-469d-46dc-bf2e-6ade9f8b9b7c}, !- Handle
@@ -7922,5 +7922,5 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Building Type
-  Plenum;                                 !- Standards Space Type
+  plenum;      !- Standards Space Type
 

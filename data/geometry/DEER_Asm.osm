@@ -1773,7 +1773,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Asm,                                    !- Standards Building Type
-  Auditorium;                             !- Standards Space Type
+  audience seating;      !- Standards Space Type
 
 OS:SpaceType,
   {7efdc289-8909-4807-aa4e-882f847dbf56}, !- Handle
@@ -1783,7 +1783,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Asm,                                    !- Standards Building Type
-  OfficeGeneral;                          !- Standards Space Type
+  office;      !- Standards Space Type
 
 OS:ThermalZone,
   {5d89a67f-359c-4571-bb53-62ef5139e733}, !- Handle
@@ -2613,5 +2613,5 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Building Type
-  Plenum;                                 !- Standards Space Type
+  plenum;      !- Standards Space Type
 
