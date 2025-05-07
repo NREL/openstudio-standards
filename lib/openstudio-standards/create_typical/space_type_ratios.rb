@@ -383,11 +383,9 @@ module OpenstudioStandards
         hash['FacMaint'] = { ratio: 0.08, space_type_gen: true, default: false }
         hash['DormitoryRoom'] = { ratio: 0.1699, space_type_gen: true, default: false }
       when 'Gro'
-        hash['GrocSales'] = { ratio: 0.8002, space_type_gen: true, default: true }
-        hash['RefWalkInCool'] = { ratio: 0.0312, space_type_gen: true, default: false }
-        hash['OfficeGeneral'] = { ratio: 0.07, space_type_gen: true, default: false }
-        hash['RefFoodPrep'] = { ratio: 0.0253, space_type_gen: true, default: false }
-        hash['RefWalkInFreeze'] = { ratio: 0.0162, space_type_gen: true, default: false }
+        hash['GrocSales'] = { ratio: 0.800, space_type_gen: true, default: true }
+        hash['OfficeGeneral'] = { ratio: 0.070, space_type_gen: true, default: false }
+        hash['RefFoodPrep'] = { ratio: 0.073, space_type_gen: true, default: false }
         hash['IndLoadDock'] = { ratio: 0.057, space_type_gen: true, default: false }
       when 'Hsp'
         hash['HspSurgOutptLab'] = { ratio: 0.2317, space_type_gen: true, default: false }

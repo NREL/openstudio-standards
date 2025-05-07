@@ -191,7 +191,7 @@ module OpenstudioStandards
                                                water_heater_thermal_zone: nil,
                                                service_water_loop: nil)
       if service_water_loop.nil?
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ServiceWaterHeating', "#{_method_} requires the service_water_loop argument to couple the booster water heating loop with a heat exchanger.")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ServiceWaterHeating', "#{__method__} requires the service_water_loop argument to couple the booster water heating loop with a heat exchanger.")
         return nil
       else
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ServiceWaterHeating', "Adding booster water heater to #{service_water_loop.name}")
