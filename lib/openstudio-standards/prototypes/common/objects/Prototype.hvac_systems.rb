@@ -147,7 +147,7 @@ class Standard
         ambient_loop.addDemandBranchForComponent(water_to_water_hp)
       # Central Air Source Heat Pump
       when 'AirSourceHeatPump', 'ASHP'
-        create_central_air_source_heat_pump(model, hot_water_loop)
+        OpenstudioStandards::HVAC.create_central_air_source_heat_pump(model, hot_water_loop)
       # Boiler
       when 'Electricity', 'Gas', 'NaturalGas', 'Propane', 'PropaneGas', 'FuelOilNo1', 'FuelOilNo2'
         if boiler_lvg_temp_dsgn.nil?
@@ -920,7 +920,7 @@ class Standard
       heat_pump_water_loop.addSupplyBranchForComponent(heating_equipment)
       heating_equipment_stpt_manager.setName("#{heat_pump_water_loop.name} District Heating Scheduled Dual Setpoint")
     when 'AirSourceHeatPump', 'ASHP'
-      heating_equipment = create_central_air_source_heat_pump(model, heat_pump_water_loop)
+      heating_equipment = OpenstudioStandards::HVAC.create_central_air_source_heat_pump(model, heat_pump_water_loop)
       heating_equipment_stpt_manager.setName("#{heat_pump_water_loop.name} ASHP Scheduled Dual Setpoint")
     when 'Electricity', 'Gas', 'NaturalGas', 'Propane', 'PropaneGas', 'FuelOilNo1', 'FuelOilNo2'
       heating_equipment = OpenstudioStandards::HVAC.create_boiler_hot_water(model,

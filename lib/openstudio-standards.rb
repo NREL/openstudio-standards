@@ -66,6 +66,7 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/hvac/air_loop/information'
   require_relative 'openstudio-standards/hvac/cbecs_hvac'
   require_relative 'openstudio-standards/hvac/components/create_boiler_hot_water'
+  require_relative 'openstudio-standards/hvac/components/create_central_air_source_heat_pump'
   require_relative 'openstudio-standards/hvac/components/create_coil_cooling_dx_single_speed'
   require_relative 'openstudio-standards/hvac/components/create_coil_cooling_dx_two_speed'
   require_relative 'openstudio-standards/hvac/components/create_coil_cooling_water_to_air_heat_pump_equation_fit'
@@ -527,7 +528,6 @@ module OpenstudioStandards
   # Model Objects
   require_relative "#{proto}/common/objects/Prototype.AirConditionerVariableRefrigerantFlow"
   require_relative "#{proto}/common/objects/Prototype.AirTerminalSingleDuctVAVReheat"
-  require_relative "#{proto}/common/objects/Prototype.CentralAirSourceHeatPump"
   require_relative "#{proto}/common/objects/Prototype.CoolingTower"
   require_relative "#{proto}/common/objects/Prototype.radiant_system_controls"
   require_relative "#{proto}/common/objects/Prototype.Fan"

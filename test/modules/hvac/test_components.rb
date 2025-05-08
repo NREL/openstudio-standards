@@ -23,6 +23,14 @@ class TestHVACComponents < Minitest::Test
     assert_in_delta(1.0, boiler.sizingFactor, 0.01, 'Expected boiler sizing factor to be 1.0')
   end
 
+  def test_create_central_air_source_heat_pump
+    model = OpenStudio::Model::Model.new
+    plant_loop = OpenStudio::Model::PlantLoop.new(model)
+
+    hp = @hvac.create_central_air_source_heat_pump(model, plant_loop)
+    assert(hp.is_a?(OpenStudio::Model::PlantComponentUserDefined), 'Expected hp to be an PlantComponentUserDefined object')
+  end
+
   def test_create_coil_cooling_dx_single_speed
     model = OpenStudio::Model::Model.new
 
