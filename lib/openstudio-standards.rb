@@ -65,6 +65,7 @@ module OpenstudioStandards
   # HVAC Module
   require_relative 'openstudio-standards/hvac/air_loop/information'
   require_relative 'openstudio-standards/hvac/cbecs_hvac'
+  require_relative 'openstudio-standards/hvac/components/create_ac_vrf'
   require_relative 'openstudio-standards/hvac/components/create_boiler_hot_water'
   require_relative 'openstudio-standards/hvac/components/create_central_air_source_heat_pump'
   require_relative 'openstudio-standards/hvac/components/create_coil_cooling_dx_single_speed'
@@ -526,7 +527,6 @@ module OpenstudioStandards
   create_meta_classes
 
   # Model Objects
-  require_relative "#{proto}/common/objects/Prototype.AirConditionerVariableRefrigerantFlow"
   require_relative "#{proto}/common/objects/Prototype.AirTerminalSingleDuctVAVReheat"
   require_relative "#{proto}/common/objects/Prototype.CoolingTower"
   require_relative "#{proto}/common/objects/Prototype.radiant_system_controls"

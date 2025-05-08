@@ -4614,9 +4614,9 @@ class Standard
 
     # create vrf outdoor unit
     master_zone = thermal_zones[0]
-    vrf_outdoor_unit = create_air_conditioner_variable_refrigerant_flow(model,
-                                                                        name: "#{thermal_zones.size} Zone VRF System",
-                                                                        master_zone: master_zone)
+    vrf_outdoor_unit = OpenstudioStandards::HVAC.create_air_conditioner_variable_refrigerant_flow(model,
+                                                                                                  name: "#{thermal_zones.size} Zone VRF System",
+                                                                                                  master_zone: master_zone)
 
     # default design temperatures used across all air loops
     dsgn_temps = standard_design_sizing_temperatures

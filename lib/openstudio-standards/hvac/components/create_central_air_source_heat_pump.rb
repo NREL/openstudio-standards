@@ -209,7 +209,7 @@ module OpenstudioStandards
       elec_mtr_out_var.setUnits('J')
 
       # add to supply side of hot water loop if specified
-      hot_water_loop.addSupplyBranchForComponent(plant_comp) unless hot_water_loop.nil?
+      hot_water_loop&.addSupplyBranchForComponent(plant_comp)
 
       # add operation scheme
       htg_op_scheme = OpenStudio::Model::PlantEquipmentOperationHeatingLoad.new(model)
