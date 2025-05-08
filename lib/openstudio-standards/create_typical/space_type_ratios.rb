@@ -463,7 +463,9 @@ module OpenstudioStandards
         hash['OfficeGeneral'] = { ratio: 0.049, space_type_gen: true, default: false }
 
       when 'SUn'
-        hash['WarehouseUnCond'] = { ratio: 1.0, space_type_gen: true, default: true }
+        hash['WarehouseUnCond'] = { ratio: 0.951, space_type_gen: true, default: true }
+        hash['OfficeGeneral'] = { ratio: 0.049, space_type_gen: true, default: false }
+
       when 'WRf'
         hash['IndLoadDock'] = { ratio: 0.08, space_type_gen: true, default: false }
         hash['OfficeGeneral'] = { ratio: 0.02, space_type_gen: true, default: false }
