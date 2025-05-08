@@ -119,7 +119,7 @@ module OpenstudioStandards
       boiler.setSizingFactor(sizing_factor) unless sizing_factor.nil?
 
       # add to supply side of hot water loop if specified
-      hot_water_loop.addSupplyBranchForComponent(boiler) unless hot_water_loop.nil?
+      hot_water_loop&.addSupplyBranchForComponent(boiler)
 
       return boiler
     end

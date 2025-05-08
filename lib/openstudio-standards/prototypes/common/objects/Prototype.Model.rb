@@ -1421,17 +1421,8 @@ Standard.class_eval do
     model.getFanOnOffs.sort.each { |obj| prototype_fan_apply_prototype_fan_efficiency(obj) }
     model.getFanZoneExhausts.sort.each { |obj| prototype_fan_apply_prototype_fan_efficiency(obj) }
 
-    # Gas Heating Coil
-    model.getCoilHeatingGass.sort.each { |obj| coil_heating_gas_apply_prototype_efficiency(obj) }
-
     # Add Economizers
     apply_economizers(climate_zone, model)
-
-    # @todo What is the logic behind hard-sizing hot water coil convergence tolerances?
-    model.getControllerWaterCoils.sort.each { |obj| controller_water_coil_set_convergence_limits(obj) }
-
-    # Adjust defrost curve limits for coil heating dx single speed
-    model.getCoilHeatingDXSingleSpeeds.sort.each { |obj| coil_heating_dx_single_speed_apply_defrost_eir_curve_limits(obj) }
 
     # Pump part load performances
     model.getPumpVariableSpeeds.sort.each { |obj| pump_variable_speed_control_type(obj) }

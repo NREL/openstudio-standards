@@ -66,6 +66,15 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/hvac/air_loop/information'
   require_relative 'openstudio-standards/hvac/cbecs_hvac'
   require_relative 'openstudio-standards/hvac/components/create_boiler_hot_water'
+  require_relative 'openstudio-standards/hvac/components/create_coil_cooling_dx_single_speed'
+  require_relative 'openstudio-standards/hvac/components/create_coil_cooling_dx_two_speed'
+  require_relative 'openstudio-standards/hvac/components/create_coil_cooling_water_to_air_heat_pump_equation_fit'
+  require_relative 'openstudio-standards/hvac/components/create_coil_cooling_water'
+  require_relative 'openstudio-standards/hvac/components/create_coil_heating_dx_single_speed'
+  require_relative 'openstudio-standards/hvac/components/create_coil_heating_electric'
+  require_relative 'openstudio-standards/hvac/components/create_coil_heating_gas'
+  require_relative 'openstudio-standards/hvac/components/create_coil_heating_water_to_air_heat_pump_equation_fit'
+  require_relative 'openstudio-standards/hvac/components/create_coil_heating_water'
   require_relative 'openstudio-standards/hvac/components/create_hx_air_to_air'
   require_relative 'openstudio-standards/hvac/components/modify'
   require_relative 'openstudio-standards/hvac/exhaust/create_exhaust_fan'
@@ -519,16 +528,6 @@ module OpenstudioStandards
   require_relative "#{proto}/common/objects/Prototype.AirConditionerVariableRefrigerantFlow"
   require_relative "#{proto}/common/objects/Prototype.AirTerminalSingleDuctVAVReheat"
   require_relative "#{proto}/common/objects/Prototype.CentralAirSourceHeatPump"
-  require_relative "#{proto}/common/objects/Prototype.CoilCoolingDXSingleSpeed"
-  require_relative "#{proto}/common/objects/Prototype.CoilCoolingDXTwoSpeed"
-  require_relative "#{proto}/common/objects/Prototype.CoilCoolingWater"
-  require_relative "#{proto}/common/objects/Prototype.CoilCoolingWaterToAirHeatPumpEquationFit"
-  require_relative "#{proto}/common/objects/Prototype.CoilHeatingDXSingleSpeed"
-  require_relative "#{proto}/common/objects/Prototype.CoilHeatingElectric"
-  require_relative "#{proto}/common/objects/Prototype.CoilHeatingGas"
-  require_relative "#{proto}/common/objects/Prototype.CoilHeatingWater"
-  require_relative "#{proto}/common/objects/Prototype.CoilHeatingWaterToAirHeatPumpEquationFit"
-  require_relative "#{proto}/common/objects/Prototype.ControllerWaterCoil"
   require_relative "#{proto}/common/objects/Prototype.CoolingTower"
   require_relative "#{proto}/common/objects/Prototype.radiant_system_controls"
   require_relative "#{proto}/common/objects/Prototype.Fan"

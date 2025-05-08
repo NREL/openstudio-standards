@@ -23,6 +23,77 @@ class TestHVACComponents < Minitest::Test
     assert_in_delta(1.0, boiler.sizingFactor, 0.01, 'Expected boiler sizing factor to be 1.0')
   end
 
+  def test_create_coil_cooling_dx_single_speed
+    model = OpenStudio::Model::Model.new
+
+    coil = @hvac.create_coil_cooling_dx_single_speed(model)
+    assert(coil.is_a?(OpenStudio::Model::CoilCoolingDXSingleSpeed), 'Expected coil to be a CoilCoolingDXSingleSpeed object')
+  end
+
+  def test_create_coil_cooling_dx_two_speed
+    model = OpenStudio::Model::Model.new
+
+    coil = @hvac.create_coil_cooling_dx_two_speed(model)
+    assert(coil.is_a?(OpenStudio::Model::CoilCoolingDXTwoSpeed), 'Expected coil to be a CoilCoolingDXTwoSpeed object')
+  end
+
+  def test_create_coil_cooling_water_to_air_heat_pump_equation_fit
+    model = OpenStudio::Model::Model.new
+    plant_loop = OpenStudio::Model::PlantLoop.new(model)
+    air_loop_node = OpenStudio::Model::Node.new(model)
+
+    coil = @hvac.create_coil_cooling_water_to_air_heat_pump_equation_fit(model, plant_loop, air_loop_node: air_loop_node)
+    assert(coil.is_a?(OpenStudio::Model::CoilCoolingWaterToAirHeatPumpEquationFit), 'Expected coil to be a CoilCoolingWaterToAirHeatPumpEquationFit object')
+    assert_equal('Water-to-Air HP Clg Coil', coil.name.to_s, "Expected coil name to be 'Water-to-Air HP Clg Coil'")
+  end
+
+  def test_create_coil_cooling_water
+    model = OpenStudio::Model::Model.new
+    plant_loop = OpenStudio::Model::PlantLoop.new(model)
+
+    coil = @hvac.create_coil_cooling_water(model, plant_loop)
+    assert(coil.is_a?(OpenStudio::Model::CoilCoolingWater), 'Expected coil to be a CoilCoolingWater object')
+  end
+
+  def test_create_coil_heating_dx_single_speed
+    model = OpenStudio::Model::Model.new
+
+    coil = @hvac.create_coil_heating_dx_single_speed(model)
+    assert(coil.is_a?(OpenStudio::Model::CoilHeatingDXSingleSpeed), 'Expected coil to be a CoilHeatingDXSingleSpeed object')
+  end
+
+  def test_create_coil_heating_electric
+    model = OpenStudio::Model::Model.new
+
+    coil = @hvac.create_coil_heating_electric(model)
+    assert(coil.is_a?(OpenStudio::Model::CoilHeatingElectric), 'Expected coil to be a CoilHeatingElectric object')
+  end
+
+  def test_create_coil_heating_gas
+    model = OpenStudio::Model::Model.new
+
+    coil = @hvac.create_coil_heating_gas(model)
+    assert(coil.is_a?(OpenStudio::Model::CoilHeatingGas), 'Expected coil to be a CoilHeatingGas object')
+  end
+
+  def test_create_coil_heating_water_to_air_heat_pump_equation_fit
+    model = OpenStudio::Model::Model.new
+    plant_loop = OpenStudio::Model::PlantLoop.new(model)
+    air_loop_node = OpenStudio::Model::Node.new(model)
+
+    coil = @hvac.create_coil_heating_water_to_air_heat_pump_equation_fit(model, plant_loop, air_loop_node: air_loop_node)
+    assert(coil.is_a?(OpenStudio::Model::CoilHeatingWaterToAirHeatPumpEquationFit), 'Expected coil to be a CoilHeatingWaterToAirHeatPumpEquationFit object')
+    assert_equal('Water-to-Air HP Htg Coil', coil.name.to_s, "Expected coil name to be 'Water-to-Air HP Htg Coil'")
+  end
+
+  def test_create_coil_heating_water
+    model = OpenStudio::Model::Model.new
+    plant_loop = OpenStudio::Model::PlantLoop.new(model)
+
+    coil = @hvac.create_coil_heating_water(model, plant_loop)
+    assert(coil.is_a?(OpenStudio::Model::CoilHeatingWater), 'Expected coil to be a CoilHeatingWater object')
+  end
+
   def test_create_hx_air_to_air_sensible_and_latent
     model = OpenStudio::Model::Model.new
 
