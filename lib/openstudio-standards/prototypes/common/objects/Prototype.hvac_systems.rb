@@ -162,16 +162,16 @@ class Standard
           out_temp_lmt_f = boiler_out_temp_lmt
         end
 
-        boiler = create_boiler_hot_water(model,
-                                         hot_water_loop: hot_water_loop,
-                                         fuel_type: boiler_fuel_type,
-                                         draft_type: boiler_draft_type,
-                                         nominal_thermal_efficiency: 0.78,
-                                         eff_curve_temp_eval_var: boiler_eff_curve_temp_eval_var,
-                                         lvg_temp_dsgn_f: lvg_temp_dsgn_f,
-                                         out_temp_lmt_f: out_temp_lmt_f,
-                                         max_plr: boiler_max_plr,
-                                         sizing_factor: boiler_sizing_factor)
+        boiler = OpenstudioStandards::HVAC.create_boiler_hot_water(model,
+                                                                   hot_water_loop: hot_water_loop,
+                                                                   fuel_type: boiler_fuel_type,
+                                                                   draft_type: boiler_draft_type,
+                                                                   nominal_thermal_efficiency: 0.78,
+                                                                   eff_curve_temp_eval_var: boiler_eff_curve_temp_eval_var,
+                                                                   lvg_temp_dsgn_f: lvg_temp_dsgn_f,
+                                                                   out_temp_lmt_f: out_temp_lmt_f,
+                                                                   max_plr: boiler_max_plr,
+                                                                   sizing_factor: boiler_sizing_factor)
 
         # @todo Yixing. Adding temperature setpoint controller at boiler outlet causes simulation errors
         # boiler_stpt_manager = OpenStudio::Model::SetpointManagerScheduled.new(self, hw_temp_sch)
@@ -923,15 +923,15 @@ class Standard
       heating_equipment = create_central_air_source_heat_pump(model, heat_pump_water_loop)
       heating_equipment_stpt_manager.setName("#{heat_pump_water_loop.name} ASHP Scheduled Dual Setpoint")
     when 'Electricity', 'Gas', 'NaturalGas', 'Propane', 'PropaneGas', 'FuelOilNo1', 'FuelOilNo2'
-      heating_equipment = create_boiler_hot_water(model,
-                                                  hot_water_loop: heat_pump_water_loop,
-                                                  name: "#{heat_pump_water_loop.name} Supplemental Boiler",
-                                                  fuel_type: heating_fuel,
-                                                  flow_mode: 'ConstantFlow',
-                                                  lvg_temp_dsgn_f: 86.0, # 30.0 degrees Celsius
-                                                  min_plr: 0.0,
-                                                  max_plr: 1.2,
-                                                  opt_plr: 1.0)
+      heating_equipment = OpenstudioStandards::HVAC.create_boiler_hot_water(model,
+                                                                            hot_water_loop: heat_pump_water_loop,
+                                                                            name: "#{heat_pump_water_loop.name} Supplemental Boiler",
+                                                                            fuel_type: heating_fuel,
+                                                                            flow_mode: 'ConstantFlow',
+                                                                            lvg_temp_dsgn_f: 86.0, # 30.0 degrees Celsius
+                                                                            min_plr: 0.0,
+                                                                            max_plr: 1.2,
+                                                                            opt_plr: 1.0)
       heating_equipment_stpt_manager.setName("#{heat_pump_water_loop.name} Boiler Scheduled Dual Setpoint")
     else
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', "Boiler fuel type #{heating_fuel} is not valid, no heating equipment will be added.")
