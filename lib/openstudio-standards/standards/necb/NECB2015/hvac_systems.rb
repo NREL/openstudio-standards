@@ -95,7 +95,7 @@ class NECB2015
     cop = nil
     if chlr_props['minimum_full_load_efficiency']
       kw_per_ton = chlr_props['minimum_full_load_efficiency']
-      cop = kw_per_ton_to_cop(kw_per_ton)
+      cop = OpenstudioStandards::HVAC.kw_per_ton_to_cop(kw_per_ton)
       chiller_electric_eir.setReferenceCOP(cop)
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find minimum full load efficiency, will not be set.")
@@ -138,7 +138,7 @@ class NECB2015
       max_total_loop_pump_power_table = @standards_data['max_total_loop_pump_power']
       plantloop.supplyComponents.each do |supplycomp|
         case supplycomp.iddObjectType.valueName.to_s
-          when 'OS_CentralHeatPumpSystem', 'OS_Coil_Heating_WaterToAirHeatPump_EquationFit', 'OS_Coil_Heating_WaterToAirHeatPump_VariableSpeedEquationFit', 
+          when 'OS_CentralHeatPumpSystem', 'OS_Coil_Heating_WaterToAirHeatPump_EquationFit', 'OS_Coil_Heating_WaterToAirHeatPump_VariableSpeedEquationFit',
             'OS_Coil_Heating_WaterToAirHeatPump_VariableSpeedEquationFit_SpeedData', 'OS_HeatPump_PlantLoop_EIR_Heating', 'OS_HeatPump_PlantLoop_EIR_Cooling'
             search_hash = { 'hydronic_system_type' => 'WSHP' }
             max_powertoload = model_find_object(max_total_loop_pump_power_table, search_hash)['total_normalized_pump_power_wperkw']
@@ -167,7 +167,7 @@ class NECB2015
       var_spd_pumps = pumps.select {|pump| pump.to_PumpVariableSpeed.is_initialized}
       # EnergyPlus doesn't currently properly account for variable speed pumps operation in the condenser loop.
       # This code is an approximation for a correction to the pump head when the loop has variable speed pumps for ground-source condenser loops.
-      # These estimates were confirmed with OS runs using Montreal weather file for offices, schoold, and apartment bldgs. Office estimates are 
+      # These estimates were confirmed with OS runs using Montreal weather file for offices, schoold, and apartment bldgs. Office estimates are
       # then for other bldg types.
       if plantloop.name.to_s.upcase.include? "GLHX"
         max_powertoload = 21.0

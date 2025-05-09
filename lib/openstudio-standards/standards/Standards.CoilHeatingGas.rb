@@ -56,7 +56,7 @@ class Standard
       # If specified as AFUE
       unless furnace_props['minimum_annual_fuel_utilization_efficiency'].nil?
         min_afue = furnace_props['minimum_annual_fuel_utilization_efficiency']
-        thermal_eff = afue_to_thermal_eff(min_afue)
+        thermal_eff = OpenstudioStandards::HVAC.afue_to_thermal_eff(min_afue)
         new_comp_name = "#{coil_heating_gas.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_afue} AFUE"
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingGas', "For #{template}: #{coil_heating_gas.name}: = #{capacity_kbtu_per_hr.round}kBtu/hr; AFUE = #{min_afue}")
       end
@@ -64,7 +64,7 @@ class Standard
       # If specified as combustion efficiency
       unless furnace_props['minimum_combustion_efficiency'].nil?
         min_comb_eff = furnace_props['minimum_combustion_efficiency']
-        thermal_eff = combustion_eff_to_thermal_eff(min_comb_eff)
+        thermal_eff = OpenstudioStandards::HVAC.combustion_eff_to_thermal_eff(min_comb_eff)
         new_comp_name = "#{coil_heating_gas.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_comb_eff} Combustion Eff"
         OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingGas', "For #{template}: #{coil_heating_gas.name}: = #{capacity_kbtu_per_hr.round}kBtu/hr; Combustion Efficiency = #{min_comb_eff}")
       end

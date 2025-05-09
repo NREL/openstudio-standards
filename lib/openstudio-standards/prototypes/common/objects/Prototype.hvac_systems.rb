@@ -386,11 +386,11 @@ class Standard
       # 0.66 kw/ton for a 150 ton Water Cooled positive displacement chiller
       case chiller_cooling_type
       when 'AirCooled'
-        default_cop = kw_per_ton_to_cop(1.188)
+        default_cop = OpenstudioStandards::HVAC.kw_per_ton_to_cop(1.188)
       when 'WaterCooled'
-        default_cop = kw_per_ton_to_cop(0.66)
+        default_cop = OpenstudioStandards::HVAC.kw_per_ton_to_cop(0.66)
       else
-        default_cop = kw_per_ton_to_cop(0.66)
+        default_cop = OpenstudioStandards::HVAC.kw_per_ton_to_cop(0.66)
       end
 
       # make the correct type of chiller based these properties
@@ -5398,7 +5398,7 @@ class Standard
       if heating
         htg_coil = OpenstudioStandards::HVAC.create_coil_heating_gas(model,
                                                                      name: "#{air_loop.name} Heating Coil",
-                                                                     efficiency: afue_to_thermal_eff(afue))
+                                                                     efficiency: OpenstudioStandards::HVAC.afue_to_thermal_eff(afue))
       end
 
       # create cooling coil
@@ -5408,7 +5408,7 @@ class Standard
                                                                                  name: "#{air_loop.name} Cooling Coil",
                                                                                  type: 'Residential Central AC')
         clg_coil.setRatedSensibleHeatRatio(shr)
-        clg_coil.setRatedCOP(OpenStudio::OptionalDouble.new(eer_to_cop_no_fan(eer)))
+        clg_coil.setRatedCOP(OpenStudio::OptionalDouble.new(OpenstudioStandards::HVAC.eer_to_cop_no_fan(eer)))
         clg_coil.setRatedEvaporatorFanPowerPerVolumeFlowRate(OpenStudio::OptionalDouble.new(ac_w_per_cfm / OpenStudio.convert(1.0, 'cfm', 'm^3/s').get))
         clg_coil.setNominalTimeForCondensateRemovalToBegin(OpenStudio::OptionalDouble.new(1000.0))
         clg_coil.setRatioOfInitialMoistureEvaporationRateAndSteadyStateLatentCapacity(OpenStudio::OptionalDouble.new(1.5))
@@ -5522,7 +5522,7 @@ class Standard
         htg_coil = OpenstudioStandards::HVAC.create_coil_heating_dx_single_speed(model,
                                                                                  name: "#{air_loop.name} heating coil",
                                                                                  type: 'Residential Central Air Source HP',
-                                                                                 cop: hspf_to_cop_no_fan(hspf))
+                                                                                 cop: OpenstudioStandards::HVAC.hspf_to_cop_no_fan(hspf))
         if model.version < OpenStudio::VersionString.new('3.5.0')
           htg_coil.setRatedSupplyFanPowerPerVolumeFlowRate(ac_w_per_cfm / OpenStudio.convert(1.0, 'cfm', 'm^3/s').get)
         else

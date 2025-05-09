@@ -611,7 +611,7 @@ class NECB2011
     # If specified as AFUE
     unless blr_props['minimum_annual_fuel_utilization_efficiency'].nil?
       min_afue = blr_props['minimum_annual_fuel_utilization_efficiency']
-      thermal_eff = afue_to_thermal_eff(min_afue)
+      thermal_eff = OpenstudioStandards::HVAC.afue_to_thermal_eff(min_afue)
       new_comp_name = "#{boiler_hot_water.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_afue} AFUE"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.BoilerHotWater', "For #{template}: #{boiler_hot_water.name}: #{fuel_type} #{fluid_type} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; AFUE = #{min_afue}")
     end
@@ -626,7 +626,7 @@ class NECB2011
     # If specified as combustion efficiency
     unless blr_props['minimum_combustion_efficiency'].nil?
       min_comb_eff = blr_props['minimum_combustion_efficiency']
-      thermal_eff = combustion_eff_to_thermal_eff(min_comb_eff)
+      thermal_eff = OpenstudioStandards::HVAC.combustion_eff_to_thermal_eff(min_comb_eff)
       new_comp_name = "#{boiler_hot_water.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_comb_eff} Combustion Eff"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.BoilerHotWater', "For #{template}: #{boiler_hot_water.name}: #{fuel_type} #{fluid_type} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; Combustion Efficiency = #{min_comb_eff}")
     end
@@ -737,7 +737,7 @@ class NECB2011
     cop = nil
     if chlr_props['minimum_full_load_efficiency']
       kw_per_ton = chlr_props['minimum_full_load_efficiency']
-      cop = kw_per_ton_to_cop(kw_per_ton)
+      cop = OpenstudioStandards::HVAC.kw_per_ton_to_cop(kw_per_ton)
       chiller_electric_eir.setReferenceCOP(cop)
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find minimum full load efficiency, will not be set.")
@@ -824,7 +824,7 @@ class NECB2011
     # If specified as AFUE
     unless coil_props['minimum_annual_fuel_utilization_efficiency'].nil?
       min_afue = coil_props['minimum_annual_fuel_utilization_efficiency']
-      thermal_eff = afue_to_thermal_eff(min_afue)
+      thermal_eff = OpenstudioStandards::HVAC.afue_to_thermal_eff(min_afue)
       new_comp_name = "#{coil_heating_gas.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_afue} AFUE"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingGas', "For #{template}: #{coil_heating_gas.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; AFUE = #{min_afue}")
     end
@@ -839,7 +839,7 @@ class NECB2011
     # If specified as combustion efficiency
     unless coil_props['minimum_combustion_efficiency'].nil?
       min_comb_eff = coil_props['minimum_combustion_efficiency']
-      thermal_eff = combustion_eff_to_thermal_eff(min_comb_eff)
+      thermal_eff = OpenstudioStandards::HVAC.combustion_eff_to_thermal_eff(min_comb_eff)
       new_comp_name = "#{coil_heating_gas.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_comb_eff} Combustion Eff"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingGas', "For #{template}: #{coil_heating_gas.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; Combustion Efficiency = #{min_comb_eff}")
     end
@@ -1291,7 +1291,7 @@ class NECB2011
     # If specified as AFUE
     unless heater_props['minimum_annual_fuel_utilization_efficiency'].nil?
       min_afue = heater_props['minimum_annual_fuel_utilization_efficiency']
-      thermal_eff = afue_to_thermal_eff(min_afue)
+      thermal_eff = OpenstudioStandards::HVAC.afue_to_thermal_eff(min_afue)
       new_comp_name = "#{coil_heating_gas_multi_stage.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_afue} AFUE"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingGasMultiStage', "For #{template}: #{coil_heating_gas_multi_stage.name}: #{fuel_type} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; AFUE = #{min_afue}")
     end
@@ -1306,7 +1306,7 @@ class NECB2011
     # If specified as combustion efficiency
     unless heater_props['minimum_combustion_efficiency'].nil?
       min_comb_eff = heater_props['minimum_combustion_efficiency']
-      thermal_eff = combustion_eff_to_thermal_eff(min_comb_eff)
+      thermal_eff = OpenstudioStandards::HVAC.combustion_eff_to_thermal_eff(min_comb_eff)
       new_comp_name = "#{coil_heating_gas_multi_stage.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_comb_eff} Combustion Eff"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.BoilerHotWater', "For #{template}: #{coil_heating_gas_multi_stage.name}: #{fuel_type} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; Combustion Efficiency = #{min_comb_eff}")
     end

@@ -59,7 +59,7 @@ class ASHRAE901PRM < Standard
     # If specified as combustion efficiency
     unless coil_props['minimum_combustion_efficiency'].nil?
       min_comb_eff = coil_props['minimum_combustion_efficiency']
-      thermal_eff = combustion_eff_to_thermal_eff(min_comb_eff)
+      thermal_eff = OpenstudioStandards::HVAC.combustion_eff_to_thermal_eff(min_comb_eff)
       new_comp_name = "#{coil_heating_gas.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_comb_eff} Combustion Eff"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingGas', "For #{template}: #{coil_heating_gas.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; Combustion Efficiency = #{min_comb_eff}")
     end
