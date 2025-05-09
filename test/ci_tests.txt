@@ -15,6 +15,7 @@ modules/geometry/test_geometry_create.rb
 modules/geometry/test_geometry_information.rb
 modules/hvac/test_components.rb
 modules/hvac/test_conversions.rb
+modules/hvac/test_curves.rb
 modules/hvac/test_hvac_exhaust.rb
 modules/infiltration/test_infiltration.rb
 modules/infiltration/test_nist_infiltration.rb

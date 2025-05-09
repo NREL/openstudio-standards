@@ -66,6 +66,7 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/hvac/air_loop/information'
   require_relative 'openstudio-standards/hvac/cbecs_hvac'
   require_relative 'openstudio-standards/hvac/conversions'
+  require_relative 'openstudio-standards/hvac/curves'
   require_relative 'openstudio-standards/hvac/components/create_ac_vrf'
   require_relative 'openstudio-standards/hvac/components/create_boiler_hot_water'
   require_relative 'openstudio-standards/hvac/components/create_central_air_source_heat_pump'

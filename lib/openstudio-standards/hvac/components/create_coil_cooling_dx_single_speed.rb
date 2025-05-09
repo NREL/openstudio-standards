@@ -168,11 +168,11 @@ module OpenstudioStandards
         cool_plf_fplr_coeffs = [0.78, 0.22, 0]
 
         # Make the curves
-        clg_cap_f_of_temp = create_curve_biquadratic(model, cool_cap_ft_coeffs_si, 'RoomAC-Cap-fT', 0, 100, 0, 100, nil, nil)
-        clg_cap_f_of_flow = create_curve_quadratic(model, cool_cap_fflow_coeffs, 'RoomAC-Cap-fFF', 0, 2, 0, 2, is_dimensionless = true)
-        clg_energy_input_ratio_f_of_temp = create_curve_biquadratic(model, cool_eir_ft_coeffs_si, 'RoomAC-EIR-fT', 0, 100, 0, 100, nil, nil)
-        clg_energy_input_ratio_f_of_flow = create_curve_quadratic(model, cool_eir_fflow_coeffs, 'RoomAC-EIR-fFF', 0, 2, 0, 2, is_dimensionless = true)
-        clg_part_load_ratio = create_curve_quadratic(model, cool_plf_fplr_coeffs, 'RoomAC-PLF-fPLR', 0, 1, 0, 1, is_dimensionless = true)
+        clg_cap_f_of_temp = OpenstudioStandards::HVAC.create_curve_biquadratic(model, cool_cap_ft_coeffs_si, name: 'RoomAC-Cap-fT', min_x: 0, max_x: 100, min_y: 0, max_y: 100)
+        clg_cap_f_of_flow = OpenstudioStandards::HVAC.create_curve_quadratic(model, cool_cap_fflow_coeffs, name: 'RoomAC-Cap-fFF', min_x: 0, max_x: 2, min_out: 0, max_out: 2, is_dimensionless: true)
+        clg_energy_input_ratio_f_of_temp = OpenstudioStandards::HVAC.create_curve_biquadratic(model, cool_eir_ft_coeffs_si, name: 'RoomAC-EIR-fT', min_x: 0, max_x: 100, min_y: 0, max_y: 100)
+        clg_energy_input_ratio_f_of_flow = OpenstudioStandards::HVAC.create_curve_quadratic(model, cool_eir_fflow_coeffs, name: 'RoomAC-EIR-fFF', min_x: 0, max_x: 2, min_out: 0, max_out: 2, is_dimensionless: true)
+        clg_part_load_ratio = OpenstudioStandards::HVAC.create_curve_quadratic(model, cool_plf_fplr_coeffs, name: 'RoomAC-PLF-fPLR', min_x: 0, max_x: 1, min_out: 0, max_out: 1, is_dimensionless: true)
 
       when 'Residential Central AC'
         # Performance curves
@@ -184,15 +184,15 @@ module OpenstudioStandards
         cool_plf_fplr_coeffs = [0.8, 0.2, 0]
 
         # Convert coefficients from IP to SI
-        cool_cap_ft_coeffs_si = convert_curve_biquadratic(cool_cap_ft_coeffs_ip)
-        cool_eir_ft_coeffs_si = convert_curve_biquadratic(cool_eir_ft_coeffs_ip)
+        cool_cap_ft_coeffs_si = OpenstudioStandards::HVAC.convert_curve_biquadratic(cool_cap_ft_coeffs_ip)
+        cool_eir_ft_coeffs_si = OpenstudioStandards::HVAC.convert_curve_biquadratic(cool_eir_ft_coeffs_ip)
 
         # Make the curves
-        clg_cap_f_of_temp = create_curve_biquadratic(model, cool_cap_ft_coeffs_si, 'AC-Cap-fT', 0, 100, 0, 100, nil, nil)
-        clg_cap_f_of_flow = create_curve_quadratic(model, cool_cap_fflow_coeffs, 'AC-Cap-fFF', 0, 2, 0, 2, is_dimensionless = true)
-        clg_energy_input_ratio_f_of_temp = create_curve_biquadratic(model, cool_eir_ft_coeffs_si, 'AC-EIR-fT', 0, 100, 0, 100, nil, nil)
-        clg_energy_input_ratio_f_of_flow = create_curve_quadratic(model, cool_eir_fflow_coeffs, 'AC-EIR-fFF', 0, 2, 0, 2, is_dimensionless = true)
-        clg_part_load_ratio = create_curve_quadratic(model, cool_plf_fplr_coeffs, 'AC-PLF-fPLR', 0, 1, 0, 1, is_dimensionless = true)
+        clg_cap_f_of_temp = OpenstudioStandards::HVAC.create_curve_biquadratic(model, cool_cap_ft_coeffs_si, name: 'AC-Cap-fT', min_x: 0, max_x: 100, min_y: 0, max_y: 100)
+        clg_cap_f_of_flow = OpenstudioStandards::HVAC.create_curve_quadratic(model, cool_cap_fflow_coeffs, name: 'AC-Cap-fFF', min_x: 0, max_x: 2, min_out: 0, max_out: 2, is_dimensionless: true)
+        clg_energy_input_ratio_f_of_temp = OpenstudioStandards::HVAC.create_curve_biquadratic(model, cool_eir_ft_coeffs_si, name: 'AC-EIR-fT', min_x: 0, max_x: 100, min_y: 0, max_y: 100)
+        clg_energy_input_ratio_f_of_flow = OpenstudioStandards::HVAC.create_curve_quadratic(model, cool_eir_fflow_coeffs, name: 'AC-EIR-fFF', min_x: 0, max_x: 2, min_out: 0, max_out: 2, is_dimensionless: true)
+        clg_part_load_ratio = OpenstudioStandards::HVAC.create_curve_quadratic(model, cool_plf_fplr_coeffs, name: 'AC-PLF-fPLR', min_x: 0, max_x: 1, min_out: 0, max_out: 1, is_dimensionless: true)
 
       when 'Residential Central ASHP'
         # Performance curves
@@ -204,15 +204,15 @@ module OpenstudioStandards
         cool_plf_fplr_coeffs = [0.8, 0.2, 0]
 
         # Convert coefficients from IP to SI
-        cool_cap_ft_coeffs_si = convert_curve_biquadratic(cool_cap_ft_coeffs_ip)
-        cool_eir_ft_coeffs_si = convert_curve_biquadratic(cool_eir_ft_coeffs_ip)
+        cool_cap_ft_coeffs_si = OpenstudioStandards::HVAC.convert_curve_biquadratic(cool_cap_ft_coeffs_ip)
+        cool_eir_ft_coeffs_si = OpenstudioStandards::HVAC.convert_curve_biquadratic(cool_eir_ft_coeffs_ip)
 
         # Make the curves
-        clg_cap_f_of_temp = create_curve_biquadratic(model, cool_cap_ft_coeffs_si, 'Cool-Cap-fT', 0, 100, 0, 100, nil, nil)
-        clg_cap_f_of_flow = create_curve_quadratic(model, cool_cap_fflow_coeffs, 'Cool-Cap-fFF', 0, 2, 0, 2, is_dimensionless = true)
-        clg_energy_input_ratio_f_of_temp = create_curve_biquadratic(model, cool_eir_ft_coeffs_si, 'Cool-EIR-fT', 0, 100, 0, 100, nil, nil)
-        clg_energy_input_ratio_f_of_flow = create_curve_quadratic(model, cool_eir_fflow_coeffs, 'Cool-EIR-fFF', 0, 2, 0, 2, is_dimensionless = true)
-        clg_part_load_ratio = create_curve_quadratic(model, cool_plf_fplr_coeffs, 'Cool-PLF-fPLR', 0, 1, 0, 1, is_dimensionless = true)
+        clg_cap_f_of_temp = OpenstudioStandards::HVAC.create_curve_biquadratic(model, cool_cap_ft_coeffs_si, name: 'Cool-Cap-fT', min_x: 0, max_x: 100, min_y: 0, max_y: 100)
+        clg_cap_f_of_flow = OpenstudioStandards::HVAC.create_curve_quadratic(model, cool_cap_fflow_coeffs, name: 'Cool-Cap-fFF', min_x: 0, max_x: 2, min_out: 0, max_out: 2, is_dimensionless: true)
+        clg_energy_input_ratio_f_of_temp = OpenstudioStandards::HVAC.create_curve_biquadratic(model, cool_eir_ft_coeffs_si, name: 'Cool-EIR-fT', min_x: 0, max_x: 100, min_y: 0, max_y: 100)
+        clg_energy_input_ratio_f_of_flow = OpenstudioStandards::HVAC.create_curve_quadratic(model, cool_eir_fflow_coeffs, name: 'Cool-EIR-fFF', min_x: 0, max_x: 2, min_out: 0, max_out: 2, is_dimensionless: true)
+        clg_part_load_ratio = OpenstudioStandards::HVAC.create_curve_quadratic(model, cool_plf_fplr_coeffs, name: 'Cool-PLF-fPLR', min_x: 0, max_x: 1, min_out: 0, max_out: 1, is_dimensionless: true)
 
       else # default curve set, type == 'Split AC' || 'PTAC'
         clg_cap_f_of_temp = OpenStudio::Model::CurveBiquadratic.new(model)

@@ -76,17 +76,17 @@ module OpenstudioStandards
         defrost_eir_coeffs = [0.1528, 0, 0, 0, 0, 0]
 
         # Convert coefficients from IP to SI
-        heat_cap_ft_coeffs_si = convert_curve_biquadratic(heat_cap_ft_coeffs_ip)
-        heat_eir_ft_coeffs_si = convert_curve_biquadratic(heat_eir_ft_coeffs_ip)
+        heat_cap_ft_coeffs_si = OpenstudioStandards::HVAC.convert_curve_biquadratic(heat_cap_ft_coeffs_ip)
+        heat_eir_ft_coeffs_si = OpenstudioStandards::HVAC.convert_curve_biquadratic(heat_eir_ft_coeffs_ip)
 
-        htg_cap_f_of_temp = create_curve_biquadratic(model, heat_cap_ft_coeffs_si, 'Heat-Cap-fT', 0, 100, 0, 100, nil, nil)
-        htg_cap_f_of_flow = create_curve_quadratic(model, heat_cap_fflow_coeffs, 'Heat-Cap-fFF', 0, 2, 0, 2, is_dimensionless = true)
-        htg_energy_input_ratio_f_of_temp = create_curve_biquadratic(model, heat_eir_ft_coeffs_si, 'Heat-EIR-fT', 0, 100, 0, 100, nil, nil)
-        htg_energy_input_ratio_f_of_flow = create_curve_quadratic(model, heat_eir_fflow_coeffs, 'Heat-EIR-fFF', 0, 2, 0, 2, is_dimensionless = true)
-        htg_part_load_fraction = create_curve_quadratic(model, heat_plf_fplr_coeffs, 'Heat-PLF-fPLR', 0, 1, 0, 1, is_dimensionless = true)
+        htg_cap_f_of_temp = OpenstudioStandards::HVAC.create_curve_biquadratic(model, heat_cap_ft_coeffs_si, name: 'Heat-Cap-fT', min_x: 0, max_x: 100, min_y: 0, max_y: 100)
+        htg_cap_f_of_flow = OpenstudioStandards::HVAC.create_curve_quadratic(model, heat_cap_fflow_coeffs, name: 'Heat-Cap-fFF', min_x: 0, max_x: 2, min_out: 0, max_out: 2, is_dimensionless: true)
+        htg_energy_input_ratio_f_of_temp = OpenstudioStandards::HVAC.create_curve_biquadratic(model, heat_eir_ft_coeffs_si, name: 'Heat-EIR-fT', min_x: 0, max_x: 100, min_y: 0, max_y: 100)
+        htg_energy_input_ratio_f_of_flow = OpenstudioStandards::HVAC.create_curve_quadratic(model, heat_eir_fflow_coeffs, name: 'Heat-EIR-fFF', min_x: 0, max_x: 2, min_out: 0, max_out: 2, is_dimensionless: true)
+        htg_part_load_fraction = OpenstudioStandards::HVAC.create_curve_quadratic(model, heat_plf_fplr_coeffs, name: 'Heat-PLF-fPLR', min_x: 0, max_x: 1, min_out: 0, max_out: 1, is_dimensionless: true)
 
         # Heating defrost curve for reverse cycle
-        def_eir_f_of_temp = create_curve_biquadratic(model, defrost_eir_coeffs, 'DefrostEIR', -100, 100, -100, 100, nil, nil)
+        def_eir_f_of_temp = OpenstudioStandards::HVAC.create_curve_biquadratic(model, defrost_eir_coeffs, name: 'DefrostEIR', min_x: -100, max_x: 100, min_y: -100, max_y: 100)
       when 'Residential Minisplit HP'
         # Performance curves
         # These coefficients are in SI UNITS
@@ -97,14 +97,14 @@ module OpenstudioStandards
         heat_plf_fplr_coeffs = [0.89, 0.11, 0]
         defrost_eir_coeffs = [0.1528, 0, 0, 0, 0, 0]
 
-        htg_cap_f_of_temp = create_curve_biquadratic(model, heat_cap_ft_coeffs_si, 'Heat-Cap-fT', -100, 100, -100, 100, nil, nil)
-        htg_cap_f_of_flow = create_curve_quadratic(model, heat_cap_fflow_coeffs, 'Heat-Cap-fFF', 0, 2, 0, 2, is_dimensionless = true)
-        htg_energy_input_ratio_f_of_temp = create_curve_biquadratic(model, heat_eir_ft_coeffs_si, 'Heat-EIR-fT', -100, 100, -100, 100, nil, nil)
-        htg_energy_input_ratio_f_of_flow = create_curve_quadratic(model, heat_eir_fflow_coeffs, 'Heat-EIR-fFF', 0, 2, 0, 2, is_dimensionless = true)
-        htg_part_load_fraction = create_curve_quadratic(model, heat_plf_fplr_coeffs, 'Heat-PLF-fPLR', 0, 1, 0.6, 1, is_dimensionless = true)
+        htg_cap_f_of_temp = OpenstudioStandards::HVAC.create_curve_biquadratic(model, heat_cap_ft_coeffs_si, name: 'Heat-Cap-fT', min_x: -100, max_x: 100, min_y: -100, max_y: 100)
+        htg_cap_f_of_flow = OpenstudioStandards::HVAC.create_curve_quadratic(model, heat_cap_fflow_coeffs, name: 'Heat-Cap-fFF', min_x: 0, max_x: 2, min_out: 0, max_out: 2, is_dimensionless: true)
+        htg_energy_input_ratio_f_of_temp = OpenstudioStandards::HVAC.create_curve_biquadratic(model, heat_eir_ft_coeffs_si, name: 'Heat-EIR-fT', min_x: -100, max_x: 100, min_y: -100, max_y: 100)
+        htg_energy_input_ratio_f_of_flow = OpenstudioStandards::HVAC.create_curve_quadratic(model, heat_eir_fflow_coeffs, name: 'Heat-EIR-fFF', min_x: 0, max_x: 2, min_out: 0, max_out: 2, is_dimensionless: true)
+        htg_part_load_fraction = OpenstudioStandards::HVAC.create_curve_quadratic(model, heat_plf_fplr_coeffs, name: 'Heat-PLF-fPLR', min_x: 0, max_x: 1, min_out: 0.6, max_out: 1, is_dimensionless: true)
 
         # Heating defrost curve for reverse cycle
-        def_eir_f_of_temp = create_curve_biquadratic(model, defrost_eir_coeffs, 'Defrost EIR', -100, 100, -100, 100, nil, nil)
+        def_eir_f_of_temp = OpenstudioStandards::HVAC.create_curve_biquadratic(model, defrost_eir_coeffs, name: 'Defrost EIR', min_x: -100, max_x: 100, min_y: -100, max_y: 100)
       else # default curve set
         htg_cap_f_of_temp = OpenStudio::Model::CurveCubic.new(model)
         htg_cap_f_of_temp.setName("#{htg_coil.name} Htg Cap Func of Temp Curve")
