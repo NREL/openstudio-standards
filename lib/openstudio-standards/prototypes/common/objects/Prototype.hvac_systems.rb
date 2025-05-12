@@ -1462,18 +1462,18 @@ class Standard
       # create the ERV and set its properties
       # @todo come up with scheme for estimating power of ERV motor wheel which might require knowing airflow.
       # erv.setNominalElectricPower(value_new)
-      erv = OpenstudioStandards::HVAC.create_hx_air_to_air_sensible_and_latent(model,
-                                                                              name: "#{zone.name} ERV HX",
-                                                                              type: "Rotary",
-                                                                              economizer_lockout: true,
-                                                                              sensible_heating_100_eff: 0.76,
-                                                                              sensible_heating_75_eff: 0.81,
-                                                                              latent_heating_100_eff: 0.68,
-                                                                              latent_heating_75_eff: 0.73,
-                                                                              sensible_cooling_100_eff: 0.76,
-                                                                              sensible_cooling_75_eff: 0.81,
-                                                                              latent_cooling_100_eff: 0.68,
-                                                                              latent_cooling_75_eff: 0.73)
+      erv = OpenstudioStandards::HVAC.create_heat_exchanger_air_to_air_sensible_and_latent(model,
+                                                                                           name: "#{zone.name} ERV HX",
+                                                                                           type: "Rotary",
+                                                                                           economizer_lockout: true,
+                                                                                           sensible_heating_100_eff: 0.76,
+                                                                                           sensible_heating_75_eff: 0.81,
+                                                                                           latent_heating_100_eff: 0.68,
+                                                                                           latent_heating_75_eff: 0.73,
+                                                                                           sensible_cooling_100_eff: 0.76,
+                                                                                           sensible_cooling_75_eff: 0.81,
+                                                                                           latent_cooling_100_eff: 0.68,
+                                                                                           latent_cooling_75_eff: 0.73)
       erv.addToNode(oa_system.outboardOANode.get)
 
       # increase fan static pressure to account for ERV
@@ -5693,19 +5693,19 @@ class Standard
       # erv_controller.setTimeofDayEconomizerFlowControlSchedule(self.alwaysOnDiscreteSchedule)
       # erv_controller.setHighHumidityControlFlag(false)
 
-      heat_exchanger = OpenstudioStandards::HVAC.create_hx_air_to_air_sensible_and_latent(model,
-                                                                                          name: "#{zone.name} ERV HX",
-                                                                                          type: "Plate",
-                                                                                          economizer_lockout: false,
-                                                                                          supply_air_outlet_temperature_control: false,
-                                                                                          sensible_heating_100_eff: 0.76,
-                                                                                          sensible_heating_75_eff: 0.81,
-                                                                                          latent_heating_100_eff: 0.68,
-                                                                                          latent_heating_75_eff: 0.73,
-                                                                                          sensible_cooling_100_eff: 0.76,
-                                                                                          sensible_cooling_75_eff: 0.81,
-                                                                                          latent_cooling_100_eff: 0.68,
-                                                                                          latent_cooling_75_eff: 0.73)
+      heat_exchanger = OpenstudioStandards::HVAC.create_heat_exchanger_air_to_air_sensible_and_latent(model,
+                                                                                                      name: "#{zone.name} ERV HX",
+                                                                                                      type: "Plate",
+                                                                                                      economizer_lockout: false,
+                                                                                                      supply_air_outlet_temperature_control: false,
+                                                                                                      sensible_heating_100_eff: 0.76,
+                                                                                                      sensible_heating_75_eff: 0.81,
+                                                                                                      latent_heating_100_eff: 0.68,
+                                                                                                      latent_heating_75_eff: 0.73,
+                                                                                                      sensible_cooling_100_eff: 0.76,
+                                                                                                      sensible_cooling_75_eff: 0.81,
+                                                                                                      latent_cooling_100_eff: 0.68,
+                                                                                                      latent_cooling_75_eff: 0.73)
 
       zone_hvac = OpenStudio::Model::ZoneHVACEnergyRecoveryVentilator.new(model, heat_exchanger, supply_fan, exhaust_fan)
       zone_hvac.setName("#{zone.name} ERV")
@@ -6018,12 +6018,12 @@ class Standard
       exhaust_fan.setPressureRise(270.64755)
 
       # Create heat exchanger
-      heat_exchanger = OpenstudioStandards::HVAC.create_hx_air_to_air_sensible_and_latent(model,
-                                                                                          name: "#{thermal_zone.name} ERV HX",
-                                                                                          type: 'Rotary',
-                                                                                          economizer_lockout: false,
-                                                                                          supply_air_outlet_temperature_control: false,
-                                                                                          frost_control_type: 'ExhaustOnly')
+      heat_exchanger = OpenstudioStandards::HVAC.create_heat_exchanger_air_to_air_sensible_and_latent(model,
+                                                                                                      name: "#{thermal_zone.name} ERV HX",
+                                                                                                      type: 'Rotary',
+                                                                                                      economizer_lockout: false,
+                                                                                                      supply_air_outlet_temperature_control: false,
+                                                                                                      frost_control_type: 'ExhaustOnly')
       heat_exchanger.setThresholdTemperature(-23.3)
       heat_exchanger.setInitialDefrostTimeFraction(0.167)
       heat_exchanger.setRateofDefrostTimeFractionIncrease(1.44)

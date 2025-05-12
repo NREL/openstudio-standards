@@ -79,8 +79,7 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/hvac/components/coil_heating_gas'
   require_relative 'openstudio-standards/hvac/components/coil_heating_water_to_air_heat_pump_equation_fit'
   require_relative 'openstudio-standards/hvac/components/coil_heating_water'
-  require_relative 'openstudio-standards/hvac/components/hx_air_to_air'
-  require_relative 'openstudio-standards/hvac/components/modify'
+  require_relative 'openstudio-standards/hvac/components/heat_exchanger_air_to_air'
   require_relative 'openstudio-standards/hvac/exhaust/create_exhaust_fan'
   require_relative 'openstudio-standards/hvac/setpoint_managers/information'
 

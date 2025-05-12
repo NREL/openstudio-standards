@@ -298,20 +298,20 @@ class NECB2011
     end
 
     # Create an ERV
-    erv = OpenstudioStandards::HVAC.create_hx_air_to_air_sensible_and_latent(air_loop_hvac.model,
-                                                                            name: "#{air_loop_hvac.name} ERV",
-                                                                            type: "Rotary",
-                                                                            economizer_lockout: true,
-                                                                            supply_air_outlet_temperature_control: true,
-                                                                            frost_control_type: 'ExhaustOnly',
-                                                                            sensible_heating_100_eff: 0.5,
-                                                                            sensible_heating_75_eff: 0.5,
-                                                                            latent_heating_100_eff: 0.5,
-                                                                            latent_heating_75_eff: 0.5,
-                                                                            sensible_cooling_100_eff: 0.5,
-                                                                            sensible_cooling_75_eff: 0.5,
-                                                                            latent_cooling_100_eff: 0.5,
-                                                                            latent_cooling_75_eff: 0.5)
+    erv = OpenstudioStandards::HVAC.create_heat_exchanger_air_to_air_sensible_and_latent(air_loop_hvac.model,
+                                                                                         name: "#{air_loop_hvac.name} ERV",
+                                                                                         type: "Rotary",
+                                                                                         economizer_lockout: true,
+                                                                                         supply_air_outlet_temperature_control: true,
+                                                                                         frost_control_type: 'ExhaustOnly',
+                                                                                         sensible_heating_100_eff: 0.5,
+                                                                                         sensible_heating_75_eff: 0.5,
+                                                                                         latent_heating_100_eff: 0.5,
+                                                                                         latent_heating_75_eff: 0.5,
+                                                                                         sensible_cooling_100_eff: 0.5,
+                                                                                         sensible_cooling_75_eff: 0.5,
+                                                                                         latent_cooling_100_eff: 0.5,
+                                                                                         latent_cooling_75_eff: 0.5)
 
     erv.setThresholdTemperature(-23.3) # -10F
     erv.setInitialDefrostTimeFraction(0.167)

@@ -120,12 +120,12 @@ class TestHVACComponents < Minitest::Test
   def test_create_hx_air_to_air_sensible_and_latent
     model = OpenStudio::Model::Model.new
 
-    hx = @hvac.create_hx_air_to_air_sensible_and_latent(model,
-                                                        name: "ERV HX",
-                                                        type: 'Rotary',
-                                                        economizer_lockout: false,
-                                                        supply_air_outlet_temperature_control: false,
-                                                        frost_control_type: 'ExhaustOnly')
+    hx = @hvac.create_heat_exchanger_air_to_air_sensible_and_latent(model,
+                                                                    name: "ERV HX",
+                                                                    type: 'Rotary',
+                                                                    economizer_lockout: false,
+                                                                    supply_air_outlet_temperature_control: false,
+                                                                    frost_control_type: 'ExhaustOnly')
     assert(hx.is_a?(OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent), 'Expected hx to be a HeatExchangerAirToAirSensibleAndLatent object')
     assert_equal('ERV HX', hx.name.to_s, "Expected hx name to be 'ERV HX'")
     assert_equal('Rotary', hx.heatExchangerType.to_s, "'Expected hx type to be 'Rotary'")
