@@ -30,7 +30,7 @@ module OpenstudioStandards
 
       # add to plant loop
       if plant_loop.nil?
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Model', 'No plant loop supplied for cooling coil')
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.HVAC', 'No plant loop supplied for cooling coil')
         return false
       end
       plant_loop.addDemandBranchForComponent(clg_coil)

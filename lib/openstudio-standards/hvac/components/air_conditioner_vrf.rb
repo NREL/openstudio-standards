@@ -96,7 +96,7 @@ module OpenstudioStandards
         vrf_outdoor_unit.setString(56, condenser_type)
         # require condenser_loop
         unless condenser_loop
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.Model.Model', 'Must specify condenser_loop for vrf_outdoor_unit if WaterCooled')
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.HVAC', 'Must specify condenser_loop for vrf_outdoor_unit if WaterCooled')
         end
         condenser_loop.addDemandBranchForComponent(vrf_outdoor_unit)
       elsif condenser_type == 'EvaporativelyCooled'

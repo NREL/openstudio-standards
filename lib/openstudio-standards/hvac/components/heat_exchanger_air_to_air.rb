@@ -44,7 +44,7 @@ module OpenstudioStandards
         if OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent.heatExchangerTypeValues.include?(type)
           heat_exchanger.setHeatExchangerType(type)
         else
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Hvac', "Entered heat exchanger type #{type} not a valid type value. Enter one of #{OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent.heatExchangerTypeValues}")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.HVAC', "Entered heat exchanger type #{type} not a valid type value. Enter one of #{OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent.heatExchangerTypeValues}")
         end
       end
 
@@ -52,7 +52,7 @@ module OpenstudioStandards
         if OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent.frostControlTypeValues.include?(frost_control_type)
           heat_exchanger.setFrostControlType(frost_control_type)
         else
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Hvac', "Entered heat exchanger frost control type #{frost_control_type} not a valid type value. Enter one of #{OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent.frostControlTypeValues}")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.HVAC', "Entered heat exchanger frost control type #{frost_control_type} not a valid type value. Enter one of #{OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent.frostControlTypeValues}")
         end
       end
 
@@ -81,7 +81,7 @@ module OpenstudioStandards
         effectiveness_inputs['Latent Cooling'][1.0] = latent_cooling_100_eff.to_f unless latent_cooling_100_eff.nil?
 
         if effectiveness_inputs.values.all?(&:empty?)
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Hvac', 'Creating heat exchanger with historical effectiveness curves')
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.HVAC', 'Creating heat exchanger with historical effectiveness curves')
           defaults = true
         else
           defaults = false
@@ -103,7 +103,7 @@ module OpenstudioStandards
       # validate inputs
       types = ['Sensible Heating', 'Latent Heating', 'Sensible Cooling', 'Latent Cooling']
       unless types.include? type
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Hvac', "#{__method__} requires effectiveness type as one of #{types}")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.HVAC', "#{__method__} requires effectiveness type as one of #{types}")
         return false
       end
 
@@ -114,7 +114,7 @@ module OpenstudioStandards
       end
 
       if !validate_effectiveness_hash(values_hash)
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Hvac', "#{__method__} require values_hash to have keys and values between 0.0 and 1.0: #{values_hash}")
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.HVAC', "#{__method__} require values_hash to have keys and values between 0.0 and 1.0: #{values_hash}")
         return false
       end
 
@@ -180,14 +180,14 @@ module OpenstudioStandards
           return heat_exchanger
         end
       elsif values.nil?
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.model.Hvac', "#{__method__} called with defaults=false and no values provided. #{heat_exchanger.name.get} will not be modified")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.HVAC', "#{__method__} called with defaults=false and no values provided. #{heat_exchanger.name.get} will not be modified")
         return heat_exchanger
       end
 
       values.each do |type, values_hash|
         # ensure values_hash has one value at 100% flow
         unless values_hash.key?(1.0)
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.model.Hvac', "Effectiveness Values for #{type} do not include 100% flow effectivenss. Cannot set effectiveness curves")
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.HVAC', "Effectiveness Values for #{type} do not include 100% flow effectivenss. Cannot set effectiveness curves")
           return false
         end
 
