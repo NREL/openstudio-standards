@@ -1,8 +1,8 @@
 module OpenstudioStandards
   # The HVAC module provides methods create, modify, and get information about HVAC systems in the model
   module HVAC
-    # @!group Component:Create
-    # Methods to create HVAC component objects
+    # @!group Component:Coil
+    # Methods to create, modify, and get information about HVAC coil objects
 
     # Create CoilCoolingWater object
     #

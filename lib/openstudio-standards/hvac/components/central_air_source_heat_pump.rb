@@ -1,8 +1,8 @@
 module OpenstudioStandards
   # The HVAC module provides methods create, modify, and get information about HVAC systems in the model
   module HVAC
-    # @!group Component:Create
-    # Methods to create HVAC component objects
+    # @!group Component:CentralAirSourceHeatPump
+    # Methods to create central air source heat pumps
 
     # Create CentralAirSourceHeatPump object using PlantComponentUserDefined
     #

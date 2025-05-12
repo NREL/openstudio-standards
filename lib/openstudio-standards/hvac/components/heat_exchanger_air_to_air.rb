@@ -1,8 +1,8 @@
 module OpenstudioStandards
   # The HVAC module provides methods create, modify, and get information about HVAC systems in the model
   module HVAC
-    # @!group Component:Create
-    # Methods to create HVAC component objects
+    # @!group Component:HX
+    # Methods to create, modify, and get information about heat exchangers
 
     # creates HeatExchangerAirToAirSensibleAndLatent object with user-input effectiveness values
     #
