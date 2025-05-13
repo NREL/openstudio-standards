@@ -307,6 +307,8 @@ module OpenstudioStandards
   require_relative "#{stds}/Standards.Motor"
   require_relative "#{stds}/Standards.PlanarSurface"
   require_relative "#{stds}/Standards.PlantLoop"
+  require_relative "#{stds}/Standards.Pump"
+  require_relative "#{stds}/Standards.PumpVariableSpeed"
   require_relative "#{stds}/Standards.ScheduleRuleset"
   require_relative "#{stds}/Standards.ServiceWaterHeating"
   require_relative "#{stds}/Standards.Space"
@@ -324,6 +326,7 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2004/ashrae_90_1_2004.FanVariableVolume"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2004/ashrae_90_1_2004.Model"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2004/ashrae_90_1_2004.PlantLoop"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2004/ashrae_90_1_2004.PumpVariableSpeed"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2004/ashrae_90_1_2004.ThermalZone"
   # 90.1-2007
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2007/ashrae_90_1_2007.AirLoopHVAC"
@@ -331,6 +334,7 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2007/ashrae_90_1_2007.ChillerElectricEIR"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2007/ashrae_90_1_2007.FanVariableVolume"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2007/ashrae_90_1_2007.Model"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2007/ashrae_90_1_2007.PumpVariableSpeed"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2007/ashrae_90_1_2007.ThermalZone"
   # 90.1-2010
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.AirLoopHVAC"
@@ -343,6 +347,7 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.CoolingTowerVariableSpeed"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.FanVariableVolume"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.Model"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.PumpVariableSpeed"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.Space"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.ThermalZone"
   # 90.1-2013
@@ -358,6 +363,7 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.Model"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.Motor"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.PlantLoop"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.PumpVariableSpeed"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.Space"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.ThermalZone"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.WaterHeaterMixed"
@@ -373,6 +379,7 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.FanVariableVolume"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.Model"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.Motor"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.PumpVariableSpeed"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.Space"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.ThermalZone"
   # 90.1-2019
@@ -388,6 +395,8 @@ module OpenstudioStandards
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.FanVariableVolume"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.Model"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.Motor"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.Pump"
+  require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.PumpVariableSpeed"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.Space"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.ThermalZone"
   require_relative "#{stds}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.WaterHeaterMixed"
@@ -541,19 +550,16 @@ module OpenstudioStandards
   require_relative "#{proto}/common/objects/Prototype.Model.transformers"
   require_relative "#{proto}/common/objects/Prototype.Model.hvac"
   require_relative "#{proto}/common/objects/Prototype.Model"
-  require_relative "#{proto}/common/objects/Prototype.PumpVariableSpeed"
   require_relative "#{proto}/common/objects/Prototype.refrigeration"
   require_relative "#{proto}/common/objects/Prototype.SizingSystem"
   require_relative "#{proto}/common/objects/Prototype.utilities"
   # 90.1-2004
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2004/ashrae_90_1_2004.AirTerminalSingleDuctVAVReheat"
-  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2004/ashrae_90_1_2004.PumpVariableSpeed"
   # 90.1-2007
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2007/ashrae_90_1_2007.FanConstantVolume"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2007/ashrae_90_1_2007.FanOnOff"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2007/ashrae_90_1_2007.FanVariableVolume"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2007/ashrae_90_1_2007.AirTerminalSingleDuctVAVReheat"
-  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2007/ashrae_90_1_2007.PumpVariableSpeed"
   # 90.1-2010
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.FanConstantVolume"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.FanOnOff"
@@ -561,7 +567,6 @@ module OpenstudioStandards
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.Model"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.Model.elevators"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.AirTerminalSingleDuctVAVReheat"
-  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2010/ashrae_90_1_2010.PumpVariableSpeed"
   # 90.1-2013
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.FanConstantVolume"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.FanOnOff"
@@ -570,7 +575,6 @@ module OpenstudioStandards
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.Model.elevators"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.hvac_systems"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.AirTerminalSingleDuctVAVReheat"
-  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2013/ashrae_90_1_2013.PumpVariableSpeed"
   # 90.1-2016
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.FanConstantVolume"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.FanOnOff"
@@ -579,7 +583,6 @@ module OpenstudioStandards
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.Model.elevators"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.hvac_systems"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.AirTerminalSingleDuctVAVReheat"
-  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2016/ashrae_90_1_2016.PumpVariableSpeed"
   # 90.1-2019
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.FanConstantVolume"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.FanOnOff"
@@ -588,8 +591,6 @@ module OpenstudioStandards
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.Model.elevators"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.hvac_systems"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.AirTerminalSingleDuctVAVReheat"
-  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.Pump"
-  require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.PumpVariableSpeed"
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2019/ashrae_90_1_2019.Space"
   # DOE Ref 1980-2004
   require_relative "#{proto}/ashrae_90_1/doe_ref_1980_2004/doe_ref_1980_2004.AirTerminalSingleDuctVAVReheat"
