@@ -297,7 +297,7 @@ class Standard
     end
 
     # Clean name of airloop
-    loop_name_clean = ems_friendly_name(air_loop_hvac.name)
+    loop_name_clean = OpenstudioStandards::HVAC.ems_friendly_name(air_loop_hvac.name)
 
     # Sensors
     oat_db_c_sen = OpenStudio::Model::EnergyManagementSystemSensor.new(air_loop_hvac.model, 'Site Outdoor Air Drybulb Temperature')
@@ -2955,11 +2955,11 @@ class Standard
     fan_control = air_loop_hvac_multi_stage_dx_cooling?(air_loop_hvac)
 
     # Scrub special characters from the system name
-    snc = ems_friendly_name(air_loop_hvac.name)
+    snc = OpenstudioStandards::HVAC.ems_friendly_name(air_loop_hvac.name)
 
     # Get the zone name
     zone = air_loop_hvac.thermalZones[0]
-    zn_name_clean = ems_friendly_name(zone.name)
+    zn_name_clean = OpenstudioStandards::HVAC.ems_friendly_name(zone.name)
 
     # Zone air node
     zone_air_node = zone.zoneAirNode

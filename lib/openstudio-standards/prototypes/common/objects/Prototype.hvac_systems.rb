@@ -1028,7 +1028,7 @@ class Standard
     loop_stpt_manager.addToNode(ground_hx_loop.supplyOutletNode)
 
     # edit name to be EMS friendly
-    ground_hx_ems_name = ems_friendly_name(ground_hx.name)
+    ground_hx_ems_name = OpenstudioStandards::HVAC.ems_friendly_name(ground_hx.name)
 
     # sensor to read supply inlet temperature
     inlet_temp_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model,
@@ -1206,8 +1206,8 @@ class Standard
       chilled_water_loop.addAvailabilityManager(chilled_water_loop_lockout_manager)
     else
       # create availability managers based on zone heating and cooling demand
-      hot_water_loop_name = ems_friendly_name(hot_water_loop.name)
-      chilled_water_loop_name = ems_friendly_name(chilled_water_loop.name)
+      hot_water_loop_name = OpenstudioStandards::HVAC.ems_friendly_name(hot_water_loop.name)
+      chilled_water_loop_name = OpenstudioStandards::HVAC.ems_friendly_name(chilled_water_loop.name)
 
       # create hot water plant availability schedule managers and create an EMS acuator
       sch_hot_water_availability = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
@@ -4459,20 +4459,20 @@ class Standard
       # Create a sensor to read the zone load
       zn_load_sensor = OpenStudio::Model::EnergyManagementSystemSensor.new(model,
                                                                            'Zone Predicted Sensible Load to Cooling Setpoint Heat Transfer Rate')
-      zn_load_sensor.setName("#{ems_friendly_name(zone_name_clean)} Clg Load Sensor")
+      zn_load_sensor.setName("#{OpenstudioStandards::HVAC.ems_friendly_name(zone_name_clean)} Clg Load Sensor")
       zn_load_sensor.setKeyName(zone.handle.to_s)
 
       # Create an actuator to set the airloop availability
       air_loop_avail_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(air_loop_avail_sch,
                                                                                       'Schedule:Constant',
                                                                                       'Schedule Value')
-      air_loop_avail_actuator.setName("#{ems_friendly_name(air_loop.name)} Availability Actuator")
+      air_loop_avail_actuator.setName("#{OpenstudioStandards::HVAC.ems_friendly_name(air_loop.name)} Availability Actuator")
 
       # Create a program to turn on Evap Cooler if
       # there is a cooling load in the target zone.
       # Load < 0.0 is a cooling load.
       avail_program = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
-      avail_program.setName("#{ems_friendly_name(air_loop.name)} Availability Control")
+      avail_program.setName("#{OpenstudioStandards::HVAC.ems_friendly_name(air_loop.name)} Availability Control")
       avail_program_body = <<-EMS
         IF #{zn_load_sensor.handle} < 0.0
           SET #{air_loop_avail_actuator.handle} = 1
@@ -6364,7 +6364,7 @@ class Standard
         model_add_zone_heat_cool_request_count_program(model, thermal_zones)
       end
 
-      plant_water_loop_name = ems_friendly_name(plant_water_loop.name)
+      plant_water_loop_name = OpenstudioStandards::HVAC.ems_friendly_name(plant_water_loop.name)
 
       if plant_water_loop.componentType.valueName == 'Heating'
         swt_upper_limit = sp_at_oat_low.nil? ? OpenStudio.convert(120, 'F', 'C').get : OpenStudio.convert(sp_at_oat_low, 'F', 'C').get
@@ -6540,7 +6540,7 @@ class Standard
       exisiting_ems_sensors_names = exisiting_ems_sensors.collect { |sensor| "#{sensor.name.get}-#{sensor.outputVariableOrMeterName}" }
 
       # Create zone air temperature 'sensor' for the zone.
-      zone_name = ems_friendly_name(zone.name)
+      zone_name = OpenstudioStandards::HVAC.ems_friendly_name(zone.name)
       zone_air_sensor_name = "#{zone_name}_ctrl_temperature"
 
       unless exisiting_ems_sensors_names.include?("#{zone_air_sensor_name}-Zone Air Temperature")
@@ -7513,7 +7513,7 @@ class Standard
     end
 
     # rename air loop and plant loop nodes for readability
-    rename_air_loop_nodes(model)
-    rename_plant_loop_nodes(model)
+    OpenstudioStandards::HVAC.rename_air_loop_nodes(model)
+    OpenstudioStandards::HVAC.rename_plant_loop_nodes(model)
   end
 end

@@ -552,7 +552,6 @@ module OpenstudioStandards
   require_relative "#{proto}/common/objects/Prototype.Model"
   require_relative "#{proto}/common/objects/Prototype.refrigeration"
   require_relative "#{proto}/common/objects/Prototype.SizingSystem"
-  require_relative "#{proto}/common/objects/Prototype.utilities"
   # 90.1-2004
   require_relative "#{proto}/ashrae_90_1/ashrae_90_1_2004/ashrae_90_1_2004.AirTerminalSingleDuctVAVReheat"
   # 90.1-2007

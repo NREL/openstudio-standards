@@ -30,9 +30,7 @@ module OpenstudioStandards
       end
 
       # change equipment name for EMS validity
-      # @todo refactor to remove std call when ems_friendly_name is available in the HVAC module
-      std = Standard.build('90.1-2013')
-      plant_comp.setName(std.ems_friendly_name(name))
+      plant_comp.setName(OpenstudioStandards::HVAC.ems_friendly_name(name))
 
       # set plant component properties
       plant_comp.setPlantLoadingMode('MeetsLoadWithNominalCapacityHiOutLimit')
