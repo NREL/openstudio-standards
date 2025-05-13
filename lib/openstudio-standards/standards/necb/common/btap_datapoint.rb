@@ -125,6 +125,7 @@ class BTAPDatapoint
         @standard.model_apply_standard(model: model,
                                        epw_file: @options[:epw_file],
                                        custom_weather_folder: weather_folder,
+                                       btap_weather: @options[:btap_weather],
                                        sizing_run_dir: File.join(@dp_temp_folder, 'sizing_folder'),
                                        primary_heating_fuel: @options[:primary_heating_fuel],
                                        necb_reference_hp: @options[:necb_reference_hp],

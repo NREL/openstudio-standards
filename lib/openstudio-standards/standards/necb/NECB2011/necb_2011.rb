@@ -355,6 +355,7 @@ class NECB2011 < Standard
                            tbd_interpolate: nil,
                            epw_file:,
                            custom_weather_folder: nil,
+                           btap_weather: true,
                            sizing_run_dir: Dir.pwd,
                            necb_reference_hp: false,
                            necb_reference_hp_supp_fuel: 'DefaultFuel',
@@ -415,7 +416,10 @@ class NECB2011 < Standard
                            boiler_cap_ratio: nil,
                            oerd_utility_pricing: nil)
 
-    apply_weather_data(model: model, epw_file: epw_file, custom_weather_folder: custom_weather_folder)
+    apply_weather_data(model: model, 
+                       epw_file: epw_file, 
+                       custom_weather_folder: custom_weather_folder, 
+                       btap_weather: btap_weather)
     primary_heating_fuel = validate_primary_heating_fuel(primary_heating_fuel: primary_heating_fuel, model: model)
     self.fuel_type_set = SystemFuels.new()
     self.fuel_type_set.set_defaults(standards_data: @standards_data, primary_heating_fuel: primary_heating_fuel)
@@ -689,7 +693,7 @@ class NECB2011 < Standard
     ecm.scale_oa_loads(model: model, scale: oa_scale)
   end
 
-  def apply_weather_data(model:, epw_file:, custom_weather_folder: nil)
+  def apply_weather_data(model:, epw_file:, custom_weather_folder: nil, btap_weather: true)
     # Create full path to weather file
     weather_files = File.absolute_path(File.join(__FILE__, '..', '..', '..', '..', '..' , '..', "data/weather"))
     weather_file = File.join(weather_files, epw_file)
@@ -699,7 +703,7 @@ class NECB2011 < Standard
       # Check if btap_batch transferred the weather file
       weather_transfer = check_datapoint_weather_folder(epw_file: epw_file, weather_folder: weather_files, custom_weather_folder: custom_weather_folder)
       # If btap_batch didn't transfer the weather file, download it.
-      get_weather_file_from_repo(epw_file: epw_file) unless weather_transfer
+      get_weather_file_from_repo(epw_file: epw_file, btap_weather: btap_weather) unless weather_transfer
     end
 
     # Fix EMS references. Temporary workaround for OS issue #2598
@@ -2265,28 +2269,42 @@ class NECB2011 < Standard
     return model
   end
 
-  # This method handles looking for the epw_file in the https://github.com/canmet-energy/btap_weather repository.  It
+  # This method handles looking for the epw_file in btap_weather or Climate.OneBuilding.Org. It
   # checks for the epw_file in the historical data first.  If it is not there then it looks in the future weather data.
   # If it is not there either, it throws an error.
-  # epw_file (String):  The name of the epw file.  The different weather files all share the same name as the epw file,
-  #                     only the extension changes.
-  def get_weather_file_from_repo(epw_file:)
+  # epw_file (String): The name of the epw file.  The different weather files all share the same name as the epw file,
+  #                    only the extension changes.
+  # btap_weather (Boolean): Determines whether to download from the btap_weather repository or Climate.OneBuilding.Org.
+  def get_weather_file_from_repo(epw_file:, btap_weather:)
     # Get just the weather file name without the extension
     weather_loc = epw_file[0..-5]
     # Get the url of the file containing the historical weather data file names in the repository and the repository
     # folder containing the files
-    historic_weather_files_loc = @standards_data['constants']['historic_weather_file_list']['value'].to_s
-    historic_git_folder = @standards_data['constants']['historic_weather_folder_url']['value'].to_s
+    if btap_weather
+      historic_weather_files_loc = @standards_data['constants']['historic_weather_file_list_btap']['value'].to_s
+      historic_folder = @standards_data['constants']['historic_weather_folder_url_btap']['value'].to_s
+      future_weather_files_loc = @standards_data['constants']['future_weather_file_list_btap']['value'].to_s
+      future_folder = @standards_data['constants']['future_weather_folder_url_btap']['value'].to_s  
+    else
+      historic_weather_files_loc = @standards_data['constants']['historic_weather_file_list']['value'].to_s
+      historic_folder = @standards_data['constants']['historic_weather_folder_url']['value'].to_s
+      future_weather_files_loc = @standards_data['constants']['future_weather_file_list']['value'].to_s
+      future_folder = @standards_data['constants']['future_weather_folder_url']['value'].to_s  
+    end
     # Get the files from the repository
-    success_flag = download_and_save_file(weather_list_url: historic_weather_files_loc, weather_loc: weather_loc, git_folder: historic_git_folder)
+    success_flag = download_and_save_file(weather_list_url: historic_weather_files_loc, 
+                                          weather_loc: weather_loc, 
+                                          download_folder: historic_folder,
+                                          btap_weather: btap_weather)
     return if success_flag
     # If the file could not be found in the historical data look for it with the future weather data.
     puts "Could not find #{epw_file} in historical weather data files, looking in future weather data files."
-    future_weather_files_loc = @standards_data['constants']['future_weather_file_list']['value'].to_s
-    future_git_folder = @standards_data['constants']['future_weather_folder_url']['value'].to_s
-    success_flag = download_and_save_file(weather_list_url: future_weather_files_loc, weather_loc: weather_loc, git_folder: future_git_folder)
+    success_flag = download_and_save_file(weather_list_url: future_weather_files_loc, 
+                                          weather_loc: weather_loc, 
+                                          download_folder: future_folder,
+                                          btap_weather: btap_weather)
     return if success_flag
-    raise("Could not locate the following file in the canmet/btap_weather repository or could not extract the data: #{epw_file}.  Please check the spelling of the file or visit https://github.com/canmet-energy/btap_weather to see if the file exists.")
+    raise("Could not locate the following file in #{btap_weather ? "btap_weather" : "Climate.OneBuilding.Org"} or could not extract the data: #{epw_file} Please check the spelling of the file or visit #{btap_weather ? "https://github.com/canmet-energy/btap_weather" : "https://climate.onebuilding.org/WMO_Region_4_North_and_Central_America/"} to see if the file exists.")
   end
 
   # This method actually looks for and downloads the zip file from the https://github.com/canmet-energy/btap_weather
@@ -2300,7 +2318,8 @@ class NECB2011 < Standard
   # weather_loc (string): the name of the epw file we are looking for without the .epw extension
   # git_folder (string): the url of the folder containing the weather files.  As of 2023-07-07 this this is either the
   #                      url of the historical weather data folder or the future weather data folder.
-  def download_and_save_file(weather_list_url:, weather_loc:, git_folder:)
+  # btap_weather (Boolean): Determines whether to download from the btap_weather repository or Climate.OneBuilding.Org.
+  def download_and_save_file(weather_list_url:, weather_loc:, download_folder:, btap_weather:)
     status = false
     attempt = 1
     # Try to download the list of weather files 5 times, waiting 5 seconds between each attempt.
@@ -2320,7 +2339,27 @@ class NECB2011 < Standard
           unless zip_name.nil?
             # Found the weather file on the list
             # Define the full url of the weather zip file we want to download
-            save_file_url = git_folder + zip_name
+            if btap_weather
+              save_file_url = download_folder + zip_name
+            else
+              # Used to resolve the Climate.OneBuilding.Org download link from using just the filename.
+              abbreviation_map = { 
+                'AB' => 'AB_Alberta/',
+                'BC' => 'BC_British_Columbia/',
+                'MB' => 'MB_Manitoba/',
+                'NB' => 'NB_New_Brunswick/',
+                'NL' => 'NL_Newfoundland_and_Labrador/',
+                'NS' => 'NS_Nova_Scotia/',
+                'NT' => 'NT_Northwest_Territories/',
+                'NU' => 'NU_Nunavut/',
+                'ON' => 'ON_Ontario/',
+                'PE' => 'PE_Prince_Edward_Island/',
+                'QC' => 'QC_Quebec/',
+                'SK' => 'SK_Saskatchewan/',
+                'YT' => 'YT_Yukon/'
+              }
+              save_file_url = download_folder + abbreviation_map[zip_name[4..5]] + zip_name
+            end
             # Define the local location of where the weather zip file will be saved
             weather_dir = File.absolute_path(File.join(__FILE__, '..', '..', '..', '..', '..' , '..', "data/weather"))
             save_file = File.join(weather_dir, zip_name)
