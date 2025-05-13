@@ -80,6 +80,7 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/hvac/components/coil_heating_water_to_air_heat_pump_equation_fit'
   require_relative 'openstudio-standards/hvac/components/coil_heating_water'
   require_relative 'openstudio-standards/hvac/components/heat_exchanger_air_to_air'
+  require_relative 'openstudio-standards/hvac/components/pump'
   require_relative 'openstudio-standards/hvac/exhaust/create_exhaust_fan'
   require_relative 'openstudio-standards/hvac/setpoint_managers/information'
 
@@ -306,8 +307,6 @@ module OpenstudioStandards
   require_relative "#{stds}/Standards.Motor"
   require_relative "#{stds}/Standards.PlanarSurface"
   require_relative "#{stds}/Standards.PlantLoop"
-  require_relative "#{stds}/Standards.PumpConstantSpeed"
-  require_relative "#{stds}/Standards.PumpVariableSpeed"
   require_relative "#{stds}/Standards.ScheduleRuleset"
   require_relative "#{stds}/Standards.ServiceWaterHeating"
   require_relative "#{stds}/Standards.Space"
@@ -542,7 +541,6 @@ module OpenstudioStandards
   require_relative "#{proto}/common/objects/Prototype.Model.transformers"
   require_relative "#{proto}/common/objects/Prototype.Model.hvac"
   require_relative "#{proto}/common/objects/Prototype.Model"
-  require_relative "#{proto}/common/objects/Prototype.Pump"
   require_relative "#{proto}/common/objects/Prototype.PumpVariableSpeed"
   require_relative "#{proto}/common/objects/Prototype.refrigeration"
   require_relative "#{proto}/common/objects/Prototype.SizingSystem"

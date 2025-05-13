@@ -737,7 +737,7 @@ module OpenstudioStandards
           motor_eff = component.motorEfficiency
 
           # get eff values from standards
-          motor_bhp = std.pump_brake_horsepower(component)
+          motor_bhp = OpenstudioStandards::HVAC.pump_get_brake_horsepower(component)
           next if motor_bhp < 0.0001 # less than 1 watt
 
           standard_minimum_motor_efficiency_and_size = std.pump_standard_minimum_motor_efficiency_and_size(component, motor_bhp)[0]
@@ -758,7 +758,7 @@ module OpenstudioStandards
           motor_eff = component.motorEfficiency
 
           # get eff values from standards
-          motor_bhp = std.pump_brake_horsepower(component)
+          motor_bhp = OpenstudioStandards::HVAC.pump_get_brake_horsepower(component)
           next if motor_bhp < 0.0001 # less than 1 watt
 
           standard_minimum_motor_efficiency_and_size = std.pump_standard_minimum_motor_efficiency_and_size(component, motor_bhp)[0]
@@ -1416,13 +1416,13 @@ module OpenstudioStandards
             obj_type = component.iddObjectType.valueName.to_s
             case obj_type
             when 'OS_Pump_ConstantSpeed'
-              actual_w_per_gpm = std.pump_rated_w_per_gpm(component.to_PumpConstantSpeed.get)
+              actual_w_per_gpm = OpenstudioStandards::HVAC.pump_get_rated_w_per_gpm(component.to_PumpConstantSpeed.get)
             when 'OS_Pump_VariableSpeed'
-              actual_w_per_gpm = std.pump_rated_w_per_gpm(component.to_PumpVariableSpeed.get)
+              actual_w_per_gpm = OpenstudioStandards::HVAC.pump_get_rated_w_per_gpm(component.to_PumpVariableSpeed.get)
             when 'OS_HeaderedPumps_ConstantSpeed'
-              actual_w_per_gpm = std.pump_rated_w_per_gpm(component.to_HeaderedPumpsConstantSpeed.get)
+              actual_w_per_gpm = OpenstudioStandards::HVAC.pump_get_rated_w_per_gpm(component.to_HeaderedPumpsConstantSpeed.get)
             when 'OS_HeaderedPumps_VariableSpeed'
-              actual_w_per_gpm = std.pump_rated_w_per_gpm(component.to_HeaderedPumpsVariableSpeed.get)
+              actual_w_per_gpm = OpenstudioStandards::HVAC.pump_get_rated_w_per_gpm(component.to_HeaderedPumpsVariableSpeed.get)
             else
               next # Skip non-pump objects
             end

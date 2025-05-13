@@ -218,7 +218,7 @@ class ASHRAE901PRM < Standard
       new_pump.setName("#{chiller.name} Inlet Pump")
       new_pump.setRatedPumpHead(original_pump.ratedPumpHead / num_chillers)
 
-      pump_variable_speed_set_control_type(new_pump, control_type = 'Riding Curve')
+      OpenstudioStandards::HVAC.pump_variable_speed_set_control_type(new_pump, control_type: 'Riding Curve')
       chiller_inlet_node = chiller.connectedObject(chiller.supplyInletPort).get.to_Node.get
       new_pump.addToNode(chiller_inlet_node)
 
