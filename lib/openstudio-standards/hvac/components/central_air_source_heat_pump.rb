@@ -34,7 +34,7 @@ module OpenstudioStandards
 
       # set plant component properties
       plant_comp.setPlantLoadingMode('MeetsLoadWithNominalCapacityHiOutLimit')
-      plant_comp.setPlantLoopFlowRequestMode('NeedsFlowIfLoopIsOn')
+      plant_comp.setPlantLoopFlowRequestMode('NeedsFlowIfLoopOn')
 
       # plant design volume flow rate internal variable
       vdot_des_int_var = OpenStudio::Model::EnergyManagementSystemInternalVariable.new(model, 'Plant Design Volume Flow Rate')
