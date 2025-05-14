@@ -185,7 +185,7 @@ Standard.class_eval do
   def model_run_sizing_run(model, sizing_run_dir = "#{Dir.pwd}/SR")
     # Change the simulation to only run the sizing days
     sim_control = model.getSimulationControl
-    sim_control.setRunSimulationforSizingPeriods(true)
+    sim_control.setRunSimulationforSizingPeriods(false)
     sim_control.setRunSimulationforWeatherFileRunPeriods(false)
     if model.version >= OpenStudio::VersionString.new('3.0.0')
       sim_control.setDoHVACSizingSimulationforSizingPeriods(true)
