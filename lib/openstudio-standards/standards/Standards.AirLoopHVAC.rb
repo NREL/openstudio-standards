@@ -892,7 +892,7 @@ class Standard
         # CoilCoolingDXMultSpeed
         if clg_coil.to_CoilCoolingDXMultiSpeed.is_initialized
           coil = clg_coil.to_CoilCoolingDXMultiSpeed.get
-          total_cooling_capacity_w = coil_cooling_dx_multi_speed_find_capacity(coil)
+          total_cooling_capacity_w = OpenstudioStandards::HVAC.coil_cooling_dx_multi_speed_get_capacity(coil)
         end
       elsif sc.to_CoilCoolingDXVariableSpeed.is_initialized
         coil = sc.to_CoilCoolingDXVariableSpeed.get

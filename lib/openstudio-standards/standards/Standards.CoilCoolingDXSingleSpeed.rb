@@ -3,41 +3,6 @@ class Standard
 
   include CoilDX
 
-  # Finds capacity in W
-  #
-  # @param coil_cooling_dx_single_speed [OpenStudio::Model::CoilCoolingDXSingleSpeed] coil cooling dx single speed object
-  # @param necb_ref_hp [Boolean] for compatability with NECB ruleset only.
-  # @param equipment_type [String] type of equipment that this coil object belongs to.
-  # @return [Double] capacity in W to be used for find object
-  def coil_cooling_dx_single_speed_find_capacity(coil_cooling_dx_single_speed, necb_ref_hp = false, equipment_type = nil)
-    capacity_w = nil
-    if coil_cooling_dx_single_speed.ratedTotalCoolingCapacity.is_initialized
-      capacity_w = coil_cooling_dx_single_speed.ratedTotalCoolingCapacity.get
-    elsif coil_cooling_dx_single_speed.autosizedRatedTotalCoolingCapacity.is_initialized
-      capacity_w = coil_cooling_dx_single_speed.autosizedRatedTotalCoolingCapacity.get
-    else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{coil_cooling_dx_single_speed.name} capacity is not available, cannot apply efficiency standard.")
-      return 0.0
-    end
-
-    # If it's a PTAC or PTHP System, we need to divide the capacity by the potential zone multiplier
-    # because the COP is dependent on capacity, and the capacity should be the capacity of a single zone, not all the zones
-    if ['PTAC', 'PTHP'].include?(coil_dx_subcategory(coil_cooling_dx_single_speed)) || ['PTAC', 'PTHP'].include?(equipment_type)
-      mult = 1
-      comp = coil_cooling_dx_single_speed.containingZoneHVACComponent
-      if comp.is_initialized && comp.get.thermalZone.is_initialized
-        mult = comp.get.thermalZone.get.multiplier
-        if mult > 1
-          total_cap = capacity_w
-          capacity_w /= mult
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{coil_cooling_dx_single_speed.name}, total capacity of #{OpenStudio.convert(total_cap, 'W', 'kBtu/hr').get.round(2)}kBTU/hr was divided by the zone multiplier of #{mult} to give #{capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get.round(2)}kBTU/hr.")
-        end
-      end
-    end
-
-    return capacity_w
-  end
-
   # Finds lookup object in standards and return efficiency
   #
   # @param coil_cooling_dx_single_speed [OpenStudio::Model::CoilCoolingDXSingleSpeed] coil cooling dx single speed object
@@ -53,11 +18,12 @@ class Standard
     equipment_type = nil
 
     # Define database
-    if coil_dx_heat_pump?(coil_cooling_dx_single_speed)
+    if OpenstudioStandards::HVAC.coil_dx_heat_pump?(coil_cooling_dx_single_speed)
       database = standards_data['heat_pumps']
     else
       database = standards_data['unitary_acs']
     end
+
 
     # Additional search criteria
     if database[0].keys.include?('equipment_type') || ((template == 'NECB2011') || (template == 'NECB2015') || (template == 'NECB2017') || (template == 'NECB2020') || (template == 'BTAPPRE1980') ||
@@ -67,7 +33,7 @@ class Standard
         if equipment_type == 'PTAC'
           search_criteria['application'] = coil_dx_ptac_application(coil_cooling_dx_single_speed)
         end
-      elsif !coil_dx_heat_pump?(coil_cooling_dx_single_speed)
+      elsif !OpenstudioStandards::HVAC.coil_dx_heat_pump?(coil_cooling_dx_single_speed)
         search_criteria['equipment_type'] = 'Air Conditioners'
       end
     end
@@ -75,7 +41,12 @@ class Standard
       search_criteria['region'] = nil # non-nil values are currently used for residential products
     end
 
-    capacity_w = coil_cooling_dx_single_speed_find_capacity(coil_cooling_dx_single_speed, necb_ref_hp, equipment_type)
+    if ['PTAC', 'PTHP'].include?(equipment_type) || ['PTAC', 'PTHP'].include?(OpenstudioStandards::HVAC.coil_dx_subcategory(coil_cooling_dx_single_speed))
+      thermal_zone = OpenstudioStandards::HVAC.hvac_component_get_thermal_zone(coil_cooling_dx_single_speed)
+      multiplier = thermal_zone.multiplier if !thermal_zone.nil?
+    end
+    # Get the capacity
+    capacity_w = OpenstudioStandards::HVAC.coil_cooling_dx_single_speed_get_capacity(coil_cooling_dx_single_speed, multiplier: multiplier)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
@@ -226,7 +197,7 @@ class Standard
     successfully_set_all_properties = true
 
     # Get efficiencies data depending on whether it is a unitary AC or a heat pump
-    coil_efficiency_data = if coil_dx_heat_pump?(coil_cooling_dx_single_speed)
+    coil_efficiency_data = if OpenstudioStandards::HVAC.coil_dx_heat_pump?(coil_cooling_dx_single_speed)
                              standards_data['heat_pumps']
                            else
                              standards_data['unitary_acs']
@@ -253,7 +224,11 @@ class Standard
     end
 
     # Get the capacity
-    capacity_w = coil_cooling_dx_single_speed_find_capacity(coil_cooling_dx_single_speed, necb_ref_hp, equipment_type)
+    if ['PTAC', 'PTHP'].include?(equipment_type) || ['PTAC', 'PTHP'].include?(OpenstudioStandards::HVAC.coil_dx_subcategory(coil_cooling_dx_single_speed))
+      thermal_zone = OpenstudioStandards::HVAC.hvac_component_get_thermal_zone(coil_cooling_dx_single_speed)
+      multiplier = thermal_zone.multiplier if !thermal_zone.nil?
+    end
+    capacity_w = OpenstudioStandards::HVAC.coil_cooling_dx_single_speed_get_capacity(coil_cooling_dx_single_speed, multiplier: multiplier)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 

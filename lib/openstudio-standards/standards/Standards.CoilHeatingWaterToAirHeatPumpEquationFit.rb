@@ -67,19 +67,24 @@ class Standard
       return capacity_w
     end
 
+    if ['PTAC', 'PTHP'].include?(equipment_type) || ['PTAC', 'PTHP'].include?(OpenstudioStandards::HVAC.coil_dx_subcategory(clg_coil))
+      thermal_zone = OpenstudioStandards::HVAC.hvac_component_get_thermal_zone(clg_coil)
+      multiplier = thermal_zone.multiplier if !thermal_zone.nil?
+    end
+
     # If a coil was found, cast to the correct type
     if clg_coil.to_CoilCoolingDXSingleSpeed.is_initialized
       clg_coil = clg_coil.to_CoilCoolingDXSingleSpeed.get
-      capacity_w = coil_cooling_dx_single_speed_find_capacity(clg_coil)
+      capacity_w = OpenstudioStandards::HVAC.coil_cooling_dx_single_speed_get_capacity(clg_coil, multiplier: multiplier)
     elsif clg_coil.to_CoilCoolingDXTwoSpeed.is_initialized
       clg_coil = clg_coil.to_CoilCoolingDXTwoSpeed.get
-      capacity_w = coil_cooling_dx_two_speed_find_capacity(clg_coil)
+      capacity_w = OpenstudioStandards::HVAC.coil_cooling_dx_two_speed_get_capacity(clg_coil, multiplier: multiplier)
     elsif clg_coil.to_CoilCoolingDXMultiSpeed.is_initialized
       clg_coil = clg_coil.to_CoilCoolingDXMultiSpeed.get
-      capacity_w = coil_cooling_dx_multi_speed_find_capacity(clg_coil)
+      capacity_w = OpenstudioStandards::HVAC.coil_cooling_dx_multi_speed_get_capacity(clg_coil, multiplier: multiplier)
     elsif clg_coil.to_CoilCoolingWaterToAirHeatPumpEquationFit.is_initialized
       clg_coil = clg_coil.to_CoilCoolingWaterToAirHeatPumpEquationFit.get
-      capacity_w = coil_cooling_water_to_air_heat_pump_find_capacity(clg_coil)
+      capacity_w = OpenstudioStandards::HVAC.coil_cooling_water_to_air_heat_pump_find_capacity(clg_coil, multiplier: multiplier)
     end
 
     return capacity_w

@@ -910,7 +910,7 @@ class NECB2011
 
     # Define the criteria to find the properties in the hvac standards data set
     search_criteria = coil_dx_find_search_criteria(coil_cooling_dx_multi_speed)
-    capacity_w = coil_cooling_dx_multi_speed_find_capacity(coil_cooling_dx_multi_speed)
+    capacity_w = OpenstudioStandards::HVAC.coil_cooling_dx_multi_speed_get_capacity(coil_cooling_dx_multi_speed)
 
     # Find design outside air flow rate and flow fraction
     controller_oa = nil
@@ -1000,7 +1000,7 @@ class NECB2011
 
     # Lookup efficiencies depending on whether it is a unitary AC or a heat pump
     ac_props = nil
-    ac_props = if coil_dx_heat_pump?(coil_cooling_dx_multi_speed)
+    ac_props = if OpenstudioStandards::HVAC.coil_dx_heat_pump?(coil_cooling_dx_multi_speed)
                  model_find_object(standards_data['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
                else
                  model_find_object(standards_data['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
@@ -2389,7 +2389,12 @@ class NECB2011
 
       # Paired cooling coil parameters
       clg_coil = clg_coil.to_CoilCoolingDXSingleSpeed.get
-      capacity_w = coil_cooling_dx_single_speed_find_capacity(clg_coil)
+      if ['PTAC', 'PTHP'].include?(OpenstudioStandards::HVAC.coil_dx_subcategory(clg_coil))
+        thermal_zone = OpenstudioStandards::HVAC.hvac_component_get_thermal_zone(clg_coil)
+        multiplier = thermal_zone.multiplier if !thermal_zone.nil?
+      end
+
+      capacity_w = OpenstudioStandards::HVAC.coil_cooling_dx_single_speed_get_capacity(clg_coil, multiplier: multiplier)
       indoor_wb = 19.4 #rated indoor wb
       outdoor_db = -8.3 # outdoor db
 
@@ -2438,7 +2443,7 @@ class NECB2011
   # 1.  DX htg/cooling + gas supplement htg
   # 2.  Potential lack of AirLoopHVACUnitaryHeatPumpAirToAir or AirLoopHVACUnitarySystem
   # @param necb_reference_hp [Boolean] if true, NECB reference model rules for heat pumps will be used.
-  def coil_dx_heating_type(coil_dx, necb_reference_hp = false)
+  def coil_dx_heating_type(coil_dx)
     supp_htg_type = nil
 
     # If not heat pump reference case use the standard implementation.

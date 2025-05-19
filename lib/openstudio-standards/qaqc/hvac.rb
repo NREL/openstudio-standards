@@ -912,9 +912,9 @@ module OpenstudioStandards
 
           # find ac properties
           search_criteria = std.coil_dx_find_search_criteria(component)
-          capacity_w = std.coil_cooling_dx_single_speed_find_capacity(component)
+          capacity_w = OpenstudioStandards::HVAC.coil_cooling_dx_single_speed_get_capacity(component)
           capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
-          if std.coil_dx_heat_pump?(component)
+          if OpenstudioStandards::HVAC.coil_dx_heat_pump?(component)
             ac_props = std.model_find_object(std.standards_data['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
           else
             ac_props = std.model_find_object(std.standards_data['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
@@ -955,7 +955,7 @@ module OpenstudioStandards
 
           # find ac properties
           search_criteria = std.coil_dx_find_search_criteria(component)
-          capacity_w = std.coil_cooling_dx_two_speed_find_capacity(component)
+          capacity_w = OpenstudioStandards::HVAC.coil_cooling_dx_two_speed_get_capacity(component)
           capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
           ac_props = std.model_find_object(std.standards_data['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
 

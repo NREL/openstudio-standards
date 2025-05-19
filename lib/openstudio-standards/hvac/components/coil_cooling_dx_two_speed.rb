@@ -158,5 +158,30 @@ module OpenstudioStandards
 
       return clg_coil
     end
+
+    # Return the capacity in W of a CoilCoolingDXTwoSpeed
+    #
+    # @param coil_cooling_dx_two_speed [OpenStudio::Model::CoilCoolingDXTwoSpeed] coil cooling dx two speed object
+    # @param multiplier [Double] zone multiplier, if applicable
+    # @return [Double] capacity in W
+    def self.coil_cooling_dx_two_speed_get_capacity(coil_cooling_dx_two_speed, multiplier: nil)
+      capacity_w = nil
+      if coil_cooling_dx_two_speed.ratedHighSpeedTotalCoolingCapacity.is_initialized
+        capacity_w = coil_cooling_dx_two_speed.ratedHighSpeedTotalCoolingCapacity.get
+      elsif coil_cooling_dx_two_speed.autosizedRatedHighSpeedTotalCoolingCapacity.is_initialized
+        capacity_w = coil_cooling_dx_two_speed.autosizedRatedHighSpeedTotalCoolingCapacity.get
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.HVAC.coil_cooling_dx_two_speed', "For #{coil_cooling_dx_two_speed.name} capacity is not available.")
+        return 0.0
+      end
+
+      if !multiplier.nil? && multiplier > 1
+        total_cap = capacity_w
+        capacity_w /= mult
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.HVAC.coil_cooling_dx_two_speed', "For #{coil_cooling_dx_two_speed.name}, total capacity of #{OpenStudio.convert(total_cap, 'W', 'kBtu/hr').get.round(2)}kBTU/hr was divided by the zone multiplier of #{mult} to give #{capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get.round(2)}kBTU/hr.")
+      end
+
+      return capacity_w
+    end
   end
 end

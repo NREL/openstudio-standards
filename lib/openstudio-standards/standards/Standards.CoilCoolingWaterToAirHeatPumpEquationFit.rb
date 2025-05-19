@@ -1,24 +1,6 @@
 class Standard
   # @!group CoilCoolingWaterToAirHeatPumpEquationFit
 
-  # Finds capacity in W
-  #
-  # @param coil_cooling_water_to_air_heat_pump [OpenStudio::Model::CoilCoolingWaterToAirHeatPumpEquationFit] coil cooling object
-  # @return [Double] capacity in W to be used for find object
-  def coil_cooling_water_to_air_heat_pump_find_capacity(coil_cooling_water_to_air_heat_pump)
-    capacity_w = nil
-    if coil_cooling_water_to_air_heat_pump.ratedTotalCoolingCapacity.is_initialized
-      capacity_w = coil_cooling_water_to_air_heat_pump.ratedTotalCoolingCapacity.get
-    elsif coil_cooling_water_to_air_heat_pump.autosizedRatedTotalCoolingCapacity.is_initialized
-      capacity_w = coil_cooling_water_to_air_heat_pump.autosizedRatedTotalCoolingCapacity.get
-    else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingWaterToAirHeatPumpEquationFit', "For #{coil_cooling_water_to_air_heat_pump.name} capacity is not available, cannot apply efficiency standard.")
-      return 0.0
-    end
-
-    return capacity_w
-  end
-
   # Finds lookup object in standards and return efficiency
   #
   # @param coil_cooling_water_to_air_heat_pump [OpenStudio::Model::CoilCoolingWaterToAirHeatPumpEquationFit] coil cooling object
@@ -35,7 +17,7 @@ class Standard
       heating_type = search_criteria['heating_type']
       sub_category = search_criteria['subcategory']
     end
-    capacity_w = coil_cooling_water_to_air_heat_pump_find_capacity(coil_cooling_water_to_air_heat_pump)
+    capacity_w = OpenstudioStandards::HVAC.coil_cooling_water_to_air_heat_pump_find_capacity(coil_cooling_water_to_air_heat_pump)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
     return nil unless capacity_kbtu_per_hr > 0.0
@@ -117,7 +99,7 @@ class Standard
     # Get the search criteria
     search_criteria = {}
     search_criteria['template'] = template
-    capacity_w = coil_cooling_water_to_air_heat_pump_find_capacity(coil_cooling_water_to_air_heat_pump)
+    capacity_w = OpenstudioStandards::HVAC.coil_cooling_water_to_air_heat_pump_find_capacity(coil_cooling_water_to_air_heat_pump)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
 
     # Look up the efficiency characteristics

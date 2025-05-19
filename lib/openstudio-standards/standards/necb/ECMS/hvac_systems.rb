@@ -2364,7 +2364,11 @@ class ECMS
     search_criteria['name'] = eqpt_name
 
     # Get the capacity
-    capacity_w = coil_cooling_dx_single_speed_find_capacity(coil_cooling_dx_single_speed)
+    if ['PTAC', 'PTHP'].include?(OpenstudioStandards::HVAC.coil_dx_subcategory(coil_cooling_dx_single_speed))
+      thermal_zone = OpenstudioStandards::HVAC.hvac_component_get_thermal_zone(coil_cooling_dx_single_speed)
+      multiplier = thermal_zone.multiplier if !thermal_zone.nil?
+    end
+    capacity_w = OpenstudioStandards::HVAC.coil_cooling_dx_single_speed_get_capacity(coil_cooling_dx_single_speed, multiplier: multiplier)
     capacity_w = [1.0,capacity_w].max
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
 
@@ -2965,7 +2969,11 @@ class ECMS
                                              search_criteria,
                                              rename = false)
 
-    capacity_w = coil_cooling_dx_single_speed_find_capacity(coil_cooling_dx_single_speed)
+    if ['PTAC', 'PTHP'].include?(OpenstudioStandards::HVAC.coil_dx_subcategory(coil_cooling_dx_single_speed))
+      thermal_zone = OpenstudioStandards::HVAC.hvac_component_get_thermal_zone(coil_cooling_dx_single_speed)
+      multiplier = thermal_zone.multiplier if !thermal_zone.nil?
+    end
+    capacity_w = OpenstudioStandards::HVAC.coil_cooling_dx_single_speed_get_capacity(coil_cooling_dx_single_speed, multiplier: multiplier)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
@@ -3754,10 +3762,16 @@ class ECMS
         search_criteria['name'] = unitary_cop_copy
         coil_name = coil.name.to_s
         if (sql_db_vars_map.has_key? coil_name) && !sizing_done then coil.setName(sql_db_vars_map[coil_name]) end
+
+        if ['PTAC', 'PTHP'].include?(OpenstudioStandards::HVAC.coil_dx_subcategory(coil))
+          thermal_zone = OpenstudioStandards::HVAC.hvac_component_get_thermal_zone(coil)
+          multiplier = thermal_zone.multiplier if !thermal_zone.nil?
+        end
+
         if coil_type == 'SingleSpeed'
-          capacity_w = coil_cooling_dx_single_speed_find_capacity(coil)
+          capacity_w = OpenstudioStandards::HVAC.coil_cooling_dx_single_speed_get_capacity(coil, multiplier: multiplier)
         elsif coil_type == 'MultiSpeed'
-          capacity_w = coil_cooling_dx_multi_speed_find_capacity(coil)
+          capacity_w = OpenstudioStandards::HVAC.coil_cooling_dx_multi_speed_get_capacity(coil, multiplier: multiplier)
         end
         coil.setName(coil_name)
         cop_package = model_find_object(@standards_data['tables']['unitary_cop_ecm'], search_criteria, capacity_w)
