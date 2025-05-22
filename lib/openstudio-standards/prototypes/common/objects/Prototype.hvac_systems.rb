@@ -1801,6 +1801,7 @@ class Standard
       sizing_zone.setDedicatedOutdoorAirSystemControlStrategy(doas_control_strategy)
       sizing_zone.setDedicatedOutdoorAirLowSetpointTemperatureforDesign(clg_dsgn_sup_air_temp_c)
       sizing_zone.setDedicatedOutdoorAirHighSetpointTemperatureforDesign(htg_dsgn_sup_air_temp_c)
+      sizing_zone.setHeatingMaximumAirFlowFraction(1.0)
     end
 
     return air_loop
@@ -2026,6 +2027,7 @@ class Standard
         sizing_zone = zone.sizingZone
         sizing_zone.setCoolingDesignAirFlowMethod('DesignDayWithLimit')
         sizing_zone.setHeatingDesignAirFlowMethod('DesignDay')
+        sizing_zone.setHeatingMaximumAirFlowFraction(1.0)
         sizing_zone.setZoneCoolingDesignSupplyAirTemperature(dsgn_temps['zn_clg_dsgn_sup_air_temp_c'])
         sizing_zone.setZoneHeatingDesignSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
       else
@@ -2045,6 +2047,7 @@ class Standard
         # zone sizing
         sizing_zone = zone.sizingZone
         sizing_zone.setCoolingDesignAirFlowMethod('DesignDayWithLimit')
+        sizing_zone.setHeatingMaximumAirFlowFraction(1.0)
         sizing_zone.setZoneCoolingDesignSupplyAirTemperature(dsgn_temps['zn_clg_dsgn_sup_air_temp_c'])
       end
 
@@ -2185,6 +2188,7 @@ class Standard
       sizing_zone = zone.sizingZone
       sizing_zone.setCoolingDesignAirFlowMethod('DesignDay')
       sizing_zone.setHeatingDesignAirFlowMethod('DesignDay')
+      sizing_zone.setHeatingMaximumAirFlowFraction(1.0)
       sizing_zone.setZoneCoolingDesignSupplyAirTemperature(dsgn_temps['zn_clg_dsgn_sup_air_temp_c'])
       sizing_zone.setZoneHeatingDesignSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
     end
@@ -2390,6 +2394,7 @@ class Standard
 
       # zone sizing
       sizing_zone = zone.sizingZone
+      sizing_zone.setHeatingMaximumAirFlowFraction(1.0)
       sizing_zone.setZoneCoolingDesignSupplyAirTemperature(dsgn_temps['zn_clg_dsgn_sup_air_temp_c'])
       sizing_zone.setZoneHeatingDesignSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
     end
@@ -2533,6 +2538,7 @@ class Standard
       sizing_zone = zone.sizingZone
       sizing_zone.setCoolingDesignAirFlowMethod('DesignDay')
       sizing_zone.setHeatingDesignAirFlowMethod('DesignDay')
+      sizing_zone.setHeatingMaximumAirFlowFraction(1.0)
       sizing_zone.setZoneCoolingDesignSupplyAirTemperature(dsgn_temps['zn_clg_dsgn_sup_air_temp_c'])
       sizing_zone.setZoneHeatingDesignSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
     end
@@ -2695,6 +2701,7 @@ class Standard
       sizing_zone = zone.sizingZone
       sizing_zone.setCoolingDesignAirFlowMethod('DesignDayWithLimit')
       sizing_zone.setHeatingDesignAirFlowMethod('DesignDay')
+      sizing_zone.setHeatingMaximumAirFlowFraction(1.0)
       sizing_zone.setZoneCoolingDesignSupplyAirTemperature(dsgn_temps['zn_clg_dsgn_sup_air_temp_c'])
       sizing_zone.setZoneHeatingDesignSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
     end
@@ -2786,6 +2793,7 @@ class Standard
 
       # zone sizing
       sizing_zone = zone.sizingZone
+      sizing_zone.setHeatingMaximumAirFlowFraction(1.0)
       sizing_zone.setZoneCoolingDesignSupplyAirTemperature(dsgn_temps['zn_clg_dsgn_sup_air_temp_c'])
       sizing_zone.setZoneHeatingDesignSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
 
@@ -3059,6 +3067,7 @@ class Standard
 
       # zone sizing
       sizing_zone = zone.sizingZone
+      sizing_zone.setHeatingMaximumAirFlowFraction(1.0)
       sizing_zone.setZoneCoolingDesignSupplyAirTemperature(dsgn_temps['zn_clg_dsgn_sup_air_temp_c'])
       sizing_zone.setZoneHeatingDesignSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
 
@@ -4274,6 +4283,7 @@ class Standard
 
       # zone sizing
       sizing_zone = zone.sizingZone
+      sizing_zone.setHeatingMaximumAirFlowFraction(1.0)
       sizing_zone.setZoneHeatingDesignSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
 
       # add fan
