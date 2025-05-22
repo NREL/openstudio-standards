@@ -99,39 +99,75 @@
       "units": "",
       "notes": ""
     },
-    "historic_weather_file_list": {
+    "historic_weather_file_list_btap": {
       "data_type": "value",
       "refs": [
         "Defined"
       ],
       "value": "https://github.com/canmet-energy/btap_weather/raw/main/historic_weather_filenames.json",
       "units": "",
-      "notes": "This is the url of the file containing the list of historic Canadian weather files in the canmet-eneryg/btap_weather GitHub repository."
+      "notes": "This is the url of the file containing the list of historic Canadian weather files on Climate.OneBuilding.Org."
     },
-    "future_weather_file_list": {
+    "future_weather_file_list_btap": {
       "data_type": "value",
       "refs": [
         "Defined"
       ],
       "value": "https://github.com/canmet-energy/btap_weather/raw/main/future_weather_filenames.json",
       "units": "",
-      "notes": "This is the url of the file containing the list of future Canadian weather files in the canmet-eneryg/btap_weather GitHub repository."
+      "notes": "This is the url of the file containing the list of future Canadian weather files on Climate.OneBuilding.Org."
     },
-    "historic_weather_folder_url": {
+    "historic_weather_folder_url_btap": {
       "data_type": "value",
       "refs": [
         "Defined"
       ],
       "value": "https://github.com/canmet-energy/btap_weather/raw/main/historic/",
       "units": "",
-      "notes": "This is the url of the folder containing the historic Canadian weather files in the canmet-eneryg/btap_weather GitHub repository."
+      "notes": "This is the url of the folder containing the historic Canadian weather files in the canmet-energy/btap_weather GitHub repository."
+    },
+    "future_weather_folder_url_btap": {
+      "data_type": "value",
+      "refs": [
+        "Defined"
+      ],
+      "value": "https://github.com/canmet-energy/btap_weather/raw/main/future/",
+      "units": "",
+      "notes": "This is the url of the folder containing the future Canadian weather files in the canmet-eneryg/btap_weather GitHub repository."
+    },
+    "historic_weather_file_list": {
+      "data_type": "value",
+      "refs": [
+        "Defined"
+      ],
+      "value": "https://raw.githubusercontent.com/canmet-energy/btap_batch/refs/heads/nrcan_459/resources/historic_weather_filenames.json",
+      "units": "",
+      "notes": "This is the url of the file containing the list of historic Canadian weather files in the canmet-energy/btap_weather GitHub repository."
+    },
+    "future_weather_file_list": {
+      "data_type": "value",
+      "refs": [
+        "Defined"
+      ],
+      "value": "https://raw.githubusercontent.com/canmet-energy/btap_batch/refs/heads/nrcan_459/resources/future_weather_filenames.json",
+      "units": "",
+      "notes": "This is the url of the file containing the list of future Canadian weather files on Climate.OneBuilding.Org."
+    },
+    "historic_weather_folder_url": {
+      "data_type": "value",
+      "refs": [
+        "Defined"
+      ],
+      "value": "https://climate.onebuilding.org/WMO_Region_4_North_and_Central_America/CAN_Canada/",
+      "units": "",
+      "notes": "This is the url of the folder containing the historic Canadian weather files on Climate.OneBuilding.Org."
     },
     "future_weather_folder_url": {
       "data_type": "value",
       "refs": [
         "Defined"
       ],
-      "value": "https://github.com/canmet-energy/btap_weather/raw/main/future/",
+      "value": "https://climate.onebuilding.org/WMO_Region_4_North_and_Central_America/CAN_Canada_Future/",
       "units": "",
       "notes": "This is the url of the folder containing the future Canadian weather files in the canmet-eneryg/btap_weather GitHub repository."
     }
