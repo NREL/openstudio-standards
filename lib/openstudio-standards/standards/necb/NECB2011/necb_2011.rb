@@ -2435,6 +2435,9 @@ class NECB2011 < Standard
   def extract_weather_data(zipped_file:, weather_dir:)
     # Set a flag to check if the weather data is for future weather.
     future_file = false
+
+    # Data structure to determine if the weather file contains all necessary elements.
+    checklist = {'.epw' => false, '.stat' => false, '.ddy' => false}
     # Start expanding the data.
     Zip::File.open(zipped_file) do |zip_file|
       puts "Expanding #{zipped_file}"
@@ -2447,7 +2450,7 @@ class NECB2011 < Standard
         # to just '.ddy'. This is so the rest of BTAP uses the _ASHRAE.ddy file.
         entry_name = entry.name.to_s
         if entry_name.length > 11
-          future_file = true if entry_name[-11..-1] == '_ASHRAE.ddy'
+          future_file = true if entry_name.end_with?('_ASHRAE.ddy')
         end
         # entry.extract # This was required before but now it isn't.  I'm confused so am saving this comment to
         # remind me if there are problems later.
@@ -2455,6 +2458,12 @@ class NECB2011 < Standard
         content = entry.get_input_stream.read
         # Save the data locally
         File.open(curr_save_file, 'wb') { |save_f| save_f.write(content) }
+
+        # Add the file extension of the current entry to the checklist.
+        file_extension = entry_name[entry_name.rindex('.')..]
+        if checklist.key?(file_extension)
+          checklist[file_extension] = true
+        end
       end
     end
     if future_file
@@ -2471,6 +2480,13 @@ class NECB2011 < Standard
       FileUtils.cp(orig_ddy_name, rev_ddy_name)
       FileUtils.cp(ashrae_ddy_name, orig_ddy_name)
     end
+
+    # Return false if not all files are present:
+    if !checklist.values.all?()
+      puts "Error: Not all files present in #{zipped_file}. Missing #{checklist.select { |k, v| v == false}.keys.join(", ") } file(s). Exiting..."
+      exit(1)
+    end
+
     # Return true if everything worked out
     return true
   end
