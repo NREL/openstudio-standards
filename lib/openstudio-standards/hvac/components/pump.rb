@@ -130,7 +130,7 @@ module OpenstudioStandards
 
     # Set the pump curve coefficients based on the specified control type.
     #
-    # @param pump_variable_speed [OpenStudio::Model::PumpVariableSpeed] variable speed pump
+    # @param pump_variable_speed [OpenStudio::Model::PumpVariableSpeed, OpenStudio::Model::HeaderedPumpsVariableSpeed] variable speed pump or headered variable speed pumps object
     # @param control_type [String] valid choices are Riding Curve, VSD No Reset, VSD DP Reset
     # @return [Boolean] returns true if successful, false if not
     def self.pump_variable_speed_set_control_type(pump_variable_speed, control_type: 'Riding Curve')
@@ -161,7 +161,7 @@ module OpenstudioStandards
         coeff_c = 0.4101
         coeff_d = 0.5753
       else
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.PumpVariableSpeed', "Pump control type '#{control_type}' not recognized, pump coefficients will not be changed.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.HVAC.pump', "Pump control type '#{control_type}' not recognized, pump coefficients will not be changed.")
         return false
       end
 

@@ -304,8 +304,6 @@ module OpenstudioStandards
   require_relative "#{stds}/Standards.FanVariableVolume"
   require_relative "#{stds}/Standards.FanZoneExhaust"
   require_relative "#{stds}/Standards.FluidCooler"
-  require_relative "#{stds}/Standards.HeaderedPumpsConstantSpeed"
-  require_relative "#{stds}/Standards.HeaderedPumpsVariableSpeed"
   require_relative "#{stds}/Standards.HeatExchangerSensLat"
   require_relative "#{stds}/Standards.Model"
   require_relative "#{stds}/Standards.Motor"
