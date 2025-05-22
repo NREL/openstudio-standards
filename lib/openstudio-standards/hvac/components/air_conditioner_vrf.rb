@@ -442,5 +442,23 @@ module OpenstudioStandards
 
       return vrf_outdoor_unit
     end
+
+    # Return the capacity in W of a AirConditionerVariableRefrigerantFlow
+    #
+    # @param air_conditioner_variable_refrigerant_flow [OpenStudio::Model::AirConditionerVariableRefrigerantFlow] vrf unit
+    # @return [Double] capacity in W
+    def self.air_conditioner_variable_refrigerant_flow_get_capacity(air_conditioner_variable_refrigerant_flow)
+      capacity_w = nil
+      if air_conditioner_variable_refrigerant_flow.grossRatedTotalCoolingCapacity.is_initialized
+        capacity_w = air_conditioner_variable_refrigerant_flow.grossRatedTotalCoolingCapacity.get
+      elsif air_conditioner_variable_refrigerant_flow.autosizedGrossRatedTotalCoolingCapacity.is_initialized
+        capacity_w = air_conditioner_variable_refrigerant_flow.autosizedGrossRatedTotalCoolingCapacity.get
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.HVAC.air_conditioner_vrf', "For #{air_conditioner_variable_refrigerant_flow.name} capacity is not available.")
+        return 0.0
+      end
+
+      return capacity_w
+    end
   end
 end

@@ -23,24 +23,6 @@ class Standard
     return search_criteria
   end
 
-  # Find capacity in W
-  #
-  # @param air_conditioner_variable_refrigerant_flow [OpenStudio::Model::AirConditionerVariableRefrigerantFlow] vrf unit
-  # @return [Double] capacity in W
-  def air_conditioner_variable_refrigerant_flow_find_capacity(air_conditioner_variable_refrigerant_flow)
-    capacity_w = nil
-    if air_conditioner_variable_refrigerant_flow.grossRatedTotalCoolingCapacity.is_initialized
-      capacity_w = air_conditioner_variable_refrigerant_flow.grossRatedTotalCoolingCapacity.get
-    elsif air_conditioner_variable_refrigerant_flow.autosizedGrossRatedTotalCoolingCapacity.is_initialized
-      capacity_w = air_conditioner_variable_refrigerant_flow.autosizedGrossRatedTotalCoolingCapacity.get
-    else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{air_conditioner_variable_refrigerant_flow.name} capacity is not available, cannot apply efficiency standard.")
-      return false
-    end
-
-    return capacity_w
-  end
-
   # Finds lookup object in standards and return minimum thermal efficiency
   #
   # @param air_conditioner_variable_refrigerant_flow [OpenStudio::Model::AirConditionerVariableRefrigerantFlow] vrf unit
@@ -53,7 +35,7 @@ class Standard
     search_criteria = air_conditioner_variable_refrigerant_flow_find_search_criteria(air_conditioner_variable_refrigerant_flow)
 
     # Get the capacity
-    capacity_w = air_conditioner_variable_refrigerant_flow_find_capacity(air_conditioner_variable_refrigerant_flow)
+    capacity_w = OpenstudioStandards::HVAC.air_conditioner_variable_refrigerant_flow_get_capacity(air_conditioner_variable_refrigerant_flow)
 
     # Convert capacity to Btu/hr
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
