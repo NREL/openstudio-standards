@@ -16428,7 +16428,7 @@ OS:SpaceType,
   {31d1d9b1-5601-4629-bfe8-f747556765cf}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hospital,                               !- Standards Building Type
-  Corridor;                               !- Standards Space Type
+  corridor;      !- Standards Space Type
 
 OS:Rendering:Color,
   {31d1d9b1-5601-4629-bfe8-f747556765cf}, !- Handle
@@ -16445,7 +16445,7 @@ OS:SpaceType,
   {804342e9-b917-49ea-94bf-1b2148298cc7}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hospital,                               !- Standards Building Type
-  Dining;                                 !- Standards Space Type
+  dining;      !- Standards Space Type
 
 OS:Rendering:Color,
   {804342e9-b917-49ea-94bf-1b2148298cc7}, !- Handle
@@ -16462,7 +16462,7 @@ OS:SpaceType,
   {e9d3e608-97e4-4656-9f54-535d087e6ec7}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hospital,                               !- Standards Building Type
-  ER_Exam;                                !- Standards Space Type
+  exam/treatment;      !- Standards Space Type
 
 OS:Rendering:Color,
   {e9d3e608-97e4-4656-9f54-535d087e6ec7}, !- Handle
@@ -16479,7 +16479,7 @@ OS:SpaceType,
   {d7c03283-af40-4c1e-946b-b8abb9d98530}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hospital,                               !- Standards Building Type
-  ER_NurseStn;                            !- Standards Space Type
+  nurses station;      !- Standards Space Type
 
 OS:Rendering:Color,
   {d7c03283-af40-4c1e-946b-b8abb9d98530}, !- Handle
@@ -16496,7 +16496,7 @@ OS:SpaceType,
   {66701b48-1812-4bf6-9aff-9f8465a66eca}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hospital,                               !- Standards Building Type
-  ER_Trauma;                              !- Standards Space Type
+  emergency room;      !- Standards Space Type
 
 OS:Rendering:Color,
   {66701b48-1812-4bf6-9aff-9f8465a66eca}, !- Handle
@@ -16513,7 +16513,7 @@ OS:SpaceType,
   {26e979b3-9849-497b-8590-847b62b8469c}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hospital,                               !- Standards Building Type
-  ER_Triage;                              !- Standards Space Type
+  emergency room;      !- Standards Space Type
 
 OS:Rendering:Color,
   {26e979b3-9849-497b-8590-847b62b8469c}, !- Handle
@@ -16530,7 +16530,7 @@ OS:SpaceType,
   {650f8517-fcf2-49ef-8016-83b8d3a28dae}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hospital,                               !- Standards Building Type
-  ICU_NurseStn;                           !- Standards Space Type
+  nurses station;      !- Standards Space Type
 
 OS:Rendering:Color,
   {650f8517-fcf2-49ef-8016-83b8d3a28dae}, !- Handle
@@ -16547,7 +16547,7 @@ OS:SpaceType,
   {7806b59a-5e1b-43f7-be19-43edea196cc2}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hospital,                               !- Standards Building Type
-  ICU_Open;                               !- Standards Space Type
+  exam/treatment;      !- Standards Space Type
 
 OS:Rendering:Color,
   {7806b59a-5e1b-43f7-be19-43edea196cc2}, !- Handle
@@ -16564,7 +16564,7 @@ OS:SpaceType,
   {e2b83995-a5c3-486a-bab7-0673dfc54ba9}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hospital,                               !- Standards Building Type
-  ICU_PatRm;                              !- Standards Space Type
+  patient room;      !- Standards Space Type
 
 OS:Rendering:Color,
   {e2b83995-a5c3-486a-bab7-0673dfc54ba9}, !- Handle
@@ -16581,7 +16581,7 @@ OS:SpaceType,
   {53e8e7a0-f3c2-495e-8b90-6cb411b8ade7}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hospital,                               !- Standards Building Type
-  Kitchen;                                !- Standards Space Type
+  food preparation;      !- Standards Space Type
 
 OS:Rendering:Color,
   {53e8e7a0-f3c2-495e-8b90-6cb411b8ade7}, !- Handle
@@ -16598,7 +16598,7 @@ OS:SpaceType,
   {763e19bd-42cc-404c-8fa9-d6ff5f366f08}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hospital,                               !- Standards Building Type
-  Lab;                                    !- Standards Space Type
+  laboratory;      !- Standards Space Type
 
 OS:Rendering:Color,
   {763e19bd-42cc-404c-8fa9-d6ff5f366f08}, !- Handle
@@ -16615,7 +16615,7 @@ OS:SpaceType,
   {1a81df68-0664-46fe-b4c9-03609dd62264}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hospital,                               !- Standards Building Type
-  Lobby;                                  !- Standards Space Type
+  lobby;      !- Standards Space Type
 
 OS:Rendering:Color,
   {1a81df68-0664-46fe-b4c9-03609dd62264}, !- Handle
@@ -16632,7 +16632,7 @@ OS:SpaceType,
   {31c59b2c-f949-4271-9d2d-0ca10ffba32b}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hospital,                               !- Standards Building Type
-  NurseStn;                               !- Standards Space Type
+  nurses station;      !- Standards Space Type
 
 OS:Rendering:Color,
   {31c59b2c-f949-4271-9d2d-0ca10ffba32b}, !- Handle
@@ -16649,7 +16649,7 @@ OS:SpaceType,
   {0ced1fa8-528b-4e7b-92f9-5ee695982263}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hospital,                               !- Standards Building Type
-  OR;                                     !- Standards Space Type
+  operating room;      !- Standards Space Type
 
 OS:Rendering:Color,
   {0ced1fa8-528b-4e7b-92f9-5ee695982263}, !- Handle
@@ -16666,7 +16666,7 @@ OS:SpaceType,
   {40ec78b9-51ea-4a37-8e9d-34879dd937bf}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hospital,                               !- Standards Building Type
-  Office;                                 !- Standards Space Type
+  office;      !- Standards Space Type
 
 OS:Rendering:Color,
   {40ec78b9-51ea-4a37-8e9d-34879dd937bf}, !- Handle
@@ -16683,7 +16683,7 @@ OS:SpaceType,
   {44042211-c0b1-4767-89ac-fe36560b04f2}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hospital,                               !- Standards Building Type
-  Basement;                               !- Standards Space Type
+  electrical/mechanical;      !- Standards Space Type
 
 OS:Rendering:Color,
   {44042211-c0b1-4767-89ac-fe36560b04f2}, !- Handle
@@ -16700,7 +16700,7 @@ OS:SpaceType,
   {1eaf223d-e20b-4b2b-afec-bc55e680ab00}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hospital,                               !- Standards Building Type
-  PatRoom;                                !- Standards Space Type
+  patient room;      !- Standards Space Type
 
 OS:Rendering:Color,
   {1eaf223d-e20b-4b2b-afec-bc55e680ab00}, !- Handle
@@ -16717,7 +16717,7 @@ OS:SpaceType,
   {02439061-7445-4ccc-9175-791ee3a989c5}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hospital,                               !- Standards Building Type
-  PhysTherapy;                            !- Standards Space Type
+  physical therapy;      !- Standards Space Type
 
 OS:Rendering:Color,
   {02439061-7445-4ccc-9175-791ee3a989c5}, !- Handle
@@ -16734,7 +16734,7 @@ OS:SpaceType,
   {49626c0c-6d69-49a2-9500-5f6eea2953a1}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hospital,                               !- Standards Building Type
-  Radiology;                              !- Standards Space Type
+  imaging;      !- Standards Space Type
 
 OS:Rendering:Color,
   {49626c0c-6d69-49a2-9500-5f6eea2953a1}, !- Handle
@@ -16751,7 +16751,7 @@ OS:SpaceType,
   {8b254af2-01f3-4936-b806-2f9b2c2d6b3c}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hospital,                               !- Standards Building Type
-  HospitalOfficeFlr1;                     !- Standards Space Type
+  office;      !- Standards Space Type
 
 OS:Rendering:Color,
   {8b254af2-01f3-4936-b806-2f9b2c2d6b3c}, !- Handle
@@ -16768,7 +16768,7 @@ OS:SpaceType,
   {336e5569-9e3e-49c7-9a9b-1d1a45169673}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hospital,                               !- Standards Building Type
-  HospitalOfficeFlr5;                     !- Standards Space Type
+  office;      !- Standards Space Type
 
 OS:Rendering:Color,
   {336e5569-9e3e-49c7-9a9b-1d1a45169673}, !- Handle
