@@ -55,6 +55,7 @@ class BTAPCosting
         sys_type_real = sys_type
         # For costing, treat system types 1 and 4 the same (treat both as system 1)
         sys_type = 1 if sys_type == 4
+        next if sys_type == 2
       end
       ahu_tags = [
         "ventilation",
