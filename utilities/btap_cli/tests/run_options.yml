@@ -6,6 +6,7 @@
 :boiler_eff: NECB_Default
 :boiler_fuel: NECB_Default
 :boiler_cap_ratio: NECB_Default
+:btap_weather: true
 :building_type: FullServiceRestaurant
 :chiller_type: NECB_Default
 :compute_environment: local
