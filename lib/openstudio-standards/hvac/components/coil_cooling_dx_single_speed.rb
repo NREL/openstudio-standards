@@ -285,7 +285,7 @@ module OpenstudioStandards
         capacity_w = coil_cooling_dx_single_speed.autosizedRatedTotalCoolingCapacity.get
       else
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.HVAC.coil_cooling_dx_single_speed', "For #{coil_cooling_dx_single_speed.name} capacity is not available.")
-        return 0.0
+        return capacity_w
       end
 
       if !multiplier.nil? && multiplier > 1

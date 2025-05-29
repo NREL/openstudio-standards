@@ -167,7 +167,7 @@ module OpenstudioStandards
         capacity_w = coil_cooling_water_to_air_heat_pump.autosizedRatedTotalCoolingCapacity.get
       else
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.HVAC.coil_cooling_water_to_air_heat_pump_equation_fit', "For #{coil_cooling_water_to_air_heat_pump.name} capacity is not available.")
-        return 0.0
+        return capacity_w
       end
 
       if !multiplier.nil? && multiplier > 1

@@ -7,7 +7,7 @@ class ASHRAE901PRM < Standard
   # @return [Boolean] returns true if successful, false if not
   def chiller_electric_eir_apply_efficiency_and_curves(chiller_electric_eir)
     # Get the chiller capacity
-    capacity_w = chiller_electric_eir_find_capacity(chiller_electric_eir)
+    capacity_w = OpenstudioStandards::HVAC.chiller_electric_get_find_capacity(chiller_electric_eir)
 
     # Convert capacity to tons
     capacity_tons = OpenStudio.convert(capacity_w, 'W', 'ton').get

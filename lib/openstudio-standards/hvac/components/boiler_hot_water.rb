@@ -123,5 +123,41 @@ module OpenstudioStandards
 
       return boiler
     end
+
+    # Return the capacity in W of a BoilerHotWater
+    #
+    # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] hot water boiler object
+    # @return [Double] capacity in W
+    def self.boiler_hot_water_get_capacity(boiler_hot_water)
+      capacity_w = nil
+      if boiler_hot_water.nominalCapacity.is_initialized
+        capacity_w = boiler_hot_water.nominalCapacity.get
+      elsif boiler_hot_water.autosizedNominalCapacity.is_initialized
+        capacity_w = boiler_hot_water.autosizedNominalCapacity.get
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.HVAC.boiler_hot_water', "For #{boiler_hot_water.name} capacity is not available.")
+        return capacity_w
+      end
+
+      return capacity_w
+    end
+
+    # Return the design water flow rate in m^3/s of a BoilerHotWater
+    #
+    # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] hot water boiler object
+    # @return [Double] design water flow rate in m^3/s
+    def self.boiler_hot_water_find_get_water_flow_rate(boiler_hot_water)
+      design_water_flow_rate_m3_per_s = nil
+      if boiler_hot_water.designWaterFlowRate.is_initialized
+        design_water_flow_rate_m3_per_s = boiler_hot_water.designWaterFlowRate.get
+      elsif boiler_hot_water.autosizedDesignWaterFlowRate.is_initialized
+        design_water_flow_rate_m3_per_s = boiler_hot_water.autosizedDesignWaterFlowRate.get
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.HVAC.boiler_hot_water', "For #{boiler_hot_water.name} design water flow rate is not available.")
+        return design_water_flow_rate_m3_per_s
+      end
+
+      return design_water_flow_rate_m3_per_s
+    end
   end
 end

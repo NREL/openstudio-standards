@@ -34,43 +34,6 @@ class Standard
     return search_criteria
   end
 
-  # Find capacity in W
-  #
-  # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] hot water boiler object
-  # @return [Double] capacity in W
-  def boiler_hot_water_find_capacity(boiler_hot_water)
-    capacity_w = nil
-    if boiler_hot_water.nominalCapacity.is_initialized
-      capacity_w = boiler_hot_water.nominalCapacity.get
-    elsif boiler_hot_water.autosizedNominalCapacity.is_initialized
-      capacity_w = boiler_hot_water.autosizedNominalCapacity.get
-    else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{boiler_hot_water.name} capacity is not available, cannot apply efficiency standard.")
-      successfully_set_all_properties = false
-      return successfully_set_all_properties
-    end
-
-    return capacity_w
-  end
-
-  # Find design water flow rate in m^3/s
-  #
-  # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] hot water boiler object
-  # @return [Double] design water flow rate in m^3/s
-  def boiler_hot_water_find_design_water_flow_rate(boiler_hot_water)
-    design_water_flow_rate_m3_per_s = nil
-    if boiler_hot_water.designWaterFlowRate.is_initialized
-      design_water_flow_rate_m3_per_s = boiler_hot_water.designWaterFlowRate.get
-    elsif boiler_hot_water.autosizedDesignWaterFlowRate.is_initialized
-      design_water_flow_rate_m3_per_s = boiler_hot_water.autosizedDesignWaterFlowRate.get
-    else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.BoilerHotWater', "For #{boiler_hot_water.name} design water flow rate is not available.")
-      return false
-    end
-
-    return design_water_flow_rate_m3_per_s
-  end
-
   # Finds lookup object in standards and return minimum thermal efficiency
   #
   # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] hot water boiler object
@@ -79,7 +42,7 @@ class Standard
   def boiler_hot_water_standard_minimum_thermal_efficiency(boiler_hot_water, rename = false)
     # Get the boiler properties
     search_criteria = boiler_hot_water_find_search_criteria(boiler_hot_water)
-    capacity_w = boiler_hot_water_find_capacity(boiler_hot_water)
+    capacity_w = OpenstudioStandards::HVAC.boiler_hot_water_get_capacity(boiler_hot_water)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
@@ -150,7 +113,7 @@ class Standard
     fluid_type = search_criteria['fluid_type']
 
     # Get the capacity
-    capacity_w = boiler_hot_water_find_capacity(boiler_hot_water)
+    capacity_w = OpenstudioStandards::HVAC.boiler_hot_water_get_capacity(boiler_hot_water)
 
     # Convert capacity to Btu/hr
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get

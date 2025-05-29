@@ -2513,7 +2513,7 @@ class ECMS
     successfully_set_all_properties = true
 
     # Get the capacity
-    capacity_w = chiller_electric_eir_find_capacity(chiller_electric_eir)
+    capacity_w = OpenstudioStandards::HVAC.chiller_electric_get_find_capacity(chiller_electric_eir)
     capacity_tons = OpenStudio.convert(capacity_w, 'W', 'ton').get
 
     # Lookup performance curves
@@ -3435,23 +3435,6 @@ class ECMS
       airconditioner_variablerefrigerantflow.setRatedTotalHeatingCapacity(capacity_w)
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.AirConditionerVariableRefrigerantFlow', "For #{airconditioner_variablerefrigerantflow.name} heating capacity is not available.")
-      return 0.0
-    end
-
-    return capacity_w
-  end
-
-  # =============================================================================================================================
-  # Find cooling capacity for "ChillerElectricEIR" object
-  def chiller_electric_eir_find_capacity(chiller_electric_eir)
-    capacity_w = nil
-    if chiller_electric_eir.referenceCapacity.is_initialized
-      capacity_w = chiller_electric_eir.referenceCapacity.get
-    elsif chiller_electric_eir.autosizedRererenceCapacity.is_initialized
-      capacity_w = chiller_electric_eir.autosizedRerenceCapacity.get
-      chiller_electric_eir.setReferenceCapacity(capacity_w)
-    else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name} capacity not available")
       return 0.0
     end
 

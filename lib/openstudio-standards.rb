@@ -70,6 +70,7 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/hvac/components/air_conditioner_vrf'
   require_relative 'openstudio-standards/hvac/components/boiler_hot_water'
   require_relative 'openstudio-standards/hvac/components/central_air_source_heat_pump'
+  require_relative 'openstudio-standards/hvac/components/chiller'
   require_relative 'openstudio-standards/hvac/components/coil'
   require_relative 'openstudio-standards/hvac/components/coil_cooling_dx_single_speed'
   require_relative 'openstudio-standards/hvac/components/coil_cooling_dx_two_speed'

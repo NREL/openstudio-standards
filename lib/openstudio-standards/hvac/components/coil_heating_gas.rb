@@ -61,5 +61,30 @@ module OpenstudioStandards
 
       return htg_coil
     end
+
+    # Return the capacity in W of a CoilHeatingGas
+    #
+    # @param coil_heating_gas [OpenStudio::Model::CoilHeatingGas] coil heating gas object
+    # @param multiplier [Double] zone multiplier, if applicable
+    # @return [Double] capacity in W
+    def self.coil_heating_gas_get_capacity(coil_heating_gas, multiplier: nil)
+      capacity_w = nil
+      if coil_heating_gas.nominalCapacity.is_initialized
+        capacity_w = coil_heating_gas.nominalCapacity.get
+      elsif coil_heating_gas.autosizedNominalCapacity.is_initialized
+        capacity_w = coil_heating_gas.autosizedNominalCapacity.get
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.HVAC.coil_heating_gas', "For #{coil_heating_gas.name} capacity is not available.")
+        return capacity_w
+      end
+
+      if !multiplier.nil? && multiplier > 1
+        total_cap = capacity_w
+        capacity_w /= mult
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.HVAC.coil_heating_gas', "For #{coil_heating_gas.name}, total capacity of #{OpenStudio.convert(total_cap, 'W', 'kBtu/hr').get.round(2)}kBTU/hr was divided by the zone multiplier of #{mult} to give #{capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get.round(2)}kBTU/hr.")
+      end
+
+      return capacity_w
+    end
   end
 end
