@@ -1150,7 +1150,7 @@ class NECB2011
     # Define the criteria to find the properties in the hvac standards data set.
     search_criteria = coil_heating_gas_multi_stage_find_search_criteria(coil_heating_gas_multi_stage)
     fuel_type = search_criteria['fuel_type']
-    capacity_w = coil_heating_gas_multi_stage_find_capacity(coil_heating_gas_multi_stage)
+    capacity_w = OpenstudioStandards::HVAC.coil_heating_gas_multi_stage_get_capacity(coil_heating_gas_multi_stage)
 
     # Find system design outside air flow rate and fraction
     controller_oa = nil

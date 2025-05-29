@@ -80,6 +80,7 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/hvac/components/coil_heating_dx_single_speed'
   require_relative 'openstudio-standards/hvac/components/coil_heating_electric'
   require_relative 'openstudio-standards/hvac/components/coil_heating_gas'
+  require_relative 'openstudio-standards/hvac/components/coil_heating_gas_multi_stage'
   require_relative 'openstudio-standards/hvac/components/coil_heating_water_to_air_heat_pump_equation_fit'
   require_relative 'openstudio-standards/hvac/components/coil_heating_water'
   require_relative 'openstudio-standards/hvac/components/component'
