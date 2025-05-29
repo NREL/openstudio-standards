@@ -197,5 +197,24 @@ module OpenstudioStandards
 
       return htg_coil
     end
+
+    # Return the capacity in W of a CoilHeatingDXSingleSpeed
+    #
+    # @param coil_heating_dx_single_speed [OpenStudio::Model::CoilHeatingDXSingleSpeed] coil cooling dx single speed object
+    # @param multiplier [Double] zone multiplier, if applicable
+    # @return [Double] capacity in W
+    def self.coil_heating_dx_single_speed_get_capacity(coil_heating_dx_single_speed, multiplier: 1.0)
+      capacity_w = nil
+      if coil_heating_dx_single_speed.ratedTotalHeatingCapacity.is_initialized
+        capacity_w = coil_heating_dx_single_speed.ratedTotalHeatingCapacity.get
+      elsif coil_heating_dx_single_speed.autosizedRatedTotalHeatingCapacity.is_initialized
+        capacity_w = coil_heating_dx_single_speed.autosizedRatedTotalHeatingCapacity.get
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.HVAC.coil_heating_dx_single_speed', "For #{coil_heating_dx_single_speed.name} capacity is not available.")
+        return capacity_w
+      end
+
+      return capacity_w
+    end
   end
 end

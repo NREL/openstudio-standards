@@ -38,7 +38,7 @@ class TestApplyHVACEfficiencyStandard < Minitest::Test
       search_criteria = std.coil_dx_find_search_criteria(coil, true)
       sub_category = search_criteria['subcategory']
       suppl_heating_type = search_criteria['heating_type']
-      capacity_w = std.coil_heating_dx_single_speed_find_capacity(coil, true)
+      capacity_w = OpenstudioStandards::HVAC.coil_heating_dx_get_paired_coil_cooling_dx_capacity(coil)
       capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
       capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
       ac_props = std.model_find_object(std.standards_data['heat_pumps_heating'], search_criteria, capacity_btu_per_hr, Date.today)
