@@ -73,6 +73,91 @@ module OpenstudioStandards
       return heat_pump
     end
 
+    # Determine the heating type for a dx cooling coil. Possible choices are: 'Electric Resistance or None', 'All Other'.
+    #
+    # @param coil_dx [OpenStudio::Model::StraightComponent] coil cooling object, allowable types:
+    #   CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilCoolingDXMultiSpeed
+    # @return [String] the heating type
+    def self.coil_dx_heating_type(coil_dx)
+      htg_type = nil
+
+      # If Unitary or Zone HVAC
+      if coil_dx.airLoopHVAC.empty?
+        if coil_dx.containingHVACComponent.is_initialized
+          containing_comp = coil_dx.containingHVACComponent.get
+          if containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAir.is_initialized
+            htg_type = 'Electric Resistance or None'
+          elsif containing_comp.to_AirLoopHVACUnitarySystem.is_initialized
+            htg_coil = containing_comp.to_AirLoopHVACUnitarySystem.get.heatingCoil
+            if containing_comp.name.to_s.include? 'Minisplit'
+              htg_type = 'All Other'
+            elsif htg_coil.is_initialized
+              htg_coil = htg_coil.get
+              if htg_coil.to_CoilHeatingElectric.is_initialized || htg_coil.to_CoilHeatingDXMultiSpeed.is_initialized
+                htg_type = 'Electric Resistance or None'
+              elsif htg_coil.to_CoilHeatingGas.is_initialized || htg_coil.to_CoilHeatingGasMultiStage.is_initialized
+                htg_type = 'All Other'
+              end
+            else
+              htg_type = 'Electric Resistance or None'
+            end
+          elsif containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.is_initialized
+            htg_coil = containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.get.heatingCoil
+            supp_htg_coil = containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.get.supplementalHeatingCoil
+            if htg_coil.to_CoilHeatingDXMultiSpeed.is_initialized || supp_htg_coil.to_CoilHeatingElectric.is_initialized
+              htg_type = 'Electric Resistance or None'
+            elsif htg_coil.to_CoilHeatingGasMultiStage.is_initialized || htg_coil.to_CoilHeatingGas.is_initialized
+              htg_type = 'All Other'
+            end
+          end
+          # @todo Add other unitary systems
+        elsif coil_dx.containingZoneHVACComponent.is_initialized
+          containing_comp = coil_dx.containingZoneHVACComponent.get
+          # PTAC
+          if containing_comp.to_ZoneHVACPackagedTerminalAirConditioner.is_initialized
+            htg_coil = containing_comp.to_ZoneHVACPackagedTerminalAirConditioner.get.heatingCoil
+            if htg_coil.to_CoilHeatingElectric.is_initialized
+              htg_type = 'Electric Resistance or None'
+            elsif htg_coil.to_CoilHeatingWater.is_initialized || htg_coil.to_CoilHeatingGas.is_initialized
+              htg_type = 'All Other'
+            end
+          # PTHP
+          elsif containing_comp.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
+            htg_type = 'Electric Resistance or None'
+          end
+          # @todo Add other zone hvac systems
+        end
+      end
+
+      # If on an AirLoop
+      if coil_dx.airLoopHVAC.is_initialized
+        air_loop = coil_dx.airLoopHVAC.get
+        htg_type = if !air_loop.supplyComponents('OS:Coil:Heating:Gas'.to_IddObjectType).empty?
+                    'All Other'
+                  elsif !air_loop.supplyComponents('OS:Coil:Heating:Water'.to_IddObjectType).empty?
+                    'All Other'
+                  elsif !air_loop.supplyComponents('OS:Coil:Heating:DX:SingleSpeed'.to_IddObjectType).empty?
+                    'All Other'
+                  elsif !air_loop.supplyComponents('OS:Coil:Heating:DX:MultiSpeed'.to_IddObjectType).empty?
+                    'All Other'
+                  elsif !air_loop.supplyComponents('OS:Coil:Heating:DX:VariableSpeed'.to_IddObjectType).empty?
+                    'All Other'
+                  elsif !air_loop.supplyComponents('OS:Coil:Heating:Gas:MultiStage'.to_IddObjectType).empty?
+                    'All Other'
+                  elsif !air_loop.supplyComponents('OS:Coil:Heating:Desuperheater'.to_IddObjectType).empty?
+                    'All Other'
+                  elsif !air_loop.supplyComponents('OS:Coil:Heating:WaterToAirHeatPump:EquationFit'.to_IddObjectType).empty?
+                    'All Other'
+                  elsif !air_loop.supplyComponents('OS:Coil:Heating:Electric'.to_IddObjectType).empty?
+                    'Electric Resistance or None'
+                  else
+                    'Electric Resistance or None'
+                  end
+      end
+
+      return htg_type
+    end
+
     # Return the cooling capacity of the DX cooling coil paired with the heating coil
     #
     # @param coil_heating [OpenStudio::Model::CoilHeatingDXSingleSpeed, OpenStudio::Model::CoilHeatingWaterToAirHeatPumpEquationFit] coil heating object
