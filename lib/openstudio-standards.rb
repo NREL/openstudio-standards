@@ -68,6 +68,7 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/hvac/conversions'
   require_relative 'openstudio-standards/hvac/curves'
   require_relative 'openstudio-standards/hvac/components/air_conditioner_vrf'
+  require_relative 'openstudio-standards/hvac/components/air_terminal'
   require_relative 'openstudio-standards/hvac/components/boiler_hot_water'
   require_relative 'openstudio-standards/hvac/components/central_air_source_heat_pump'
   require_relative 'openstudio-standards/hvac/components/chiller'

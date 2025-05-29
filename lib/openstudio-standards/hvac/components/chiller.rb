@@ -8,7 +8,7 @@ module OpenstudioStandards
     #
     # @param boiler_hot_water [OpenStudio::Model::ChillerElectricEIR] chiller object
     # @return [Double] capacity in W
-    def self.chiller_electric_get_find_capacity(chiller_electric_eir)
+    def self.chiller_electric_get_capacity(chiller_electric_eir)
       capacity_w = nil
       if chiller_electric_eir.referenceCapacity.is_initialized
         capacity_w = chiller_electric_eir.referenceCapacity.get
