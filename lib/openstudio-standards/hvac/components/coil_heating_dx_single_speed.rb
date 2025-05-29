@@ -200,7 +200,7 @@ module OpenstudioStandards
 
     # Return the capacity in W of a CoilHeatingDXSingleSpeed
     #
-    # @param coil_heating_dx_single_speed [OpenStudio::Model::CoilHeatingDXSingleSpeed] coil cooling dx single speed object
+    # @param coil_heating_dx_single_speed [OpenStudio::Model::CoilHeatingDXSingleSpeed] coil heating dx single speed object
     # @param multiplier [Double] zone multiplier, if applicable
     # @return [Double] capacity in W
     def self.coil_heating_dx_single_speed_get_capacity(coil_heating_dx_single_speed, multiplier: 1.0)

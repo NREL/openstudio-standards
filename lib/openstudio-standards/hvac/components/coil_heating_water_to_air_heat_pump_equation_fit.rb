@@ -124,5 +124,24 @@ module OpenstudioStandards
 
       return htg_coil
     end
+
+    # Return the capacity in W of a CoilHeatingWaterToAirHeatPumpEquationFit
+    #
+    # @param coil_heating_water_to_air_heat_pump [OpenStudio::Model::CoilHeatingWaterToAirHeatPumpEquationFit] coil coheating water to air heat pump object
+    # @param multiplier [Double] zone multiplier, if applicable
+    # @return [Double] capacity in W
+    def self.coil_heating_water_to_air_heat_pump_equation_fit_get_capacity(coil_heating_water_to_air_heat_pump, multiplier: 1.0)
+      capacity_w = nil
+      if coil_heating_water_to_air_heat_pump.ratedTotalHeatingCapacity.is_initialized
+        capacity_w = coil_heating_water_to_air_heat_pump.ratedTotalHeatingCapacity.get
+      elsif coil_heating_water_to_air_heat_pump.autosizedRatedTotalHeatingCapacity.is_initialized
+        capacity_w = coil_heating_water_to_air_heat_pump.autosizedRatedTotalHeatingCapacity.get
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.HVAC.coil_heating_water_to_air_heat_pump_equation_fit', "For #{coil_heating_water_to_air_heat_pump.name} capacity is not available.")
+        return capacity_w
+      end
+
+      return capacity_w
+    end
   end
 end

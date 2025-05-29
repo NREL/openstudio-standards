@@ -73,20 +73,20 @@ module OpenstudioStandards
       return heat_pump
     end
 
-    # Return the cooling capacity of the DX cooling coil paired with the DX heating coil
+    # Return the cooling capacity of the DX cooling coil paired with the heating coil
     #
-    # @param coil_heating_dx [OpenStudio::Model::CoilHeatingDXSingleSpeed, OpenStudio::Model::CoilHeatingDXMultiSpeed] coil heating dx object
+    # @param coil_heating [OpenStudio::Model::CoilHeatingDXSingleSpeed, OpenStudio::Model::CoilHeatingWaterToAirHeatPumpEquationFit] coil heating object
     # @return [Double] capacity in W to be used for find object
-    def self.coil_heating_dx_get_paired_coil_cooling_dx_capacity(coil_heating_dx)
+    def self.coil_heating_get_paired_coil_cooling_capacity(coil_heating)
       capacity_w = nil
 
       # Get the paired cooling coil
       clg_coil = nil
 
       # Unitary and zone equipment
-      if coil_heating_dx.airLoopHVAC.empty?
-        if coil_heating_dx.containingHVACComponent.is_initialized
-          containing_comp = coil_heating_dx.containingHVACComponent.get
+      if coil_heating.airLoopHVAC.empty?
+        if coil_heating.containingHVACComponent.is_initialized
+          containing_comp = coil_heating.containingHVACComponent.get
           if containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAir.is_initialized
             clg_coil = containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAir.get.coolingCoil
           elsif containing_comp.to_AirLoopHVACUnitarySystem.is_initialized
@@ -96,8 +96,8 @@ module OpenstudioStandards
             end
           end
           # @todo Add other unitary systems
-        elsif coil_heating_dx.containingZoneHVACComponent.is_initialized
-          containing_comp = coil_heating_dx.containingZoneHVACComponent.get
+        elsif coil_heating.containingZoneHVACComponent.is_initialized
+          containing_comp = coil_heating.containingZoneHVACComponent.get
           # PTHP
           if containing_comp.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
             pthp = containing_comp.to_ZoneHVACPackagedTerminalHeatPump.get
@@ -107,8 +107,8 @@ module OpenstudioStandards
       end
 
       # On AirLoop directly
-      if coil_heating_dx.airLoopHVAC.is_initialized
-        air_loop = coil_heating_dx.airLoopHVAC.get
+      if coil_heating.airLoopHVAC.is_initialized
+        air_loop = coil_heating.airLoopHVAC.get
 
         # Check for the presence of any other type of cooling coil
         clg_types = ['OS:Coil:Cooling:DX:SingleSpeed',
@@ -126,17 +126,23 @@ module OpenstudioStandards
 
       # If no paired cooling coil was found, throw an error and fall back to the heating capacity
       if clg_coil.nil?
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.HVAC.coil', "For #{coil_heating_dx.name}, the paired DX cooling coil could not be found to determine capacity. Using the coil's heating capacity instead, which will incorrectly select efficiency levels for most standards.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.HVAC.coil', "For #{coil_heating.name}, the paired DX cooling coil could not be found to determine capacity. Using the coil's heating capacity instead, which will incorrectly select efficiency levels for most standards.")
 
-        if coil_heating_dx.to_CoilHeatingDXSingleSpeed.is_initialized
-          coil_heating_dx = coil_heating_dx.to_CoilHeatingDXSingleSpeed.get
-          capacity_w = OpenstudioStandards::HVAC.coil_heating_dx_single_speed_get_capacity(coil_heating_dx, multiplier: multiplier)
-          # add support for multi-speed DX heating coils
+        if coil_heating.to_CoilHeatingDXSingleSpeed.is_initialized
+          coil_heating = coil_heating.to_CoilHeatingDXSingleSpeed.get
+          capacity_w = OpenstudioStandards::HVAC.coil_heating_dx_single_speed_get_capacity(coil_heating, multiplier: multiplier)
+        elsif coil_heating.to_CoilHeatingWaterToAirHeatPumpEquationFit.is_initialized
+          coil_heating = coil_heating.to_CoilHeatingWaterToAirHeatPumpEquationFit.get
+          capacity_w = OpenstudioStandards::HVAC.coil_heating_water_to_air_heat_pump_equation_fit_get_capacity(coil_heating, multiplier: multiplier)
+        else
+          # If the coil is not a supported coil type, we cannot determine the capacity
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.HVAC.coil', "For #{coil_heating.name}, the coil is not a supported coil type and cannot determine capacity.")
+          return nil
         end
 
         # return nil if no capacity is available
         if capacity_w.nil?
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.HVAC.coil', "For #{coil_heating_dx.name} capacity is not available.")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.HVAC.coil', "For #{coil_heating.name} capacity is not available.")
           return capacity_w
         end
       end
@@ -157,6 +163,9 @@ module OpenstudioStandards
       elsif clg_coil.to_CoilCoolingDXMultiSpeed.is_initialized
         clg_coil = clg_coil.to_CoilCoolingDXMultiSpeed.get
         capacity_w = OpenstudioStandards::HVAC.coil_cooling_dx_multi_speed_get_capacity(clg_coil, multiplier: multiplier)
+      elsif clg_coil.to_CoilCoolingWaterToAirHeatPumpEquationFit.is_initialized
+        clg_coil = clg_coil.to_CoilCoolingWaterToAirHeatPumpEquationFit.get
+        capacity_w = OpenstudioStandards::HVAC.coil_cooling_water_to_air_heat_pump_find_capacity(clg_coil, multiplier: multiplier)
       end
 
       return capacity_w

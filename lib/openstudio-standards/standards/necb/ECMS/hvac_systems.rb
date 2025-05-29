@@ -2438,7 +2438,7 @@ class ECMS
     search_criteria['name'] = eqpt_name
 
     # Get the capacity
-    capacity_w = OpenstudioStandards::HVAC.coil_heating_dx_get_paired_coil_cooling_dx_capacity(coil_heating_dx_single_speed)
+    capacity_w = OpenstudioStandards::HVAC.coil_heating_get_paired_coil_cooling_capacity(coil_heating_dx_single_speed)
     capacity_w = [1.0, capacity_w].max
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
 
@@ -3045,7 +3045,7 @@ class ECMS
                                              search_criteria,
                                              rename = false)
 
-    capacity_w = OpenstudioStandards::HVAC.coil_heating_dx_get_paired_coil_cooling_dx_capacity(coil_heating_dx_single_speed)
+    capacity_w = OpenstudioStandards::HVAC.coil_heating_get_paired_coil_cooling_capacity(coil_heating_dx_single_speed)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 

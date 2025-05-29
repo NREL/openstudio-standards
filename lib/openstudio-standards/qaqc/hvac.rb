@@ -994,7 +994,7 @@ module OpenstudioStandards
 
           # find ac properties
           search_criteria = std.coil_dx_find_search_criteria(component)
-          capacity_w = OpenstudioStandards::HVAC.coil_heating_dx_get_paired_coil_cooling_dx_capacity(component)
+          capacity_w = OpenstudioStandards::HVAC.coil_heating_get_paired_coil_cooling_capacity(component)
           capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
           ac_props = std.model_find_object(std.standards_data['heat_pumps_heating'], search_criteria, capacity_btu_per_hr, Date.today)
           if ac_props.nil?

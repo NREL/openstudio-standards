@@ -14,7 +14,7 @@ class Standard
     search_criteria = coil_dx_find_search_criteria(coil_heating_dx_single_speed, necb_ref_hp)
     sub_category = search_criteria['subcategory']
     suppl_heating_type = search_criteria['heating_type']
-    capacity_w = OpenstudioStandards::HVAC.coil_heating_dx_get_paired_coil_cooling_dx_capacity(coil_heating_dx_single_speed)
+    capacity_w = OpenstudioStandards::HVAC.coil_heating_get_paired_coil_cooling_capacity(coil_heating_dx_single_speed)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
@@ -103,7 +103,7 @@ class Standard
     search_criteria = coil_dx_find_search_criteria(coil_heating_dx_single_speed, necb_ref_hp)
 
     # Get the capacity
-    capacity_w = OpenstudioStandards::HVAC.coil_heating_dx_get_paired_coil_cooling_dx_capacity(coil_heating_dx_single_speed)
+    capacity_w = OpenstudioStandards::HVAC.coil_heating_get_paired_coil_cooling_capacity(coil_heating_dx_single_speed)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
