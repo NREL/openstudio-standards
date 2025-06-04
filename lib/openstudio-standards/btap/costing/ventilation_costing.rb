@@ -2611,21 +2611,4 @@ class BTAPCosting
     ccashp_add_cost += vent_assembly_cost(ids: ids, id_quants: id_quants, overall_mult: ahu_mult, vent_tags: ccashp_tags)
     return ccashp_add_cost
   end
-
-  # This method verifies that, for a given row the number of items listed in the 'id_layers' column is the same as the
-  # number of quantities listed in the 'Id_layers_quantity_multipliers' column in the 'hvac_vent_ahu' sheet in the
-  # costing spreadsheet.  If there is a difference in the number of items and number of quantities in a row then that
-  # row needs to be investigated and fixed.
-  def validate_ahu_items_and_quantities()
-    # Find out if there are a different number of items and number oof quantities in any row of the 'hvac_vent_ahu'
-    # sheet.
-    diff_id_quantities = @costing_database['raw']['hvac_vent_ahu'].select{|data| data['id_layers'].to_s.split(',').size != data['Id_layers_quantity_multipliers'].to_s.split(',').size}
-    # If there is a difference (that is the diff_id_quantities has something in it) then raise an error.
-    unless diff_id_quantities.empty?
-      puts "Errors in the hvac_vent_ahu Costing Table.  The number of id_layers does not match the number of"
-      puts "Id_layers_quantity_multipliers for the following item(s):"
-      puts JSON.pretty_generate(diff_id_quantities)
-      raise("costing spreadsheet validation failed")
-    end
-  end
 end

@@ -60,50 +60,8 @@ class BTAPCosting
     @costing_database.load_database
   end
 
-  # Re-load data from the excel spreadsheet into costing_database.json and do some additional validation checks.
   def validate_database()
-    require_relative './envelope_costing.rb'
-    require_relative './ventilation_costing'
-
-    # Load all data from excel
-    self.load_data_from_database()
-    self.validate_constructions_sets()
-    self.validate_ahu_items_and_quantities()
-
-    @costing_database.save_database
-  end
-
-  def load_data_from_database
-
-    #Get Raw Data from files.
-    @costing_database['costs'] = [] # Costing data
-    @costing_database['localization_factors'] = [] # Local costing factors
-    @costing_database['raw'] = {}
-    @costing_database['db_errors'] = []
-
-    data_names = [
-      'locations',
-      'construction_sets',
-      'constructions_opaque',
-      'materials_opaque',
-      'constructions_glazing',
-      'materials_glazing',
-      'Constructions',
-      'ConstructionProperties',
-      'lighting_sets',
-      'lighting',
-      'materials_lighting',
-      'hvac_vent_ahu',
-      'materials_hvac'
-    ]
-
-    0.upto(data_names.length - 1) do |i|
-      data_path = @cp.raw_paths[i]
-      unless File.exist?(data_path)
-        raise("Error: Could not find #{data_path}")
-      end
-      @costing_database['raw'][data_names[i]] = CSV.read(data_path, headers: true).map { |row| row.to_hash}
-    end
+    @costing_database.validate_database
   end
 
   def generate_construction_cost_database_for_all_cities()
