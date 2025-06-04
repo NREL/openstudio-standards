@@ -254,7 +254,7 @@ class Standard
 
     # Additional search criteria
     if (database[0].keys.include?('equipment_type') || ((template == 'NECB2011') || (template == 'NECB2015') || (template == 'NECB2017') || (template == 'NECB2020') || (template == 'BTAPPRE1980') ||
-      (template == 'BTAP1980TO2010'))) && !coil_dx_heat_pump?(coil_cooling_dx_multi_speed)
+      (template == 'BTAP1980TO2010'))) && !OpenstudioStandards::HVAC.coil_dx_heat_pump?(coil_cooling_dx_multi_speed)
       search_criteria['equipment_type'] = 'Air Conditioners'
     end
     if database[0].keys.include?('region')

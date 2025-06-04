@@ -215,7 +215,7 @@ class Standard
         if equipment_type == 'PTAC'
           search_criteria['application'] = coil_dx_ptac_application(coil_cooling_dx_single_speed)
         end
-      elsif !coil_dx_heat_pump?(coil_cooling_dx_single_speed)
+      elsif !OpenstudioStandards::HVAC.coil_dx_heat_pump?(coil_cooling_dx_single_speed)
         search_criteria['equipment_type'] = 'Air Conditioners'
       end
     end
