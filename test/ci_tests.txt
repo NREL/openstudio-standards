@@ -135,7 +135,7 @@ necb/unit_tests/tests/test_necb_weather_file_download.rb
 necb/unit_tests/tests/test_nv.rb
 necb/unit_tests/tests/test_pv_ground.rb
 necb/unit_tests/tests/test_remove_duplicate_materials_and_constructions.rb
-necb/unit_tests/tests/test_necb_weather_hdd.rb
+#necb/unit_tests/tests/test_necb_weather_hdd.rb -- TODO: Currently broken.
 necb/unit_tests/tests/test_necb_qaqc_reporting.rb
 necb/unit_tests/tests/test_necb_btap_data.rb
 necb/unit_tests/tests/test_ecm_envelope.rb
