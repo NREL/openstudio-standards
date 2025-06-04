@@ -138,9 +138,7 @@
         "daylighting_sensor_control_cost_for_this_zone": 38633.43563537575
       }
     ],
-    "led_lighting": [
-
-    ],
+    "led_lighting": [],
     "fixture_report": [
       {
         "fixture_type": "7",
@@ -334,8 +332,7 @@
         "ind_ahu_max_airflow_l_per_s": 8000,
         "base_ahu_cost": -1203.73,
         "revised_base_ahu_cost": -947.2,
-        "hrv": {
-        },
+        "hrv": {},
         "equipment_info": [
           {
             "eq_category": "Coil_Cooling_DX_SingleSpeed",
@@ -352,9 +349,7 @@
             "cost": 74479.78
           }
         ],
-        "reheat_recool": [
-
-        ]
+        "reheat_recool": []
       },
       {
         "sys_type": 1,
@@ -364,8 +359,7 @@
         "ind_ahu_max_airflow_l_per_s": 15000,
         "base_ahu_cost": 110896.32,
         "revised_base_ahu_cost": 110896.32,
-        "hrv": {
-        },
+        "hrv": {},
         "equipment_info": [
           {
             "eq_category": "Coil_Cooling_DX_SingleSpeed",
@@ -382,14 +376,10 @@
             "cost": 148959.55
           }
         ],
-        "reheat_recool": [
-
-        ]
+        "reheat_recool": []
       }
     ],
-    "system_2": [
-
-    ],
+    "system_2": [],
     "system_3": [
       {
         "sys_type": 3,
@@ -399,8 +389,7 @@
         "ind_ahu_max_airflow_l_per_s": 1000,
         "base_ahu_cost": 66951.57,
         "revised_base_ahu_cost": 57069.13,
-        "hrv": {
-        },
+        "hrv": {},
         "equipment_info": [
           {
             "eq_category": "Coil_Cooling_DX_SingleSpeed",
@@ -417,23 +406,13 @@
             "cost": 3941.92
           }
         ],
-        "reheat_recool": [
-
-        ]
+        "reheat_recool": []
       }
     ],
-    "system_4": [
-
-    ],
-    "system_5": [
-
-    ],
-    "system_6": [
-
-    ],
-    "system_7": [
-
-    ],
+    "system_4": [],
+    "system_5": [],
+    "system_6": [],
+    "system_7": [],
     "mech_to_roof": {
       "Gas_Line_m": 0.0,
       "HW_Line_m": 0.0,
@@ -523,23 +502,15 @@
     "hrv_return_ducting": [
       {
         "floor": "Building Story 1",
-        "air_systems": [
-
-        ]
+        "air_systems": []
       }
     ],
-    "natural_ventilation": [
-
-    ],
-    "demand_controlled_ventilation": [
-
-    ],
+    "natural_ventilation": [],
+    "demand_controlled_ventilation": [],
     "hrv_total_cost": 0
   },
   "renewables": {
-    "pv": [
-
-    ]
+    "pv": []
   },
   "totals": {
     "envelope": 5273919,

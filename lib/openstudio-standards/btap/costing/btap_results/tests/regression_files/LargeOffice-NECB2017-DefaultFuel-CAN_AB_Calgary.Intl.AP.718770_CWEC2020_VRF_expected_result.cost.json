@@ -97,12 +97,8 @@
     "total_envelope_cost": 13209807.66
   },
   "lighting": {
-    "daylighting_sensor_control": [
-
-    ],
-    "led_lighting": [
-
-    ],
+    "daylighting_sensor_control": [],
+    "led_lighting": [],
     "fixture_report": [
       {
         "fixture_type": "Nil",
@@ -1266,9 +1262,7 @@
             "cost": 131372.81
           }
         ],
-        "reheat_recool": [
-
-        ]
+        "reheat_recool": []
       },
       {
         "sys_type": 1,
@@ -1302,9 +1296,7 @@
             "cost": 106900.7
           }
         ],
-        "reheat_recool": [
-
-        ]
+        "reheat_recool": []
       },
       {
         "sys_type": 1,
@@ -1338,9 +1330,7 @@
             "cost": 460608.32
           }
         ],
-        "reheat_recool": [
-
-        ]
+        "reheat_recool": []
       },
       {
         "sys_type": 1,
@@ -1374,9 +1364,7 @@
             "cost": 2127203.32
           }
         ],
-        "reheat_recool": [
-
-        ]
+        "reheat_recool": []
       },
       {
         "sys_type": 1,
@@ -1410,29 +1398,15 @@
             "cost": 460608.32
           }
         ],
-        "reheat_recool": [
-
-        ]
+        "reheat_recool": []
       }
     ],
-    "system_2": [
-
-    ],
-    "system_3": [
-
-    ],
-    "system_4": [
-
-    ],
-    "system_5": [
-
-    ],
-    "system_6": [
-
-    ],
-    "system_7": [
-
-    ],
+    "system_2": [],
+    "system_3": [],
+    "system_4": [],
+    "system_5": [],
+    "system_6": [],
+    "system_7": [],
     "mech_to_roof": {
       "Gas_Line_m": 0.0,
       "HW_Line_m": 0.0,
@@ -1764,8 +1738,7 @@
             "air_system": "sys_1|doas|shr>erv|sc>ccashp|sh>ccashp|ssf>cv|zh>vrf|zc>vrf|srf>none|",
             "hrv": "sys_1|doas|shr>none|sc>ccashp|sh>ccashp|ssf>cv|zh>vrf|zc>vrf|srf>none| ERV",
             "floor_mult": 1,
-            "hrv_ret_trunk": {
-            },
+            "hrv_ret_trunk": {},
             "tz_dist": [
               {
                 "tz": "WILD_ST=Electrical/Mechanical room-sch-A_FL=Basement Story 0_SCH=A",
@@ -1780,21 +1753,15 @@
       },
       {
         "floor": "Building Story 1",
-        "air_systems": [
-
-        ]
+        "air_systems": []
       },
       {
         "floor": "Building Story 2",
-        "air_systems": [
-
-        ]
+        "air_systems": []
       },
       {
         "floor": "Building Story 3",
-        "air_systems": [
-
-        ]
+        "air_systems": []
       },
       {
         "air_system": "sys_1|doas|shr>erv|sc>ccashp|sh>ccashp|ssf>cv|zh>vrf|zc>vrf|srf>none|",
@@ -1804,18 +1771,12 @@
         "cost": 2419.39
       }
     ],
-    "natural_ventilation": [
-
-    ],
-    "demand_controlled_ventilation": [
-
-    ],
+    "natural_ventilation": [],
+    "demand_controlled_ventilation": [],
     "hrv_total_cost": 883532.64
   },
   "renewables": {
-    "pv": [
-
-    ]
+    "pv": []
   },
   "totals": {
     "envelope": 13209808,

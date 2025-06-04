@@ -97,12 +97,8 @@
     "total_envelope_cost": 13035932.18
   },
   "lighting": {
-    "daylighting_sensor_control": [
-
-    ],
-    "led_lighting": [
-
-    ],
+    "daylighting_sensor_control": [],
+    "led_lighting": [],
     "fixture_report": [
       {
         "fixture_type": "Nil",
@@ -845,7 +841,7 @@
     "system_1": [
       {
         "sys_type": 1,
-        "name": "sys_1|doas|shr>erv|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none|",
+        "name": "sys_1|doas|shr>erv|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none|",
         "airloop_flow_m3_per_s": 0.847,
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 1000,
@@ -853,7 +849,7 @@
         "revised_base_ahu_cost": 42899.86,
         "hrv": {
           "hrv_type": "HeatExchanger_AirToAir_SensibleAndLatent",
-          "hrv_name": "sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| ERV",
+          "hrv_name": "sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| ERV",
           "hrv_size_m3ps": 0.847,
           "hrv_return_fan_size_m3ps": 0.847,
           "hrv_cost": 42484.63,
@@ -875,13 +871,11 @@
             "cost": 19317.48
           }
         ],
-        "reheat_recool": [
-
-        ]
+        "reheat_recool": []
       },
       {
         "sys_type": 1,
-        "name": "sys_1|doas|shr>erv|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1",
+        "name": "sys_1|doas|shr>erv|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1",
         "airloop_flow_m3_per_s": 0.338,
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 1000,
@@ -889,7 +883,7 @@
         "revised_base_ahu_cost": 26676.65,
         "hrv": {
           "hrv_type": "HeatExchanger_AirToAir_SensibleAndLatent",
-          "hrv_name": "sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 ERV",
+          "hrv_name": "sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 ERV",
           "hrv_size_m3ps": 0.338,
           "hrv_return_fan_size_m3ps": 0.338,
           "hrv_cost": 20804.74,
@@ -911,13 +905,11 @@
             "cost": 28634.33
           }
         ],
-        "reheat_recool": [
-
-        ]
+        "reheat_recool": []
       },
       {
         "sys_type": 1,
-        "name": "sys_1|doas|shr>erv|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 2",
+        "name": "sys_1|doas|shr>erv|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 2",
         "airloop_flow_m3_per_s": 1.539,
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 2500,
@@ -925,7 +917,7 @@
         "revised_base_ahu_cost": 38210.58,
         "hrv": {
           "hrv_type": "HeatExchanger_AirToAir_SensibleAndLatent",
-          "hrv_name": "sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 2 ERV",
+          "hrv_name": "sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 2 ERV",
           "hrv_size_m3ps": 1.539,
           "hrv_return_fan_size_m3ps": 1.539,
           "hrv_cost": 15563.03,
@@ -947,13 +939,11 @@
             "cost": 67265.09
           }
         ],
-        "reheat_recool": [
-
-        ]
+        "reheat_recool": []
       },
       {
         "sys_type": 1,
-        "name": "sys_1|doas|shr>erv|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 3",
+        "name": "sys_1|doas|shr>erv|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 3",
         "airloop_flow_m3_per_s": 15.385,
         "num_rooftop_units": 2,
         "ind_ahu_max_airflow_l_per_s": 8000,
@@ -961,7 +951,7 @@
         "revised_base_ahu_cost": 84567.08,
         "hrv": {
           "hrv_type": "HeatExchanger_AirToAir_SensibleAndLatent",
-          "hrv_name": "sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 3 ERV",
+          "hrv_name": "sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 3 ERV",
           "hrv_size_m3ps": 15.385,
           "hrv_return_fan_size_m3ps": 15.385,
           "hrv_cost": 100111.6,
@@ -983,13 +973,11 @@
             "cost": 334836.25
           }
         ],
-        "reheat_recool": [
-
-        ]
+        "reheat_recool": []
       },
       {
         "sys_type": 1,
-        "name": "sys_1|doas|shr>erv|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 4",
+        "name": "sys_1|doas|shr>erv|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 4",
         "airloop_flow_m3_per_s": 1.539,
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 2500,
@@ -997,7 +985,7 @@
         "revised_base_ahu_cost": 38210.58,
         "hrv": {
           "hrv_type": "HeatExchanger_AirToAir_SensibleAndLatent",
-          "hrv_name": "sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 4 ERV",
+          "hrv_name": "sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 4 ERV",
           "hrv_size_m3ps": 1.539,
           "hrv_return_fan_size_m3ps": 1.539,
           "hrv_cost": 15563.03,
@@ -1019,29 +1007,15 @@
             "cost": 67265.09
           }
         ],
-        "reheat_recool": [
-
-        ]
+        "reheat_recool": []
       }
     ],
-    "system_2": [
-
-    ],
-    "system_3": [
-
-    ],
-    "system_4": [
-
-    ],
-    "system_5": [
-
-    ],
-    "system_6": [
-
-    ],
-    "system_7": [
-
-    ],
+    "system_2": [],
+    "system_3": [],
+    "system_4": [],
+    "system_5": [],
+    "system_6": [],
+    "system_7": [],
     "mech_to_roof": {
       "Gas_Line_m": 0.0,
       "HW_Line_m": 708.9,
@@ -1370,11 +1344,10 @@
         "floor": "Basement Story 0",
         "air_systems": [
           {
-            "air_system": "sys_1|doas|shr>erv|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none|",
-            "hrv": "sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| ERV",
+            "air_system": "sys_1|doas|shr>erv|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none|",
+            "hrv": "sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| ERV",
             "floor_mult": 1,
-            "hrv_ret_trunk": {
-            },
+            "hrv_ret_trunk": {},
             "tz_dist": [
               {
                 "tz": "WILD_ST=Electrical/Mechanical room-sch-A_FL=Basement Story 0_SCH=A",
@@ -1386,11 +1359,10 @@
             ]
           },
           {
-            "air_system": "sys_1|doas|shr>erv|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1",
-            "hrv": "sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 ERV",
+            "air_system": "sys_1|doas|shr>erv|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1",
+            "hrv": "sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 ERV",
             "floor_mult": 1,
-            "hrv_ret_trunk": {
-            },
+            "hrv_ret_trunk": {},
             "tz_dist": [
               {
                 "tz": "ALL_ST=Office open plan_FL=Basement Story 0_SCH=A",
@@ -1407,8 +1379,8 @@
         "floor": "Building Story 1",
         "air_systems": [
           {
-            "air_system": "sys_1|doas|shr>erv|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 2",
-            "hrv": "sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 2 ERV",
+            "air_system": "sys_1|doas|shr>erv|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 2",
+            "hrv": "sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 2 ERV",
             "floor_mult": 1.0,
             "hrv_ret_trunk": {
               "duct_length_m": 84.3,
@@ -1466,8 +1438,8 @@
         "floor": "Building Story 2",
         "air_systems": [
           {
-            "air_system": "sys_1|doas|shr>erv|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 3",
-            "hrv": "sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 3 ERV",
+            "air_system": "sys_1|doas|shr>erv|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 3",
+            "hrv": "sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 3 ERV",
             "floor_mult": 10.0,
             "hrv_ret_trunk": {
               "duct_length_m": 84.3,
@@ -1525,8 +1497,8 @@
         "floor": "Building Story 3",
         "air_systems": [
           {
-            "air_system": "sys_1|doas|shr>erv|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 4",
-            "hrv": "sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 4 ERV",
+            "air_system": "sys_1|doas|shr>erv|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 4",
+            "hrv": "sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 4 ERV",
             "floor_mult": 1.0,
             "hrv_ret_trunk": {
               "duct_length_m": 84.3,
@@ -1581,53 +1553,47 @@
         ]
       },
       {
-        "air_system": "sys_1|doas|shr>erv|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none|",
-        "hrv": "sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| ERV",
+        "air_system": "sys_1|doas|shr>erv|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none|",
+        "hrv": "sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| ERV",
         "hrv_building_trunk_length_m": 47.6,
         "hrv_building_trunk_dia_in": 12,
         "cost": 2419.39
       },
       {
-        "air_system": "sys_1|doas|shr>erv|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1",
-        "hrv": "sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 ERV",
+        "air_system": "sys_1|doas|shr>erv|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1",
+        "hrv": "sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 ERV",
         "hrv_building_trunk_length_m": 47.6,
         "hrv_building_trunk_dia_in": 7,
         "cost": 2804.07
       },
       {
-        "air_system": "sys_1|doas|shr>erv|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 2",
-        "hrv": "sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 2 ERV",
+        "air_system": "sys_1|doas|shr>erv|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 2",
+        "hrv": "sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 2 ERV",
         "hrv_building_trunk_length_m": 44.8,
         "hrv_building_trunk_dia_in": 14,
         "cost": 6323.74
       },
       {
-        "air_system": "sys_1|doas|shr>erv|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 3",
-        "hrv": "sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 3 ERV",
+        "air_system": "sys_1|doas|shr>erv|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 3",
+        "hrv": "sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 3 ERV",
         "hrv_building_trunk_length_m": 25.0,
         "hrv_building_trunk_dia_in": 36,
         "cost": 22627.53
       },
       {
-        "air_system": "sys_1|doas|shr>erv|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 4",
-        "hrv": "sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 4 ERV",
+        "air_system": "sys_1|doas|shr>erv|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 4",
+        "hrv": "sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 4 ERV",
         "hrv_building_trunk_length_m": 1.2,
         "hrv_building_trunk_dia_in": 14,
         "cost": 908.64
       }
     ],
-    "natural_ventilation": [
-
-    ],
-    "demand_controlled_ventilation": [
-
-    ],
+    "natural_ventilation": [],
+    "demand_controlled_ventilation": [],
     "hrv_total_cost": 169216.89
   },
   "renewables": {
-    "pv": [
-
-    ]
+    "pv": []
   },
   "totals": {
     "envelope": 13035932,

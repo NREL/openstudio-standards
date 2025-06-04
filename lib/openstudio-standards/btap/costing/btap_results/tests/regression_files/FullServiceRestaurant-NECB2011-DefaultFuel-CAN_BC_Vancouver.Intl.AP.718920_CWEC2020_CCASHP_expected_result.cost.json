@@ -89,12 +89,8 @@
     "total_envelope_cost": 456864.0
   },
   "lighting": {
-    "daylighting_sensor_control": [
-
-    ],
-    "led_lighting": [
-
-    ],
+    "daylighting_sensor_control": [],
+    "led_lighting": [],
     "fixture_report": [
       {
         "fixture_type": "Nil",
@@ -264,12 +260,8 @@
     "shw_total": 64766.75
   },
   "ventilation": {
-    "system_1": [
-
-    ],
-    "system_2": [
-
-    ],
+    "system_1": [],
+    "system_2": [],
     "system_3": [
       {
         "sys_type": 3,
@@ -279,8 +271,7 @@
         "ind_ahu_max_airflow_l_per_s": 5000,
         "base_ahu_cost": 185872.93,
         "revised_base_ahu_cost": 98284.86,
-        "hrv": {
-        },
+        "hrv": {},
         "equipment_info": [
           {
             "eq_category": "Coil_Heating_Electric",
@@ -297,9 +288,7 @@
             "cost": 434717.18
           }
         ],
-        "reheat_recool": [
-
-        ]
+        "reheat_recool": []
       },
       {
         "sys_type": 3,
@@ -309,8 +298,7 @@
         "ind_ahu_max_airflow_l_per_s": 1000,
         "base_ahu_cost": 68719.78,
         "revised_base_ahu_cost": 27300.12,
-        "hrv": {
-        },
+        "hrv": {},
         "equipment_info": [
           {
             "eq_category": "Coil_Heating_Electric",
@@ -327,23 +315,13 @@
             "cost": 115366.79
           }
         ],
-        "reheat_recool": [
-
-        ]
+        "reheat_recool": []
       }
     ],
-    "system_4": [
-
-    ],
-    "system_5": [
-
-    ],
-    "system_6": [
-
-    ],
-    "system_7": [
-
-    ],
+    "system_4": [],
+    "system_5": [],
+    "system_6": [],
+    "system_7": [],
     "mech_to_roof": {
       "Gas_Line_m": 0.0,
       "HW_Line_m": 0.0,
@@ -433,23 +411,15 @@
     "hrv_return_ducting": [
       {
         "floor": "Building Story 1",
-        "air_systems": [
-
-        ]
+        "air_systems": []
       }
     ],
-    "natural_ventilation": [
-
-    ],
-    "demand_controlled_ventilation": [
-
-    ],
+    "natural_ventilation": [],
+    "demand_controlled_ventilation": [],
     "hrv_total_cost": 0
   },
   "renewables": {
-    "pv": [
-
-    ]
+    "pv": []
   },
   "totals": {
     "envelope": 456864,

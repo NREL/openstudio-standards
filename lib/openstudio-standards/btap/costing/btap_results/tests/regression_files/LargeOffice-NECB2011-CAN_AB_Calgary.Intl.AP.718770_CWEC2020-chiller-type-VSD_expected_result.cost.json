@@ -97,12 +97,8 @@
     "total_envelope_cost": 13385012.62
   },
   "lighting": {
-    "daylighting_sensor_control": [
-
-    ],
-    "led_lighting": [
-
-    ],
+    "daylighting_sensor_control": [],
+    "led_lighting": [],
     "fixture_report": [
       {
         "fixture_type": "Nil",
@@ -861,8 +857,7 @@
         "ind_ahu_max_airflow_l_per_s": 1500,
         "base_ahu_cost": 38231.77,
         "revised_base_ahu_cost": 35697.49,
-        "hrv": {
-        },
+        "hrv": {},
         "equipment_info": [
           {
             "eq_category": "Coil_Cooling_DX_SingleSpeed",
@@ -879,23 +874,13 @@
             "cost": 31919.9
           }
         ],
-        "reheat_recool": [
-
-        ]
+        "reheat_recool": []
       }
     ],
-    "system_2": [
-
-    ],
-    "system_3": [
-
-    ],
-    "system_4": [
-
-    ],
-    "system_5": [
-
-    ],
+    "system_2": [],
+    "system_3": [],
+    "system_4": [],
+    "system_5": [],
     "system_6": [
       {
         "sys_type": 6,
@@ -905,8 +890,7 @@
         "ind_ahu_max_airflow_l_per_s": 1000,
         "base_ahu_cost": 18240.86,
         "revised_base_ahu_cost": 13339.94,
-        "hrv": {
-        },
+        "hrv": {},
         "equipment_info": [
           {
             "eq_category": "Coil_Cooling_Water",
@@ -948,8 +932,7 @@
         "ind_ahu_max_airflow_l_per_s": 10000,
         "base_ahu_cost": 635580.01,
         "revised_base_ahu_cost": 556200.28,
-        "hrv": {
-        },
+        "hrv": {},
         "equipment_info": [
           {
             "eq_category": "Coil_Cooling_Water",
@@ -1061,8 +1044,7 @@
         "ind_ahu_max_airflow_l_per_s": 15000,
         "base_ahu_cost": 6735403.31,
         "revised_base_ahu_cost": 6735403.31,
-        "hrv": {
-        },
+        "hrv": {},
         "equipment_info": [
           {
             "eq_category": "Coil_Cooling_Water",
@@ -1174,8 +1156,7 @@
         "ind_ahu_max_airflow_l_per_s": 15000,
         "base_ahu_cost": 748378.15,
         "revised_base_ahu_cost": 748378.15,
-        "hrv": {
-        },
+        "hrv": {},
         "equipment_info": [
           {
             "eq_category": "Coil_Cooling_Water",
@@ -1280,9 +1261,7 @@
         ]
       }
     ],
-    "system_7": [
-
-    ],
+    "system_7": [],
     "mech_to_roof": {
       "Gas_Line_m": 0.0,
       "HW_Line_m": 0.0,
@@ -1837,41 +1816,27 @@
     "hrv_return_ducting": [
       {
         "floor": "Basement Story 0",
-        "air_systems": [
-
-        ]
+        "air_systems": []
       },
       {
         "floor": "Building Story 1",
-        "air_systems": [
-
-        ]
+        "air_systems": []
       },
       {
         "floor": "Building Story 2",
-        "air_systems": [
-
-        ]
+        "air_systems": []
       },
       {
         "floor": "Building Story 3",
-        "air_systems": [
-
-        ]
+        "air_systems": []
       }
     ],
-    "natural_ventilation": [
-
-    ],
-    "demand_controlled_ventilation": [
-
-    ],
+    "natural_ventilation": [],
+    "demand_controlled_ventilation": [],
     "hrv_total_cost": 0
   },
   "renewables": {
-    "pv": [
-
-    ]
+    "pv": []
   },
   "totals": {
     "envelope": 13385013,

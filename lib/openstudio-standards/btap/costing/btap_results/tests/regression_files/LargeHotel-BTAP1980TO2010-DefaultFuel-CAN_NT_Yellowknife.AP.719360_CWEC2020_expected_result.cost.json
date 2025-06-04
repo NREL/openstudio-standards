@@ -89,12 +89,8 @@
     "total_envelope_cost": 229309.32
   },
   "lighting": {
-    "daylighting_sensor_control": [
-
-    ],
-    "led_lighting": [
-
-    ],
+    "daylighting_sensor_control": [],
+    "led_lighting": [],
     "fixture_report": [
       {
         "fixture_type": "7",
@@ -105,8 +101,8 @@
         "spaces": [
           "Kitchen_Flr_6",
           "Laundry_Flr_1",
-          "Banquet_Flr_6",
           "Dining_Flr_6",
+          "Banquet_Flr_6",
           "Lobby_Flr_1",
           "Cafe_Flr_1",
           "Storage_Flr_1",
@@ -223,7 +219,7 @@
         "note": ""
       },
       {
-        "space": "Banquet_Flr_6",
+        "space": "Dining_Flr_6",
         "zone": "ALL_ST=Hotel/Motel - dining_FL=Building Story 4_SCH=B",
         "building_type": "Space Function",
         "space_type": "Hotel/Motel - dining",
@@ -237,8 +233,8 @@
         "note": ""
       },
       {
-        "space": "Dining_Flr_6",
-        "zone": "ALL_ST=Hotel/Motel - dining_FL=Building Story 4_SCH=B",
+        "space": "Banquet_Flr_6",
+        "zone": "ALL_ST=Hotel/Motel - dining_FL=Building Story 4_SCH=B 1",
         "building_type": "Space Function",
         "space_type": "Hotel/Motel - dining",
         "zone_multiplier": 1,
@@ -1200,19 +1196,34 @@
         "zone_number": 3,
         "zone_name": "ALL_ST=Hotel/Motel - dining_FL=Building Story 4_SCH=B",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 54.2,
+        "heat_capacity(kW)": 27.2,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 50920,
+        "heat_cost": 25460,
         "cool_cost": 0,
         "heatcool_cost": 0,
-        "piping_cost": 19048,
+        "piping_cost": 9524,
         "wiring_cost": 0,
-        "num_units": 16.0,
-        "cummultive_zonal_cost": 104176
+        "num_units": 8.0,
+        "cummultive_zonal_cost": 69192
       },
       {
         "systype": "HW",
         "zone_number": 4,
+        "zone_name": "ALL_ST=Hotel/Motel - dining_FL=Building Story 4_SCH=B 1",
+        "zone_multiple": 1,
+        "heat_capacity(kW)": 27.0,
+        "cool_capacity(kW)": 0.0,
+        "heat_cost": 25460,
+        "cool_cost": 0,
+        "heatcool_cost": 0,
+        "piping_cost": 9524,
+        "wiring_cost": 0,
+        "num_units": 8.0,
+        "cummultive_zonal_cost": 104176
+      },
+      {
+        "systype": "HW",
+        "zone_number": 5,
         "zone_name": "ALL_ST=Hotel/Motel - lobby_FL=Building Story 2_SCH=H",
         "zone_multiple": 1,
         "heat_capacity(kW)": 22.1,
@@ -1227,7 +1238,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 5,
+        "zone_number": 6,
         "zone_name": "ALL_ST=Retail - mall concourse_FL=Building Story 2_SCH=C",
         "zone_multiple": 1,
         "heat_capacity(kW)": 19.1,
@@ -1242,7 +1253,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 6,
+        "zone_number": 7,
         "zone_name": "ALL_ST=Retail - sales_FL=Building Story 2_SCH=C",
         "zone_multiple": 1,
         "heat_capacity(kW)": 2.3,
@@ -1257,7 +1268,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 7,
+        "zone_number": 8,
         "zone_name": "ALL_ST=Retail - sales_FL=Building Story 2_SCH=C 1",
         "zone_multiple": 1,
         "heat_capacity(kW)": 7.4,
@@ -1272,7 +1283,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 8,
+        "zone_number": 9,
         "zone_name": "ALL_ST=Storage area - occsens_FL=Building Story 2_SCH=E",
         "zone_multiple": 1,
         "heat_capacity(kW)": 2.6,
@@ -1287,7 +1298,7 @@
       },
       {
         "systype": null,
-        "zone_number": 8,
+        "zone_number": 9,
         "zone_name": "ALL_ST=Storage area - occsens_FL=Building Story 2_SCH=E",
         "zone_multiple": 1,
         "heat_capacity(kW)": 2.6,
@@ -1302,7 +1313,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 9,
+        "zone_number": 10,
         "zone_name": "ALL_ST=Storage area_FL=Building Story 1_SCH=E",
         "zone_multiple": 1,
         "heat_capacity(kW)": 36.0,
@@ -1317,7 +1328,7 @@
       },
       {
         "systype": null,
-        "zone_number": 9,
+        "zone_number": 10,
         "zone_name": "ALL_ST=Storage area_FL=Building Story 1_SCH=E",
         "zone_multiple": 1,
         "heat_capacity(kW)": 36.0,
@@ -1332,7 +1343,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 10,
+        "zone_number": 11,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.1,
@@ -1347,7 +1358,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 10,
+        "zone_number": 11,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.1,
@@ -1362,7 +1373,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 11,
+        "zone_number": 12,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 1",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.1,
@@ -1377,7 +1388,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 11,
+        "zone_number": 12,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 1",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.1,
@@ -1392,7 +1403,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 12,
+        "zone_number": 13,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 10",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.1,
@@ -1407,7 +1418,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 12,
+        "zone_number": 13,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 10",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.1,
@@ -1422,7 +1433,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 13,
+        "zone_number": 14,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 11",
         "zone_multiple": 4,
         "heat_capacity(kW)": 17.0,
@@ -1437,7 +1448,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 13,
+        "zone_number": 14,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 11",
         "zone_multiple": 4,
         "heat_capacity(kW)": 17.0,
@@ -1452,7 +1463,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 14,
+        "zone_number": 15,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 12",
         "zone_multiple": 4,
         "heat_capacity(kW)": 17.2,
@@ -1467,7 +1478,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 14,
+        "zone_number": 15,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 12",
         "zone_multiple": 4,
         "heat_capacity(kW)": 17.2,
@@ -1482,7 +1493,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 15,
+        "zone_number": 16,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 13",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.1,
@@ -1497,7 +1508,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 15,
+        "zone_number": 16,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 13",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.1,
@@ -1512,7 +1523,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 16,
+        "zone_number": 17,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 14",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.1,
@@ -1527,7 +1538,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 16,
+        "zone_number": 17,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 14",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.1,
@@ -1542,7 +1553,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 17,
+        "zone_number": 18,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 15",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.1,
@@ -1557,7 +1568,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 17,
+        "zone_number": 18,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 15",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.1,
@@ -1572,7 +1583,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 18,
+        "zone_number": 19,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 16",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.1,
@@ -1587,7 +1598,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 18,
+        "zone_number": 19,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 16",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.1,
@@ -1602,7 +1613,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 19,
+        "zone_number": 20,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 17",
         "zone_multiple": 4,
         "heat_capacity(kW)": 17.1,
@@ -1617,7 +1628,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 19,
+        "zone_number": 20,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 17",
         "zone_multiple": 4,
         "heat_capacity(kW)": 17.1,
@@ -1632,7 +1643,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 20,
+        "zone_number": 21,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 18",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.1,
@@ -1647,7 +1658,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 20,
+        "zone_number": 21,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 18",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.1,
@@ -1662,7 +1673,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 21,
+        "zone_number": 22,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 19",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.2,
@@ -1677,7 +1688,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 21,
+        "zone_number": 22,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 19",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.2,
@@ -1692,7 +1703,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 22,
+        "zone_number": 23,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 2",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.0,
@@ -1707,7 +1718,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 22,
+        "zone_number": 23,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 2",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.0,
@@ -1722,7 +1733,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 23,
+        "zone_number": 24,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 20",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.1,
@@ -1737,7 +1748,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 23,
+        "zone_number": 24,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 20",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.1,
@@ -1752,7 +1763,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 24,
+        "zone_number": 25,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 21",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.2,
@@ -1767,7 +1778,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 24,
+        "zone_number": 25,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 21",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.2,
@@ -1782,7 +1793,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 25,
+        "zone_number": 26,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 22",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.2,
@@ -1797,7 +1808,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 25,
+        "zone_number": 26,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 22",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.2,
@@ -1812,7 +1823,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 26,
+        "zone_number": 27,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 23",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.1,
@@ -1827,7 +1838,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 26,
+        "zone_number": 27,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 23",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.1,
@@ -1842,7 +1853,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 27,
+        "zone_number": 28,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 24",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.2,
@@ -1857,7 +1868,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 27,
+        "zone_number": 28,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 24",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.2,
@@ -1872,7 +1883,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 28,
+        "zone_number": 29,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 25",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.2,
@@ -1887,7 +1898,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 28,
+        "zone_number": 29,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 25",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.2,
@@ -1902,7 +1913,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 29,
+        "zone_number": 30,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 26",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.2,
@@ -1917,7 +1928,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 29,
+        "zone_number": 30,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 26",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.2,
@@ -1932,7 +1943,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 30,
+        "zone_number": 31,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 27",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.2,
@@ -1947,7 +1958,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 30,
+        "zone_number": 31,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 27",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.2,
@@ -1962,7 +1973,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 31,
+        "zone_number": 32,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 28",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.1,
@@ -1977,7 +1988,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 31,
+        "zone_number": 32,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 28",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.1,
@@ -1992,7 +2003,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 32,
+        "zone_number": 33,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 29",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.2,
@@ -2007,7 +2018,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 32,
+        "zone_number": 33,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 29",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.2,
@@ -2022,7 +2033,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 33,
+        "zone_number": 34,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 3",
         "zone_multiple": 4,
         "heat_capacity(kW)": 17.3,
@@ -2037,7 +2048,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 33,
+        "zone_number": 34,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 3",
         "zone_multiple": 4,
         "heat_capacity(kW)": 17.3,
@@ -2052,7 +2063,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 34,
+        "zone_number": 35,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 30",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.2,
@@ -2067,7 +2078,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 34,
+        "zone_number": 35,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 30",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.2,
@@ -2082,7 +2093,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 35,
+        "zone_number": 36,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 31",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.2,
@@ -2097,7 +2108,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 35,
+        "zone_number": 36,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 31",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.2,
@@ -2112,7 +2123,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 36,
+        "zone_number": 37,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 32",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.2,
@@ -2127,7 +2138,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 36,
+        "zone_number": 37,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 32",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.2,
@@ -2142,7 +2153,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 37,
+        "zone_number": 38,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 33",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.2,
@@ -2157,7 +2168,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 37,
+        "zone_number": 38,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 33",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.2,
@@ -2172,7 +2183,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 38,
+        "zone_number": 39,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 34",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.1,
@@ -2187,7 +2198,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 38,
+        "zone_number": 39,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 34",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.1,
@@ -2202,7 +2213,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 39,
+        "zone_number": 40,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 35",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.2,
@@ -2217,7 +2228,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 39,
+        "zone_number": 40,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 35",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.2,
@@ -2232,7 +2243,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 40,
+        "zone_number": 41,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 36",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.1,
@@ -2247,7 +2258,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 40,
+        "zone_number": 41,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 36",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.1,
@@ -2262,7 +2273,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 41,
+        "zone_number": 42,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 37",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.2,
@@ -2277,7 +2288,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 41,
+        "zone_number": 42,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 37",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.2,
@@ -2292,7 +2303,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 42,
+        "zone_number": 43,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 38",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.1,
@@ -2307,7 +2318,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 42,
+        "zone_number": 43,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 38",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.1,
@@ -2322,7 +2333,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 43,
+        "zone_number": 44,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 39",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.2,
@@ -2337,7 +2348,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 43,
+        "zone_number": 44,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 39",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.2,
@@ -2352,7 +2363,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 44,
+        "zone_number": 45,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 4",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.1,
@@ -2367,7 +2378,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 44,
+        "zone_number": 45,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 4",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.1,
@@ -2382,7 +2393,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 45,
+        "zone_number": 46,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 40",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.2,
@@ -2397,7 +2408,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 45,
+        "zone_number": 46,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 40",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.2,
@@ -2412,7 +2423,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 46,
+        "zone_number": 47,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 41",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.1,
@@ -2427,7 +2438,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 46,
+        "zone_number": 47,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 41",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.1,
@@ -2442,7 +2453,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 47,
+        "zone_number": 48,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 5",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.1,
@@ -2457,7 +2468,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 47,
+        "zone_number": 48,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 5",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.1,
@@ -2472,7 +2483,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 48,
+        "zone_number": 49,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 6",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.0,
@@ -2487,7 +2498,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 48,
+        "zone_number": 49,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 6",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.0,
@@ -2502,7 +2513,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 49,
+        "zone_number": 50,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 7",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.2,
@@ -2517,7 +2528,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 49,
+        "zone_number": 50,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 7",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.2,
@@ -2532,7 +2543,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 50,
+        "zone_number": 51,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 8",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.1,
@@ -2547,7 +2558,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 50,
+        "zone_number": 51,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 8",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.1,
@@ -2562,7 +2573,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 51,
+        "zone_number": 52,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 9",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.1,
@@ -2577,7 +2588,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 51,
+        "zone_number": 52,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 3_SCHF 9",
         "zone_multiple": 4,
         "heat_capacity(kW)": 6.1,
@@ -2592,7 +2603,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 52,
+        "zone_number": 53,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 4_SCHF",
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.4,
@@ -2607,7 +2618,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 52,
+        "zone_number": 53,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 4_SCHF",
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.4,
@@ -2622,7 +2633,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 53,
+        "zone_number": 54,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 4_SCHF 1",
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.5,
@@ -2637,7 +2648,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 53,
+        "zone_number": 54,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 4_SCHF 1",
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.5,
@@ -2652,7 +2663,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 54,
+        "zone_number": 55,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 4_SCHF 10",
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.5,
@@ -2667,7 +2678,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 54,
+        "zone_number": 55,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 4_SCHF 10",
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.5,
@@ -2682,7 +2693,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 55,
+        "zone_number": 56,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 4_SCHF 2",
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.5,
@@ -2697,7 +2708,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 55,
+        "zone_number": 56,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 4_SCHF 2",
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.5,
@@ -2712,7 +2723,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 56,
+        "zone_number": 57,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 4_SCHF 3",
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.5,
@@ -2727,7 +2738,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 56,
+        "zone_number": 57,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 4_SCHF 3",
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.5,
@@ -2742,7 +2753,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 57,
+        "zone_number": 58,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 4_SCHF 4",
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.5,
@@ -2757,7 +2768,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 57,
+        "zone_number": 58,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 4_SCHF 4",
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.5,
@@ -2772,7 +2783,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 58,
+        "zone_number": 59,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 4_SCHF 5",
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.5,
@@ -2787,7 +2798,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 58,
+        "zone_number": 59,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 4_SCHF 5",
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.5,
@@ -2802,7 +2813,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 59,
+        "zone_number": 60,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 4_SCHF 6",
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.5,
@@ -2817,7 +2828,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 59,
+        "zone_number": 60,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 4_SCHF 6",
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.5,
@@ -2832,7 +2843,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 60,
+        "zone_number": 61,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 4_SCHF 7",
         "zone_multiple": 1,
         "heat_capacity(kW)": 6.1,
@@ -2847,7 +2858,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 60,
+        "zone_number": 61,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 4_SCHF 7",
         "zone_multiple": 1,
         "heat_capacity(kW)": 6.1,
@@ -2862,7 +2873,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 61,
+        "zone_number": 62,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 4_SCHF 8",
         "zone_multiple": 1,
         "heat_capacity(kW)": 6.1,
@@ -2877,7 +2888,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 61,
+        "zone_number": 62,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 4_SCHF 8",
         "zone_multiple": 1,
         "heat_capacity(kW)": 6.1,
@@ -2892,7 +2903,7 @@
       },
       {
         "systype": "PTAC",
-        "zone_number": 62,
+        "zone_number": 63,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 4_SCHF 9",
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.5,
@@ -2907,7 +2918,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 62,
+        "zone_number": 63,
         "zone_name": "DU_BT=Space Function_ST=Hotel/Motel - rooms_FL=Building Story 4_SCHF 9",
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.5,
@@ -2922,7 +2933,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 63,
+        "zone_number": 64,
         "zone_name": "WILD_ST=Corr. >= 2.4m wide-sch-E_FL=Building Story 3_SCH=F",
         "zone_multiple": 4,
         "heat_capacity(kW)": 59.9,
@@ -2937,7 +2948,7 @@
       },
       {
         "systype": null,
-        "zone_number": 63,
+        "zone_number": 64,
         "zone_name": "WILD_ST=Corr. >= 2.4m wide-sch-E_FL=Building Story 3_SCH=F",
         "zone_multiple": 4,
         "heat_capacity(kW)": 59.9,
@@ -2952,7 +2963,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 64,
+        "zone_number": 65,
         "zone_name": "WILD_ST=Corr. >= 2.4m wide-sch-E_FL=Building Story 4_SCH=F",
         "zone_multiple": 1,
         "heat_capacity(kW)": 50.6,
@@ -2967,7 +2978,7 @@
       },
       {
         "systype": null,
-        "zone_number": 64,
+        "zone_number": 65,
         "zone_name": "WILD_ST=Corr. >= 2.4m wide-sch-E_FL=Building Story 4_SCH=F",
         "zone_multiple": 1,
         "heat_capacity(kW)": 50.6,
@@ -2982,7 +2993,7 @@
       },
       {
         "systype": "HW",
-        "zone_number": 65,
+        "zone_number": 66,
         "zone_name": "WILD_ST=Electrical/Mechanical-sch-E_FL=Building Story 2_SCH=F",
         "zone_multiple": 1,
         "heat_capacity(kW)": 5.4,
@@ -2997,7 +3008,7 @@
       },
       {
         "systype": null,
-        "zone_number": 65,
+        "zone_number": 66,
         "zone_name": "WILD_ST=Electrical/Mechanical-sch-E_FL=Building Story 2_SCH=F",
         "zone_multiple": 1,
         "heat_capacity(kW)": 5.4,
@@ -3043,8 +3054,7 @@
         "ind_ahu_max_airflow_l_per_s": 2500,
         "base_ahu_cost": 54198.26,
         "revised_base_ahu_cost": 46615.47,
-        "hrv": {
-        },
+        "hrv": {},
         "equipment_info": [
           {
             "eq_category": "Coil_Cooling_DX_SingleSpeed",
@@ -3061,9 +3071,7 @@
             "cost": 90148.22
           }
         ],
-        "reheat_recool": [
-
-        ]
+        "reheat_recool": []
       },
       {
         "sys_type": 1,
@@ -3073,8 +3081,7 @@
         "ind_ahu_max_airflow_l_per_s": 2500,
         "base_ahu_cost": 47085.29,
         "revised_base_ahu_cost": 29759.32,
-        "hrv": {
-        },
+        "hrv": {},
         "equipment_info": [
           {
             "eq_category": "Coil_Cooling_DX_SingleSpeed",
@@ -3091,9 +3098,7 @@
             "cost": 74479.78
           }
         ],
-        "reheat_recool": [
-
-        ]
+        "reheat_recool": []
       },
       {
         "sys_type": 1,
@@ -3103,8 +3108,7 @@
         "ind_ahu_max_airflow_l_per_s": 1000,
         "base_ahu_cost": 46199.46,
         "revised_base_ahu_cost": 25041.61,
-        "hrv": {
-        },
+        "hrv": {},
         "equipment_info": [
           {
             "eq_category": "Coil_Cooling_DX_SingleSpeed",
@@ -3121,14 +3125,10 @@
             "cost": 7060.6
           }
         ],
-        "reheat_recool": [
-
-        ]
+        "reheat_recool": []
       }
     ],
-    "system_2": [
-
-    ],
+    "system_2": [],
     "system_3": [
       {
         "sys_type": 3,
@@ -3138,8 +3138,7 @@
         "ind_ahu_max_airflow_l_per_s": 5000,
         "base_ahu_cost": 184104.72,
         "revised_base_ahu_cost": 173702.64,
-        "hrv": {
-        },
+        "hrv": {},
         "equipment_info": [
           {
             "eq_category": "Coil_Cooling_DX_SingleSpeed",
@@ -3156,9 +3155,7 @@
             "cost": 212799.36
           }
         ],
-        "reheat_recool": [
-
-        ]
+        "reheat_recool": []
       },
       {
         "sys_type": 3,
@@ -3168,8 +3165,7 @@
         "ind_ahu_max_airflow_l_per_s": 1000,
         "base_ahu_cost": 66951.57,
         "revised_base_ahu_cost": 10383.93,
-        "hrv": {
-        },
+        "hrv": {},
         "equipment_info": [
           {
             "eq_category": "Coil_Cooling_DX_SingleSpeed",
@@ -3186,9 +3182,7 @@
             "cost": 14239.18
           }
         ],
-        "reheat_recool": [
-
-        ]
+        "reheat_recool": []
       },
       {
         "sys_type": 3,
@@ -3198,8 +3192,7 @@
         "ind_ahu_max_airflow_l_per_s": 1000,
         "base_ahu_cost": 66951.57,
         "revised_base_ahu_cost": 35697.81,
-        "hrv": {
-        },
+        "hrv": {},
         "equipment_info": [
           {
             "eq_category": "Coil_Cooling_DX_SingleSpeed",
@@ -3216,17 +3209,11 @@
             "cost": 11293.36
           }
         ],
-        "reheat_recool": [
-
-        ]
+        "reheat_recool": []
       }
     ],
-    "system_4": [
-
-    ],
-    "system_5": [
-
-    ],
+    "system_4": [],
+    "system_5": [],
     "system_6": [
       {
         "sys_type": 6,
@@ -3236,8 +3223,7 @@
         "ind_ahu_max_airflow_l_per_s": 5000,
         "base_ahu_cost": 153514.06,
         "revised_base_ahu_cost": 139785.82,
-        "hrv": {
-        },
+        "hrv": {},
         "equipment_info": [
           {
             "eq_category": "Coil_Cooling_Water",
@@ -3314,9 +3300,7 @@
         ]
       }
     ],
-    "system_7": [
-
-    ],
+    "system_7": [],
     "mech_to_roof": {
       "Gas_Line_m": 0.0,
       "HW_Line_m": 335.6,
@@ -4038,25 +4022,49 @@
               "ThermalZone": "ALL_ST=Hotel/Motel - dining_FL=Building Story 4_SCH=B",
               "ducting_direction": "Supply",
               "tz_mult": 1.0,
-              "airflow_m3ps": 4.717,
-              "num_diff": 39,
-              "ducting_lbs": 1560,
-              "duct_insulation_ft2": 975,
+              "airflow_m3ps": 2.359,
+              "num_diff": 20,
+              "ducting_lbs": 800,
+              "duct_insulation_ft2": 500,
               "flex_duct_sz_in": 12,
-              "flex_duct_length_ft": 390,
-              "cost": 78839.69
+              "flex_duct_length_ft": 200,
+              "cost": 40430.61
             },
             {
               "ThermalZone": "ALL_ST=Hotel/Motel - dining_FL=Building Story 4_SCH=B",
               "ducting_direction": "Return",
               "tz_mult": 1.0,
-              "airflow_m3ps": 4.717,
-              "num_diff": 39,
-              "ducting_lbs": 1560,
-              "duct_insulation_ft2": 975,
+              "airflow_m3ps": 2.359,
+              "num_diff": 20,
+              "ducting_lbs": 800,
+              "duct_insulation_ft2": 500,
               "flex_duct_sz_in": 12,
-              "flex_duct_length_ft": 390,
-              "cost": 78839.69
+              "flex_duct_length_ft": 200,
+              "cost": 40430.61
+            },
+            {
+              "ThermalZone": "ALL_ST=Hotel/Motel - dining_FL=Building Story 4_SCH=B 1",
+              "ducting_direction": "Supply",
+              "tz_mult": 1.0,
+              "airflow_m3ps": 2.359,
+              "num_diff": 20,
+              "ducting_lbs": 800,
+              "duct_insulation_ft2": 500,
+              "flex_duct_sz_in": 12,
+              "flex_duct_length_ft": 200,
+              "cost": 40430.61
+            },
+            {
+              "ThermalZone": "ALL_ST=Hotel/Motel - dining_FL=Building Story 4_SCH=B 1",
+              "ducting_direction": "Return",
+              "tz_mult": 1.0,
+              "airflow_m3ps": 2.359,
+              "num_diff": 20,
+              "ducting_lbs": 800,
+              "duct_insulation_ft2": 500,
+              "flex_duct_sz_in": 12,
+              "flex_duct_length_ft": 200,
+              "cost": 40430.61
             },
             {
               "ThermalZone": "ALL_ST=Food preparation_FL=Building Story 4_SCH=B",
@@ -4267,41 +4275,27 @@
     "hrv_return_ducting": [
       {
         "floor": "Building Story 3",
-        "air_systems": [
-
-        ]
+        "air_systems": []
       },
       {
         "floor": "Building Story 4",
-        "air_systems": [
-
-        ]
+        "air_systems": []
       },
       {
         "floor": "Building Story 2",
-        "air_systems": [
-
-        ]
+        "air_systems": []
       },
       {
         "floor": "Building Story 1",
-        "air_systems": [
-
-        ]
+        "air_systems": []
       }
     ],
-    "natural_ventilation": [
-
-    ],
-    "demand_controlled_ventilation": [
-
-    ],
+    "natural_ventilation": [],
+    "demand_controlled_ventilation": [],
     "hrv_total_cost": 0
   },
   "renewables": {
-    "pv": [
-
-    ]
+    "pv": []
   },
   "totals": {
     "envelope": 229309,
@@ -4309,8 +4303,8 @@
     "lighting": 2431258,
     "heating_and_cooling": 1988948,
     "shw": 954346,
-    "ventilation": 2599138,
+    "ventilation": 2603181,
     "renewables": 0,
-    "grand_total": 8202999
+    "grand_total": 8207042
   }
 }
