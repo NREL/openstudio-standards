@@ -154,7 +154,7 @@ module NecbHelper
       expected_data = JSON.parse(File.read(expected_results_file))
       test_data = JSON.parse(File.read(test_results_file))
       unless expected_data == test_data
-        assert(false, "Compare #{expected_results_file_path} with #{test_results_file_path}. File contents differ!")
+        assert(false, "Compare #{expected_results_file} with #{test_results_file}. File contents differ!")
       end
     else
       # Open files and compare the line by line. Remove line endings before checking strings (this can be an issue when running in docker).
@@ -172,8 +172,8 @@ module NecbHelper
       # Close files before assert.
       fe.close
       ft.close
-      expected_results_file_path=Pathname.new(expected_results_file).cleanpath
-      test_results_file_path=Pathname.new(test_results_file).cleanpath
+      expected_results_file_path = Pathname.new(expected_results_file).cleanpath
+      test_results_file_path = Pathname.new(test_results_file).cleanpath
       comp_files_str = "Compare #{expected_results_file_path} with #{test_results_file_path}. File contents differ!"
       assert(same, "#{msg} #{self.class.ancestors[0]}.\n#{comp_files_str}\n#{comp_lines_str}")
     end
