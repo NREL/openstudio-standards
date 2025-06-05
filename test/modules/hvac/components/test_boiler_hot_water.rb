@@ -21,4 +21,30 @@ class TestHVACBoilerHotWater < Minitest::Test
     assert_in_delta(1.0, boiler.optimumPartLoadRatio, 0.01, 'Expected boiler optimal load to be 1.0')
     assert_in_delta(1.0, boiler.sizingFactor, 0.01, 'Expected boiler sizing factor to be 1.0')
   end
+
+  def test_boiler_hot_water_get_capacity
+    model = OpenStudio::Model::Model.new
+    boiler = @hvac.create_boiler_hot_water(model)
+
+    # Set a nominal capacity for the boiler
+    boiler.setNominalCapacity(10000.0)
+
+    # Get the capacity using the helper method
+    capacity = @hvac.boiler_hot_water_get_capacity(boiler)
+
+    assert_in_delta(10000.0, capacity, 0.01, 'Expected boiler capacity to be 10000 W')
+  end
+
+  def test_boiler_hot_water_get_water_flow_rate
+    model = OpenStudio::Model::Model.new
+    boiler = @hvac.create_boiler_hot_water(model)
+
+    # Set a design water flow rate
+    boiler.setDesignWaterFlowRate(0.1) # m^3/s
+
+    # Get the water flow rate using the helper method
+    flow_rate = @hvac.boiler_hot_water_get_water_flow_rate(boiler)
+
+    assert_in_delta(0.1, flow_rate, 0.01, 'Expected boiler water flow rate to be 0.1 m^3/s')
+  end
 end

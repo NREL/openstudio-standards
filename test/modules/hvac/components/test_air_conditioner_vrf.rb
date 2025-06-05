@@ -19,4 +19,18 @@ class TestHVACAirConditionerVRF < Minitest::Test
     assert(vrf.is_a?(OpenStudio::Model::AirConditionerVariableRefrigerantFlow), 'Expected vrf to be an AirConditionerVariableRefrigerantFlow object')
     assert_equal('VRF Master Thermal Zone', vrf.zoneforMasterThermostatLocation.get.name.to_s, "Expected master zone to be 'VRF Master Thermal Zone'")
   end
+
+  def test_air_conditioner_variable_refrigerant_flow_get_capacity
+    model = OpenStudio::Model::Model.new
+    thermal_zone = OpenStudio::Model::ThermalZone.new(model)
+    thermal_zone.setName('VRF Master Thermal Zone')
+
+    vrf = @hvac.create_air_conditioner_variable_refrigerant_flow(model, master_zone: thermal_zone)
+    vrf.setGrossRatedTotalCoolingCapacity(10000.0) # Set a nominal capacity for the VRF system
+
+    # Get the capacity using the helper method
+    capacity = @hvac.air_conditioner_variable_refrigerant_flow_get_capacity(vrf)
+
+    assert_in_delta(10000.0, capacity, 0.01, 'Expected vrf capacity to be 10000 W')
+  end
 end

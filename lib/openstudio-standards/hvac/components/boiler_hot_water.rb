@@ -146,7 +146,7 @@ module OpenstudioStandards
     #
     # @param boiler_hot_water [OpenStudio::Model::BoilerHotWater] hot water boiler object
     # @return [Double] design water flow rate in m^3/s
-    def self.boiler_hot_water_find_get_water_flow_rate(boiler_hot_water)
+    def self.boiler_hot_water_get_water_flow_rate(boiler_hot_water)
       design_water_flow_rate_m3_per_s = nil
       if boiler_hot_water.designWaterFlowRate.is_initialized
         design_water_flow_rate_m3_per_s = boiler_hot_water.designWaterFlowRate.get
