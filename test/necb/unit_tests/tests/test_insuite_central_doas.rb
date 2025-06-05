@@ -13,7 +13,7 @@ class NECB_insuite_central_doas_Tests < Minitest::Test
     # File paths.
     @output_folder = File.join(__dir__, 'output/test_insuite_central_doas')
     @expected_results_file = File.join(__dir__, '../expected_results/insuite_central_doas_expected_results.json')
-    @test_results_file = File.join(__dir__, '../expected_results/insuite_central_doas_test_results.json')
+    @test_results_file = File.join(__dir__, '../expected_results/insuite_central_doas-test_results.json')
     @sizing_run_dir = File.join(@output_folder, 'sizing_folder')
 
     # Initial test condition
