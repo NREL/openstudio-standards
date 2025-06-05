@@ -29,6 +29,14 @@ coverage/
 /test/necb/*/expected_results/*-test_results.json
 /test/necb/*/log.txt*
 
+# BTAP costing test output
+lib/openstudio-standards/btap/costing/output/
+lib/openstudio-standards/btap/costing/costing_output/
+lib/openstudio-standards/btap/costing/local_test_output/
+
+lib/openstudio-standards/btap/costing/btap_results/tests/regression_files/*test_result.cost.json
+lib/openstudio-standards/btap/costing/btap_results/tests/output/
+
 # auto generated CI files
 /test/ci_test_files/models
 /test/ci_test_files/*.rb
