@@ -84,12 +84,11 @@ class ASHRAE901PRM < Standard
 
     # Lookup efficiencies depending on whether it is a unitary AC or a heat pump
     ac_props = nil
+    eff_key = 'minimum_coefficient_of_performance_no_fan_cooling'
     if sys_type == 'PSZ_HP' || sys_type == 'PTHP'
       ac_props = model_find_object(standards_data['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
-      eff_key = 'copnfcooling'
     else
       ac_props = model_find_object(standards_data['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
-      eff_key = 'minimum_coefficient_of_performance_no_fan_cooling'
     end
 
     # Get the minimum efficiency standards
