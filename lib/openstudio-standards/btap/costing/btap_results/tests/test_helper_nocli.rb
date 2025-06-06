@@ -10,12 +10,14 @@ rescue LoadError
   puts 'OpenStudio Measure Tester Gem not installed -- will not be able to aggregate and dashboard the results of tests'
 end
 require_relative '../../btap_workflow.rb'
+require_relative '../../common_paths.rb'
 require 'fileutils'
 #require 'optparse'
 
 class Btap_results_helper
 
   def btap_results_regression_test()
+    cp = CommonPaths.instance
     args = {}
     OptionParser.new do |opts|
       opts.banner = "Usage: example.rb [options]"
@@ -91,8 +93,16 @@ class Btap_results_helper
     #create osm file to use mimic PAT/OS server called final
     model.save(model_out_path, true)
 
-    # Check Cost file exists
+    # Do costing.
+    costing = BTAPCosting.new(costs_csv: cp.costs_path, factors_csv: cp.costs_local_factors_path)
+    costing.load_database
+
+    cost_result, _ = costing.cost_audit_all(model: model, prototype_creator: standard, template_type: template)
     cost_result_json_path = File.join(run_dir, '/cost_results.json')
+    File.open(cost_result_json_path, 'w') { |f| f.write(JSON.pretty_generate(cost_result, allow_nan: true)) }
+    puts "Wrote File cost_results.json in #{Dir.pwd} "
+
+    # Check Cost file exists
     raise("Could not find costing json at this path:#{cost_result_json_path}") unless File.exist?(cost_result_json_path)
 
     # Check Cost results are the same.

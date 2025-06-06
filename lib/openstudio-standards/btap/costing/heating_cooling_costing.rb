@@ -219,7 +219,7 @@ class BTAPCosting
         elsif boiler[:fuel_type].to_s.downcase == 'airtowaterhp'
           # Add heating buffer tank for awhp
           materialHash = get_cost_info(mat: 'solartank', size: 450)
-          matCost, labCost = getRSMeansCost('solartank', materialHash, multiplier)
+          matCost, labCost = getCost('solartank', materialHash, multiplier)
           utilCost = matCost * regional_material / 100.0 + labCost * regional_installation / 100.0
         end
 
@@ -488,15 +488,15 @@ class BTAPCosting
         primaryCap = chiller[:reference_capacity] #kW
         # Add cooling buffer tank for awhp
         materialHash = get_cost_info(mat: 'solartank', size: 450)
-        matCost, labCost = getRSMeansCost('solartank', materialHash, multiplier) #Costing for AWHP only buffer tank, AWHP included in boiler cost
+        matCost, labCost = getCost('solartank', materialHash, multiplier) #Costing for AWHP only buffer tank, AWHP included in boiler cost
         thisChillerCost = matCost * regional_material / 100.0 + labCost * regional_installation / 100.0
         # Include 2 expansion tanks for awhp
         materialHash = get_cost_info(mat: 'ExpansionTanks', size: 60)
-        matCost, labCost = getRSMeansCost('ExpansionTanks', materialHash, multiplier) #Costing for AWHP only buffer tank, AWHP included in boiler cost
+        matCost, labCost = getCost('ExpansionTanks', materialHash, multiplier) #Costing for AWHP only buffer tank, AWHP included in boiler cost
         thisChillerCost += (matCost * regional_material / 100.0 + labCost * regional_installation / 100.0) * 2
         # Inclide glycol cost
         materalHash = get_cost_info(mat: 'glycol')
-        matCost, labCost = getRSMeansCost('solartank', materialHash, multiplier) #Costing for AWHP only buffer tank, AWHP included in boiler cost
+        matCost, labCost = getCost('solartank', materialHash, multiplier) #Costing for AWHP only buffer tank, AWHP included in boiler cost
         thisChillerCost += (matCost * regional_material / 100.0 + labCost * regional_installation / 100.0) * 2
 
         flueVentCost = 0.0 ; flueElbowCost = 0.0 ; flueTopCost = 0.0 ; headerCost = 0.0
