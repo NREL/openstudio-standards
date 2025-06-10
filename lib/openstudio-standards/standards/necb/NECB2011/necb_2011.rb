@@ -214,6 +214,11 @@ class NECB2011 < Standard
                                    custom_weather_folder: nil,
                                    debug: false,
                                    sizing_run_dir: Dir.pwd,
+                                   hvac_system_primary: nil,
+                                   hvac_system_dwelling_units: nil,
+                                   hvac_system_washrooms: nil,
+                                   hvac_system_corridor: nil,
+                                   hvac_system_storage: nil,
                                    primary_heating_fuel: 'Electricity',
                                    swh_fuel: nil,
                                    dcv_type: 'NECB_Default',
@@ -271,6 +276,7 @@ class NECB2011 < Standard
                                    necb_hdd: true,
                                    boiler_fuel: nil,
                                    boiler_cap_ratio: nil,
+                                   airloop_fancoils_heating: nil,
                                    oerd_utility_pricing: nil)
     model = load_building_type_from_library(building_type: building_type)
     return model_apply_standard(model: model,
@@ -279,6 +285,11 @@ class NECB2011 < Standard
                                 epw_file: epw_file,
                                 custom_weather_folder: custom_weather_folder,
                                 sizing_run_dir: sizing_run_dir,
+                                hvac_system_primary: nil,
+                                hvac_system_dwelling_units: nil,
+                                hvac_system_washrooms: nil,
+                                hvac_system_corridor: nil,
+                                hvac_system_storage: nil,
                                 primary_heating_fuel: primary_heating_fuel,
                                 swh_fuel: swh_fuel,
                                 dcv_type: dcv_type, # Four options: (1) 'NECB_Default', (2) 'No_DCV', (3) 'Occupancy_based_DCV' , (4) 'CO2_based_DCV'
@@ -334,6 +345,7 @@ class NECB2011 < Standard
                                 necb_hdd: necb_hdd,
                                 boiler_fuel: boiler_fuel,
                                 boiler_cap_ratio: boiler_cap_ratio,
+                                airloop_fancoils_heating: airloop_fancoils_heating,
                                 oerd_utility_pricing: oerd_utility_pricing
                                 )
   end
@@ -355,9 +367,15 @@ class NECB2011 < Standard
                            tbd_interpolate: nil,
                            epw_file:,
                            custom_weather_folder: nil,
+                           btap_weather: true,
                            sizing_run_dir: Dir.pwd,
                            necb_reference_hp: false,
                            necb_reference_hp_supp_fuel: 'DefaultFuel',
+                           hvac_system_primary: 'NECB_Default',
+                           hvac_system_dwelling_units: 'NECB_Default',
+                           hvac_system_washrooms: 'NECB_Default',
+                           hvac_system_corridor: 'NECB_Default',
+                           hvac_system_storage: 'NECB_Default',
                            primary_heating_fuel: 'Electricity',
                            swh_fuel: nil,
                            dcv_type: 'NECB_Default',
@@ -413,9 +431,13 @@ class NECB2011 < Standard
                            necb_hdd: true,
                            boiler_fuel: nil,
                            boiler_cap_ratio: nil,
+                           airloop_fancoils_heating: nil,
                            oerd_utility_pricing: nil)
 
-    apply_weather_data(model: model, epw_file: epw_file, custom_weather_folder: custom_weather_folder)
+    apply_weather_data(model: model, 
+                       epw_file: epw_file, 
+                       custom_weather_folder: custom_weather_folder, 
+                       btap_weather: btap_weather)
     primary_heating_fuel = validate_primary_heating_fuel(primary_heating_fuel: primary_heating_fuel, model: model)
     self.fuel_type_set = SystemFuels.new()
     self.fuel_type_set.set_defaults(standards_data: @standards_data, primary_heating_fuel: primary_heating_fuel)
@@ -426,11 +448,21 @@ class NECB2011 < Standard
     boiler_fuel = convert_arg_to_string(variable: boiler_fuel, default: nil)
     boiler_cap_ratio = convert_arg_to_string(variable: boiler_cap_ratio, default: nil)
     swh_fuel = convert_arg_to_string(variable: swh_fuel, default: nil)
+    airloop_fancoils_heating = convert_arg_to_bool(variable: airloop_fancoils_heating, default: false)
+
+    # Check if custom systems are assigned to dwelling units, washrooms, corridors, and storage rooms.  If they are, set
+    # them to be the same as the primary system type.  If no primary system type is defined then set them to be nil.
+    hvac_system_dwelling_units, hvac_system_corridor, hvac_system_storage, hvac_system_washrooms = reset_hvac_system_if_required(hvac_system_primary: hvac_system_primary,
+                                                                                                                                 hvac_system_dwelling_units: hvac_system_dwelling_units,
+                                                                                                                                 hvac_system_corridor: hvac_system_corridor,
+                                                                                                                                 hvac_system_storage: hvac_system_storage,
+                                                                                                                                 hvac_system_washrooms: hvac_system_washrooms)
     oerd_utility_pricing = convert_arg_to_bool(variable: oerd_utility_pricing, default: false)
 
     boiler_cap_ratios = set_boiler_cap_ratios(boiler_cap_ratio: boiler_cap_ratio, boiler_fuel: boiler_fuel) unless boiler_cap_ratio.nil? && boiler_fuel.nil?
     self.fuel_type_set.set_boiler_fuel(standards_data: @standards_data, boiler_fuel: boiler_fuel, boiler_cap_ratios: boiler_cap_ratios) unless boiler_fuel.nil?
     self.fuel_type_set.set_swh_fuel(swh_fuel: swh_fuel) unless swh_fuel.nil? || swh_fuel.to_s.downcase == 'defaultfuel'
+    self.fuel_type_set.set_airloop_fancoils_heating() if airloop_fancoils_heating
 
     # Ensure the volume calculation in all spaces is done automatically
     model.getSpaces.sort.each do |space|
@@ -479,6 +511,11 @@ class NECB2011 < Standard
     apply_kiva_foundation(model)
     apply_systems_and_efficiencies(model: model,
                                    sizing_run_dir: sizing_run_dir,
+                                   hvac_system_primary: hvac_system_primary,
+                                   hvac_system_dwelling_units: hvac_system_dwelling_units,
+                                   hvac_system_washrooms: hvac_system_washrooms,
+                                   hvac_system_corridor: hvac_system_corridor,
+                                   hvac_system_storage: hvac_system_storage,
                                    primary_heating_fuel: primary_heating_fuel,
                                    dcv_type: dcv_type,
                                    ecm_system_name: ecm_system_name,
@@ -551,6 +588,11 @@ class NECB2011 < Standard
 
   def apply_systems_and_efficiencies(model:,
                                      sizing_run_dir:,
+                                     hvac_system_primary: 'NECB_Default',
+                                     hvac_system_dwelling_units: 'NECB_Default',
+                                     hvac_system_washrooms: 'NECB_Default',
+                                     hvac_system_corridor: 'NECB_Default',
+                                     hvac_system_storage: 'NECB_Default',
                                      primary_heating_fuel:,
                                      dcv_type: 'NECB_Default',
                                      ecm_system_name: 'NECB_Default',
@@ -582,6 +624,11 @@ class NECB2011 < Standard
 
     # Create Default Systems.
     apply_systems(model: model,
+                  hvac_system_primary: hvac_system_primary,
+                  hvac_system_dwelling_units: hvac_system_dwelling_units,
+                  hvac_system_washrooms: hvac_system_washrooms,
+                  hvac_system_corridor: hvac_system_corridor,
+                  hvac_system_storage: hvac_system_storage,
                   sizing_run_dir: sizing_run_dir,
                   shw_scale: shw_scale,
                   baseline_system_zones_map_option: baseline_system_zones_map_option)
@@ -689,7 +736,7 @@ class NECB2011 < Standard
     ecm.scale_oa_loads(model: model, scale: oa_scale)
   end
 
-  def apply_weather_data(model:, epw_file:, custom_weather_folder: nil)
+  def apply_weather_data(model:, epw_file:, custom_weather_folder: nil, btap_weather: true)
     # Create full path to weather file
     weather_files = File.absolute_path(File.join(__FILE__, '..', '..', '..', '..', '..' , '..', "data/weather"))
     weather_file = File.join(weather_files, epw_file)
@@ -699,7 +746,7 @@ class NECB2011 < Standard
       # Check if btap_batch transferred the weather file
       weather_transfer = check_datapoint_weather_folder(epw_file: epw_file, weather_folder: weather_files, custom_weather_folder: custom_weather_folder)
       # If btap_batch didn't transfer the weather file, download it.
-      get_weather_file_from_repo(epw_file: epw_file) unless weather_transfer
+      get_weather_file_from_repo(epw_file: epw_file, btap_weather: btap_weather) unless weather_transfer
     end
 
     # Fix EMS references. Temporary workaround for OS issue #2598
@@ -2265,28 +2312,42 @@ class NECB2011 < Standard
     return model
   end
 
-  # This method handles looking for the epw_file in the https://github.com/canmet-energy/btap_weather repository.  It
+  # This method handles looking for the epw_file in btap_weather or Climate.OneBuilding.Org. It
   # checks for the epw_file in the historical data first.  If it is not there then it looks in the future weather data.
   # If it is not there either, it throws an error.
-  # epw_file (String):  The name of the epw file.  The different weather files all share the same name as the epw file,
-  #                     only the extension changes.
-  def get_weather_file_from_repo(epw_file:)
+  # epw_file (String): The name of the epw file.  The different weather files all share the same name as the epw file,
+  #                    only the extension changes.
+  # btap_weather (Boolean): Determines whether to download from the btap_weather repository or Climate.OneBuilding.Org.
+  def get_weather_file_from_repo(epw_file:, btap_weather:)
     # Get just the weather file name without the extension
     weather_loc = epw_file[0..-5]
     # Get the url of the file containing the historical weather data file names in the repository and the repository
     # folder containing the files
-    historic_weather_files_loc = @standards_data['constants']['historic_weather_file_list']['value'].to_s
-    historic_git_folder = @standards_data['constants']['historic_weather_folder_url']['value'].to_s
+    if btap_weather
+      historic_weather_files_loc = @standards_data['constants']['historic_weather_file_list_btap']['value'].to_s
+      historic_folder = @standards_data['constants']['historic_weather_folder_url_btap']['value'].to_s
+      future_weather_files_loc = @standards_data['constants']['future_weather_file_list_btap']['value'].to_s
+      future_folder = @standards_data['constants']['future_weather_folder_url_btap']['value'].to_s  
+    else
+      historic_weather_files_loc = @standards_data['constants']['historic_weather_file_list']['value'].to_s
+      historic_folder = @standards_data['constants']['historic_weather_folder_url']['value'].to_s
+      future_weather_files_loc = @standards_data['constants']['future_weather_file_list']['value'].to_s
+      future_folder = @standards_data['constants']['future_weather_folder_url']['value'].to_s  
+    end
     # Get the files from the repository
-    success_flag = download_and_save_file(weather_list_url: historic_weather_files_loc, weather_loc: weather_loc, git_folder: historic_git_folder)
+    success_flag = download_and_save_file(weather_list_url: historic_weather_files_loc, 
+                                          weather_loc: weather_loc, 
+                                          download_folder: historic_folder,
+                                          btap_weather: btap_weather)
     return if success_flag
     # If the file could not be found in the historical data look for it with the future weather data.
     puts "Could not find #{epw_file} in historical weather data files, looking in future weather data files."
-    future_weather_files_loc = @standards_data['constants']['future_weather_file_list']['value'].to_s
-    future_git_folder = @standards_data['constants']['future_weather_folder_url']['value'].to_s
-    success_flag = download_and_save_file(weather_list_url: future_weather_files_loc, weather_loc: weather_loc, git_folder: future_git_folder)
+    success_flag = download_and_save_file(weather_list_url: future_weather_files_loc, 
+                                          weather_loc: weather_loc, 
+                                          download_folder: future_folder,
+                                          btap_weather: btap_weather)
     return if success_flag
-    raise("Could not locate the following file in the canmet/btap_weather repository or could not extract the data: #{epw_file}.  Please check the spelling of the file or visit https://github.com/canmet-energy/btap_weather to see if the file exists.")
+    raise("Could not locate the following file in #{btap_weather ? "btap_weather" : "Climate.OneBuilding.Org"} or could not extract the data: #{epw_file} Please check the spelling of the file or visit #{btap_weather ? "https://github.com/canmet-energy/btap_weather" : "https://climate.onebuilding.org/WMO_Region_4_North_and_Central_America/"} to see if the file exists.")
   end
 
   # This method actually looks for and downloads the zip file from the https://github.com/canmet-energy/btap_weather
@@ -2300,7 +2361,8 @@ class NECB2011 < Standard
   # weather_loc (string): the name of the epw file we are looking for without the .epw extension
   # git_folder (string): the url of the folder containing the weather files.  As of 2023-07-07 this this is either the
   #                      url of the historical weather data folder or the future weather data folder.
-  def download_and_save_file(weather_list_url:, weather_loc:, git_folder:)
+  # btap_weather (Boolean): Determines whether to download from the btap_weather repository or Climate.OneBuilding.Org.
+  def download_and_save_file(weather_list_url:, weather_loc:, download_folder:, btap_weather:)
     status = false
     attempt = 1
     # Try to download the list of weather files 5 times, waiting 5 seconds between each attempt.
@@ -2320,7 +2382,27 @@ class NECB2011 < Standard
           unless zip_name.nil?
             # Found the weather file on the list
             # Define the full url of the weather zip file we want to download
-            save_file_url = git_folder + zip_name
+            if btap_weather
+              save_file_url = download_folder + zip_name
+            else
+              # Used to resolve the Climate.OneBuilding.Org download link from using just the filename.
+              abbreviation_map = { 
+                'AB' => 'AB_Alberta/',
+                'BC' => 'BC_British_Columbia/',
+                'MB' => 'MB_Manitoba/',
+                'NB' => 'NB_New_Brunswick/',
+                'NL' => 'NL_Newfoundland_and_Labrador/',
+                'NS' => 'NS_Nova_Scotia/',
+                'NT' => 'NT_Northwest_Territories/',
+                'NU' => 'NU_Nunavut/',
+                'ON' => 'ON_Ontario/',
+                'PE' => 'PE_Prince_Edward_Island/',
+                'QC' => 'QC_Quebec/',
+                'SK' => 'SK_Saskatchewan/',
+                'YT' => 'YT_Yukon/'
+              }
+              save_file_url = download_folder + abbreviation_map[zip_name[4..5]] + zip_name
+            end
             # Define the local location of where the weather zip file will be saved
             weather_dir = File.absolute_path(File.join(__FILE__, '..', '..', '..', '..', '..' , '..', "data/weather"))
             save_file = File.join(weather_dir, zip_name)
@@ -2396,6 +2478,9 @@ class NECB2011 < Standard
   def extract_weather_data(zipped_file:, weather_dir:)
     # Set a flag to check if the weather data is for future weather.
     future_file = false
+
+    # Data structure to determine if the weather file contains all necessary elements.
+    checklist = {'.epw' => false, '.stat' => false, '.ddy' => false}
     # Start expanding the data.
     Zip::File.open(zipped_file) do |zip_file|
       puts "Expanding #{zipped_file}"
@@ -2408,7 +2493,7 @@ class NECB2011 < Standard
         # to just '.ddy'. This is so the rest of BTAP uses the _ASHRAE.ddy file.
         entry_name = entry.name.to_s
         if entry_name.length > 11
-          future_file = true if entry_name[-11..-1] == '_ASHRAE.ddy'
+          future_file = true if entry_name.end_with?('_ASHRAE.ddy')
         end
         # entry.extract # This was required before but now it isn't.  I'm confused so am saving this comment to
         # remind me if there are problems later.
@@ -2416,6 +2501,12 @@ class NECB2011 < Standard
         content = entry.get_input_stream.read
         # Save the data locally
         File.open(curr_save_file, 'wb') { |save_f| save_f.write(content) }
+
+        # Add the file extension of the current entry to the checklist.
+        file_extension = entry_name[entry_name.rindex('.')..]
+        if checklist.key?(file_extension)
+          checklist[file_extension] = true
+        end
       end
     end
     if future_file
@@ -2432,6 +2523,13 @@ class NECB2011 < Standard
       FileUtils.cp(orig_ddy_name, rev_ddy_name)
       FileUtils.cp(ashrae_ddy_name, orig_ddy_name)
     end
+
+    # Return false if not all files are present:
+    if !checklist.values.all?()
+      puts "Error: Not all files present in #{zipped_file}. Missing #{checklist.select { |k, v| v == false}.keys.join(", ") } file(s). Exiting..."
+      exit(1)
+    end
+
     # Return true if everything worked out
     return true
   end
@@ -2500,6 +2598,24 @@ class NECB2011 < Standard
     return boiler_cap_ratios
   end
 
+  # Until someone has time to allow dwelling units, washrooms, cooridors, and storage rooms can get their own custom
+  # system types (beyond the default necb_system), this metod will set the system type for those rooms to either be
+  # their default or to the primary system type (if one is defined and the other sytems are not set to default)
+  def reset_hvac_system_if_required(hvac_system_primary: nil, hvac_system_dwelling_units: nil, hvac_system_corridor: nil, hvac_system_storage: nil, hvac_system_washrooms: nil)
+    if hvac_system_primary.nil? || hvac_system_primary.to_s.downcase == "necb_default"
+      hvac_system_dwelling_units = "NECB_Default"
+      hvac_system_corridor = "NECB_Default"
+      hvac_system_storage = "NECB_Default"
+      hvac_system_washrooms = "NECB_Default"
+    else
+      hvac_system_dwelling_units = hvac_system_primary unless hvac_system_dwelling_units.nil? || hvac_system_dwelling_units.to_s.downcase == "necb_default"
+      hvac_system_corridor = hvac_system_primary unless hvac_system_corridor.nil? || hvac_system_corridor.to_s.downcase == "necb_default"
+      hvac_system_storage = hvac_system_primary unless hvac_system_storage.nil? || hvac_system_storage.to_s.downcase == "necb_default"
+      hvac_system_washrooms = hvac_system_primary unless hvac_system_washrooms.nil? || hvac_system_washrooms.to_s.downcase == "necb_default"
+    end
+    return hvac_system_dwelling_units, hvac_system_corridor, hvac_system_storage, hvac_system_washrooms
+  end
+
   # This method checks if the output_meters argument contains a net electricity meter with 'timestep' frequency.  If one
   # is then the method does nothing.  If one is not then it is added.  This is used in conjunction with the
   # 'oerd_utility_pricing' argument.  If that argument is present then a net electricity meter with 'timestep' frequency
@@ -2510,13 +2626,35 @@ class NECB2011 < Standard
         {
           "name" => "ElectricityNet:Facility",
           "frequency" => "Hourly"
+        },
+        {
+          "name" => "Heating:Electricity",
+          "frequency" => "Hourly"
+        },
+        {
+          "name" => "WaterSystems:Electricity",
+          "frequency" => "Hourly"
         }
       ]
     else
-      electnet_facility = output_meters.select { |output_meter| (output_meter["name"].to_s.downcase == "electricitynet:facility") && (output_meter["frequency"].to_s.downcase == "zone timestep") }
+      electnet_facility = output_meters.select { |output_meter| (output_meter["name"].to_s.downcase == "electricitynet:facility") && (output_meter["frequency"].to_s.downcase == "hourly") }
       if electnet_facility.empty?
         output_meters << {
           "name" => "ElectricityNet:Facility",
+          "frequency" => "Hourly"
+        }
+      end
+      heating_elec = output_meters.select { |output_meter| (output_meter["name"].to_s.downcase == "heating:electricity") && (output_meter["frequency"].to_s.downcase == "hourly") }
+      if electnet_facility.empty?
+        output_meters << {
+          "name" => "Heating:Electricity",
+          "frequency" => "Hourly"
+        }
+      end
+      watersys_elec = output_meters.select { |output_meter| (output_meter["name"].to_s.downcase == "watersystems:electricity") && (output_meter["frequency"].to_s.downcase == "hourly") }
+      if electnet_facility.empty?
+        output_meters << {
+          "name" => "WaterSystems:Electricity",
           "frequency" => "Hourly"
         }
       end
