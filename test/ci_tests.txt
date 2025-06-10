@@ -31,6 +31,7 @@ modules/hvac/components/test_coil_heating_water_to_air_heat_pump_equation_fit.rb
 modules/hvac/components/test_coil_heating_water.rb
 modules/hvac/components/test_coil.rb
 modules/hvac/components/test_component.rb
+modules/hvac/components/test_fan.rb
 modules/hvac/components/test_heat_exchanger_air_to_air.rb
 modules/hvac/components/test_pump.rb
 modules/hvac/test_conversions.rb

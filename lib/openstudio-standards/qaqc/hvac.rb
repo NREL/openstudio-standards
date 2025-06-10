@@ -1070,7 +1070,7 @@ module OpenstudioStandards
 
           # get target coefs
           target_fan = OpenStudio::Model::FanVariableVolume.new(model_temp)
-          std.fan_variable_volume_set_control_type(target_fan, 'Multi Zone VAV with VSD and Static Pressure Reset')
+          OpenstudioStandards::HVAC.fan_variable_volume_set_control_type(target_fan, control_type: 'Multi Zone VAV with Static Pressure Setpoint Reset')
 
           # get coeficents for fan
           target_fan_coefs = []
