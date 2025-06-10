@@ -140,7 +140,7 @@
       "refs": [
         "Defined"
       ],
-      "value": "https://raw.githubusercontent.com/canmet-energy/btap_batch/refs/heads/nrcan_459/resources/historic_weather_filenames.json",
+      "value": "https://raw.githubusercontent.com/canmet-energy/btap_batch/refs/heads/dev/resources/historic_weather_filenames.json",
       "units": "",
       "notes": "This is the url of the file containing the list of historic Canadian weather files in the canmet-energy/btap_weather GitHub repository."
     },
@@ -149,7 +149,7 @@
       "refs": [
         "Defined"
       ],
-      "value": "https://raw.githubusercontent.com/canmet-energy/btap_batch/refs/heads/nrcan_459/resources/future_weather_filenames.json",
+      "value": "https://raw.githubusercontent.com/canmet-energy/btap_batch/refs/heads/dev/resources/future_weather_filenames.json",
       "units": "",
       "notes": "This is the url of the file containing the list of future Canadian weather files on Climate.OneBuilding.Org."
     },
