@@ -37,6 +37,7 @@ module OpenstudioStandards
     # @param add_swh [Boolean] Add service water heating supply and demand objects
     # @param add_thermostat [Boolean] Add thermostats to thermal zones based on the standards space type
     # @param add_refrigeration [Boolean] Add refrigerated cases and walkin refrigeration
+    # @param refrigeration_template [String] The refrigeration technology level, either 'old', 'new', or 'advanced'
     # @param modify_wkdy_op_hrs [Boolean] Modify the default weekday hours of operation
     # @param wkdy_op_hrs_start_time [Double] Weekday operating hours start time. Enter as a fractional value, e.g. 5:15pm is 17.25. Only used if modify_wkdy_op_hrs is true.
     # @param wkdy_op_hrs_duration [Double] Weekday operating hours duration from start time. Enter as a fractional value, e.g. 5:15pm is 17.25. Only used if modify_wkdy_op_hrs is true.
@@ -76,6 +77,7 @@ module OpenstudioStandards
                                                 add_swh: true,
                                                 add_thermostat: true,
                                                 add_refrigeration: true,
+                                                refrigeration_template: 'new',
                                                 modify_wkdy_op_hrs: false,
                                                 wkdy_op_hrs_start_time: 8.0,
                                                 wkdy_op_hrs_duration: 8.0,
@@ -456,9 +458,11 @@ module OpenstudioStandards
             ext_light.remove
           end
         end
-
-        exterior_lights = standard.model_add_typical_exterior_lights(model, exterior_lighting_zone.chars[0].to_i, onsite_parking_fraction)
-        exterior_lights.each do |k, v|
+        exterior_lights = OpenstudioStandards::ExteriorLighting.model_create_typical_exterior_lighting(model,
+                                                                                                       lighting_generation: 'default',
+                                                                                                       lighting_zone: exterior_lighting_zone.chars[0].to_i,
+                                                                                                       onsite_parking_fraction: onsite_parking_fraction)
+        exterior_lights.each do |v|
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Adding Exterior Lights named #{v.exteriorLightsDefinition.name} with design level of #{v.exteriorLightsDefinition.designLevel} * #{OpenStudio.toNeatString(v.multiplier, 0, true)}.")
         end
       end
@@ -552,10 +556,14 @@ module OpenstudioStandards
         # remove refrigeration equipment
         if remove_objects
           model.getRefrigerationSystems.each(&:remove)
+          model.getRefrigerationCases.each(&:remove)
+          model.getRefrigerationWalkIns.each(&:remove)
+          model.getRefrigerationCompressorRacks.each(&:remove)
+          model.getRefrigerationCompressors.each(&:remove)
         end
 
         # Add refrigerated cases and walkins
-        standard.model_add_typical_refrigeration(model, primary_bldg_type)
+        OpenstudioStandards::Refrigeration.create_typical_refrigeration(model, template: refrigeration_template)
       end
 
       # @todo add slab modeling and slab insulation

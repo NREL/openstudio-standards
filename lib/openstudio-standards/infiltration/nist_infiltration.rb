@@ -53,7 +53,7 @@ module OpenstudioStandards
         end
       when 'RetailStripmall', 'StripMall', 'Warehouse', 'QuickServiceRestaurant', 'FullServiceRestaurant', 'RtS', 'RSD', 'RFF', 'SCn', 'SUn', 'WRf'
         nist_building_type = 'RetailStripmall'
-      when 'RetailStandalone', 'SuperMarket', 'RtL'
+      when 'RetailStandalone', 'SuperMarket', 'RtL', 'Gro'
         nist_building_type = 'RetailStandalone'
       when 'PrimarySchool', 'EPr'
         nist_building_type = 'PrimarySchool'
@@ -217,6 +217,9 @@ module OpenstudioStandards
 
       # get climate zone number
       climate_zone_number = OpenstudioStandards::Weather.model_get_ashrae_climate_zone_number(model)
+
+      # there is no data for climate zone 0, so use data for climate zone 1
+      climate_zone_number = 1 if climate_zone_number == 0
 
       # get nist building type
       if nist_building_type.nil?
