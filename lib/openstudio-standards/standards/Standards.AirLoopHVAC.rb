@@ -76,10 +76,10 @@ class Standard
           # Part Load Fan Pressure Control
           if plr_req
             vsd_curve_type = air_loop_hvac_set_vsd_curve_type
-            OpenstudioStandards::HVAC.fan_variable_volume_set_control_type(fan, vsd_curve_type)
+            OpenstudioStandards::HVAC.fan_variable_volume_set_control_type(fan, control_type: vsd_curve_type)
           # No Part Load Fan Pressure Control
           else
-            OpenstudioStandards::HVAC.fan_variable_volume_set_control_type(fan, 'Multi Zone VAV with Discharge Dampers')
+            OpenstudioStandards::HVAC.fan_variable_volume_set_control_type(fan, control_type: 'Multi Zone VAV with Discharge Dampers')
           end
         else
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{fan}: This is not a multizone VAV fan system.")
