@@ -55,7 +55,7 @@ module OpenstudioStandards
       end
 
       if exhaust_m3_per_s.zero?
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.HVAC.create_exhaust_fan', "Calculated zero flow rate for thermal zone #{exhaust_zone.name}. No exhaust fan added.")
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.HVAC.create_exhaust_fan', "Calculated zero flow rate for thermal zone #{exhaust_zone.name}. No exhaust fan added.")
         return nil
       end
 
