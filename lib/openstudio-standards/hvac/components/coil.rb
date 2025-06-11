@@ -250,7 +250,7 @@ module OpenstudioStandards
         capacity_w = OpenstudioStandards::HVAC.coil_cooling_dx_multi_speed_get_capacity(clg_coil, multiplier: multiplier)
       elsif clg_coil.to_CoilCoolingWaterToAirHeatPumpEquationFit.is_initialized
         clg_coil = clg_coil.to_CoilCoolingWaterToAirHeatPumpEquationFit.get
-        capacity_w = OpenstudioStandards::HVAC.coil_cooling_water_to_air_heat_pump_find_capacity(clg_coil, multiplier: multiplier)
+        capacity_w = OpenstudioStandards::HVAC.coil_cooling_water_to_air_heat_pump_get_capacity(clg_coil, multiplier: multiplier)
       end
 
       return capacity_w

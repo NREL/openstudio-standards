@@ -17,7 +17,7 @@ class Standard
       heating_type = search_criteria['heating_type']
       sub_category = search_criteria['subcategory']
     end
-    capacity_w = OpenstudioStandards::HVAC.coil_cooling_water_to_air_heat_pump_find_capacity(coil_cooling_water_to_air_heat_pump)
+    capacity_w = OpenstudioStandards::HVAC.coil_cooling_water_to_air_heat_pump_get_capacity(coil_cooling_water_to_air_heat_pump)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
     return nil unless capacity_kbtu_per_hr > 0.0
@@ -99,7 +99,7 @@ class Standard
     # Get the search criteria
     search_criteria = {}
     search_criteria['template'] = template
-    capacity_w = OpenstudioStandards::HVAC.coil_cooling_water_to_air_heat_pump_find_capacity(coil_cooling_water_to_air_heat_pump)
+    capacity_w = OpenstudioStandards::HVAC.coil_cooling_water_to_air_heat_pump_get_capacity(coil_cooling_water_to_air_heat_pump)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
 
     # Look up the efficiency characteristics
