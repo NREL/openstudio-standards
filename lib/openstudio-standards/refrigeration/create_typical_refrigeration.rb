@@ -8,11 +8,11 @@ module OpenstudioStandards
     #
     # @param model [OpenStudio::Model::Model] OpenStudio model object
     # @param template [String] Technology or standards level, either 'old', 'new', or 'advanced'
-    # @param separate_system_size_limit [Float] The area in square feet above which a refrigeration system will be split into multiple systems
+    # @param separate_system_size_limit [Float] The area in square feet above which a refrigeration system will be split into multiple systems. Currently not used.
     # @return [Boolean] returns true if successful, false if not
     def self.create_typical_refrigeration(model,
                                           template: 'new',
-                                          separate_system_size_limit: 20000.0)
+                                          separate_system_size_limit: 0.0)
       # get refrigeration equipment list based on space types and area
       ref_equip_list = OpenstudioStandards::Refrigeration.typical_refrigeration_equipment_list(model)
 
@@ -71,25 +71,26 @@ module OpenstudioStandards
         end
       end
 
-      refrigeration_space_type_area = OpenStudio.convert(model.getBuilding.floorArea, 'm^2', 'ft^2').get
-      if refrigeration_space_type_area < separate_system_size_limit
-        # each case is self-contained
-        medium_temperature_cases.each { |ref_equip| OpenstudioStandards::Refrigeration.create_compressor_rack(model, ref_equip, template: template) }
-        low_temperature_cases.each { |ref_equip| OpenstudioStandards::Refrigeration.create_compressor_rack(model, ref_equip, template: template) }
+      # @todo Disable self-contained refrigeration units until we have efficiency data and cases and walkins can connect to those systems and simulate correctly.
+      # refrigeration_space_type_area = OpenStudio.convert(model.getBuilding.floorArea, 'm^2', 'ft^2').get
+      # if refrigeration_space_type_area < separate_system_size_limit
+      #   # each case is self-contained
+      #   medium_temperature_cases.each { |ref_equip| OpenstudioStandards::Refrigeration.create_compressor_rack(model, ref_equip, template: template) }
+      #   low_temperature_cases.each { |ref_equip| OpenstudioStandards::Refrigeration.create_compressor_rack(model, ref_equip, template: template) }
 
-        # each walkin gets its own refrigeration system
-        medium_temperature_walkins.each { |ref_equip| OpenstudioStandards::Refrigeration.create_refrigeration_system(model, [ref_equip], template: template, operation_type: 'MT') }
-        low_temperature_walkins.each { |ref_equip| OpenstudioStandards::Refrigeration.create_refrigeration_system(model, [ref_equip], template: template, operation_type: 'LT') }
-      else
-        medium_temperature_equip = medium_temperature_cases + medium_temperature_walkins
-        OpenstudioStandards::Refrigeration.create_refrigeration_system(model, medium_temperature_equip,
-                                                                       template: template,
-                                                                       operation_type: 'MT')
-        low_temperature_equip = low_temperature_cases + low_temperature_walkins
-        OpenstudioStandards::Refrigeration.create_refrigeration_system(model, low_temperature_equip,
-                                                                       template: template,
-                                                                       operation_type: 'LT')
-      end
+      #   # each walkin gets its own refrigeration system
+      #   medium_temperature_walkins.each { |ref_equip| OpenstudioStandards::Refrigeration.create_refrigeration_system(model, [ref_equip], template: template, operation_type: 'MT') }
+      #   low_temperature_walkins.each { |ref_equip| OpenstudioStandards::Refrigeration.create_refrigeration_system(model, [ref_equip], template: template, operation_type: 'LT') }
+      # else
+      medium_temperature_equip = medium_temperature_cases + medium_temperature_walkins
+      OpenstudioStandards::Refrigeration.create_refrigeration_system(model, medium_temperature_equip,
+                                                                     template: template,
+                                                                     operation_type: 'MT')
+      low_temperature_equip = low_temperature_cases + low_temperature_walkins
+      OpenstudioStandards::Refrigeration.create_refrigeration_system(model, low_temperature_equip,
+                                                                     template: template,
+                                                                     operation_type: 'LT')
+      #end
 
       return true
     end
