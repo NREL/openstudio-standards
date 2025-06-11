@@ -31,7 +31,7 @@ class Standard
     end
 
     # Get the capacity
-    if ['PTAC', 'PTHP'].include?(equipment_type) || ['PTAC', 'PTHP'].include?(OpenstudioStandards::HVAC.coil_dx_subcategory(coil_cooling_dx_two_speed))
+    if ['PTAC', 'PTHP'].include?(OpenstudioStandards::HVAC.coil_dx_subcategory(coil_cooling_dx_two_speed))
       thermal_zone = OpenstudioStandards::HVAC.hvac_component_get_thermal_zone(coil_cooling_dx_two_speed)
       multiplier = thermal_zone.multiplier if !thermal_zone.nil?
     end
@@ -137,7 +137,7 @@ class Standard
     search_criteria = coil_dx_find_search_criteria(coil_cooling_dx_two_speed)
 
     # Get the capacity
-    if ['PTAC', 'PTHP'].include?(equipment_type) || ['PTAC', 'PTHP'].include?(OpenstudioStandards::HVAC.coil_dx_subcategory(coil_cooling_dx_two_speed))
+    if ['PTAC', 'PTHP'].include?(OpenstudioStandards::HVAC.coil_dx_subcategory(coil_cooling_dx_two_speed))
       thermal_zone = OpenstudioStandards::HVAC.hvac_component_get_thermal_zone(coil_cooling_dx_two_speed)
       multiplier = thermal_zone.multiplier if !thermal_zone.nil?
     end

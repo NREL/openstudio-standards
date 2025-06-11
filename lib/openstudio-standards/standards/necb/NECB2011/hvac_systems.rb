@@ -654,7 +654,7 @@ class NECB2011
     compressor_type = search_criteria['compressor_type']
 
     # Get the chiller capacity
-    capacity_w = OpenstudioStandards::HVAC.chiller_electric_get_find_capacity(chiller_electric_eir)
+    capacity_w = OpenstudioStandards::HVAC.chiller_electric_get_capacity(chiller_electric_eir)
 
     # All chillers must be modulating down to 25% of their capacity
     chiller_electric_eir.setChillerFlowMode('LeavingSetpointModulated')

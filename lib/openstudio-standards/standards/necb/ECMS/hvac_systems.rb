@@ -2513,7 +2513,7 @@ class ECMS
     successfully_set_all_properties = true
 
     # Get the capacity
-    capacity_w = OpenstudioStandards::HVAC.chiller_electric_get_find_capacity(chiller_electric_eir)
+    capacity_w = OpenstudioStandards::HVAC.chiller_electric_get_capacity(chiller_electric_eir)
     capacity_tons = OpenStudio.convert(capacity_w, 'W', 'ton').get
 
     # Lookup performance curves

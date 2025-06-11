@@ -868,7 +868,7 @@ module OpenstudioStandards
           end
 
           # lookup chiller
-          capacity_w = OpenstudioStandards::HVAC.chiller_electric_get_find_capacity(component)
+          capacity_w = OpenstudioStandards::HVAC.chiller_electric_get_capacity(component)
           capacity_tons = OpenStudio.convert(capacity_w, 'W', 'ton').get
           chlr_props = std.model_find_object(std.standards_data['chillers'], search_criteria, capacity_tons, Date.today)
           if chlr_props.nil?

@@ -72,7 +72,7 @@ class Standard
   def chiller_electric_eir_standard_minimum_full_load_efficiency(chiller_electric_eir)
     # Get the chiller properties
     search_criteria = chiller_electric_eir_find_search_criteria(chiller_electric_eir)
-    capacity_w = OpenstudioStandards::HVAC.chiller_electric_get_find_capacity(chiller_electric_eir)
+    capacity_w = OpenstudioStandards::HVAC.chiller_electric_get_capacity(chiller_electric_eir)
     return nil unless capacity_w
 
     capacity_tons = OpenStudio.convert(capacity_w, 'W', 'ton').get
@@ -201,7 +201,7 @@ class Standard
     compliance_path = search_criteria['compliance_path']
 
     # Get the chiller capacity
-    capacity_w = OpenstudioStandards::HVAC.chiller_electric_get_find_capacity(chiller_electric_eir)
+    capacity_w = OpenstudioStandards::HVAC.chiller_electric_get_capacity(chiller_electric_eir)
 
     # Convert capacity to tons
     capacity_tons = OpenStudio.convert(capacity_w, 'W', 'ton').get
