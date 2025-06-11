@@ -85,10 +85,10 @@ module Hospital
 
         # replace main supply air fan
         air_loop.supplyFan.get.remove
-        fan = create_fan_by_name(model,
-                                 'Hospital_CAV_Sytem_Fan',
-                                 fan_name: "#{air_loop.name} Fan",
-                                 end_use_subcategory: 'CAV System Fans')
+        fan = OpenstudioStandards::HVAC.create_typical_fan(model,
+                                                           'Hospital_CAV_Sytem_Fan',
+                                                           fan_name: "#{air_loop.name} Fan",
+                                                           end_use_subcategory: 'CAV System Fans')
         fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
         fan.addToNode(air_loop.supplyOutletNode)
 

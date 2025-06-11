@@ -1368,8 +1368,7 @@ class Standard
     sizing_system.setCentralHeatingDesignSupplyAirTemperature(htg_dsgn_sup_air_temp_c)
 
     # create supply fan
-    supply_fan = OpenstudioStandards::HVAC.create_fan_by_name(model,
-                                                              'Constant_DOAS_Fan',
+    supply_fan = OpenstudioStandards::HVAC.create_typical_fan(model, 'Constant_DOAS_Fan',
                                                               fan_name: 'DOAS Supply Fan',
                                                               end_use_subcategory: 'DOAS Fans')
     supply_fan.setAvailabilitySchedule(model.alwaysOnDiscreteSchedule)
