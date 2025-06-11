@@ -131,14 +131,17 @@ class Standard
       elsif coil_dx_heat_pump?(coil_heating_dx_single_speed)
         search_criteria['equipment_type'] = 'Heat Pumps'
       end
-      # Single Package/Split System is only used for units less than 65 kBtu/h
-      if capacity_btu_per_hr >= 65000
-        search_criteria['rating_condition'] = '47F db/43F wb outdoor air'
-        search_criteria['subcategory'] = nil
-      else
-        electric_power_phase = coil_dx_electric_power_phase(coil_heating_dx_single_speed)
-        if !electric_power_phase.nil?
-          search_criteria['electric_power_phase'] = electric_power_phase
+      unless (template == 'NECB2011') || (template == 'NECB2015') || (template == 'NECB2017') || (template == 'NECB2020') || (template == 'BTAPPRE1980') ||
+        (template == 'BTAP1980TO2010')
+        # Single Package/Split System is only used for units less than 65 kBtu/h
+        if capacity_btu_per_hr >= 65000
+          search_criteria['rating_condition'] = '47F db/43F wb outdoor air'
+          search_criteria['subcategory'] = nil
+        else
+          electric_power_phase = coil_dx_electric_power_phase(coil_heating_dx_single_speed)
+          if !electric_power_phase.nil?
+            search_criteria['electric_power_phase'] = electric_power_phase
+          end
         end
       end
     end
