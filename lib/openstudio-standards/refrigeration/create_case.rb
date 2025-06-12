@@ -96,8 +96,8 @@ module OpenstudioStandards
 
       # Dripdown schedule
       dripdown_sch = OpenStudio::Model::ScheduleRuleset.new(model)
-      dripdown_sch.setName("#{ref_case.name} Defrost")
-      dripdown_sch.defaultDaySchedule.setName("#{ref_case.name} Defrost Default")
+      dripdown_sch.setName("#{ref_case.name} Dripdown")
+      dripdown_sch.defaultDaySchedule.setName("#{ref_case.name} Dripdown Default")
       dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, i, 0, 0), 0)
       dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, i, 59, 0), 1)
       dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0)

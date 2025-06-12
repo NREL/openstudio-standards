@@ -420,9 +420,9 @@ module NecbHelper
       # Close files before assert.
       fe.close
       ft.close
-      expected_results_file_path=Pathname.new(expected_results).cleanpath
-      test_results_file_path=Pathname.new(test_results).cleanpath
-      comp_files_str="  Compare #{expected_results_file_path} with #{test_results_file_path}. File contents differ!"
+      expected_results_file_path = Pathname.new(expected_results_file).cleanpath
+      test_results_file_path = Pathname.new(test_results_file).cleanpath
+      comp_files_str = "Compare #{expected_results_file_path} with #{test_results_file_path}. File contents differ!"
       assert(same, "#{msg} #{self.class.ancestors[0]}.\n#{comp_files_str}\n#{comp_lines_str}")
     end
   end
