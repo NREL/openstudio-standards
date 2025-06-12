@@ -29,7 +29,7 @@ class ASHRAE9012013 < ASHRAE901
       # Moisture regime is not needed for climate zone 8
       climate_zone = climate_zone.split('-')[-1]
       climate_zone = '8' if climate_zone.include?('8')
-      
+
       search_criteria = {
         'template' => template,
         'climate_zone' => climate_zone
@@ -455,6 +455,8 @@ class ASHRAE9012013 < ASHRAE901
     # Moisture regime is not needed for climate zone 8
     climate_zone = climate_zone.split('-')[-1]
     climate_zone = '8' if climate_zone.include?('8')
+    # Default to use values for cooling for climate zones 0, 1, 2, and 3 and heating for all others.
+    design_conditions = climate_zone.match?(/[0123]/) ? 'Cooling' : 'Heating'
 
     # Check annual operating hours
     if ann_op_hrs < 8000.0
@@ -469,7 +471,8 @@ class ASHRAE9012013 < ASHRAE901
     search_criteria = {
       'template' => template,
       'climate_zone' => climate_zone,
-      'under_8000_hours' => under_8000_hours
+      'under_8000_hours' => under_8000_hours,
+      'design_conditions' => design_conditions
     }
     energy_recovery_limits = model_find_object(standards_data['energy_recovery'], search_criteria)
     if energy_recovery_limits.nil?
