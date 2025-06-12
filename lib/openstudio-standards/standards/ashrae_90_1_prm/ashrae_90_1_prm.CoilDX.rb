@@ -30,7 +30,7 @@ module ASHRAEPRMCoilDX
       when 'PTHP'
         sub_category = 'PTHP'
       when 'PTAC'
-        sub_category = 'PTAC'
+        sub_category = nil
       when 'PSZ_HP'
         if capacity < 65000
           sub_category = 'Single Package'
@@ -38,7 +38,7 @@ module ASHRAEPRMCoilDX
           sub_category = 'Split-system and single package'
         end
       else
-        sub_category = 'Split-system and single package'
+        sub_category = 'Single Package'
       end
     end
 
@@ -64,7 +64,13 @@ module ASHRAEPRMCoilDX
     end
 
     if coil_dx.iddObjectType.valueName.to_s != 'OS_Coil_Heating_DX_SingleSpeed'
-      search_criteria['heating_type'] = 'All Other'
+      search_criteria['heating_type'] = 'Any'
+    end
+
+    if sys_type == 'PTAC'
+      search_criteria['equipment_type'] = sys_type
+    elsif sys_type == 'PSZ_AC'
+      search_criteria['equipment_type'] = 'Air Conditioners'
     end
 
     return search_criteria
