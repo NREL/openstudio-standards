@@ -418,7 +418,12 @@ class ASHRAE9012016 < ASHRAE901
     climate_zone = climate_zone.split('-')[-1]
     climate_zone = '8' if climate_zone.include?('8')
     # Default to use values for cooling for climate zones 0, 1, 2, and 3 and heating for all others.
-    design_conditions = climate_zone.match?(/[0123]/) ? 'Cooling' : 'Heating'
+    case climate_zone
+    when '0A', '0B', '1A', '1A', '1B', '2A', '2B', '3A', '3B', '3C'
+      design_conditions = 'Cooling'
+    else
+      design_conditions = 'Heating'
+    end
 
     # Check annual operating hours
     if ann_op_hrs < 8000.0
