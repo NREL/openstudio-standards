@@ -1150,7 +1150,7 @@
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 2500,
         "base_ahu_cost": 166865.08,
-        "revised_base_ahu_cost": 100236.17,
+        "revised_base_ahu_cost": 100236.39,
         "hrv": {},
         "equipment_info": [
           {
@@ -1231,7 +1231,7 @@
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 2500,
         "base_ahu_cost": 166865.08,
-        "revised_base_ahu_cost": 84931.16,
+        "revised_base_ahu_cost": 84931.25,
         "hrv": {},
         "equipment_info": [
           {
@@ -1258,7 +1258,7 @@
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 1000,
         "base_ahu_cost": 73053.44,
-        "revised_base_ahu_cost": 27831.38,
+        "revised_base_ahu_cost": 27831.36,
         "hrv": {},
         "equipment_info": [
           {
@@ -1312,7 +1312,7 @@
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 2500,
         "base_ahu_cost": 166865.08,
-        "revised_base_ahu_cost": 90917.75,
+        "revised_base_ahu_cost": 90917.81,
         "hrv": {},
         "equipment_info": [
           {
@@ -1951,6 +1951,6 @@
     "shw": 70351,
     "ventilation": 4072523,
     "renewables": 0,
-    "grand_total": 6598727
+    "grand_total": 6598728
   }
 }

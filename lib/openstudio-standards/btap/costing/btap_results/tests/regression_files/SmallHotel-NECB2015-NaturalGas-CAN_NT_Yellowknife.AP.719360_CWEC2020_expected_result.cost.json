@@ -1550,7 +1550,7 @@
         "zone_number": 18,
         "zone_name": "DU_BT=Space Function_ST=Guest room_FL=BuildingStory1_SCHF 3",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 1.0,
+        "heat_capacity(kW)": 1.1,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 1652,
         "cool_cost": 0,
@@ -1745,7 +1745,7 @@
         "zone_number": 25,
         "zone_name": "DU_BT=Space Function_ST=Guest room_FL=BuildingStory2_SCHF 5",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 2.2,
+        "heat_capacity(kW)": 2.3,
         "cool_capacity(kW)": 1.7,
         "heat_cost": 0,
         "cool_cost": 1480,
@@ -1760,7 +1760,7 @@
         "zone_number": 25,
         "zone_name": "DU_BT=Space Function_ST=Guest room_FL=BuildingStory2_SCHF 5",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 2.2,
+        "heat_capacity(kW)": 2.3,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 2418,
         "cool_cost": 0,
@@ -2846,14 +2846,14 @@
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 1000,
         "base_ahu_cost": 44333.63,
-        "revised_base_ahu_cost": 36136.31,
+        "revised_base_ahu_cost": 36135.27,
         "hrv": {},
         "equipment_info": [
           {
             "eq_category": "Coil_Cooling_DX_SingleSpeed",
             "heating_fuel": "none",
             "cooling_type": "DX",
-            "total_modeled_capacity_kw": 13.493,
+            "total_modeled_capacity_kw": 13.492,
             "cost": 27704.34
           },
           {
@@ -2869,25 +2869,25 @@
       {
         "sys_type": 1,
         "name": "sys_4|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| 2",
-        "airloop_flow_m3_per_s": 1.807,
+        "airloop_flow_m3_per_s": 1.808,
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 2500,
         "base_ahu_cost": 53187.15,
-        "revised_base_ahu_cost": 38436.73,
+        "revised_base_ahu_cost": 38468.77,
         "hrv": {},
         "equipment_info": [
           {
             "eq_category": "Coil_Cooling_DX_SingleSpeed",
             "heating_fuel": "none",
             "cooling_type": "DX",
-            "total_modeled_capacity_kw": 29.907,
+            "total_modeled_capacity_kw": 29.932,
             "cost": 35599.96
           },
           {
             "eq_category": "Coil_Heating_Gas",
             "heating_fuel": "Gas",
             "cooling_type": "none",
-            "total_modeled_capacity_kw": 59.545,
+            "total_modeled_capacity_kw": 59.583,
             "cost": 20408.83
           }
         ],
@@ -2988,7 +2988,7 @@
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 1000,
         "base_ahu_cost": 23535.19,
-        "revised_base_ahu_cost": 8340.95,
+        "revised_base_ahu_cost": 8342.13,
         "hrv": {},
         "equipment_info": [
           {
@@ -3002,7 +3002,7 @@
             "eq_category": "Coil_Heating_Water",
             "heating_fuel": "HW",
             "cooling_type": "none",
-            "total_modeled_capacity_kw": 6.667,
+            "total_modeled_capacity_kw": 6.668,
             "cost": 3498.23
           }
         ],
@@ -3069,7 +3069,7 @@
         {
           "Floor": "BuildingStory2",
           "Predominant_space_type": "Guest room",
-          "SupplyDuctSize_in": 15.1,
+          "SupplyDuctSize_in": 15.11,
           "SupplyDuctLength_m": 55.8,
           "ReturnDuctSize_in": 0,
           "ReturnDuctLength_m": 0,
@@ -3299,7 +3299,7 @@
               "ThermalZone": "WILD_ST=Corridor/Transition area other-sch-F_FL=BuildingStory1_SCH=F 1",
               "ducting_direction": "Supply",
               "tz_mult": 1.0,
-              "airflow_m3ps": 0.173,
+              "airflow_m3ps": 0.174,
               "num_diff": 3,
               "ducting_lbs": 125,
               "duct_insulation_ft2": 96,
@@ -3544,7 +3544,7 @@
               "ThermalZone": "WILD_ST=Corridor/Transition area other-sch-F_FL=BuildingStory2_SCH=F",
               "ducting_direction": "Supply",
               "tz_mult": 1.0,
-              "airflow_m3ps": 0.094,
+              "airflow_m3ps": 0.095,
               "num_diff": 3,
               "ducting_lbs": 125,
               "duct_insulation_ft2": 96,
@@ -4017,8 +4017,8 @@
     "lighting": 485538,
     "heating_and_cooling": 822656,
     "shw": 64703,
-    "ventilation": 1009182,
+    "ventilation": 1009215,
     "renewables": 0,
-    "grand_total": 4706076
+    "grand_total": 4706108
   }
 }

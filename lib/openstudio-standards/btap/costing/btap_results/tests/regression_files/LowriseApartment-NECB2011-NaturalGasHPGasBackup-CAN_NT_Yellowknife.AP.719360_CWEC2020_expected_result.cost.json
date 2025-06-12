@@ -839,14 +839,14 @@
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 4000,
         "base_ahu_cost": 53283.09,
-        "revised_base_ahu_cost": 52724.17,
+        "revised_base_ahu_cost": 52725.85,
         "hrv": {},
         "equipment_info": [
           {
             "eq_category": "Coil_Heating_DX_SingleSpeed",
             "heating_fuel": "HP",
             "cooling_type": "HP",
-            "total_modeled_capacity_kw": 65.52,
+            "total_modeled_capacity_kw": 65.522,
             "cost": 150747.42
           }
         ],
@@ -1112,21 +1112,21 @@
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 1000,
         "base_ahu_cost": 72527.97,
-        "revised_base_ahu_cost": 30188.96,
+        "revised_base_ahu_cost": 30199.88,
         "hrv": {},
         "equipment_info": [
           {
             "eq_category": "Coil_Heating_DX_SingleSpeed",
             "heating_fuel": "HP",
             "cooling_type": "HP",
-            "total_modeled_capacity_kw": 6.89,
+            "total_modeled_capacity_kw": 6.893,
             "cost": 10671.15
           },
           {
             "eq_category": "Coil_Heating_Gas",
             "heating_fuel": "Gas",
             "cooling_type": "none",
-            "total_modeled_capacity_kw": 13.631,
+            "total_modeled_capacity_kw": 13.634,
             "cost": 555.61
           }
         ],
@@ -1486,8 +1486,8 @@
     "lighting": 142672,
     "heating_and_cooling": 250837,
     "shw": 19232,
-    "ventilation": 393235,
+    "ventilation": 393247,
     "renewables": 0,
-    "grand_total": 1927031
+    "grand_total": 1927043
   }
 }

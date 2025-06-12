@@ -2005,7 +2005,7 @@
         "zone_number": 16,
         "zone_name": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 1_SCHG 7",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 3.0,
+        "heat_capacity(kW)": 2.9,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 2928,
         "cool_cost": 0,
@@ -4045,7 +4045,7 @@
         "zone_number": 88,
         "zone_name": "WILD_ST=Corr. < 2.4m wide-sch-G_FL=Building Story 7_SCH=G",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 1.8,
+        "heat_capacity(kW)": 1.7,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 2162,
         "cool_cost": 0,
@@ -4151,7 +4151,7 @@
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 1500,
         "base_ahu_cost": 44333.63,
-        "revised_base_ahu_cost": 35141.66,
+        "revised_base_ahu_cost": 35141.34,
         "hrv": {},
         "equipment_info": [
           {
@@ -4165,7 +4165,7 @@
             "eq_category": "Coil_Heating_Gas",
             "heating_fuel": "Gas",
             "cooling_type": "none",
-            "total_modeled_capacity_kw": 44.056,
+            "total_modeled_capacity_kw": 44.055,
             "cost": 4850.05
           }
         ],
@@ -6183,7 +6183,7 @@
     "lighting": 634091,
     "heating_and_cooling": 1137028,
     "shw": 95711,
-    "ventilation": 695067,
+    "ventilation": 695066,
     "renewables": 0,
     "grand_total": 6625365
   }

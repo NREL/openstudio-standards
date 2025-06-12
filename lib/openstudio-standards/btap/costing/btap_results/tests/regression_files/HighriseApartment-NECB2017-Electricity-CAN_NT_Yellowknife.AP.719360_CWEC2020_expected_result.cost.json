@@ -3100,7 +3100,7 @@
         "zone_number": 53,
         "zone_name": "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 6_SCHG 4",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 2.3,
+        "heat_capacity(kW)": 2.4,
         "cool_capacity(kW)": 3.3,
         "heat_cost": 0,
         "cool_cost": 2445,
@@ -3460,7 +3460,7 @@
         "zone_number": 65,
         "zone_name": "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 8_SCHG",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 1.5,
+        "heat_capacity(kW)": 1.4,
         "cool_capacity(kW)": 2.6,
         "heat_cost": 0,
         "cool_cost": 5831,
@@ -3475,7 +3475,7 @@
         "zone_number": 65,
         "zone_name": "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 8_SCHG",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 1.5,
+        "heat_capacity(kW)": 1.4,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 1014,
         "cool_cost": 0,
@@ -3520,7 +3520,7 @@
         "zone_number": 67,
         "zone_name": "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 8_SCHG 2",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 1.5,
+        "heat_capacity(kW)": 1.4,
         "cool_capacity(kW)": 2.6,
         "heat_cost": 0,
         "cool_cost": 5831,
@@ -3535,7 +3535,7 @@
         "zone_number": 67,
         "zone_name": "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 8_SCHG 2",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 1.5,
+        "heat_capacity(kW)": 1.4,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 1014,
         "cool_cost": 0,
@@ -4077,13 +4077,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 1.9,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 1055,
+        "heat_cost": 1056,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
         "wiring_cost": 261,
-        "num_units": 2.081005728818516,
-        "cummultive_zonal_cost": 610599
+        "num_units": 2.0825951234542113,
+        "cummultive_zonal_cost": 610600
       }
     ]
   },
@@ -4151,7 +4151,7 @@
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 1500,
         "base_ahu_cost": 38231.77,
-        "revised_base_ahu_cost": 27785.63,
+        "revised_base_ahu_cost": 27787.3,
         "hrv": {
           "hrv_type": "HeatExchanger_AirToAir_SensibleAndLatent",
           "hrv_name": "sys_4|mixed|shr>none|sc>dx|sh>c-e|ssf>cv|zh>b-e|zc>none|srf>none| ERV",
@@ -4165,14 +4165,14 @@
             "eq_category": "Coil_Cooling_DX_SingleSpeed",
             "heating_fuel": "none",
             "cooling_type": "DX",
-            "total_modeled_capacity_kw": 18.046,
+            "total_modeled_capacity_kw": 18.047,
             "cost": 43464.83
           },
           {
             "eq_category": "Coil_Heating_Electric",
             "heating_fuel": "elec",
             "cooling_type": "none",
-            "total_modeled_capacity_kw": 41.555,
+            "total_modeled_capacity_kw": 41.556,
             "cost": 21279.94
           }
         ],
@@ -6265,10 +6265,10 @@
     "envelope": 3959204,
     "thermal_bridging": 0,
     "lighting": 634091,
-    "heating_and_cooling": 610599,
+    "heating_and_cooling": 610600,
     "shw": 212725,
-    "ventilation": 662223,
+    "ventilation": 662224,
     "renewables": 0,
-    "grand_total": 6078842
+    "grand_total": 6078844
   }
 }
