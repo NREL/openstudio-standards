@@ -317,7 +317,7 @@ class BtapResults_Test < Minitest::Test
     regression_files_folder = "#{File.dirname(__FILE__)}/regression_files"
     expected_result_filename = "#{regression_files_folder}/#{model_name}_expected_result.cost.json"
     test_result_filename = "#{regression_files_folder}/#{model_name}_test_result.cost.json"
-    FileUtils.rm(test_result_filename) if File.exists?(test_result_filename)
+    FileUtils.rm(test_result_filename) if File.exist?(test_result_filename)
     FileUtils.cp(cost_result_json_path, test_result_filename)
     puts "Saved cost results here #{test_result_filename}"
 
