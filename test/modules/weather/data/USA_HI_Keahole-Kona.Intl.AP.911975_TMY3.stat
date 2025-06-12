@@ -1,7 +1,7 @@
  -EnergyPlus Weather Converter V7.2.0.007
  Statistics for USA_HI_Keahole-Kona.Intl.AP.911975_TMY3
  Location -- Kona Intl At Keahol HI USA  
-      {N 19° 43'} {W 156°  3'} {GMT -10.0 Hours}
+      {N 19Â° 43'} {W 156Â°  3'} {GMT -10.0 Hours}
  Elevation --    15m above sea level
  Standard Pressure at Elevation -- 101145Pa
  Data Source -- TMY3
@@ -14,15 +14,15 @@
  - for use in heating/cooling load calculations.
 
     	Design Stat	ColdestMonth	DB996	DB990	DP996	HR_DP996	DB_DP996	DP990	HR_DP990	DB_DP990	WS004c	DB_WS004c	WS010c	DB_WS010c	WS_DB996	WD_DB996	
-    	Units	{}	{°C}	{°C}	{°C}	{}	{°C}	{°C}	{}	{°C}	{m/s}	{°C}	{m/s}	{°C}	{m/s}	{deg}	
+    	Units	{}	{Â°C}	{Â°C}	{Â°C}	{}	{Â°C}	{Â°C}	{}	{Â°C}	{m/s}	{Â°C}	{m/s}	{Â°C}	{m/s}	{deg}	
     	Heating	2	18.7	19.5	11.2	8.3	22	12.4	9	22.4	13.5	25.7	11.8	25.2	2.9	80
 
     	Design Stat	HottestMonth	DBR	DB004	WB_DB004	DB010	WB_DB010	DB020	WB_DB020	WB004	DB_WB004	WB010	DB_WB010	WB020	DB_WB020	WS_DB004	WD_DB004	DP004	HR_DP004	DB_DP004	DP010	HR_DP010	DB_DP010	DP020	HR_DP020	DB_DP020	EN004	DB_EN004	EN010	DB_EN010	EN020	DB_EN020	#Hrs_8-4_&_DB-12.8/20.6	
-    	Units	{}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{m/s}	{deg}	{°C}	{}	{°C}	{°C}	{}	{°C}	{°C}	{}	{°C}	{kJ/kg}	{°C}	{kJ/kg}	{°C}	{kJ/kg}	{°C}	{}	
+    	Units	{}	{Â°C}	{Â°C}	{Â°C}	{Â°C}	{Â°C}	{Â°C}	{Â°C}	{Â°C}	{Â°C}	{Â°C}	{Â°C}	{Â°C}	{Â°C}	{m/s}	{deg}	{Â°C}	{}	{Â°C}	{Â°C}	{}	{Â°C}	{Â°C}	{}	{Â°C}	{kJ/kg}	{Â°C}	{kJ/kg}	{Â°C}	{kJ/kg}	{Â°C}	{}	
     	Cooling	8	5.8	31.2	24.3	30.3	24	29.9	24	25.2	29.3	24.8	28.9	24.5	28.6	5.7	210	23.9	18.7	28	23	17.8	27.6	22.9	17.6	27.5	76.7	29.4	75.3	29	74.1	28.5	9
 
     	Design Stat	WS010	WS025	WS050	WBmax	DBmin_mean	DBmax_mean	DBmin_stddev	DBmax_stddev	DBmin05years	DBmax05years	DBmin10years	DBmax10years	DBmin20years	DBmax20years	DBmin50years	DBmax50years
-    	Units	{m/s}	{m/s}	{m/s}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}	{°C}
+    	Units	{m/s}	{m/s}	{m/s}	{Â°C}	{Â°C}	{Â°C}	{Â°C}	{Â°C}	{Â°C}	{Â°C}	{Â°C}	{Â°C}	{Â°C}	{Â°C}	{Â°C}	{Â°C}
     	Extremes	8.9	7.5	6.6	26.7	14.4	32.2	4.5	1	11.2	32.9	8.6	33.5	6	34	2.8	34.7
 
  - Displaying Monthly Design Conditions "Climate Design Data 2009 ASHRAE Handbook"
@@ -34,14 +34,14 @@
  	                    taub	= Clear Sky Optical Depth for Beam Irradiance
  	                    taud	= Clear Sky Optical Depth for Diffuse Irradiance
 
- - Monthly Solar Irradiance Wh/m² (noon on 21st of month)
+ - Monthly Solar Irradiance Wh/mÂ² (noon on 21st of month)
  	               ib (beam)	  932	  925	  912	  878	  874	  878	  882	  890	  906	  892	  887	  900	
  	            id (diffuse)	   83	  103	  119	  143	  132	  121	  116	  113	  101	  106	   99	   93	
 
  	                      ib	= Clear Sky Noon Beam Normal Irradiance on 21st Day
  	                      id	= Clear Sky Noon Diffuse Horizontal Irradiance on 21st Day
 
- - Monthly Drybulb and Mean Coincident Wetbulb Temperatures °C
+ - Monthly Drybulb and Mean Coincident Wetbulb Temperatures Â°C
  	                        	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
  	            Drybulb 0.4%	 28.1	 28.5	 28.9	 29.3	 29.2	 30.5	 31.3	 32.0	 32.0	 31.3	 29.8	 28.9	
  	 Coincident Wetbulb 0.4%	 21.1	 22.0	 21.1	 22.6	 23.5	 23.6	 24.5	 25.3	 24.5	 24.4	 22.4	 20.9	
@@ -61,7 +61,7 @@
  	            Drybulb 10.%	= 10.% Monthly Design Drybulb Temperature
  	 Coincident Wetbulb 10.%	= 10.% Monthly Mean Coincident Wetbulb Temperature
 
- - Monthly Drybulb and Wetbulb Daily Ranges delta°C
+ - Monthly Drybulb and Wetbulb Daily Ranges deltaÂ°C
  	                        	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
  	                 Drybulb	  6.6	  6.7	  6.3	  6.0	  5.7	  5.7	  5.7	  5.8	  6.0	  6.1	  6.1	  6.4	
  	   Drybulb range - DB 5%	  6.9	  7.0	  6.6	  6.6	  6.2	  6.5	  6.3	  6.5	  6.6	  6.8	  6.7	  6.9	
@@ -74,22 +74,22 @@
  - Displaying Heating/Cooling Degree Days/Hours from "Climate Design Data 2009 ASHRAE Handbook"
  - Monthly Standard Heating/Cooling Degree Days/Hours
  	                    	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
- 	       HDD base 10°C	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
- 	     HDD base 18.3°C	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
+ 	       HDD base 10Â°C	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
+ 	     HDD base 18.3Â°C	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
 
- 	       CDD base 10°C	  424	  382	  442	  447	  478	  479	  514	  536	  509	  510	  462	  444	
- 	     CDD base 18.3°C	  166	  148	  184	  197	  220	  229	  256	  278	  259	  252	  212	  186	
+ 	       CDD base 10Â°C	  424	  382	  442	  447	  478	  479	  514	  536	  509	  510	  462	  444	
+ 	     CDD base 18.3Â°C	  166	  148	  184	  197	  220	  229	  256	  278	  259	  252	  212	  186	
 
- 	     CDH base 23.3°C	  903	  796	 1074	 1328	 1724	 2067	 2560	 2949	 2694	 2433	 1691	 1144	
- 	     CDH base 26.7°C	   60	   52	   92	  163	  256	  398	  606	  842	  739	  602	  283	  113	
+ 	     CDH base 23.3Â°C	  903	  796	 1074	 1328	 1724	 2067	 2560	 2949	 2694	 2433	 1691	 1144	
+ 	     CDH base 26.7Â°C	   60	   52	   92	  163	  256	  398	  606	  842	  739	  602	  283	  113	
 
-    - 5628 annual (standard) cooling degree-days (10°C baseline)
-    -    0 annual (standard) heating degree-days (10°C baseline)
+    - 5628 annual (standard) cooling degree-days (10Â°C baseline)
+    -    0 annual (standard) heating degree-days (10Â°C baseline)
 
-    - 2586 annual (standard) cooling degree-days (18.3°C baseline)
-    -    0 annual (standard) heating degree-days (18.3°C baseline)
+    - 2586 annual (standard) cooling degree-days (18.3Â°C baseline)
+    -    0 annual (standard) heating degree-days (18.3Â°C baseline)
 
- - Monthly Statistics for Dry Bulb temperatures °C
+ - Monthly Statistics for Dry Bulb temperatures Â°C
  	           	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
  	Maximum 	 30.6	 28.0	 31.0	 30.0	 29.0	 30.0	 29.4	 30.0	 31.1	 29.4	 29.4	 28.0	
  	 Day:Hour	 7:12	 5:13	23:16	20:12	21:12	 3:14	 9:14	 2:15	19:12	 2:13	 1:14	 5:14	
@@ -99,17 +99,17 @@
 
  	Daily Avg	23.3 	23.3 	23.9 	24.4 	25.3 	25.6 	26.2 	26.3 	26.9 	25.9 	24.7 	24.1 	
 
-   - Maximum Dry Bulb temperature of  31.1°C on Sep 19
-   - Minimum Dry Bulb temperature of  16.0°C on Feb  6
+   - Maximum Dry Bulb temperature of  31.1Â°C on Sep 19
+   - Minimum Dry Bulb temperature of  16.0Â°C on Feb  6
 
- - Monthly Statistics for Extreme Dry Bulb temperatures °C
+ - Monthly Statistics for Extreme Dry Bulb temperatures Â°C
  	  #Days  	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
  	Max >= 32	     	     	     	     	     	     	     	     	     	     	     	     	
  	Max <=  0	     	     	     	     	     	     	     	     	     	     	     	     	
  	Min <=  0	     	     	     	     	     	     	     	     	     	     	     	     	
  	Min <=-18	     	     	     	     	     	     	     	     	     	     	     	     	
 
- - Monthly Statistics for Dew Point temperatures °C
+ - Monthly Statistics for Dew Point temperatures Â°C
  	           	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
  	Maximum 	23.0 	21.0 	21.0 	22.0 	22.0 	24.0 	24.0 	24.0 	24.0 	24.0 	23.0 	20.0 	
  	 Day:Hour	15:19	 4:15	28:12	 9:19	18:07	20:15	11:17	31:09	27:22	 1:12	 1:17	10:13	
@@ -119,10 +119,10 @@
 
  	Daily Avg	18.3 	15.6 	17.3 	18.8 	18.3 	20.9 	20.7 	19.5 	20.4 	20.4 	18.5 	17.0 	
 
-   - Maximum Dew Point temperature of  24.0°C on Jun 20
-   - Minimum Dew Point temperature of  -2.0°C on Dec 18
+   - Maximum Dew Point temperature of  24.0Â°C on Jun 20
+   - Minimum Dew Point temperature of  -2.0Â°C on Dec 18
 
- - Average Hourly Statistics for Dry Bulb temperatures °C
+ - Average Hourly Statistics for Dry Bulb temperatures Â°C
  	           	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
  	 0:01- 1:00	 21.4	 21.1	 22.3	 22.7	 23.8	 24.1	 25.0	 25.0	 25.6	 24.3	 23.3	 22.5	
  	 1:01- 2:00	 21.1	 21.0	 22.0	 22.4	 23.6	 23.7	 24.7	 24.7	 25.2	 24.0	 23.0	 22.4	
@@ -151,7 +151,7 @@
  	 Max Hour  	  14 	  14 	  14 	  14 	  14 	  14 	  15 	  14 	  14 	  14 	  13 	  14 	
  	 Min Hour  	   6 	   7 	   6 	   6 	   6 	   6 	   6 	   6 	   6 	   6 	   7 	   7 	
 
- - Average Hourly Statistics for Dew Point temperatures °C
+ - Average Hourly Statistics for Dew Point temperatures Â°C
  	           	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
  	 0:01- 1:00	 18.0	 15.0	 16.5	 18.7	 17.4	 20.1	 20.2	 18.6	 20.0	 19.6	 18.2	 16.1	
  	 1:01- 2:00	 17.5	 14.8	 16.4	 18.6	 17.5	 20.4	 20.0	 18.5	 20.1	 19.6	 18.0	 15.6	
@@ -223,7 +223,7 @@
  	           	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
  	         	  2.2	  1.9	  2.1	  2.3	  2.2	  2.6	  2.6	  2.4	  2.6	  2.6	  2.3	  2.1	
 
- - Monthly Statistics for Wind Chill/Heat Index temperatures °C **
+ - Monthly Statistics for Wind Chill/Heat Index temperatures Â°C **
  	           	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
  	Minimum WC	     	     	     	     	     	     	     	     	     	     	     	     	
  	 Day:Hour	     	     	     	     	     	     	     	     	     	     	     	     	
@@ -294,7 +294,7 @@
  	 Max Hour  	  14 	  14 	  15 	  13 	  14 	  13 	  14 	  14 	  13 	  14 	  13 	  14 	
  	 Min Hour  	   9 	   9 	   5 	   3 	   5 	   6 	   7 	   7 	   6 	   8 	   8 	   9 	
 
- - Average Hourly Statistics for Wind Direction ° {N=0 or 360,E=90,S=180,W=270}
+ - Average Hourly Statistics for Wind Direction Â° {N=0 or 360,E=90,S=180,W=270}
  	           	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
  	 0:01- 1:00	  123	   88	  105	  167	  127	  158	  150	  136	  134	  135	  125	  100	
  	 1:01- 2:00	  120	   79	   84	  144	  126	  141	  136	  131	  130	  119	  132	  103	
@@ -332,7 +332,7 @@
  	           	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
  	Average 	0.130	0.120	0.120	0.110	0.110	0.110	0.110	0.110	0.100	0.110	0.130	0.130	
 
- - Monthly Statistics for Solar Radiation  (Direct Normal, Diffuse, Global Horizontal) Wh/m²
+ - Monthly Statistics for Solar Radiation  (Direct Normal, Diffuse, Global Horizontal) Wh/mÂ²
  	           	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
  	Direct Avg 	4111 	4900 	4133 	4222 	4262 	4390 	3900 	4987 	4207 	4659 	3936 	4107 	
 
@@ -342,9 +342,9 @@
  	Diffuse Avg	1691 	2104 	2693 	2708 	2906 	2703 	2788 	2289 	2257 	1916 	1766 	1673 	
 
  	Global Avg 	4024 	5265 	5543 	5871 	6193 	6002 	5747 	5970 	5299 	4987 	4139 	3923 	
-   - Maximum Direct Normal Solar of  8345 Wh/m² on Aug 19
+   - Maximum Direct Normal Solar of  8345 Wh/mÂ² on Aug 19
 
- - Average Hourly Statistics for Direct Normal Solar Radiation Wh/m²
+ - Average Hourly Statistics for Direct Normal Solar Radiation Wh/mÂ²
  	           	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
  	 0:01- 1:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
  	 1:01- 2:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
@@ -373,7 +373,7 @@
  	 Max Hour*	  11*	  11*	  10*	  11*	  11*	  12 	  12 	  12 	  12 	  11*	  11*	  12 	
  	 Min Hour  	   1 	   1 	   1 	   1 	   1 	   1 	   1 	   1 	   1 	   1 	   1 	   1 	
 
- - Average Hourly Statistics for Diffuse Horizontal Solar Radiation Wh/m²
+ - Average Hourly Statistics for Diffuse Horizontal Solar Radiation Wh/mÂ²
  	           	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
  	 0:01- 1:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
  	 1:01- 2:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
@@ -402,7 +402,7 @@
  	 Max Hour  	  13 	  14 	  14 	  14 	  14 	  13 	  13 	  15 	  14 	  14 	  14 	  13 	
  	 Min Hour  	   1 	   1 	   1 	   1 	   1 	   1 	   1 	   1 	   1 	   1 	   1 	   1 	
 
- - Average Hourly Statistics for Global Horizontal Solar Radiation Wh/m²
+ - Average Hourly Statistics for Global Horizontal Solar Radiation Wh/mÂ²
  	           	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
  	 0:01- 1:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
  	 1:01- 2:00	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	    0	
@@ -489,7 +489,7 @@
  	 Max Hour  	  16 	  19 	  19 	  16 	  24 	  16 	  20 	  18 	  17 	  19 	  17 	  19 	
  	 Min Hour  	   4 	   1 	  10 	   5 	  10 	   5 	   4 	   9 	   6 	   6 	   6 	   5 	
 
- - Monthly Calculated "undisturbed" Ground Temperatures** °C
+ - Monthly Calculated "undisturbed" Ground Temperatures** Â°C
  	           	Jan	Feb	Mar	Apr	May	Jun	Jul	Aug	Sep	Oct	Nov	Dec	
  	   0.5 m  	 24.1	 23.5	 23.4	 23.5	 24.2	 25.1	 25.9	 26.4	 26.6	 26.3	 25.7	 24.9	
  	   2.0 m  	 24.6	 24.0	 23.8	 23.8	 24.2	 24.8	 25.4	 25.9	 26.2	 26.1	 25.8	 25.2	
@@ -514,30 +514,30 @@
  	CDH base 23C	  987	  824	  992	 1314	 1717	 1931	 2369	 2491	 2791	 2187	 1385	 1082	
  	CDH base 27C	   37	   12	   21	   89	   91	  191	  238	  331	  495	  251	   43	    7	
 
-    - 5473 annual (wthr file) cooling degree-days (10°C baseline)
-    -    0 annual (wthr file) heating degree-days (10°C baseline)
+    - 5473 annual (wthr file) cooling degree-days (10Â°C baseline)
+    -    0 annual (wthr file) heating degree-days (10Â°C baseline)
 
-    - 2553 annual (wthr file) cooling degree-days (18°C baseline)
-    -    0 annual (wthr file) heating degree-days (18°C baseline)
+    - 2553 annual (wthr file) cooling degree-days (18Â°C baseline)
+    -    0 annual (wthr file) heating degree-days (18Â°C baseline)
 
- - Climate type "Aw" (Köppen classification)**
- - Tropical savanna (pronounced wet & dry seasons, lat. 15-20°)
+ - Climate type "Aw" (KÃ¶ppen classification)**
+ - Tropical savanna (pronounced wet & dry seasons, lat. 15-20Â°)
  - Unbearably humid periods in summer, but passive cooling is possible
  - Heating may not be required
- - **Note that the Köppen classification shown here is derived algorithmically from the source weather data.
+ - **Note that the KÃ¶ppen classification shown here is derived algorithmically from the source weather data.
  -   It may not be indicative of the long term climate for this location.
 
  - Climate type "1A" (ASHRAE Standard 196-2006 Climate Zone)**
- - Very Hot - Humid, Probable Köppen classification=Aw, Tropical Wet-and-Dry
+ - Very Hot - Humid, Probable KÃ¶ppen classification=Aw, Tropical Wet-and-Dry
  - **Note that the ASHRAE classification shown here is derived algorithmically from the source weather data.
  -   It may not be indicative of the long term climate for this location.
 
  - Typical/Extreme Period Determination
  - No discernible dry period.....
      Week closest to average annual temperature selected for Typical Period
-     Typical Week Period selected: Apr 30:May  6, Average Temp=  25.00°C, Deviation=| 0.043|°C
+     Typical Week Period selected: Apr 30:May  6, Average Temp=  25.00Â°C, Deviation=| 0.043|Â°C
  - Extremes Selected from annual Min/Max
      Week closest to maximum annual temperature selected for Typical Period
-     Extreme Hot Week Period selected: Sep  3:Sep  9, Maximum Temp=  31.10°C, Deviation=| 3.989|°C
+     Extreme Hot Week Period selected: Sep  3:Sep  9, Maximum Temp=  31.10Â°C, Deviation=| 3.989|Â°C
      Week closest to minimum annual temperature selected for Typical Period
-     Extreme Cold Week Period selected: Jan 29:Feb  4, Minimum Temp=  16.00°C, Deviation=| 6.330|°C
+     Extreme Cold Week Period selected: Jan 29:Feb  4, Minimum Temp=  16.00Â°C, Deviation=| 6.330|Â°C
