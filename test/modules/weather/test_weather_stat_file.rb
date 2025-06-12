@@ -42,4 +42,11 @@ class TestWeatherStatFile < Minitest::Test
     assert(File.exist?(stat_file_path))
     stat_file = OpenstudioStandards::Weather::StatFile.new(stat_file_path)
   end
+
+  def test_load_stat_file_no_dry_period
+    model = OpenStudio::Model::Model.new
+    stat_file_path = File.join(File.dirname(__FILE__),'data','USA_HI_Keahole-Kona.Intl.AP.911975_TMY3.stat')
+    assert(File.exist?(stat_file_path))
+    stat_file = OpenstudioStandards::Weather::StatFile.new(stat_file_path)
+  end
 end
