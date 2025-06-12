@@ -342,7 +342,9 @@ module OpenstudioStandards
         # week periods
         regex = /Typical Week Period selected:(.*?)C/
         match_data = @text.scan(regex)
-        if match_data.nil? || match_data.empty?
+        if @text.include?('No discernible dry period')
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Weather.stat_file', "Can't find typical weather weeks in the .stat file because it has no discernible dry period .")
+        elsif match_data.nil? || match_data.size < 2
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.Weather.stat_file', "Can't find typical weather weeks in the .stat file.")
         else
           @typical_summer_wet_week = Date.parse("#{match_data[0][0].split(':')[0]} 2000")
