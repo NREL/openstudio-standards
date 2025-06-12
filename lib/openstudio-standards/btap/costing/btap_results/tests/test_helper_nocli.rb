@@ -1,4 +1,4 @@
-require '/usr/local/openstudio-3.7.0/Ruby/openstudio'
+require 'openstudio'
 require 'openstudio-standards'
 require 'openstudio/ruleset/ShowRunnerOutput'
 require 'optparse'
