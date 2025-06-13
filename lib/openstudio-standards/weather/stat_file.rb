@@ -212,7 +212,7 @@ module OpenstudioStandards
 
           # check info size
           if match_info_raw.size != temp_info[:size]
-            OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Weather.StatFile', "Expected to find #{temp_info[:size]} #{temp_info[:name]} but found #{match_info_raw.size}. Check data source.")
+            OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Weather.StatFile', "Expected to find #{temp_info[:size]} #{temp_info[:name]} but found #{match_info_raw.size}. Check data source.")
           end
 
           match_info_raw.each do |val|
