@@ -172,8 +172,8 @@ module OpenstudioStandards
 
       if !multiplier.nil? && multiplier > 1
         total_cap = capacity_w
-        capacity_w /= mult
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.HVAC.coil_cooling_water_to_air_heat_pump', "For #{coil_cooling_dx_twcoil_cooling_water_to_air_heat_pumpo_speed.name}, total capacity of #{OpenStudio.convert(total_cap, 'W', 'kBtu/hr').get.round(2)}kBTU/hr was divided by the zone multiplier of #{mult} to give #{capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get.round(2)}kBTU/hr.")
+        capacity_w /= multiplier
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.HVAC.coil_cooling_water_to_air_heat_pump', "For #{coil_cooling_dx_twcoil_cooling_water_to_air_heat_pumpo_speed.name}, total capacity of #{OpenStudio.convert(total_cap, 'W', 'kBtu/hr').get.round(2)}kBTU/hr was divided by the zone multiplier of #{multiplier} to give #{capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get.round(2)}kBTU/hr.")
       end
 
       return capacity_w

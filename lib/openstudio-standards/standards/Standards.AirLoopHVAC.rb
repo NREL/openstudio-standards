@@ -211,7 +211,7 @@ class Standard
       air_loop_hvac_supply_return_exhaust_relief_fans(air_loop_hvac).each do |fan|
         if fan.to_FanVariableVolume.is_initialized
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}: Setting fan part load curve per G3.1.3.15.")
-          OpenstudioStandards::HVAC.fan_variable_volume_set_control_type(fan, 'Multi Zone VAV with Fixed Static Pressure Setpoint')
+          OpenstudioStandards::HVAC.fan_variable_volume_set_control_type(fan, control_type: 'Multi Zone VAV with Fixed Static Pressure Setpoint')
         end
       end
 
