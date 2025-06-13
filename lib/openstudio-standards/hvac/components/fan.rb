@@ -222,7 +222,7 @@ module OpenstudioStandards
     #
     # @param fan_variable_volume [OpenStudio::Model::FanVariableVolume] variable volume fan object
     # @param control_type [String] valid choices are:
-    #   Single Zone VAV Fan
+    #   Single Zone VAV
     #   Multi Zone VAV with Fixed Static Pressure Setpoint
     #   Multi Zone VAV with Static Pressure Setpoint Reset
     #   Multi Zone VAV with Discharge Dampers
@@ -234,7 +234,7 @@ module OpenstudioStandards
     # @return [Boolean] returns true if successful, false if not
     def self.fan_variable_volume_set_control_type(fan_variable_volume, control_type: 'Multi Zone VAV with Static Pressure Setpoint Reset')
       case control_type
-      when 'Single Zone VAV Fan'
+      when 'Single Zone VAV'
         # Baseline for System Type 11 from ANSI/ASHRAE/IES Standard 90.1-2016 - Energy Standard for Buildings Except Low-Rise Residential Performance Rating Method
         coeff_a = 0.027827882
         coeff_b = 0.026583195

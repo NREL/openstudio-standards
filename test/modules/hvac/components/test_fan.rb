@@ -68,13 +68,13 @@ class TestHVACFan < Minitest::Test
   def test_create_fan_zone_exhaust
     model = OpenStudio::Model::Model.new
     fan = @hvac.create_fan_zone_exhaust(model,
-                                        fan_name: 'WindRose Fan',
+                                        fan_name: 'Wind Rose Fan',
                                         fan_efficiency: 0.5,
                                         pressure_rise: 1.2,
                                         system_availability_manager_coupling_mode: 'Decoupled',
                                         end_use_subcategory: 'Power Metal Fans')
     assert(fan.is_a?(OpenStudio::Model::FanZoneExhaust), 'Expected fan to be a FanZoneExhaust object')
-    assert_equal('WindRose Fan', fan.name.get)
+    assert_equal('Wind Rose Fan', fan.name.get)
     assert_in_delta(0.5, fan.fanEfficiency, 0.001)
     assert_in_delta(1.2, fan.pressureRise, 0.001)
     assert_equal('Decoupled', fan.systemAvailabilityManagerCouplingMode.to_s)
@@ -114,7 +114,7 @@ class TestHVACFan < Minitest::Test
     assert_in_delta(0.9506, fan.fanPowerCoefficient3.get, 0.001)
     assert_in_delta(-0.0998, fan.fanPowerCoefficient4.get, 0.001)
 
-    @hvac.fan_variable_volume_set_control_type(fan, control_type: 'Single Zone VAV Fan')
+    @hvac.fan_variable_volume_set_control_type(fan, control_type: 'Single Zone VAV')
     assert_in_delta(0.1, fan.fanPowerMinimumFlowFraction, 0.001)
     assert_in_delta(0.027827882, fan.fanPowerCoefficient1.get, 0.001)
     assert_in_delta(0.026583195, fan.fanPowerCoefficient2.get, 0.001)

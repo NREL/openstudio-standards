@@ -159,7 +159,7 @@ class Standard
     if air_loop_hvac.thermalZones.size == 1
       air_loop_hvac_supply_return_exhaust_relief_fans(air_loop_hvac).each do |fan|
         if fan.to_FanVariableVolume.is_initialized
-          OpenstudioStandards::HVAC.fan_variable_volume_set_control_type(fan, control_type: 'Single Zone VAV Fan')
+          OpenstudioStandards::HVAC.fan_variable_volume_set_control_type(fan, control_type: 'Single Zone VAV')
         end
       end
       air_loop_hvac_apply_single_zone_controls(air_loop_hvac, climate_zone)
