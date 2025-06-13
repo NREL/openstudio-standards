@@ -243,7 +243,7 @@ module OpenstudioStandards
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Infiltration.nist_infiltration', "Unable to find file: #{nist_infiltration_correlations_json}")
         return false
       end
-      coefficients_hsh = JSON.parse(File.read("#{__dir__}/data/NISTInfiltrationCorrelations.json"), symbolize_names: true)
+      coefficients_hsh = JSON.parse(File.read("#{File.dirname(__FILE__)}/data/NISTInfiltrationCorrelations.json"), symbolize_names: true)
       coefficients_hsh = coefficients_hsh[:infiltration]
 
       # select down to building type and climate zone
