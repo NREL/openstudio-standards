@@ -13,7 +13,6 @@ def infiltration_csv_to_json(input_csv = 'NISTInfiltrationCorrelations.csv',
 
   # Read the CSV file
   CSV.foreach(input_csv, headers: true, header_converters: :symbol) do |row|
-
     building_type = row[:building_type]
     climate_zone = row[:climate_zone]
     air_barrier = row[:air_barrier]

@@ -13,7 +13,6 @@ def parking_csv_to_json(input_csv = 'parking.csv',
 
   # Read the CSV file
   CSV.foreach(input_csv, headers: true, header_converters: :symbol) do |row|
-
     building_type = row[:building_type]
     building_area_per_spot = row[:building_area_per_spot].to_f
     units_per_spot = row[:units_per_spot].to_f

@@ -13,7 +13,6 @@ def entryways_csv_to_json(input_csv = 'entryways.csv',
 
   # Read the CSV file
   CSV.foreach(input_csv, headers: true, header_converters: :symbol) do |row|
-
     building_type = row[:building_type]
     rollup_doors_per_10000_ft2 = row[:rollup_doors_per_10000_ft2].to_f
     entrance_doors_per_10000_ft2 = row[:entrance_doors_per_10000_ft2].to_f
