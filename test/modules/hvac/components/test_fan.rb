@@ -81,6 +81,28 @@ class TestHVACFan < Minitest::Test
     assert_equal('Power Metal Fans', fan.endUseSubcategory)
   end
 
+  def test_create_fan_system_model
+    model = OpenStudio::Model::Model.new
+    fan = @hvac.create_fan_system_model(model,
+                                        fan_name: 'Helion Prime Fan',
+                                        pressure_rise: 1.2,
+                                        motor_efficiency: 0.8,
+                                        motor_in_airstream_fraction: 0.9,
+                                        design_power_sizing_method: 'PowerPerFlowPerPressure',
+                                        power_per_flow_rate_per_pressure: 1.33,
+                                        speed_control_method: 'Discrete',
+                                        speeds: [[0.5, 0.25], [0.75, 0.65], [1.0, 1.0]])
+    assert(fan.is_a?(OpenStudio::Model::FanSystemModel), 'Expected fan to be a FanSystemModel object')
+    assert_equal('Helion Prime Fan', fan.name.get)
+    assert_in_delta(1.2, fan.designPressureRise, 0.001)
+    assert_in_delta(0.8, fan.motorEfficiency, 0.001)
+    assert_in_delta(0.9, fan.motorInAirStreamFraction, 0.001)
+    assert_equal('PowerPerFlowPerPressure', fan.designPowerSizingMethod.to_s)
+    assert_in_delta(1.33, fan.electricPowerPerUnitFlowRatePerUnitPressure, 0.001)
+    assert_equal('Discrete', fan.speedControlMethod.to_s)
+    assert_equal(3, fan.speeds.size, 'Expected 3 speed points')
+  end
+
   def test_create_typical_fan
     model = OpenStudio::Model::Model.new
     fan = @hvac.create_typical_fan(model, 'CRAC_CAV_fan')

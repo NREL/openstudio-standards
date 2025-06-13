@@ -137,6 +137,48 @@ module OpenstudioStandards
       return fan
     end
 
+    # creates a fan system model
+    #
+    # @param model [OpenStudio::Model::Model] OpenStudio model object
+    # @param fan_name [String] fan name
+    # @param pressure_rise [Double] fan pressure rise in Pa
+    # @param motor_efficiency [Double] fan motor efficiency
+    # @param motor_in_airstream_fraction [Double] fraction of motor heat in airstream
+    # @param end_use_subcategory [String] end use subcategory name
+    # @param design_power_sizing_method [String] design power sizing method, options are PowerPerFlow or PowerPerFlowPerPressure
+    # @param power_per_flow_rate [Double] power per flow rate in W/(m^3/s)
+    # @param power_per_flow_rate_per_pressure [Double] power per flow rate per pressure in W/(m^3/s)/Pa
+    # @param speed_control_method [String] speed control method, options are Discrete or Continuous
+    # @param speeds [Array<[Integer, Integer]>] array of pairs of air flow rate fraction and electric power fraction for discrete speed fans
+    # @return [OpenStudio::Model::FanSystemModel] fan system model object
+    def self.create_fan_system_model(model,
+                                     fan_name: nil,
+                                     pressure_rise: nil,
+                                     motor_efficiency: nil,
+                                     motor_in_airstream_fraction: nil,
+                                     end_use_subcategory: nil,
+                                     design_power_sizing_method: 'PowerPerFlowPerPressure',
+                                     power_per_flow_rate: nil,
+                                     power_per_flow_rate_per_pressure: 1.66667,
+                                     speed_control_method: 'Continuous',
+                                     speeds: nil)
+      fan = OpenStudio::Model::FanSystemModel.new(model)
+      fan.setName(fan_name) unless fan_name.nil?
+      fan.setDesignPressureRise(pressure_rise) unless pressure_rise.nil?
+      fan.setMotorEfficiency(motor_efficiency) unless motor_efficiency.nil?
+      fan.setMotorInAirStreamFraction(motor_in_airstream_fraction) unless motor_in_airstream_fraction.nil?
+      fan.setEndUseSubcategory(end_use_subcategory) unless end_use_subcategory.nil?
+      fan.setDesignPowerSizingMethod(design_power_sizing_method) unless design_power_sizing_method.nil?
+      fan.setElectricPowerPerUnitFlowRate(power_per_flow_rate) unless power_per_flow_rate.nil?
+      fan.setElectricPowerPerUnitFlowRatePerUnitPressure(power_per_flow_rate_per_pressure) unless power_per_flow_rate_per_pressure.nil?
+      fan.setSpeedControlMethod(speed_control_method) unless speed_control_method.nil?
+      if !speeds.nil? && (speed_control_method == 'Discrete')
+        speeds.each { |pair| fan.addSpeed(pair[0], pair[1]) }
+      end
+
+      return fan
+    end
+
     # create a fan with properties for a typical fan type
     #
     # @param model [OpenStudio::Model::Model] OpenStudio model object
