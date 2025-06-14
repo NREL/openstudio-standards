@@ -90,7 +90,7 @@ module OpenstudioStandards
       OpenstudioStandards::Refrigeration.create_refrigeration_system(model, low_temperature_equip,
                                                                      template: template,
                                                                      operation_type: 'LT')
-      #end
+      # end
 
       return true
     end
