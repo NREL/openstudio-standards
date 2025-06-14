@@ -14,13 +14,13 @@ def entryways_csv_to_json(input_csv = 'entryways.csv',
   # Read the CSV file
   CSV.foreach(input_csv, headers: true, header_converters: :symbol) do |row|
     building_type = row[:building_type]
-    rollup_doors_per_10000_ft2 = row[:rollup_doors_per_10000_ft2].to_f
-    entrance_doors_per_10000_ft2 = row[:entrance_doors_per_10000_ft2].to_f
-    other_doors_per_10000_ft2 = row[:other_doors_per_10000_ft2].to_f
-    entrance_canopies = row[:entrance_canopies].to_f
-    emergency_canopies = row[:emergency_canopies].to_f
-    canopy_size = row[:canopy_size].to_f
-    floor_area_per_drive_through_window = row[:floor_area_per_drive_through_window].to_f
+    rollup_doors_per_10000_ft2 = row[:rollup_doors_per_10000_ft2]&.to_f
+    entrance_doors_per_10000_ft2 = row[:entrance_doors_per_10000_ft2]&.to_f
+    other_doors_per_10000_ft2 = row[:other_doors_per_10000_ft2]&.to_f
+    entrance_canopies = row[:entrance_canopies]&.to_f
+    emergency_canopies = row[:emergency_canopies]&.to_f
+    canopy_size = row[:canopy_size]&.to_f
+    floor_area_per_drive_through_window = row[:floor_area_per_drive_through_window]&.to_f
     notes = row[:notes]
 
     entryways_hash = {

@@ -17,9 +17,9 @@ def infiltration_csv_to_json(input_csv = 'NISTInfiltrationCorrelations.csv',
     climate_zone = row[:climate_zone]
     air_barrier = row[:air_barrier]
     hvac_status = row[:hvac_status]
-    a = row[:a].to_f
-    b = row[:b].to_f
-    d = row[:d].to_f
+    a = row[:a]&.to_f
+    b = row[:b]&.to_f
+    d = row[:d]&.to_f
 
     infiltration_hash = {
       building_type: building_type,

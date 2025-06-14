@@ -14,9 +14,9 @@
       "climate_zone": "1",
       "air_barrier": "no",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "HighriseApartment",
@@ -32,9 +32,9 @@
       "climate_zone": "2",
       "air_barrier": "no",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "HighriseApartment",
@@ -50,9 +50,9 @@
       "climate_zone": "3",
       "air_barrier": "no",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "HighriseApartment",
@@ -68,9 +68,9 @@
       "climate_zone": "4",
       "air_barrier": "no",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "HighriseApartment",
@@ -86,9 +86,9 @@
       "climate_zone": "5",
       "air_barrier": "no",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "HighriseApartment",
@@ -104,9 +104,9 @@
       "climate_zone": "6",
       "air_barrier": "no",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "HighriseApartment",
@@ -122,9 +122,9 @@
       "climate_zone": "7",
       "air_barrier": "no",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "HighriseApartment",
@@ -140,9 +140,9 @@
       "climate_zone": "8",
       "air_barrier": "no",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "Hospital",
@@ -158,9 +158,9 @@
       "climate_zone": "1",
       "air_barrier": "no",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "Hospital",
@@ -176,9 +176,9 @@
       "climate_zone": "2",
       "air_barrier": "no",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "Hospital",
@@ -194,9 +194,9 @@
       "climate_zone": "3",
       "air_barrier": "no",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "Hospital",
@@ -212,9 +212,9 @@
       "climate_zone": "4",
       "air_barrier": "no",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "Hospital",
@@ -230,9 +230,9 @@
       "climate_zone": "5",
       "air_barrier": "no",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "Hospital",
@@ -248,9 +248,9 @@
       "climate_zone": "6",
       "air_barrier": "no",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "Hospital",
@@ -266,9 +266,9 @@
       "climate_zone": "7",
       "air_barrier": "no",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "Hospital",
@@ -284,9 +284,9 @@
       "climate_zone": "8",
       "air_barrier": "no",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "LargeHotel",
@@ -302,9 +302,9 @@
       "climate_zone": "1",
       "air_barrier": "no",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "LargeHotel",
@@ -320,9 +320,9 @@
       "climate_zone": "2",
       "air_barrier": "no",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "LargeHotel",
@@ -338,9 +338,9 @@
       "climate_zone": "3",
       "air_barrier": "no",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "LargeHotel",
@@ -356,9 +356,9 @@
       "climate_zone": "4",
       "air_barrier": "no",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "LargeHotel",
@@ -374,9 +374,9 @@
       "climate_zone": "5",
       "air_barrier": "no",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "LargeHotel",
@@ -392,9 +392,9 @@
       "climate_zone": "6",
       "air_barrier": "no",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "LargeHotel",
@@ -410,9 +410,9 @@
       "climate_zone": "7",
       "air_barrier": "no",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "LargeHotel",
@@ -428,9 +428,9 @@
       "climate_zone": "8",
       "air_barrier": "no",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "MediumOffice",
@@ -590,9 +590,9 @@
       "climate_zone": "1",
       "air_barrier": "no",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "MidriseApartment",
@@ -608,9 +608,9 @@
       "climate_zone": "2",
       "air_barrier": "no",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "MidriseApartment",
@@ -626,9 +626,9 @@
       "climate_zone": "3",
       "air_barrier": "no",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "MidriseApartment",
@@ -644,9 +644,9 @@
       "climate_zone": "4",
       "air_barrier": "no",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "MidriseApartment",
@@ -662,9 +662,9 @@
       "climate_zone": "5",
       "air_barrier": "no",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "MidriseApartment",
@@ -680,9 +680,9 @@
       "climate_zone": "6",
       "air_barrier": "no",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "MidriseApartment",
@@ -698,9 +698,9 @@
       "climate_zone": "7",
       "air_barrier": "no",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "MidriseApartment",
@@ -716,9 +716,9 @@
       "climate_zone": "8",
       "air_barrier": "no",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "PrimarySchool",
@@ -1022,9 +1022,9 @@
       "climate_zone": "1",
       "air_barrier": "no",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "SmallHotel",
@@ -1040,9 +1040,9 @@
       "climate_zone": "2",
       "air_barrier": "no",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "SmallHotel",
@@ -1058,9 +1058,9 @@
       "climate_zone": "3",
       "air_barrier": "no",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "SmallHotel",
@@ -1076,9 +1076,9 @@
       "climate_zone": "4",
       "air_barrier": "no",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "SmallHotel",
@@ -1094,9 +1094,9 @@
       "climate_zone": "5",
       "air_barrier": "no",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "SmallHotel",
@@ -1112,9 +1112,9 @@
       "climate_zone": "6",
       "air_barrier": "no",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "SmallHotel",
@@ -1130,9 +1130,9 @@
       "climate_zone": "7",
       "air_barrier": "no",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "SmallHotel",
@@ -1148,9 +1148,9 @@
       "climate_zone": "8",
       "air_barrier": "no",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "SmallOffice",
@@ -1598,9 +1598,9 @@
       "climate_zone": "1",
       "air_barrier": "yes",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "HighriseApartment",
@@ -1616,9 +1616,9 @@
       "climate_zone": "2",
       "air_barrier": "yes",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "HighriseApartment",
@@ -1634,9 +1634,9 @@
       "climate_zone": "3",
       "air_barrier": "yes",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "HighriseApartment",
@@ -1652,9 +1652,9 @@
       "climate_zone": "4",
       "air_barrier": "yes",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "HighriseApartment",
@@ -1670,9 +1670,9 @@
       "climate_zone": "5",
       "air_barrier": "yes",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "HighriseApartment",
@@ -1688,9 +1688,9 @@
       "climate_zone": "6",
       "air_barrier": "yes",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "HighriseApartment",
@@ -1706,9 +1706,9 @@
       "climate_zone": "7",
       "air_barrier": "yes",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "HighriseApartment",
@@ -1724,9 +1724,9 @@
       "climate_zone": "8",
       "air_barrier": "yes",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "Hospital",
@@ -1742,9 +1742,9 @@
       "climate_zone": "1",
       "air_barrier": "yes",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "Hospital",
@@ -1760,9 +1760,9 @@
       "climate_zone": "2",
       "air_barrier": "yes",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "Hospital",
@@ -1778,9 +1778,9 @@
       "climate_zone": "3",
       "air_barrier": "yes",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "Hospital",
@@ -1796,9 +1796,9 @@
       "climate_zone": "4",
       "air_barrier": "yes",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "Hospital",
@@ -1814,9 +1814,9 @@
       "climate_zone": "5",
       "air_barrier": "yes",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "Hospital",
@@ -1832,9 +1832,9 @@
       "climate_zone": "6",
       "air_barrier": "yes",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "Hospital",
@@ -1850,9 +1850,9 @@
       "climate_zone": "7",
       "air_barrier": "yes",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "Hospital",
@@ -1868,9 +1868,9 @@
       "climate_zone": "8",
       "air_barrier": "yes",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "LargeHotel",
@@ -1886,9 +1886,9 @@
       "climate_zone": "1",
       "air_barrier": "yes",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "LargeHotel",
@@ -1904,9 +1904,9 @@
       "climate_zone": "2",
       "air_barrier": "yes",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "LargeHotel",
@@ -1922,9 +1922,9 @@
       "climate_zone": "3",
       "air_barrier": "yes",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "LargeHotel",
@@ -1940,9 +1940,9 @@
       "climate_zone": "4",
       "air_barrier": "yes",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "LargeHotel",
@@ -1958,9 +1958,9 @@
       "climate_zone": "5",
       "air_barrier": "yes",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "LargeHotel",
@@ -1976,9 +1976,9 @@
       "climate_zone": "6",
       "air_barrier": "yes",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "LargeHotel",
@@ -1994,9 +1994,9 @@
       "climate_zone": "7",
       "air_barrier": "yes",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "LargeHotel",
@@ -2012,9 +2012,9 @@
       "climate_zone": "8",
       "air_barrier": "yes",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "MediumOffice",
@@ -2174,9 +2174,9 @@
       "climate_zone": "1",
       "air_barrier": "yes",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "MidriseApartment",
@@ -2192,9 +2192,9 @@
       "climate_zone": "2",
       "air_barrier": "yes",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "MidriseApartment",
@@ -2210,9 +2210,9 @@
       "climate_zone": "3",
       "air_barrier": "yes",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "MidriseApartment",
@@ -2228,9 +2228,9 @@
       "climate_zone": "4",
       "air_barrier": "yes",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "MidriseApartment",
@@ -2246,9 +2246,9 @@
       "climate_zone": "5",
       "air_barrier": "yes",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "MidriseApartment",
@@ -2264,9 +2264,9 @@
       "climate_zone": "6",
       "air_barrier": "yes",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "MidriseApartment",
@@ -2282,9 +2282,9 @@
       "climate_zone": "7",
       "air_barrier": "yes",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "MidriseApartment",
@@ -2300,9 +2300,9 @@
       "climate_zone": "8",
       "air_barrier": "yes",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "PrimarySchool",
@@ -2606,9 +2606,9 @@
       "climate_zone": "1",
       "air_barrier": "yes",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "SmallHotel",
@@ -2624,9 +2624,9 @@
       "climate_zone": "2",
       "air_barrier": "yes",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "SmallHotel",
@@ -2642,9 +2642,9 @@
       "climate_zone": "3",
       "air_barrier": "yes",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "SmallHotel",
@@ -2660,9 +2660,9 @@
       "climate_zone": "4",
       "air_barrier": "yes",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "SmallHotel",
@@ -2678,9 +2678,9 @@
       "climate_zone": "5",
       "air_barrier": "yes",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "SmallHotel",
@@ -2696,9 +2696,9 @@
       "climate_zone": "6",
       "air_barrier": "yes",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "SmallHotel",
@@ -2714,9 +2714,9 @@
       "climate_zone": "7",
       "air_barrier": "yes",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "SmallHotel",
@@ -2732,9 +2732,9 @@
       "climate_zone": "8",
       "air_barrier": "yes",
       "hvac_status": "off",
-      "a": 0.0,
-      "b": 0.0,
-      "d": 0.0
+      "a": null,
+      "b": null,
+      "d": null
     },
     {
       "building_type": "SmallOffice",
