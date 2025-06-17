@@ -28,7 +28,7 @@ module OpenstudioStandards
       end
 
       # load refrigeration cases data
-      cases_csv = "#{__dir__}/data/refrigerated_cases.csv"
+      cases_csv = "#{File.dirname(__FILE__)}/data/refrigerated_cases.csv"
       unless File.exist?(cases_csv)
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Refrigeration', "Unable to find file: #{cases_csv}")
         return nil
