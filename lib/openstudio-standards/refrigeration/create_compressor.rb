@@ -15,7 +15,7 @@ module OpenstudioStandards
                                operation_type: 'MT')
       # load refrigeration compressor data
       compressors_csv = "#{File.dirname(__FILE__)}/data/refrigeration_compressors.csv"
-      unless File.exist?(compressors_csv)
+      unless File.file?(compressors_csv)
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Refrigeration', "Unable to find file: #{compressors_csv}")
         return nil
       end

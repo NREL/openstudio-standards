@@ -102,7 +102,7 @@ module OpenstudioStandards
     def self.typical_refrigeration_equipment_list(model)
       # load refrigeration cases data
       cases_csv = "#{File.dirname(__FILE__)}/data/typical_refrigerated_cases.csv"
-      unless File.exist?(cases_csv)
+      unless File.file?(cases_csv)
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Refrigeration', "Unable to find file: #{cases_csv}")
         return false
       end
@@ -111,7 +111,7 @@ module OpenstudioStandards
 
       # load refrigeration walkin data
       walkins_csv = "#{File.dirname(__FILE__)}/data/typical_refrigerated_walkins.csv"
-      unless File.exist?(walkins_csv)
+      unless File.file?(walkins_csv)
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Refrigeration', "Unable to find file: #{walkins_csv}")
         return false
       end

@@ -10,7 +10,7 @@ module OpenstudioStandards
     def self.model_get_exterior_lighting_sizes(model)
       # load parking file and convert to hash table
       parking_json = "#{File.dirname(__FILE__)}/data/parking.json"
-      unless File.exist?(parking_json)
+      unless File.file?(parking_json)
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ExteriorLighting', "Unable to find file: #{parking_json}")
         return false
       end
@@ -19,7 +19,7 @@ module OpenstudioStandards
 
       # load entryways file and convert to hash table
       entryways_json = "#{File.dirname(__FILE__)}/data/entryways.json"
-      unless File.exist?(entryways_json)
+      unless File.file?(entryways_json)
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ExteriorLighting', "Unable to find file: #{entryways_json}")
         return false
       end

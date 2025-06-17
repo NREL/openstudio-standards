@@ -29,7 +29,7 @@ module OpenstudioStandards
 
       # load refrigeration walkin data
       walkins_csv = "#{File.dirname(__FILE__)}/data/refrigerated_walkins.csv"
-      unless File.exist?(walkins_csv)
+      unless File.file?(walkins_csv)
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Refrigeration', "Unable to find file: #{walkins_csv}")
         return nil
       end
