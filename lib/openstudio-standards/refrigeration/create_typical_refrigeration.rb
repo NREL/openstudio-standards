@@ -101,8 +101,8 @@ module OpenstudioStandards
     # @return [Hash] Hash of refrigeration case lengths and walkin area
     def self.typical_refrigeration_equipment_list(model)
       # load refrigeration cases data
-      cases_csv = "#{__dir__}/data/typical_refrigerated_cases.csv"
-      unless File.exist?(cases_csv)
+      cases_csv = "#{File.dirname(__FILE__)}/data/typical_refrigerated_cases.csv"
+      unless File.file?(cases_csv)
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Refrigeration', "Unable to find file: #{cases_csv}")
         return false
       end
@@ -110,8 +110,8 @@ module OpenstudioStandards
       cases_hsh = cases_tbl.map(&:to_hash)
 
       # load refrigeration walkin data
-      walkins_csv = "#{__dir__}/data/typical_refrigerated_walkins.csv"
-      unless File.exist?(walkins_csv)
+      walkins_csv = "#{File.dirname(__FILE__)}/data/typical_refrigerated_walkins.csv"
+      unless File.file?(walkins_csv)
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Refrigeration', "Unable to find file: #{walkins_csv}")
         return false
       end

@@ -239,7 +239,7 @@ module OpenstudioStandards
 
       # load NIST infiltration correlations file and convert to hash table
       nist_infiltration_correlations_json = "#{File.dirname(__FILE__)}/data/NISTInfiltrationCorrelations.json"
-      unless File.exist?(nist_infiltration_correlations_json)
+      unless File.file?(nist_infiltration_correlations_json)
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Infiltration.nist_infiltration', "Unable to find file: #{nist_infiltration_correlations_json}")
         return false
       end
