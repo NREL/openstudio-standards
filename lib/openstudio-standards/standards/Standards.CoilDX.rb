@@ -204,11 +204,11 @@ module CoilDX
       end
       # PTHP
       if containing_comp.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
-        search_criteria['equipment_type'] = 'PTHP'
-        search_criteria['subcategory'] = nil
         unless (template == 'NECB2011') || (template == 'NECB2015') || (template == 'NECB2017') || (template == 'NECB2020') || (template == 'BTAPPRE1980') ||
                (template == 'BTAP1980TO2010')
+          search_criteria['subcategory'] = nil
           search_criteria['heating_type'] = nil
+          search_criteria['equipment_type'] = 'PTHP'
         end
       end
     end
