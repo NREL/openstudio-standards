@@ -170,7 +170,6 @@ module OpenStudioStandards
     # Count the number of lines of a idf object and return the last index
     # (e.g. find the index of "!- Fan Inlet Node Name")
     # @param idf_object
-    # @param search_string str
     # @return index if found
     def self.find_last_index_of_idf_object(idf_object)
       split_object = idf_object.to_s.split("\n")
@@ -182,7 +181,7 @@ module OpenStudioStandards
     # If the index is not found, this function returns the last index of the object + 1
     # (e.g. find the index of "!- Fan Inlet Node Name")
     # @param idf_object
-    # @param search_string str
+    # @param search_string [String]
     # @return index if found
     def self.find_index_of_string(idf_object, search_string)
 

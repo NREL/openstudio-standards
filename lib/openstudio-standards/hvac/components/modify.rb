@@ -4,13 +4,13 @@ module OpenstudioStandards
     # @!group Component:Modify
     # Methods to modify HVAC Component objects
 
-    # Applies historical default or user-input effectiveness values to a HeatExchanger:AirToAir:SensibleAndLatent object
+    # Applies historical default or user-input effectiveness values to a HeatExchangerAirToAirSensibleAndLatent object
     #
     # @param hx [<OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent>] OpenStudio HX object to update
     # @param defaults [Boolean] flag to apply historical default curves
     # @param values [Hash{String=>Hash{Float=>Float}}] user-input effectiveness values, where keys are one of
     #   'Sensible Heating', 'Latent Heating, 'Sensible Cooling', 'Latent Cooling'
-    #   and value is a hash of {flow decimal fraction => effectivess decimal fraction}, e.g. {0.75 => 0.81, 1.0 => 0.76}
+    #   and value is a hash of { flow decimal fraction => effectivess decimal fraction }, e.g. { 0.75 => 0.81, 1.0 => 0.76 }
     # @return [<OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent>] modified OpenStudio HX object
     def self.heat_exchanger_air_to_air_set_effectiveness_values(hx, defaults: false, values: nil)
       if defaults
