@@ -3397,7 +3397,7 @@ OS:SetpointManager:SingleZone:Reheat,
 
 OS:Coil:Heating:DX:SingleSpeed,
   {d92b2ec2-aa6f-44cb-bfc5-35e3918479fd}, !- Handle
-  Perimeter_ZN_1 ZN HP Htg Coil 30 Clg kBtu/hr 6.6HSPF, !- Name
+  Perimeter_ZN_1 ZN HP Htg Coil 30 Clg kBtu/hr 7.4HSPF, !- Name
   {3e2d9bf3-3a72-478e-95a1-7da05ea0c5de}, !- Availability Schedule Name
   Autosize,                               !- Rated Total Heating Capacity {W}
   3.419064,                               !- Rated COP {W/W}
@@ -3935,7 +3935,7 @@ OS:SetpointManager:SingleZone:Reheat,
 
 OS:Coil:Heating:DX:SingleSpeed,
   {77f607aa-1363-4a89-830f-81a75c7d784f}, !- Handle
-  Perimeter_ZN_2 ZN HP Htg Coil 22 Clg kBtu/hr 6.6HSPF, !- Name
+  Perimeter_ZN_2 ZN HP Htg Coil 22 Clg kBtu/hr 7.4HSPF, !- Name
   {3e2d9bf3-3a72-478e-95a1-7da05ea0c5de}, !- Availability Schedule Name
   Autosize,                               !- Rated Total Heating Capacity {W}
   3.419064,                               !- Rated COP {W/W}
@@ -4465,7 +4465,7 @@ OS:SetpointManager:SingleZone:Reheat,
 
 OS:Coil:Heating:DX:SingleSpeed,
   {e532dc94-762e-47b9-9ddc-be72f09f14a3}, !- Handle
-  Perimeter_ZN_3 ZN HP Htg Coil 27 Clg kBtu/hr 6.6HSPF, !- Name
+  Perimeter_ZN_3 ZN HP Htg Coil 27 Clg kBtu/hr 7.4HSPF, !- Name
   {3e2d9bf3-3a72-478e-95a1-7da05ea0c5de}, !- Availability Schedule Name
   Autosize,                               !- Rated Total Heating Capacity {W}
   3.419064,                               !- Rated COP {W/W}
@@ -4995,7 +4995,7 @@ OS:SetpointManager:SingleZone:Reheat,
 
 OS:Coil:Heating:DX:SingleSpeed,
   {3adce1d2-cc19-4065-a722-8348bda42154}, !- Handle
-  Perimeter_ZN_4 ZN HP Htg Coil 25 Clg kBtu/hr 6.6HSPF, !- Name
+  Perimeter_ZN_4 ZN HP Htg Coil 25 Clg kBtu/hr 7.4HSPF, !- Name
   {3e2d9bf3-3a72-478e-95a1-7da05ea0c5de}, !- Availability Schedule Name
   Autosize,                               !- Rated Total Heating Capacity {W}
   3.419064,                               !- Rated COP {W/W}
@@ -5525,7 +5525,7 @@ OS:SetpointManager:SingleZone:Reheat,
 
 OS:Coil:Heating:DX:SingleSpeed,
   {35916483-2a35-43fe-9b7b-6773f490f592}, !- Handle
-  Core_ZN ZN HP Htg Coil 28 Clg kBtu/hr 6.6HSPF, !- Name
+  Core_ZN ZN HP Htg Coil 28 Clg kBtu/hr 7.4HSPF, !- Name
   {3e2d9bf3-3a72-478e-95a1-7da05ea0c5de}, !- Availability Schedule Name
   Autosize,                               !- Rated Total Heating Capacity {W}
   3.419064,                               !- Rated COP {W/W}

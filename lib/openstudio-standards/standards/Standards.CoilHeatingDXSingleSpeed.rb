@@ -128,7 +128,7 @@ class Standard
         if equipment_type == 'PTHP'
           search_criteria['application'] = coil_dx_packaged_terminal_application(coil_heating_dx_single_speed)
         end
-      elsif coil_dx_heat_pump?(coil_heating_dx_single_speed)
+      elsif !coil_dx_heat_pump?(coil_heating_dx_single_speed) # `coil_dx_heat_pump?` returns false when a DX heating coil is wrapped into a AirloopHVAC:UnitarySystem
         search_criteria['equipment_type'] = 'Heat Pumps'
       end
       unless (template == 'NECB2011') || (template == 'NECB2015') || (template == 'NECB2017') || (template == 'NECB2020') || (template == 'BTAPPRE1980') ||
@@ -242,6 +242,11 @@ class Standard
     coil_efficiency_data = standards_data['heat_pumps_heating']
     equipment_type = coil_efficiency_data[0].keys.include?('equipment_type') ? true : false
 
+    # Get the capacity
+    capacity_w = coil_heating_dx_single_speed_find_capacity(coil_heating_dx_single_speed, necb_ref_hp)
+    capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
+    capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
+
     # Additional search criteria
     if coil_efficiency_data[0].keys.include?('equipment_type') || ((template == 'NECB2011') || (template == 'NECB2015') || (template == 'NECB2017') || (template == 'NECB2020') || (template == 'BTAPPRE1980') ||
       (template == 'BTAP1980TO2010'))
@@ -250,18 +255,26 @@ class Standard
         if ['PTHP'].include?(equipment_type)
           search_criteria['application'] = coil_dx_packaged_terminal_application(coil_heating_dx_single_speed)
         end
-      elsif !coil_dx_heat_pump?(coil_heating_dx_single_speed)
+      elsif !coil_dx_heat_pump?(coil_heating_dx_single_speed) # `coil_dx_heat_pump?` returns false when a DX heating coil is wrapped into a AirloopHVAC:UnitarySystem
         search_criteria['equipment_type'] = 'Heat Pumps'
+      end
+      unless (template == 'NECB2011') || (template == 'NECB2015') || (template == 'NECB2017') || (template == 'NECB2020') || (template == 'BTAPPRE1980') ||
+             (template == 'BTAP1980TO2010')
+        # Single Package/Split System is only used for units less than 65 kBtu/h
+        if capacity_btu_per_hr >= 65000
+          search_criteria['rating_condition'] = '47F db/43F wb outdoor air'
+          search_criteria['subcategory'] = nil
+        else
+          electric_power_phase = coil_dx_electric_power_phase(coil_heating_dx_single_speed)
+          if !electric_power_phase.nil?
+            search_criteria['electric_power_phase'] = electric_power_phase
+          end
+        end
       end
     end
     if coil_efficiency_data[0].keys.include?('region')
       search_criteria['region'] = nil # non-nil values are currently used for residential products
     end
-
-    # Get the capacity
-    capacity_w = coil_heating_dx_single_speed_find_capacity(coil_heating_dx_single_speed, necb_ref_hp)
-    capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
-    capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
     # Lookup efficiencies
     hp_props = model_find_object(standards_data['heat_pumps_heating'], search_criteria, capacity_btu_per_hr, Date.today)
@@ -278,7 +291,7 @@ class Standard
     if hp_props['heat_cap_ft']
       heat_cap_ft = model_add_curve(coil_heating_dx_single_speed.model, hp_props['heat_cap_ft'])
     else
-      heat_cap_ft_curve_name = coil_dx_cap_ft(coil_heating_dx_single_speed, equipment_type_field)
+      heat_cap_ft_curve_name = coil_dx_cap_ft(coil_heating_dx_single_speed, equipment_type_field, heating = true)
       heat_cap_ft = model_add_curve(coil_heating_dx_single_speed.model, heat_cap_ft_curve_name)
     end
     if heat_cap_ft
@@ -292,7 +305,7 @@ class Standard
     if hp_props['heat_cap_fflow']
       heat_cap_fflow = model_add_curve(coil_heating_dx_single_speed.model, hp_props['heat_cap_fflow'])
     else
-      heat_cap_fflow_curve_name = coil_dx_cap_fflow(coil_heating_dx_single_speed, equipment_type_field)
+      heat_cap_fflow_curve_name = coil_dx_cap_fflow(coil_heating_dx_single_speed, equipment_type_field, heating = true)
       heat_cap_fflow = model_add_curve(coil_heating_dx_single_speed.model, heat_cap_fflow_curve_name)
     end
     if heat_cap_fflow
@@ -306,8 +319,8 @@ class Standard
     if hp_props['heat_eir_ft']
       heat_eir_ft = model_add_curve(coil_heating_dx_single_speed.model, hp_props['heat_eir_ft'])
     else
-      heat_eir_ft_curve_name = coil_dx_eir_ft(coil_heating_dx_single_speed, equipment_type_field)
-      heat_eif_ft = model_add_curve(coil_heating_dx_single_speed.model, heat_eir_ft_curve_name)
+      heat_eir_ft_curve_name = coil_dx_eir_ft(coil_heating_dx_single_speed, equipment_type_field, heating = true)
+      heat_eir_ft = model_add_curve(coil_heating_dx_single_speed.model, heat_eir_ft_curve_name)
     end
     if heat_eir_ft
       coil_heating_dx_single_speed.setEnergyInputRatioFunctionofTemperatureCurve(heat_eir_ft)
@@ -320,7 +333,7 @@ class Standard
     if hp_props['heat_eir_fflow']
       heat_eir_fflow = model_add_curve(coil_heating_dx_single_speed.model, hp_props['heat_eir_fflow'])
     else
-      heat_eir_fflow_curve_name = coil_dx_eir_fflow(coil_heating_dx_single_speed, equipment_type_field)
+      heat_eir_fflow_curve_name = coil_dx_eir_fflow(coil_heating_dx_single_speed, equipment_type_field, heating = true)
       heat_eir_fflow = model_add_curve(coil_heating_dx_single_speed.model, heat_eir_fflow_curve_name)
     end
     if heat_eir_fflow
@@ -334,7 +347,7 @@ class Standard
     if hp_props['heat_plf_fplr']
       heat_plf_fplr = model_add_curve(coil_heating_dx_single_speed.model, hp_props['heat_plf_fplr'])
     else
-      heat_plf_fplr_curve_name = coil_dx_plf_fplr(coil_heating_dx_single_speed, equipment_type_field)
+      heat_plf_fplr_curve_name = coil_dx_plf_fplr(coil_heating_dx_single_speed, equipment_type_field, heating = true)
       heat_plf_fplr = model_add_curve(coil_heating_dx_single_speed.model, heat_plf_fplr_curve_name)
     end
     if heat_plf_fplr

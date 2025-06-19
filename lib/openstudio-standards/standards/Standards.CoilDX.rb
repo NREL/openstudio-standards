@@ -31,8 +31,7 @@ module CoilDX
 
   # Determine if it is a heat pump
   #
-  # @param coil_dx [OpenStudio::Model::StraightComponent] coil cooling object, allowable types:
-  #   CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilCoolingDXMultiSpeed
+  # @param coil_dx [OpenStudio::Model::StraightComponent] coil cooling object
   # @return [Boolean] returns true if it is a heat pump, false if not
   def coil_dx_heat_pump?(coil_dx)
     heat_pump = false
@@ -249,17 +248,19 @@ module CoilDX
   # @param coil_dx [OpenStudio::Model::StraightComponent] coil cooling object, allowable types:
   #   CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilCoolingDXMultiSpeed
   # @param equipment_type [String] Type of equipment
-  # @return [String] PTAC application
-  def coil_dx_cap_ft(coil_dx, equipment_type = 'Air Conditioners')
+  # @param heating [Boolean] Specify if the curve to return is for heating operation
+  # @return [String] Curve name
+  def coil_dx_cap_ft(coil_dx, equipment_type = 'Air Conditioners', heating = false)
     case equipment_type
     when 'PTAC'
       return 'PSZ-Fine Storage DX Coil Cap-FT'
-    when 'PSZ-AC'
+    when 'PSZ-AC', 'Air Conditioners'
       return 'CoilClgDXQRatio_fTwbToadbSI'
     when 'PTHP'
       return 'DXHEAT-NECB2011-REF-CAPFT'
-    when 'PSZ-HP'
-      return 'DXHEAT-NECB2011-REF-CAPFT'
+    when 'PSZ-HP', 'Heat Pumps'
+      return 'HPACHeatCapFT' if heating
+      return 'HPACCoolCapFT'
     else
       return 'CoilClgDXQRatio_fTwbToadbSI'
     end
@@ -270,17 +271,19 @@ module CoilDX
   # @param coil_dx [OpenStudio::Model::StraightComponent] coil cooling object, allowable types:
   #   CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilCoolingDXMultiSpeed
   # @param equipment_type [String] Type of equipment
-  # @return [String] PTAC application
-  def coil_dx_cap_fflow(coil_dx, equipment_type = 'Air Conditioners')
+  # @param heating [Boolean] Specify if the curve to return is for heating operation
+  # @return [String] Curve name
+  def coil_dx_cap_fflow(coil_dx, equipment_type = 'Air Conditioners', heating = false)
     case equipment_type
     when 'PTAC'
       return 'DX Coil Cap-FF'
-    when 'PSZ-AC'
+    when 'PSZ-AC', 'Air Conditioners'
       return 'CoilClgDXSnglQRatio_fCFMRatio'
     when 'PTHP'
       return 'DXHEAT-NECB2011-REF-CAPFFLOW'
-    when 'PSZ-HP'
-      return 'DXHEAT-NECB2011-REF-CAPFFLOW'
+    when 'PSZ-HP', 'Heat Pumps'
+      return 'HPACHeatCapFFF' if heating
+      return 'HPACCoolCapFFF'
     else
       return 'CoilClgDXSnglQRatio_fCFMRatio'
     end
@@ -291,17 +294,19 @@ module CoilDX
   # @param coil_dx [OpenStudio::Model::StraightComponent] coil cooling object, allowable types:
   #   CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilCoolingDXMultiSpeed
   # @param equipment_type [String] Type of equipment
-  # @return [String] PTAC application
-  def coil_dx_eir_ft(coil_dx, equipment_type = 'Air Conditioners')
+  # @param heating [Boolean] Specify if the curve to return is for heating operation
+  # @return [String] Curve name
+  def coil_dx_eir_ft(coil_dx, equipment_type = 'Air Conditioners', heating = false)
     case equipment_type
     when 'PTAC'
       return 'PSZ-AC DX Coil EIR-FT'
-    when 'PSZ-AC'
+    when 'PSZ-AC', 'Air Conditioners'
       return 'CoilClgDXEIRRatio_fTwbToadbSI'
     when 'PTHP'
       return 'DXHEAT-NECB2011-REF-EIRFT'
-    when 'PSZ-HP'
-      return 'DXHEAT-NECB2011-REF-EIRFT'
+    when 'PSZ-HP', 'Heat Pumps'
+      return 'HPACHeatEIRFT' if heating
+      return 'HPACCoolEIRFT'
     else
       return 'CoilClgDXEIRRatio_fTwbToadbSI'
     end
@@ -312,17 +317,19 @@ module CoilDX
   # @param coil_dx [OpenStudio::Model::StraightComponent] coil cooling object, allowable types:
   #   CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilCoolingDXMultiSpeed
   # @param equipment_type [String] Type of equipment
-  # @return [String] PTAC application
-  def coil_dx_eir_fflow(coil_dx, equipment_type = 'Air Conditioners')
+  # @param heating [Boolean] Specify if the curve to return is for heating operation
+  # @return [String] Curve name
+  def coil_dx_eir_fflow(coil_dx, equipment_type = 'Air Conditioners', heating = false)
     case equipment_type
     when 'PTAC'
       return 'Split DX Coil EIR-FF'
-    when 'PSZ-AC'
+    when 'PSZ-AC', 'Air Conditioners'
       return 'CoilClgDXSnglEIRRatio_fCFMRatio'
     when 'PTHP'
       return 'DXHEAT-NECB2011-REF-EIRFFLOW'
-    when 'PSZ-HP'
-      return 'DXHEAT-NECB2011-REF-EIRFFLOW'
+    when 'PSZ-HP', 'Heat Pumps'
+      return 'HPACHeatEIRFFF' if heating
+      return 'HPACCoolEIRFFF'
     else
       return 'CoilClgDXSnglEIRRatio_fCFMRatio'
     end
@@ -333,17 +340,18 @@ module CoilDX
   # @param coil_dx [OpenStudio::Model::StraightComponent] coil cooling object, allowable types:
   #   CoilCoolingDXSingleSpeed, CoilCoolingDXTwoSpeed, CoilCoolingDXMultiSpeed
   # @param equipment_type [String] Type of equipment
-  # @return [String] PTAC application
-  def coil_dx_plf_fplr(coil_dx, equipment_type = 'Air Conditioners')
+  # @param heating [Boolean] Specify if the curve to return is for heating operation
+  # @return [String] Curve name
+  def coil_dx_plf_fplr(coil_dx, equipment_type = 'Air Conditioners', heating = false)
     case equipment_type
     when 'PTAC'
       return 'HPACCOOLPLFFPLR'
-    when 'PSZ-AC'
+    when 'PSZ-AC', 'Air Conditioners'
       return 'CoilClgDXEIRRatio_fQFrac'
     when 'PTHP'
       return 'DXHEAT-NECB2011-REF-PLFFPLR'
-    when 'PSZ-HP'
-      return 'DXHEAT-NECB2011-REF-PLFFPLR'
+    when 'PSZ-HP', 'Heat Pumps'
+      return 'HPACCOOLPLFFPLR'
     else
       return 'CoilClgDXEIRRatio_fQFrac'
     end
