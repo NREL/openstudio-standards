@@ -1,4 +1,4 @@
-﻿curve_name,template,operation_type,curve_type,coefficient1,coefficient2,coefficient3,coefficient4,coefficient5,coefficient6,coefficient7,coefficient8,coefficient9,coefficient10,min_val_x,max_val_x,min_val_y,max_val_y
+curve_name,template,operation_type,curve_type,coefficient1,coefficient2,coefficient3,coefficient4,coefficient5,coefficient6,coefficient7,coefficient8,coefficient9,coefficient10,min_val_x,max_val_x,min_val_y,max_val_y
 Old_Low_Temp_Comp_Pwr_Curve,old,LT,Power,29669.27106,1027.632052,18.10662623,-442.1997136,11.13352877,-20.38045192,0.139980653,-0.058866918,-0.218451538,0.203858467,-40,-17.8,4.4,54.4
 Old_Med_Temp_Comp_Pwr_Curve,old,MT,Power,7438.922294,-269.5975647,-9.856104461,553.5732602,-3.385889614,14.86578782,-0.100796292,0.009822793,0.097362356,-0.039675217,-23.3,7.2,10,60
 New_Low_Temp_Comp_Pwr_Curve,new,LT,Power,170751.8339,6102.903702,78.2619862,-2959.432648,19.78765887,-90.95810147,0.435964768,-0.041157653,-0.60884596,0.459133262,-40,-17.8,4.4,54.4

@@ -6,7 +6,7 @@ module OpenstudioStandards
 
     # creates HeatExchangerAirToAirSensibleAndLatent object with user-input effectiveness values
     #
-    # @param model [<OpenStudio::Model::Model>] OpenStudio model
+    # @param model [OpenStudio::Model::Model] OpenStudio model
     # @param name [String]
     # @param type [String] Heat Exchanger Type. One of 'Plate', 'Rotary'
     # @param economizer_lockout [Boolean] whether hx is locked out during economizing
@@ -96,10 +96,10 @@ module OpenstudioStandards
 
     # creates LookupTable objects to define effectiveness of HeatExchangerAirToAirSensibleAndLatent objects
     #
-    # @param hx [<OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent>] OpenStudio HX object to update
+    # @param hx [OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent] OpenStudio HX object to update
     # @param type [String] type of curve to create. one of 'Sensible Heating', 'Latent Heating, 'Sensible Cooling', 'Latent Cooling'
-    # @param values_hash [Hash{Float=>Float}] user_input flow decimal fraction => effectiveness decimal fraction pairs, e.g. {0.75 => 0.81, 1.0 => 0.76}
-    # @return [<OpenStudio::Model::TableLookup>] lookup table object
+    # @param values_hash [Hash{Float=>Float}] user_input { flow decimal fraction => effectiveness } decimal fraction pairs, e.g. { 0.75 => 0.81, 1.0 => 0.76 }
+    # @return [OpenStudio::Model::TableLookup] lookup table object
     def self.create_hx_effectiveness_table(hx, type, values_hash)
       # validate inputs
       types = ['Sensible Heating', 'Latent Heating', 'Sensible Cooling', 'Latent Cooling']
