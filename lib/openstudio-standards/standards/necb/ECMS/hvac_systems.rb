@@ -1054,6 +1054,9 @@ class ECMS
     when "heatpump_watertowater_equationfit"
       htg_eqpt = OpenStudio::Model::HeatPumpWaterToWaterEquationFitHeating.new(model)
       htg_eqpt.setName("HeatPumpWaterToWaterEquationFitHeating")
+    when "heatpump_plantloop_eir_heating"
+      htg_eqpt = OpenStudio::Model::HeatPumpPlantLoopEIRHeating.new(model)
+      htg_eqpt.setName("HeatPumpPlantLoopEIRHeating")
     end
 
     return htg_eqpt
@@ -1074,6 +1077,9 @@ class ECMS
     when "heatpump_watertowater_equationfit"
       clg_eqpt = OpenStudio::Model::HeatPumpWaterToWaterEquationFitCooling.new(model)
       clg_eqpt.setName("HeatPumpWaterToWaterEquationFitCooling")
+    when "heatpump_plantloop_eir_cooling"
+      clg_eqpt = OpenStudio::Model::HeatPumpPlantLoopEIRCooling.new(model)
+      clg_eqpt.setName("HeatPumpPlantLoopEIRCooling")
     end
 
     return clg_eqpt
@@ -1321,6 +1327,8 @@ class ECMS
           backup_coil = icomp.to_CoilHeatingElectric.get
         elsif icomp.to_CoilHeatingGas.is_initialized
           backup_coil = icomp.to_CoilHeatingGas.get
+        elsif icomp.to_CoilHeatingWater.is_initialized
+          backup_coil = icomp.to_CoilHeatingWater.get
         elsif icomp.to_FanConstantVolume.is_initialized
           fans << icomp.to_FanConstantVolume.get
         elsif icomp.to_FanVariableVolume.is_initialized
@@ -1366,12 +1374,24 @@ class ECMS
         end
         htg_dx_coil_init_name = get_hvac_comp_init_name(htg_dx_coil, false)
         htg_dx_coil.setName(htg_dx_coil_init_name)
-        if backup_coil.nominalCapacity.is_initialized
-          backup_coil_cap = backup_coil.nominalCapacity.to_f
-        elsif backup_coil.autosizedNominalCapacity.is_initialized
-           backup_coil_cap = backup_coil.autosizedNominalCapacity.to_f
+        if (backup_coil.class.name.to_s.include? "CoilHeatingGas") || (backup_coil.class.name.to_s.include? "CoilHeatingElectric")
+          if backup_coil.nominalCapacity.is_initialized
+            backup_coil_cap = backup_coil.nominalCapacity.to_f
+          elsif backup_coil.autosizedNominalCapacity.is_initialized
+             backup_coil_cap = backup_coil.autosizedNominalCapacity.to_f
+          else
+            raise "Nominal capacity is undefiled for coil #{backup_coil.name.to_s}"
+          end
+        elsif backup_coil.class.name.to_s.include? "CoilHeatingWater"
+          if backup_coil.ratedCapacity.is_initialized
+            backup_coil_cap = backup_coil.ratedCapacity.to_f
+          elsif backup_coil.autosizedRatedCapacity.is_initialized
+            backup_coil_cap = backup_coil.autosizedRatedCapacity.to_f
+          else
+            raise "Rated capacity is undefiled for coil #{backup_coil.name.to_s}"
+          end
         else
-          raise "Nominal capacity is undefiled for coil #{backup_coil.name.to_s}"
+          raise("Backup coil type is not supported")
         end
         # Set the DX capacities to the maximum of the fraction of the backup coil capacity or the cooling capacity needed
         dx_cap = fr_backup_coil_cap_as_dx_coil_cap * backup_coil_cap
@@ -1650,6 +1670,8 @@ class ECMS
           backup_coil = icomp.to_CoilHeatingElectric.get
         elsif icomp.to_CoilHeatingGas.is_initialized
           backup_coil = icomp.to_CoilHeatingGas.get
+        elsif icomp.to_CoilHeatingWater.is_initialized
+          backup_coil = icomp.to_CoilHeatingWater.get
         end
       end
       if clg_dx_coil && htg_dx_coil && backup_coil
@@ -1665,12 +1687,24 @@ class ECMS
         end
         htg_dx_coil_init_name = get_hvac_comp_init_name(htg_dx_coil, true)
         htg_dx_coil.setName(htg_dx_coil_init_name)
-        if backup_coil.nominalCapacity.is_initialized
-          backup_coil_cap = backup_coil.nominalCapacity.to_f
-        elsif backup_coil.autosizedNominalCapacity.is_initialized
-          backup_coil_cap = backup_coil.autosizedNominalCapacity.to_f
+        if (backup_coil.class.name.include? "CoilHeatingElectric") || (backup_coil.class.name.include? "CoilHeatingGas")
+          if backup_coil.nominalCapacity.is_initialized
+            backup_coil_cap = backup_coil.nominalCapacity.to_f
+          elsif backup_coil.autosizedNominalCapacity.is_initialized
+            backup_coil_cap = backup_coil.autosizedNominalCapacity.to_f
+          else
+            raise "Nominal capacity is undefined for coil #{backup_coil.name.to_s}"
+          end
+        elsif backup_coil.class.name.include? "CoilHeatingWater"
+          if backup_coil.ratedCapacity.is_initialized
+            backup_coil_cap = backup_coil.ratedCapacity.to_f
+          elsif backup_coil.autosizedRatedCapacity.is_initialized
+            backup_coil_cap = backup_coil.autosizedRatedCapacity.to_f
+          else
+            raise "Rated capacity is undefined for coil #{backup_coil.name.to_s}"
+          end
         else
-          raise "Nominal capacity is undefined for coil #{backup_coil.name.to_s}"
+          raise("Backup coil type is not supported")
         end
         # set the DX capacities to the maximum of the fraction of the backup coil capacity or the cooling capacity needed
         dx_cap = fr_backup_coil_cap_as_dx_coil_cap * backup_coil_cap
@@ -1797,11 +1831,19 @@ class ECMS
     else
       raise("Can not find curve hpowerf for #{hw_loop_htg_eqpt.name}")
     end
-    boiler = OpenStudio::Model::BoilerHotWater.new(model)
-    boiler.setFuelType(heating_fuel)
+    # Add one boiler if the primary and backup boiler fuel types are the same.  Add two boilers if the primary and
+    # secondary boiler fuel types differ.
+    boiler_fuels = []
+    boiler_fuels[0] = standard.fuel_type_set.boiler_fueltype
+    boiler_fuels[1] = standard.fuel_type_set.backup_boiler_fueltype unless standard.fuel_type_set.backup_boiler_fueltype == boiler_fuels[0]
     hw_loop_htg_eqpt_outlet_node = hw_loop_htg_eqpt.supplyOutletModelObject.get.to_Node.get
-    boiler.addToNode(hw_loop_htg_eqpt_outlet_node)
-
+    hw_boilers = []
+    boiler_fuels.each do |boiler_fuel|
+      boiler = OpenStudio::Model::BoilerHotWater.new(model)
+      boiler.setFuelType(boiler_fuel)
+      hw_boilers << boiler
+    end
+    hw_boilers.reverse().each {|boiler| boiler.addToNode(hw_loop_htg_eqpt_outlet_node)}
     # add chilled-water loop
     chw_loop,chw_loop_clg_eqpt = add_plantloop(model: model,
                                                loop_htg_eqpt_type: 'none',
@@ -1843,7 +1885,7 @@ class ECMS
     heat_rej_loop.addDemandBranchForComponent(hw_loop_htg_eqpt)
     heat_rej_loop.addDemandBranchForComponent(chw_loop_clg_eqpt)
 
-    # add output variables  for district heating and cooling
+    # add output variables for district heating and cooling
     model.getOutputVariables.each {|ivar| ivar.remove}
     dist_htg_var = OpenStudio::Model::OutputVariable.new("District Heating Water Rate",model)
     dist_htg_var.setReportingFrequency("hourly")
@@ -1864,7 +1906,7 @@ class ECMS
     hw_loops = model.getPlantLoops.select {|loop| loop.sizingPlant.loopType.to_s.downcase == 'heating'}
     hw_heatpump_loop = nil
     hw_heatpump = nil
-    hw_boiler = nil
+    hw_boilers = nil
     hw_loops.each do |hw_loop|
       hw_heatpumps = hw_loop.supplyComponents.select {|comp| comp.to_HeatPumpWaterToWaterEquationFitHeating.is_initialized}
       if !hw_heatpumps.empty?
@@ -1872,8 +1914,7 @@ class ECMS
         hw_heatpump = hw_heatpumps[0].to_HeatPumpWaterToWaterEquationFitHeating.get
       end
       hw_boilers = hw_loop.supplyComponents.select {|comp| comp.to_BoilerHotWater.is_initialized}
-      hw_boiler = hw_boilers[0].to_BoilerHotWater.get if !hw_boilers.empty?
-      break if !hw_heatpump_loop.nil? && !hw_heatpump.nil? && !hw_boiler.nil?
+      break if !hw_heatpump_loop.nil? && !hw_heatpump.nil? && !hw_boilers.empty?
     end
     raise("apply_efficiency_ecm_hs14_cgshp_fancoils: no water-source heat pump found in heating loop #{hw_loops.name.to_s}") if hw_heatpump.nil?
     cw_loop = model.getPlantLoops.select {|loop| loop.sizingPlant.loopType.to_s.downcase == 'condenser'}[0]
@@ -1902,13 +1943,22 @@ class ECMS
       cap = hw_heatpump.autosizedRatedHeatingCapacity.to_f
     elsif hw_heatpump.ratedHeatingCapacity.is_initialized
       cap = hw_heatpump.ratedHeatingCapacity.to_f
-    elsif hw_heatpump.autosizedRatedHeatingCapacity.is_initialized
-      cap = hw_heatpump.autosizedRatedHeatingCapacity.to_f
     else
       raise("apply_efficiency_ecm_hs14_cgshp_fancoils: capacity of water-source heat pump #{hw_heatpump.name.to_s} is not defined")
     end
     hw_heatpump.setRatedHeatingCapacity(heatpump_siz_f*cap)
-    hw_boiler.setNominalCapacity((1.0-heatpump_siz_f)*cap)
+    # If two boilers are present set their capacities by multiplying the capacity not handled by the GSHP by the defined
+    # primary and secondary boiler capacity ratios, respectively. If one boiler is defined then set its capacity to the
+    # amount not handled by the GSHP.
+    tot_hw_boiler_cap = (1.0-heatpump_siz_f)*cap
+    hw_boiler_cap = [ 1.0 ]
+    if hw_boilers.size > 1
+      standard.fuel_type_set.primary_boiler_cap_frac.nil? ? hw_boiler_cap[0] = 0.75 : hw_boiler_cap[0] = standard.fuel_type_set.primary_boiler_cap_frac
+      standard.fuel_type_set.secondary_boiler_cap_frac.nil? ? hw_boiler_cap[1] = 1.0 - hw_boiler_cap[0] : hw_boiler_cap[1] = standard.fuel_type_set.secondary_boiler_cap_frac
+    end
+    hw_boilers.each_with_index do |hw_boiler, boiler_index|
+      hw_boiler.to_BoilerHotWater.get.setNominalCapacity((tot_hw_boiler_cap*hw_boiler_cap[boiler_index]))
+    end
     # set cooling capacity of chillers
     chillers = chw_loop.supplyComponents.select {|comp| comp.to_ChillerElectricEIR.is_initialized}
     chiller_water_cooled = nil
@@ -1925,8 +1975,6 @@ class ECMS
       cap = chiller_water_cooled.autosizedReferenceCapacity.to_f
     elsif chiller_water_cooled.referenceCapacity.is_initialized
       cap = chiller_water_cooled.referenceCapacity.to_f
-    elsif chiller_water_cooled.autosizedReferenceCapacity.is_initialized
-      cap = chiller_water_cooled.autosizedReferenceCapacity.to_f
     else
       raise("apply_efficiency_ecm_hs14_cgshp_fancoils: cooling capacity of chiller #{chiller_water_cooled.name.to_s} is not defined")
     end
@@ -2011,6 +2059,302 @@ class ECMS
     dist_clg_eqpt.setNominalCapacity(max_clg_load)
   end
 
+  #=============================================================================================================================
+  # Add equipment for ECM "hs15_cawhp_fancoils"
+  #   -Constant volume DOAS with hydronic htg and clg coils served by central air-to-water heat pump.
+  #   -Zonal terminal fan coil (4-pipe) connected to central air-to-water heat pump.
+  #   -Plant has a heating loop with air-to-water heat pump with one or two backup boiler(s).
+  def add_ecm_hs15_cawhp_fancoils(model:,
+                               system_zones_map:,
+                               system_doas_flags:,
+                               ecm_system_zones_map_option:,
+                               standard:,
+                               sys_htg_eqpt_type: 'coil_hw',
+                               sys_clg_eqpt_type: 'coil_chw',
+                               sys_supp_htg_eqpt_type: 'none')
+    # Update system zones map if needed
+    system_zones_map = update_system_zones_map_keys(system_zones_map,'sys_1')
+    system_zones_map = update_system_zones_map(model,system_zones_map,ecm_system_zones_map_option,'sys_1') if ecm_system_zones_map_option != 'NECB_Default'
+    # Update system doas flags
+    system_doas_flags = {}
+    system_zones_map.keys.each { |sname| system_doas_flags[sname] = true }
+    # generate new air system and zonal equipment
+    systems = []
+    system_zones_map.sort.each do |sys_name, zones|
+      sys_info = air_sys_comps_assumptions(sys_name: sys_name,
+             zones: zones,
+             system_doas_flags: system_doas_flags)
+      airloop,clg_coil,htg_coil,return_fan = add_air_system(model: model,
+             zones: zones,
+             sys_abbr: sys_info['sys_abbr'],
+             sys_vent_type: sys_info['sys_vent_type'],
+             sys_heat_rec_type: sys_info['sys_heat_rec_type'],
+             sys_htg_eqpt_type: sys_htg_eqpt_type,
+             sys_supp_htg_eqpt_type: sys_supp_htg_eqpt_type,
+             sys_clg_eqpt_type: sys_clg_eqpt_type,
+             sys_supp_fan_type: sys_info['sys_supp_fan_type'],
+             sys_ret_fan_type: sys_info['sys_ret_fan_type'],
+             sys_setpoint_mgr_type: 'warmest')
+      if sys_htg_eqpt_type == 'ashp' && sys_clg_eqpt_type == 'ashp'
+        eqpt_name = 'NECB2015_ASHP'
+        coil_cooling_dx_single_speed_apply_curves(clg_coil,eqpt_name)
+        coil_heating_dx_single_speed_apply_curves(htg_coil,eqpt_name)
+      end
+      # add zone fan coil equipment and diffuser
+      zone_htg_eqpt_type = 'fancoil_4pipe'
+      zone_clg_eqpt_type = 'fancoil_4pipe'
+      zone_supp_htg_eqpt_type = 'none'
+      zone_fan_type = 'on_off'
+      add_zone_eqpt(model: model,
+      airloop: airloop,
+      zones: zones,
+      outdoor_unit: nil,
+      zone_diffuser_type: sys_info['zone_diffuser_type'],
+      zone_htg_eqpt_type: zone_htg_eqpt_type,
+      zone_supp_htg_eqpt_type: zone_supp_htg_eqpt_type,
+      zone_clg_eqpt_type: zone_clg_eqpt_type,
+      zone_fan_type: zone_fan_type)
+      return_fan.addToNode(airloop.returnAirNode.get) if return_fan
+      systems << airloop
+    end
+    # add hot-water loop with heat pump for heating
+    hw_loop,hw_loop_htg_eqpt = add_plantloop(model: model,
+           loop_htg_eqpt_type: 'HeatPump_PlantLoop_EIR_Heating',
+           loop_clg_eqpt_type: 'none',
+           loop_heat_rej_eqpt_type: 'none',
+           loop_pump_type: 'variable_speed',
+           loop_spm_type: 'Scheduled',
+           loop_setpoint: 50.0,
+           loop_temp_diff: 5.0)
+    # set additional parameters for heating heat pump
+    hw_loop_htg_eqpt.setCondenserType('AirSoure')
+    hw_loop_htg_eqpt.setMinimumSourceInletTemperature(-15.0)
+    hw_loop_htg_eqpt.setReferenceCoefficientofPerformance(3.0)
+    hw_loop_htg_eqpt.setHeatPumpSizingMethod('CoolingCapacity')
+    hw_loop_htg_eqpt.setHeatPumpDefrostControl('OnDemand')
+    hw_loop_htg_eqpt.setFlowMode('VariableSpeedPumping')
+    hw_loop_htg_eqpt.setControlType('Setpoint')
+    hw_loop_htg_eqpt.setMinimumPartLoadRatio(0.2)
+    hw_loop.setLoadDistributionScheme('SequentialLoad')
+    model.getCoilHeatingWaters.sort.each {|coil| hw_loop.addDemandBranchForComponent(coil)}
+    # add one boiler if the primary and backup boiler fuel types are the same.  Add two boilers if the primary and
+    # secondary boiler fuel types differ.
+    hw_loop_htg_eqpt_outlet_node = hw_loop_htg_eqpt.supplyOutletModelObject.get.to_Node.get
+    boiler_fuels = []
+    boiler_fuels[0] = standard.fuel_type_set.boiler_fueltype
+    boiler_fuels[1] = standard.fuel_type_set.backup_boiler_fueltype unless standard.fuel_type_set.backup_boiler_fueltype == boiler_fuels[0]
+    hw_boilers = []
+    boiler_fuels.each do |boiler_fuel|
+      boiler = OpenStudio::Model::BoilerHotWater.new(model)
+      boiler.setFuelType(boiler_fuel)
+      hw_boilers << boiler
+    end
+    hw_boilers.reverse().each {|boiler| boiler.addToNode(hw_loop_htg_eqpt_outlet_node)}
+    # add setpoint manager at the exit of the heat pump heating comp
+    sch = OpenStudio::Model::ScheduleConstant.new(model)
+    sch.setValue(50.0)
+    spm = OpenStudio::Model::SetpointManagerScheduled.new(model,sch)
+    spm.setName("HeatPumpHtgSetpointManager")
+    spm.addToNode(hw_loop_htg_eqpt_outlet_node)
+    # add chilled-water loop with heat pump for cooling
+    chw_loop,chw_loop_clg_eqpt = add_plantloop(model: model,
+           loop_htg_eqpt_type: 'none',
+           loop_clg_eqpt_type: 'HeatPump_PlantLoop_EIR_Cooling',
+           loop_heat_rej_eqpt_type: 'none',
+           loop_pump_type: 'variable_speed',
+           loop_spm_type: 'Scheduled',
+           loop_setpoint: 7.0,
+           loop_temp_diff: 6.0)
+    # set additional parameter for heat pump for cooling
+    chw_loop_clg_eqpt.setCondenserType('AirSource')
+    chw_loop_clg_eqpt.setFlowMode('VariableSpeedPumping')
+    chw_loop_clg_eqpt.setReferenceCoefficientofPerformance(3.0)
+    chw_loop_clg_eqpt.setFlowMode('VariableSpeedPumping')
+    chw_loop_clg_eqpt.setControlType('Load')
+    chw_loop_clg_eqpt.setMinimumPartLoadRatio(0.2)
+    hw_loop_htg_eqpt.setCompanionCoolingHeatPump(chw_loop_clg_eqpt)
+    model.getCoilCoolingWaters.sort.each {|coil| chw_loop.addDemandBranchForComponent(coil)}
+    # use performance curves given in one of the E+ examples for a central air-to-water heat pump from Trane
+    # heating capft curve
+    hcapft = OpenStudio::Model::CurveBiquadratic.new(model)
+    hcapft.setCoefficient1Constant(0.794900878202383)
+    hcapft.setCoefficient2x(0.00388524034840032)
+    hcapft.setCoefficient3xPOW2(-0.0000575169230965453)
+    hcapft.setCoefficient4y(0.0278109488428528)
+    hcapft.setCoefficient5yPOW2(0.000318168)
+    hcapft.setCoefficient6xTIMESY(-0.000130572089253355)
+    hcapft.setMinimumValueofx(15.0)
+    hcapft.setMaximumValueofx(70.0)
+    hcapft.setMinimumValueofy(-17.0)
+    hcapft.setMaximumValueofy(37.22)
+    hcapft.setMinimumCurveOutput(0.0)
+    hcapft.setMaximumCurveOutput(1.55)
+    hw_loop_htg_eqpt.setCapacityModifierFunctionofTemperatureCurve(hcapft)
+    # heating eirft curve
+    heirft = OpenStudio::Model::CurveBiquadratic.new(model)
+    heirft.setCoefficient1Constant(0.530730392560108)
+    heirft.setCoefficient2x(0.00655164780603528)
+    heirft.setCoefficient3xPOW2(0.000263599226028026)
+    heirft.setCoefficient4y(-0.03620668194737)
+    heirft.setCoefficient5yPOW2(0.00126617163409192)
+    heirft.setCoefficient6xTIMESY(-0.000791224057761721)
+    heirft.setMinimumValueofx(15.0)
+    heirft.setMaximumValueofx(70.0)
+    heirft.setMinimumValueofy(-17.0)
+    heirft.setMaximumValueofy(37.22)
+    heirft.setMinimumCurveOutput(0.4)
+    heirft.setMaximumCurveOutput(1.48)
+    hw_loop_htg_eqpt.setElectricInputtoOutputRatioModifierFunctionofTemperatureCurve(heirft)
+    # cooling capft curves
+    ccapft = OpenStudio::Model::CurveBiquadratic.new(model)
+    ccapft.setCoefficient1Constant(1.06722728893252)
+    ccapft.setCoefficient2x(0.0460678063570057)
+    ccapft.setCoefficient3xPOW2(0.00034604993757372)
+    ccapft.setCoefficient4y(-0.0069704934525177)
+    ccapft.setCoefficient5yPOW2(-0.0000288618548923695)
+    ccapft.setCoefficient6xTIMESY(-0.000475762640861958)
+    ccapft.setMinimumValueofx(2.0)
+    ccapft.setMaximumValueofx(20.0)
+    ccapft.setMinimumValueofy(4.2)
+    ccapft.setMaximumValueofy(37.0)
+    ccapft.setMinimumCurveOutput(0.0)
+    ccapft.setMaximumCurveOutput(1.55)
+    chw_loop_clg_eqpt.setCapacityModifierFunctionofTemperatureCurve(ccapft)
+    # cooling eirft curve
+    ceirft = OpenStudio::Model::CurveBiquadratic.new(model)
+    ceirft.setCoefficient1Constant(0.440305821838175)
+    ceirft.setCoefficient2x(-0.0241323110030793)
+    ceirft.setCoefficient3xPOW2(0.000537914626055751)
+    ceirft.setCoefficient4y(0.0118716162533228)
+    ceirft.setCoefficient5yPOW2(0.000305785618883187)
+    ceirft.setCoefficient6xTIMESY(-0.000617329632749052)
+    ceirft.setMinimumValueofx(2.0)
+    ceirft.setMaximumValueofx(20.0)
+    ceirft.setMinimumValueofy(4.2)
+    ceirft.setMaximumValueofy(37.0)
+    ceirft.setMinimumCurveOutput(0.4)
+    ceirft.setMaximumCurveOutput(1.48)
+    chw_loop_clg_eqpt.setElectricInputtoOutputRatioModifierFunctionofTemperatureCurve(ceirft)
+    return
+  end
+
+  #=============================================================================================================================
+  # Apply efficiency for ECM 'hs15_cawhp_fancoils'
+  def apply_efficiency_ecm_hs15_cawhp_fancoils(model, standard)
+    heatpump_siz_f = 0.4 # heating heat pump sizing fraction
+    # get heat pump heating and boiler objects
+    hw_loop = model.getPlantLoops.select {|loop| loop.sizingPlant.loopType.to_s.downcase == 'heating'}
+    raise("apply_efficiency_ecm_hs15_cawhp_fancoils: no hot-water loop is found") if hw_loop.empty?
+    hw_loop = hw_loop[0].to_PlantLoop.get
+    heatpump_htg = hw_loop.supplyComponents.select {|comp| comp.to_HeatPumpPlantLoopEIRHeating.is_initialized}
+    hw_boilers = hw_loop.supplyComponents.select {|comp| comp.to_BoilerHotWater.is_initialized}
+    raise("apply_efficiency_ecm_hs15_cawhp_fancoils: no air-source heat pump found on hot-water loop #{hw_loop.name.to_s}") if heatpump_htg.empty?
+    raise("apply_efficiency_ecm_hs15_cawhp_fancoils: no boiler found on hot-water loop #{hw_loop.name.to_s}") if hw_boilers.empty?
+    heatpump_htg = heatpump_htg[0].to_HeatPumpPlantLoopEIRHeating.get
+    primary_boiler = hw_boilers[0].to_BoilerHotWater.get
+    # boiler total capacity
+    if primary_boiler.autosizedNominalCapacity.is_initialized
+      tot_hw_boiler_cap = primary_boiler.autosizedNominalCapacity.to_f
+    elsif primary_boiler.nominalCapacity.is_initialized
+      tot_hw_boiler_cap = primary_boiler.nominalCapacity.to_f
+    else
+      raise("apply_efficiency_ecm_hs15_cawhp_fancoils: capacity of boiler #{primary_boiler.name.to_s} is not defined")
+    end
+    # If two boilers are present set their capacities by multiplying the total capacity by the defined primary and secondary
+    # boiler capacity ratios, respectively.
+    hw_boiler_cap = [ 1.0 ]
+    if hw_boilers.size > 1
+      standard.fuel_type_set.primary_boiler_cap_frac.nil? ? hw_boiler_cap[0] = 0.75 : hw_boiler_cap[0] = standard.fuel_type_set.primary_boiler_cap_frac
+      standard.fuel_type_set.secondary_boiler_cap_frac.nil? ? hw_boiler_cap[1] = 1.0 - hw_boiler_cap[0] : hw_boiler_cap[1] = standard.fuel_type_set.secondary_boiler_cap_frac
+    end
+    hw_boilers.each_with_index do |hw_boiler, boiler_index|
+      hw_boiler.to_BoilerHotWater.get.setNominalCapacity((tot_hw_boiler_cap*hw_boiler_cap[boiler_index]))
+    end
+    # get heat pump cooling object
+    chw_loop = model.getPlantLoops.select {|loop| loop.sizingPlant.loopType.to_s.downcase == 'cooling'}
+    raise("apply_efficiency_ecm_hs15_cawhp_fancoils: no chilled-water loop is found") if chw_loop.empty?
+    chw_loop = chw_loop[0].to_PlantLoop.get
+    heatpump_clg = chw_loop.supplyComponents.select {|comp| comp.to_HeatPumpPlantLoopEIRCooling.is_initialized}
+    raise("apply_efficiency_ecm_hs15_cawhp_fancoils: no heat pump on chilled-water loop #{chw_loop.name} is found") if heatpump_clg.empty?
+    heatpump_clg = heatpump_clg[0].to_HeatPumpPlantLoopEIRCooling.get
+    # get cooling capacity of air-source heat pump
+    if heatpump_clg.autosizedReferenceCapacity.is_initialized
+      hp_clg_cap = heatpump_clg.autosizedReferenceCapacity.to_f
+    elsif heatpump_clg.ratedReferenceCapacity.is_initialized
+      hp_clg_cap = heatpump_clg.ratedReferenceCapacity.to_f
+    else
+      raise("apply_efficiency_ecm_hs15_cawhp_fancoils: capacity of air-source heat pump #{heatpump_htg.name.to_s} is not defined")
+    end
+    # set final heating capacity and cooling capacities of air-source heat pump
+    hp_htg_cap = heatpump_siz_f*tot_hw_boiler_cap
+    hp_htg_cap = hp_clg_cap if hp_clg_cap > hp_htg_cap
+    heatpump_htg.setReferenceCapacity(hp_htg_cap)
+    heatpump_clg.setReferenceCapacity(hp_htg_cap)
+    # sensor for heat pump cooling load side heat transfer
+    heatpump_clg_load_s = OpenStudio::Model::EnergyManagementSystemSensor.new(model, 'Heat Pump Load Side Heat Transfer Rate')
+    heatpump_clg_load_s.setName('HeatPumpClgLoad')
+    heatpump_clg_load_s.setKeyName(heatpump_clg.name.to_s)
+    # actuator for heat pump heating outlet node setpoint schedule
+    heatpump_htg_outlet_node = heatpump_htg.supplyOutletModelObject.get.to_Node.get
+    heatpump_htg_sch = heatpump_htg_outlet_node.setpointManagers[0].to_SetpointManagerScheduled.get.schedule.to_ScheduleConstant.get
+    heatpump_htg_sch_a = OpenStudio::Model::EnergyManagementSystemActuator.new(heatpump_htg_sch, 'Schedule:Constant', 'Schedule Value')
+    heatpump_htg_sch_a.setName('heatpump_htg_sch_a')
+    # energy management program to turn off heat pump heating side when the cooling side is on
+    heatpump_cltr_prg = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
+    heatpump_cltr_prg.setName('HeatPumpCtrlPrg')
+    body = <<-EMS
+      IF (HeatPumpClgLoad > 0.0)
+        SET heatpump_htg_sch_a = -99.0
+      ELSE
+        SET heatpump_htg_sch_a = 50.0
+      ENDIF
+    EMS
+    heatpump_cltr_prg.setBody(body)
+    heat_pump_ctlr_pcm = OpenStudio::Model::EnergyManagementSystemProgramCallingManager.new(model)
+    heat_pump_ctlr_pcm.setName('HeatPumpCtrlPCM')
+    heat_pump_ctlr_pcm.setCallingPoint('InsideHVACSystemIterationLoop')
+    heat_pump_ctlr_pcm.addProgram(heatpump_cltr_prg)
+
+    return
+  end
+
+  #=============================================================================================================================
+  # Add equipment for ECM "hs16_ashp_cawhp_fancoils"
+  #   -Constant volume DOAS with ashp for heating and cooling with a backup heating coil.
+  #   -Zonal terminal fan coil (4-pipe) connected to central air-to-water heat pump.
+  #   -Plant has a heating loop with air-to-water heat pump with one or two backup boiler(s).
+  def add_ecm_hs16_ashp_cawhp_fancoils(model:,
+                                    system_zones_map:,
+                                    system_doas_flags:,
+                                    ecm_system_zones_map_option:,
+                                    standard:)
+    # Get the heating fuel type from the system fuels object defined by the standards object
+    heating_fuel = standard.fuel_type_set.ecm_fueltype
+    # Set supplemental heaing for airloop
+    sys_supp_htg_eqpt_type = 'coil_electric'
+    sys_supp_htg_eqpt_type = 'coil_gas' if heating_fuel == 'NaturalGas'
+    # call ecm HS15 to add the air loop
+    add_ecm_hs15_cawhp_fancoils(model: model,
+                             system_zones_map: system_zones_map,
+                             system_doas_flags: system_doas_flags,
+                             ecm_system_zones_map_option: ecm_system_zones_map_option,
+                             standard: standard,
+                             sys_htg_eqpt_type: 'ashp',
+                             sys_clg_eqpt_type: 'ashp',
+                             sys_supp_htg_eqpt_type: sys_supp_htg_eqpt_type)
+    return
+  end
+
+  #=============================================================================================================================
+  # Apply efficiency for ECM 'hs16_ashp_cawhp_fancoils'
+  def apply_efficiency_ecm_hs16_ashp_cawhp_fancoils(model, standard)
+    # The air loop is the same as in ECM HS12
+    apply_efficiency_ecm_hs12_ashp_baseboard(model, standard)
+    # The plant loop is the same as in ECM HS15
+    apply_efficiency_ecm_hs15_cawhp_fancoils(model, standard)
+    return
+  end
+
   # =============================================================================================================================
   # Applies the performance curves "CoilCoolingDXSingleSpeed" object.
   def coil_cooling_dx_single_speed_apply_curves(coil_cooling_dx_single_speed, eqpt_name)
@@ -2032,7 +2376,6 @@ class ECMS
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standard.CoilCoolingDXSingleSpeed', "For #{coil_cooling_dx_single_speed.name}, cannot find efficiency info using #{search_criteria}, cannot apply efficiency.")
       successfully_set_all_properties = false
     end
-
     # Make the COOL-CAP-FT curve
     cool_cap_ft = model_add_curve(coil_cooling_dx_single_speed.model, ac_props['cool_cap_ft'])
 

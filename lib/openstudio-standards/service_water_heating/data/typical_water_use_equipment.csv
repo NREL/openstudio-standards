@@ -1,4 +1,4 @@
-﻿space_type,building_type,equipment_name,peak_flow_rate,peak_flow_rate_per_area,loop_type,temperature,flow_rate_schedule,sensible_fraction,latent_fraction
+space_type,building_type,equipment_name,peak_flow_rate,peak_flow_rate_per_area,loop_type,temperature,flow_rate_schedule,sensible_fraction,latent_fraction
 Break Room,Courthouse,,,0.02,Shared,140,Courthouse BLDG_SWH_SCH,0.2,0.05
 Restroom,Courthouse,,,0.02,Shared,140,Courthouse BLDG_SWH_SCH,0.2,0.05
 Kitchen,FullServiceRestaurant,Dishwasher Booster,,0.054,Shared,180,RestaurantSitDown BLDG_SWH_SCH,0.2,0.05

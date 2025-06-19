@@ -2345,6 +2345,19 @@ if !applicable_zones.nil? && !applicable_zones.include?(zone)
     return false
   end
 
+  # Get the maximum value for a field of a hash
+  #
+  # @param hash_of_objects [Hash] hash of objects to search through
+  # @param field [String] field name from the hash
+  # @return [float] Return the first matching object hash if successful, nil if not.
+  def model_find_maximum_value(hash_of_objects, field)
+    maximum_value = 0
+    hash_of_objects.each do |set|
+      maximum_value = [maximum_value, set[field]].max if set[field].to_f > 0
+    end
+    return maximum_value
+  end
+
   # Method to search through a hash for the objects that meets the desired search criteria, as passed via a hash.
   # Returns an Array (empty if nothing found) of matching objects.
   #
@@ -2475,7 +2488,7 @@ if !applicable_zones.nil? && !applicable_zones.include?(zone)
       matching_capacity_objects = matching_objects.reject { |object| fan_motor_bhp.to_f <= object['minimum_capacity'].to_f || fan_motor_bhp.to_f > object['maximum_capacity'].to_f }
 
       # Filter based on motor type
-      matching_capacity_objects = matching_capacity_objects.select { |object| object['type'].downcase == search_criteria['type'].downcase } if search_criteria.keys.include?('type')
+      matching_capacity_objects = matching_capacity_objects.select { |object| object['type'].to_s.downcase == search_criteria['type'].to_s.downcase } if search_criteria.keys.include?('type')
 
       # If no object was found, round the fan_motor_bhp down in case the number fell between the limits in the json file.
       if matching_capacity_objects.empty?
@@ -2544,7 +2557,7 @@ if !applicable_zones.nil? && !applicable_zones.include?(zone)
   #   the objects will only be returned if the specified area is between the minimum_area and maximum_area values.
   # @param num_floors [Double] capacity of the object in question.  If num_floors is supplied,
   #   the objects will only be returned if the specified num_floors is between the minimum_floors and maximum_floors values.
-  # @return [Hash] Return tbe first matching object hash if successful, nil if not.
+  # @return [Hash] Return the first matching object hash if successful, nil if not.
   # @example Find the motor that meets these size criteria
   #   search_criteria = {
   #   'template' => template,
@@ -2716,7 +2729,7 @@ if !applicable_zones.nil? && !applicable_zones.include?(zone)
   #   the objects will only be returned if the specified capacity is between the minimum_capacity and maximum_capacity values.
   # @param date [<OpenStudio::Date>] date of the object in question.  If date is supplied,
   #   the objects will only be returned if the specified date is between the start_date and end_date.
-  # @return [Hash] Return tbe first matching object hash if successful, nil if not.
+  # @return [Hash] Return the first matching object hash if successful, nil if not.
   # @example Find the motor that meets these size criteria
   #   search_criteria = {
   #   'template' => template,
@@ -5742,7 +5755,7 @@ if !applicable_zones.nil? && !applicable_zones.include?(zone)
     if sch_type == 'Constant'
       day_sch.addValue(OpenStudio::Time.new(0, 24, 0, 0), values[0])
     elsif sch_type == 'Hourly'
-      (0..23).each do |i|
+      24.times do |i|
         next if values[i] == values[i + 1]
 
         day_sch.addValue(OpenStudio::Time.new(0, i + 1, 0, 0), values[i])

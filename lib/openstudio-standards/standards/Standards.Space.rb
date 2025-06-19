@@ -1254,6 +1254,9 @@ class Standard
 
     # Get climate zone
     climate_zone = OpenstudioStandards::Weather.model_get_climate_zone(space.model)
+    if climate_zone.empty?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Space', 'Model has no climate zone assigned, cannot determine space conditioning category.')
+    end
 
     # Get the zone this space is inside
     zone = space.thermalZone

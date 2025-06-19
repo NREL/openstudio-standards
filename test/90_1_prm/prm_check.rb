@@ -631,7 +631,7 @@ class AppendixGPRMTests < Minitest::Test
     # cooling: CoilCoolingDXSingleSpeed
     # heating: CoilHeatingWater
     # hash = {capacity:cop}
-    capacity_cop_cool = { 100000 => 3.1 }
+    capacity_cop_cool = { 100000 => 3.2 }
     capacity_cop_cool.each do |key_cool, value_cool|
       std = Standard.build('90.1-PRM-2019')
       prototypes_base.each do |prototype, model_base|
