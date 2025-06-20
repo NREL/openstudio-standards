@@ -2862,7 +2862,7 @@ OS:DistrictCooling,
   DistrictCooling GLHX,                    !- Name
   {00000000-0000-0000-0016-000000000186},  !- Chilled Water Inlet Node Name
   {00000000-0000-0000-0016-000000000187},  !- Chilled Water Outlet Node Name
-  18078.3619565444,                        !- Nominal Capacity {W}
+  18078.3622636878,                        !- Nominal Capacity {W}
   {00000000-0000-0000-0064-000000000002};  !- Capacity Fraction Schedule
 
 OS:DistrictHeating:Water,
@@ -2870,7 +2870,7 @@ OS:DistrictHeating:Water,
   DistrictHeating GLHX,                    !- Name
   {00000000-0000-0000-0016-000000000177},  !- Hot Water Inlet Node Name
   {00000000-0000-0000-0016-000000000178},  !- Hot Water Outlet Node Name
-  21453.6020405003,                        !- Nominal Capacity {W}
+  18678.2004348694,                        !- Nominal Capacity {W}
   {00000000-0000-0000-0064-000000000002};  !- Capacity Fraction Schedule
 
 OS:ElectricEquipment,
@@ -4734,7 +4734,7 @@ OS:Schedule:Constant,
   {00000000-0000-0000-0064-000000000004},  !- Handle
   Schedule Constant 1,                     !- Name
   {00000000-0000-0000-0068-000000000008},  !- Schedule Type Limits Name
-  50;                                      !- Value
+  60;                                      !- Value
 
 OS:Schedule:Constant,
   {00000000-0000-0000-0064-000000000005},  !- Handle
@@ -6753,7 +6753,7 @@ OS:Sizing:Plant,
   {00000000-0000-0000-0081-000000000002},  !- Handle
   {00000000-0000-0000-0058-000000000003},  !- Plant or Condenser Loop Name
   Heating,                                 !- Loop Type
-  50,                                      !- Design Loop Exit Temperature {C}
+  60,                                      !- Design Loop Exit Temperature {C}
   5,                                       !- Loop Design Temperature Difference {deltaC}
   NonCoincident,                           !- Sizing Option
   1,                                       !- Zone Timesteps in Averaging Window
