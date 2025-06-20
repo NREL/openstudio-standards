@@ -134,7 +134,7 @@ class Standard
       unless (template == 'NECB2011') || (template == 'NECB2015') || (template == 'NECB2017') || (template == 'NECB2020') || (template == 'BTAPPRE1980') ||
         (template == 'BTAP1980TO2010')
         # Single Package/Split System is only used for units less than 65 kBtu/h
-        if capacity_btu_per_hr >= 65000
+        if capacity_btu_per_hr >= 65000 && equipment_type != 'PTHP'
           search_criteria['rating_condition'] = '47F db/43F wb outdoor air'
           search_criteria['subcategory'] = nil
         else
@@ -160,7 +160,7 @@ class Standard
 
     cop = nil
     # If PTHP, use equations
-    if sub_category == 'PTHP' && !hp_props['pthp_cop_coefficient_1'].nil? && !hp_props['pthp_cop_coefficient_2'].nil?
+    if equipment_type == 'PTHP' && !hp_props['pthp_cop_coefficient_1'].nil? && !hp_props['pthp_cop_coefficient_2'].nil?
       pthp_cop_coeff_1 = hp_props['pthp_cop_coefficient_1']
       pthp_cop_coeff_2 = hp_props['pthp_cop_coefficient_2']
       # TABLE 6.8.1D
