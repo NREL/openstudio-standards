@@ -236,7 +236,7 @@ module CoilDX
   # @return [String] Electric power phase
   def coil_dx_electric_power_phase(coil_dx)
     case template
-    when '90.1-2019'
+    when '90.1-2019', '90.1-2016'
       return 3
     else
       return nil

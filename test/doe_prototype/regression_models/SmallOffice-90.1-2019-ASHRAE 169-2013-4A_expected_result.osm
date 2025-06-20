@@ -3618,7 +3618,7 @@ OS:Coil:Heating:DX:SingleSpeed,
   Perimeter_ZN_1 ZN HP Htg Coil 25 Clg kBtu/hr 6.7HSPF2, !- Name
   {715c929a-5b53-46c1-9d83-70fac74dce4c}, !- Availability Schedule Name
   Autosize,                               !- Rated Total Heating Capacity {W}
-  3.8128,                                 !- Rated COP {W/W}
+  3.45104,                                 !- Rated COP {W/W}
   Autosize,                               !- Rated Air Flow Rate {m3/s}
   773.3,                                  !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                  !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -4156,7 +4156,7 @@ OS:Coil:Heating:DX:SingleSpeed,
   Perimeter_ZN_2 ZN HP Htg Coil 19 Clg kBtu/hr 6.7HSPF2, !- Name
   {715c929a-5b53-46c1-9d83-70fac74dce4c}, !- Availability Schedule Name
   Autosize,                               !- Rated Total Heating Capacity {W}
-  3.8128,                                 !- Rated COP {W/W}
+  3.45104,                                 !- Rated COP {W/W}
   Autosize,                               !- Rated Air Flow Rate {m3/s}
   773.3,                                  !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                  !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -4686,7 +4686,7 @@ OS:Coil:Heating:DX:SingleSpeed,
   Perimeter_ZN_3 ZN HP Htg Coil 23 Clg kBtu/hr 6.7HSPF2, !- Name
   {715c929a-5b53-46c1-9d83-70fac74dce4c}, !- Availability Schedule Name
   Autosize,                               !- Rated Total Heating Capacity {W}
-  3.8128,                                 !- Rated COP {W/W}
+  3.45104,                                 !- Rated COP {W/W}
   Autosize,                               !- Rated Air Flow Rate {m3/s}
   773.3,                                  !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                  !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -5216,7 +5216,7 @@ OS:Coil:Heating:DX:SingleSpeed,
   Perimeter_ZN_4 ZN HP Htg Coil 21 Clg kBtu/hr 6.7HSPF2, !- Name
   {715c929a-5b53-46c1-9d83-70fac74dce4c}, !- Availability Schedule Name
   Autosize,                               !- Rated Total Heating Capacity {W}
-  3.8128,                                 !- Rated COP {W/W}
+  3.45104,                                 !- Rated COP {W/W}
   Autosize,                               !- Rated Air Flow Rate {m3/s}
   773.3,                                  !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                  !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -5746,7 +5746,7 @@ OS:Coil:Heating:DX:SingleSpeed,
   Core_ZN ZN HP Htg Coil 23 Clg kBtu/hr 6.7HSPF2, !- Name
   {715c929a-5b53-46c1-9d83-70fac74dce4c}, !- Availability Schedule Name
   Autosize,                               !- Rated Total Heating Capacity {W}
-  3.8128,                                 !- Rated COP {W/W}
+  3.45104,                                 !- Rated COP {W/W}
   Autosize,                               !- Rated Air Flow Rate {m3/s}
   773.3,                                  !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                  !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}

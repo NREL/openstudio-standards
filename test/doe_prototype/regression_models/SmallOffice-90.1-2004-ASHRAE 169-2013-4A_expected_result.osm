@@ -3400,7 +3400,7 @@ OS:Coil:Heating:DX:SingleSpeed,
   Perimeter_ZN_1 ZN HP Htg Coil 30 Clg kBtu/hr 7.4HSPF, !- Name
   {3e2d9bf3-3a72-478e-95a1-7da05ea0c5de}, !- Availability Schedule Name
   Autosize,                               !- Rated Total Heating Capacity {W}
-  3.419064,                               !- Rated COP {W/W}
+  3.65826,                               !- Rated COP {W/W}
   Autosize,                               !- Rated Air Flow Rate {m3/s}
   773.3,                                  !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                  !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -3938,7 +3938,7 @@ OS:Coil:Heating:DX:SingleSpeed,
   Perimeter_ZN_2 ZN HP Htg Coil 22 Clg kBtu/hr 7.4HSPF, !- Name
   {3e2d9bf3-3a72-478e-95a1-7da05ea0c5de}, !- Availability Schedule Name
   Autosize,                               !- Rated Total Heating Capacity {W}
-  3.419064,                               !- Rated COP {W/W}
+  3.65826,                               !- Rated COP {W/W}
   Autosize,                               !- Rated Air Flow Rate {m3/s}
   773.3,                                  !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                  !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -4468,7 +4468,7 @@ OS:Coil:Heating:DX:SingleSpeed,
   Perimeter_ZN_3 ZN HP Htg Coil 27 Clg kBtu/hr 7.4HSPF, !- Name
   {3e2d9bf3-3a72-478e-95a1-7da05ea0c5de}, !- Availability Schedule Name
   Autosize,                               !- Rated Total Heating Capacity {W}
-  3.419064,                               !- Rated COP {W/W}
+  3.65826,                               !- Rated COP {W/W}
   Autosize,                               !- Rated Air Flow Rate {m3/s}
   773.3,                                  !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                  !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -4998,7 +4998,7 @@ OS:Coil:Heating:DX:SingleSpeed,
   Perimeter_ZN_4 ZN HP Htg Coil 25 Clg kBtu/hr 7.4HSPF, !- Name
   {3e2d9bf3-3a72-478e-95a1-7da05ea0c5de}, !- Availability Schedule Name
   Autosize,                               !- Rated Total Heating Capacity {W}
-  3.419064,                               !- Rated COP {W/W}
+  3.65826,                               !- Rated COP {W/W}
   Autosize,                               !- Rated Air Flow Rate {m3/s}
   773.3,                                  !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                  !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -5528,7 +5528,7 @@ OS:Coil:Heating:DX:SingleSpeed,
   Core_ZN ZN HP Htg Coil 28 Clg kBtu/hr 7.4HSPF, !- Name
   {3e2d9bf3-3a72-478e-95a1-7da05ea0c5de}, !- Availability Schedule Name
   Autosize,                               !- Rated Total Heating Capacity {W}
-  3.419064,                               !- Rated COP {W/W}
+  3.65826,                               !- Rated COP {W/W}
   Autosize,                               !- Rated Air Flow Rate {m3/s}
   773.3,                                  !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                  !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -7664,18 +7664,18 @@ OS:Schedule:Day,
   0.7;                                    !- Value Until Time 1
 
 OS:Curve:Cubic,
-  {30759b81-f89f-4b6b-8d50-9ddfd97fba81}, !- Handle
-  DXHEAT-NECB2011-REF-CAPFT,              !- Name
-  0.729,                                  !- Coefficient1 Constant
-  0.0319,                                 !- Coefficient2 x
-  0.000136,                               !- Coefficient3 x**2
-  -8.75e-06,                              !- Coefficient4 x**3
+  {dc555f8b-2b75-4e41-9f30-f2a63fdccde3}, !- Handle
+  HPACHeatCapFT,                          !- Name
+  0.758746,                               !- Coefficient1 Constant
+  0.027626,                               !- Coefficient2 x
+  0.000148716,                            !- Coefficient3 x**2
+  3.4992e-06,                             !- Coefficient4 x**3
   -20,                                    !- Minimum Value of x
   20;                                     !- Maximum Value of x
 
 OS:Curve:Cubic,
-  {4e31980e-964c-4c9c-877a-9f606bb67e61}, !- Handle
-  DXHEAT-NECB2011-REF-CAPFFLOW,           !- Name
+  {881dfcb3-3394-4578-9a64-58c273d7fb01}, !- Handle
+  HPACHeatCapFFF,                         !- Name
   0.84,                                   !- Coefficient1 Constant
   0.16,                                   !- Coefficient2 x
   0,                                      !- Coefficient3 x**2
@@ -7684,32 +7684,31 @@ OS:Curve:Cubic,
   1.5;                                    !- Maximum Value of x
 
 OS:Curve:Cubic,
-  {0ec1b431-0f6a-444b-90bd-49ef65f44173}, !- Handle
-  DXHEAT-NECB2011-REF-EIRFT,              !- Name
-  1.2183,                                 !- Coefficient1 Constant
-  -0.03612,                               !- Coefficient2 x
-  0.00142,                                !- Coefficient3 x**2
-  -2.68e-05,                              !- Coefficient4 x**3
+  {bce0a229-370d-4ec2-a106-a232c8384f12}, !- Handle
+  HPACHeatEIRFT,                          !- Name
+  1.19248,                                !- Coefficient1 Constant
+  -0.0300438,                             !- Coefficient2 x
+  0.00103745,                             !- Coefficient3 x**2
+  -2.3328e-05,                            !- Coefficient4 x**3
   -20,                                    !- Minimum Value of x
   20;                                     !- Maximum Value of x
 
 OS:Curve:Quadratic,
-  {aeef4be0-3d7a-461c-b38e-e368bc81521e}, !- Handle
-  DXHEAT-NECB2011-REF-EIRFFLOW,           !- Name
+  {1e7ae74d-6e3d-4f12-8af1-331a787861e5}, !- Handle
+  HPACHeatEIRFFF,                         !- Name
   1.3824,                                 !- Coefficient1 Constant
   -0.4336,                                !- Coefficient2 x
   0.0512,                                 !- Coefficient3 x**2
   0,                                      !- Minimum Value of x
   1;                                      !- Maximum Value of x
 
-OS:Curve:Cubic,
-  {19baa73d-c68b-493a-843d-34f92b7d891c}, !- Handle
-  DXHEAT-NECB2011-REF-PLFFPLR,            !- Name
-  0.3696,                                 !- Coefficient1 Constant
-  2.3362,                                 !- Coefficient2 x
-  -2.9577,                                !- Coefficient3 x**2
-  1.2596,                                 !- Coefficient4 x**3
-  0.7,                                    !- Minimum Value of x
+OS:Curve:Quadratic,
+  {2d05f3ee-9cee-4bf6-a38f-6402d8d4aa73}, !- Handle
+  HPACCOOLPLFFPLR,                        !- Name
+  0.85,                                   !- Coefficient1 Constant
+  0.15,                                   !- Coefficient2 x
+  0,                                      !- Coefficient3 x**2
+  0,                                      !- Minimum Value of x
   1;                                      !- Maximum Value of x
 
 OS:Curve:Biquadratic,
