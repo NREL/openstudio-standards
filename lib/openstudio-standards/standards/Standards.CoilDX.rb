@@ -202,13 +202,11 @@ module CoilDX
         end
       end
       # PTHP
-      if containing_comp.to_ZoneHVACPackagedTerminalHeatPump.is_initialized
-        unless (template == 'NECB2011') || (template == 'NECB2015') || (template == 'NECB2017') || (template == 'NECB2020') || (template == 'BTAPPRE1980') ||
-               (template == 'BTAP1980TO2010')
-          search_criteria['subcategory'] = nil
-          search_criteria['heating_type'] = nil
-          search_criteria['equipment_type'] = 'PTHP'
-        end
+      if containing_comp.to_ZoneHVACPackagedTerminalHeatPump.is_initialized && !((template == 'NECB2011') || (template == 'NECB2015') || (template == 'NECB2017') || (template == 'NECB2020') || (template == 'BTAPPRE1980') ||
+               (template == 'BTAP1980TO2010'))
+        search_criteria['subcategory'] = nil
+        search_criteria['heating_type'] = nil
+        search_criteria['equipment_type'] = 'PTHP'
       end
     end
 
@@ -260,6 +258,7 @@ module CoilDX
       return 'DXHEAT-NECB2011-REF-CAPFT'
     when 'PSZ-HP', 'Heat Pumps'
       return 'HPACHeatCapFT' if heating
+
       return 'HPACCoolCapFT'
     else
       return 'CoilClgDXQRatio_fTwbToadbSI'
@@ -283,6 +282,7 @@ module CoilDX
       return 'DXHEAT-NECB2011-REF-CAPFFLOW'
     when 'PSZ-HP', 'Heat Pumps'
       return 'HPACHeatCapFFF' if heating
+
       return 'HPACCoolCapFFF'
     else
       return 'CoilClgDXSnglQRatio_fCFMRatio'
@@ -306,6 +306,7 @@ module CoilDX
       return 'DXHEAT-NECB2011-REF-EIRFT'
     when 'PSZ-HP', 'Heat Pumps'
       return 'HPACHeatEIRFT' if heating
+
       return 'HPACCoolEIRFT'
     else
       return 'CoilClgDXEIRRatio_fTwbToadbSI'
@@ -329,6 +330,7 @@ module CoilDX
       return 'DXHEAT-NECB2011-REF-EIRFFLOW'
     when 'PSZ-HP', 'Heat Pumps'
       return 'HPACHeatEIRFFF' if heating
+
       return 'HPACCoolEIRFFF'
     else
       return 'CoilClgDXSnglEIRRatio_fCFMRatio'

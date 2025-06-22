@@ -132,7 +132,7 @@ class Standard
         search_criteria['equipment_type'] = 'Heat Pumps'
       end
       unless (template == 'NECB2011') || (template == 'NECB2015') || (template == 'NECB2017') || (template == 'NECB2020') || (template == 'BTAPPRE1980') ||
-        (template == 'BTAP1980TO2010')
+             (template == 'BTAP1980TO2010')
         # Single Package/Split System is only used for units less than 65 kBtu/h
         if capacity_btu_per_hr >= 65000 && equipment_type != 'PTHP'
           search_criteria['rating_condition'] = '47F db/43F wb outdoor air'
