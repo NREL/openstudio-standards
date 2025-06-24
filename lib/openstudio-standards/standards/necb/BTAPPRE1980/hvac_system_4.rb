@@ -53,9 +53,7 @@ class BTAPPRE1980
     # NOTE: This is the same as system type 3 (single zone make-up air unit and single zone rooftop unit are both PSZ systems)
     # SHOULD WE COMBINE sys3 and sys4 into one script?
     #
-    # control_zone = determine_control_zone(zones)
-    # Todo change this when control zone method is working.
-    control_zone = zones.first
+    control_zone = determine_control_zone(zones)
 
     always_on = model.alwaysOnDiscreteSchedule
 
