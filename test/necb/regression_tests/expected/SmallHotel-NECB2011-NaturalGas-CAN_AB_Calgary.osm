@@ -30618,7 +30618,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0066-000000000173},  !- Handle
   Schedule Day 4,                          !- Name
-  {00000000-0000-0000-0069-000000000010},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0069-000000000008},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -30846,7 +30846,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0066-000000000183},  !- Handle
   satCHW Temp 1,                           !- Name
-  {00000000-0000-0000-0069-000000000010},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0069-000000000008},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -31314,7 +31314,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0066-000000000189},  !- Handle
   sunCHW Temp 1,                           !- Name
-  {00000000-0000-0000-0069-000000000010},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0069-000000000008},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -32019,7 +32019,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0066-000000000219},  !- Handle
   wkdCHW Temp 1,                           !- Name
-  {00000000-0000-0000-0069-000000000010},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0069-000000000008},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -35044,8 +35044,8 @@ OS:Schedule:Ruleset,
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0068-000000000003},  !- Handle
-  CW Temp,                                 !- Name
-  {00000000-0000-0000-0069-000000000009},  !- Schedule Type Limits Name
+  CHW Temp,                                !- Name
+  {00000000-0000-0000-0069-000000000008},  !- Schedule Type Limits Name
   {00000000-0000-0000-0066-000000000174};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,

@@ -516,7 +516,7 @@ class ECMS
 
     # Create one hot-water loop for hot-water baseboards if required
     hw_loop = nil
-    hw_loop = add_hotwater_loop(model: model, fuel_type_set: standard.fuel_type_set) if standard.fuel_type_set.baseboard_type == 'Hot Water' || standard.fuel_type_set.force_airloop_hot_water
+    hw_loop = add_hotwater_loop(model: model, fuel_type_set: standard.fuel_type_set) if standard.fuel_type_set.baseboard_type == 'Hot Water' || standard.fuel_type_set.force_airloop_hot_water || standard.fuel_type_set.force_airloop_hot_water
 
     # Update system zones map if needed
     system_zones_map = update_system_zones_map_keys(system_zones_map,'sys_1')
@@ -1830,7 +1830,7 @@ class ECMS
                                              loop_heat_rej_eqpt_type: 'none',
                                              loop_pump_type: 'variable_speed',
                                              loop_spm_type: 'Scheduled',
-                                             loop_setpoint: 50.0,
+                                             loop_setpoint: 60.0,
                                              loop_temp_diff: 5.0)
     model.getCoilHeatingWaters.sort.each {|coil| hw_loop.addDemandBranchForComponent(coil)}
     hcapf_curve_name = "HEATPUMP_WATERTOWATER_HCAPF"
@@ -2140,7 +2140,7 @@ class ECMS
            loop_heat_rej_eqpt_type: 'none',
            loop_pump_type: 'variable_speed',
            loop_spm_type: 'Scheduled',
-           loop_setpoint: 50.0,
+           loop_setpoint: 60.0,
            loop_temp_diff: 5.0)
     # set additional parameters for heating heat pump
     hw_loop_htg_eqpt.setCondenserType('AirSoure')
@@ -2168,7 +2168,7 @@ class ECMS
     hw_boilers.reverse().each {|boiler| boiler.addToNode(hw_loop_htg_eqpt_outlet_node)}
     # add setpoint manager at the exit of the heat pump heating comp
     sch = OpenStudio::Model::ScheduleConstant.new(model)
-    sch.setValue(50.0)
+    sch.setValue(60.0)
     spm = OpenStudio::Model::SetpointManagerScheduled.new(model,sch)
     spm.setName("HeatPumpHtgSetpointManager")
     spm.addToNode(hw_loop_htg_eqpt_outlet_node)

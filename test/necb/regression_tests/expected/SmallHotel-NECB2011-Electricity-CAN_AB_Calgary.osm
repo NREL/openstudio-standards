@@ -30656,15 +30656,15 @@ OS:Schedule:Ruleset,
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0064-000000000003},  !- Handle
-  CW Temp,                                 !- Name
+  CHW Temp,                                !- Name
   {00000000-0000-0000-0065-000000000010},  !- Schedule Type Limits Name
   {00000000-0000-0000-0062-000000000174};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0064-000000000004},  !- Handle
-  Clothing Schedule,                       !- Name
-  {00000000-0000-0000-0065-000000000003},  !- Schedule Type Limits Name
-  {00000000-0000-0000-0062-000000000002};  !- Default Day Schedule Name
+  CW Temp,                                 !- Name
+  {00000000-0000-0000-0065-000000000010},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0062-000000000175};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0064-000000000005},  !- Handle
@@ -30934,15 +30934,15 @@ OS:Schedule:Ruleset,
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0064-000000000049},  !- Handle
-  Schedule Ruleset 2,                      !- Name
+  Schedule Ruleset 1,                      !- Name
   {00000000-0000-0000-0065-000000000010},  !- Schedule Type Limits Name
   {00000000-0000-0000-0062-000000000176};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0064-000000000050},  !- Handle
-  Service Water Loop Temp - 140F,          !- Name
+  Schedule Ruleset 2,                      !- Name
   {00000000-0000-0000-0065-000000000010},  !- Schedule Type Limits Name
-  {00000000-0000-0000-0062-000000000179};  !- Default Day Schedule Name
+  {00000000-0000-0000-0062-000000000177};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0064-000000000051},  !- Handle
@@ -30952,7 +30952,7 @@ OS:Schedule:Ruleset,
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0064-000000000052},  !- Handle
-  Water Heater Ambient Temp Schedule 71.6F, !- Name
+  Supply Air Temp,                         !- Name
   {00000000-0000-0000-0065-000000000010},  !- Schedule Type Limits Name
   {00000000-0000-0000-0062-000000000181};  !- Default Day Schedule Name
 

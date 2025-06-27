@@ -4291,13 +4291,13 @@ OS:Schedule:Constant,
   {00000000-0000-0000-0065-000000000003},  !- Handle
   Schedule Constant 1,                     !- Name
   {00000000-0000-0000-0069-000000000007},  !- Schedule Type Limits Name
-  50;                                      !- Value
+  60;                                      !- Value
 
 OS:Schedule:Constant,
   {00000000-0000-0000-0065-000000000004},  !- Handle
   Schedule Constant 2,                     !- Name
   {00000000-0000-0000-0069-000000000007},  !- Schedule Type Limits Name
-  50;                                      !- Value
+  60;                                      !- Value
 
 OS:Schedule:Constant,
   {00000000-0000-0000-0065-000000000005},  !- Handle

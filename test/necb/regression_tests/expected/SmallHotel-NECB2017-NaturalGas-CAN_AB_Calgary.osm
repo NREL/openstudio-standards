@@ -30891,7 +30891,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0066-000000000158},  !- Handle
   Schedule Day 5,                          !- Name
-  {00000000-0000-0000-0069-000000000009},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0069-000000000010},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -30969,7 +30969,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0066-000000000159},  !- Handle
   Schedule Day 6,                          !- Name
-  {00000000-0000-0000-0069-000000000009},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0069-000000000010},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
   0,                                       !- Minute 1
@@ -30978,7 +30978,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0066-000000000160},  !- Handle
   Schedule Day 7,                          !- Name
-  {00000000-0000-0000-0069-000000000009},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0069-000000000010},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
   0,                                       !- Minute 1
@@ -31026,7 +31026,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0066-000000000164},  !- Handle
   Supply Air Temp Default,                 !- Name
-  {00000000-0000-0000-0069-000000000009},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0069-000000000010},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
   0,                                       !- Minute 1
@@ -31209,7 +31209,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0066-000000000169},  !- Handle
   satCW Temp 1,                            !- Name
-  {00000000-0000-0000-0069-000000000009},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0069-000000000010},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -31677,7 +31677,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0066-000000000175},  !- Handle
   sunCW Temp 1,                            !- Name
-  {00000000-0000-0000-0069-000000000009},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0069-000000000010},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -32400,7 +32400,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0066-000000000205},  !- Handle
   wkdCW Temp 1,                            !- Name
-  {00000000-0000-0000-0069-000000000009},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0069-000000000010},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -35041,15 +35041,15 @@ OS:Schedule:Ruleset,
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0068-000000000003},  !- Handle
-  CW Temp,                                 !- Name
-  {00000000-0000-0000-0069-000000000009},  !- Schedule Type Limits Name
+  CHW Temp,                                !- Name
+  {00000000-0000-0000-0069-000000000010},  !- Schedule Type Limits Name
   {00000000-0000-0000-0066-000000000158};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0068-000000000004},  !- Handle
-  Clothing Schedule,                       !- Name
-  {00000000-0000-0000-0069-000000000003},  !- Schedule Type Limits Name
-  {00000000-0000-0000-0066-000000000002};  !- Default Day Schedule Name
+  CW Temp,                                 !- Name
+  {00000000-0000-0000-0069-000000000010},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0066-000000000159};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0068-000000000005},  !- Handle
@@ -35295,15 +35295,15 @@ OS:Schedule:Ruleset,
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0068-000000000045},  !- Handle
-  Schedule Ruleset 2,                      !- Name
-  {00000000-0000-0000-0069-000000000009},  !- Schedule Type Limits Name
+  Schedule Ruleset 1,                      !- Name
+  {00000000-0000-0000-0069-000000000010},  !- Schedule Type Limits Name
   {00000000-0000-0000-0066-000000000160};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0068-000000000046},  !- Handle
-  Service Water Loop Temp - 140F,          !- Name
+  Schedule Ruleset 2,                      !- Name
   {00000000-0000-0000-0069-000000000010},  !- Schedule Type Limits Name
-  {00000000-0000-0000-0066-000000000163};  !- Default Day Schedule Name
+  {00000000-0000-0000-0066-000000000161};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0068-000000000047},  !- Handle
@@ -35313,7 +35313,7 @@ OS:Schedule:Ruleset,
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0068-000000000048},  !- Handle
-  Water Heater Ambient Temp Schedule 71.6F, !- Name
+  Supply Air Temp,                         !- Name
   {00000000-0000-0000-0069-000000000010},  !- Schedule Type Limits Name
   {00000000-0000-0000-0066-000000000165};  !- Default Day Schedule Name
 
