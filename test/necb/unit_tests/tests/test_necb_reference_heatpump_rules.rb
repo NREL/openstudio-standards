@@ -43,8 +43,11 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
           heating_coil_type = 'DX'
           hw_loop = OpenStudio::Model::PlantLoop.new(model)
           always_on = model.alwaysOnDiscreteSchedule
-          weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(weather_file)
+          weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
           OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
+
+          standard.fuel_type_set = SystemFuels.new()
+          standard.fuel_type_set.set_defaults(standards_data: standard.standards_data, primary_heating_fuel: fuel_type)
 
           # Save baseline model.
           BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm")
@@ -71,7 +74,7 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
                 new_auto_zoner: false)
           elsif sys_number == 'sys4'
             model = standard.load_building_type_from_library(building_type: 'SmallOffice')
-            standard.apply_weather_data(model: model, epw_file: weather_file)
+            standard.apply_weather_data(model: model, epw_file: 'CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
             standard.apply_loads(model: model)
             standard.apply_envelope(model: model)
             standard.apply_fdwr_srr_daylighting(model: model)
@@ -239,6 +242,10 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
           hw_loop = OpenStudio::Model::PlantLoop.new(model)
           always_on = model.alwaysOnDiscreteSchedule
           weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+
+          standard.fuel_type_set = SystemFuels.new()
+          standard.fuel_type_set.set_defaults(standards_data: standard.standards_data, primary_heating_fuel: fuel_type)
+
           OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
           # save baseline
           BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
@@ -340,10 +347,13 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
           heating_coil_type = 'DX'
           hw_loop = OpenStudio::Model::PlantLoop.new(model)
           always_on = model.alwaysOnDiscreteSchedule
-          weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(weather_file)
+          weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
           OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
           # save baseline
           BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm")
+
+          standard.fuel_type_set = SystemFuels.new()
+          standard.fuel_type_set.set_defaults(standards_data: standard.standards_data, primary_heating_fuel: fuel_type)
 
           # set up hvac system
           standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, fuel_type, always_on)
@@ -778,6 +788,10 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
         fuel_type = 'Electricity'
         baseboard_type = 'Hot Water'
         heating_coil_type = 'DX'
+
+        standard.fuel_type_set = SystemFuels.new()
+        standard.fuel_type_set.set_defaults(standards_data: standard.standards_data, primary_heating_fuel: fuel_type)
+
         hw_loop = OpenStudio::Model::PlantLoop.new(model)
         always_on = model.alwaysOnDiscreteSchedule
         weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
@@ -869,6 +883,8 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
         weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
         OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
 
+        standard.fuel_type_set = SystemFuels.new()
+        standard.fuel_type_set.set_defaults(standards_data: standard.standards_data, primary_heating_fuel: fuel_type)
         # Save baseline model.
         BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm")
 
