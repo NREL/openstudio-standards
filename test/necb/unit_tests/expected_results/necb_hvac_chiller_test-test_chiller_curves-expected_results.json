@@ -14,9 +14,9 @@
           "curve_coefficients": {
             "const": 0.94418,
             "x": 0.0337102,
-            "x2": 9.75564e-05,
+            "x2": 0.0000975564,
             "y": -0.00322114,
-            "y2": -4.91832e-05,
+            "y2": -0.0000491832,
             "xy": -0.000177584,
             "minX": 5.0,
             "maxX": 10.0,
@@ -29,8 +29,8 @@
     "Centrifugal": {
       "VarType": "TestCase",
       "small": {
-        "Primary Chiller WaterCooled Centrifugal 28tons 0.6kW/ton": {
-          "chiller_name": "Primary Chiller WaterCooled Centrifugal 28tons 0.6kW/ton",
+        "Primary Chiller WaterCooled Centrifugal 28tons 0.8kW/ton": {
+          "chiller_name": "Primary Chiller WaterCooled Centrifugal 28tons 0.8kW/ton",
           "capacity_kW": 100,
           "eff_curve_name": "WaterCooled_Centrifugal_CAPFT_NECB2011",
           "eff_curve_type": "OS_Curve_Biquadratic",
@@ -85,7 +85,7 @@
             "x": 0.0334698,
             "x2": 0.00023639,
             "y": -0.00729587,
-            "y2": -2.3166e-05,
+            "y2": -0.000023166,
             "xy": -0.000148943,
             "minX": 5.0,
             "maxX": 10.0,
@@ -110,9 +110,9 @@
           "curve_coefficients": {
             "const": 0.94418,
             "x": 0.0337102,
-            "x2": 9.75564e-05,
+            "x2": 0.0000975564,
             "y": -0.00322114,
-            "y2": -4.91832e-05,
+            "y2": -0.0000491832,
             "xy": -0.000177584,
             "minX": 5.0,
             "maxX": 10.0,
@@ -125,8 +125,8 @@
     "Centrifugal": {
       "VarType": "TestCase",
       "small": {
-        "Primary Chiller WaterCooled Centrifugal 28tons 0.6kW/ton": {
-          "chiller_name": "Primary Chiller WaterCooled Centrifugal 28tons 0.6kW/ton",
+        "Primary Chiller WaterCooled Centrifugal 28tons 0.8kW/ton": {
+          "chiller_name": "Primary Chiller WaterCooled Centrifugal 28tons 0.8kW/ton",
           "capacity_kW": 100,
           "eff_curve_name": "WaterCooled_Centrifugal_CAPFT_NECB2011",
           "eff_curve_type": "OS_Curve_Biquadratic",
@@ -181,7 +181,7 @@
             "x": 0.0334698,
             "x2": 0.00023639,
             "y": -0.00729587,
-            "y2": -2.3166e-05,
+            "y2": -0.000023166,
             "xy": -0.000148943,
             "minX": 5.0,
             "maxX": 10.0,
@@ -206,9 +206,9 @@
           "curve_coefficients": {
             "const": 0.94418,
             "x": 0.0337102,
-            "x2": 9.75564e-05,
+            "x2": 0.0000975564,
             "y": -0.00322114,
-            "y2": -4.91832e-05,
+            "y2": -0.0000491832,
             "xy": -0.000177584,
             "minX": 5.0,
             "maxX": 10.0,
@@ -221,8 +221,8 @@
     "Centrifugal": {
       "VarType": "TestCase",
       "small": {
-        "Primary Chiller WaterCooled Centrifugal 28tons 0.6kW/ton": {
-          "chiller_name": "Primary Chiller WaterCooled Centrifugal 28tons 0.6kW/ton",
+        "Primary Chiller WaterCooled Centrifugal 28tons 0.8kW/ton": {
+          "chiller_name": "Primary Chiller WaterCooled Centrifugal 28tons 0.8kW/ton",
           "capacity_kW": 100,
           "eff_curve_name": "WaterCooled_Centrifugal_CAPFT_NECB2011",
           "eff_curve_type": "OS_Curve_Biquadratic",
@@ -277,7 +277,7 @@
             "x": 0.0334698,
             "x2": 0.00023639,
             "y": -0.00729587,
-            "y2": -2.3166e-05,
+            "y2": -0.000023166,
             "xy": -0.000148943,
             "minX": 5.0,
             "maxX": 10.0,
@@ -302,9 +302,9 @@
           "curve_coefficients": {
             "const": 0.94418,
             "x": 0.0337102,
-            "x2": 9.75564e-05,
+            "x2": 0.0000975564,
             "y": -0.00322114,
-            "y2": -4.91832e-05,
+            "y2": -0.0000491832,
             "xy": -0.000177584,
             "minX": 5.0,
             "maxX": 10.0,
@@ -373,7 +373,7 @@
             "x": 0.0334698,
             "x2": 0.00023639,
             "y": -0.00729587,
-            "y2": -2.3166e-05,
+            "y2": -0.000023166,
             "xy": -0.000148943,
             "minX": 5.0,
             "maxX": 10.0,
