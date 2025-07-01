@@ -41,7 +41,7 @@ module OpenstudioStandards
         standards_building_type = space_type.standardsBuildingType.get
 
         # load typical water use equipment data
-        data = JSON.parse(File.read("#{__dir__}/data/typical_water_use_equipment.json"), symbolize_names: true)
+        data = JSON.parse(File.read("#{File.dirname(__FILE__)}/data/typical_water_use_equipment.json"), symbolize_names: true)
         space_type_properties = data[:space_types].select { |hash| (hash[:space_type] == standards_space_type) && (hash[:building_type] == standards_building_type) }
 
         # skip spaces with no equipment defined

@@ -1,4 +1,4 @@
-﻿building_type,building_area_per_spot,units_per_spot,students_per_spot,beds_per_spot,parking_area_per_spot
+building_type,building_area_per_spot,units_per_spot,students_per_spot,beds_per_spot,parking_area_per_spot
 SmallOffice,250,,,,405
 MediumOffice,250,,,,405
 LargeOffice,620,,,,405
