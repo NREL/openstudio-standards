@@ -7,8 +7,7 @@ class Standard
   # @param sql_db_vars_map [Hash] hash map
   # @return [Hash] hash of coil objects
   def coil_cooling_dx_multi_speed_apply_efficiency_and_curves(coil_cooling_dx_multi_speed, sql_db_vars_map)
-    # Define the criteria to find the chiller properties
-    # in the hvac standards data set.
+    # Define the criteria to find the cooling coil properties in the hvac standards data set.
     search_criteria = {}
     search_criteria['template'] = template
     cooling_type = coil_cooling_dx_multi_speed.condenserType
