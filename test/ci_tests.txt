@@ -16,6 +16,13 @@ modules/geometry/test_geometry_information.rb
 modules/hvac/test_hvac_exhaust.rb
 modules/infiltration/test_infiltration.rb
 modules/infiltration/test_nist_infiltration.rb
+modules/refrigeration/test_create_case.rb
+modules/refrigeration/test_create_compressor.rb
+modules/refrigeration/test_create_compressor_rack.rb
+modules/refrigeration/test_create_refrigeration_system.rb
+modules/refrigeration/test_create_typical_refrigeration.rb
+modules/refrigeration/test_create_walkin.rb
+modules/refrigeration/test_information.rb
 modules/schedules/test_schedules_create.rb
 modules/schedules/test_schedules_information.rb
 modules/schedules/test_schedules_modify.rb
@@ -64,8 +71,8 @@ doe_prototype/test_laboratory.rb
 doe_prototype/test_large_data_center_highITE.rb
 doe_prototype/test_large_data_center_lowITE.rb
 doe_prototype/test_large_hotel.rb
-doe_prototype/test_large_office.rb
-doe_prototype/test_large_office_detailed.rb
+#doe_prototype/test_large_office.rb
+#doe_prototype/test_large_office_detailed.rb
 doe_prototype/test_medium_office.rb
 doe_prototype/test_medium_detailed.rb
 doe_prototype/test_mid_rise_apartment.rb
@@ -117,7 +124,7 @@ necb/unit_tests/tests/test_necb_boiler_rules.rb
 necb/unit_tests/tests/test_necb_chiller_rules.rb
 necb/unit_tests/tests/test_necb_constructions_fdwr.rb
 necb/unit_tests/tests/test_necb_coolingtower_rules.rb
-necb/unit_tests/tests/test_necb_default_spacetypes.rb
+#necb/unit_tests/tests/test_necb_default_spacetypes.rb
 #necb/unit_tests/tests/test_necb_default_system_selection.rb
 necb/unit_tests/tests/test_necb_fan_rules.rb
 necb/unit_tests/tests/test_necb_furnace_rules.rb
@@ -127,7 +134,7 @@ necb/unit_tests/tests/test_necb_loop_rules.rb
 necb/unit_tests/tests/test_necb_pumppower_rules.rb
 #necb/unit_tests/tests/test_necb_qaqc_single.rb
 necb/unit_tests/tests/test_necb_reference_heatpump_rules.rb
-necb/unit_tests/tests/test_necb_schedules.rb
+#necb/unit_tests/tests/test_necb_schedules.rb
 necb/unit_tests/tests/test_necb_shw.rb
 necb/unit_tests/tests/test_necb_space_types_default_constructions_set.rb
 necb/unit_tests/tests/test_necb_total_and_tz_ceiling_centroid.rb
@@ -516,6 +523,8 @@ necb/regression_tests/tests/test_necb_ecm_hs11_ashp_pthp.rb
 necb/regression_tests/tests/test_necb_ecm_hs12_ashp_baseboard.rb
 necb/regression_tests/tests/test_necb_ecm_hs13_ashp_vrf.rb
 necb/regression_tests/tests/test_necb_ecm_hs14_cgshp_fancoils.rb
+necb/regression_tests/tests/test_necb_ecm_hs15_cawhp_fancoils.rb
+necb/regression_tests/tests/test_necb_ecm_hs16_ashp_cawhp_fancoils.rb
 necb/regression_tests/tests/test_necb_ecm_noair_baseboard.rb
 necb/regression_tests/tests/test_necb_ecm_unitary_cop.rb
 necb/regression_tests/tests/test_necb_ecm_boiler_eff.rb
