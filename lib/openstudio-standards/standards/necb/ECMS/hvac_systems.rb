@@ -292,6 +292,7 @@ class ECMS
     outdoor_vrf_unit.setMinimumHeatPumpPartLoadRatio(0.5)
     outdoor_vrf_unit.setCondenserType(condenser_type)
     outdoor_vrf_unit.setCrankcaseHeaterPowerperCompressor(1.0e-6)
+    outdoor_vrf_unit.setMinimumOutdoorTemperatureinCoolingMode(-10)
     heat_defrost_eir_ft = nil
     if ecm_name
       search_criteria = {}
@@ -544,8 +545,9 @@ class ECMS
                                            sys_clg_eqpt_type: air_sys_eqpt_type,
                                            sys_supp_fan_type: sys_info['sys_supp_fan_type'],
                                            sys_ret_fan_type: sys_info['sys_ret_fan_type'],
-                                           sys_setpoint_mgr_type: sys_info['sys_setpoint_mgr_type'],
+                                           sys_setpoint_mgr_type: 'warmest',
                                            hw_loop: hw_loop)
+
       # Appy performance curves
       if air_sys_eqpt_type == 'ccashp'
         eqpt_name = 'Mitsubishi_Hyper_Heating_VRF_Outdoor_Unit RTU'
