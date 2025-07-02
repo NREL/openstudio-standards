@@ -167,10 +167,10 @@ class NECB_HVAC_Furnace_Tests < Minitest::Test
             output_line_text += "#{heating_coil_type},#{fuel_type_min_cap[heating_coil_type][int]},#{(fuel_type_max_cap[heating_coil_type][int])},#{fuel_type_cap[heating_coil_type][int]},#{stage_type},#{num_stages},"
 
             if efficiency_type[heating_coil_type][int] == 'Annual Fuel Utilization Efficiency (AFUE)'
-              actual_furnace_eff[heating_coil_type][int] = (standard.thermal_eff_to_afue(actual_furnace_thermal_eff[heating_coil_type][int]) + 0.0001).round(3)
+              actual_furnace_eff[heating_coil_type][int] = (OpenstudioStandards::HVAC.thermal_eff_to_afue(actual_furnace_thermal_eff[heating_coil_type][int]) + 0.0001).round(3)
               output_line_text += "#{actual_furnace_eff[heating_coil_type][int]},,\n"
             elsif efficiency_type[heating_coil_type][int] == 'Combustion Efficiency'
-              actual_furnace_eff[heating_coil_type][int] = (standard.thermal_eff_to_comb_eff(actual_furnace_thermal_eff[heating_coil_type][int]) + 0.0001).round(3)
+              actual_furnace_eff[heating_coil_type][int] = (OpenstudioStandards::HVAC.thermal_eff_to_comb_eff(actual_furnace_thermal_eff[heating_coil_type][int]) + 0.0001).round(3)
               output_line_text += ",,#{actual_furnace_eff[heating_coil_type][int]}\n"
             elsif efficiency_type[heating_coil_type][int] == 'Thermal Efficiency'
               actual_furnace_eff[heating_coil_type][int] = (actual_furnace_thermal_eff[heating_coil_type][int] + 0.0001).round(3)
