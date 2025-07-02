@@ -8,6 +8,7 @@ class Standard
   # @param coil_heating_dx_single_speed [OpenStudio::Model::CoilHeatingDXSingleSpeed] coil heating dx single speed object
   # @param rename [Boolean] if true, object will be renamed to include capacity and efficiency level
   # @param necb_ref_hp [Boolean] for compatability with NECB ruleset only.
+  # @param equipment_type [Boolean] indicate that equipment_type should be in the search criteria.
   # @return [Double] full load efficiency (COP)
   def coil_heating_dx_single_speed_standard_minimum_cop(coil_heating_dx_single_speed, rename = false, necb_ref_hp = false, equipment_type = false)
     coil_efficiency_data = standards_data['heat_pumps_heating']
@@ -32,7 +33,7 @@ class Standard
         if equipment_type == 'PTHP'
           search_criteria['application'] = coil_dx_packaged_terminal_application(coil_heating_dx_single_speed)
         end
-      elsif !coil_dx_heat_pump?(coil_heating_dx_single_speed) # `coil_dx_heat_pump?` returns false when a DX heating coil is wrapped into a AirloopHVAC:UnitarySystem
+      elsif !OpenstudioStandards::HVAC.coil_dx_heat_pump?(coil_heating_dx_single_speed) # `coil_dx_heat_pump?` returns false when a DX heating coil is wrapped into a AirloopHVAC:UnitarySystem
         search_criteria['equipment_type'] = 'Heat Pumps'
       end
       unless (template == 'NECB2011') || (template == 'NECB2015') || (template == 'NECB2017') || (template == 'NECB2020') || (template == 'BTAPPRE1980') ||
@@ -92,8 +93,8 @@ class Standard
     end
 
     # If specified as HSPF
-    unless ac_props['minimum_heating_seasonal_performance_factor'].nil?
-      min_hspf = ac_props['minimum_heating_seasonal_performance_factor']
+    unless hp_props['minimum_heating_seasonal_performance_factor'].nil?
+      min_hspf = hp_props['minimum_heating_seasonal_performance_factor']
       cop = OpenstudioStandards::HVAC.hspf_to_cop_no_fan(min_hspf)
       new_comp_name = "#{coil_heating_dx_single_speed.name} #{capacity_kbtu_per_hr.round} Clg kBtu/hr #{min_hspf.round(1)}HSPF"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{template}: #{coil_heating_dx_single_speed.name}: #{suppl_heating_type} #{sub_category} Cooling Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; HSPF = #{min_hspf}")
@@ -109,16 +110,16 @@ class Standard
     end
 
     # If specified as COPH
-    unless ac_props['minimum_coefficient_of_performance_heating'].nil?
-      min_coph = ac_props['minimum_coefficient_of_performance_heating']
+    unless hp_props['minimum_coefficient_of_performance_heating'].nil?
+      min_coph = hp_props['minimum_coefficient_of_performance_heating']
       cop = OpenstudioStandards::HVAC.cop_heating_to_cop_heating_no_fan(min_coph, OpenStudio.convert(capacity_kbtu_per_hr, 'kBtu/hr', 'W').get)
       new_comp_name = "#{coil_heating_dx_single_speed.name} #{capacity_kbtu_per_hr.round} Clg kBtu/hr #{min_coph.round(1)}COPH"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{template}: #{coil_heating_dx_single_speed.name}: #{suppl_heating_type} #{sub_category} Cooling Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; COPH = #{min_coph}")
     end
 
     # If specified as EER
-    unless ac_props['minimum_energy_efficiency_ratio'].nil?
-      min_eer = ac_props['minimum_energy_efficiency_ratio']
+    unless hp_props['minimum_energy_efficiency_ratio'].nil?
+      min_eer = hp_props['minimum_energy_efficiency_ratio']
       cop = OpenstudioStandards::HVAC.eer_to_cop_no_fan(min_eer)
       new_comp_name = "#{coil_heating_dx_single_speed.name} #{capacity_kbtu_per_hr.round} Clg kBtu/hr #{min_eer.round(1)}EER"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{template}: #{coil_heating_dx_single_speed.name}:  #{suppl_heating_type} #{sub_category} Cooling Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
@@ -159,7 +160,7 @@ class Standard
         if ['PTHP'].include?(equipment_type)
           search_criteria['application'] = coil_dx_packaged_terminal_application(coil_heating_dx_single_speed)
         end
-      elsif !coil_dx_heat_pump?(coil_heating_dx_single_speed) # `coil_dx_heat_pump?` returns false when a DX heating coil is wrapped into a AirloopHVAC:UnitarySystem
+      elsif !OpenstudioStandards::HVAC.coil_dx_heat_pump?(coil_heating_dx_single_speed) # `coil_dx_heat_pump?` returns false when a DX heating coil is wrapped into a AirloopHVAC:UnitarySystem
         search_criteria['equipment_type'] = 'Heat Pumps'
       end
       unless (template == 'NECB2011') || (template == 'NECB2015') || (template == 'NECB2017') || (template == 'NECB2020') || (template == 'BTAPPRE1980') ||
