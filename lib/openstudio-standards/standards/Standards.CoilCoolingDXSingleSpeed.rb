@@ -30,8 +30,8 @@ class Standard
       (template == 'BTAP1980TO2010'))
       if search_criteria.keys.include?('equipment_type')
         equipment_type = search_criteria['equipment_type']
-        if equipment_type == 'PTAC'
-          search_criteria['application'] = coil_dx_ptac_application(coil_cooling_dx_single_speed)
+        if ['PTAC', 'PTHP'].include?(equipment_type)
+          search_criteria['application'] = coil_dx_packaged_terminal_application(coil_cooling_dx_single_speed)
         end
       elsif !OpenstudioStandards::HVAC.coil_dx_heat_pump?(coil_cooling_dx_single_speed)
         search_criteria['equipment_type'] = 'Air Conditioners'
@@ -58,8 +58,7 @@ class Standard
     # Check to make sure properties were found
     if ac_props.nil?
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{coil_cooling_dx_single_speed.name}, cannot find efficiency info using #{search_criteria}, cannot apply efficiency standard.")
-      successfully_set_all_properties = false
-      return successfully_set_all_properties
+      return false
     end
 
     # Get the minimum efficiency standards
@@ -68,7 +67,7 @@ class Standard
     # If PTHP, use equations if coefficients are specified
     pthp_eer_coeff_1 = ac_props['pthp_eer_coefficient_1']
     pthp_eer_coeff_2 = ac_props['pthp_eer_coefficient_2']
-    if sub_category == 'PTHP' && !pthp_eer_coeff_1.nil? && !pthp_eer_coeff_2.nil?
+    if equipment_type == 'PTHP' && !pthp_eer_coeff_1.nil? && !pthp_eer_coeff_2.nil?
       # TABLE 6.8.1D
       # EER = pthp_eer_coeff_1 - (pthp_eer_coeff_2 * Cap / 1000)
       # Note c: Cap means the rated cooling capacity of the product in Btu/h.
@@ -194,8 +193,6 @@ class Standard
   # @param necb_ref_hp [Boolean] for compatability with NECB ruleset only.
   # @return [Hash] hash of coil objects
   def coil_cooling_dx_single_speed_apply_efficiency_and_curves(coil_cooling_dx_single_speed, sql_db_vars_map, necb_ref_hp = false)
-    successfully_set_all_properties = true
-
     # Get efficiencies data depending on whether it is a unitary AC or a heat pump
     coil_efficiency_data = if OpenstudioStandards::HVAC.coil_dx_heat_pump?(coil_cooling_dx_single_speed)
                              standards_data['heat_pumps']
@@ -212,8 +209,8 @@ class Standard
       (template == 'BTAP1980TO2010'))
       if search_criteria.keys.include?('equipment_type')
         equipment_type = search_criteria['equipment_type']
-        if equipment_type == 'PTAC'
-          search_criteria['application'] = coil_dx_ptac_application(coil_cooling_dx_single_speed)
+        if ['PTAC', 'PTHP'].include?(equipment_type)
+          search_criteria['application'] = coil_dx_packaged_terminal_application(coil_cooling_dx_single_speed)
         end
       elsif !OpenstudioStandards::HVAC.coil_dx_heat_pump?(coil_cooling_dx_single_speed)
         search_criteria['equipment_type'] = 'Air Conditioners'
@@ -238,8 +235,7 @@ class Standard
     # Check to make sure properties were found
     if ac_props.nil?
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{coil_cooling_dx_single_speed.name}, cannot find efficiency info using #{search_criteria}, cannot apply efficiency standard.")
-      successfully_set_all_properties = false
-      return sql_db_vars_map
+      return false
     end
 
     equipment_type_field = search_criteria['equipment_type']
@@ -255,7 +251,6 @@ class Standard
       coil_cooling_dx_single_speed.setTotalCoolingCapacityFunctionOfTemperatureCurve(cool_cap_ft)
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{coil_cooling_dx_single_speed.name}, cannot find cool_cap_ft curve, will not be set.")
-      successfully_set_all_properties = false
     end
 
     # Make the COOL-CAP-FFLOW curve
@@ -263,14 +258,13 @@ class Standard
     if ac_props['cool_cap_fflow']
       cool_cap_fflow = model_add_curve(coil_cooling_dx_single_speed.model, ac_props['cool_cap_fflow'])
     else
-      cool_cap_fflow_curve_name = coil_dx_cap_fff(coil_cooling_dx_single_speed, equipment_type_field)
+      cool_cap_fflow_curve_name = coil_dx_cap_fflow(coil_cooling_dx_single_speed, equipment_type_field)
       cool_cap_fflow = model_add_curve(coil_cooling_dx_single_speed.model, cool_cap_fflow_curve_name)
     end
     if cool_cap_fflow
       coil_cooling_dx_single_speed.setTotalCoolingCapacityFunctionOfFlowFractionCurve(cool_cap_fflow)
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{coil_cooling_dx_single_speed.name}, cannot find cool_cap_fflow curve, will not be set.")
-      successfully_set_all_properties = false
     end
 
     # Make the COOL-EIR-FT curve
@@ -285,7 +279,6 @@ class Standard
       coil_cooling_dx_single_speed.setEnergyInputRatioFunctionOfTemperatureCurve(cool_eir_ft)
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{coil_cooling_dx_single_speed.name}, cannot find cool_eir_ft curve, will not be set.")
-      successfully_set_all_properties = false
     end
 
     # Make the COOL-EIR-FFLOW curve
@@ -293,14 +286,13 @@ class Standard
     if ac_props['cool_eir_fflow']
       cool_eir_fflow = model_add_curve(coil_cooling_dx_single_speed.model, ac_props['cool_eir_fflow'])
     else
-      cool_eir_fflow_curve_name = coil_dx_eir_fff(coil_cooling_dx_single_speed, equipment_type_field)
+      cool_eir_fflow_curve_name = coil_dx_eir_fflow(coil_cooling_dx_single_speed, equipment_type_field)
       cool_eir_fflow = model_add_curve(coil_cooling_dx_single_speed.model, cool_eir_fflow_curve_name)
     end
     if cool_eir_fflow
       coil_cooling_dx_single_speed.setEnergyInputRatioFunctionOfFlowFractionCurve(cool_eir_fflow)
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{coil_cooling_dx_single_speed.name}, cannot find cool_eir_fflow curve, will not be set.")
-      successfully_set_all_properties = false
     end
 
     # Make the COOL-PLF-FPLR curve
@@ -315,7 +307,6 @@ class Standard
       coil_cooling_dx_single_speed.setPartLoadFractionCorrelationCurve(cool_plf_fplr)
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{coil_cooling_dx_single_speed.name}, cannot find cool_plf_fplr curve, will not be set.")
-      successfully_set_all_properties = false
     end
 
     # Preserve the original name

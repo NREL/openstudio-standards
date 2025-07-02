@@ -139,20 +139,22 @@ class ASHRAE901PRM < Standard
     capacity_w = coil_heating_dx_single_speed_find_capacity(coil_heating_dx_single_speed, sys_type)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     search_criteria = coil_dx_find_search_criteria(coil_heating_dx_single_speed, capacity_btu_per_hr, sys_type)
-
-    # find object
-    ac_props = nil
-    ac_props = model_find_object(standards_data['heat_pumps_heating'], search_criteria, capacity_btu_per_hr, Date.today)
-    # Get the minimum efficiency standards
-    cop = nil
-
-    # Check to make sure properties were found
-    if ac_props.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{coil_heating_dx_single_speed.name}, cannot find efficiency info using #{search_criteria}, cannot apply efficiency standard.")
-      return cop # value of nil
+    if sys_type == 'PSZ-HP' && capacity_btu_per_hr > 65000
+      search_criteria['rating_condition'] = '47F db/43F wb outdoor air'
     end
 
-    cop = ac_props['copnfcooling']
+    # Get the minimum efficiency standards
+    hp_props = nil
+    cop = nil
+    hp_props = model_find_object(standards_data['heat_pumps_heating'], search_criteria, capacity_btu_per_hr, Date.today)
+
+    # Check to make sure properties were found
+    if hp_props.nil?
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{coil_heating_dx_single_speed.name}, cannot find efficiency info using #{search_criteria}, cannot apply efficiency standard.")
+      return false
+    end
+
+    cop = hp_props['minimum_coefficient_of_performance_no_fan_heating']
     new_comp_name = "#{coil_heating_dx_single_speed.name} #{capacity_btu_per_hr.round}Btu/hr #{cop}COP"
 
     # Rename
