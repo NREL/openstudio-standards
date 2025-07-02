@@ -203,7 +203,7 @@ module OpenstudioStandards
           coils = air_loop.supplyComponents(ct.to_IddObjectType)
           next if coils.empty?
 
-          clg_coil = coils[0]
+          clg_coil = coils[0].to_StraightComponent.get
           # Stop on first DX cooling coil found
           break
         end
