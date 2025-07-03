@@ -620,7 +620,7 @@ class NECB2011 < Standard
     ecm.add_airloop_economizer(model: model, airloop_economizer_type: airloop_economizer_type)
     # Perform a second sizing run if needed
     if (!unitary_cop.nil? && unitary_cop != 'NECB_Default') || !model.getPlantLoops.empty?
-      if model_run_sizing_run(model, "#{sizing_run_dir}/SR2") == false
+      if model_run_sizing_run(model, "#{sizing_run_dir}/SR2", true) == false
         raise('sizing run 2 failed!')
       end
     end
@@ -1083,7 +1083,7 @@ class NECB2011 < Standard
     raise('validation of model failed.') unless validate_initial_model(model)
 
     climate_zone = 'NECB HDD Method'
-    raise("sizing run 1 failed! check #{sizing_run_dir}") if model_run_sizing_run(model, "#{sizing_run_dir}/plant_loops") == false
+    raise("sizing run 1 failed! check #{sizing_run_dir}") if model_run_sizing_run(model, "#{sizing_run_dir}/plant_loops", true) == false
 
     # This is needed for NECB2011 as a workaround for sizing the reheat boxes.
     model.getAirTerminalSingleDuctVAVReheats.each { |iobj| air_terminal_single_duct_vav_reheat_set_heating_cap(iobj) }
