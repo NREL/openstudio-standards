@@ -43,14 +43,19 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
           heating_coil_type = 'DX'
           hw_loop = OpenStudio::Model::PlantLoop.new(model)
           always_on = model.alwaysOnDiscreteSchedule
+          weather_file = 'CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw'
           weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(weather_file)
           OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
 
           # Save baseline model.
           BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm")
 
+         standard.fuel_type_set = SystemFuels.new()
+         standard.fuel_type_set.set_defaults(standards_data: standard.standards_data, primary_heating_fuel: fuel_type)
+         boiler_fueltype = standard.fuel_type_set.boiler_fueltype
+
           # Set up hvac system.
-          standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, fuel_type, always_on)
+          standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, boiler_fueltype, always_on)
           if sys_number == 'sys1'
             standard.add_sys1_unitary_ac_baseboard_heating_single_speed(model: model,
                 necb_reference_hp: necb_reference_hp,
@@ -243,8 +248,11 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
           # save baseline
           BTAP::FileIO.save_osm(model, "#{output_folder}/baseline.osm")
 
+          standard.fuel_type_set = SystemFuels.new()
+          standard.fuel_type_set.set_defaults(standards_data: standard.standards_data, primary_heating_fuel: fuel_type)
+          boiler_fueltype = standard.fuel_type_set.boiler_fueltype
           # set up hvac system
-          standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, fuel_type, always_on)
+          standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, boiler_fueltype, always_on)
           if sys_number == 'sys1'
             standard.add_sys1_unitary_ac_baseboard_heating_single_speed(model: model,
                 necb_reference_hp: necb_reference_hp,
@@ -340,13 +348,18 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
           heating_coil_type = 'DX'
           hw_loop = OpenStudio::Model::PlantLoop.new(model)
           always_on = model.alwaysOnDiscreteSchedule
+          weather_file = 'CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw'
           weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(weather_file)
           OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
           # save baseline
           BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm")
 
+          standard.fuel_type_set = SystemFuels.new()
+          standard.fuel_type_set.set_defaults(standards_data: standard.standards_data, primary_heating_fuel: fuel_type)
+
+          boiler_fueltype = standard.fuel_type_set.boiler_fueltype
           # set up hvac system
-          standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, fuel_type, always_on)
+          standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, boiler_fueltype, always_on)
           if sys_number == 'sys1'
             standard.add_sys1_unitary_ac_baseboard_heating_single_speed(model: model,
                 necb_reference_hp: necb_reference_hp,
@@ -785,8 +798,12 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
         # save baseline
         BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm")
 
+        standard.fuel_type_set = SystemFuels.new()
+        standard.fuel_type_set.set_defaults(standards_data: standard.standards_data, primary_heating_fuel: fuel_type)
+        boiler_fueltype = standard.fuel_type_set.boiler_fueltype
+        standard.fuel_type_set.necb_reference_hp_supp_fuel = necb_reference_hp_supp_fuel
         # set up hvac system
-        standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, fuel_type, always_on)
+        standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, boiler_fueltype, always_on)
         if sys_number == 'sys1'
           standard.add_sys1_unitary_ac_baseboard_heating_single_speed(model: model,
               necb_reference_hp: necb_reference_hp,
@@ -864,6 +881,9 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
         fuel_type = 'Electricity'
         baseboard_type = 'Hot Water'
         heating_coil_type = 'DX'
+        standard.fuel_type_set = SystemFuels.new()
+        standard.fuel_type_set.set_defaults(standards_data: standard.standards_data, primary_heating_fuel: fuel_type)
+        boiler_fueltype = standard.fuel_type_set.boiler_fueltype
         hw_loop = OpenStudio::Model::PlantLoop.new(model)
         always_on = model.alwaysOnDiscreteSchedule
         weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
@@ -872,8 +892,9 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
         # Save baseline model.
         BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm")
 
+        standard.fuel_type_set.necb_reference_hp_supp_fuel = necb_reference_hp_supp_fuel
         # Set up hvac system.
-        standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, fuel_type, always_on)
+        standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, boiler_fueltype, always_on)
         if sys_number == 'sys1'
           standard.add_sys1_unitary_ac_baseboard_heating_single_speed(model: model,
               necb_reference_hp: necb_reference_hp,
