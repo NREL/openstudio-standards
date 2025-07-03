@@ -30,6 +30,8 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
     templates.each do |template|
       unitary_expected_result_file = File.join(@expected_results_folder, "#{template.downcase}_compliance_unitary_efficiencies_expected_results.csv")
       standard = get_standard(template)
+      standard.fuel_type_set = SystemFuels.new()
+      standard.fuel_type_set.set_defaults(standards_data: standard.standards_data, primary_heating_fuel: boiler_fueltype)
       unitary_res_file_output_text = "Heating Type,Min Capacity (Btu per hr),Max Capacity (Btu per hr),Seasonal Energy Efficiency Ratio (SEER),Energy Efficiency Ratio (EER)\n"
 
       # Initialize hashes for storing expected unitary efficiency data from file
@@ -233,6 +235,8 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
     fuel_type = test_pars[:fuel_type]
     vintage = test_pars[:vintage]
     standard = get_standard(vintage)
+    standard.fuel_type_set = SystemFuels.new()
+    standard.fuel_type_set.set_defaults(standards_data: standard.standards_data, primary_heating_fuel: fuel_type)
 
     # Define the test name.
     name = "#{vintage}_sys2_CoolingType_#{fuel_type}_kW_chiller_type-#{chiller_type}_#{mau_cooling_type}"
