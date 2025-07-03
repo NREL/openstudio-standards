@@ -61,6 +61,20 @@ class TestRefrigerationCreateTypicalRefrigeration < Minitest::Test
     assert(result)
   end
 
+  def test_create_typical_refrigeration_small_supermarket
+    model = OpenStudio::Model::Model.new
+
+    args = {}
+    args['total_bldg_floor_area'] = 5000.0
+    args['bldg_type_a'] = 'SuperMarket'
+    result = @geo.create_bar_from_building_type_ratios(model, args)
+
+    # default refrigeration system
+    result = @refrig.create_typical_refrigeration(model)
+    assert(result)
+    model.save('output/small_supermarket.osm', true)
+  end
+
   def test_create_typical_refrigeration_primary_school
     model = OpenStudio::Model::Model.new
 

@@ -14,7 +14,7 @@ module OpenstudioStandards
                                 make_up_air_source_zone: nil,
                                 make_up_air_fraction: 0.5)
       # load exhaust fan data
-      data = JSON.parse(File.read("#{__dir__}/data/typical_exhaust.json"), symbolize_names: true)
+      data = JSON.parse(File.read("#{File.dirname(__FILE__)}/data/typical_exhaust.json"), symbolize_names: true)
 
       # loop through spaces to get standards space information
       space_type_hash = {}
@@ -55,7 +55,7 @@ module OpenstudioStandards
       end
 
       if exhaust_m3_per_s.zero?
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.HVAC.create_exhaust_fan', "Calculated zero flow rate for thermal zone #{exhaust_zone.name}. No exhaust fan added.")
+        OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.HVAC.create_exhaust_fan', "Calculated zero flow rate for thermal zone #{exhaust_zone.name}. No exhaust fan added.")
         return nil
       end
 
