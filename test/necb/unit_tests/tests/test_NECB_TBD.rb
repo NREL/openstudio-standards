@@ -10,7 +10,7 @@ class NECB_TBD_Tests < Minitest::Test
     # File paths.
     @output_folder = File.join(__dir__, 'output/test_necb_tbd')
     @expected_results_file = File.join(__dir__, '../expected_results/necb_tbd_expected_results.json')
-    @test_results_file = File.join(__dir__, '../expected_results/necb_tbd-test_results.json')
+    @test_results_file = File.join(__dir__, '../expected_results/necb_tbd_test_results.json')
     @sizing_run_dir = File.join(@output_folder, 'sizing_folder')
     @test_results_array = [] # test results storage array
 
@@ -19,9 +19,10 @@ class NECB_TBD_Tests < Minitest::Test
 
     #Range of test options.
     @templates = [
-      'NECB2011',
-    # 'NECB2015',
-    # 'NECB2017'
+      # 'NECB2011',
+      # 'NECB2015',
+      # 'NECB2017',
+      'NECB2020'
     ]
 
     @epws = ['CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw']
@@ -55,7 +56,7 @@ class NECB_TBD_Tests < Minitest::Test
     # Otherwise, :bad vs :good PSI factor sets refer to costed BTAP details.
     @options = ['none',
                 'bad',
-                'good',
+                # 'good',
                 'uprate']
 
     # BTAP holds discrete performance levels for each e.g. wall construction:

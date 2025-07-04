@@ -36,10 +36,10 @@ class ParametricRegressionHelper < NECBRegressionHelper
     model_params[:sizing_run_dir] = @run_dir
 
     #create folders
-    if !Dir.exists?(@test_dir)
+    if !Dir.exist?(@test_dir)
       Dir.mkdir(@test_dir)
     end
-    if !Dir.exists?(@run_dir)
+    if !Dir.exist?(@run_dir)
       Dir.mkdir(@run_dir)
     end
 
@@ -57,4 +57,3 @@ class ParametricRegressionHelper < NECBRegressionHelper
     return self
   end
 end
-
