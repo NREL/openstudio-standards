@@ -43,16 +43,17 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
           heating_coil_type = 'DX'
           hw_loop = OpenStudio::Model::PlantLoop.new(model)
           always_on = model.alwaysOnDiscreteSchedule
-          weather_file = 'CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw'
-          weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(weather_file)
+          weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
           OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
+
+          standard.fuel_type_set = SystemFuels.new()
+          standard.fuel_type_set.set_defaults(standards_data: standard.standards_data, primary_heating_fuel: fuel_type)
+          standard.fuel_type_set.necb_reference_hp = necb_reference_hp
+          standard.fuel_type_set.necb_reference_hp_supp_fuel = necb_reference_hp_supp_fuel
+          boiler_fueltype = standard.fuel_type_set.boiler_fueltype
 
           # Save baseline model.
           BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm")
-
-         standard.fuel_type_set = SystemFuels.new()
-         standard.fuel_type_set.set_defaults(standards_data: standard.standards_data, primary_heating_fuel: fuel_type)
-         boiler_fueltype = standard.fuel_type_set.boiler_fueltype
 
           # Set up hvac system.
           standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, boiler_fueltype, always_on)
@@ -75,14 +76,6 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
                 hw_loop: hw_loop,
                 new_auto_zoner: false)
           elsif sys_number == 'sys4'
-            model = standard.load_building_type_from_library(building_type: 'SmallOffice')
-            standard.apply_weather_data(model: model, epw_file: weather_file)
-            standard.apply_loads(model: model)
-            standard.apply_envelope(model: model)
-            standard.apply_fdwr_srr_daylighting(model: model)
-            standard.apply_auto_zoning(model: model, sizing_run_dir: output_folder)
-            hw_loop = OpenStudio::Model::PlantLoop.new(model)
-            standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, boiler_fueltype, model.alwaysOnDiscreteSchedule)
             standard.add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
                 necb_reference_hp: necb_reference_hp,
                 necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
@@ -250,7 +243,10 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
 
           standard.fuel_type_set = SystemFuels.new()
           standard.fuel_type_set.set_defaults(standards_data: standard.standards_data, primary_heating_fuel: fuel_type)
+          standard.fuel_type_set.necb_reference_hp = necb_reference_hp
+          standard.fuel_type_set.necb_reference_hp_supp_fuel = necb_reference_hp_supp_fuel
           boiler_fueltype = standard.fuel_type_set.boiler_fueltype
+
           # set up hvac system
           standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, boiler_fueltype, always_on)
           if sys_number == 'sys1'
@@ -348,16 +344,17 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
           heating_coil_type = 'DX'
           hw_loop = OpenStudio::Model::PlantLoop.new(model)
           always_on = model.alwaysOnDiscreteSchedule
-          weather_file = 'CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw'
-          weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path(weather_file)
+          weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
           OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
           # save baseline
           BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm")
 
           standard.fuel_type_set = SystemFuels.new()
           standard.fuel_type_set.set_defaults(standards_data: standard.standards_data, primary_heating_fuel: fuel_type)
-
+          standard.fuel_type_set.necb_reference_hp = necb_reference_hp
+          standard.fuel_type_set.necb_reference_hp_supp_fuel = necb_reference_hp_supp_fuel
           boiler_fueltype = standard.fuel_type_set.boiler_fueltype
+
           # set up hvac system
           standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, boiler_fueltype, always_on)
           if sys_number == 'sys1'
@@ -379,14 +376,6 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
                 hw_loop: hw_loop,
                 new_auto_zoner: false)
           elsif sys_number == 'sys4'
-            model = standard.load_building_type_from_library(building_type: 'SmallOffice')
-            standard.apply_weather_data(model: model, epw_file: weather_file)
-            standard.apply_loads(model: model)
-            standard.apply_envelope(model: model)
-            standard.apply_fdwr_srr_daylighting(model: model)
-            standard.apply_auto_zoning(model: model, sizing_run_dir: output_folder)
-            hw_loop = OpenStudio::Model::PlantLoop.new(model)
-            standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, boiler_fueltype, model.alwaysOnDiscreteSchedule)
             standard.add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
                 necb_reference_hp: necb_reference_hp,
                 necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
@@ -800,11 +789,15 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
 
         standard.fuel_type_set = SystemFuels.new()
         standard.fuel_type_set.set_defaults(standards_data: standard.standards_data, primary_heating_fuel: fuel_type)
-        boiler_fueltype = standard.fuel_type_set.boiler_fueltype
+        standard.fuel_type_set.necb_reference_hp = necb_reference_hp
         standard.fuel_type_set.necb_reference_hp_supp_fuel = necb_reference_hp_supp_fuel
+        standard.fuel_type_set.baseboard_type = baseboard_type
+        boiler_fueltype = standard.fuel_type_set.boiler_fueltype
+
         # set up hvac system
         standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, boiler_fueltype, always_on)
         if sys_number == 'sys1'
+          standard.fuel_type_set.mau_heating_coil_type = heating_coil_type
           standard.add_sys1_unitary_ac_baseboard_heating_single_speed(model: model,
               necb_reference_hp: necb_reference_hp,
               necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
@@ -814,6 +807,7 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
               baseboard_type: baseboard_type,
               hw_loop: hw_loop)
         elsif sys_number == 'sys3'
+          standard.fuel_type_set.heating_coil_type_sys3 = heating_coil_type
           standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
               necb_reference_hp: necb_reference_hp,
               necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
@@ -823,6 +817,7 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
               hw_loop: hw_loop,
               new_auto_zoner: false)
         elsif sys_number == 'sys4'
+          standard.fuel_type_set.heating_coil_type_sys4 = heating_coil_type
           standard.add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
               necb_reference_hp: necb_reference_hp,
               necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
@@ -831,6 +826,7 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
               baseboard_type: baseboard_type,
               hw_loop: hw_loop)
         elsif sys_number == 'sys6'
+          standard.fuel_type_set.heating_coil_type_sys6 = heating_coil_type
           standard.add_sys6_multi_zone_reference_hp_with_baseboard_heating(model: model,
               necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
               zones: model.getThermalZones,
@@ -842,22 +838,22 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
         # Run sizing.
         run_sizing(model: model, template: template, save_model_versions: false, output_dir: output_folder, necb_ref_hp: true) if PERFORM_STANDARDS
 
-          no_over_sizing = true
-          model.getThermalZones.each do |zone|
-            unless zone.sizingZone.zoneCoolingSizingFactor.is_initialized and zone.sizingZone.zoneCoolingSizingFactor.get == 1.0
-              no_over_sizing = false
-            end
+        no_over_sizing = true
+        model.getThermalZones.each do |zone|
+          unless zone.sizingZone.zoneCoolingSizingFactor.is_initialized and zone.sizingZone.zoneCoolingSizingFactor.get == 1.0
+            no_over_sizing = false
           end
-          assert(no_over_sizing, "test_ref_heatpump_sizing_factor: The reference heat pump cooling is not sized to peak load
-          (e.g. zone.sizingZone.zoneCoolingSizingFactor.get != 1.0). ")
         end
+        assert(no_over_sizing, "test_ref_heatpump_sizing_factor: The reference heat pump cooling is not sized to peak load
+        (e.g. zone.sizingZone.zoneCoolingSizingFactor.get != 1.0). ")
       end
     end
   end
+end
 
-  # Test for correct supplemental heating
-  # Test heating coil to check if it turns off at <-10C
-  def test_ref_heatpump_heating_low_temp
+# Test for correct supplemental heating
+# Test heating coil to check if it turns off at <-10C
+def test_ref_heatpump_heating_low_temp
 
   # Set up remaining parameters for test.
   templates = ['NECB2011', 'NECB2015', 'NECB2017']
@@ -871,19 +867,16 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
         output_folder = method_output_folder("#{__method__}/#{name_short}")
         standard = get_standard(template)
 
-          # Set standard to use reference hp rules.
-          necb_reference_hp = true
+        # Set standard to use reference hp rules.
+        necb_reference_hp = true
 
-          # Set up model.
-          model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
+        # Set up model.
+        model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
 
         # Set up hvac system parameters and components.
         fuel_type = 'Electricity'
         baseboard_type = 'Hot Water'
         heating_coil_type = 'DX'
-        standard.fuel_type_set = SystemFuels.new()
-        standard.fuel_type_set.set_defaults(standards_data: standard.standards_data, primary_heating_fuel: fuel_type)
-        boiler_fueltype = standard.fuel_type_set.boiler_fueltype
         hw_loop = OpenStudio::Model::PlantLoop.new(model)
         always_on = model.alwaysOnDiscreteSchedule
         weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
@@ -892,10 +885,17 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
         # Save baseline model.
         BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm")
 
+        standard.fuel_type_set = SystemFuels.new()
+        standard.fuel_type_set.set_defaults(standards_data: standard.standards_data, primary_heating_fuel: fuel_type)
+        standard.fuel_type_set.necb_reference_hp = necb_reference_hp
         standard.fuel_type_set.necb_reference_hp_supp_fuel = necb_reference_hp_supp_fuel
+        standard.fuel_type_set.baseboard_type = baseboard_type
+        boiler_fueltype = standard.fuel_type_set.boiler_fueltype
+
         # Set up hvac system.
         standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, boiler_fueltype, always_on)
         if sys_number == 'sys1'
+          standard.fuel_type_set.mau_heating_coil_type = heating_coil_type
           standard.add_sys1_unitary_ac_baseboard_heating_single_speed(model: model,
               necb_reference_hp: necb_reference_hp,
               necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
@@ -905,6 +905,7 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
               baseboard_type: baseboard_type,
               hw_loop: hw_loop)
         elsif sys_number == 'sys3'
+          standard.fuel_type_set.heating_coil_type_sys3 = heating_coil_type
           standard.add_sys3and8_single_zone_packaged_rooftop_unit_with_baseboard_heating_single_speed(model: model,
               necb_reference_hp: necb_reference_hp,
               necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
@@ -914,6 +915,7 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
               hw_loop: hw_loop,
               new_auto_zoner: false)
         elsif sys_number == 'sys4'
+          standard.fuel_type_set.heating_coil_type_sys4 = heating_coil_type
           standard.add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
               necb_reference_hp: necb_reference_hp,
               necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
@@ -922,6 +924,7 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
               baseboard_type: baseboard_type,
               hw_loop: hw_loop)
         elsif sys_number == 'sys6'
+          standard.fuel_type_set.heating_coil_type_sys6 = heating_coil_type
           standard.add_sys6_multi_zone_reference_hp_with_baseboard_heating(model: model,
               necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
               zones: model.getThermalZones,
@@ -937,32 +940,32 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
         unless sys_number == 'sys6'
           model.getAirLoopHVACUnitaryHeatPumpAirToAirs.each do |heatpump|
 
-              # Get heat pump coils.
-              if necb_reference_hp_supp_fuel == "NaturalGas"
-                assert(heatpump.supplementalHeatingCoil.to_CoilHeatingGas.is_initialized, "test_ref_supp_heating_fuel: The reference heat pump supplmental coil is
-                set to the wrong type - it should be CoilHeatingGas")
-              elsif necb_reference_hp_supp_fuel == "Electricity" or necb_reference_hp_supp_fuel == "FuelOilNo2"
-                assert(heatpump.supplementalHeatingCoil.to_CoilHeatingElectric.is_initialized, "test_ref_supp_heating_fuel: The reference heat pump supplmental coil is
-                set to the wrong type - it should be CoilHeatingElectric")
-              end
+            # Get heat pump coils.
+            if necb_reference_hp_supp_fuel == "NaturalGas"
+              assert(heatpump.supplementalHeatingCoil.to_CoilHeatingGas.is_initialized, "test_ref_supp_heating_fuel: The reference heat pump supplmental coil is
+              set to the wrong type - it should be CoilHeatingGas")
+            elsif necb_reference_hp_supp_fuel == "Electricity" or necb_reference_hp_supp_fuel == "FuelOilNo2"
+              assert(heatpump.supplementalHeatingCoil.to_CoilHeatingElectric.is_initialized, "test_ref_supp_heating_fuel: The reference heat pump supplmental coil is
+              set to the wrong type - it should be CoilHeatingElectric")
             end
-          else
+          end
+        else
 
-            # sys6 and sys1 uses contain dx coils directly within air loops.
-            model.getThermalZones.each do |zone|
-              air_terminal_rh = zone.airLoopHVACTerminal.get.to_AirTerminalSingleDuctConstantVolumeReheat.get
-              if necb_reference_hp_supp_fuel == "NaturalGas"
-                assert(air_terminal_rh.reheatCoil.to_CoilHeatingGas.is_initialized, "test_ref_supp_heating_fuel: The reference heat pump supplmental coil is
-                set to the wrong type - it should be CoilHeatingGas")
-              elsif necb_reference_hp_supp_fuel == "Electricity" or necb_reference_hp_supp_fuel == "FuelOilNo2"
-                assert(air_terminal_rh.reheatCoil.to_CoilHeatingElectric.is_initialized, "test_ref_supp_heating_fuel: The reference heat pump supplmental coil is
-                set to the wrong type - it should be CoilHeatingElectric")
-              end
+          # sys6 and sys1 uses contain dx coils directly within air loops.
+          model.getThermalZones.each do |zone|
+            air_terminal_rh = zone.airLoopHVACTerminal.get.to_AirTerminalSingleDuctConstantVolumeReheat.get
+            if necb_reference_hp_supp_fuel == "NaturalGas"
+              assert(air_terminal_rh.reheatCoil.to_CoilHeatingGas.is_initialized, "test_ref_supp_heating_fuel: The reference heat pump supplmental coil is
+              set to the wrong type - it should be CoilHeatingGas")
+            elsif necb_reference_hp_supp_fuel == "Electricity" or necb_reference_hp_supp_fuel == "FuelOilNo2"
+              assert(air_terminal_rh.reheatCoil.to_CoilHeatingElectric.is_initialized, "test_ref_supp_heating_fuel: The reference heat pump supplmental coil is
+              set to the wrong type - it should be CoilHeatingElectric")
             end
           end
         end
       end
     end
   end
+end
 
 end
