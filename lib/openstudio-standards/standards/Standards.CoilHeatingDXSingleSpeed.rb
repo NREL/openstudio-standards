@@ -104,7 +104,7 @@ class Standard
     # TODO: assumed to be the same as HSPF for now
     unless hp_props['minimum_heating_seasonal_performance_factor_2'].nil?
       min_hspf = hp_props['minimum_heating_seasonal_performance_factor_2']
-      cop = hspf_to_cop_no_fan(min_hspf)
+      cop = OpenstudioStandards::HVAC.hspf_to_cop_no_fan(min_hspf)
       new_comp_name = "#{coil_heating_dx_single_speed.name} #{capacity_kbtu_per_hr.round} Clg kBtu/hr #{min_hspf.round(1)}HSPF2"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{template}: #{coil_heating_dx_single_speed.name}: #{suppl_heating_type} #{sub_category} Cooling Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; HSPF = #{min_hspf}")
     end
