@@ -71,13 +71,13 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
                 new_auto_zoner: false)
           elsif sys_number == 'sys4'
             model = standard.load_building_type_from_library(building_type: 'SmallOffice')
-            standard.apply_weather_data(model: model, epw_file: weather_file)
+            standard.apply_weather_data(model: model, epw_file: 'CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
             standard.apply_loads(model: model)
             standard.apply_envelope(model: model)
             standard.apply_fdwr_srr_daylighting(model: model)
             standard.apply_auto_zoning(model: model, sizing_run_dir: output_folder)
             hw_loop = OpenStudio::Model::PlantLoop.new(model)
-            standard.setup_hw_loop_with_components(model, hw_loop, boiler_fueltype, boiler_fueltype, model.alwaysOnDiscreteSchedule)
+            standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, fuel_type, model.alwaysOnDiscreteSchedule)
             standard.add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
                 necb_reference_hp: necb_reference_hp,
                 necb_reference_hp_supp_fuel: necb_reference_hp_supp_fuel,
