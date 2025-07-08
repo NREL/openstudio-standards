@@ -14214,21 +14214,21 @@ OS:EnergyManagementSystem:Actuator,
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0036-000000000001},  !- Handle
   ems_sys_1_mixed_shr_none_sc_ashp_sh_ashp_c_g_ssf_cv_zh_b_hw_zc_none_srf_none__OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {cd3b4b37-de59-4c56-bdce-9ebda6aacd19}<23.9 && {cd3b4b37-de59-4c56-bdce-9ebda6aacd19}>1.7, !- Program Line 1
-  SET {f4676886-0205-4930-8ab9-adfeceed846d} = 29.4, !- Program Line 2
-  SET {220565ff-1a45-475b-bec5-1854500dc0ca} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {cd3b4b37-de59-4c56-bdce-9ebda6aacd19}<23.9 && {cd3b4b37-de59-4c56-bdce-9ebda6aacd19}>1.7, !- Program Line 4
-  SET {f4676886-0205-4930-8ab9-adfeceed846d} = 29.4, !- Program Line 5
-  SET {220565ff-1a45-475b-bec5-1854500dc0ca} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {cd3b4b37-de59-4c56-bdce-9ebda6aacd19}<23.9 && {cd3b4b37-de59-4c56-bdce-9ebda6aacd19}>1.7, !- Program Line 7
-  SET {f4676886-0205-4930-8ab9-adfeceed846d} = 29.4, !- Program Line 8
-  SET {220565ff-1a45-475b-bec5-1854500dc0ca} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {cd3b4b37-de59-4c56-bdce-9ebda6aacd19}<23.9 && {cd3b4b37-de59-4c56-bdce-9ebda6aacd19}>1.7, !- Program Line 10
-  SET {f4676886-0205-4930-8ab9-adfeceed846d} = 29.4, !- Program Line 11
-  SET {220565ff-1a45-475b-bec5-1854500dc0ca} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {a865a0e7-9346-435c-a9c2-9ac0eab0173c}<23.9 && {a865a0e7-9346-435c-a9c2-9ac0eab0173c}>1.7, !- Program Line 1
+  SET {4774471d-b610-4a17-b877-3b450caa81f1} = 29.4, !- Program Line 2
+  SET {cb4bc74b-92e3-45a5-a34d-5ec5038e89a7} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {a865a0e7-9346-435c-a9c2-9ac0eab0173c}<23.9 && {a865a0e7-9346-435c-a9c2-9ac0eab0173c}>1.7, !- Program Line 4
+  SET {4774471d-b610-4a17-b877-3b450caa81f1} = 29.4, !- Program Line 5
+  SET {cb4bc74b-92e3-45a5-a34d-5ec5038e89a7} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {a865a0e7-9346-435c-a9c2-9ac0eab0173c}<23.9 && {a865a0e7-9346-435c-a9c2-9ac0eab0173c}>1.7, !- Program Line 7
+  SET {4774471d-b610-4a17-b877-3b450caa81f1} = 29.4, !- Program Line 8
+  SET {cb4bc74b-92e3-45a5-a34d-5ec5038e89a7} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {a865a0e7-9346-435c-a9c2-9ac0eab0173c}<23.9 && {a865a0e7-9346-435c-a9c2-9ac0eab0173c}>1.7, !- Program Line 10
+  SET {4774471d-b610-4a17-b877-3b450caa81f1} = 29.4, !- Program Line 11
+  SET {cb4bc74b-92e3-45a5-a34d-5ec5038e89a7} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {f4676886-0205-4930-8ab9-adfeceed846d} = NULL, !- Program Line 14
-  SET {220565ff-1a45-475b-bec5-1854500dc0ca} = NULL, !- Program Line 15
+  SET {4774471d-b610-4a17-b877-3b450caa81f1} = NULL, !- Program Line 14
+  SET {cb4bc74b-92e3-45a5-a34d-5ec5038e89a7} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:ProgramCallingManager,
@@ -28167,7 +28167,7 @@ OS:SetpointManager:SingleZone:Reheat,
   Setpoint Manager Single Zone Reheat 2,   !- Name
   13,                                      !- Minimum Supply Air Temperature {C}
   43,                                      !- Maximum Supply Air Temperature {C}
-  {00000000-0000-0000-0094-000000000012},  !- Control Zone Name
+  {00000000-0000-0000-0094-000000000007},  !- Control Zone Name
   {00000000-0000-0000-0049-000000000583};  !- Setpoint Node or NodeList Name
 
 OS:SetpointManager:SingleZone:Reheat,
@@ -28175,7 +28175,7 @@ OS:SetpointManager:SingleZone:Reheat,
   Setpoint Manager Single Zone Reheat 3,   !- Name
   13,                                      !- Minimum Supply Air Temperature {C}
   43,                                      !- Maximum Supply Air Temperature {C}
-  {00000000-0000-0000-0094-000000000067},  !- Control Zone Name
+  {00000000-0000-0000-0094-000000000061},  !- Control Zone Name
   {00000000-0000-0000-0049-000000000590};  !- Setpoint Node or NodeList Name
 
 OS:SetpointManager:SingleZone:Reheat,

@@ -12789,7 +12789,7 @@ OS:SetpointManager:SingleZone:Reheat,
   Setpoint Manager Single Zone Reheat 1,   !- Name
   13,                                      !- Minimum Supply Air Temperature {C}
   43,                                      !- Maximum Supply Air Temperature {C}
-  {00000000-0000-0000-0086-000000000025},  !- Control Zone Name
+  {00000000-0000-0000-0086-000000000026},  !- Control Zone Name
   {00000000-0000-0000-0044-000000000237};  !- Setpoint Node or NodeList Name
 
 OS:ShadowCalculation,

@@ -28,6 +28,7 @@ coverage/
 /test/necb/*/expected_results/*-test_results.csv
 /test/necb/*/expected_results/*-test_results.json
 /test/necb/*/log.txt*
+/test/necb/*/autozone
 
 # BTAP costing test output
 lib/openstudio-standards/btap/costing/output/
@@ -57,6 +58,5 @@ input_cache/
 input/
 /utilities/btap_cli/input
 /utilities/btap_cli/output
-/test/necb/unit_tests/tests/autozone
 
 /.venv
