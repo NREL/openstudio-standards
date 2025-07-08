@@ -5930,12 +5930,12 @@ OS:ZoneHVAC:EquipmentList,
   ALL_ST=Dining - bar lounge/leisure_FL=Building Story 1_SCH=B Zone HVAC Equipment List, !- Name
   {00000000-0000-0000-0082-000000000002},  !- Thermal Zone
   ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0006-000000000002},  !- Zone Equipment 1
+  {00000000-0000-0000-0094-000000000002},  !- Zone Equipment 1
   1,                                       !- Zone Equipment Cooling Sequence 1
   1,                                       !- Zone Equipment Heating or No-Load Sequence 1
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
   ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
-  {00000000-0000-0000-0094-000000000002},  !- Zone Equipment 2
+  {00000000-0000-0000-0006-000000000002},  !- Zone Equipment 2
   2,                                       !- Zone Equipment Cooling Sequence 2
   2,                                       !- Zone Equipment Heating or No-Load Sequence 2
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
@@ -5946,12 +5946,12 @@ OS:ZoneHVAC:EquipmentList,
   ALL_ST=Food preparation_FL=Building Story 1_SCH=B Zone HVAC Equipment List, !- Name
   {00000000-0000-0000-0082-000000000003},  !- Thermal Zone
   ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0006-000000000001},  !- Zone Equipment 1
+  {00000000-0000-0000-0094-000000000001},  !- Zone Equipment 1
   1,                                       !- Zone Equipment Cooling Sequence 1
   1,                                       !- Zone Equipment Heating or No-Load Sequence 1
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
   ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
-  {00000000-0000-0000-0094-000000000001},  !- Zone Equipment 2
+  {00000000-0000-0000-0006-000000000001},  !- Zone Equipment 2
   2,                                       !- Zone Equipment Cooling Sequence 2
   2,                                       !- Zone Equipment Heating or No-Load Sequence 2
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2

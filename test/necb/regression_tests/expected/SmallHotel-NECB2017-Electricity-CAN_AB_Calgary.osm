@@ -31089,7 +31089,7 @@ OS:SetpointManager:SingleZone:Reheat,
   Setpoint Manager Single Zone Reheat 2,   !- Name
   13,                                      !- Minimum Supply Air Temperature {C}
   43,                                      !- Maximum Supply Air Temperature {C}
-  {00000000-0000-0000-0093-000000000012},  !- Control Zone Name
+  {00000000-0000-0000-0093-000000000007},  !- Control Zone Name
   {00000000-0000-0000-0049-000000000519};  !- Setpoint Node or NodeList Name
 
 OS:SetpointManager:SingleZone:Reheat,
@@ -31097,7 +31097,7 @@ OS:SetpointManager:SingleZone:Reheat,
   Setpoint Manager Single Zone Reheat 3,   !- Name
   13,                                      !- Minimum Supply Air Temperature {C}
   43,                                      !- Maximum Supply Air Temperature {C}
-  {00000000-0000-0000-0093-000000000067},  !- Control Zone Name
+  {00000000-0000-0000-0093-000000000060},  !- Control Zone Name
   {00000000-0000-0000-0049-000000000526};  !- Setpoint Node or NodeList Name
 
 OS:SetpointManager:SingleZone:Reheat,

@@ -56,9 +56,7 @@ class BTAPPRE1980
     # NOTE: This is the same as system type 3 (single zone make-up air unit and single zone rooftop unit are both PSZ systems)
     # SHOULD WE COMBINE sys3 and sys4 into one script?
     #
-    # control_zone = determine_control_zone(zones)
-    # Todo change this when control zone method is working.
-    control_zone = zones.first
+    control_zone = determine_control_zone(zones)
 
     always_on = model.alwaysOnDiscreteSchedule
 
@@ -91,7 +89,7 @@ class BTAPPRE1980
     clg_coil = add_onespeed_DX_coil(model, always_on)
     clg_coil.setName('CoilCoolingDXSingleSpeed_dx')
     clg_coil.setName('CoilCoolingDXSingleSpeed_ashp') if necb_reference_hp
-    
+
     raise("Flag 'necb_reference_hp' is set to true while parameter 'heating_coil_type' is not set to DX") if (necb_reference_hp && (heating_coil_type != 'DX'))
     if heating_coil_type == 'Electric' || heating_coil_type == 'FuelOilNo2' # electric coil
       htg_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)

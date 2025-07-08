@@ -26227,7 +26227,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0062-000000000174},  !- Handle
   Schedule Day 4,                          !- Name
-  {00000000-0000-0000-0065-000000000010},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0065-000000000008},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -26305,7 +26305,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0062-000000000175},  !- Handle
   Schedule Day 5,                          !- Name
-  {00000000-0000-0000-0065-000000000010},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0065-000000000009},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -26383,7 +26383,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0062-000000000176},  !- Handle
   Schedule Day 6,                          !- Name
-  {00000000-0000-0000-0065-000000000010},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0065-000000000009},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
   0,                                       !- Minute 1
@@ -26392,7 +26392,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0062-000000000177},  !- Handle
   Schedule Day 7,                          !- Name
-  {00000000-0000-0000-0065-000000000010},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0065-000000000009},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
   0,                                       !- Minute 1
@@ -26428,7 +26428,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0062-000000000181},  !- Handle
   Supply Air Temp Default,                 !- Name
-  {00000000-0000-0000-0065-000000000010},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0065-000000000009},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
   0,                                       !- Minute 1
@@ -26455,7 +26455,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0062-000000000184},  !- Handle
   satCHW Temp 1,                           !- Name
-  {00000000-0000-0000-0065-000000000010},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0065-000000000008},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -26611,7 +26611,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0062-000000000186},  !- Handle
   satCW Temp 1,                            !- Name
-  {00000000-0000-0000-0065-000000000010},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0065-000000000009},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -26923,7 +26923,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0062-000000000190},  !- Handle
   sunCHW Temp 1,                           !- Name
-  {00000000-0000-0000-0065-000000000010},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0065-000000000008},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -27079,7 +27079,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0062-000000000192},  !- Handle
   sunCW Temp 1,                            !- Name
-  {00000000-0000-0000-0065-000000000010},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0065-000000000009},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -27628,7 +27628,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0062-000000000220},  !- Handle
   wkdCHW Temp 1,                           !- Name
-  {00000000-0000-0000-0065-000000000010},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0065-000000000008},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -27784,7 +27784,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0062-000000000222},  !- Handle
   wkdCW Temp 1,                            !- Name
-  {00000000-0000-0000-0065-000000000010},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0065-000000000009},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -30654,13 +30654,13 @@ OS:Schedule:Ruleset,
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0064-000000000003},  !- Handle
   CHW Temp,                                !- Name
-  {00000000-0000-0000-0065-000000000010},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0065-000000000008},  !- Schedule Type Limits Name
   {00000000-0000-0000-0062-000000000174};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0064-000000000004},  !- Handle
   CW Temp,                                 !- Name
-  {00000000-0000-0000-0065-000000000010},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0065-000000000009},  !- Schedule Type Limits Name
   {00000000-0000-0000-0062-000000000175};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
@@ -30932,13 +30932,13 @@ OS:Schedule:Ruleset,
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0064-000000000049},  !- Handle
   Schedule Ruleset 1,                      !- Name
-  {00000000-0000-0000-0065-000000000010},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0065-000000000009},  !- Schedule Type Limits Name
   {00000000-0000-0000-0062-000000000176};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0064-000000000050},  !- Handle
   Schedule Ruleset 2,                      !- Name
-  {00000000-0000-0000-0065-000000000010},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0065-000000000009},  !- Schedule Type Limits Name
   {00000000-0000-0000-0062-000000000177};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
@@ -30950,7 +30950,7 @@ OS:Schedule:Ruleset,
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0064-000000000052},  !- Handle
   Supply Air Temp,                         !- Name
-  {00000000-0000-0000-0065-000000000010},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0065-000000000009},  !- Schedule Type Limits Name
   {00000000-0000-0000-0062-000000000181};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
@@ -31164,7 +31164,7 @@ OS:SetpointManager:SingleZone:Reheat,
   Setpoint Manager Single Zone Reheat 2,   !- Name
   13,                                      !- Minimum Supply Air Temperature {C}
   43,                                      !- Maximum Supply Air Temperature {C}
-  {00000000-0000-0000-0092-000000000012},  !- Control Zone Name
+  {00000000-0000-0000-0092-000000000007},  !- Control Zone Name
   {00000000-0000-0000-0049-000000000529};  !- Setpoint Node or NodeList Name
 
 OS:SetpointManager:SingleZone:Reheat,
@@ -31172,7 +31172,7 @@ OS:SetpointManager:SingleZone:Reheat,
   Setpoint Manager Single Zone Reheat 3,   !- Name
   13,                                      !- Minimum Supply Air Temperature {C}
   43,                                      !- Maximum Supply Air Temperature {C}
-  {00000000-0000-0000-0092-000000000067},  !- Control Zone Name
+  {00000000-0000-0000-0092-000000000061},  !- Control Zone Name
   {00000000-0000-0000-0049-000000000536};  !- Setpoint Node or NodeList Name
 
 OS:SetpointManager:SingleZone:Reheat,

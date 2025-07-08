@@ -962,7 +962,7 @@ OS:Chiller:Electric:EIR,
   {00000000-0000-0000-0013-000000000001},  !- Handle
   Primary Chiller WaterCooled Centrifugal 537tons 0.6kW/ton, !- Name
   1889395.58683074,                        !- Reference Capacity {W}
-  6.0222602739726,                         !- Reference COP {W/W}
+  6.01824124300553,                        !- Reference COP {W/W}
   ,                                        !- Reference Leaving Chilled Water Temperature {C}
   ,                                        !- Reference Entering Condenser Fluid Temperature {C}
   Autosize,                                !- Reference Chilled Water Flow Rate {m3/s}
@@ -999,7 +999,7 @@ OS:Chiller:Electric:EIR,
   {00000000-0000-0000-0013-000000000002},  !- Handle
   Secondary Chiller WaterCooled Scroll 0tons 0.8kW/ton, !- Name
   0.001,                                   !- Reference Capacity {W}
-  4.51476251604621,                        !- Reference COP {W/W}
+  4.5131982496439,                         !- Reference COP {W/W}
   ,                                        !- Reference Leaving Chilled Water Temperature {C}
   ,                                        !- Reference Entering Condenser Fluid Temperature {C}
   Autosize,                                !- Reference Chilled Water Flow Rate {m3/s}
@@ -7351,7 +7351,7 @@ OS:CoolingTower:SingleSpeed,
   {00000000-0000-0000-0020-000000000132},  !- Water Outlet Node Name
   autosize,                                !- Design Water Flow Rate {m3/s}
   autosize,                                !- Design Air Flow Rate {m3/s}
-  28640.7014275539,                        !- Fan Power at Design Air Flow Rate {W}
+  28643.4251226421,                        !- Fan Power at Design Air Flow Rate {W}
   autosize,                                !- U-Factor Times Area Value at Design Air Flow Rate {W/K}
   autosize,                                !- Air Flow Rate in Free Convection Regime {m3/s}
   autosize,                                !- U-Factor Times Area Value at Free Convection Air Flow Rate {W/K}
@@ -7950,61 +7950,61 @@ OS:EnergyManagementSystem:Actuator,
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0039-000000000001},  !- Handle
   ems_sys_6_mixed_shr_none_sh_c_hw_sc_c_chw_ssf_vv_zh_b_hw_zc_none_srf_vv__1_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {541b0e0c-1aac-4438-848a-9bf9be930ad1}<23.9 && {541b0e0c-1aac-4438-848a-9bf9be930ad1}>1.7, !- Program Line 1
-  SET {b2438d68-7ba8-4263-93c0-84e90ec7d3cf} = 29.4, !- Program Line 2
-  SET {93e133c9-5318-4857-b470-35940e80b10d} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {541b0e0c-1aac-4438-848a-9bf9be930ad1}<23.9 && {541b0e0c-1aac-4438-848a-9bf9be930ad1}>1.7, !- Program Line 4
-  SET {b2438d68-7ba8-4263-93c0-84e90ec7d3cf} = 29.4, !- Program Line 5
-  SET {93e133c9-5318-4857-b470-35940e80b10d} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {541b0e0c-1aac-4438-848a-9bf9be930ad1}<23.9 && {541b0e0c-1aac-4438-848a-9bf9be930ad1}>1.7, !- Program Line 7
-  SET {b2438d68-7ba8-4263-93c0-84e90ec7d3cf} = 29.4, !- Program Line 8
-  SET {93e133c9-5318-4857-b470-35940e80b10d} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {541b0e0c-1aac-4438-848a-9bf9be930ad1}<23.9 && {541b0e0c-1aac-4438-848a-9bf9be930ad1}>1.7, !- Program Line 10
-  SET {b2438d68-7ba8-4263-93c0-84e90ec7d3cf} = 29.4, !- Program Line 11
-  SET {93e133c9-5318-4857-b470-35940e80b10d} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {fa72aa84-62f5-4a84-b970-a7835c47dfac}<23.9 && {fa72aa84-62f5-4a84-b970-a7835c47dfac}>1.7, !- Program Line 1
+  SET {05b0fc40-04f2-4cc6-880c-c9880c853444} = 29.4, !- Program Line 2
+  SET {7cb5e8eb-12b9-49b5-baf0-53ba5158ff47} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {fa72aa84-62f5-4a84-b970-a7835c47dfac}<23.9 && {fa72aa84-62f5-4a84-b970-a7835c47dfac}>1.7, !- Program Line 4
+  SET {05b0fc40-04f2-4cc6-880c-c9880c853444} = 29.4, !- Program Line 5
+  SET {7cb5e8eb-12b9-49b5-baf0-53ba5158ff47} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {fa72aa84-62f5-4a84-b970-a7835c47dfac}<23.9 && {fa72aa84-62f5-4a84-b970-a7835c47dfac}>1.7, !- Program Line 7
+  SET {05b0fc40-04f2-4cc6-880c-c9880c853444} = 29.4, !- Program Line 8
+  SET {7cb5e8eb-12b9-49b5-baf0-53ba5158ff47} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {fa72aa84-62f5-4a84-b970-a7835c47dfac}<23.9 && {fa72aa84-62f5-4a84-b970-a7835c47dfac}>1.7, !- Program Line 10
+  SET {05b0fc40-04f2-4cc6-880c-c9880c853444} = 29.4, !- Program Line 11
+  SET {7cb5e8eb-12b9-49b5-baf0-53ba5158ff47} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {b2438d68-7ba8-4263-93c0-84e90ec7d3cf} = NULL, !- Program Line 14
-  SET {93e133c9-5318-4857-b470-35940e80b10d} = NULL, !- Program Line 15
+  SET {05b0fc40-04f2-4cc6-880c-c9880c853444} = NULL, !- Program Line 14
+  SET {7cb5e8eb-12b9-49b5-baf0-53ba5158ff47} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0039-000000000002},  !- Handle
   ems_sys_6_mixed_shr_none_sh_c_hw_sc_c_chw_ssf_vv_zh_b_hw_zc_none_srf_vv__2_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {b9a1eef6-64d4-4e29-a8e8-1f15af6ce1b7}<23.9 && {b9a1eef6-64d4-4e29-a8e8-1f15af6ce1b7}>1.7, !- Program Line 1
-  SET {60af451a-6827-4c53-ac49-a148e10e0f02} = 29.4, !- Program Line 2
-  SET {9662f477-f0fd-42ae-b617-d6d32948d5f7} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {b9a1eef6-64d4-4e29-a8e8-1f15af6ce1b7}<23.9 && {b9a1eef6-64d4-4e29-a8e8-1f15af6ce1b7}>1.7, !- Program Line 4
-  SET {60af451a-6827-4c53-ac49-a148e10e0f02} = 29.4, !- Program Line 5
-  SET {9662f477-f0fd-42ae-b617-d6d32948d5f7} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {b9a1eef6-64d4-4e29-a8e8-1f15af6ce1b7}<23.9 && {b9a1eef6-64d4-4e29-a8e8-1f15af6ce1b7}>1.7, !- Program Line 7
-  SET {60af451a-6827-4c53-ac49-a148e10e0f02} = 29.4, !- Program Line 8
-  SET {9662f477-f0fd-42ae-b617-d6d32948d5f7} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {b9a1eef6-64d4-4e29-a8e8-1f15af6ce1b7}<23.9 && {b9a1eef6-64d4-4e29-a8e8-1f15af6ce1b7}>1.7, !- Program Line 10
-  SET {60af451a-6827-4c53-ac49-a148e10e0f02} = 29.4, !- Program Line 11
-  SET {9662f477-f0fd-42ae-b617-d6d32948d5f7} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {d93cc102-0390-4d6f-92b4-062809e2771a}<23.9 && {d93cc102-0390-4d6f-92b4-062809e2771a}>1.7, !- Program Line 1
+  SET {5ef6b0b4-0e48-401b-bb9b-77c22c450b08} = 29.4, !- Program Line 2
+  SET {8a749f84-8095-4170-a4ef-2b3172ac96a7} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {d93cc102-0390-4d6f-92b4-062809e2771a}<23.9 && {d93cc102-0390-4d6f-92b4-062809e2771a}>1.7, !- Program Line 4
+  SET {5ef6b0b4-0e48-401b-bb9b-77c22c450b08} = 29.4, !- Program Line 5
+  SET {8a749f84-8095-4170-a4ef-2b3172ac96a7} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {d93cc102-0390-4d6f-92b4-062809e2771a}<23.9 && {d93cc102-0390-4d6f-92b4-062809e2771a}>1.7, !- Program Line 7
+  SET {5ef6b0b4-0e48-401b-bb9b-77c22c450b08} = 29.4, !- Program Line 8
+  SET {8a749f84-8095-4170-a4ef-2b3172ac96a7} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {d93cc102-0390-4d6f-92b4-062809e2771a}<23.9 && {d93cc102-0390-4d6f-92b4-062809e2771a}>1.7, !- Program Line 10
+  SET {5ef6b0b4-0e48-401b-bb9b-77c22c450b08} = 29.4, !- Program Line 11
+  SET {8a749f84-8095-4170-a4ef-2b3172ac96a7} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {60af451a-6827-4c53-ac49-a148e10e0f02} = NULL, !- Program Line 14
-  SET {9662f477-f0fd-42ae-b617-d6d32948d5f7} = NULL, !- Program Line 15
+  SET {5ef6b0b4-0e48-401b-bb9b-77c22c450b08} = NULL, !- Program Line 14
+  SET {8a749f84-8095-4170-a4ef-2b3172ac96a7} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0039-000000000003},  !- Handle
   ems_sys_6_mixed_shr_none_sh_c_hw_sc_c_chw_ssf_vv_zh_b_hw_zc_none_srf_vv__3_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {ca74cc56-9d8f-402c-ad7d-b0c866e65c6f}<23.9 && {ca74cc56-9d8f-402c-ad7d-b0c866e65c6f}>1.7, !- Program Line 1
-  SET {eb73637a-1f8f-49ac-8995-54673831ce1a} = 29.4, !- Program Line 2
-  SET {f0edd27e-941b-4676-a829-dfb1f9171408} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {ca74cc56-9d8f-402c-ad7d-b0c866e65c6f}<23.9 && {ca74cc56-9d8f-402c-ad7d-b0c866e65c6f}>1.7, !- Program Line 4
-  SET {eb73637a-1f8f-49ac-8995-54673831ce1a} = 29.4, !- Program Line 5
-  SET {f0edd27e-941b-4676-a829-dfb1f9171408} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {ca74cc56-9d8f-402c-ad7d-b0c866e65c6f}<23.9 && {ca74cc56-9d8f-402c-ad7d-b0c866e65c6f}>1.7, !- Program Line 7
-  SET {eb73637a-1f8f-49ac-8995-54673831ce1a} = 29.4, !- Program Line 8
-  SET {f0edd27e-941b-4676-a829-dfb1f9171408} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {ca74cc56-9d8f-402c-ad7d-b0c866e65c6f}<23.9 && {ca74cc56-9d8f-402c-ad7d-b0c866e65c6f}>1.7, !- Program Line 10
-  SET {eb73637a-1f8f-49ac-8995-54673831ce1a} = 29.4, !- Program Line 11
-  SET {f0edd27e-941b-4676-a829-dfb1f9171408} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {051b6637-ccef-475d-b76a-54fee93bec4c}<23.9 && {051b6637-ccef-475d-b76a-54fee93bec4c}>1.7, !- Program Line 1
+  SET {7a1aec33-488a-4482-a26f-a8491269a90a} = 29.4, !- Program Line 2
+  SET {d05b24d6-9424-4bd5-aa8e-55ab7203c552} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {051b6637-ccef-475d-b76a-54fee93bec4c}<23.9 && {051b6637-ccef-475d-b76a-54fee93bec4c}>1.7, !- Program Line 4
+  SET {7a1aec33-488a-4482-a26f-a8491269a90a} = 29.4, !- Program Line 5
+  SET {d05b24d6-9424-4bd5-aa8e-55ab7203c552} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {051b6637-ccef-475d-b76a-54fee93bec4c}<23.9 && {051b6637-ccef-475d-b76a-54fee93bec4c}>1.7, !- Program Line 7
+  SET {7a1aec33-488a-4482-a26f-a8491269a90a} = 29.4, !- Program Line 8
+  SET {d05b24d6-9424-4bd5-aa8e-55ab7203c552} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {051b6637-ccef-475d-b76a-54fee93bec4c}<23.9 && {051b6637-ccef-475d-b76a-54fee93bec4c}>1.7, !- Program Line 10
+  SET {7a1aec33-488a-4482-a26f-a8491269a90a} = 29.4, !- Program Line 11
+  SET {d05b24d6-9424-4bd5-aa8e-55ab7203c552} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {eb73637a-1f8f-49ac-8995-54673831ce1a} = NULL, !- Program Line 14
-  SET {f0edd27e-941b-4676-a829-dfb1f9171408} = NULL, !- Program Line 15
+  SET {7a1aec33-488a-4482-a26f-a8491269a90a} = NULL, !- Program Line 14
+  SET {d05b24d6-9424-4bd5-aa8e-55ab7203c552} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:ProgramCallingManager,
@@ -12436,7 +12436,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0064-000000000045},  !- Handle
   Schedule Day 3,                          !- Name
-  {00000000-0000-0000-0067-000000000008},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0067-000000000006},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -12700,7 +12700,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0064-000000000059},  !- Handle
   satCHW Temp 1,                           !- Name
-  {00000000-0000-0000-0067-000000000008},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0067-000000000006},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -13012,7 +13012,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0064-000000000063},  !- Handle
   sunCHW Temp 1,                           !- Name
-  {00000000-0000-0000-0067-000000000008},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0067-000000000006},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -13489,7 +13489,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0064-000000000082},  !- Handle
   wkdCHW Temp 1,                           !- Name
-  {00000000-0000-0000-0067-000000000008},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0067-000000000006},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -14478,7 +14478,7 @@ OS:Schedule:Ruleset,
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0066-000000000003},  !- Handle
   CHW Temp,                                !- Name
-  {00000000-0000-0000-0067-000000000008},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0067-000000000006},  !- Schedule Type Limits Name
   {00000000-0000-0000-0064-000000000045};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,

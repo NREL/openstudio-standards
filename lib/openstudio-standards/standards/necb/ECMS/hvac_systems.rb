@@ -292,6 +292,7 @@ class ECMS
     outdoor_vrf_unit.setMinimumHeatPumpPartLoadRatio(0.5)
     outdoor_vrf_unit.setCondenserType(condenser_type)
     outdoor_vrf_unit.setCrankcaseHeaterPowerperCompressor(1.0e-6)
+    outdoor_vrf_unit.setMinimumOutdoorTemperatureinCoolingMode(-10)
     heat_defrost_eir_ft = nil
     if ecm_name
       search_criteria = {}
@@ -1826,7 +1827,7 @@ class ECMS
                                              loop_heat_rej_eqpt_type: 'none',
                                              loop_pump_type: 'variable_speed',
                                              loop_spm_type: 'Scheduled',
-                                             loop_setpoint: 50.0,
+                                             loop_setpoint: 60.0,
                                              loop_temp_diff: 5.0)
     model.getCoilHeatingWaters.sort.each {|coil| hw_loop.addDemandBranchForComponent(coil)}
     hcapf_curve_name = "HEATPUMP_WATERTOWATER_HCAPF"
@@ -2136,7 +2137,7 @@ class ECMS
            loop_heat_rej_eqpt_type: 'none',
            loop_pump_type: 'variable_speed',
            loop_spm_type: 'Scheduled',
-           loop_setpoint: 50.0,
+           loop_setpoint: 60.0,
            loop_temp_diff: 5.0)
     # set additional parameters for heating heat pump
     hw_loop_htg_eqpt.setCondenserType('AirSoure')
@@ -2164,7 +2165,7 @@ class ECMS
     hw_boilers.reverse().each {|boiler| boiler.addToNode(hw_loop_htg_eqpt_outlet_node)}
     # add setpoint manager at the exit of the heat pump heating comp
     sch = OpenStudio::Model::ScheduleConstant.new(model)
-    sch.setValue(50.0)
+    sch.setValue(60.0)
     spm = OpenStudio::Model::SetpointManagerScheduled.new(model,sch)
     spm.setName("HeatPumpHtgSetpointManager")
     spm.addToNode(hw_loop_htg_eqpt_outlet_node)

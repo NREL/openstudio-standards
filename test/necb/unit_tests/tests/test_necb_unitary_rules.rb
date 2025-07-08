@@ -24,14 +24,14 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
 
     # Define test cases.
     test_cases = {}
-    
+
     # Define references (per vintage in this case).
     test_cases[:NECB2011] = { Reference: "NECB 2011 p3:Table 5.2.12.1. Air-cooled Unitary Air Conditioners and Heat Pumps - Electrically Operated (page 5-13)" }
     test_cases[:NECB2015] = { Reference: "NECB 2015 p1:Table 5.2.12.1. Air-cooled Unitary Air Conditioners and Heat Pumps - Electrically Operated (page 5-14)" }
     test_cases[:NECB2017] = { Reference: "NECB 2017 p2:Table 5.2.12.1. Air-cooled Unitary Air Conditioners and Heat Pumps - Electrically Operated (page 5-15)" }
     test_cases[:NECB2020] = { Reference: "NECB 2020 p1:Table 5.2.12.1-A" }
 
-    # Test cases. 
+    # Test cases.
     test_cases_hash = { vintage: @AllTemplates,
                         :unitary_heating_types => ['Electric Resistance', 'All Other'], # DX is tested in the heatpump tests.
                         TestCase: ["Small single package system"],
@@ -116,6 +116,9 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
     logger.info "Starting individual test: #{name}"
     results = {}
 
+    standard.fuel_type_set = SystemFuels.new()
+    standard.fuel_type_set.set_defaults(standards_data: standard.standards_data, primary_heating_fuel: fuel_type)
+
     # Wrap test in begin/rescue/ensure.
     begin
 
@@ -163,7 +166,7 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
       logger.error(msg)
       return {ERROR: msg}
     end
-    
+
     # Extract results and generate hash.
     capacity_btu_per_hr = OpenStudio.convert(cap.to_f, 'kW', 'Btu/hr').get
     dx_units = model.getCoilCoolingDXSingleSpeeds
@@ -261,6 +264,9 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
     fuel_type = test_pars[:fuel_type]
     vintage = test_pars[:vintage]
     standard = get_standard(vintage)
+
+    standard.fuel_type_set = SystemFuels.new()
+    standard.fuel_type_set.set_defaults(standards_data: standard.standards_data, primary_heating_fuel: fuel_type)
 
     # Define the test name.
     name = "#{vintage}_sys2_CoolingType_#{fuel_type}_kW_chiller_type-#{chiller_type}_#{mau_cooling_type}"

@@ -36,7 +36,7 @@ OS:AirConditioner:VariableRefrigerantFlow,
   {00000000-0000-0000-0061-000000000002},  !- Availability Schedule
   27911.1420959623,                        !- Gross Rated Total Cooling Capacity {W}
   4.35,                                    !- Gross Rated Cooling COP {W/W}
-  -5,                                      !- Minimum Outdoor Temperature in Cooling Mode {C}
+  -10,                                     !- Minimum Outdoor Temperature in Cooling Mode {C}
   43,                                      !- Maximum Outdoor Temperature in Cooling Mode {C}
   {00000000-0000-0000-0027-000000000028},  !- Cooling Capacity Ratio Modifier Function of Low Temperature Curve Name
   {00000000-0000-0000-0028-000000000014},  !- Cooling Capacity Ratio Boundary Curve Name
