@@ -296,6 +296,7 @@ class ECMS
     outdoor_vrf_unit.setMinimumHeatPumpPartLoadRatio(0.5)
     outdoor_vrf_unit.setCondenserType(condenser_type)
     outdoor_vrf_unit.setCrankcaseHeaterPowerperCompressor(1.0e-6)
+    outdoor_vrf_unit.setMinimumOutdoorTemperatureinCoolingMode(-10)
     heat_defrost_eir_ft = nil
     if ecm_name
       search_criteria = {}
