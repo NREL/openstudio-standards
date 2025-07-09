@@ -102,6 +102,8 @@
         {
           "name": "DINING_WALL_EAST_FIXEDWINDOW",
           "construction": "BTAP-EXT-FIXEDWINDOW:U=0.220 SHGC=0.600",
+          "zone": "ALL_ST=DINING - FAMILY SPACE_FL=BUILDING STORY 1_SCH=B",
+          "space": "DINING",
           "glass_area_m2": 20.05,
           "area_of_one_opening_m2": 20.05,
           "area_of_multiplied_openings_m2": 20.05,
@@ -120,6 +122,8 @@
         {
           "name": "DINING_WALL_SOUTH_FIXEDWINDOW",
           "construction": "BTAP-EXT-FIXEDWINDOW:U=0.220 SHGC=0.600",
+          "zone": "ALL_ST=DINING - FAMILY SPACE_FL=BUILDING STORY 1_SCH=B",
+          "space": "DINING",
           "glass_area_m2": 27.57,
           "area_of_one_opening_m2": 27.57,
           "area_of_multiplied_openings_m2": 27.57,
@@ -138,6 +142,8 @@
         {
           "name": "DINING_WALL_WEST_FIXEDWINDOW",
           "construction": "BTAP-EXT-FIXEDWINDOW:U=0.220 SHGC=0.600",
+          "zone": "ALL_ST=DINING - FAMILY SPACE_FL=BUILDING STORY 1_SCH=B",
+          "space": "DINING",
           "glass_area_m2": 20.05,
           "area_of_one_opening_m2": 20.05,
           "area_of_multiplied_openings_m2": 20.05,
@@ -156,6 +162,8 @@
         {
           "name": "KITCHEN_WALL_EAST_FIXEDWINDOW",
           "construction": "BTAP-EXT-FIXEDWINDOW:U=0.220 SHGC=0.600",
+          "zone": "ALL_ST=FOOD PREPARATION_FL=BUILDING STORY 1_SCH=B",
+          "space": "KITCHEN",
           "glass_area_m2": 7.52,
           "area_of_one_opening_m2": 7.52,
           "area_of_multiplied_openings_m2": 7.52,
@@ -174,6 +182,8 @@
         {
           "name": "KITCHEN_WALL_NORTH_FIXEDWINDOW",
           "construction": "BTAP-EXT-FIXEDWINDOW:U=0.220 SHGC=0.600",
+          "zone": "ALL_ST=FOOD PREPARATION_FL=BUILDING STORY 1_SCH=B",
+          "space": "KITCHEN",
           "glass_area_m2": 27.57,
           "area_of_one_opening_m2": 27.57,
           "area_of_multiplied_openings_m2": 27.57,
@@ -191,6 +201,8 @@
         {
           "name": "KITCHEN_WALL_WEST_FIXEDWINDOW",
           "construction": "BTAP-EXT-FIXEDWINDOW:U=0.220 SHGC=0.600",
+          "zone": "ALL_ST=FOOD PREPARATION_FL=BUILDING STORY 1_SCH=B",
+          "space": "KITCHEN",
           "glass_area_m2": 7.52,
           "area_of_one_opening_m2": 7.52,
           "area_of_multiplied_openings_m2": 7.52,
@@ -210,6 +222,7 @@
           "name": "EAST-ROOF",
           "construction": "BTAP-EXT-ROOF-METAL:U-0.183",
           "zone": "ALL_ST=- UNDEFINED -_FL=BUILDING STORY 2_SCH=A",
+          "space": "ATTIC",
           "reflectance": 0.3,
           "u-factor_with_film_W/m2-K": 0.179,
           "u-factor_no_film_W/m2-K": 0.183,
@@ -225,6 +238,7 @@
           "name": "NORTH-ROOF",
           "construction": "BTAP-EXT-ROOF-METAL:U-0.183",
           "zone": "ALL_ST=- UNDEFINED -_FL=BUILDING STORY 2_SCH=A",
+          "space": "ATTIC",
           "reflectance": 0.3,
           "u-factor_with_film_W/m2-K": 0.179,
           "u-factor_no_film_W/m2-K": 0.183,
@@ -239,6 +253,7 @@
           "name": "SOUTH-ROOF",
           "construction": "BTAP-EXT-ROOF-METAL:U-0.183",
           "zone": "ALL_ST=- UNDEFINED -_FL=BUILDING STORY 2_SCH=A",
+          "space": "ATTIC",
           "reflectance": 0.3,
           "u-factor_with_film_W/m2-K": 0.179,
           "u-factor_no_film_W/m2-K": 0.183,
@@ -254,6 +269,7 @@
           "name": "WEST-ROOF",
           "construction": "BTAP-EXT-ROOF-METAL:U-0.183",
           "zone": "ALL_ST=- UNDEFINED -_FL=BUILDING STORY 2_SCH=A",
+          "space": "ATTIC",
           "reflectance": 0.3,
           "u-factor_with_film_W/m2-K": 0.179,
           "u-factor_no_film_W/m2-K": 0.183,
@@ -269,6 +285,7 @@
           "name": "DINING_WALL_EAST",
           "construction": "BTAP-EXT-WALL-MASS:U-0.278",
           "zone": "ALL_ST=DINING - FAMILY SPACE_FL=BUILDING STORY 1_SCH=B",
+          "space": "DINING",
           "reflectance": 0.3,
           "u-factor_with_film_W/m2-K": 0.267,
           "u-factor_no_film_W/m2-K": 0.278,
@@ -285,6 +302,7 @@
           "name": "DINING_WALL_SOUTH",
           "construction": "BTAP-EXT-WALL-MASS:U-0.278",
           "zone": "ALL_ST=DINING - FAMILY SPACE_FL=BUILDING STORY 1_SCH=B",
+          "space": "DINING",
           "reflectance": 0.3,
           "u-factor_with_film_W/m2-K": 0.267,
           "u-factor_no_film_W/m2-K": 0.278,
@@ -301,6 +319,7 @@
           "name": "DINING_WALL_WEST",
           "construction": "BTAP-EXT-WALL-MASS:U-0.278",
           "zone": "ALL_ST=DINING - FAMILY SPACE_FL=BUILDING STORY 1_SCH=B",
+          "space": "DINING",
           "reflectance": 0.3,
           "u-factor_with_film_W/m2-K": 0.267,
           "u-factor_no_film_W/m2-K": 0.278,
@@ -317,6 +336,7 @@
           "name": "DINING_FLOOR",
           "construction": "BTAP-GRND-FLOOR-MASS:U-0.757_STD",
           "zone": "ALL_ST=DINING - FAMILY SPACE_FL=BUILDING STORY 1_SCH=B",
+          "space": "DINING",
           "reflectance": 0.3,
           "u-factor_with_film_W/m2-K": 0.674,
           "u-factor_no_film_W/m2-K": 0.757,
@@ -331,6 +351,7 @@
           "name": "KITCHEN_WALL_EAST",
           "construction": "BTAP-EXT-WALL-MASS:U-0.278",
           "zone": "ALL_ST=FOOD PREPARATION_FL=BUILDING STORY 1_SCH=B",
+          "space": "KITCHEN",
           "reflectance": 0.3,
           "u-factor_with_film_W/m2-K": 0.267,
           "u-factor_no_film_W/m2-K": 0.278,
@@ -347,6 +368,7 @@
           "name": "KITCHEN_WALL_NORTH",
           "construction": "BTAP-EXT-WALL-MASS:U-0.278",
           "zone": "ALL_ST=FOOD PREPARATION_FL=BUILDING STORY 1_SCH=B",
+          "space": "KITCHEN",
           "reflectance": 0.3,
           "u-factor_with_film_W/m2-K": 0.267,
           "u-factor_no_film_W/m2-K": 0.278,
@@ -362,6 +384,7 @@
           "name": "KITCHEN_WALL_WEST",
           "construction": "BTAP-EXT-WALL-MASS:U-0.278",
           "zone": "ALL_ST=FOOD PREPARATION_FL=BUILDING STORY 1_SCH=B",
+          "space": "KITCHEN",
           "reflectance": 0.3,
           "u-factor_with_film_W/m2-K": 0.267,
           "u-factor_no_film_W/m2-K": 0.278,
@@ -378,6 +401,7 @@
           "name": "KITCHEN_FLOOR",
           "construction": "BTAP-GRND-FLOOR-MASS:U-0.757_STD",
           "zone": "ALL_ST=FOOD PREPARATION_FL=BUILDING STORY 1_SCH=B",
+          "space": "KITCHEN",
           "reflectance": 0.3,
           "u-factor_with_film_W/m2-K": 0.674,
           "u-factor_no_film_W/m2-K": 0.757,
@@ -499,19 +523,19 @@
       "eplusout_err_table": [
         {
           "error_type": "warning",
-          "message": "ProcessScheduleInput: Schedule:Day:Interval=\"ECONOMIZER MAX OA FRACTION 100 PCT DEFAULT\", Blank Schedule Type Limits Name input -- will not be validated."
+          "message": "ProcessScheduleInput: Schedule:Day:Interval = ECONOMIZER MAX OA FRACTION 100 PCT DEFAULT  Schedule Type Limits Name is empty.  Schedule will not be validated."
         },
         {
           "error_type": "warning",
-          "message": "ProcessScheduleInput: Schedule:Day:Interval=\"SCHEDULE DAY 1\", Blank Schedule Type Limits Name input -- will not be validated."
+          "message": "ProcessScheduleInput: Schedule:Day:Interval = SCHEDULE DAY 1  Schedule Type Limits Name is empty.  Schedule will not be validated."
         },
         {
           "error_type": "warning",
-          "message": "ProcessScheduleInput: Schedule:Day:Interval=\"SCHEDULE DAY 2\", Blank Schedule Type Limits Name input -- will not be validated."
+          "message": "ProcessScheduleInput: Schedule:Day:Interval = SCHEDULE DAY 2  Schedule Type Limits Name is empty.  Schedule will not be validated."
         },
         {
           "error_type": "warning",
-          "message": "ProcessScheduleInput: Schedule:Year=\"ECONOMIZER MAX OA FRACTION 100 PCT\", Blank Schedule Type Limits Name input -- will not be validated."
+          "message": "ProcessScheduleInput: Schedule:Year = ECONOMIZER MAX OA FRACTION 100 PCT  Schedule Type Limits Name is empty.  Schedule will not be validated."
         },
         {
           "error_type": "warning",
