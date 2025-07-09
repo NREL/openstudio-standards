@@ -18,8 +18,8 @@ exhibit::museum,exhibit,convention,
 exhibit::convention,exhibit,museum,
 baggage::terminal,baggage/carousel,,
 counter::terminal,counter,,
-seating::common,seating,airport/terminal/transp,
-seating::terminal,seating,general/common/other,
+seating::common,seating,airport/terminal/transp/audience,
+seating::terminal,seating,general/common/other/audience,
 refectory::religious,fellowship/refectory,,
 pulpit::religious,pulpit/choir,,
 chapel::religious,chapel,,
@@ -35,7 +35,7 @@ c1::arena,class 1/class I,,
 c2::arena,class 2/class II,,
 c3::arena,class 3/class III,,
 c4::arena,class 4/class IV,,
-octogon::arena,ring/octogon,,
+octogon::arena,ring/octogon,manufacturing,
 exercise::gym,exercise,,
 court::gym,court,class 1/class 2/class 3/class 4/class I/class II/class III/class IV/courthouse/courtroom/chambers/tribunal,
 locker::common,locker,
@@ -52,8 +52,8 @@ dining::motel,dining,penitentiary/leisure/lounge/bar/cafeteria/fast/family/resta
 dining::hotel,dining,penitentiaryleisure/lounge/bar/cafeteria/fast/family/restaurant/motel/lodging/common/other,dining::common
 cuisine::common,food/preparation,
 rooms::common,guest,otel,rooms::hotel
-rooms::motel,guest,hotel,rooms::common
-rooms::hotel,guest,motel/hway/lodging,rooms::common
+rooms::motel,guest/otel,hotel,rooms::common
+rooms::hotel,guest/otel,motel/hway/lodging,rooms::common
 quarters::dorm,quarter,fire,
 quarters::firehouse,quarter,dorm,
 units::residential,unit,care,units::residential
@@ -63,9 +63,9 @@ meeting::common,conference/meeting/multi-purpose,,
 office::common,office/enclosed,bank/open,office::common
 openplan::common,open,enclosed/bank,office::common
 bank::common,bank,,
-copiers::common,copier/print,,
-computer::common,computer,
-server::common,server,
+copiers::common,copier/copy/print,,
+computer::common,computer,server,computer::common
+server::common,server,computer,computer::common
 sorting::postal,sorting,,
 chambers::court,chambers,,
 tribunal::court,tribunal/courtroom,,
@@ -78,7 +78,7 @@ stacks::library,stacks,,
 catalog::library,catalog,,
 lab::common,lab,teaching,lab::common
 teachinglab::common,lab,research/industr/medical/common/other,lab::common
-storage::common,storage,suppl,storage::common
+storage::common,storage,suppl/garage,storage::common
 supplies::hospital,suppl,,
 exam::hospital,exam/treatment,,
 nursery::hospital,nursery,,
