@@ -139,6 +139,16 @@ def create_baseline_model(model_name, standard, climate_zone, building_type, cus
   # Create the baseline model from the
   # supplied proposed test model
   standard = Standard.build(standard)
+
+  # run sizing - due to the model uses layer by layer approach to define a window, the lack or incorrect
+  # uFactor calculation without running Eplus causes error in the space conditioning category function
+  # therefore, we force to run a sizing run.
+  sizing_run_test_files = ['bldg_11', 'bldg_17']
+  if sizing_run_test_files.include?(model_name)
+    unless standard.model_run_sizing_run(model, "#{osm_directory}/PROPOSED")
+      return false
+    end
+  end
   standard.model_create_prm_baseline_building(model, building_type, climate_zone, custom, osm_directory, debug)
 
   # Show the output messages
