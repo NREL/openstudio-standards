@@ -9,21 +9,21 @@ module OpenstudioStandards
     # @return [Hash] hash of exterior lighting value types and building type and model specific values
     def self.model_get_exterior_lighting_sizes(model)
       # load parking file and convert to hash table
-      parking_json = "#{__dir__}/data/parking.json"
-      unless File.exist?(parking_json)
+      parking_json = "#{File.dirname(__FILE__)}/data/parking.json"
+      unless File.file?(parking_json)
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ExteriorLighting', "Unable to find file: #{parking_json}")
         return false
       end
-      parking_hsh = JSON.parse(File.read("#{__dir__}/data/parking.json"), symbolize_names: true)
+      parking_hsh = JSON.parse(File.read("#{File.dirname(__FILE__)}/data/parking.json"), symbolize_names: true)
       parking_hsh = parking_hsh[:parking]
 
       # load entryways file and convert to hash table
-      entryways_json = "#{__dir__}/data/entryways.json"
-      unless File.exist?(entryways_json)
+      entryways_json = "#{File.dirname(__FILE__)}/data/entryways.json"
+      unless File.file?(entryways_json)
         OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ExteriorLighting', "Unable to find file: #{entryways_json}")
         return false
       end
-      entryways_hsh = JSON.parse(File.read("#{__dir__}/data/entryways.json"), symbolize_names: true)
+      entryways_hsh = JSON.parse(File.read("#{File.dirname(__FILE__)}/data/entryways.json"), symbolize_names: true)
       entryways_hsh = entryways_hsh[:entryways]
 
       # get space properties from the model
@@ -187,7 +187,7 @@ module OpenstudioStandards
     def self.model_get_exterior_lighting_properties(lighting_generation: 'default',
                                                     lighting_zone: 3)
       # load typical exterior lighting data
-      data = JSON.parse(File.read("#{__dir__}/data/typical_exterior_lighting.json"))
+      data = JSON.parse(File.read("#{File.dirname(__FILE__)}/data/typical_exterior_lighting.json"))
       exterior_lighting_properties = data['exterior_lighting'].select { |hash| (hash['lighting_generation'] == lighting_generation) && (hash['lighting_zone'] == lighting_zone) }[0]
 
       # make sure lighting properties were found

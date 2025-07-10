@@ -1,4 +1,4 @@
-﻿space_type,building_type,exhaust_per_area
+space_type,building_type,exhaust_per_area
 Kitchen,FullServiceRestaurant,0.7
 Kitchen,Hospital,0.7
 Kitchen,LargeHotel,0.7

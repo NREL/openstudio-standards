@@ -22,10 +22,10 @@ class Standard
         heat_pump = true
         htg_coil = containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.get.supplementalHeatingCoil
         suppl_heating_type = if htg_coil.to_CoilHeatingElectric.is_initialized
-                                'Electric Resistance or None'
-                              else
-                                'All Other'
-                              end
+                               'Electric Resistance or None'
+                             else
+                               'All Other'
+                             end
       end
       # @todo Add other unitary systems
     end

@@ -1,5 +1,6 @@
 require 'csv'
 require 'date'
+require 'parallel'
 
 class Standard
   attr_accessor :space_multiplier_map, :standards_data
@@ -66,8 +67,9 @@ class Standard
   # @param sizing_run_dir [String] the directory where the sizing runs will be performed
   # @param run_all_orients [Boolean] indicate weather a baseline model should be created for all 4 orientations: same as user model, +90 deg, +180 deg, +270 deg
   # @param debug [Boolean] If true, will report out more detailed debugging output
+  # @param use_parallel [Boolean] If true, when measure will run simulation for four orientations in parallel, else keep runinig one at a time.
   # @return [Boolean] returns true if successful, false if not
-  def model_create_prm_any_baseline_building(user_model, building_type, climate_zone, hvac_building_type = 'All others', wwr_building_type = 'All others', swh_building_type = 'All others', model_deep_copy = false, create_proposed_model = false, custom = nil, sizing_run_dir = Dir.pwd, run_all_orients = false, unmet_load_hours_check = true, debug = false)
+  def model_create_prm_any_baseline_building(user_model, building_type, climate_zone, hvac_building_type = 'All others', wwr_building_type = 'All others', swh_building_type = 'All others', model_deep_copy = false, create_proposed_model = false, custom = nil, sizing_run_dir = Dir.pwd, run_all_orients = false, unmet_load_hours_check = true, debug = false, use_parallel=false)
     # User data process
     # bldg_type_hvac_zone_hash could be an empty hash if all zones in the models are unconditioned
     # TODO - move this portion to the top of the function
@@ -155,8 +157,11 @@ class Standard
     # Need to run proposed model sizing simulation if no sql data is available
     degs_from_org = run_all_orientations(run_all_orients, user_model) ? [0, 90, 180, 270] : [0]
 
+    # loop method
+    each_method = use_parallel && degs_from_org.size > 1 ? ->(collection, &block) { Parallel.each(collection, in_process: 4, &block) } : ->(collection, &block) { collection.each(&block) }
+    
     # Create baseline model for each orientation
-    degs_from_org.each do |degs|
+    each_method.call(degs_from_org) do |degs|
       # New baseline model:
       # Starting point is the original proposed model
       # Create a deep copy of the user model if requested
@@ -429,7 +434,7 @@ class Standard
       end
 
       # Run sizing run with the HVAC equipment
-      if model_run_sizing_run(model, "#{sizing_run_dir}/SR1") == false
+      if model_run_sizing_run(model, "#{sizing_run_dir}/SR1-#{degs}") == false
         return false
       end
 
@@ -471,7 +476,7 @@ class Standard
       end
 
       # Run sizing run with the new chillers, boilers, and cooling towers to determine capacities
-      if model_run_sizing_run(model, "#{sizing_run_dir}/SR2") == false
+      if model_run_sizing_run(model, "#{sizing_run_dir}/SR2-#{degs}") == false
         return false
       end
 

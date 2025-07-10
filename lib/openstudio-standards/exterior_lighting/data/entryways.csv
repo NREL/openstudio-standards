@@ -1,4 +1,4 @@
-﻿building_type,rollup_doors_per_10000_ft2,entrance_doors_per_10000_ft2,other_doors_per_10000_ft2,entrance_canopies,emergency_canopies,canopy_size,floor_area_per_drive_through_window,notes
+building_type,rollup_doors_per_10000_ft2,entrance_doors_per_10000_ft2,other_doors_per_10000_ft2,entrance_canopies,emergency_canopies,canopy_size,floor_area_per_drive_through_window,notes
 SmallOffice,0.47,2,2,,,,,Based on Table 4.18 Number of Doors by Door Type from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010
 MediumOffice,0.13,1,3,,,,,Based on Table 4.18 Number of Doors by Door Type from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010
 LargeOffice,0,1,3,,,,,Based on Table 4.18 Number of Doors by Door Type from Achieving the 30% Goal: Energy and Cost Savings Analysis of ASHRAE Standard 90.1-2010
