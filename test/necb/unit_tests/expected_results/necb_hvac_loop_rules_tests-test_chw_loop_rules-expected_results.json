@@ -6,38 +6,6 @@
     "Electricity": {
       "VarType": "TestCase",
       "case-1": {
-        "Chilled Water Loop": {
-          "name": "Chilled Water Loop",
-          "has_variable_pump": true,
-          "loop_design_temperature_difference": 6.0,
-          "schedule_rule_name": "wkdCHW Temp rule",
-          "hourly_setpoints": [
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0
-          ]
-        },
         "Condenser Water Loop": {
           "name": "Condenser Water Loop",
           "has_variable_pump": true,
@@ -69,6 +37,38 @@
             29.0,
             29.0,
             29.0
+          ]
+        },
+        "Chilled Water Loop": {
+          "name": "Chilled Water Loop",
+          "has_variable_pump": true,
+          "loop_design_temperature_difference": 6.0,
+          "schedule_rule_name": "wkdCHW Temp rule",
+          "hourly_setpoints": [
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0
           ]
         }
       }
@@ -80,38 +80,6 @@
     "Electricity": {
       "VarType": "TestCase",
       "case-1": {
-        "Chilled Water Loop": {
-          "name": "Chilled Water Loop",
-          "has_variable_pump": true,
-          "loop_design_temperature_difference": 6.0,
-          "schedule_rule_name": "wkdCHW Temp rule",
-          "hourly_setpoints": [
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0
-          ]
-        },
         "Condenser Water Loop": {
           "name": "Condenser Water Loop",
           "has_variable_pump": true,
@@ -143,6 +111,38 @@
             29.0,
             29.0,
             29.0
+          ]
+        },
+        "Chilled Water Loop": {
+          "name": "Chilled Water Loop",
+          "has_variable_pump": true,
+          "loop_design_temperature_difference": 6.0,
+          "schedule_rule_name": "wkdCHW Temp rule",
+          "hourly_setpoints": [
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0
           ]
         }
       }
@@ -154,6 +154,38 @@
     "Electricity": {
       "VarType": "TestCase",
       "case-1": {
+        "Chilled Water Loop": {
+          "name": "Chilled Water Loop",
+          "has_variable_pump": true,
+          "loop_design_temperature_difference": 6.0,
+          "schedule_rule_name": "wkdCHW Temp rule",
+          "hourly_setpoints": [
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0
+          ]
+        },
         "Condenser Water Loop": {
           "name": "Condenser Water Loop",
           "has_variable_pump": true,
@@ -185,38 +217,6 @@
             29.0,
             29.0,
             29.0
-          ]
-        },
-        "Chilled Water Loop": {
-          "name": "Chilled Water Loop",
-          "has_variable_pump": true,
-          "loop_design_temperature_difference": 6.0,
-          "schedule_rule_name": "wkdCHW Temp rule",
-          "hourly_setpoints": [
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0
           ]
         }
       }
@@ -374,38 +374,6 @@
     "Electricity": {
       "VarType": "TestCase",
       "case-1": {
-        "Chilled Water Loop": {
-          "name": "Chilled Water Loop",
-          "has_variable_pump": true,
-          "loop_design_temperature_difference": 6.0,
-          "schedule_rule_name": "wkdCHW Temp rule",
-          "hourly_setpoints": [
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0,
-            7.0
-          ]
-        },
         "Condenser Water Loop": {
           "name": "Condenser Water Loop",
           "has_variable_pump": true,
@@ -437,6 +405,38 @@
             29.0,
             29.0,
             29.0
+          ]
+        },
+        "Chilled Water Loop": {
+          "name": "Chilled Water Loop",
+          "has_variable_pump": true,
+          "loop_design_temperature_difference": 6.0,
+          "schedule_rule_name": "wkdCHW Temp rule",
+          "hourly_setpoints": [
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0,
+            7.0
           ]
         }
       }

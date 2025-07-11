@@ -2884,7 +2884,7 @@ OS:DistrictCooling,
   DistrictCooling GLHX,                    !- Name
   {00000000-0000-0000-0016-000000000186},  !- Chilled Water Inlet Node Name
   {00000000-0000-0000-0016-000000000187},  !- Chilled Water Outlet Node Name
-  18077.265112938,                         !- Nominal Capacity {W}
+  18078.6829759377,                        !- Nominal Capacity {W}
   {00000000-0000-0000-0064-000000000002};  !- Capacity Fraction Schedule
 
 OS:DistrictHeating:Water,
@@ -2892,7 +2892,7 @@ OS:DistrictHeating:Water,
   DistrictHeating GLHX,                    !- Name
   {00000000-0000-0000-0016-000000000177},  !- Hot Water Inlet Node Name
   {00000000-0000-0000-0016-000000000178},  !- Hot Water Outlet Node Name
-  18678.2015681967,                        !- Nominal Capacity {W}
+  18675.2483167543,                        !- Nominal Capacity {W}
   {00000000-0000-0000-0064-000000000002};  !- Capacity Fraction Schedule
 
 OS:ElectricEquipment,
@@ -5737,7 +5737,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0065-000000000043},  !- Handle
   Schedule Day 5,                          !- Name
-  {00000000-0000-0000-0068-000000000004},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0068-000000000005},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   2,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -5752,7 +5752,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0065-000000000044},  !- Handle
   Schedule Day 6,                          !- Name
-  {00000000-0000-0000-0068-000000000004},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0068-000000000005},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -5773,7 +5773,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0065-000000000045},  !- Handle
   Schedule Day 7,                          !- Name
-  {00000000-0000-0000-0068-000000000004},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0068-000000000005},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   2,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -5788,7 +5788,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0065-000000000046},  !- Handle
   Schedule Day 8,                          !- Name
-  {00000000-0000-0000-0068-000000000004},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0068-000000000005},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -5834,9 +5834,9 @@ OS:Schedule:Day,
   0;                                       !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0065-000000000051},  !- Handle
+  {00000000-0000-0000-0065-000000000050},  !- Handle
   sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Occ Sch Default, !- Name
-  {00000000-0000-0000-0068-000000000004},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0068-000000000005},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -5851,7 +5851,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0065-000000000051},  !- Handle
   sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Occ Sch Summer Design Day, !- Name
-  {00000000-0000-0000-0068-000000000004},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0068-000000000005},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
   0,                                       !- Minute 1
@@ -5859,8 +5859,8 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0065-000000000052},  !- Handle
-  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Occ Sch Summer Design Day, !- Name
-  {00000000-0000-0000-0068-000000000004},  !- Schedule Type Limits Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Occ Sch Winter Design Day, !- Name
+  {00000000-0000-0000-0068-000000000005},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
   0,                                       !- Minute 1
@@ -5868,17 +5868,8 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0065-000000000053},  !- Handle
-  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Occ Sch Winter Design Day, !- Name
-  {00000000-0000-0000-0068-000000000004},  !- Schedule Type Limits Name
-  ,                                        !- Interpolate to Timestep
-  24,                                      !- Hour 1
-  0,                                       !- Minute 1
-  1;                                       !- Value Until Time 1
-
-OS:Schedule:Day,
-  {00000000-0000-0000-0065-000000000054},  !- Handle
   sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Occ Sch Default, !- Name
-  {00000000-0000-0000-0068-000000000004},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0068-000000000005},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -5891,18 +5882,18 @@ OS:Schedule:Day,
   1;                                       !- Value Until Time 3
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0065-000000000055},  !- Handle
+  {00000000-0000-0000-0065-000000000054},  !- Handle
   sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Occ Sch Summer Design Day, !- Name
-  {00000000-0000-0000-0068-000000000004},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0068-000000000005},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
   0,                                       !- Minute 1
   1;                                       !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0065-000000000056},  !- Handle
+  {00000000-0000-0000-0065-000000000055},  !- Handle
   sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Occ Sch Winter Design Day, !- Name
-  {00000000-0000-0000-0068-000000000004},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0068-000000000005},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
   0,                                       !- Minute 1
@@ -6521,26 +6512,18 @@ OS:Schedule:Ruleset,
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0067-000000000020},  !- Handle
   sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Occ Sch, !- Name
-  {00000000-0000-0000-0068-000000000004},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0068-000000000005},  !- Schedule Type Limits Name
   {00000000-0000-0000-0065-000000000050},  !- Default Day Schedule Name
   {00000000-0000-0000-0065-000000000051},  !- Summer Design Day Schedule Name
   {00000000-0000-0000-0065-000000000052};  !- Winter Design Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0067-000000000021},  !- Handle
-  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Occ Sch, !- Name
-  {00000000-0000-0000-0068-000000000004},  !- Schedule Type Limits Name
-  {00000000-0000-0000-0065-000000000051},  !- Default Day Schedule Name
-  {00000000-0000-0000-0065-000000000052},  !- Summer Design Day Schedule Name
-  {00000000-0000-0000-0065-000000000053};  !- Winter Design Day Schedule Name
-
-OS:Schedule:Ruleset,
-  {00000000-0000-0000-0067-000000000022},  !- Handle
   sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Occ Sch, !- Name
-  {00000000-0000-0000-0068-000000000004},  !- Schedule Type Limits Name
-  {00000000-0000-0000-0065-000000000054},  !- Default Day Schedule Name
-  {00000000-0000-0000-0065-000000000055},  !- Summer Design Day Schedule Name
-  {00000000-0000-0000-0065-000000000056};  !- Winter Design Day Schedule Name
+  {00000000-0000-0000-0068-000000000005},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0065-000000000053},  !- Default Day Schedule Name
+  {00000000-0000-0000-0065-000000000054},  !- Summer Design Day Schedule Name
+  {00000000-0000-0000-0065-000000000055};  !- Winter Design Day Schedule Name
 
 OS:ScheduleTypeLimits,
   {00000000-0000-0000-0068-000000000001},  !- Handle
