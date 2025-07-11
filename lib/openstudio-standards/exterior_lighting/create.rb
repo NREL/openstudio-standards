@@ -116,7 +116,8 @@ module OpenstudioStandards
         search_criteria = {
           'template' => lookup_key,
           'lighting_zone' => lighting_zone,
-          'allowance_type' => 'building facades'
+          'allowance_type' => 'building facades',
+          'allowance_unit' => 'W/ft2'
         }
         exterior_lighting_building_facade_req = standard.standards_lookup_table_first(table_name: 'exterior_lighting', search_criteria: search_criteria)
         if exterior_lighting_building_facade_req['daylight_off_control'] == 'REQ'
@@ -135,7 +136,6 @@ module OpenstudioStandards
       else
         ext_lights_sch_facade_and_landscape = model.alwaysOnDiscreteSchedule
       end
-
 
       occupancy_setback_reduction = 0.0
       if exterior_lighting_properties.has_key?('occupancy_setback_reduction')

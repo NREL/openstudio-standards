@@ -30656,15 +30656,15 @@ OS:Schedule:Ruleset,
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0064-000000000003},  !- Handle
-  CHW Temp,                                !- Name
+  CW Temp,                                 !- Name
   {00000000-0000-0000-0065-000000000010},  !- Schedule Type Limits Name
   {00000000-0000-0000-0062-000000000174};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0064-000000000004},  !- Handle
-  CW Temp,                                 !- Name
-  {00000000-0000-0000-0065-000000000010},  !- Schedule Type Limits Name
-  {00000000-0000-0000-0062-000000000175};  !- Default Day Schedule Name
+  Clothing Schedule,                       !- Name
+  {00000000-0000-0000-0065-000000000003},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0062-000000000002};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0064-000000000005},  !- Handle
@@ -30934,15 +30934,15 @@ OS:Schedule:Ruleset,
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0064-000000000049},  !- Handle
-  Schedule Ruleset 1,                      !- Name
+  Schedule Ruleset 2,                      !- Name
   {00000000-0000-0000-0065-000000000010},  !- Schedule Type Limits Name
   {00000000-0000-0000-0062-000000000176};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0064-000000000050},  !- Handle
-  Schedule Ruleset 2,                      !- Name
+  Service Water Loop Temp - 140F,          !- Name
   {00000000-0000-0000-0065-000000000010},  !- Schedule Type Limits Name
-  {00000000-0000-0000-0062-000000000177};  !- Default Day Schedule Name
+  {00000000-0000-0000-0062-000000000179};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0064-000000000051},  !- Handle
@@ -30952,7 +30952,7 @@ OS:Schedule:Ruleset,
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0064-000000000052},  !- Handle
-  Supply Air Temp,                         !- Name
+  Water Heater Ambient Temp Schedule 71.6F, !- Name
   {00000000-0000-0000-0065-000000000010},  !- Schedule Type Limits Name
   {00000000-0000-0000-0062-000000000181};  !- Default Day Schedule Name
 
@@ -31161,7 +31161,7 @@ OS:SetpointManager:SingleZone:Reheat,
   Setpoint Manager Single Zone Reheat 2,   !- Name
   13,                                      !- Minimum Supply Air Temperature {C}
   43,                                      !- Maximum Supply Air Temperature {C}
-  {00000000-0000-0000-0092-000000000012},  !- Control Zone Name
+  {00000000-0000-0000-0092-000000000007},  !- Control Zone Name
   {00000000-0000-0000-0049-000000000529};  !- Setpoint Node or NodeList Name
 
 OS:SetpointManager:SingleZone:Reheat,
@@ -31169,7 +31169,7 @@ OS:SetpointManager:SingleZone:Reheat,
   Setpoint Manager Single Zone Reheat 3,   !- Name
   13,                                      !- Minimum Supply Air Temperature {C}
   43,                                      !- Maximum Supply Air Temperature {C}
-  {00000000-0000-0000-0092-000000000067},  !- Control Zone Name
+  {00000000-0000-0000-0092-000000000061},  !- Control Zone Name
   {00000000-0000-0000-0049-000000000536};  !- Setpoint Node or NodeList Name
 
 OS:SetpointManager:SingleZone:Reheat,

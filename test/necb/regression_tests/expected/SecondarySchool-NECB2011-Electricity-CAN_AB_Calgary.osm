@@ -11799,161 +11799,161 @@ OS:EnergyManagementSystem:Actuator,
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0033-000000000001},  !- Handle
   ems_sys_3_mixed_shr_none_sc_dx_sh_c_e_ssf_cv_zh_b_e_zc_none_srf_none__13_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {c05c0ebf-d61a-4e46-8dc2-90786861cc57}<23.9 && {c05c0ebf-d61a-4e46-8dc2-90786861cc57}>1.7, !- Program Line 1
-  SET {73f999a7-f18d-42b6-a463-a102db70ffcc} = 29.4, !- Program Line 2
-  SET {6a6bcf49-ed41-4803-8d7f-df8877214ce3} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {c05c0ebf-d61a-4e46-8dc2-90786861cc57}<23.9 && {c05c0ebf-d61a-4e46-8dc2-90786861cc57}>1.7, !- Program Line 4
-  SET {73f999a7-f18d-42b6-a463-a102db70ffcc} = 29.4, !- Program Line 5
-  SET {6a6bcf49-ed41-4803-8d7f-df8877214ce3} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {c05c0ebf-d61a-4e46-8dc2-90786861cc57}<23.9 && {c05c0ebf-d61a-4e46-8dc2-90786861cc57}>1.7, !- Program Line 7
-  SET {73f999a7-f18d-42b6-a463-a102db70ffcc} = 29.4, !- Program Line 8
-  SET {6a6bcf49-ed41-4803-8d7f-df8877214ce3} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {c05c0ebf-d61a-4e46-8dc2-90786861cc57}<23.9 && {c05c0ebf-d61a-4e46-8dc2-90786861cc57}>1.7, !- Program Line 10
-  SET {73f999a7-f18d-42b6-a463-a102db70ffcc} = 29.4, !- Program Line 11
-  SET {6a6bcf49-ed41-4803-8d7f-df8877214ce3} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {9efd249c-a8fe-4672-852a-4fe4533a4234}<23.9 && {9efd249c-a8fe-4672-852a-4fe4533a4234}>1.7, !- Program Line 1
+  SET {2ba1283a-ccab-419f-959c-72ffeeb6c6d7} = 29.4, !- Program Line 2
+  SET {2eaf5ce1-56d8-4f4a-b571-ce65e6ba042e} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {9efd249c-a8fe-4672-852a-4fe4533a4234}<23.9 && {9efd249c-a8fe-4672-852a-4fe4533a4234}>1.7, !- Program Line 4
+  SET {2ba1283a-ccab-419f-959c-72ffeeb6c6d7} = 29.4, !- Program Line 5
+  SET {2eaf5ce1-56d8-4f4a-b571-ce65e6ba042e} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {9efd249c-a8fe-4672-852a-4fe4533a4234}<23.9 && {9efd249c-a8fe-4672-852a-4fe4533a4234}>1.7, !- Program Line 7
+  SET {2ba1283a-ccab-419f-959c-72ffeeb6c6d7} = 29.4, !- Program Line 8
+  SET {2eaf5ce1-56d8-4f4a-b571-ce65e6ba042e} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {9efd249c-a8fe-4672-852a-4fe4533a4234}<23.9 && {9efd249c-a8fe-4672-852a-4fe4533a4234}>1.7, !- Program Line 10
+  SET {2ba1283a-ccab-419f-959c-72ffeeb6c6d7} = 29.4, !- Program Line 11
+  SET {2eaf5ce1-56d8-4f4a-b571-ce65e6ba042e} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {73f999a7-f18d-42b6-a463-a102db70ffcc} = NULL, !- Program Line 14
-  SET {6a6bcf49-ed41-4803-8d7f-df8877214ce3} = NULL, !- Program Line 15
+  SET {2ba1283a-ccab-419f-959c-72ffeeb6c6d7} = NULL, !- Program Line 14
+  SET {2eaf5ce1-56d8-4f4a-b571-ce65e6ba042e} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0033-000000000002},  !- Handle
   ems_sys_3_mixed_shr_none_sc_dx_sh_c_e_ssf_cv_zh_b_e_zc_none_srf_none__15_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {f772ab6f-23ba-43d5-a650-a5cb37b63429}<23.9 && {f772ab6f-23ba-43d5-a650-a5cb37b63429}>1.7, !- Program Line 1
-  SET {d2f2d73b-84b5-4b34-8262-5f842b4f3895} = 29.4, !- Program Line 2
-  SET {c347bd18-7ad9-454c-a910-18da6074696e} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {f772ab6f-23ba-43d5-a650-a5cb37b63429}<23.9 && {f772ab6f-23ba-43d5-a650-a5cb37b63429}>1.7, !- Program Line 4
-  SET {d2f2d73b-84b5-4b34-8262-5f842b4f3895} = 29.4, !- Program Line 5
-  SET {c347bd18-7ad9-454c-a910-18da6074696e} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {f772ab6f-23ba-43d5-a650-a5cb37b63429}<23.9 && {f772ab6f-23ba-43d5-a650-a5cb37b63429}>1.7, !- Program Line 7
-  SET {d2f2d73b-84b5-4b34-8262-5f842b4f3895} = 29.4, !- Program Line 8
-  SET {c347bd18-7ad9-454c-a910-18da6074696e} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {f772ab6f-23ba-43d5-a650-a5cb37b63429}<23.9 && {f772ab6f-23ba-43d5-a650-a5cb37b63429}>1.7, !- Program Line 10
-  SET {d2f2d73b-84b5-4b34-8262-5f842b4f3895} = 29.4, !- Program Line 11
-  SET {c347bd18-7ad9-454c-a910-18da6074696e} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {82e84607-88d6-4d2a-9ca6-d91b0b35670c}<23.9 && {82e84607-88d6-4d2a-9ca6-d91b0b35670c}>1.7, !- Program Line 1
+  SET {6129ecea-7e1b-4828-aa33-0104c1d31edb} = 29.4, !- Program Line 2
+  SET {2d01d8b6-fc8d-471f-a6d4-bced606e9c80} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {82e84607-88d6-4d2a-9ca6-d91b0b35670c}<23.9 && {82e84607-88d6-4d2a-9ca6-d91b0b35670c}>1.7, !- Program Line 4
+  SET {6129ecea-7e1b-4828-aa33-0104c1d31edb} = 29.4, !- Program Line 5
+  SET {2d01d8b6-fc8d-471f-a6d4-bced606e9c80} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {82e84607-88d6-4d2a-9ca6-d91b0b35670c}<23.9 && {82e84607-88d6-4d2a-9ca6-d91b0b35670c}>1.7, !- Program Line 7
+  SET {6129ecea-7e1b-4828-aa33-0104c1d31edb} = 29.4, !- Program Line 8
+  SET {2d01d8b6-fc8d-471f-a6d4-bced606e9c80} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {82e84607-88d6-4d2a-9ca6-d91b0b35670c}<23.9 && {82e84607-88d6-4d2a-9ca6-d91b0b35670c}>1.7, !- Program Line 10
+  SET {6129ecea-7e1b-4828-aa33-0104c1d31edb} = 29.4, !- Program Line 11
+  SET {2d01d8b6-fc8d-471f-a6d4-bced606e9c80} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {d2f2d73b-84b5-4b34-8262-5f842b4f3895} = NULL, !- Program Line 14
-  SET {c347bd18-7ad9-454c-a910-18da6074696e} = NULL, !- Program Line 15
+  SET {6129ecea-7e1b-4828-aa33-0104c1d31edb} = NULL, !- Program Line 14
+  SET {2d01d8b6-fc8d-471f-a6d4-bced606e9c80} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0033-000000000003},  !- Handle
   ems_sys_3_mixed_shr_none_sc_dx_sh_c_e_ssf_cv_zh_b_e_zc_none_srf_none__2_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {347b3446-d93e-4323-8626-175a0a984e53}<23.9 && {347b3446-d93e-4323-8626-175a0a984e53}>1.7, !- Program Line 1
-  SET {dbfa9d36-52be-442f-b00d-915f19d693e3} = 29.4, !- Program Line 2
-  SET {0df206a3-1da5-430f-8729-03cfa755c7bc} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {347b3446-d93e-4323-8626-175a0a984e53}<23.9 && {347b3446-d93e-4323-8626-175a0a984e53}>1.7, !- Program Line 4
-  SET {dbfa9d36-52be-442f-b00d-915f19d693e3} = 29.4, !- Program Line 5
-  SET {0df206a3-1da5-430f-8729-03cfa755c7bc} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {347b3446-d93e-4323-8626-175a0a984e53}<23.9 && {347b3446-d93e-4323-8626-175a0a984e53}>1.7, !- Program Line 7
-  SET {dbfa9d36-52be-442f-b00d-915f19d693e3} = 29.4, !- Program Line 8
-  SET {0df206a3-1da5-430f-8729-03cfa755c7bc} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {347b3446-d93e-4323-8626-175a0a984e53}<23.9 && {347b3446-d93e-4323-8626-175a0a984e53}>1.7, !- Program Line 10
-  SET {dbfa9d36-52be-442f-b00d-915f19d693e3} = 29.4, !- Program Line 11
-  SET {0df206a3-1da5-430f-8729-03cfa755c7bc} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {2cd56f5d-6065-42ca-905c-3b81641caef9}<23.9 && {2cd56f5d-6065-42ca-905c-3b81641caef9}>1.7, !- Program Line 1
+  SET {f76ca445-4665-4b4f-8623-c6179fc8bf6f} = 29.4, !- Program Line 2
+  SET {4986c5f1-9e8e-4d0c-b990-a20ce4cbe92d} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {2cd56f5d-6065-42ca-905c-3b81641caef9}<23.9 && {2cd56f5d-6065-42ca-905c-3b81641caef9}>1.7, !- Program Line 4
+  SET {f76ca445-4665-4b4f-8623-c6179fc8bf6f} = 29.4, !- Program Line 5
+  SET {4986c5f1-9e8e-4d0c-b990-a20ce4cbe92d} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {2cd56f5d-6065-42ca-905c-3b81641caef9}<23.9 && {2cd56f5d-6065-42ca-905c-3b81641caef9}>1.7, !- Program Line 7
+  SET {f76ca445-4665-4b4f-8623-c6179fc8bf6f} = 29.4, !- Program Line 8
+  SET {4986c5f1-9e8e-4d0c-b990-a20ce4cbe92d} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {2cd56f5d-6065-42ca-905c-3b81641caef9}<23.9 && {2cd56f5d-6065-42ca-905c-3b81641caef9}>1.7, !- Program Line 10
+  SET {f76ca445-4665-4b4f-8623-c6179fc8bf6f} = 29.4, !- Program Line 11
+  SET {4986c5f1-9e8e-4d0c-b990-a20ce4cbe92d} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {dbfa9d36-52be-442f-b00d-915f19d693e3} = NULL, !- Program Line 14
-  SET {0df206a3-1da5-430f-8729-03cfa755c7bc} = NULL, !- Program Line 15
+  SET {f76ca445-4665-4b4f-8623-c6179fc8bf6f} = NULL, !- Program Line 14
+  SET {4986c5f1-9e8e-4d0c-b990-a20ce4cbe92d} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0033-000000000004},  !- Handle
   ems_sys_3_mixed_shr_none_sc_dx_sh_c_e_ssf_cv_zh_b_e_zc_none_srf_none__3_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {e72cc6f8-5e3f-47a3-b36f-6a2bcfe61fda}<23.9 && {e72cc6f8-5e3f-47a3-b36f-6a2bcfe61fda}>1.7, !- Program Line 1
-  SET {f89d6019-2103-4eac-923b-693a2c022dc5} = 29.4, !- Program Line 2
-  SET {e0c70c83-b01e-4515-944d-ae1fd41f4ba8} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {e72cc6f8-5e3f-47a3-b36f-6a2bcfe61fda}<23.9 && {e72cc6f8-5e3f-47a3-b36f-6a2bcfe61fda}>1.7, !- Program Line 4
-  SET {f89d6019-2103-4eac-923b-693a2c022dc5} = 29.4, !- Program Line 5
-  SET {e0c70c83-b01e-4515-944d-ae1fd41f4ba8} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {e72cc6f8-5e3f-47a3-b36f-6a2bcfe61fda}<23.9 && {e72cc6f8-5e3f-47a3-b36f-6a2bcfe61fda}>1.7, !- Program Line 7
-  SET {f89d6019-2103-4eac-923b-693a2c022dc5} = 29.4, !- Program Line 8
-  SET {e0c70c83-b01e-4515-944d-ae1fd41f4ba8} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {e72cc6f8-5e3f-47a3-b36f-6a2bcfe61fda}<23.9 && {e72cc6f8-5e3f-47a3-b36f-6a2bcfe61fda}>1.7, !- Program Line 10
-  SET {f89d6019-2103-4eac-923b-693a2c022dc5} = 29.4, !- Program Line 11
-  SET {e0c70c83-b01e-4515-944d-ae1fd41f4ba8} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {c911ca58-8860-473c-8d62-4f51ce8441c4}<23.9 && {c911ca58-8860-473c-8d62-4f51ce8441c4}>1.7, !- Program Line 1
+  SET {7a6c2747-2896-425a-b5ce-12e3769a208a} = 29.4, !- Program Line 2
+  SET {5c859186-7aa0-4f70-890e-a62450431741} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {c911ca58-8860-473c-8d62-4f51ce8441c4}<23.9 && {c911ca58-8860-473c-8d62-4f51ce8441c4}>1.7, !- Program Line 4
+  SET {7a6c2747-2896-425a-b5ce-12e3769a208a} = 29.4, !- Program Line 5
+  SET {5c859186-7aa0-4f70-890e-a62450431741} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {c911ca58-8860-473c-8d62-4f51ce8441c4}<23.9 && {c911ca58-8860-473c-8d62-4f51ce8441c4}>1.7, !- Program Line 7
+  SET {7a6c2747-2896-425a-b5ce-12e3769a208a} = 29.4, !- Program Line 8
+  SET {5c859186-7aa0-4f70-890e-a62450431741} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {c911ca58-8860-473c-8d62-4f51ce8441c4}<23.9 && {c911ca58-8860-473c-8d62-4f51ce8441c4}>1.7, !- Program Line 10
+  SET {7a6c2747-2896-425a-b5ce-12e3769a208a} = 29.4, !- Program Line 11
+  SET {5c859186-7aa0-4f70-890e-a62450431741} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {f89d6019-2103-4eac-923b-693a2c022dc5} = NULL, !- Program Line 14
-  SET {e0c70c83-b01e-4515-944d-ae1fd41f4ba8} = NULL, !- Program Line 15
+  SET {7a6c2747-2896-425a-b5ce-12e3769a208a} = NULL, !- Program Line 14
+  SET {5c859186-7aa0-4f70-890e-a62450431741} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0033-000000000005},  !- Handle
   ems_sys_3_mixed_shr_none_sc_dx_sh_c_e_ssf_cv_zh_b_e_zc_none_srf_none__5_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {717f981f-a5cd-46c2-aa9f-c00a98d3396a}<23.9 && {717f981f-a5cd-46c2-aa9f-c00a98d3396a}>1.7, !- Program Line 1
-  SET {33d25c2e-f8aa-449e-bf38-e218b02de1f7} = 29.4, !- Program Line 2
-  SET {fe2369a3-a5cc-4a82-804d-6068b598ea51} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {717f981f-a5cd-46c2-aa9f-c00a98d3396a}<23.9 && {717f981f-a5cd-46c2-aa9f-c00a98d3396a}>1.7, !- Program Line 4
-  SET {33d25c2e-f8aa-449e-bf38-e218b02de1f7} = 29.4, !- Program Line 5
-  SET {fe2369a3-a5cc-4a82-804d-6068b598ea51} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {717f981f-a5cd-46c2-aa9f-c00a98d3396a}<23.9 && {717f981f-a5cd-46c2-aa9f-c00a98d3396a}>1.7, !- Program Line 7
-  SET {33d25c2e-f8aa-449e-bf38-e218b02de1f7} = 29.4, !- Program Line 8
-  SET {fe2369a3-a5cc-4a82-804d-6068b598ea51} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {717f981f-a5cd-46c2-aa9f-c00a98d3396a}<23.9 && {717f981f-a5cd-46c2-aa9f-c00a98d3396a}>1.7, !- Program Line 10
-  SET {33d25c2e-f8aa-449e-bf38-e218b02de1f7} = 29.4, !- Program Line 11
-  SET {fe2369a3-a5cc-4a82-804d-6068b598ea51} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {97ae8dff-ec0a-47f6-afde-3f7e2e0c0f80}<23.9 && {97ae8dff-ec0a-47f6-afde-3f7e2e0c0f80}>1.7, !- Program Line 1
+  SET {3f337c62-89a4-4d77-8b73-07fae79657ee} = 29.4, !- Program Line 2
+  SET {307cc721-73c0-4d0e-bd50-1afe5d5ab2f7} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {97ae8dff-ec0a-47f6-afde-3f7e2e0c0f80}<23.9 && {97ae8dff-ec0a-47f6-afde-3f7e2e0c0f80}>1.7, !- Program Line 4
+  SET {3f337c62-89a4-4d77-8b73-07fae79657ee} = 29.4, !- Program Line 5
+  SET {307cc721-73c0-4d0e-bd50-1afe5d5ab2f7} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {97ae8dff-ec0a-47f6-afde-3f7e2e0c0f80}<23.9 && {97ae8dff-ec0a-47f6-afde-3f7e2e0c0f80}>1.7, !- Program Line 7
+  SET {3f337c62-89a4-4d77-8b73-07fae79657ee} = 29.4, !- Program Line 8
+  SET {307cc721-73c0-4d0e-bd50-1afe5d5ab2f7} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {97ae8dff-ec0a-47f6-afde-3f7e2e0c0f80}<23.9 && {97ae8dff-ec0a-47f6-afde-3f7e2e0c0f80}>1.7, !- Program Line 10
+  SET {3f337c62-89a4-4d77-8b73-07fae79657ee} = 29.4, !- Program Line 11
+  SET {307cc721-73c0-4d0e-bd50-1afe5d5ab2f7} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {33d25c2e-f8aa-449e-bf38-e218b02de1f7} = NULL, !- Program Line 14
-  SET {fe2369a3-a5cc-4a82-804d-6068b598ea51} = NULL, !- Program Line 15
+  SET {3f337c62-89a4-4d77-8b73-07fae79657ee} = NULL, !- Program Line 14
+  SET {307cc721-73c0-4d0e-bd50-1afe5d5ab2f7} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0033-000000000006},  !- Handle
   ems_sys_3_mixed_shr_none_sc_dx_sh_c_e_ssf_cv_zh_b_e_zc_none_srf_none__7_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {6800e02a-8fa5-41c0-acb1-667c7693f62f}<23.9 && {6800e02a-8fa5-41c0-acb1-667c7693f62f}>1.7, !- Program Line 1
-  SET {85bf6085-644a-4558-b3c7-97c610b1b3ae} = 29.4, !- Program Line 2
-  SET {68767eac-a4b1-481c-9df2-1794d34636fc} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {6800e02a-8fa5-41c0-acb1-667c7693f62f}<23.9 && {6800e02a-8fa5-41c0-acb1-667c7693f62f}>1.7, !- Program Line 4
-  SET {85bf6085-644a-4558-b3c7-97c610b1b3ae} = 29.4, !- Program Line 5
-  SET {68767eac-a4b1-481c-9df2-1794d34636fc} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {6800e02a-8fa5-41c0-acb1-667c7693f62f}<23.9 && {6800e02a-8fa5-41c0-acb1-667c7693f62f}>1.7, !- Program Line 7
-  SET {85bf6085-644a-4558-b3c7-97c610b1b3ae} = 29.4, !- Program Line 8
-  SET {68767eac-a4b1-481c-9df2-1794d34636fc} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {6800e02a-8fa5-41c0-acb1-667c7693f62f}<23.9 && {6800e02a-8fa5-41c0-acb1-667c7693f62f}>1.7, !- Program Line 10
-  SET {85bf6085-644a-4558-b3c7-97c610b1b3ae} = 29.4, !- Program Line 11
-  SET {68767eac-a4b1-481c-9df2-1794d34636fc} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {089fa5c1-a58f-4af1-95f5-c1c201e0287d}<23.9 && {089fa5c1-a58f-4af1-95f5-c1c201e0287d}>1.7, !- Program Line 1
+  SET {812831f2-24c8-4e0b-8c8a-2ee2e6e30ec4} = 29.4, !- Program Line 2
+  SET {989b67bc-676a-40b8-a38a-871aedd134ab} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {089fa5c1-a58f-4af1-95f5-c1c201e0287d}<23.9 && {089fa5c1-a58f-4af1-95f5-c1c201e0287d}>1.7, !- Program Line 4
+  SET {812831f2-24c8-4e0b-8c8a-2ee2e6e30ec4} = 29.4, !- Program Line 5
+  SET {989b67bc-676a-40b8-a38a-871aedd134ab} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {089fa5c1-a58f-4af1-95f5-c1c201e0287d}<23.9 && {089fa5c1-a58f-4af1-95f5-c1c201e0287d}>1.7, !- Program Line 7
+  SET {812831f2-24c8-4e0b-8c8a-2ee2e6e30ec4} = 29.4, !- Program Line 8
+  SET {989b67bc-676a-40b8-a38a-871aedd134ab} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {089fa5c1-a58f-4af1-95f5-c1c201e0287d}<23.9 && {089fa5c1-a58f-4af1-95f5-c1c201e0287d}>1.7, !- Program Line 10
+  SET {812831f2-24c8-4e0b-8c8a-2ee2e6e30ec4} = 29.4, !- Program Line 11
+  SET {989b67bc-676a-40b8-a38a-871aedd134ab} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {85bf6085-644a-4558-b3c7-97c610b1b3ae} = NULL, !- Program Line 14
-  SET {68767eac-a4b1-481c-9df2-1794d34636fc} = NULL, !- Program Line 15
+  SET {812831f2-24c8-4e0b-8c8a-2ee2e6e30ec4} = NULL, !- Program Line 14
+  SET {989b67bc-676a-40b8-a38a-871aedd134ab} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0033-000000000007},  !- Handle
   ems_sys_3_mixed_shr_none_sc_dx_sh_c_e_ssf_cv_zh_b_e_zc_none_srf_none__OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {977dda44-ce46-4eae-9240-ec012d0bea0b}<23.9 && {977dda44-ce46-4eae-9240-ec012d0bea0b}>1.7, !- Program Line 1
-  SET {d0b74154-3984-47e0-b094-33339b0e742d} = 29.4, !- Program Line 2
-  SET {34caafa0-970f-423a-8645-c935ec8cfaf7} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {977dda44-ce46-4eae-9240-ec012d0bea0b}<23.9 && {977dda44-ce46-4eae-9240-ec012d0bea0b}>1.7, !- Program Line 4
-  SET {d0b74154-3984-47e0-b094-33339b0e742d} = 29.4, !- Program Line 5
-  SET {34caafa0-970f-423a-8645-c935ec8cfaf7} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {977dda44-ce46-4eae-9240-ec012d0bea0b}<23.9 && {977dda44-ce46-4eae-9240-ec012d0bea0b}>1.7, !- Program Line 7
-  SET {d0b74154-3984-47e0-b094-33339b0e742d} = 29.4, !- Program Line 8
-  SET {34caafa0-970f-423a-8645-c935ec8cfaf7} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {977dda44-ce46-4eae-9240-ec012d0bea0b}<23.9 && {977dda44-ce46-4eae-9240-ec012d0bea0b}>1.7, !- Program Line 10
-  SET {d0b74154-3984-47e0-b094-33339b0e742d} = 29.4, !- Program Line 11
-  SET {34caafa0-970f-423a-8645-c935ec8cfaf7} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {563b2f8f-fc66-410c-9cdf-df5a955b14cc}<23.9 && {563b2f8f-fc66-410c-9cdf-df5a955b14cc}>1.7, !- Program Line 1
+  SET {79755435-7a3f-4659-8dd8-651de5510d05} = 29.4, !- Program Line 2
+  SET {bceec422-0828-4fb5-8864-f77afd00308e} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {563b2f8f-fc66-410c-9cdf-df5a955b14cc}<23.9 && {563b2f8f-fc66-410c-9cdf-df5a955b14cc}>1.7, !- Program Line 4
+  SET {79755435-7a3f-4659-8dd8-651de5510d05} = 29.4, !- Program Line 5
+  SET {bceec422-0828-4fb5-8864-f77afd00308e} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {563b2f8f-fc66-410c-9cdf-df5a955b14cc}<23.9 && {563b2f8f-fc66-410c-9cdf-df5a955b14cc}>1.7, !- Program Line 7
+  SET {79755435-7a3f-4659-8dd8-651de5510d05} = 29.4, !- Program Line 8
+  SET {bceec422-0828-4fb5-8864-f77afd00308e} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {563b2f8f-fc66-410c-9cdf-df5a955b14cc}<23.9 && {563b2f8f-fc66-410c-9cdf-df5a955b14cc}>1.7, !- Program Line 10
+  SET {79755435-7a3f-4659-8dd8-651de5510d05} = 29.4, !- Program Line 11
+  SET {bceec422-0828-4fb5-8864-f77afd00308e} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {d0b74154-3984-47e0-b094-33339b0e742d} = NULL, !- Program Line 14
-  SET {34caafa0-970f-423a-8645-c935ec8cfaf7} = NULL, !- Program Line 15
+  SET {79755435-7a3f-4659-8dd8-651de5510d05} = NULL, !- Program Line 14
+  SET {bceec422-0828-4fb5-8864-f77afd00308e} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0033-000000000008},  !- Handle
   ems_sys_4_mixed_shr_none_sc_dx_sh_c_e_ssf_cv_zh_b_e_zc_none_srf_none__1_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {31c27eb1-fda3-4ef0-a27b-8ed7089a0bd5}<23.9 && {31c27eb1-fda3-4ef0-a27b-8ed7089a0bd5}>1.7, !- Program Line 1
-  SET {0a992fd4-5262-4aa1-9466-72a322376af2} = 29.4, !- Program Line 2
-  SET {e6b433dd-bf4b-47e5-a6f7-6541c543f131} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {31c27eb1-fda3-4ef0-a27b-8ed7089a0bd5}<23.9 && {31c27eb1-fda3-4ef0-a27b-8ed7089a0bd5}>1.7, !- Program Line 4
-  SET {0a992fd4-5262-4aa1-9466-72a322376af2} = 29.4, !- Program Line 5
-  SET {e6b433dd-bf4b-47e5-a6f7-6541c543f131} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {31c27eb1-fda3-4ef0-a27b-8ed7089a0bd5}<23.9 && {31c27eb1-fda3-4ef0-a27b-8ed7089a0bd5}>1.7, !- Program Line 7
-  SET {0a992fd4-5262-4aa1-9466-72a322376af2} = 29.4, !- Program Line 8
-  SET {e6b433dd-bf4b-47e5-a6f7-6541c543f131} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {31c27eb1-fda3-4ef0-a27b-8ed7089a0bd5}<23.9 && {31c27eb1-fda3-4ef0-a27b-8ed7089a0bd5}>1.7, !- Program Line 10
-  SET {0a992fd4-5262-4aa1-9466-72a322376af2} = 29.4, !- Program Line 11
-  SET {e6b433dd-bf4b-47e5-a6f7-6541c543f131} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {fdd7d486-a320-4821-86cd-e825bca1bb99}<23.9 && {fdd7d486-a320-4821-86cd-e825bca1bb99}>1.7, !- Program Line 1
+  SET {436a39f0-d619-4462-b556-cb870c7673d5} = 29.4, !- Program Line 2
+  SET {da28e711-3d25-4b03-b120-c1d55f2372ce} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {fdd7d486-a320-4821-86cd-e825bca1bb99}<23.9 && {fdd7d486-a320-4821-86cd-e825bca1bb99}>1.7, !- Program Line 4
+  SET {436a39f0-d619-4462-b556-cb870c7673d5} = 29.4, !- Program Line 5
+  SET {da28e711-3d25-4b03-b120-c1d55f2372ce} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {fdd7d486-a320-4821-86cd-e825bca1bb99}<23.9 && {fdd7d486-a320-4821-86cd-e825bca1bb99}>1.7, !- Program Line 7
+  SET {436a39f0-d619-4462-b556-cb870c7673d5} = 29.4, !- Program Line 8
+  SET {da28e711-3d25-4b03-b120-c1d55f2372ce} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {fdd7d486-a320-4821-86cd-e825bca1bb99}<23.9 && {fdd7d486-a320-4821-86cd-e825bca1bb99}>1.7, !- Program Line 10
+  SET {436a39f0-d619-4462-b556-cb870c7673d5} = 29.4, !- Program Line 11
+  SET {da28e711-3d25-4b03-b120-c1d55f2372ce} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {0a992fd4-5262-4aa1-9466-72a322376af2} = NULL, !- Program Line 14
-  SET {e6b433dd-bf4b-47e5-a6f7-6541c543f131} = NULL, !- Program Line 15
+  SET {436a39f0-d619-4462-b556-cb870c7673d5} = NULL, !- Program Line 14
+  SET {da28e711-3d25-4b03-b120-c1d55f2372ce} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:ProgramCallingManager,
@@ -23616,7 +23616,7 @@ OS:SetpointManager:Scheduled,
   {00000000-0000-0000-0065-000000000001},  !- Handle
   Service hot water setpoint manager,      !- Name
   Temperature,                             !- Control Variable
-  {00000000-0000-0000-0063-000000000035},  !- Schedule Name
+  {00000000-0000-0000-0063-000000000034},  !- Schedule Name
   {00000000-0000-0000-0047-000000000243};  !- Setpoint Node or NodeList Name
 
 OS:SetpointManager:SingleZone:Reheat,
@@ -23624,7 +23624,7 @@ OS:SetpointManager:SingleZone:Reheat,
   Setpoint Manager Single Zone Reheat 1,   !- Name
   13,                                      !- Minimum Supply Air Temperature {C}
   43,                                      !- Maximum Supply Air Temperature {C}
-  {00000000-0000-0000-0090-000000000035},  !- Control Zone Name
+  {00000000-0000-0000-0090-000000000036},  !- Control Zone Name
   {00000000-0000-0000-0047-000000000441};  !- Setpoint Node or NodeList Name
 
 OS:SetpointManager:SingleZone:Reheat,
@@ -23712,7 +23712,7 @@ OS:SetpointManager:SingleZone:Reheat,
   Setpoint Manager Single Zone Reheat 2,   !- Name
   13,                                      !- Minimum Supply Air Temperature {C}
   43,                                      !- Maximum Supply Air Temperature {C}
-  {00000000-0000-0000-0090-000000000040},  !- Control Zone Name
+  {00000000-0000-0000-0090-000000000041},  !- Control Zone Name
   {00000000-0000-0000-0047-000000000434};  !- Setpoint Node or NodeList Name
 
 OS:SetpointManager:SingleZone:Reheat,
@@ -25381,7 +25381,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0078-000000000017},  !- Handle
@@ -25416,7 +25423,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0078-000000000018},  !- Handle
@@ -25755,251 +25769,6 @@ OS:Sizing:Zone,
   Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
-  {00000000-0000-0000-0078-000000000019},  !- Handle
-  {00000000-0000-0000-0090-000000000027},  !- Zone or ZoneList Name
-  TemperatureDifference,                   !- Zone Cooling Design Supply Air Temperature Input Method
-  14,                                      !- Zone Cooling Design Supply Air Temperature {C}
-  11,                                      !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
-  TemperatureDifference,                   !- Zone Heating Design Supply Air Temperature Input Method
-  40,                                      !- Zone Heating Design Supply Air Temperature {C}
-  21,                                      !- Zone Heating Design Supply Air Temperature Difference {deltaC}
-  0.0085,                                  !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  0.008,                                   !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  1.3,                                     !- Zone Heating Sizing Factor
-  1.1,                                     !- Zone Cooling Sizing Factor
-  DesignDay,                               !- Cooling Design Air Flow Method
-  ,                                        !- Cooling Design Air Flow Rate {m3/s}
-  ,                                        !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Cooling Minimum Air Flow {m3/s}
-  ,                                        !- Cooling Minimum Air Flow Fraction
-  DesignDay,                               !- Heating Design Air Flow Method
-  ,                                        !- Heating Design Air Flow Rate {m3/s}
-  ,                                        !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Heating Maximum Air Flow {m3/s}
-  ,                                        !- Heating Maximum Air Flow Fraction
-  No,                                      !- Account for Dedicated Outdoor Air System
-  NeutralSupplyAir,                        !- Dedicated Outdoor Air System Control Strategy
-  autosize,                                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-  autosize,                                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
-  Sensible Load Only No Latent Load,       !- Zone Load Sizing Method
-  HumidityRatioDifference,                 !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-  HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-
-OS:Sizing:Zone,
-  {00000000-0000-0000-0078-000000000020},  !- Handle
-  {00000000-0000-0000-0090-000000000030},  !- Zone or ZoneList Name
-  TemperatureDifference,                   !- Zone Cooling Design Supply Air Temperature Input Method
-  14,                                      !- Zone Cooling Design Supply Air Temperature {C}
-  11,                                      !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
-  TemperatureDifference,                   !- Zone Heating Design Supply Air Temperature Input Method
-  40,                                      !- Zone Heating Design Supply Air Temperature {C}
-  21,                                      !- Zone Heating Design Supply Air Temperature Difference {deltaC}
-  0.0085,                                  !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  0.008,                                   !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  1.3,                                     !- Zone Heating Sizing Factor
-  1.1,                                     !- Zone Cooling Sizing Factor
-  DesignDay,                               !- Cooling Design Air Flow Method
-  ,                                        !- Cooling Design Air Flow Rate {m3/s}
-  ,                                        !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Cooling Minimum Air Flow {m3/s}
-  ,                                        !- Cooling Minimum Air Flow Fraction
-  DesignDay,                               !- Heating Design Air Flow Method
-  ,                                        !- Heating Design Air Flow Rate {m3/s}
-  ,                                        !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Heating Maximum Air Flow {m3/s}
-  ,                                        !- Heating Maximum Air Flow Fraction
-  No,                                      !- Account for Dedicated Outdoor Air System
-  NeutralSupplyAir,                        !- Dedicated Outdoor Air System Control Strategy
-  autosize,                                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-  autosize,                                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
-  Sensible Load Only No Latent Load,       !- Zone Load Sizing Method
-  HumidityRatioDifference,                 !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-  HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-
-OS:Sizing:Zone,
-  {00000000-0000-0000-0078-000000000021},  !- Handle
-  {00000000-0000-0000-0090-000000000024},  !- Zone or ZoneList Name
-  TemperatureDifference,                   !- Zone Cooling Design Supply Air Temperature Input Method
-  14,                                      !- Zone Cooling Design Supply Air Temperature {C}
-  11,                                      !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
-  TemperatureDifference,                   !- Zone Heating Design Supply Air Temperature Input Method
-  40,                                      !- Zone Heating Design Supply Air Temperature {C}
-  21,                                      !- Zone Heating Design Supply Air Temperature Difference {deltaC}
-  0.0085,                                  !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  0.008,                                   !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  1.3,                                     !- Zone Heating Sizing Factor
-  1.1,                                     !- Zone Cooling Sizing Factor
-  DesignDay,                               !- Cooling Design Air Flow Method
-  ,                                        !- Cooling Design Air Flow Rate {m3/s}
-  ,                                        !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Cooling Minimum Air Flow {m3/s}
-  ,                                        !- Cooling Minimum Air Flow Fraction
-  DesignDay,                               !- Heating Design Air Flow Method
-  ,                                        !- Heating Design Air Flow Rate {m3/s}
-  ,                                        !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Heating Maximum Air Flow {m3/s}
-  ,                                        !- Heating Maximum Air Flow Fraction
-  No,                                      !- Account for Dedicated Outdoor Air System
-  NeutralSupplyAir,                        !- Dedicated Outdoor Air System Control Strategy
-  autosize,                                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-  autosize,                                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
-  Sensible Load Only No Latent Load,       !- Zone Load Sizing Method
-  HumidityRatioDifference,                 !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-  HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-
-OS:Sizing:Zone,
-  {00000000-0000-0000-0078-000000000022},  !- Handle
-  {00000000-0000-0000-0090-000000000028},  !- Zone or ZoneList Name
-  TemperatureDifference,                   !- Zone Cooling Design Supply Air Temperature Input Method
-  14,                                      !- Zone Cooling Design Supply Air Temperature {C}
-  11,                                      !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
-  TemperatureDifference,                   !- Zone Heating Design Supply Air Temperature Input Method
-  40,                                      !- Zone Heating Design Supply Air Temperature {C}
-  21,                                      !- Zone Heating Design Supply Air Temperature Difference {deltaC}
-  0.0085,                                  !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  0.008,                                   !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  1.3,                                     !- Zone Heating Sizing Factor
-  1.1,                                     !- Zone Cooling Sizing Factor
-  DesignDay,                               !- Cooling Design Air Flow Method
-  ,                                        !- Cooling Design Air Flow Rate {m3/s}
-  ,                                        !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Cooling Minimum Air Flow {m3/s}
-  ,                                        !- Cooling Minimum Air Flow Fraction
-  DesignDay,                               !- Heating Design Air Flow Method
-  ,                                        !- Heating Design Air Flow Rate {m3/s}
-  ,                                        !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Heating Maximum Air Flow {m3/s}
-  ,                                        !- Heating Maximum Air Flow Fraction
-  No,                                      !- Account for Dedicated Outdoor Air System
-  NeutralSupplyAir,                        !- Dedicated Outdoor Air System Control Strategy
-  autosize,                                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-  autosize,                                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
-  Sensible Load Only No Latent Load,       !- Zone Load Sizing Method
-  HumidityRatioDifference,                 !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-  HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-
-OS:Sizing:Zone,
-  {00000000-0000-0000-0078-000000000023},  !- Handle
-  {00000000-0000-0000-0090-000000000002},  !- Zone or ZoneList Name
-  TemperatureDifference,                   !- Zone Cooling Design Supply Air Temperature Input Method
-  14,                                      !- Zone Cooling Design Supply Air Temperature {C}
-  11,                                      !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
-  TemperatureDifference,                   !- Zone Heating Design Supply Air Temperature Input Method
-  40,                                      !- Zone Heating Design Supply Air Temperature {C}
-  21,                                      !- Zone Heating Design Supply Air Temperature Difference {deltaC}
-  0.0085,                                  !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  0.008,                                   !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  1.3,                                     !- Zone Heating Sizing Factor
-  1.1,                                     !- Zone Cooling Sizing Factor
-  DesignDay,                               !- Cooling Design Air Flow Method
-  ,                                        !- Cooling Design Air Flow Rate {m3/s}
-  ,                                        !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Cooling Minimum Air Flow {m3/s}
-  ,                                        !- Cooling Minimum Air Flow Fraction
-  DesignDay,                               !- Heating Design Air Flow Method
-  ,                                        !- Heating Design Air Flow Rate {m3/s}
-  ,                                        !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Heating Maximum Air Flow {m3/s}
-  ,                                        !- Heating Maximum Air Flow Fraction
-  No,                                      !- Account for Dedicated Outdoor Air System
-  NeutralSupplyAir,                        !- Dedicated Outdoor Air System Control Strategy
-  autosize,                                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-  autosize,                                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
-  Sensible Load Only No Latent Load,       !- Zone Load Sizing Method
-  HumidityRatioDifference,                 !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-  HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-
-OS:Sizing:Zone,
-  {00000000-0000-0000-0078-000000000024},  !- Handle
-  {00000000-0000-0000-0090-000000000005},  !- Zone or ZoneList Name
-  TemperatureDifference,                   !- Zone Cooling Design Supply Air Temperature Input Method
-  14,                                      !- Zone Cooling Design Supply Air Temperature {C}
-  11,                                      !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
-  TemperatureDifference,                   !- Zone Heating Design Supply Air Temperature Input Method
-  40,                                      !- Zone Heating Design Supply Air Temperature {C}
-  21,                                      !- Zone Heating Design Supply Air Temperature Difference {deltaC}
-  0.0085,                                  !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  0.008,                                   !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  1.3,                                     !- Zone Heating Sizing Factor
-  1.1,                                     !- Zone Cooling Sizing Factor
-  DesignDay,                               !- Cooling Design Air Flow Method
-  ,                                        !- Cooling Design Air Flow Rate {m3/s}
-  ,                                        !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Cooling Minimum Air Flow {m3/s}
-  ,                                        !- Cooling Minimum Air Flow Fraction
-  DesignDay,                               !- Heating Design Air Flow Method
-  ,                                        !- Heating Design Air Flow Rate {m3/s}
-  ,                                        !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Heating Maximum Air Flow {m3/s}
-  ,                                        !- Heating Maximum Air Flow Fraction
-  No,                                      !- Account for Dedicated Outdoor Air System
-  NeutralSupplyAir,                        !- Dedicated Outdoor Air System Control Strategy
-  autosize,                                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-  autosize,                                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
-  Sensible Load Only No Latent Load,       !- Zone Load Sizing Method
-  HumidityRatioDifference,                 !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-  HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-
-OS:Sizing:Zone,
-  {00000000-0000-0000-0078-000000000025},  !- Handle
-  {00000000-0000-0000-0090-000000000006},  !- Zone or ZoneList Name
-  TemperatureDifference,                   !- Zone Cooling Design Supply Air Temperature Input Method
-  14,                                      !- Zone Cooling Design Supply Air Temperature {C}
-  11,                                      !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
-  TemperatureDifference,                   !- Zone Heating Design Supply Air Temperature Input Method
-  40,                                      !- Zone Heating Design Supply Air Temperature {C}
-  21,                                      !- Zone Heating Design Supply Air Temperature Difference {deltaC}
-  0.0085,                                  !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  0.008,                                   !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  1.3,                                     !- Zone Heating Sizing Factor
-  1.1,                                     !- Zone Cooling Sizing Factor
-  DesignDay,                               !- Cooling Design Air Flow Method
-  ,                                        !- Cooling Design Air Flow Rate {m3/s}
-  ,                                        !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Cooling Minimum Air Flow {m3/s}
-  ,                                        !- Cooling Minimum Air Flow Fraction
-  DesignDay,                               !- Heating Design Air Flow Method
-  ,                                        !- Heating Design Air Flow Rate {m3/s}
-  ,                                        !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Heating Maximum Air Flow {m3/s}
-  ,                                        !- Heating Maximum Air Flow Fraction
-  No,                                      !- Account for Dedicated Outdoor Air System
-  NeutralSupplyAir,                        !- Dedicated Outdoor Air System Control Strategy
-  autosize,                                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-  autosize,                                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
-  Sensible Load Only No Latent Load,       !- Zone Load Sizing Method
-  HumidityRatioDifference,                 !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-  HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-
-OS:Sizing:Zone,
   {00000000-0000-0000-0078-000000000026},  !- Handle
   {00000000-0000-0000-0090-000000000007},  !- Zone or ZoneList Name
   TemperatureDifference,                   !- Zone Cooling Design Supply Air Temperature Input Method
@@ -26032,7 +25801,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0078-000000000027},  !- Handle
@@ -26067,7 +25843,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0078-000000000028},  !- Handle
@@ -26102,7 +25885,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0078-000000000029},  !- Handle
@@ -26137,7 +25927,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0078-000000000030},  !- Handle
@@ -26172,7 +25969,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0078-000000000031},  !- Handle
@@ -26207,7 +26011,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0078-000000000032},  !- Handle
@@ -26242,7 +26053,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0078-000000000033},  !- Handle
@@ -26277,7 +26095,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0078-000000000034},  !- Handle
@@ -26312,7 +26137,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0078-000000000035},  !- Handle
@@ -26817,391 +26649,6 @@ OS:Sizing:Zone,
   ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
   ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
   Coincident;                              !- Sizing Option
-
-OS:Sizing:Zone,
-  {00000000-0000-0000-0078-000000000036},  !- Handle
-  {00000000-0000-0000-0090-000000000004},  !- Zone or ZoneList Name
-  TemperatureDifference,                   !- Zone Cooling Design Supply Air Temperature Input Method
-  14,                                      !- Zone Cooling Design Supply Air Temperature {C}
-  11,                                      !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
-  TemperatureDifference,                   !- Zone Heating Design Supply Air Temperature Input Method
-  40,                                      !- Zone Heating Design Supply Air Temperature {C}
-  21,                                      !- Zone Heating Design Supply Air Temperature Difference {deltaC}
-  0.0085,                                  !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  0.008,                                   !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  1.3,                                     !- Zone Heating Sizing Factor
-  1.1,                                     !- Zone Cooling Sizing Factor
-  DesignDay,                               !- Cooling Design Air Flow Method
-  ,                                        !- Cooling Design Air Flow Rate {m3/s}
-  ,                                        !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Cooling Minimum Air Flow {m3/s}
-  ,                                        !- Cooling Minimum Air Flow Fraction
-  DesignDay,                               !- Heating Design Air Flow Method
-  ,                                        !- Heating Design Air Flow Rate {m3/s}
-  ,                                        !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Heating Maximum Air Flow {m3/s}
-  ,                                        !- Heating Maximum Air Flow Fraction
-  No,                                      !- Account for Dedicated Outdoor Air System
-  NeutralSupplyAir,                        !- Dedicated Outdoor Air System Control Strategy
-  autosize,                                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-  autosize,                                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
-  Sensible Load Only No Latent Load,       !- Zone Load Sizing Method
-  HumidityRatioDifference,                 !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-  HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-
-OS:Sizing:Zone,
-  {00000000-0000-0000-0078-000000000037},  !- Handle
-  {00000000-0000-0000-0090-000000000040},  !- Zone or ZoneList Name
-  TemperatureDifference,                   !- Zone Cooling Design Supply Air Temperature Input Method
-  14,                                      !- Zone Cooling Design Supply Air Temperature {C}
-  11,                                      !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
-  TemperatureDifference,                   !- Zone Heating Design Supply Air Temperature Input Method
-  40,                                      !- Zone Heating Design Supply Air Temperature {C}
-  21,                                      !- Zone Heating Design Supply Air Temperature Difference {deltaC}
-  0.0085,                                  !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  0.008,                                   !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  1.3,                                     !- Zone Heating Sizing Factor
-  1.1,                                     !- Zone Cooling Sizing Factor
-  DesignDay,                               !- Cooling Design Air Flow Method
-  ,                                        !- Cooling Design Air Flow Rate {m3/s}
-  ,                                        !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Cooling Minimum Air Flow {m3/s}
-  ,                                        !- Cooling Minimum Air Flow Fraction
-  DesignDay,                               !- Heating Design Air Flow Method
-  ,                                        !- Heating Design Air Flow Rate {m3/s}
-  ,                                        !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Heating Maximum Air Flow {m3/s}
-  ,                                        !- Heating Maximum Air Flow Fraction
-  No,                                      !- Account for Dedicated Outdoor Air System
-  NeutralSupplyAir,                        !- Dedicated Outdoor Air System Control Strategy
-  autosize,                                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-  autosize,                                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
-  Sensible Load Only No Latent Load,       !- Zone Load Sizing Method
-  HumidityRatioDifference,                 !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-  HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-
-OS:Sizing:Zone,
-  {00000000-0000-0000-0078-000000000038},  !- Handle
-  {00000000-0000-0000-0090-000000000037},  !- Zone or ZoneList Name
-  TemperatureDifference,                   !- Zone Cooling Design Supply Air Temperature Input Method
-  14,                                      !- Zone Cooling Design Supply Air Temperature {C}
-  11,                                      !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
-  TemperatureDifference,                   !- Zone Heating Design Supply Air Temperature Input Method
-  40,                                      !- Zone Heating Design Supply Air Temperature {C}
-  21,                                      !- Zone Heating Design Supply Air Temperature Difference {deltaC}
-  0.0085,                                  !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  0.008,                                   !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  1.3,                                     !- Zone Heating Sizing Factor
-  1.1,                                     !- Zone Cooling Sizing Factor
-  DesignDay,                               !- Cooling Design Air Flow Method
-  ,                                        !- Cooling Design Air Flow Rate {m3/s}
-  ,                                        !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Cooling Minimum Air Flow {m3/s}
-  ,                                        !- Cooling Minimum Air Flow Fraction
-  DesignDay,                               !- Heating Design Air Flow Method
-  ,                                        !- Heating Design Air Flow Rate {m3/s}
-  ,                                        !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Heating Maximum Air Flow {m3/s}
-  ,                                        !- Heating Maximum Air Flow Fraction
-  No,                                      !- Account for Dedicated Outdoor Air System
-  NeutralSupplyAir,                        !- Dedicated Outdoor Air System Control Strategy
-  autosize,                                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-  autosize,                                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
-  Sensible Load Only No Latent Load,       !- Zone Load Sizing Method
-  HumidityRatioDifference,                 !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-  HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-
-OS:Sizing:Zone,
-  {00000000-0000-0000-0078-000000000039},  !- Handle
-  {00000000-0000-0000-0090-000000000038},  !- Zone or ZoneList Name
-  TemperatureDifference,                   !- Zone Cooling Design Supply Air Temperature Input Method
-  14,                                      !- Zone Cooling Design Supply Air Temperature {C}
-  11,                                      !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
-  TemperatureDifference,                   !- Zone Heating Design Supply Air Temperature Input Method
-  40,                                      !- Zone Heating Design Supply Air Temperature {C}
-  21,                                      !- Zone Heating Design Supply Air Temperature Difference {deltaC}
-  0.0085,                                  !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  0.008,                                   !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  1.3,                                     !- Zone Heating Sizing Factor
-  1.1,                                     !- Zone Cooling Sizing Factor
-  DesignDay,                               !- Cooling Design Air Flow Method
-  ,                                        !- Cooling Design Air Flow Rate {m3/s}
-  ,                                        !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Cooling Minimum Air Flow {m3/s}
-  ,                                        !- Cooling Minimum Air Flow Fraction
-  DesignDay,                               !- Heating Design Air Flow Method
-  ,                                        !- Heating Design Air Flow Rate {m3/s}
-  ,                                        !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Heating Maximum Air Flow {m3/s}
-  ,                                        !- Heating Maximum Air Flow Fraction
-  No,                                      !- Account for Dedicated Outdoor Air System
-  NeutralSupplyAir,                        !- Dedicated Outdoor Air System Control Strategy
-  autosize,                                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-  autosize,                                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
-  Sensible Load Only No Latent Load,       !- Zone Load Sizing Method
-  HumidityRatioDifference,                 !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-  HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-
-OS:Sizing:Zone,
-  {00000000-0000-0000-0078-000000000040},  !- Handle
-  {00000000-0000-0000-0090-000000000045},  !- Zone or ZoneList Name
-  TemperatureDifference,                   !- Zone Cooling Design Supply Air Temperature Input Method
-  14,                                      !- Zone Cooling Design Supply Air Temperature {C}
-  11,                                      !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
-  TemperatureDifference,                   !- Zone Heating Design Supply Air Temperature Input Method
-  40,                                      !- Zone Heating Design Supply Air Temperature {C}
-  21,                                      !- Zone Heating Design Supply Air Temperature Difference {deltaC}
-  0.0085,                                  !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  0.008,                                   !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  1.3,                                     !- Zone Heating Sizing Factor
-  1.1,                                     !- Zone Cooling Sizing Factor
-  DesignDay,                               !- Cooling Design Air Flow Method
-  ,                                        !- Cooling Design Air Flow Rate {m3/s}
-  ,                                        !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Cooling Minimum Air Flow {m3/s}
-  ,                                        !- Cooling Minimum Air Flow Fraction
-  DesignDay,                               !- Heating Design Air Flow Method
-  ,                                        !- Heating Design Air Flow Rate {m3/s}
-  ,                                        !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Heating Maximum Air Flow {m3/s}
-  ,                                        !- Heating Maximum Air Flow Fraction
-  No,                                      !- Account for Dedicated Outdoor Air System
-  NeutralSupplyAir,                        !- Dedicated Outdoor Air System Control Strategy
-  autosize,                                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-  autosize,                                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
-  Sensible Load Only No Latent Load,       !- Zone Load Sizing Method
-  HumidityRatioDifference,                 !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-  HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-
-OS:Sizing:Zone,
-  {00000000-0000-0000-0078-000000000041},  !- Handle
-  {00000000-0000-0000-0090-000000000044},  !- Zone or ZoneList Name
-  TemperatureDifference,                   !- Zone Cooling Design Supply Air Temperature Input Method
-  14,                                      !- Zone Cooling Design Supply Air Temperature {C}
-  11,                                      !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
-  TemperatureDifference,                   !- Zone Heating Design Supply Air Temperature Input Method
-  40,                                      !- Zone Heating Design Supply Air Temperature {C}
-  21,                                      !- Zone Heating Design Supply Air Temperature Difference {deltaC}
-  0.0085,                                  !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  0.008,                                   !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  1.3,                                     !- Zone Heating Sizing Factor
-  1.1,                                     !- Zone Cooling Sizing Factor
-  DesignDay,                               !- Cooling Design Air Flow Method
-  ,                                        !- Cooling Design Air Flow Rate {m3/s}
-  ,                                        !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Cooling Minimum Air Flow {m3/s}
-  ,                                        !- Cooling Minimum Air Flow Fraction
-  DesignDay,                               !- Heating Design Air Flow Method
-  ,                                        !- Heating Design Air Flow Rate {m3/s}
-  ,                                        !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Heating Maximum Air Flow {m3/s}
-  ,                                        !- Heating Maximum Air Flow Fraction
-  No,                                      !- Account for Dedicated Outdoor Air System
-  NeutralSupplyAir,                        !- Dedicated Outdoor Air System Control Strategy
-  autosize,                                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-  autosize,                                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
-  Sensible Load Only No Latent Load,       !- Zone Load Sizing Method
-  HumidityRatioDifference,                 !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-  HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-
-OS:Sizing:Zone,
-  {00000000-0000-0000-0078-000000000042},  !- Handle
-  {00000000-0000-0000-0090-000000000041},  !- Zone or ZoneList Name
-  TemperatureDifference,                   !- Zone Cooling Design Supply Air Temperature Input Method
-  14,                                      !- Zone Cooling Design Supply Air Temperature {C}
-  11,                                      !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
-  TemperatureDifference,                   !- Zone Heating Design Supply Air Temperature Input Method
-  40,                                      !- Zone Heating Design Supply Air Temperature {C}
-  21,                                      !- Zone Heating Design Supply Air Temperature Difference {deltaC}
-  0.0085,                                  !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  0.008,                                   !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  1.3,                                     !- Zone Heating Sizing Factor
-  1.1,                                     !- Zone Cooling Sizing Factor
-  DesignDay,                               !- Cooling Design Air Flow Method
-  ,                                        !- Cooling Design Air Flow Rate {m3/s}
-  ,                                        !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Cooling Minimum Air Flow {m3/s}
-  ,                                        !- Cooling Minimum Air Flow Fraction
-  DesignDay,                               !- Heating Design Air Flow Method
-  ,                                        !- Heating Design Air Flow Rate {m3/s}
-  ,                                        !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Heating Maximum Air Flow {m3/s}
-  ,                                        !- Heating Maximum Air Flow Fraction
-  No,                                      !- Account for Dedicated Outdoor Air System
-  NeutralSupplyAir,                        !- Dedicated Outdoor Air System Control Strategy
-  autosize,                                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-  autosize,                                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
-  Sensible Load Only No Latent Load,       !- Zone Load Sizing Method
-  HumidityRatioDifference,                 !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-  HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-
-OS:Sizing:Zone,
-  {00000000-0000-0000-0078-000000000043},  !- Handle
-  {00000000-0000-0000-0090-000000000042},  !- Zone or ZoneList Name
-  TemperatureDifference,                   !- Zone Cooling Design Supply Air Temperature Input Method
-  14,                                      !- Zone Cooling Design Supply Air Temperature {C}
-  11,                                      !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
-  TemperatureDifference,                   !- Zone Heating Design Supply Air Temperature Input Method
-  40,                                      !- Zone Heating Design Supply Air Temperature {C}
-  21,                                      !- Zone Heating Design Supply Air Temperature Difference {deltaC}
-  0.0085,                                  !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  0.008,                                   !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  1.3,                                     !- Zone Heating Sizing Factor
-  1.1,                                     !- Zone Cooling Sizing Factor
-  DesignDay,                               !- Cooling Design Air Flow Method
-  ,                                        !- Cooling Design Air Flow Rate {m3/s}
-  ,                                        !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Cooling Minimum Air Flow {m3/s}
-  ,                                        !- Cooling Minimum Air Flow Fraction
-  DesignDay,                               !- Heating Design Air Flow Method
-  ,                                        !- Heating Design Air Flow Rate {m3/s}
-  ,                                        !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Heating Maximum Air Flow {m3/s}
-  ,                                        !- Heating Maximum Air Flow Fraction
-  No,                                      !- Account for Dedicated Outdoor Air System
-  NeutralSupplyAir,                        !- Dedicated Outdoor Air System Control Strategy
-  autosize,                                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-  autosize,                                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
-  Sensible Load Only No Latent Load,       !- Zone Load Sizing Method
-  HumidityRatioDifference,                 !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-  HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-
-OS:Sizing:Zone,
-  {00000000-0000-0000-0078-000000000044},  !- Handle
-  {00000000-0000-0000-0090-000000000043},  !- Zone or ZoneList Name
-  TemperatureDifference,                   !- Zone Cooling Design Supply Air Temperature Input Method
-  14,                                      !- Zone Cooling Design Supply Air Temperature {C}
-  11,                                      !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
-  TemperatureDifference,                   !- Zone Heating Design Supply Air Temperature Input Method
-  40,                                      !- Zone Heating Design Supply Air Temperature {C}
-  21,                                      !- Zone Heating Design Supply Air Temperature Difference {deltaC}
-  0.0085,                                  !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  0.008,                                   !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  1.3,                                     !- Zone Heating Sizing Factor
-  1.1,                                     !- Zone Cooling Sizing Factor
-  DesignDay,                               !- Cooling Design Air Flow Method
-  ,                                        !- Cooling Design Air Flow Rate {m3/s}
-  ,                                        !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Cooling Minimum Air Flow {m3/s}
-  ,                                        !- Cooling Minimum Air Flow Fraction
-  DesignDay,                               !- Heating Design Air Flow Method
-  ,                                        !- Heating Design Air Flow Rate {m3/s}
-  ,                                        !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Heating Maximum Air Flow {m3/s}
-  ,                                        !- Heating Maximum Air Flow Fraction
-  No,                                      !- Account for Dedicated Outdoor Air System
-  NeutralSupplyAir,                        !- Dedicated Outdoor Air System Control Strategy
-  autosize,                                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-  autosize,                                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
-  Sensible Load Only No Latent Load,       !- Zone Load Sizing Method
-  HumidityRatioDifference,                 !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-  HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-
-OS:Sizing:Zone,
-  {00000000-0000-0000-0078-000000000045},  !- Handle
-  {00000000-0000-0000-0090-000000000039},  !- Zone or ZoneList Name
-  TemperatureDifference,                   !- Zone Cooling Design Supply Air Temperature Input Method
-  14,                                      !- Zone Cooling Design Supply Air Temperature {C}
-  11,                                      !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
-  TemperatureDifference,                   !- Zone Heating Design Supply Air Temperature Input Method
-  40,                                      !- Zone Heating Design Supply Air Temperature {C}
-  21,                                      !- Zone Heating Design Supply Air Temperature Difference {deltaC}
-  0.0085,                                  !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  0.008,                                   !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  1.3,                                     !- Zone Heating Sizing Factor
-  1.1,                                     !- Zone Cooling Sizing Factor
-  DesignDay,                               !- Cooling Design Air Flow Method
-  ,                                        !- Cooling Design Air Flow Rate {m3/s}
-  ,                                        !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Cooling Minimum Air Flow {m3/s}
-  ,                                        !- Cooling Minimum Air Flow Fraction
-  DesignDay,                               !- Heating Design Air Flow Method
-  ,                                        !- Heating Design Air Flow Rate {m3/s}
-  ,                                        !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Heating Maximum Air Flow {m3/s}
-  ,                                        !- Heating Maximum Air Flow Fraction
-  No,                                      !- Account for Dedicated Outdoor Air System
-  NeutralSupplyAir,                        !- Dedicated Outdoor Air System Control Strategy
-  autosize,                                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-  autosize,                                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
-  Sensible Load Only No Latent Load,       !- Zone Load Sizing Method
-  HumidityRatioDifference,                 !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-  HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-
-OS:Sizing:Zone,
-  {00000000-0000-0000-0078-000000000046},  !- Handle
-  {00000000-0000-0000-0090-000000000046},  !- Zone or ZoneList Name
-  TemperatureDifference,                   !- Zone Cooling Design Supply Air Temperature Input Method
-  14,                                      !- Zone Cooling Design Supply Air Temperature {C}
-  11,                                      !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
-  TemperatureDifference,                   !- Zone Heating Design Supply Air Temperature Input Method
-  40,                                      !- Zone Heating Design Supply Air Temperature {C}
-  21,                                      !- Zone Heating Design Supply Air Temperature Difference {deltaC}
-  0.0085,                                  !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  0.008,                                   !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  1.3,                                     !- Zone Heating Sizing Factor
-  1.1,                                     !- Zone Cooling Sizing Factor
-  DesignDay,                               !- Cooling Design Air Flow Method
-  ,                                        !- Cooling Design Air Flow Rate {m3/s}
-  ,                                        !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Cooling Minimum Air Flow {m3/s}
-  ,                                        !- Cooling Minimum Air Flow Fraction
-  DesignDay,                               !- Heating Design Air Flow Method
-  ,                                        !- Heating Design Air Flow Rate {m3/s}
-  ,                                        !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Heating Maximum Air Flow {m3/s}
-  ,                                        !- Heating Maximum Air Flow Fraction
-  No,                                      !- Account for Dedicated Outdoor Air System
-  NeutralSupplyAir,                        !- Dedicated Outdoor Air System Control Strategy
-  autosize,                                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-  autosize,                                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
-  Sensible Load Only No Latent Load,       !- Zone Load Sizing Method
-  HumidityRatioDifference,                 !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-  HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
 
 OS:SizingPeriod:DesignDay,
   {00000000-0000-0000-0079-000000000001},  !- Handle
@@ -37743,554 +37190,554 @@ OS:ThermostatSetpoint:DualSetpoint,
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000057},  !- Handle
   Space Function Classroom/lecture/training Thermostat 57, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000058},  !- Handle
   Space Function Classroom/lecture/training Thermostat 58, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000059},  !- Handle
   Space Function Classroom/lecture/training Thermostat 59, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000060},  !- Handle
   Space Function Classroom/lecture/training Thermostat 6, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000061},  !- Handle
   Space Function Classroom/lecture/training Thermostat 60, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000062},  !- Handle
   Space Function Classroom/lecture/training Thermostat 61, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000063},  !- Handle
   Space Function Classroom/lecture/training Thermostat 62, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000064},  !- Handle
   Space Function Classroom/lecture/training Thermostat 63, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000065},  !- Handle
   Space Function Classroom/lecture/training Thermostat 64, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000066},  !- Handle
   Space Function Classroom/lecture/training Thermostat 65, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000067},  !- Handle
   Space Function Classroom/lecture/training Thermostat 66, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000068},  !- Handle
   Space Function Classroom/lecture/training Thermostat 67, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000069},  !- Handle
   Space Function Classroom/lecture/training Thermostat 68, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000070},  !- Handle
   Space Function Classroom/lecture/training Thermostat 69, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000071},  !- Handle
   Space Function Classroom/lecture/training Thermostat 7, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000072},  !- Handle
   Space Function Classroom/lecture/training Thermostat 70, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000073},  !- Handle
   Space Function Classroom/lecture/training Thermostat 71, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000074},  !- Handle
   Space Function Classroom/lecture/training Thermostat 72, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000075},  !- Handle
   Space Function Classroom/lecture/training Thermostat 8, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000076},  !- Handle
   Space Function Classroom/lecture/training Thermostat 9, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000077},  !- Handle
   Space Function Classroom/lecture/training Thermostat, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000078},  !- Handle
   Space Function Conf./meet./multi-purpose Thermostat 1, !- Name
-  {00000000-0000-0000-0063-000000000026},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000025};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000025},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000024};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000079},  !- Handle
   Space Function Conf./meet./multi-purpose Thermostat 2, !- Name
-  {00000000-0000-0000-0063-000000000026},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000025};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000025},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000024};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000080},  !- Handle
   Space Function Conf./meet./multi-purpose Thermostat 3, !- Name
-  {00000000-0000-0000-0063-000000000026},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000025};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000025},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000024};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000081},  !- Handle
   Space Function Conf./meet./multi-purpose Thermostat, !- Name
-  {00000000-0000-0000-0063-000000000026},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000025};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000025},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000024};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000082},  !- Handle
   Space Function Corr. >= 2.4m wide-sch-D Thermostat 1, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000083},  !- Handle
   Space Function Corr. >= 2.4m wide-sch-D Thermostat 10, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000084},  !- Handle
   Space Function Corr. >= 2.4m wide-sch-D Thermostat 11, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000085},  !- Handle
   Space Function Corr. >= 2.4m wide-sch-D Thermostat 12, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000086},  !- Handle
   Space Function Corr. >= 2.4m wide-sch-D Thermostat 13, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000087},  !- Handle
   Space Function Corr. >= 2.4m wide-sch-D Thermostat 14, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000088},  !- Handle
   Space Function Corr. >= 2.4m wide-sch-D Thermostat 15, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000089},  !- Handle
   Space Function Corr. >= 2.4m wide-sch-D Thermostat 16, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000090},  !- Handle
   Space Function Corr. >= 2.4m wide-sch-D Thermostat 17, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000091},  !- Handle
   Space Function Corr. >= 2.4m wide-sch-D Thermostat 18, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000092},  !- Handle
   Space Function Corr. >= 2.4m wide-sch-D Thermostat 19, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000093},  !- Handle
   Space Function Corr. >= 2.4m wide-sch-D Thermostat 2, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000094},  !- Handle
   Space Function Corr. >= 2.4m wide-sch-D Thermostat 20, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000095},  !- Handle
   Space Function Corr. >= 2.4m wide-sch-D Thermostat 21, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000096},  !- Handle
   Space Function Corr. >= 2.4m wide-sch-D Thermostat 22, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000097},  !- Handle
   Space Function Corr. >= 2.4m wide-sch-D Thermostat 23, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000098},  !- Handle
   Space Function Corr. >= 2.4m wide-sch-D Thermostat 24, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000099},  !- Handle
   Space Function Corr. >= 2.4m wide-sch-D Thermostat 3, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000100},  !- Handle
   Space Function Corr. >= 2.4m wide-sch-D Thermostat 4, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000101},  !- Handle
   Space Function Corr. >= 2.4m wide-sch-D Thermostat 5, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000102},  !- Handle
   Space Function Corr. >= 2.4m wide-sch-D Thermostat 6, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000103},  !- Handle
   Space Function Corr. >= 2.4m wide-sch-D Thermostat 7, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000104},  !- Handle
   Space Function Corr. >= 2.4m wide-sch-D Thermostat 8, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000105},  !- Handle
   Space Function Corr. >= 2.4m wide-sch-D Thermostat 9, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000106},  !- Handle
   Space Function Corr. >= 2.4m wide-sch-D Thermostat, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000107},  !- Handle
   Space Function Electrical/Mechanical-sch-D Thermostat 1, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000108},  !- Handle
   Space Function Electrical/Mechanical-sch-D Thermostat 2, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000109},  !- Handle
   Space Function Electrical/Mechanical-sch-D Thermostat 3, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000110},  !- Handle
   Space Function Electrical/Mechanical-sch-D Thermostat 4, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000111},  !- Handle
   Space Function Electrical/Mechanical-sch-D Thermostat 5, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000112},  !- Handle
   Space Function Electrical/Mechanical-sch-D Thermostat 6, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000113},  !- Handle
   Space Function Electrical/Mechanical-sch-D Thermostat, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000114},  !- Handle
   Space Function Food preparation Thermostat 1, !- Name
-  {00000000-0000-0000-0063-000000000020},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000019};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000019},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000018};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000115},  !- Handle
   Space Function Food preparation Thermostat 2, !- Name
-  {00000000-0000-0000-0063-000000000020},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000019};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000019},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000018};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000116},  !- Handle
   Space Function Food preparation Thermostat 3, !- Name
-  {00000000-0000-0000-0063-000000000020},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000019};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000019},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000018};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000117},  !- Handle
   Space Function Food preparation Thermostat, !- Name
-  {00000000-0000-0000-0063-000000000020},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000019};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000019},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000018};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000118},  !- Handle
   Space Function Gym - play Thermostat 1,  !- Name
-  {00000000-0000-0000-0063-000000000020},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000019};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000019},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000018};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000119},  !- Handle
   Space Function Gym - play Thermostat 2,  !- Name
-  {00000000-0000-0000-0063-000000000020},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000019};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000019},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000018};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000120},  !- Handle
   Space Function Gym - play Thermostat 3,  !- Name
-  {00000000-0000-0000-0063-000000000020},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000019};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000019},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000018};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000121},  !- Handle
   Space Function Gym - play Thermostat 4,  !- Name
-  {00000000-0000-0000-0063-000000000020},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000019};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000019},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000018};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000122},  !- Handle
   Space Function Gym - play Thermostat 5,  !- Name
-  {00000000-0000-0000-0063-000000000020},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000019};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000019},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000018};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000123},  !- Handle
   Space Function Gym - play Thermostat 6,  !- Name
-  {00000000-0000-0000-0063-000000000020},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000019};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000019},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000018};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000124},  !- Handle
   Space Function Gym - play Thermostat,    !- Name
-  {00000000-0000-0000-0063-000000000020},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000019};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000019},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000018};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000125},  !- Handle
   Space Function Library - reading Thermostat 1, !- Name
-  {00000000-0000-0000-0063-000000000026},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000025};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000025},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000024};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000126},  !- Handle
   Space Function Library - reading Thermostat 2, !- Name
-  {00000000-0000-0000-0063-000000000026},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000025};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000025},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000024};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000127},  !- Handle
   Space Function Library - reading Thermostat 3, !- Name
-  {00000000-0000-0000-0063-000000000026},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000025};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000025},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000024};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000128},  !- Handle
   Space Function Library - reading Thermostat, !- Name
-  {00000000-0000-0000-0063-000000000026},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000025};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000025},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000024};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000129},  !- Handle
   Space Function Lobby - other Thermostat 1, !- Name
-  {00000000-0000-0000-0063-000000000026},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000025};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000025},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000024};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000130},  !- Handle
   Space Function Lobby - other Thermostat 2, !- Name
-  {00000000-0000-0000-0063-000000000026},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000025};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000025},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000024};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000131},  !- Handle
   Space Function Lobby - other Thermostat 3, !- Name
-  {00000000-0000-0000-0063-000000000026},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000025};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000025},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000024};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000132},  !- Handle
   Space Function Lobby - other Thermostat 4, !- Name
-  {00000000-0000-0000-0063-000000000026},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000025};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000025},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000024};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000133},  !- Handle
   Space Function Lobby - other Thermostat 5, !- Name
-  {00000000-0000-0000-0063-000000000026},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000025};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000025},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000024};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000134},  !- Handle
   Space Function Lobby - other Thermostat 6, !- Name
-  {00000000-0000-0000-0063-000000000026},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000025};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000025},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000024};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000135},  !- Handle
   Space Function Lobby - other Thermostat, !- Name
-  {00000000-0000-0000-0063-000000000026},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000025};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000025},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000024};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000136},  !- Handle
   Space Function Office - enclosed Thermostat 1, !- Name
-  {00000000-0000-0000-0063-000000000013},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000012};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000012},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000011};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000137},  !- Handle
   Space Function Office - enclosed Thermostat 2, !- Name
-  {00000000-0000-0000-0063-000000000013},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000012};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000012},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000011};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000138},  !- Handle
   Space Function Office - enclosed Thermostat 3, !- Name
-  {00000000-0000-0000-0063-000000000013},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000012};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000012},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000011};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000139},  !- Handle
   Space Function Office - enclosed Thermostat 4, !- Name
-  {00000000-0000-0000-0063-000000000013},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000012};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000012},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000011};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000140},  !- Handle
   Space Function Office - enclosed Thermostat 5, !- Name
-  {00000000-0000-0000-0063-000000000013},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000012};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000012},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000011};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000141},  !- Handle
   Space Function Office - enclosed Thermostat 6, !- Name
-  {00000000-0000-0000-0063-000000000013},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000012};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000012},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000011};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000142},  !- Handle
   Space Function Office - enclosed Thermostat, !- Name
-  {00000000-0000-0000-0063-000000000013},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000012};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000012},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000011};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000143},  !- Handle
   Space Function Washroom-sch-D Thermostat 1, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000144},  !- Handle
   Space Function Washroom-sch-D Thermostat 2, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000145},  !- Handle
   Space Function Washroom-sch-D Thermostat 3, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000146},  !- Handle
   Space Function Washroom-sch-D Thermostat 4, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000147},  !- Handle
   Space Function Washroom-sch-D Thermostat 5, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000148},  !- Handle
   Space Function Washroom-sch-D Thermostat 6, !- Name
-  {00000000-0000-0000-0063-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0091-000000000149},  !- Handle

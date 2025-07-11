@@ -6090,7 +6090,7 @@ OS:Sizing:Plant,
   {00000000-0000-0000-0081-000000000002},  !- Handle
   {00000000-0000-0000-0059-000000000002},  !- Plant or Condenser Loop Name
   Heating,                                 !- Loop Type
-  50,                                      !- Design Loop Exit Temperature {C}
+  60,                                      !- Design Loop Exit Temperature {C}
   5,                                       !- Loop Design Temperature Difference {deltaC}
   NonCoincident,                           !- Sizing Option
   1,                                       !- Zone Timesteps in Averaging Window

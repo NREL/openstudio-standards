@@ -24,6 +24,7 @@
 output/
 coverage/
 /spec/reports/
+/test/measures
 /test/reports
 /test/necb/*/expected_results/*-test_results.csv
 /test/necb/*/expected_results/*-test_results.json

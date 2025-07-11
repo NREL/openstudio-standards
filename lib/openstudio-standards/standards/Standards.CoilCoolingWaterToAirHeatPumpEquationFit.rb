@@ -29,11 +29,10 @@ class Standard
     search_criteria['template'] = template
     if computer_room_air_conditioner
       search_criteria['cooling_type'] = 'WaterCooled'
-      search_criteria['heating_type'] = 'All Other'
-      search_criteria['subcategory'] = 'CRAC'
+      search_criteria['standard_model'] = 'Downflow units'
       cooling_type = search_criteria['cooling_type']
-      heating_type = search_criteria['heating_type']
-      sub_category = search_criteria['subcategory']
+      heating_type = 'All Other'
+      sub_category = 'CRAC'
     end
     capacity_w = coil_cooling_water_to_air_heat_pump_find_capacity(coil_cooling_water_to_air_heat_pump)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get

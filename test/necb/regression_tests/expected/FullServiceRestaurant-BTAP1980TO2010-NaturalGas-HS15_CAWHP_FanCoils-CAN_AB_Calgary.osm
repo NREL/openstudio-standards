@@ -5023,7 +5023,7 @@ OS:Schedule:Day,
   0;                                       !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0064-000000000047},  !- Handle
+  {00000000-0000-0000-0064-000000000046},  !- Handle
   sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Occ Sch Default, !- Name
   {00000000-0000-0000-0067-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -5048,15 +5048,6 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0064-000000000048},  !- Handle
-  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Occ Sch Summer Design Day, !- Name
-  {00000000-0000-0000-0067-000000000004},  !- Schedule Type Limits Name
-  ,                                        !- Interpolate to Timestep
-  24,                                      !- Hour 1
-  0,                                       !- Minute 1
-  1;                                       !- Value Until Time 1
-
-OS:Schedule:Day,
-  {00000000-0000-0000-0064-000000000049},  !- Handle
   sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Occ Sch Winter Design Day, !- Name
   {00000000-0000-0000-0067-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -5065,7 +5056,7 @@ OS:Schedule:Day,
   1;                                       !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0064-000000000050},  !- Handle
+  {00000000-0000-0000-0064-000000000049},  !- Handle
   sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Occ Sch Default, !- Name
   {00000000-0000-0000-0067-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -5080,7 +5071,7 @@ OS:Schedule:Day,
   1;                                       !- Value Until Time 3
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0064-000000000051},  !- Handle
+  {00000000-0000-0000-0064-000000000050},  !- Handle
   sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Occ Sch Summer Design Day, !- Name
   {00000000-0000-0000-0067-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -5089,7 +5080,7 @@ OS:Schedule:Day,
   1;                                       !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0064-000000000052},  !- Handle
+  {00000000-0000-0000-0064-000000000051},  !- Handle
   sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Occ Sch Winter Design Day, !- Name
   {00000000-0000-0000-0067-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -5654,19 +5645,11 @@ OS:Schedule:Ruleset,
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0066-000000000020},  !- Handle
-  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Occ Sch, !- Name
-  {00000000-0000-0000-0067-000000000004},  !- Schedule Type Limits Name
-  {00000000-0000-0000-0064-000000000047},  !- Default Day Schedule Name
-  {00000000-0000-0000-0064-000000000048},  !- Summer Design Day Schedule Name
-  {00000000-0000-0000-0064-000000000049};  !- Winter Design Day Schedule Name
-
-OS:Schedule:Ruleset,
-  {00000000-0000-0000-0066-000000000021},  !- Handle
   sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Occ Sch, !- Name
   {00000000-0000-0000-0067-000000000004},  !- Schedule Type Limits Name
-  {00000000-0000-0000-0064-000000000050},  !- Default Day Schedule Name
-  {00000000-0000-0000-0064-000000000051},  !- Summer Design Day Schedule Name
-  {00000000-0000-0000-0064-000000000052};  !- Winter Design Day Schedule Name
+  {00000000-0000-0000-0064-000000000049},  !- Default Day Schedule Name
+  {00000000-0000-0000-0064-000000000050},  !- Summer Design Day Schedule Name
+  {00000000-0000-0000-0064-000000000051};  !- Winter Design Day Schedule Name
 
 OS:ScheduleTypeLimits,
   {00000000-0000-0000-0067-000000000001},  !- Handle

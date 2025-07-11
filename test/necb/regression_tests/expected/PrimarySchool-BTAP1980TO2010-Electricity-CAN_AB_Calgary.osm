@@ -590,7 +590,7 @@ OS:AirLoopHVAC:ZoneMixer,
   {00000000-0000-0000-0004-000000000001},  !- Handle
   Air Loop HVAC Zone Mixer 1,              !- Name
   {00000000-0000-0000-0014-000000000056},  !- Outlet Node Name
-  {00000000-0000-0000-0014-000000000069};  !- Inlet Node Name 1
+  {00000000-0000-0000-0014-000000000072};  !- Inlet Node Name 1
 
 OS:AirLoopHVAC:ZoneMixer,
   {00000000-0000-0000-0004-000000000002},  !- Handle
@@ -619,11 +619,11 @@ OS:AirLoopHVAC:ZoneMixer,
   {00000000-0000-0000-0004-000000000005},  !- Handle
   Air Loop HVAC Zone Mixer 2,              !- Name
   {00000000-0000-0000-0014-000000000081},  !- Outlet Node Name
-  {00000000-0000-0000-0014-000000000094},  !- Inlet Node Name 1
-  {00000000-0000-0000-0014-000000000103},  !- Inlet Node Name 2
-  {00000000-0000-0000-0014-000000000112},  !- Inlet Node Name 3
-  {00000000-0000-0000-0014-000000000121},  !- Inlet Node Name 4
-  {00000000-0000-0000-0014-000000000130};  !- Inlet Node Name 5
+  {00000000-0000-0000-0014-000000000097},  !- Inlet Node Name 1
+  {00000000-0000-0000-0014-000000000106},  !- Inlet Node Name 2
+  {00000000-0000-0000-0014-000000000115},  !- Inlet Node Name 3
+  {00000000-0000-0000-0014-000000000124},  !- Inlet Node Name 4
+  {00000000-0000-0000-0014-000000000133};  !- Inlet Node Name 5
 
 OS:AirLoopHVAC:ZoneMixer,
   {00000000-0000-0000-0004-000000000006},  !- Handle
@@ -675,7 +675,7 @@ OS:AirLoopHVAC:ZoneSplitter,
   {00000000-0000-0000-0005-000000000001},  !- Handle
   Air Loop HVAC Zone Splitter 1,           !- Name
   {00000000-0000-0000-0014-000000000055},  !- Inlet Node Name
-  {00000000-0000-0000-0014-000000000070};  !- Outlet Node Name 1
+  {00000000-0000-0000-0014-000000000073};  !- Outlet Node Name 1
 
 OS:AirLoopHVAC:ZoneSplitter,
   {00000000-0000-0000-0005-000000000002},  !- Handle
@@ -704,11 +704,11 @@ OS:AirLoopHVAC:ZoneSplitter,
   {00000000-0000-0000-0005-000000000005},  !- Handle
   Air Loop HVAC Zone Splitter 2,           !- Name
   {00000000-0000-0000-0014-000000000080},  !- Inlet Node Name
-  {00000000-0000-0000-0014-000000000095},  !- Outlet Node Name 1
-  {00000000-0000-0000-0014-000000000104},  !- Outlet Node Name 2
-  {00000000-0000-0000-0014-000000000113},  !- Outlet Node Name 3
-  {00000000-0000-0000-0014-000000000122},  !- Outlet Node Name 4
-  {00000000-0000-0000-0014-000000000131};  !- Outlet Node Name 5
+  {00000000-0000-0000-0014-000000000098},  !- Outlet Node Name 1
+  {00000000-0000-0000-0014-000000000107},  !- Outlet Node Name 2
+  {00000000-0000-0000-0014-000000000116},  !- Outlet Node Name 3
+  {00000000-0000-0000-0014-000000000125},  !- Outlet Node Name 4
+  {00000000-0000-0000-0014-000000000134};  !- Outlet Node Name 5
 
 OS:AirLoopHVAC:ZoneSplitter,
   {00000000-0000-0000-0005-000000000006},  !- Handle
@@ -760,8 +760,8 @@ OS:AirTerminal:SingleDuct:ConstantVolume:NoReheat,
   {00000000-0000-0000-0006-000000000001},  !- Handle
   Air Terminal Single Duct Constant Volume No Reheat 1, !- Name
   {00000000-0000-0000-0058-000000000001},  !- Availability Schedule Name
-  {00000000-0000-0000-0014-000000000071},  !- Air Inlet Node Name
-  {00000000-0000-0000-0014-000000000072},  !- Air Outlet Node Name
+  {00000000-0000-0000-0014-000000000074},  !- Air Inlet Node Name
+  {00000000-0000-0000-0014-000000000075},  !- Air Outlet Node Name
   AutoSize;                                !- Maximum Air Flow Rate {m3/s}
 
 OS:AirTerminal:SingleDuct:ConstantVolume:NoReheat,
@@ -848,8 +848,8 @@ OS:AirTerminal:SingleDuct:ConstantVolume:NoReheat,
   {00000000-0000-0000-0006-000000000012},  !- Handle
   Air Terminal Single Duct Constant Volume No Reheat 2, !- Name
   {00000000-0000-0000-0058-000000000001},  !- Availability Schedule Name
-  {00000000-0000-0000-0014-000000000096},  !- Air Inlet Node Name
-  {00000000-0000-0000-0014-000000000097},  !- Air Outlet Node Name
+  {00000000-0000-0000-0014-000000000099},  !- Air Inlet Node Name
+  {00000000-0000-0000-0014-000000000100},  !- Air Outlet Node Name
   AutoSize;                                !- Maximum Air Flow Rate {m3/s}
 
 OS:AirTerminal:SingleDuct:ConstantVolume:NoReheat,
@@ -904,32 +904,32 @@ OS:AirTerminal:SingleDuct:ConstantVolume:NoReheat,
   {00000000-0000-0000-0006-000000000019},  !- Handle
   Air Terminal Single Duct Constant Volume No Reheat 3, !- Name
   {00000000-0000-0000-0058-000000000001},  !- Availability Schedule Name
-  {00000000-0000-0000-0014-000000000105},  !- Air Inlet Node Name
-  {00000000-0000-0000-0014-000000000106},  !- Air Outlet Node Name
+  {00000000-0000-0000-0014-000000000108},  !- Air Inlet Node Name
+  {00000000-0000-0000-0014-000000000109},  !- Air Outlet Node Name
   AutoSize;                                !- Maximum Air Flow Rate {m3/s}
 
 OS:AirTerminal:SingleDuct:ConstantVolume:NoReheat,
   {00000000-0000-0000-0006-000000000020},  !- Handle
   Air Terminal Single Duct Constant Volume No Reheat 4, !- Name
   {00000000-0000-0000-0058-000000000001},  !- Availability Schedule Name
-  {00000000-0000-0000-0014-000000000114},  !- Air Inlet Node Name
-  {00000000-0000-0000-0014-000000000115},  !- Air Outlet Node Name
+  {00000000-0000-0000-0014-000000000117},  !- Air Inlet Node Name
+  {00000000-0000-0000-0014-000000000118},  !- Air Outlet Node Name
   AutoSize;                                !- Maximum Air Flow Rate {m3/s}
 
 OS:AirTerminal:SingleDuct:ConstantVolume:NoReheat,
   {00000000-0000-0000-0006-000000000021},  !- Handle
   Air Terminal Single Duct Constant Volume No Reheat 5, !- Name
   {00000000-0000-0000-0058-000000000001},  !- Availability Schedule Name
-  {00000000-0000-0000-0014-000000000123},  !- Air Inlet Node Name
-  {00000000-0000-0000-0014-000000000124},  !- Air Outlet Node Name
+  {00000000-0000-0000-0014-000000000126},  !- Air Inlet Node Name
+  {00000000-0000-0000-0014-000000000127},  !- Air Outlet Node Name
   AutoSize;                                !- Maximum Air Flow Rate {m3/s}
 
 OS:AirTerminal:SingleDuct:ConstantVolume:NoReheat,
   {00000000-0000-0000-0006-000000000022},  !- Handle
   Air Terminal Single Duct Constant Volume No Reheat 6, !- Name
   {00000000-0000-0000-0058-000000000001},  !- Availability Schedule Name
-  {00000000-0000-0000-0014-000000000132},  !- Air Inlet Node Name
-  {00000000-0000-0000-0014-000000000133},  !- Air Outlet Node Name
+  {00000000-0000-0000-0014-000000000135},  !- Air Inlet Node Name
+  {00000000-0000-0000-0014-000000000136},  !- Air Outlet Node Name
   AutoSize;                                !- Maximum Air Flow Rate {m3/s}
 
 OS:AirTerminal:SingleDuct:ConstantVolume:NoReheat,
@@ -2213,65 +2213,65 @@ OS:Connection,
 
 OS:Connection,
   {00000000-0000-0000-0014-000000000067},  !- Handle
-  {00000000-0000-0000-0047-000000000042},  !- Source Object
-  3,                                       !- Outlet Port
-  {00000000-0000-0000-0054-000000000001},  !- Target Object
-  2;                                       !- Inlet Port
-
-OS:Connection,
-  {00000000-0000-0000-0014-000000000068},  !- Handle
-  {00000000-0000-0000-0054-000000000003},  !- Source Object
-  2,                                       !- Outlet Port
-  {00000000-0000-0000-0047-000000000184},  !- Target Object
-  2;                                       !- Inlet Port
-
-OS:Connection,
-  {00000000-0000-0000-0014-000000000069},  !- Handle
-  {00000000-0000-0000-0047-000000000184},  !- Source Object
-  3,                                       !- Outlet Port
-  {00000000-0000-0000-0004-000000000001},  !- Target Object
-  3;                                       !- Inlet Port
-
-OS:Connection,
-  {00000000-0000-0000-0014-000000000070},  !- Handle
-  {00000000-0000-0000-0005-000000000001},  !- Source Object
-  3,                                       !- Outlet Port
-  {00000000-0000-0000-0047-000000000041},  !- Target Object
-  2;                                       !- Inlet Port
-
-OS:Connection,
-  {00000000-0000-0000-0014-000000000071},  !- Handle
-  {00000000-0000-0000-0047-000000000041},  !- Source Object
-  3,                                       !- Outlet Port
-  {00000000-0000-0000-0006-000000000001},  !- Target Object
-  3;                                       !- Inlet Port
-
-OS:Connection,
-  {00000000-0000-0000-0014-000000000072},  !- Handle
-  {00000000-0000-0000-0006-000000000001},  !- Source Object
-  4,                                       !- Outlet Port
-  {00000000-0000-0000-0047-000000000042},  !- Target Object
-  2;                                       !- Inlet Port
-
-OS:Connection,
-  {00000000-0000-0000-0014-000000000073},  !- Handle
   {00000000-0000-0000-0054-000000000002},  !- Source Object
   2,                                       !- Outlet Port
   {00000000-0000-0000-0047-000000000182},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0014-000000000074},  !- Handle
+  {00000000-0000-0000-0014-000000000068},  !- Handle
   {00000000-0000-0000-0047-000000000182},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0038-000000000006},  !- Target Object
   6;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0014-000000000075},  !- Handle
+  {00000000-0000-0000-0014-000000000069},  !- Handle
   {00000000-0000-0000-0038-000000000006},  !- Source Object
   7,                                       !- Outlet Port
   {00000000-0000-0000-0047-000000000183},  !- Target Object
+  2;                                       !- Inlet Port
+
+OS:Connection,
+  {00000000-0000-0000-0014-000000000070},  !- Handle
+  {00000000-0000-0000-0047-000000000042},  !- Source Object
+  3,                                       !- Outlet Port
+  {00000000-0000-0000-0054-000000000001},  !- Target Object
+  2;                                       !- Inlet Port
+
+OS:Connection,
+  {00000000-0000-0000-0014-000000000071},  !- Handle
+  {00000000-0000-0000-0054-000000000003},  !- Source Object
+  2,                                       !- Outlet Port
+  {00000000-0000-0000-0047-000000000184},  !- Target Object
+  2;                                       !- Inlet Port
+
+OS:Connection,
+  {00000000-0000-0000-0014-000000000072},  !- Handle
+  {00000000-0000-0000-0047-000000000184},  !- Source Object
+  3,                                       !- Outlet Port
+  {00000000-0000-0000-0004-000000000001},  !- Target Object
+  3;                                       !- Inlet Port
+
+OS:Connection,
+  {00000000-0000-0000-0014-000000000073},  !- Handle
+  {00000000-0000-0000-0005-000000000001},  !- Source Object
+  3,                                       !- Outlet Port
+  {00000000-0000-0000-0047-000000000041},  !- Target Object
+  2;                                       !- Inlet Port
+
+OS:Connection,
+  {00000000-0000-0000-0014-000000000074},  !- Handle
+  {00000000-0000-0000-0047-000000000041},  !- Source Object
+  3,                                       !- Outlet Port
+  {00000000-0000-0000-0006-000000000001},  !- Target Object
+  3;                                       !- Inlet Port
+
+OS:Connection,
+  {00000000-0000-0000-0014-000000000075},  !- Handle
+  {00000000-0000-0000-0006-000000000001},  !- Source Object
+  4,                                       !- Outlet Port
+  {00000000-0000-0000-0047-000000000042},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
@@ -2388,317 +2388,317 @@ OS:Connection,
 
 OS:Connection,
   {00000000-0000-0000-0014-000000000092},  !- Handle
-  {00000000-0000-0000-0047-000000000064},  !- Source Object
-  3,                                       !- Outlet Port
-  {00000000-0000-0000-0054-000000000061},  !- Target Object
-  2;                                       !- Inlet Port
-
-OS:Connection,
-  {00000000-0000-0000-0014-000000000093},  !- Handle
-  {00000000-0000-0000-0054-000000000063},  !- Source Object
-  2,                                       !- Outlet Port
-  {00000000-0000-0000-0047-000000000192},  !- Target Object
-  2;                                       !- Inlet Port
-
-OS:Connection,
-  {00000000-0000-0000-0014-000000000094},  !- Handle
-  {00000000-0000-0000-0047-000000000192},  !- Source Object
-  3,                                       !- Outlet Port
-  {00000000-0000-0000-0004-000000000005},  !- Target Object
-  3;                                       !- Inlet Port
-
-OS:Connection,
-  {00000000-0000-0000-0014-000000000095},  !- Handle
-  {00000000-0000-0000-0005-000000000005},  !- Source Object
-  3,                                       !- Outlet Port
-  {00000000-0000-0000-0047-000000000063},  !- Target Object
-  2;                                       !- Inlet Port
-
-OS:Connection,
-  {00000000-0000-0000-0014-000000000096},  !- Handle
-  {00000000-0000-0000-0047-000000000063},  !- Source Object
-  3,                                       !- Outlet Port
-  {00000000-0000-0000-0006-000000000012},  !- Target Object
-  3;                                       !- Inlet Port
-
-OS:Connection,
-  {00000000-0000-0000-0014-000000000097},  !- Handle
-  {00000000-0000-0000-0006-000000000012},  !- Source Object
-  4,                                       !- Outlet Port
-  {00000000-0000-0000-0047-000000000064},  !- Target Object
-  2;                                       !- Inlet Port
-
-OS:Connection,
-  {00000000-0000-0000-0014-000000000098},  !- Handle
   {00000000-0000-0000-0054-000000000062},  !- Source Object
   2,                                       !- Outlet Port
   {00000000-0000-0000-0047-000000000172},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0014-000000000099},  !- Handle
+  {00000000-0000-0000-0014-000000000093},  !- Handle
   {00000000-0000-0000-0047-000000000172},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0038-000000000001},  !- Target Object
   6;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0014-000000000100},  !- Handle
+  {00000000-0000-0000-0014-000000000094},  !- Handle
   {00000000-0000-0000-0038-000000000001},  !- Source Object
   7,                                       !- Outlet Port
   {00000000-0000-0000-0047-000000000173},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0014-000000000101},  !- Handle
-  {00000000-0000-0000-0047-000000000078},  !- Source Object
+  {00000000-0000-0000-0014-000000000095},  !- Handle
+  {00000000-0000-0000-0047-000000000064},  !- Source Object
   3,                                       !- Outlet Port
-  {00000000-0000-0000-0054-000000000064},  !- Target Object
+  {00000000-0000-0000-0054-000000000061},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0014-000000000102},  !- Handle
-  {00000000-0000-0000-0054-000000000066},  !- Source Object
+  {00000000-0000-0000-0014-000000000096},  !- Handle
+  {00000000-0000-0000-0054-000000000063},  !- Source Object
   2,                                       !- Outlet Port
-  {00000000-0000-0000-0047-000000000186},  !- Target Object
+  {00000000-0000-0000-0047-000000000192},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0014-000000000103},  !- Handle
-  {00000000-0000-0000-0047-000000000186},  !- Source Object
+  {00000000-0000-0000-0014-000000000097},  !- Handle
+  {00000000-0000-0000-0047-000000000192},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0004-000000000005},  !- Target Object
-  4;                                       !- Inlet Port
-
-OS:Connection,
-  {00000000-0000-0000-0014-000000000104},  !- Handle
-  {00000000-0000-0000-0005-000000000005},  !- Source Object
-  4,                                       !- Outlet Port
-  {00000000-0000-0000-0047-000000000077},  !- Target Object
-  2;                                       !- Inlet Port
-
-OS:Connection,
-  {00000000-0000-0000-0014-000000000105},  !- Handle
-  {00000000-0000-0000-0047-000000000077},  !- Source Object
-  3,                                       !- Outlet Port
-  {00000000-0000-0000-0006-000000000019},  !- Target Object
   3;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0014-000000000106},  !- Handle
-  {00000000-0000-0000-0006-000000000019},  !- Source Object
-  4,                                       !- Outlet Port
-  {00000000-0000-0000-0047-000000000078},  !- Target Object
+  {00000000-0000-0000-0014-000000000098},  !- Handle
+  {00000000-0000-0000-0005-000000000005},  !- Source Object
+  3,                                       !- Outlet Port
+  {00000000-0000-0000-0047-000000000063},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0014-000000000107},  !- Handle
+  {00000000-0000-0000-0014-000000000099},  !- Handle
+  {00000000-0000-0000-0047-000000000063},  !- Source Object
+  3,                                       !- Outlet Port
+  {00000000-0000-0000-0006-000000000012},  !- Target Object
+  3;                                       !- Inlet Port
+
+OS:Connection,
+  {00000000-0000-0000-0014-000000000100},  !- Handle
+  {00000000-0000-0000-0006-000000000012},  !- Source Object
+  4,                                       !- Outlet Port
+  {00000000-0000-0000-0047-000000000064},  !- Target Object
+  2;                                       !- Inlet Port
+
+OS:Connection,
+  {00000000-0000-0000-0014-000000000101},  !- Handle
   {00000000-0000-0000-0054-000000000065},  !- Source Object
   2,                                       !- Outlet Port
   {00000000-0000-0000-0047-000000000174},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0014-000000000108},  !- Handle
+  {00000000-0000-0000-0014-000000000102},  !- Handle
   {00000000-0000-0000-0047-000000000174},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0038-000000000002},  !- Target Object
   6;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0014-000000000109},  !- Handle
+  {00000000-0000-0000-0014-000000000103},  !- Handle
   {00000000-0000-0000-0038-000000000002},  !- Source Object
   7,                                       !- Outlet Port
   {00000000-0000-0000-0047-000000000175},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0014-000000000110},  !- Handle
-  {00000000-0000-0000-0047-000000000080},  !- Source Object
+  {00000000-0000-0000-0014-000000000104},  !- Handle
+  {00000000-0000-0000-0047-000000000078},  !- Source Object
   3,                                       !- Outlet Port
-  {00000000-0000-0000-0054-000000000067},  !- Target Object
+  {00000000-0000-0000-0054-000000000064},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0014-000000000111},  !- Handle
-  {00000000-0000-0000-0054-000000000069},  !- Source Object
+  {00000000-0000-0000-0014-000000000105},  !- Handle
+  {00000000-0000-0000-0054-000000000066},  !- Source Object
   2,                                       !- Outlet Port
-  {00000000-0000-0000-0047-000000000188},  !- Target Object
+  {00000000-0000-0000-0047-000000000186},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0014-000000000112},  !- Handle
-  {00000000-0000-0000-0047-000000000188},  !- Source Object
+  {00000000-0000-0000-0014-000000000106},  !- Handle
+  {00000000-0000-0000-0047-000000000186},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0004-000000000005},  !- Target Object
-  5;                                       !- Inlet Port
+  4;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0014-000000000113},  !- Handle
+  {00000000-0000-0000-0014-000000000107},  !- Handle
   {00000000-0000-0000-0005-000000000005},  !- Source Object
-  5,                                       !- Outlet Port
-  {00000000-0000-0000-0047-000000000079},  !- Target Object
+  4,                                       !- Outlet Port
+  {00000000-0000-0000-0047-000000000077},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0014-000000000114},  !- Handle
-  {00000000-0000-0000-0047-000000000079},  !- Source Object
+  {00000000-0000-0000-0014-000000000108},  !- Handle
+  {00000000-0000-0000-0047-000000000077},  !- Source Object
   3,                                       !- Outlet Port
-  {00000000-0000-0000-0006-000000000020},  !- Target Object
+  {00000000-0000-0000-0006-000000000019},  !- Target Object
   3;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0014-000000000115},  !- Handle
-  {00000000-0000-0000-0006-000000000020},  !- Source Object
+  {00000000-0000-0000-0014-000000000109},  !- Handle
+  {00000000-0000-0000-0006-000000000019},  !- Source Object
   4,                                       !- Outlet Port
-  {00000000-0000-0000-0047-000000000080},  !- Target Object
+  {00000000-0000-0000-0047-000000000078},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0014-000000000116},  !- Handle
+  {00000000-0000-0000-0014-000000000110},  !- Handle
   {00000000-0000-0000-0054-000000000068},  !- Source Object
   2,                                       !- Outlet Port
   {00000000-0000-0000-0047-000000000176},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0014-000000000117},  !- Handle
+  {00000000-0000-0000-0014-000000000111},  !- Handle
   {00000000-0000-0000-0047-000000000176},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0038-000000000003},  !- Target Object
   6;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0014-000000000118},  !- Handle
+  {00000000-0000-0000-0014-000000000112},  !- Handle
   {00000000-0000-0000-0038-000000000003},  !- Source Object
   7,                                       !- Outlet Port
   {00000000-0000-0000-0047-000000000177},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0014-000000000119},  !- Handle
-  {00000000-0000-0000-0047-000000000082},  !- Source Object
+  {00000000-0000-0000-0014-000000000113},  !- Handle
+  {00000000-0000-0000-0047-000000000080},  !- Source Object
   3,                                       !- Outlet Port
-  {00000000-0000-0000-0054-000000000070},  !- Target Object
+  {00000000-0000-0000-0054-000000000067},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0014-000000000120},  !- Handle
-  {00000000-0000-0000-0054-000000000072},  !- Source Object
+  {00000000-0000-0000-0014-000000000114},  !- Handle
+  {00000000-0000-0000-0054-000000000069},  !- Source Object
   2,                                       !- Outlet Port
-  {00000000-0000-0000-0047-000000000190},  !- Target Object
+  {00000000-0000-0000-0047-000000000188},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0014-000000000121},  !- Handle
-  {00000000-0000-0000-0047-000000000190},  !- Source Object
+  {00000000-0000-0000-0014-000000000115},  !- Handle
+  {00000000-0000-0000-0047-000000000188},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0004-000000000005},  !- Target Object
-  6;                                       !- Inlet Port
+  5;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0014-000000000122},  !- Handle
+  {00000000-0000-0000-0014-000000000116},  !- Handle
   {00000000-0000-0000-0005-000000000005},  !- Source Object
-  6,                                       !- Outlet Port
-  {00000000-0000-0000-0047-000000000081},  !- Target Object
+  5,                                       !- Outlet Port
+  {00000000-0000-0000-0047-000000000079},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0014-000000000123},  !- Handle
-  {00000000-0000-0000-0047-000000000081},  !- Source Object
+  {00000000-0000-0000-0014-000000000117},  !- Handle
+  {00000000-0000-0000-0047-000000000079},  !- Source Object
   3,                                       !- Outlet Port
-  {00000000-0000-0000-0006-000000000021},  !- Target Object
+  {00000000-0000-0000-0006-000000000020},  !- Target Object
   3;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0014-000000000124},  !- Handle
-  {00000000-0000-0000-0006-000000000021},  !- Source Object
+  {00000000-0000-0000-0014-000000000118},  !- Handle
+  {00000000-0000-0000-0006-000000000020},  !- Source Object
   4,                                       !- Outlet Port
-  {00000000-0000-0000-0047-000000000082},  !- Target Object
+  {00000000-0000-0000-0047-000000000080},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0014-000000000125},  !- Handle
+  {00000000-0000-0000-0014-000000000119},  !- Handle
   {00000000-0000-0000-0054-000000000071},  !- Source Object
   2,                                       !- Outlet Port
   {00000000-0000-0000-0047-000000000178},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0014-000000000126},  !- Handle
+  {00000000-0000-0000-0014-000000000120},  !- Handle
   {00000000-0000-0000-0047-000000000178},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0038-000000000004},  !- Target Object
   6;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0014-000000000127},  !- Handle
+  {00000000-0000-0000-0014-000000000121},  !- Handle
   {00000000-0000-0000-0038-000000000004},  !- Source Object
   7,                                       !- Outlet Port
   {00000000-0000-0000-0047-000000000179},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0014-000000000128},  !- Handle
-  {00000000-0000-0000-0047-000000000084},  !- Source Object
+  {00000000-0000-0000-0014-000000000122},  !- Handle
+  {00000000-0000-0000-0047-000000000082},  !- Source Object
   3,                                       !- Outlet Port
-  {00000000-0000-0000-0054-000000000073},  !- Target Object
+  {00000000-0000-0000-0054-000000000070},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0014-000000000129},  !- Handle
-  {00000000-0000-0000-0054-000000000075},  !- Source Object
+  {00000000-0000-0000-0014-000000000123},  !- Handle
+  {00000000-0000-0000-0054-000000000072},  !- Source Object
   2,                                       !- Outlet Port
-  {00000000-0000-0000-0047-000000000194},  !- Target Object
+  {00000000-0000-0000-0047-000000000190},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0014-000000000130},  !- Handle
-  {00000000-0000-0000-0047-000000000194},  !- Source Object
+  {00000000-0000-0000-0014-000000000124},  !- Handle
+  {00000000-0000-0000-0047-000000000190},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0004-000000000005},  !- Target Object
-  7;                                       !- Inlet Port
+  6;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0014-000000000131},  !- Handle
+  {00000000-0000-0000-0014-000000000125},  !- Handle
   {00000000-0000-0000-0005-000000000005},  !- Source Object
-  7,                                       !- Outlet Port
-  {00000000-0000-0000-0047-000000000083},  !- Target Object
+  6,                                       !- Outlet Port
+  {00000000-0000-0000-0047-000000000081},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0014-000000000132},  !- Handle
-  {00000000-0000-0000-0047-000000000083},  !- Source Object
+  {00000000-0000-0000-0014-000000000126},  !- Handle
+  {00000000-0000-0000-0047-000000000081},  !- Source Object
   3,                                       !- Outlet Port
-  {00000000-0000-0000-0006-000000000022},  !- Target Object
+  {00000000-0000-0000-0006-000000000021},  !- Target Object
   3;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0014-000000000133},  !- Handle
-  {00000000-0000-0000-0006-000000000022},  !- Source Object
+  {00000000-0000-0000-0014-000000000127},  !- Handle
+  {00000000-0000-0000-0006-000000000021},  !- Source Object
   4,                                       !- Outlet Port
-  {00000000-0000-0000-0047-000000000084},  !- Target Object
+  {00000000-0000-0000-0047-000000000082},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0014-000000000134},  !- Handle
+  {00000000-0000-0000-0014-000000000128},  !- Handle
   {00000000-0000-0000-0054-000000000074},  !- Source Object
   2,                                       !- Outlet Port
   {00000000-0000-0000-0047-000000000180},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0014-000000000135},  !- Handle
+  {00000000-0000-0000-0014-000000000129},  !- Handle
   {00000000-0000-0000-0047-000000000180},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0038-000000000005},  !- Target Object
   6;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0014-000000000136},  !- Handle
+  {00000000-0000-0000-0014-000000000130},  !- Handle
   {00000000-0000-0000-0038-000000000005},  !- Source Object
   7,                                       !- Outlet Port
   {00000000-0000-0000-0047-000000000181},  !- Target Object
+  2;                                       !- Inlet Port
+
+OS:Connection,
+  {00000000-0000-0000-0014-000000000131},  !- Handle
+  {00000000-0000-0000-0047-000000000084},  !- Source Object
+  3,                                       !- Outlet Port
+  {00000000-0000-0000-0054-000000000073},  !- Target Object
+  2;                                       !- Inlet Port
+
+OS:Connection,
+  {00000000-0000-0000-0014-000000000132},  !- Handle
+  {00000000-0000-0000-0054-000000000075},  !- Source Object
+  2,                                       !- Outlet Port
+  {00000000-0000-0000-0047-000000000194},  !- Target Object
+  2;                                       !- Inlet Port
+
+OS:Connection,
+  {00000000-0000-0000-0014-000000000133},  !- Handle
+  {00000000-0000-0000-0047-000000000194},  !- Source Object
+  3,                                       !- Outlet Port
+  {00000000-0000-0000-0004-000000000005},  !- Target Object
+  7;                                       !- Inlet Port
+
+OS:Connection,
+  {00000000-0000-0000-0014-000000000134},  !- Handle
+  {00000000-0000-0000-0005-000000000005},  !- Source Object
+  7,                                       !- Outlet Port
+  {00000000-0000-0000-0047-000000000083},  !- Target Object
+  2;                                       !- Inlet Port
+
+OS:Connection,
+  {00000000-0000-0000-0014-000000000135},  !- Handle
+  {00000000-0000-0000-0047-000000000083},  !- Source Object
+  3,                                       !- Outlet Port
+  {00000000-0000-0000-0006-000000000022},  !- Target Object
+  3;                                       !- Inlet Port
+
+OS:Connection,
+  {00000000-0000-0000-0014-000000000136},  !- Handle
+  {00000000-0000-0000-0006-000000000022},  !- Source Object
+  4,                                       !- Outlet Port
+  {00000000-0000-0000-0047-000000000084},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
@@ -7471,41 +7471,41 @@ OS:EnergyManagementSystem:Actuator,
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0033-000000000001},  !- Handle
   ems_sys_3_mixed_shr_none_sc_dx_sh_c_e_ssf_cv_zh_b_e_zc_none_srf_none__7_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {c80795f9-0376-4a66-925e-a0e0b00f4464}<23.9 && {c80795f9-0376-4a66-925e-a0e0b00f4464}>1.7, !- Program Line 1
-  SET {40770a8f-f2d8-4ca0-9f9b-d7adcd9f6c77} = 29.4, !- Program Line 2
-  SET {0fc71936-e2ee-4abd-8b0c-c4ef0be3383d} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {c80795f9-0376-4a66-925e-a0e0b00f4464}<23.9 && {c80795f9-0376-4a66-925e-a0e0b00f4464}>1.7, !- Program Line 4
-  SET {40770a8f-f2d8-4ca0-9f9b-d7adcd9f6c77} = 29.4, !- Program Line 5
-  SET {0fc71936-e2ee-4abd-8b0c-c4ef0be3383d} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {c80795f9-0376-4a66-925e-a0e0b00f4464}<23.9 && {c80795f9-0376-4a66-925e-a0e0b00f4464}>1.7, !- Program Line 7
-  SET {40770a8f-f2d8-4ca0-9f9b-d7adcd9f6c77} = 29.4, !- Program Line 8
-  SET {0fc71936-e2ee-4abd-8b0c-c4ef0be3383d} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {c80795f9-0376-4a66-925e-a0e0b00f4464}<23.9 && {c80795f9-0376-4a66-925e-a0e0b00f4464}>1.7, !- Program Line 10
-  SET {40770a8f-f2d8-4ca0-9f9b-d7adcd9f6c77} = 29.4, !- Program Line 11
-  SET {0fc71936-e2ee-4abd-8b0c-c4ef0be3383d} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {6953975b-dd97-4c5d-9027-c67f32ddd017}<23.9 && {6953975b-dd97-4c5d-9027-c67f32ddd017}>1.7, !- Program Line 1
+  SET {26234884-fbf1-4cd4-8a23-17e6671814b0} = 29.4, !- Program Line 2
+  SET {63ebea71-95a1-46a2-9c7d-eb1f563aebdd} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {6953975b-dd97-4c5d-9027-c67f32ddd017}<23.9 && {6953975b-dd97-4c5d-9027-c67f32ddd017}>1.7, !- Program Line 4
+  SET {26234884-fbf1-4cd4-8a23-17e6671814b0} = 29.4, !- Program Line 5
+  SET {63ebea71-95a1-46a2-9c7d-eb1f563aebdd} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {6953975b-dd97-4c5d-9027-c67f32ddd017}<23.9 && {6953975b-dd97-4c5d-9027-c67f32ddd017}>1.7, !- Program Line 7
+  SET {26234884-fbf1-4cd4-8a23-17e6671814b0} = 29.4, !- Program Line 8
+  SET {63ebea71-95a1-46a2-9c7d-eb1f563aebdd} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {6953975b-dd97-4c5d-9027-c67f32ddd017}<23.9 && {6953975b-dd97-4c5d-9027-c67f32ddd017}>1.7, !- Program Line 10
+  SET {26234884-fbf1-4cd4-8a23-17e6671814b0} = 29.4, !- Program Line 11
+  SET {63ebea71-95a1-46a2-9c7d-eb1f563aebdd} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {40770a8f-f2d8-4ca0-9f9b-d7adcd9f6c77} = NULL, !- Program Line 14
-  SET {0fc71936-e2ee-4abd-8b0c-c4ef0be3383d} = NULL, !- Program Line 15
+  SET {26234884-fbf1-4cd4-8a23-17e6671814b0} = NULL, !- Program Line 14
+  SET {63ebea71-95a1-46a2-9c7d-eb1f563aebdd} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0033-000000000002},  !- Handle
   ems_sys_3_mixed_shr_none_sc_dx_sh_c_e_ssf_cv_zh_b_e_zc_none_srf_none__9_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {a2ff0b58-09e9-414a-957b-56f93dbb23d2}<23.9 && {a2ff0b58-09e9-414a-957b-56f93dbb23d2}>1.7, !- Program Line 1
-  SET {feab39ca-0209-4d5f-9d9a-d0539e4ab9a8} = 29.4, !- Program Line 2
-  SET {788ba39b-d216-4358-b512-90d143f8f7d6} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {a2ff0b58-09e9-414a-957b-56f93dbb23d2}<23.9 && {a2ff0b58-09e9-414a-957b-56f93dbb23d2}>1.7, !- Program Line 4
-  SET {feab39ca-0209-4d5f-9d9a-d0539e4ab9a8} = 29.4, !- Program Line 5
-  SET {788ba39b-d216-4358-b512-90d143f8f7d6} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {a2ff0b58-09e9-414a-957b-56f93dbb23d2}<23.9 && {a2ff0b58-09e9-414a-957b-56f93dbb23d2}>1.7, !- Program Line 7
-  SET {feab39ca-0209-4d5f-9d9a-d0539e4ab9a8} = 29.4, !- Program Line 8
-  SET {788ba39b-d216-4358-b512-90d143f8f7d6} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {a2ff0b58-09e9-414a-957b-56f93dbb23d2}<23.9 && {a2ff0b58-09e9-414a-957b-56f93dbb23d2}>1.7, !- Program Line 10
-  SET {feab39ca-0209-4d5f-9d9a-d0539e4ab9a8} = 29.4, !- Program Line 11
-  SET {788ba39b-d216-4358-b512-90d143f8f7d6} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {d8455892-0ec8-4ecd-b920-0bb030aeaef2}<23.9 && {d8455892-0ec8-4ecd-b920-0bb030aeaef2}>1.7, !- Program Line 1
+  SET {4b921dd8-83dd-4aab-9459-eea66f69eb8f} = 29.4, !- Program Line 2
+  SET {6cf07748-4b65-4241-8740-a05128c6f6a8} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {d8455892-0ec8-4ecd-b920-0bb030aeaef2}<23.9 && {d8455892-0ec8-4ecd-b920-0bb030aeaef2}>1.7, !- Program Line 4
+  SET {4b921dd8-83dd-4aab-9459-eea66f69eb8f} = 29.4, !- Program Line 5
+  SET {6cf07748-4b65-4241-8740-a05128c6f6a8} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {d8455892-0ec8-4ecd-b920-0bb030aeaef2}<23.9 && {d8455892-0ec8-4ecd-b920-0bb030aeaef2}>1.7, !- Program Line 7
+  SET {4b921dd8-83dd-4aab-9459-eea66f69eb8f} = 29.4, !- Program Line 8
+  SET {6cf07748-4b65-4241-8740-a05128c6f6a8} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {d8455892-0ec8-4ecd-b920-0bb030aeaef2}<23.9 && {d8455892-0ec8-4ecd-b920-0bb030aeaef2}>1.7, !- Program Line 10
+  SET {4b921dd8-83dd-4aab-9459-eea66f69eb8f} = 29.4, !- Program Line 11
+  SET {6cf07748-4b65-4241-8740-a05128c6f6a8} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {feab39ca-0209-4d5f-9d9a-d0539e4ab9a8} = NULL, !- Program Line 14
-  SET {788ba39b-d216-4358-b512-90d143f8f7d6} = NULL, !- Program Line 15
+  SET {4b921dd8-83dd-4aab-9459-eea66f69eb8f} = NULL, !- Program Line 14
+  SET {6cf07748-4b65-4241-8740-a05128c6f6a8} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:ProgramCallingManager,
@@ -7828,8 +7828,8 @@ OS:Fan:ZoneExhaust,
   0.25,                                    !- Fan Total Efficiency
   125,                                     !- Pressure Rise {Pa}
   0.048768,                                !- Maximum Flow Rate {m3/s}
-  {00000000-0000-0000-0014-000000000099},  !- Air Inlet Node Name
-  {00000000-0000-0000-0014-000000000100},  !- Air Outlet Node Name
+  {00000000-0000-0000-0014-000000000093},  !- Air Inlet Node Name
+  {00000000-0000-0000-0014-000000000094},  !- Air Outlet Node Name
   General,                                 !- End-Use Subcategory
   ,                                        !- Flow Fraction Schedule Name
   Coupled;                                 !- System Availability Manager Coupling Mode
@@ -7841,8 +7841,8 @@ OS:Fan:ZoneExhaust,
   0.25,                                    !- Fan Total Efficiency
   125,                                     !- Pressure Rise {Pa}
   0.048768,                                !- Maximum Flow Rate {m3/s}
-  {00000000-0000-0000-0014-000000000108},  !- Air Inlet Node Name
-  {00000000-0000-0000-0014-000000000109},  !- Air Outlet Node Name
+  {00000000-0000-0000-0014-000000000102},  !- Air Inlet Node Name
+  {00000000-0000-0000-0014-000000000103},  !- Air Outlet Node Name
   General,                                 !- End-Use Subcategory
   ,                                        !- Flow Fraction Schedule Name
   Coupled;                                 !- System Availability Manager Coupling Mode
@@ -7854,8 +7854,8 @@ OS:Fan:ZoneExhaust,
   0.25,                                    !- Fan Total Efficiency
   125,                                     !- Pressure Rise {Pa}
   0.048768,                                !- Maximum Flow Rate {m3/s}
-  {00000000-0000-0000-0014-000000000117},  !- Air Inlet Node Name
-  {00000000-0000-0000-0014-000000000118},  !- Air Outlet Node Name
+  {00000000-0000-0000-0014-000000000111},  !- Air Inlet Node Name
+  {00000000-0000-0000-0014-000000000112},  !- Air Outlet Node Name
   General,                                 !- End-Use Subcategory
   ,                                        !- Flow Fraction Schedule Name
   Coupled;                                 !- System Availability Manager Coupling Mode
@@ -7867,8 +7867,8 @@ OS:Fan:ZoneExhaust,
   0.25,                                    !- Fan Total Efficiency
   125,                                     !- Pressure Rise {Pa}
   0.138684,                                !- Maximum Flow Rate {m3/s}
-  {00000000-0000-0000-0014-000000000126},  !- Air Inlet Node Name
-  {00000000-0000-0000-0014-000000000127},  !- Air Outlet Node Name
+  {00000000-0000-0000-0014-000000000120},  !- Air Inlet Node Name
+  {00000000-0000-0000-0014-000000000121},  !- Air Outlet Node Name
   General,                                 !- End-Use Subcategory
   ,                                        !- Flow Fraction Schedule Name
   Coupled;                                 !- System Availability Manager Coupling Mode
@@ -7880,8 +7880,8 @@ OS:Fan:ZoneExhaust,
   0.25,                                    !- Fan Total Efficiency
   125,                                     !- Pressure Rise {Pa}
   0.064008,                                !- Maximum Flow Rate {m3/s}
-  {00000000-0000-0000-0014-000000000135},  !- Air Inlet Node Name
-  {00000000-0000-0000-0014-000000000136},  !- Air Outlet Node Name
+  {00000000-0000-0000-0014-000000000129},  !- Air Inlet Node Name
+  {00000000-0000-0000-0014-000000000130},  !- Air Outlet Node Name
   General,                                 !- End-Use Subcategory
   ,                                        !- Flow Fraction Schedule Name
   Coupled;                                 !- System Availability Manager Coupling Mode
@@ -7893,8 +7893,8 @@ OS:Fan:ZoneExhaust,
   0.25,                                    !- Fan Total Efficiency
   125,                                     !- Pressure Rise {Pa}
   0,                                       !- Maximum Flow Rate {m3/s}
-  {00000000-0000-0000-0014-000000000074},  !- Air Inlet Node Name
-  {00000000-0000-0000-0014-000000000075},  !- Air Outlet Node Name
+  {00000000-0000-0000-0014-000000000068},  !- Air Inlet Node Name
+  {00000000-0000-0000-0014-000000000069},  !- Air Outlet Node Name
   General,                                 !- End-Use Subcategory
   ,                                        !- Flow Fraction Schedule Name
   Coupled;                                 !- System Availability Manager Coupling Mode
@@ -8955,14 +8955,14 @@ OS:Node,
 OS:Node,
   {00000000-0000-0000-0047-000000000041},  !- Handle
   Air Terminal Single Duct Constant Volume No Reheat 1 Inlet Air Node, !- Name
-  {00000000-0000-0000-0014-000000000070},  !- Inlet Port
-  {00000000-0000-0000-0014-000000000071};  !- Outlet Port
+  {00000000-0000-0000-0014-000000000073},  !- Inlet Port
+  {00000000-0000-0000-0014-000000000074};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0047-000000000042},  !- Handle
   Air Terminal Single Duct Constant Volume No Reheat 1 Outlet Air Node, !- Name
-  {00000000-0000-0000-0014-000000000072},  !- Inlet Port
-  {00000000-0000-0000-0014-000000000067};  !- Outlet Port
+  {00000000-0000-0000-0014-000000000075},  !- Inlet Port
+  {00000000-0000-0000-0014-000000000070};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0047-000000000043},  !- Handle
@@ -9087,14 +9087,14 @@ OS:Node,
 OS:Node,
   {00000000-0000-0000-0047-000000000063},  !- Handle
   Air Terminal Single Duct Constant Volume No Reheat 2 Inlet Air Node, !- Name
-  {00000000-0000-0000-0014-000000000095},  !- Inlet Port
-  {00000000-0000-0000-0014-000000000096};  !- Outlet Port
+  {00000000-0000-0000-0014-000000000098},  !- Inlet Port
+  {00000000-0000-0000-0014-000000000099};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0047-000000000064},  !- Handle
   Air Terminal Single Duct Constant Volume No Reheat 2 Outlet Air Node, !- Name
-  {00000000-0000-0000-0014-000000000097},  !- Inlet Port
-  {00000000-0000-0000-0014-000000000092};  !- Outlet Port
+  {00000000-0000-0000-0014-000000000100},  !- Inlet Port
+  {00000000-0000-0000-0014-000000000095};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0047-000000000065},  !- Handle
@@ -9171,50 +9171,50 @@ OS:Node,
 OS:Node,
   {00000000-0000-0000-0047-000000000077},  !- Handle
   Air Terminal Single Duct Constant Volume No Reheat 3 Inlet Air Node, !- Name
-  {00000000-0000-0000-0014-000000000104},  !- Inlet Port
-  {00000000-0000-0000-0014-000000000105};  !- Outlet Port
+  {00000000-0000-0000-0014-000000000107},  !- Inlet Port
+  {00000000-0000-0000-0014-000000000108};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0047-000000000078},  !- Handle
   Air Terminal Single Duct Constant Volume No Reheat 3 Outlet Air Node, !- Name
-  {00000000-0000-0000-0014-000000000106},  !- Inlet Port
-  {00000000-0000-0000-0014-000000000101};  !- Outlet Port
+  {00000000-0000-0000-0014-000000000109},  !- Inlet Port
+  {00000000-0000-0000-0014-000000000104};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0047-000000000079},  !- Handle
   Air Terminal Single Duct Constant Volume No Reheat 4 Inlet Air Node, !- Name
-  {00000000-0000-0000-0014-000000000113},  !- Inlet Port
-  {00000000-0000-0000-0014-000000000114};  !- Outlet Port
+  {00000000-0000-0000-0014-000000000116},  !- Inlet Port
+  {00000000-0000-0000-0014-000000000117};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0047-000000000080},  !- Handle
   Air Terminal Single Duct Constant Volume No Reheat 4 Outlet Air Node, !- Name
-  {00000000-0000-0000-0014-000000000115},  !- Inlet Port
-  {00000000-0000-0000-0014-000000000110};  !- Outlet Port
+  {00000000-0000-0000-0014-000000000118},  !- Inlet Port
+  {00000000-0000-0000-0014-000000000113};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0047-000000000081},  !- Handle
   Air Terminal Single Duct Constant Volume No Reheat 5 Inlet Air Node, !- Name
-  {00000000-0000-0000-0014-000000000122},  !- Inlet Port
-  {00000000-0000-0000-0014-000000000123};  !- Outlet Port
+  {00000000-0000-0000-0014-000000000125},  !- Inlet Port
+  {00000000-0000-0000-0014-000000000126};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0047-000000000082},  !- Handle
   Air Terminal Single Duct Constant Volume No Reheat 5 Outlet Air Node, !- Name
-  {00000000-0000-0000-0014-000000000124},  !- Inlet Port
-  {00000000-0000-0000-0014-000000000119};  !- Outlet Port
+  {00000000-0000-0000-0014-000000000127},  !- Inlet Port
+  {00000000-0000-0000-0014-000000000122};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0047-000000000083},  !- Handle
   Air Terminal Single Duct Constant Volume No Reheat 6 Inlet Air Node, !- Name
-  {00000000-0000-0000-0014-000000000131},  !- Inlet Port
-  {00000000-0000-0000-0014-000000000132};  !- Outlet Port
+  {00000000-0000-0000-0014-000000000134},  !- Inlet Port
+  {00000000-0000-0000-0014-000000000135};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0047-000000000084},  !- Handle
   Air Terminal Single Duct Constant Volume No Reheat 6 Outlet Air Node, !- Name
-  {00000000-0000-0000-0014-000000000133},  !- Inlet Port
-  {00000000-0000-0000-0014-000000000128};  !- Outlet Port
+  {00000000-0000-0000-0014-000000000136},  !- Inlet Port
+  {00000000-0000-0000-0014-000000000131};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0047-000000000085},  !- Handle
@@ -9741,80 +9741,80 @@ OS:Node,
 OS:Node,
   {00000000-0000-0000-0047-000000000172},  !- Handle
   Sys_4_zone_exhaust_fan 1 Inlet Air Node, !- Name
-  {00000000-0000-0000-0014-000000000098},  !- Inlet Port
-  {00000000-0000-0000-0014-000000000099};  !- Outlet Port
+  {00000000-0000-0000-0014-000000000092},  !- Inlet Port
+  {00000000-0000-0000-0014-000000000093};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0047-000000000173},  !- Handle
   Sys_4_zone_exhaust_fan 1 Outlet Air Node, !- Name
-  {00000000-0000-0000-0014-000000000100},  !- Inlet Port
+  {00000000-0000-0000-0014-000000000094},  !- Inlet Port
   ;                                        !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0047-000000000174},  !- Handle
   Sys_4_zone_exhaust_fan 2 Inlet Air Node, !- Name
-  {00000000-0000-0000-0014-000000000107},  !- Inlet Port
-  {00000000-0000-0000-0014-000000000108};  !- Outlet Port
+  {00000000-0000-0000-0014-000000000101},  !- Inlet Port
+  {00000000-0000-0000-0014-000000000102};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0047-000000000175},  !- Handle
   Sys_4_zone_exhaust_fan 2 Outlet Air Node, !- Name
-  {00000000-0000-0000-0014-000000000109},  !- Inlet Port
+  {00000000-0000-0000-0014-000000000103},  !- Inlet Port
   ;                                        !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0047-000000000176},  !- Handle
   Sys_4_zone_exhaust_fan 3 Inlet Air Node, !- Name
-  {00000000-0000-0000-0014-000000000116},  !- Inlet Port
-  {00000000-0000-0000-0014-000000000117};  !- Outlet Port
+  {00000000-0000-0000-0014-000000000110},  !- Inlet Port
+  {00000000-0000-0000-0014-000000000111};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0047-000000000177},  !- Handle
   Sys_4_zone_exhaust_fan 3 Outlet Air Node, !- Name
-  {00000000-0000-0000-0014-000000000118},  !- Inlet Port
+  {00000000-0000-0000-0014-000000000112},  !- Inlet Port
   ;                                        !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0047-000000000178},  !- Handle
   Sys_4_zone_exhaust_fan 4 Inlet Air Node, !- Name
-  {00000000-0000-0000-0014-000000000125},  !- Inlet Port
-  {00000000-0000-0000-0014-000000000126};  !- Outlet Port
+  {00000000-0000-0000-0014-000000000119},  !- Inlet Port
+  {00000000-0000-0000-0014-000000000120};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0047-000000000179},  !- Handle
   Sys_4_zone_exhaust_fan 4 Outlet Air Node, !- Name
-  {00000000-0000-0000-0014-000000000127},  !- Inlet Port
+  {00000000-0000-0000-0014-000000000121},  !- Inlet Port
   ;                                        !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0047-000000000180},  !- Handle
   Sys_4_zone_exhaust_fan 5 Inlet Air Node, !- Name
-  {00000000-0000-0000-0014-000000000134},  !- Inlet Port
-  {00000000-0000-0000-0014-000000000135};  !- Outlet Port
+  {00000000-0000-0000-0014-000000000128},  !- Inlet Port
+  {00000000-0000-0000-0014-000000000129};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0047-000000000181},  !- Handle
   Sys_4_zone_exhaust_fan 5 Outlet Air Node, !- Name
-  {00000000-0000-0000-0014-000000000136},  !- Inlet Port
+  {00000000-0000-0000-0014-000000000130},  !- Inlet Port
   ;                                        !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0047-000000000182},  !- Handle
   Sys_4_zone_exhaust_fan Inlet Air Node,   !- Name
-  {00000000-0000-0000-0014-000000000073},  !- Inlet Port
-  {00000000-0000-0000-0014-000000000074};  !- Outlet Port
+  {00000000-0000-0000-0014-000000000067},  !- Inlet Port
+  {00000000-0000-0000-0014-000000000068};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0047-000000000183},  !- Handle
   Sys_4_zone_exhaust_fan Outlet Air Node,  !- Name
-  {00000000-0000-0000-0014-000000000075},  !- Inlet Port
+  {00000000-0000-0000-0014-000000000069},  !- Inlet Port
   ;                                        !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0047-000000000184},  !- Handle
   WET_ST=Washroom-sch-D_FL=Building Story 1_SCHD Return Air Node, !- Name
-  {00000000-0000-0000-0014-000000000068},  !- Inlet Port
-  {00000000-0000-0000-0014-000000000069};  !- Outlet Port
+  {00000000-0000-0000-0014-000000000071},  !- Inlet Port
+  {00000000-0000-0000-0014-000000000072};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0047-000000000185},  !- Handle
@@ -9825,8 +9825,8 @@ OS:Node,
 OS:Node,
   {00000000-0000-0000-0047-000000000186},  !- Handle
   WILD_ST=Corr. >= 2.4m wide-sch-D_FL=Building Story 1_SCH=D 1 Return Air Node, !- Name
-  {00000000-0000-0000-0014-000000000102},  !- Inlet Port
-  {00000000-0000-0000-0014-000000000103};  !- Outlet Port
+  {00000000-0000-0000-0014-000000000105},  !- Inlet Port
+  {00000000-0000-0000-0014-000000000106};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0047-000000000187},  !- Handle
@@ -9837,8 +9837,8 @@ OS:Node,
 OS:Node,
   {00000000-0000-0000-0047-000000000188},  !- Handle
   WILD_ST=Corr. >= 2.4m wide-sch-D_FL=Building Story 1_SCH=D 2 Return Air Node, !- Name
-  {00000000-0000-0000-0014-000000000111},  !- Inlet Port
-  {00000000-0000-0000-0014-000000000112};  !- Outlet Port
+  {00000000-0000-0000-0014-000000000114},  !- Inlet Port
+  {00000000-0000-0000-0014-000000000115};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0047-000000000189},  !- Handle
@@ -9849,8 +9849,8 @@ OS:Node,
 OS:Node,
   {00000000-0000-0000-0047-000000000190},  !- Handle
   WILD_ST=Corr. >= 2.4m wide-sch-D_FL=Building Story 1_SCH=D 3 Return Air Node, !- Name
-  {00000000-0000-0000-0014-000000000120},  !- Inlet Port
-  {00000000-0000-0000-0014-000000000121};  !- Outlet Port
+  {00000000-0000-0000-0014-000000000123},  !- Inlet Port
+  {00000000-0000-0000-0014-000000000124};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0047-000000000191},  !- Handle
@@ -9861,8 +9861,8 @@ OS:Node,
 OS:Node,
   {00000000-0000-0000-0047-000000000192},  !- Handle
   WILD_ST=Corr. >= 2.4m wide-sch-D_FL=Building Story 1_SCH=D Return Air Node, !- Name
-  {00000000-0000-0000-0014-000000000093},  !- Inlet Port
-  {00000000-0000-0000-0014-000000000094};  !- Outlet Port
+  {00000000-0000-0000-0014-000000000096},  !- Inlet Port
+  {00000000-0000-0000-0014-000000000097};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0047-000000000193},  !- Handle
@@ -9873,8 +9873,8 @@ OS:Node,
 OS:Node,
   {00000000-0000-0000-0047-000000000194},  !- Handle
   WILD_ST=Electrical/Mechanical-sch-D_FL=Building Story 1_SCH=D Return Air Node, !- Name
-  {00000000-0000-0000-0014-000000000129},  !- Inlet Port
-  {00000000-0000-0000-0014-000000000130};  !- Outlet Port
+  {00000000-0000-0000-0014-000000000132},  !- Inlet Port
+  {00000000-0000-0000-0014-000000000133};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0047-000000000195},  !- Handle
@@ -10793,17 +10793,17 @@ OS:PlantLoop,
 OS:PortList,
   {00000000-0000-0000-0054-000000000001},  !- Handle
   {00000000-0000-0000-0088-000000000020},  !- HVAC Component
-  {00000000-0000-0000-0014-000000000067};  !- Port 1
+  {00000000-0000-0000-0014-000000000070};  !- Port 1
 
 OS:PortList,
   {00000000-0000-0000-0054-000000000002},  !- Handle
   {00000000-0000-0000-0088-000000000020},  !- HVAC Component
-  {00000000-0000-0000-0014-000000000073};  !- Port 1
+  {00000000-0000-0000-0014-000000000067};  !- Port 1
 
 OS:PortList,
   {00000000-0000-0000-0054-000000000003},  !- Handle
   {00000000-0000-0000-0088-000000000020},  !- HVAC Component
-  {00000000-0000-0000-0014-000000000068};  !- Port 1
+  {00000000-0000-0000-0014-000000000071};  !- Port 1
 
 OS:PortList,
   {00000000-0000-0000-0054-000000000004},  !- Handle
@@ -11074,77 +11074,77 @@ OS:PortList,
 OS:PortList,
   {00000000-0000-0000-0054-000000000061},  !- Handle
   {00000000-0000-0000-0088-000000000024},  !- HVAC Component
-  {00000000-0000-0000-0014-000000000092};  !- Port 1
+  {00000000-0000-0000-0014-000000000095};  !- Port 1
 
 OS:PortList,
   {00000000-0000-0000-0054-000000000062},  !- Handle
   {00000000-0000-0000-0088-000000000024},  !- HVAC Component
-  {00000000-0000-0000-0014-000000000098};  !- Port 1
+  {00000000-0000-0000-0014-000000000092};  !- Port 1
 
 OS:PortList,
   {00000000-0000-0000-0054-000000000063},  !- Handle
   {00000000-0000-0000-0088-000000000024},  !- HVAC Component
-  {00000000-0000-0000-0014-000000000093};  !- Port 1
+  {00000000-0000-0000-0014-000000000096};  !- Port 1
 
 OS:PortList,
   {00000000-0000-0000-0054-000000000064},  !- Handle
   {00000000-0000-0000-0088-000000000021},  !- HVAC Component
-  {00000000-0000-0000-0014-000000000101};  !- Port 1
+  {00000000-0000-0000-0014-000000000104};  !- Port 1
 
 OS:PortList,
   {00000000-0000-0000-0054-000000000065},  !- Handle
   {00000000-0000-0000-0088-000000000021},  !- HVAC Component
-  {00000000-0000-0000-0014-000000000107};  !- Port 1
+  {00000000-0000-0000-0014-000000000101};  !- Port 1
 
 OS:PortList,
   {00000000-0000-0000-0054-000000000066},  !- Handle
   {00000000-0000-0000-0088-000000000021},  !- HVAC Component
-  {00000000-0000-0000-0014-000000000102};  !- Port 1
+  {00000000-0000-0000-0014-000000000105};  !- Port 1
 
 OS:PortList,
   {00000000-0000-0000-0054-000000000067},  !- Handle
   {00000000-0000-0000-0088-000000000022},  !- HVAC Component
-  {00000000-0000-0000-0014-000000000110};  !- Port 1
+  {00000000-0000-0000-0014-000000000113};  !- Port 1
 
 OS:PortList,
   {00000000-0000-0000-0054-000000000068},  !- Handle
   {00000000-0000-0000-0088-000000000022},  !- HVAC Component
-  {00000000-0000-0000-0014-000000000116};  !- Port 1
+  {00000000-0000-0000-0014-000000000110};  !- Port 1
 
 OS:PortList,
   {00000000-0000-0000-0054-000000000069},  !- Handle
   {00000000-0000-0000-0088-000000000022},  !- HVAC Component
-  {00000000-0000-0000-0014-000000000111};  !- Port 1
+  {00000000-0000-0000-0014-000000000114};  !- Port 1
 
 OS:PortList,
   {00000000-0000-0000-0054-000000000070},  !- Handle
   {00000000-0000-0000-0088-000000000023},  !- HVAC Component
-  {00000000-0000-0000-0014-000000000119};  !- Port 1
+  {00000000-0000-0000-0014-000000000122};  !- Port 1
 
 OS:PortList,
   {00000000-0000-0000-0054-000000000071},  !- Handle
   {00000000-0000-0000-0088-000000000023},  !- HVAC Component
-  {00000000-0000-0000-0014-000000000125};  !- Port 1
+  {00000000-0000-0000-0014-000000000119};  !- Port 1
 
 OS:PortList,
   {00000000-0000-0000-0054-000000000072},  !- Handle
   {00000000-0000-0000-0088-000000000023},  !- HVAC Component
-  {00000000-0000-0000-0014-000000000120};  !- Port 1
+  {00000000-0000-0000-0014-000000000123};  !- Port 1
 
 OS:PortList,
   {00000000-0000-0000-0054-000000000073},  !- Handle
   {00000000-0000-0000-0088-000000000025},  !- HVAC Component
-  {00000000-0000-0000-0014-000000000128};  !- Port 1
+  {00000000-0000-0000-0014-000000000131};  !- Port 1
 
 OS:PortList,
   {00000000-0000-0000-0054-000000000074},  !- Handle
   {00000000-0000-0000-0088-000000000025},  !- HVAC Component
-  {00000000-0000-0000-0014-000000000134};  !- Port 1
+  {00000000-0000-0000-0014-000000000128};  !- Port 1
 
 OS:PortList,
   {00000000-0000-0000-0054-000000000075},  !- Handle
   {00000000-0000-0000-0088-000000000025},  !- HVAC Component
-  {00000000-0000-0000-0014-000000000129};  !- Port 1
+  {00000000-0000-0000-0014-000000000132};  !- Port 1
 
 OS:Pump:ConstantSpeed,
   {00000000-0000-0000-0055-000000000001},  !- Handle
@@ -16828,7 +16828,7 @@ OS:SetpointManager:Scheduled,
   {00000000-0000-0000-0063-000000000001},  !- Handle
   Service hot water setpoint manager,      !- Name
   Temperature,                             !- Control Variable
-  {00000000-0000-0000-0061-000000000035},  !- Schedule Name
+  {00000000-0000-0000-0061-000000000034},  !- Schedule Name
   {00000000-0000-0000-0047-000000000141};  !- Setpoint Node or NodeList Name
 
 OS:SetpointManager:SingleZone:Reheat,
@@ -16868,7 +16868,7 @@ OS:SetpointManager:SingleZone:Reheat,
   Setpoint Manager Single Zone Reheat 2,   !- Name
   13,                                      !- Minimum Supply Air Temperature {C}
   43,                                      !- Maximum Supply Air Temperature {C}
-  {00000000-0000-0000-0088-000000000024},  !- Control Zone Name
+  {00000000-0000-0000-0088-000000000021},  !- Control Zone Name
   {00000000-0000-0000-0047-000000000272};  !- Setpoint Node or NodeList Name
 
 OS:SetpointManager:SingleZone:Reheat,
@@ -17781,7 +17781,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0076-000000000007},  !- Handle
@@ -17816,7 +17823,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0076-000000000008},  !- Handle
@@ -18019,7 +18033,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0076-000000000013},  !- Handle
@@ -18096,7 +18117,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0076-000000000015},  !- Handle
@@ -18131,7 +18159,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0076-000000000016},  !- Handle
@@ -18166,7 +18201,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0076-000000000017},  !- Handle
@@ -18201,256 +18243,18 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0076-000000000018},  !- Handle
   {00000000-0000-0000-0088-000000000002},  !- Zone or ZoneList Name
-  TemperatureDifference,                   !- Zone Cooling Design Supply Air Temperature Input Method
-  14,                                      !- Zone Cooling Design Supply Air Temperature {C}
-  11,                                      !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
-  TemperatureDifference,                   !- Zone Heating Design Supply Air Temperature Input Method
-  40,                                      !- Zone Heating Design Supply Air Temperature {C}
-  21,                                      !- Zone Heating Design Supply Air Temperature Difference {deltaC}
-  0.0085,                                  !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  0.008,                                   !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  1.3,                                     !- Zone Heating Sizing Factor
-  1.1,                                     !- Zone Cooling Sizing Factor
-  DesignDay,                               !- Cooling Design Air Flow Method
-  ,                                        !- Cooling Design Air Flow Rate {m3/s}
-  ,                                        !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Cooling Minimum Air Flow {m3/s}
-  ,                                        !- Cooling Minimum Air Flow Fraction
-  DesignDay,                               !- Heating Design Air Flow Method
-  ,                                        !- Heating Design Air Flow Rate {m3/s}
-  ,                                        !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Heating Maximum Air Flow {m3/s}
-  ,                                        !- Heating Maximum Air Flow Fraction
-  No,                                      !- Account for Dedicated Outdoor Air System
-  NeutralSupplyAir,                        !- Dedicated Outdoor Air System Control Strategy
-  autosize,                                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-  autosize,                                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
-  Sensible Load Only No Latent Load,       !- Zone Load Sizing Method
-  HumidityRatioDifference,                 !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-  HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-
-OS:Sizing:Zone,
-  {00000000-0000-0000-0076-000000000019},  !- Handle
-  {00000000-0000-0000-0088-000000000003},  !- Zone or ZoneList Name
-  TemperatureDifference,                   !- Zone Cooling Design Supply Air Temperature Input Method
-  14,                                      !- Zone Cooling Design Supply Air Temperature {C}
-  11,                                      !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
-  TemperatureDifference,                   !- Zone Heating Design Supply Air Temperature Input Method
-  40,                                      !- Zone Heating Design Supply Air Temperature {C}
-  21,                                      !- Zone Heating Design Supply Air Temperature Difference {deltaC}
-  0.0085,                                  !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  0.008,                                   !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  1.3,                                     !- Zone Heating Sizing Factor
-  1.1,                                     !- Zone Cooling Sizing Factor
-  DesignDay,                               !- Cooling Design Air Flow Method
-  ,                                        !- Cooling Design Air Flow Rate {m3/s}
-  ,                                        !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Cooling Minimum Air Flow {m3/s}
-  ,                                        !- Cooling Minimum Air Flow Fraction
-  DesignDay,                               !- Heating Design Air Flow Method
-  ,                                        !- Heating Design Air Flow Rate {m3/s}
-  ,                                        !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Heating Maximum Air Flow {m3/s}
-  ,                                        !- Heating Maximum Air Flow Fraction
-  No,                                      !- Account for Dedicated Outdoor Air System
-  NeutralSupplyAir,                        !- Dedicated Outdoor Air System Control Strategy
-  autosize,                                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-  autosize,                                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
-  Sensible Load Only No Latent Load,       !- Zone Load Sizing Method
-  HumidityRatioDifference,                 !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-  HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-
-OS:Sizing:Zone,
-  {00000000-0000-0000-0076-000000000020},  !- Handle
-  {00000000-0000-0000-0088-000000000004},  !- Zone or ZoneList Name
-  TemperatureDifference,                   !- Zone Cooling Design Supply Air Temperature Input Method
-  14,                                      !- Zone Cooling Design Supply Air Temperature {C}
-  11,                                      !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
-  TemperatureDifference,                   !- Zone Heating Design Supply Air Temperature Input Method
-  40,                                      !- Zone Heating Design Supply Air Temperature {C}
-  21,                                      !- Zone Heating Design Supply Air Temperature Difference {deltaC}
-  0.0085,                                  !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  0.008,                                   !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  1.3,                                     !- Zone Heating Sizing Factor
-  1.1,                                     !- Zone Cooling Sizing Factor
-  DesignDay,                               !- Cooling Design Air Flow Method
-  ,                                        !- Cooling Design Air Flow Rate {m3/s}
-  ,                                        !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Cooling Minimum Air Flow {m3/s}
-  ,                                        !- Cooling Minimum Air Flow Fraction
-  DesignDay,                               !- Heating Design Air Flow Method
-  ,                                        !- Heating Design Air Flow Rate {m3/s}
-  ,                                        !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Heating Maximum Air Flow {m3/s}
-  ,                                        !- Heating Maximum Air Flow Fraction
-  No,                                      !- Account for Dedicated Outdoor Air System
-  NeutralSupplyAir,                        !- Dedicated Outdoor Air System Control Strategy
-  autosize,                                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-  autosize,                                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
-  Sensible Load Only No Latent Load,       !- Zone Load Sizing Method
-  HumidityRatioDifference,                 !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-  HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-
-OS:Sizing:Zone,
-  {00000000-0000-0000-0076-000000000021},  !- Handle
-  {00000000-0000-0000-0088-000000000024},  !- Zone or ZoneList Name
-  TemperatureDifference,                   !- Zone Cooling Design Supply Air Temperature Input Method
-  14,                                      !- Zone Cooling Design Supply Air Temperature {C}
-  11,                                      !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
-  TemperatureDifference,                   !- Zone Heating Design Supply Air Temperature Input Method
-  40,                                      !- Zone Heating Design Supply Air Temperature {C}
-  21,                                      !- Zone Heating Design Supply Air Temperature Difference {deltaC}
-  0.0085,                                  !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  0.008,                                   !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  1.3,                                     !- Zone Heating Sizing Factor
-  1.1,                                     !- Zone Cooling Sizing Factor
-  DesignDay,                               !- Cooling Design Air Flow Method
-  ,                                        !- Cooling Design Air Flow Rate {m3/s}
-  ,                                        !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Cooling Minimum Air Flow {m3/s}
-  ,                                        !- Cooling Minimum Air Flow Fraction
-  DesignDay,                               !- Heating Design Air Flow Method
-  ,                                        !- Heating Design Air Flow Rate {m3/s}
-  ,                                        !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Heating Maximum Air Flow {m3/s}
-  ,                                        !- Heating Maximum Air Flow Fraction
-  No,                                      !- Account for Dedicated Outdoor Air System
-  NeutralSupplyAir,                        !- Dedicated Outdoor Air System Control Strategy
-  autosize,                                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-  autosize,                                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
-  Sensible Load Only No Latent Load,       !- Zone Load Sizing Method
-  HumidityRatioDifference,                 !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-  HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-
-OS:Sizing:Zone,
-  {00000000-0000-0000-0076-000000000022},  !- Handle
-  {00000000-0000-0000-0088-000000000021},  !- Zone or ZoneList Name
-  TemperatureDifference,                   !- Zone Cooling Design Supply Air Temperature Input Method
-  14,                                      !- Zone Cooling Design Supply Air Temperature {C}
-  11,                                      !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
-  TemperatureDifference,                   !- Zone Heating Design Supply Air Temperature Input Method
-  40,                                      !- Zone Heating Design Supply Air Temperature {C}
-  21,                                      !- Zone Heating Design Supply Air Temperature Difference {deltaC}
-  0.0085,                                  !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  0.008,                                   !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  1.3,                                     !- Zone Heating Sizing Factor
-  1.1,                                     !- Zone Cooling Sizing Factor
-  DesignDay,                               !- Cooling Design Air Flow Method
-  ,                                        !- Cooling Design Air Flow Rate {m3/s}
-  ,                                        !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Cooling Minimum Air Flow {m3/s}
-  ,                                        !- Cooling Minimum Air Flow Fraction
-  DesignDay,                               !- Heating Design Air Flow Method
-  ,                                        !- Heating Design Air Flow Rate {m3/s}
-  ,                                        !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Heating Maximum Air Flow {m3/s}
-  ,                                        !- Heating Maximum Air Flow Fraction
-  No,                                      !- Account for Dedicated Outdoor Air System
-  NeutralSupplyAir,                        !- Dedicated Outdoor Air System Control Strategy
-  autosize,                                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-  autosize,                                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
-  Sensible Load Only No Latent Load,       !- Zone Load Sizing Method
-  HumidityRatioDifference,                 !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-  HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-
-OS:Sizing:Zone,
-  {00000000-0000-0000-0076-000000000023},  !- Handle
-  {00000000-0000-0000-0088-000000000022},  !- Zone or ZoneList Name
-  TemperatureDifference,                   !- Zone Cooling Design Supply Air Temperature Input Method
-  14,                                      !- Zone Cooling Design Supply Air Temperature {C}
-  11,                                      !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
-  TemperatureDifference,                   !- Zone Heating Design Supply Air Temperature Input Method
-  40,                                      !- Zone Heating Design Supply Air Temperature {C}
-  21,                                      !- Zone Heating Design Supply Air Temperature Difference {deltaC}
-  0.0085,                                  !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  0.008,                                   !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  1.3,                                     !- Zone Heating Sizing Factor
-  1.1,                                     !- Zone Cooling Sizing Factor
-  DesignDay,                               !- Cooling Design Air Flow Method
-  ,                                        !- Cooling Design Air Flow Rate {m3/s}
-  ,                                        !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Cooling Minimum Air Flow {m3/s}
-  ,                                        !- Cooling Minimum Air Flow Fraction
-  DesignDay,                               !- Heating Design Air Flow Method
-  ,                                        !- Heating Design Air Flow Rate {m3/s}
-  ,                                        !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Heating Maximum Air Flow {m3/s}
-  ,                                        !- Heating Maximum Air Flow Fraction
-  No,                                      !- Account for Dedicated Outdoor Air System
-  NeutralSupplyAir,                        !- Dedicated Outdoor Air System Control Strategy
-  autosize,                                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-  autosize,                                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
-  Sensible Load Only No Latent Load,       !- Zone Load Sizing Method
-  HumidityRatioDifference,                 !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-  HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-
-OS:Sizing:Zone,
-  {00000000-0000-0000-0076-000000000024},  !- Handle
-  {00000000-0000-0000-0088-000000000023},  !- Zone or ZoneList Name
-  TemperatureDifference,                   !- Zone Cooling Design Supply Air Temperature Input Method
-  14,                                      !- Zone Cooling Design Supply Air Temperature {C}
-  11,                                      !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
-  TemperatureDifference,                   !- Zone Heating Design Supply Air Temperature Input Method
-  40,                                      !- Zone Heating Design Supply Air Temperature {C}
-  21,                                      !- Zone Heating Design Supply Air Temperature Difference {deltaC}
-  0.0085,                                  !- Zone Cooling Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  0.008,                                   !- Zone Heating Design Supply Air Humidity Ratio {kg-H2O/kg-air}
-  1.3,                                     !- Zone Heating Sizing Factor
-  1.1,                                     !- Zone Cooling Sizing Factor
-  DesignDay,                               !- Cooling Design Air Flow Method
-  ,                                        !- Cooling Design Air Flow Rate {m3/s}
-  ,                                        !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Cooling Minimum Air Flow {m3/s}
-  ,                                        !- Cooling Minimum Air Flow Fraction
-  DesignDay,                               !- Heating Design Air Flow Method
-  ,                                        !- Heating Design Air Flow Rate {m3/s}
-  ,                                        !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
-  ,                                        !- Heating Maximum Air Flow {m3/s}
-  ,                                        !- Heating Maximum Air Flow Fraction
-  No,                                      !- Account for Dedicated Outdoor Air System
-  NeutralSupplyAir,                        !- Dedicated Outdoor Air System Control Strategy
-  autosize,                                !- Dedicated Outdoor Air Low Setpoint Temperature for Design {C}
-  autosize,                                !- Dedicated Outdoor Air High Setpoint Temperature for Design {C}
-  Sensible Load Only No Latent Load,       !- Zone Load Sizing Method
-  HumidityRatioDifference,                 !- Zone Latent Cooling Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Dehumidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-  HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
-  ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
-
-OS:Sizing:Zone,
-  {00000000-0000-0000-0076-000000000025},  !- Handle
-  {00000000-0000-0000-0088-000000000025},  !- Zone or ZoneList Name
   TemperatureDifference,                   !- Zone Cooling Design Supply Air Temperature Input Method
   14,                                      !- Zone Cooling Design Supply Air Temperature {C}
   11,                                      !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
@@ -24418,362 +24222,362 @@ OS:ThermostatSetpoint:DualSetpoint,
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000025},  !- Handle
   Space Function Classroom/lecture/training Thermostat 31, !- Name
-  {00000000-0000-0000-0061-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000026},  !- Handle
   Space Function Classroom/lecture/training Thermostat 32, !- Name
-  {00000000-0000-0000-0061-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000027},  !- Handle
   Space Function Classroom/lecture/training Thermostat 33, !- Name
-  {00000000-0000-0000-0061-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000028},  !- Handle
   Space Function Classroom/lecture/training Thermostat 34, !- Name
-  {00000000-0000-0000-0061-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000029},  !- Handle
   Space Function Classroom/lecture/training Thermostat 35, !- Name
-  {00000000-0000-0000-0061-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000030},  !- Handle
   Space Function Classroom/lecture/training Thermostat 36, !- Name
-  {00000000-0000-0000-0061-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000031},  !- Handle
   Space Function Classroom/lecture/training Thermostat 37, !- Name
-  {00000000-0000-0000-0061-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000032},  !- Handle
   Space Function Classroom/lecture/training Thermostat 38, !- Name
-  {00000000-0000-0000-0061-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000033},  !- Handle
   Space Function Classroom/lecture/training Thermostat 39, !- Name
-  {00000000-0000-0000-0061-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000034},  !- Handle
   Space Function Classroom/lecture/training Thermostat 4, !- Name
-  {00000000-0000-0000-0061-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000035},  !- Handle
   Space Function Classroom/lecture/training Thermostat 5, !- Name
-  {00000000-0000-0000-0061-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000036},  !- Handle
   Space Function Classroom/lecture/training Thermostat 6, !- Name
-  {00000000-0000-0000-0061-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000037},  !- Handle
   Space Function Classroom/lecture/training Thermostat 7, !- Name
-  {00000000-0000-0000-0061-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000038},  !- Handle
   Space Function Classroom/lecture/training Thermostat 8, !- Name
-  {00000000-0000-0000-0061-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000039},  !- Handle
   Space Function Classroom/lecture/training Thermostat 9, !- Name
-  {00000000-0000-0000-0061-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000040},  !- Handle
   Space Function Classroom/lecture/training Thermostat, !- Name
-  {00000000-0000-0000-0061-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000041},  !- Handle
   Space Function Conf./meet./multi-purpose Thermostat 1, !- Name
-  {00000000-0000-0000-0061-000000000026},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000025};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000025},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000024};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000042},  !- Handle
   Space Function Conf./meet./multi-purpose Thermostat 2, !- Name
-  {00000000-0000-0000-0061-000000000026},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000025};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000025},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000024};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000043},  !- Handle
   Space Function Conf./meet./multi-purpose Thermostat 3, !- Name
-  {00000000-0000-0000-0061-000000000026},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000025};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000025},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000024};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000044},  !- Handle
   Space Function Conf./meet./multi-purpose Thermostat, !- Name
-  {00000000-0000-0000-0061-000000000026},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000025};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000025},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000024};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000045},  !- Handle
   Space Function Corr. >= 2.4m wide-sch-D Thermostat 1, !- Name
-  {00000000-0000-0000-0061-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000046},  !- Handle
   Space Function Corr. >= 2.4m wide-sch-D Thermostat 10, !- Name
-  {00000000-0000-0000-0061-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000047},  !- Handle
   Space Function Corr. >= 2.4m wide-sch-D Thermostat 11, !- Name
-  {00000000-0000-0000-0061-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000048},  !- Handle
   Space Function Corr. >= 2.4m wide-sch-D Thermostat 12, !- Name
-  {00000000-0000-0000-0061-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000049},  !- Handle
   Space Function Corr. >= 2.4m wide-sch-D Thermostat 2, !- Name
-  {00000000-0000-0000-0061-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000050},  !- Handle
   Space Function Corr. >= 2.4m wide-sch-D Thermostat 3, !- Name
-  {00000000-0000-0000-0061-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000051},  !- Handle
   Space Function Corr. >= 2.4m wide-sch-D Thermostat 4, !- Name
-  {00000000-0000-0000-0061-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000052},  !- Handle
   Space Function Corr. >= 2.4m wide-sch-D Thermostat 5, !- Name
-  {00000000-0000-0000-0061-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000053},  !- Handle
   Space Function Corr. >= 2.4m wide-sch-D Thermostat 6, !- Name
-  {00000000-0000-0000-0061-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000054},  !- Handle
   Space Function Corr. >= 2.4m wide-sch-D Thermostat 7, !- Name
-  {00000000-0000-0000-0061-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000055},  !- Handle
   Space Function Corr. >= 2.4m wide-sch-D Thermostat 8, !- Name
-  {00000000-0000-0000-0061-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000056},  !- Handle
   Space Function Corr. >= 2.4m wide-sch-D Thermostat 9, !- Name
-  {00000000-0000-0000-0061-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000057},  !- Handle
   Space Function Corr. >= 2.4m wide-sch-D Thermostat, !- Name
-  {00000000-0000-0000-0061-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000058},  !- Handle
   Space Function Electrical/Mechanical-sch-D Thermostat 1, !- Name
-  {00000000-0000-0000-0061-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000059},  !- Handle
   Space Function Electrical/Mechanical-sch-D Thermostat 2, !- Name
-  {00000000-0000-0000-0061-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000060},  !- Handle
   Space Function Electrical/Mechanical-sch-D Thermostat 3, !- Name
-  {00000000-0000-0000-0061-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000061},  !- Handle
   Space Function Electrical/Mechanical-sch-D Thermostat, !- Name
-  {00000000-0000-0000-0061-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000062},  !- Handle
   Space Function Food preparation Thermostat 1, !- Name
-  {00000000-0000-0000-0061-000000000020},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000019};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000019},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000018};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000063},  !- Handle
   Space Function Food preparation Thermostat 2, !- Name
-  {00000000-0000-0000-0061-000000000020},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000019};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000019},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000018};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000064},  !- Handle
   Space Function Food preparation Thermostat 3, !- Name
-  {00000000-0000-0000-0061-000000000020},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000019};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000019},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000018};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000065},  !- Handle
   Space Function Food preparation Thermostat, !- Name
-  {00000000-0000-0000-0061-000000000020},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000019};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000019},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000018};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000066},  !- Handle
   Space Function Gym - play Thermostat 1,  !- Name
-  {00000000-0000-0000-0061-000000000020},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000019};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000019},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000018};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000067},  !- Handle
   Space Function Gym - play Thermostat 2,  !- Name
-  {00000000-0000-0000-0061-000000000020},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000019};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000019},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000018};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000068},  !- Handle
   Space Function Gym - play Thermostat 3,  !- Name
-  {00000000-0000-0000-0061-000000000020},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000019};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000019},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000018};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000069},  !- Handle
   Space Function Gym - play Thermostat,    !- Name
-  {00000000-0000-0000-0061-000000000020},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000019};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000019},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000018};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000070},  !- Handle
   Space Function Library - reading Thermostat 1, !- Name
-  {00000000-0000-0000-0061-000000000026},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000025};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000025},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000024};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000071},  !- Handle
   Space Function Library - reading Thermostat 2, !- Name
-  {00000000-0000-0000-0061-000000000026},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000025};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000025},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000024};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000072},  !- Handle
   Space Function Library - reading Thermostat 3, !- Name
-  {00000000-0000-0000-0061-000000000026},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000025};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000025},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000024};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000073},  !- Handle
   Space Function Library - reading Thermostat, !- Name
-  {00000000-0000-0000-0061-000000000026},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000025};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000025},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000024};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000074},  !- Handle
   Space Function Lobby - other Thermostat 1, !- Name
-  {00000000-0000-0000-0061-000000000026},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000025};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000025},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000024};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000075},  !- Handle
   Space Function Lobby - other Thermostat 2, !- Name
-  {00000000-0000-0000-0061-000000000026},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000025};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000025},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000024};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000076},  !- Handle
   Space Function Lobby - other Thermostat 3, !- Name
-  {00000000-0000-0000-0061-000000000026},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000025};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000025},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000024};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000077},  !- Handle
   Space Function Lobby - other Thermostat, !- Name
-  {00000000-0000-0000-0061-000000000026},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000025};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000025},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000024};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000078},  !- Handle
   Space Function Office - enclosed Thermostat 1, !- Name
-  {00000000-0000-0000-0061-000000000013},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000012};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000012},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000011};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000079},  !- Handle
   Space Function Office - enclosed Thermostat 2, !- Name
-  {00000000-0000-0000-0061-000000000013},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000012};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000012},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000011};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000080},  !- Handle
   Space Function Office - enclosed Thermostat 3, !- Name
-  {00000000-0000-0000-0061-000000000013},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000012};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000012},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000011};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000081},  !- Handle
   Space Function Office - enclosed Thermostat, !- Name
-  {00000000-0000-0000-0061-000000000013},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000012};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000012},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000011};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000082},  !- Handle
   Space Function Washroom-sch-D Thermostat 1, !- Name
-  {00000000-0000-0000-0061-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000083},  !- Handle
   Space Function Washroom-sch-D Thermostat 2, !- Name
-  {00000000-0000-0000-0061-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000084},  !- Handle
   Space Function Washroom-sch-D Thermostat 3, !- Name
-  {00000000-0000-0000-0061-000000000032},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0061-000000000031};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000031},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0061-000000000030};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0089-000000000085},  !- Handle
@@ -25597,7 +25401,23 @@ OS:ZoneHVAC:EquipmentList,
   ALL_ST=Classroom/lecture/training_FL=Building Story 1_SCH=D 1 Zone HVAC Equipment List, !- Name
   {00000000-0000-0000-0088-000000000001},  !- Thermal Zone
   ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0006-000000000004},  !- Zone Equipment 1
+  {00000000-0000-0000-0100-000000000004},  !- Zone Equipment 1
+  1,                                       !- Zone Equipment Cooling Sequence 1
+  1,                                       !- Zone Equipment Heating or No-Load Sequence 1
+  ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
+  ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
+  {00000000-0000-0000-0006-000000000004},  !- Zone Equipment 2
+  2,                                       !- Zone Equipment Cooling Sequence 2
+  2,                                       !- Zone Equipment Heating or No-Load Sequence 2
+  ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
+  ;                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 2
+
+OS:ZoneHVAC:EquipmentList,
+  {00000000-0000-0000-0101-000000000002},  !- Handle
+  ALL_ST=Classroom/lecture/training_FL=Building Story 1_SCH=D 10 Zone HVAC Equipment List, !- Name
+  {00000000-0000-0000-0088-000000000002},  !- Thermal Zone
+  ,                                        !- Load Distribution Scheme
+  {00000000-0000-0000-0100-000000000013},  !- Zone Equipment 1
   1,                                       !- Zone Equipment Cooling Sequence 1
   1,                                       !- Zone Equipment Heating or No-Load Sequence 1
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
@@ -25609,27 +25429,43 @@ OS:ZoneHVAC:EquipmentList,
   ;                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 2
 
 OS:ZoneHVAC:EquipmentList,
-  {00000000-0000-0000-0101-000000000002},  !- Handle
-  ALL_ST=Classroom/lecture/training_FL=Building Story 1_SCH=D 10 Zone HVAC Equipment List, !- Name
-  {00000000-0000-0000-0088-000000000002},  !- Thermal Zone
+  {00000000-0000-0000-0101-000000000003},  !- Handle
+  ALL_ST=Classroom/lecture/training_FL=Building Story 1_SCH=D 11 Zone HVAC Equipment List, !- Name
+  {00000000-0000-0000-0088-000000000003},  !- Thermal Zone
   ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0006-000000000013},  !- Zone Equipment 1
+  {00000000-0000-0000-0100-000000000014},  !- Zone Equipment 1
   1,                                       !- Zone Equipment Cooling Sequence 1
   1,                                       !- Zone Equipment Heating or No-Load Sequence 1
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
   ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
-  {00000000-0000-0000-0100-000000000013},  !- Zone Equipment 2
+  {00000000-0000-0000-0006-000000000014},  !- Zone Equipment 2
   2,                                       !- Zone Equipment Cooling Sequence 2
   2,                                       !- Zone Equipment Heating or No-Load Sequence 2
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
   ;                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 2
 
 OS:ZoneHVAC:EquipmentList,
-  {00000000-0000-0000-0101-000000000003},  !- Handle
-  ALL_ST=Classroom/lecture/training_FL=Building Story 1_SCH=D 11 Zone HVAC Equipment List, !- Name
-  {00000000-0000-0000-0088-000000000003},  !- Thermal Zone
+  {00000000-0000-0000-0101-000000000004},  !- Handle
+  ALL_ST=Classroom/lecture/training_FL=Building Story 1_SCH=D 12 Zone HVAC Equipment List, !- Name
+  {00000000-0000-0000-0088-000000000004},  !- Thermal Zone
   ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0006-000000000014},  !- Zone Equipment 1
+  {00000000-0000-0000-0100-000000000006},  !- Zone Equipment 1
+  1,                                       !- Zone Equipment Cooling Sequence 1
+  1,                                       !- Zone Equipment Heating or No-Load Sequence 1
+  ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
+  ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
+  {00000000-0000-0000-0006-000000000006},  !- Zone Equipment 2
+  2,                                       !- Zone Equipment Cooling Sequence 2
+  2,                                       !- Zone Equipment Heating or No-Load Sequence 2
+  ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
+  ;                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 2
+
+OS:ZoneHVAC:EquipmentList,
+  {00000000-0000-0000-0101-000000000005},  !- Handle
+  ALL_ST=Classroom/lecture/training_FL=Building Story 1_SCH=D 2 Zone HVAC Equipment List, !- Name
+  {00000000-0000-0000-0088-000000000005},  !- Thermal Zone
+  ,                                        !- Load Distribution Scheme
+  {00000000-0000-0000-0100-000000000002},  !- Zone Equipment 1
   1,                                       !- Zone Equipment Cooling Sequence 1
   1,                                       !- Zone Equipment Heating or No-Load Sequence 1
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
@@ -25641,25 +25477,41 @@ OS:ZoneHVAC:EquipmentList,
   ;                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 2
 
 OS:ZoneHVAC:EquipmentList,
-  {00000000-0000-0000-0101-000000000004},  !- Handle
-  ALL_ST=Classroom/lecture/training_FL=Building Story 1_SCH=D 12 Zone HVAC Equipment List, !- Name
-  {00000000-0000-0000-0088-000000000004},  !- Thermal Zone
+  {00000000-0000-0000-0101-000000000006},  !- Handle
+  ALL_ST=Classroom/lecture/training_FL=Building Story 1_SCH=D 3 Zone HVAC Equipment List, !- Name
+  {00000000-0000-0000-0088-000000000006},  !- Thermal Zone
   ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0006-000000000006},  !- Zone Equipment 1
+  {00000000-0000-0000-0100-000000000005},  !- Zone Equipment 1
   1,                                       !- Zone Equipment Cooling Sequence 1
   1,                                       !- Zone Equipment Heating or No-Load Sequence 1
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
   ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
-  {00000000-0000-0000-0100-000000000006},  !- Zone Equipment 2
+  {00000000-0000-0000-0006-000000000005},  !- Zone Equipment 2
   2,                                       !- Zone Equipment Cooling Sequence 2
   2,                                       !- Zone Equipment Heating or No-Load Sequence 2
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
   ;                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 2
 
 OS:ZoneHVAC:EquipmentList,
-  {00000000-0000-0000-0101-000000000005},  !- Handle
-  ALL_ST=Classroom/lecture/training_FL=Building Story 1_SCH=D 2 Zone HVAC Equipment List, !- Name
-  {00000000-0000-0000-0088-000000000005},  !- Thermal Zone
+  {00000000-0000-0000-0101-000000000007},  !- Handle
+  ALL_ST=Classroom/lecture/training_FL=Building Story 1_SCH=D 4 Zone HVAC Equipment List, !- Name
+  {00000000-0000-0000-0088-000000000007},  !- Thermal Zone
+  ,                                        !- Load Distribution Scheme
+  {00000000-0000-0000-0100-000000000003},  !- Zone Equipment 1
+  1,                                       !- Zone Equipment Cooling Sequence 1
+  1,                                       !- Zone Equipment Heating or No-Load Sequence 1
+  ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
+  ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
+  {00000000-0000-0000-0006-000000000003},  !- Zone Equipment 2
+  2,                                       !- Zone Equipment Cooling Sequence 2
+  2,                                       !- Zone Equipment Heating or No-Load Sequence 2
+  ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
+  ;                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 2
+
+OS:ZoneHVAC:EquipmentList,
+  {00000000-0000-0000-0101-000000000008},  !- Handle
+  ALL_ST=Classroom/lecture/training_FL=Building Story 1_SCH=D 5 Zone HVAC Equipment List, !- Name
+  {00000000-0000-0000-0088-000000000008},  !- Thermal Zone
   ,                                        !- Load Distribution Scheme
   {00000000-0000-0000-0100-000000000010},  !- Zone Equipment 1
   1,                                       !- Zone Equipment Cooling Sequence 1
@@ -25673,9 +25525,25 @@ OS:ZoneHVAC:EquipmentList,
   ;                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 2
 
 OS:ZoneHVAC:EquipmentList,
-  {00000000-0000-0000-0101-000000000006},  !- Handle
-  ALL_ST=Classroom/lecture/training_FL=Building Story 1_SCH=D 3 Zone HVAC Equipment List, !- Name
-  {00000000-0000-0000-0088-000000000006},  !- Thermal Zone
+  {00000000-0000-0000-0101-000000000009},  !- Handle
+  ALL_ST=Classroom/lecture/training_FL=Building Story 1_SCH=D 6 Zone HVAC Equipment List, !- Name
+  {00000000-0000-0000-0088-000000000009},  !- Thermal Zone
+  ,                                        !- Load Distribution Scheme
+  {00000000-0000-0000-0100-000000000016},  !- Zone Equipment 1
+  1,                                       !- Zone Equipment Cooling Sequence 1
+  1,                                       !- Zone Equipment Heating or No-Load Sequence 1
+  ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
+  ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
+  {00000000-0000-0000-0006-000000000016},  !- Zone Equipment 2
+  2,                                       !- Zone Equipment Cooling Sequence 2
+  2,                                       !- Zone Equipment Heating or No-Load Sequence 2
+  ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
+  ;                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 2
+
+OS:ZoneHVAC:EquipmentList,
+  {00000000-0000-0000-0101-000000000010},  !- Handle
+  ALL_ST=Classroom/lecture/training_FL=Building Story 1_SCH=D 7 Zone HVAC Equipment List, !- Name
+  {00000000-0000-0000-0088-000000000010},  !- Thermal Zone
   ,                                        !- Load Distribution Scheme
   {00000000-0000-0000-0100-000000000017},  !- Zone Equipment 1
   1,                                       !- Zone Equipment Cooling Sequence 1
@@ -25689,80 +25557,16 @@ OS:ZoneHVAC:EquipmentList,
   ;                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 2
 
 OS:ZoneHVAC:EquipmentList,
-  {00000000-0000-0000-0101-000000000007},  !- Handle
-  ALL_ST=Classroom/lecture/training_FL=Building Story 1_SCH=D 4 Zone HVAC Equipment List, !- Name
-  {00000000-0000-0000-0088-000000000007},  !- Thermal Zone
-  ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0006-000000000003},  !- Zone Equipment 1
-  1,                                       !- Zone Equipment Cooling Sequence 1
-  1,                                       !- Zone Equipment Heating or No-Load Sequence 1
-  ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
-  ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
-  {00000000-0000-0000-0100-000000000003},  !- Zone Equipment 2
-  2,                                       !- Zone Equipment Cooling Sequence 2
-  2,                                       !- Zone Equipment Heating or No-Load Sequence 2
-  ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
-  ;                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 2
-
-OS:ZoneHVAC:EquipmentList,
-  {00000000-0000-0000-0101-000000000008},  !- Handle
-  ALL_ST=Classroom/lecture/training_FL=Building Story 1_SCH=D 5 Zone HVAC Equipment List, !- Name
-  {00000000-0000-0000-0088-000000000008},  !- Thermal Zone
-  ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0006-000000000010},  !- Zone Equipment 1
-  1,                                       !- Zone Equipment Cooling Sequence 1
-  1,                                       !- Zone Equipment Heating or No-Load Sequence 1
-  ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
-  ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
-  {00000000-0000-0000-0100-000000000010},  !- Zone Equipment 2
-  2,                                       !- Zone Equipment Cooling Sequence 2
-  2,                                       !- Zone Equipment Heating or No-Load Sequence 2
-  ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
-  ;                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 2
-
-OS:ZoneHVAC:EquipmentList,
-  {00000000-0000-0000-0101-000000000009},  !- Handle
-  ALL_ST=Classroom/lecture/training_FL=Building Story 1_SCH=D 6 Zone HVAC Equipment List, !- Name
-  {00000000-0000-0000-0088-000000000009},  !- Thermal Zone
-  ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0006-000000000016},  !- Zone Equipment 1
-  1,                                       !- Zone Equipment Cooling Sequence 1
-  1,                                       !- Zone Equipment Heating or No-Load Sequence 1
-  ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
-  ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
-  {00000000-0000-0000-0100-000000000016},  !- Zone Equipment 2
-  2,                                       !- Zone Equipment Cooling Sequence 2
-  2,                                       !- Zone Equipment Heating or No-Load Sequence 2
-  ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
-  ;                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 2
-
-OS:ZoneHVAC:EquipmentList,
-  {00000000-0000-0000-0101-000000000010},  !- Handle
-  ALL_ST=Classroom/lecture/training_FL=Building Story 1_SCH=D 7 Zone HVAC Equipment List, !- Name
-  {00000000-0000-0000-0088-000000000010},  !- Thermal Zone
-  ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0006-000000000017},  !- Zone Equipment 1
-  1,                                       !- Zone Equipment Cooling Sequence 1
-  1,                                       !- Zone Equipment Heating or No-Load Sequence 1
-  ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
-  ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
-  {00000000-0000-0000-0100-000000000017},  !- Zone Equipment 2
-  2,                                       !- Zone Equipment Cooling Sequence 2
-  2,                                       !- Zone Equipment Heating or No-Load Sequence 2
-  ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
-  ;                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 2
-
-OS:ZoneHVAC:EquipmentList,
   {00000000-0000-0000-0101-000000000011},  !- Handle
   ALL_ST=Classroom/lecture/training_FL=Building Story 1_SCH=D 8 Zone HVAC Equipment List, !- Name
   {00000000-0000-0000-0088-000000000011},  !- Thermal Zone
   ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0006-000000000011},  !- Zone Equipment 1
+  {00000000-0000-0000-0100-000000000011},  !- Zone Equipment 1
   1,                                       !- Zone Equipment Cooling Sequence 1
   1,                                       !- Zone Equipment Heating or No-Load Sequence 1
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
   ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
-  {00000000-0000-0000-0100-000000000011},  !- Zone Equipment 2
+  {00000000-0000-0000-0006-000000000011},  !- Zone Equipment 2
   2,                                       !- Zone Equipment Cooling Sequence 2
   2,                                       !- Zone Equipment Heating or No-Load Sequence 2
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
@@ -25773,12 +25577,12 @@ OS:ZoneHVAC:EquipmentList,
   ALL_ST=Classroom/lecture/training_FL=Building Story 1_SCH=D 9 Zone HVAC Equipment List, !- Name
   {00000000-0000-0000-0088-000000000012},  !- Thermal Zone
   ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0006-000000000018},  !- Zone Equipment 1
+  {00000000-0000-0000-0100-000000000018},  !- Zone Equipment 1
   1,                                       !- Zone Equipment Cooling Sequence 1
   1,                                       !- Zone Equipment Heating or No-Load Sequence 1
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
   ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
-  {00000000-0000-0000-0100-000000000018},  !- Zone Equipment 2
+  {00000000-0000-0000-0006-000000000018},  !- Zone Equipment 2
   2,                                       !- Zone Equipment Cooling Sequence 2
   2,                                       !- Zone Equipment Heating or No-Load Sequence 2
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
@@ -25789,12 +25593,12 @@ OS:ZoneHVAC:EquipmentList,
   ALL_ST=Classroom/lecture/training_FL=Building Story 1_SCH=D Zone HVAC Equipment List, !- Name
   {00000000-0000-0000-0088-000000000013},  !- Thermal Zone
   ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0006-000000000025},  !- Zone Equipment 1
+  {00000000-0000-0000-0100-000000000025},  !- Zone Equipment 1
   1,                                       !- Zone Equipment Cooling Sequence 1
   1,                                       !- Zone Equipment Heating or No-Load Sequence 1
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
   ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
-  {00000000-0000-0000-0100-000000000025},  !- Zone Equipment 2
+  {00000000-0000-0000-0006-000000000025},  !- Zone Equipment 2
   2,                                       !- Zone Equipment Cooling Sequence 2
   2,                                       !- Zone Equipment Heating or No-Load Sequence 2
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
@@ -25805,12 +25609,12 @@ OS:ZoneHVAC:EquipmentList,
   ALL_ST=Conf./meet./multi-purpose_FL=Building Story 1_SCH=C Zone HVAC Equipment List, !- Name
   {00000000-0000-0000-0088-000000000014},  !- Thermal Zone
   ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0006-000000000007},  !- Zone Equipment 1
+  {00000000-0000-0000-0100-000000000007},  !- Zone Equipment 1
   1,                                       !- Zone Equipment Cooling Sequence 1
   1,                                       !- Zone Equipment Heating or No-Load Sequence 1
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
   ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
-  {00000000-0000-0000-0100-000000000007},  !- Zone Equipment 2
+  {00000000-0000-0000-0006-000000000007},  !- Zone Equipment 2
   2,                                       !- Zone Equipment Cooling Sequence 2
   2,                                       !- Zone Equipment Heating or No-Load Sequence 2
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
@@ -25821,12 +25625,12 @@ OS:ZoneHVAC:EquipmentList,
   ALL_ST=Food preparation_FL=Building Story 1_SCH=B Zone HVAC Equipment List, !- Name
   {00000000-0000-0000-0088-000000000015},  !- Thermal Zone
   ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0006-000000000009},  !- Zone Equipment 1
+  {00000000-0000-0000-0100-000000000009},  !- Zone Equipment 1
   1,                                       !- Zone Equipment Cooling Sequence 1
   1,                                       !- Zone Equipment Heating or No-Load Sequence 1
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
   ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
-  {00000000-0000-0000-0100-000000000009},  !- Zone Equipment 2
+  {00000000-0000-0000-0006-000000000009},  !- Zone Equipment 2
   2,                                       !- Zone Equipment Cooling Sequence 2
   2,                                       !- Zone Equipment Heating or No-Load Sequence 2
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
@@ -25837,12 +25641,12 @@ OS:ZoneHVAC:EquipmentList,
   ALL_ST=Gym - play_FL=Building Story 1_SCH=B Zone HVAC Equipment List, !- Name
   {00000000-0000-0000-0088-000000000016},  !- Thermal Zone
   ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0006-000000000024},  !- Zone Equipment 1
+  {00000000-0000-0000-0100-000000000024},  !- Zone Equipment 1
   1,                                       !- Zone Equipment Cooling Sequence 1
   1,                                       !- Zone Equipment Heating or No-Load Sequence 1
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
   ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
-  {00000000-0000-0000-0100-000000000024},  !- Zone Equipment 2
+  {00000000-0000-0000-0006-000000000024},  !- Zone Equipment 2
   2,                                       !- Zone Equipment Cooling Sequence 2
   2,                                       !- Zone Equipment Heating or No-Load Sequence 2
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
@@ -25853,12 +25657,12 @@ OS:ZoneHVAC:EquipmentList,
   ALL_ST=Library - reading_FL=Building Story 1_SCH=C Zone HVAC Equipment List, !- Name
   {00000000-0000-0000-0088-000000000017},  !- Thermal Zone
   ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0006-000000000008},  !- Zone Equipment 1
+  {00000000-0000-0000-0100-000000000008},  !- Zone Equipment 1
   1,                                       !- Zone Equipment Cooling Sequence 1
   1,                                       !- Zone Equipment Heating or No-Load Sequence 1
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
   ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
-  {00000000-0000-0000-0100-000000000008},  !- Zone Equipment 2
+  {00000000-0000-0000-0006-000000000008},  !- Zone Equipment 2
   2,                                       !- Zone Equipment Cooling Sequence 2
   2,                                       !- Zone Equipment Heating or No-Load Sequence 2
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
@@ -25869,12 +25673,12 @@ OS:ZoneHVAC:EquipmentList,
   ALL_ST=Lobby - other_FL=Building Story 1_SCH=C Zone HVAC Equipment List, !- Name
   {00000000-0000-0000-0088-000000000018},  !- Thermal Zone
   ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0006-000000000023},  !- Zone Equipment 1
+  {00000000-0000-0000-0100-000000000023},  !- Zone Equipment 1
   1,                                       !- Zone Equipment Cooling Sequence 1
   1,                                       !- Zone Equipment Heating or No-Load Sequence 1
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
   ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
-  {00000000-0000-0000-0100-000000000023},  !- Zone Equipment 2
+  {00000000-0000-0000-0006-000000000023},  !- Zone Equipment 2
   2,                                       !- Zone Equipment Cooling Sequence 2
   2,                                       !- Zone Equipment Heating or No-Load Sequence 2
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
@@ -25885,12 +25689,12 @@ OS:ZoneHVAC:EquipmentList,
   ALL_ST=Office - enclosed_FL=Building Story 1_SCH=A Zone HVAC Equipment List, !- Name
   {00000000-0000-0000-0088-000000000019},  !- Thermal Zone
   ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0006-000000000015},  !- Zone Equipment 1
+  {00000000-0000-0000-0100-000000000015},  !- Zone Equipment 1
   1,                                       !- Zone Equipment Cooling Sequence 1
   1,                                       !- Zone Equipment Heating or No-Load Sequence 1
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
   ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
-  {00000000-0000-0000-0100-000000000015},  !- Zone Equipment 2
+  {00000000-0000-0000-0006-000000000015},  !- Zone Equipment 2
   2,                                       !- Zone Equipment Cooling Sequence 2
   2,                                       !- Zone Equipment Heating or No-Load Sequence 2
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
@@ -25901,91 +25705,12 @@ OS:ZoneHVAC:EquipmentList,
   WET_ST=Washroom-sch-D_FL=Building Story 1_SCHD Zone HVAC Equipment List, !- Name
   {00000000-0000-0000-0088-000000000020},  !- Thermal Zone
   ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0006-000000000001},  !- Zone Equipment 1
+  {00000000-0000-0000-0100-000000000001},  !- Zone Equipment 1
   1,                                       !- Zone Equipment Cooling Sequence 1
   1,                                       !- Zone Equipment Heating or No-Load Sequence 1
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
   ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
-  {00000000-0000-0000-0006-000000000011},  !- Zone Equipment 2
-  2,                                       !- Zone Equipment Cooling Sequence 2
-  2,                                       !- Zone Equipment Heating or No-Load Sequence 2
-  ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
-  ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 2
-  {00000000-0000-0000-0038-000000000006},  !- Zone Equipment 3
-  3,                                       !- Zone Equipment Cooling Sequence 3
-  3,                                       !- Zone Equipment Heating or No-Load Sequence 3
-  ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 3
-  ;                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 3
-
-OS:ZoneHVAC:EquipmentList,
-  {00000000-0000-0000-0101-000000000021},  !- Handle
-  WILD_ST=Corr. >= 2.4m wide-sch-D_FL=Building Story 1_SCH=D 1 Zone HVAC Equipment List, !- Name
-  {00000000-0000-0000-0088-000000000021},  !- Thermal Zone
-  ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0006-000000000019},  !- Zone Equipment 1
-  1,                                       !- Zone Equipment Cooling Sequence 1
-  1,                                       !- Zone Equipment Heating or No-Load Sequence 1
-  ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
-  ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
-  {00000000-0000-0000-0100-000000000019},  !- Zone Equipment 2
-  2,                                       !- Zone Equipment Cooling Sequence 2
-  2,                                       !- Zone Equipment Heating or No-Load Sequence 2
-  ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
-  ;                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 2
-
-OS:ZoneHVAC:EquipmentList,
-  {00000000-0000-0000-0101-000000000022},  !- Handle
-  WILD_ST=Corr. >= 2.4m wide-sch-D_FL=Building Story 1_SCH=D 2 Zone HVAC Equipment List, !- Name
-  {00000000-0000-0000-0088-000000000022},  !- Thermal Zone
-  ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0006-000000000020},  !- Zone Equipment 1
-  1,                                       !- Zone Equipment Cooling Sequence 1
-  1,                                       !- Zone Equipment Heating or No-Load Sequence 1
-  ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
-  ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
-  {00000000-0000-0000-0100-000000000020},  !- Zone Equipment 2
-  2,                                       !- Zone Equipment Cooling Sequence 2
-  2,                                       !- Zone Equipment Heating or No-Load Sequence 2
-  ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
-  ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 2
-  {00000000-0000-0000-0038-000000000003},  !- Zone Equipment 3
-  3,                                       !- Zone Equipment Cooling Sequence 3
-  3,                                       !- Zone Equipment Heating or No-Load Sequence 3
-  ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 3
-  ;                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 3
-
-OS:ZoneHVAC:EquipmentList,
-  {00000000-0000-0000-0101-000000000023},  !- Handle
-  WILD_ST=Corr. >= 2.4m wide-sch-D_FL=Building Story 1_SCH=D 3 Zone HVAC Equipment List, !- Name
-  {00000000-0000-0000-0088-000000000023},  !- Thermal Zone
-  ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0006-000000000021},  !- Zone Equipment 1
-  1,                                       !- Zone Equipment Cooling Sequence 1
-  1,                                       !- Zone Equipment Heating or No-Load Sequence 1
-  ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
-  ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
-  {00000000-0000-0000-0100-000000000021},  !- Zone Equipment 2
-  2,                                       !- Zone Equipment Cooling Sequence 2
-  2,                                       !- Zone Equipment Heating or No-Load Sequence 2
-  ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
-  ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 2
-  {00000000-0000-0000-0038-000000000004},  !- Zone Equipment 3
-  3,                                       !- Zone Equipment Cooling Sequence 3
-  3,                                       !- Zone Equipment Heating or No-Load Sequence 3
-  ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 3
-  ;                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 3
-
-OS:ZoneHVAC:EquipmentList,
-  {00000000-0000-0000-0101-000000000024},  !- Handle
-  WILD_ST=Corr. >= 2.4m wide-sch-D_FL=Building Story 1_SCH=D Zone HVAC Equipment List, !- Name
-  {00000000-0000-0000-0088-000000000024},  !- Thermal Zone
-  ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0006-000000000012},  !- Zone Equipment 1
-  1,                                       !- Zone Equipment Cooling Sequence 1
-  1,                                       !- Zone Equipment Heating or No-Load Sequence 1
-  ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
-  ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
-  {00000000-0000-0000-0100-000000000012},  !- Zone Equipment 2
+  {00000000-0000-0000-0038-000000000006},  !- Zone Equipment 2
   2,                                       !- Zone Equipment Cooling Sequence 2
   2,                                       !- Zone Equipment Heating or No-Load Sequence 2
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
@@ -25997,21 +25722,105 @@ OS:ZoneHVAC:EquipmentList,
   ;                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 3
 
 OS:ZoneHVAC:EquipmentList,
-  {00000000-0000-0000-0101-000000000025},  !- Handle
-  WILD_ST=Electrical/Mechanical-sch-D_FL=Building Story 1_SCH=D Zone HVAC Equipment List, !- Name
-  {00000000-0000-0000-0088-000000000025},  !- Thermal Zone
+  {00000000-0000-0000-0101-000000000021},  !- Handle
+  WILD_ST=Corr. >= 2.4m wide-sch-D_FL=Building Story 1_SCH=D 1 Zone HVAC Equipment List, !- Name
+  {00000000-0000-0000-0088-000000000021},  !- Thermal Zone
   ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0006-000000000022},  !- Zone Equipment 1
+  {00000000-0000-0000-0100-000000000019},  !- Zone Equipment 1
   1,                                       !- Zone Equipment Cooling Sequence 1
   1,                                       !- Zone Equipment Heating or No-Load Sequence 1
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
   ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
-  {00000000-0000-0000-0100-000000000022},  !- Zone Equipment 2
+  {00000000-0000-0000-0038-000000000002},  !- Zone Equipment 2
   2,                                       !- Zone Equipment Cooling Sequence 2
   2,                                       !- Zone Equipment Heating or No-Load Sequence 2
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
   ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 2
-  {00000000-0000-0000-0038-000000000005},  !- Zone Equipment 3
+  {00000000-0000-0000-0006-000000000019},  !- Zone Equipment 3
+  3,                                       !- Zone Equipment Cooling Sequence 3
+  3,                                       !- Zone Equipment Heating or No-Load Sequence 3
+  ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 3
+  ;                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 3
+
+OS:ZoneHVAC:EquipmentList,
+  {00000000-0000-0000-0101-000000000022},  !- Handle
+  WILD_ST=Corr. >= 2.4m wide-sch-D_FL=Building Story 1_SCH=D 2 Zone HVAC Equipment List, !- Name
+  {00000000-0000-0000-0088-000000000022},  !- Thermal Zone
+  ,                                        !- Load Distribution Scheme
+  {00000000-0000-0000-0100-000000000020},  !- Zone Equipment 1
+  1,                                       !- Zone Equipment Cooling Sequence 1
+  1,                                       !- Zone Equipment Heating or No-Load Sequence 1
+  ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
+  ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
+  {00000000-0000-0000-0038-000000000003},  !- Zone Equipment 2
+  2,                                       !- Zone Equipment Cooling Sequence 2
+  2,                                       !- Zone Equipment Heating or No-Load Sequence 2
+  ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
+  ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 2
+  {00000000-0000-0000-0006-000000000020},  !- Zone Equipment 3
+  3,                                       !- Zone Equipment Cooling Sequence 3
+  3,                                       !- Zone Equipment Heating or No-Load Sequence 3
+  ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 3
+  ;                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 3
+
+OS:ZoneHVAC:EquipmentList,
+  {00000000-0000-0000-0101-000000000023},  !- Handle
+  WILD_ST=Corr. >= 2.4m wide-sch-D_FL=Building Story 1_SCH=D 3 Zone HVAC Equipment List, !- Name
+  {00000000-0000-0000-0088-000000000023},  !- Thermal Zone
+  ,                                        !- Load Distribution Scheme
+  {00000000-0000-0000-0100-000000000021},  !- Zone Equipment 1
+  1,                                       !- Zone Equipment Cooling Sequence 1
+  1,                                       !- Zone Equipment Heating or No-Load Sequence 1
+  ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
+  ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
+  {00000000-0000-0000-0038-000000000004},  !- Zone Equipment 2
+  2,                                       !- Zone Equipment Cooling Sequence 2
+  2,                                       !- Zone Equipment Heating or No-Load Sequence 2
+  ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
+  ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 2
+  {00000000-0000-0000-0006-000000000021},  !- Zone Equipment 3
+  3,                                       !- Zone Equipment Cooling Sequence 3
+  3,                                       !- Zone Equipment Heating or No-Load Sequence 3
+  ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 3
+  ;                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 3
+
+OS:ZoneHVAC:EquipmentList,
+  {00000000-0000-0000-0101-000000000024},  !- Handle
+  WILD_ST=Corr. >= 2.4m wide-sch-D_FL=Building Story 1_SCH=D Zone HVAC Equipment List, !- Name
+  {00000000-0000-0000-0088-000000000024},  !- Thermal Zone
+  ,                                        !- Load Distribution Scheme
+  {00000000-0000-0000-0100-000000000012},  !- Zone Equipment 1
+  1,                                       !- Zone Equipment Cooling Sequence 1
+  1,                                       !- Zone Equipment Heating or No-Load Sequence 1
+  ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
+  ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
+  {00000000-0000-0000-0038-000000000001},  !- Zone Equipment 2
+  2,                                       !- Zone Equipment Cooling Sequence 2
+  2,                                       !- Zone Equipment Heating or No-Load Sequence 2
+  ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
+  ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 2
+  {00000000-0000-0000-0006-000000000012},  !- Zone Equipment 3
+  3,                                       !- Zone Equipment Cooling Sequence 3
+  3,                                       !- Zone Equipment Heating or No-Load Sequence 3
+  ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 3
+  ;                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 3
+
+OS:ZoneHVAC:EquipmentList,
+  {00000000-0000-0000-0101-000000000025},  !- Handle
+  WILD_ST=Electrical/Mechanical-sch-D_FL=Building Story 1_SCH=D Zone HVAC Equipment List, !- Name
+  {00000000-0000-0000-0088-000000000025},  !- Thermal Zone
+  ,                                        !- Load Distribution Scheme
+  {00000000-0000-0000-0100-000000000022},  !- Zone Equipment 1
+  1,                                       !- Zone Equipment Cooling Sequence 1
+  1,                                       !- Zone Equipment Heating or No-Load Sequence 1
+  ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
+  ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
+  {00000000-0000-0000-0038-000000000005},  !- Zone Equipment 2
+  2,                                       !- Zone Equipment Cooling Sequence 2
+  2,                                       !- Zone Equipment Heating or No-Load Sequence 2
+  ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
+  ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 2
+  {00000000-0000-0000-0006-000000000022},  !- Zone Equipment 3
   3,                                       !- Zone Equipment Cooling Sequence 3
   3,                                       !- Zone Equipment Heating or No-Load Sequence 3
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 3

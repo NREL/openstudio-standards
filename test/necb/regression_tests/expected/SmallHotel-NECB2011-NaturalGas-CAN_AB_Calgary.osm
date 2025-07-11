@@ -35039,13 +35039,13 @@ OS:Schedule:Ruleset,
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0068-000000000002},  !- Handle
   CHW Temp,                                !- Name
-  {00000000-0000-0000-0069-000000000010},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0069-000000000008},  !- Schedule Type Limits Name
   {00000000-0000-0000-0066-000000000173};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0068-000000000003},  !- Handle
-  CHW Temp,                                !- Name
-  {00000000-0000-0000-0069-000000000008},  !- Schedule Type Limits Name
+  CW Temp,                                 !- Name
+  {00000000-0000-0000-0069-000000000009},  !- Schedule Type Limits Name
   {00000000-0000-0000-0066-000000000174};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
@@ -35564,7 +35564,7 @@ OS:SetpointManager:SingleZone:Reheat,
   Setpoint Manager Single Zone Reheat 2,   !- Name
   13,                                      !- Minimum Supply Air Temperature {C}
   43,                                      !- Maximum Supply Air Temperature {C}
-  {00000000-0000-0000-0097-000000000012},  !- Control Zone Name
+  {00000000-0000-0000-0097-000000000007},  !- Control Zone Name
   {00000000-0000-0000-0053-000000000683};  !- Setpoint Node or NodeList Name
 
 OS:SetpointManager:SingleZone:Reheat,
@@ -35572,7 +35572,7 @@ OS:SetpointManager:SingleZone:Reheat,
   Setpoint Manager Single Zone Reheat 3,   !- Name
   13,                                      !- Minimum Supply Air Temperature {C}
   43,                                      !- Maximum Supply Air Temperature {C}
-  {00000000-0000-0000-0097-000000000067},  !- Control Zone Name
+  {00000000-0000-0000-0097-000000000061},  !- Control Zone Name
   {00000000-0000-0000-0053-000000000690};  !- Setpoint Node or NodeList Name
 
 OS:SetpointManager:SingleZone:Reheat,
