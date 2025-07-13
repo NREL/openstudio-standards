@@ -4263,41 +4263,41 @@ OS:EnergyManagementSystem:Actuator,
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0035-000000000001},  !- Handle
   ems_sys_6_mixed_shr_none_sh_c_e_sc_c_chw_ssf_vv_zh_b_e_zc_none_srf_vv__1_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {345a7f59-8e33-4225-b56b-f6a510470809}<23.9 && {345a7f59-8e33-4225-b56b-f6a510470809}>1.7, !- Program Line 1
-  SET {d3521b5e-2615-4a89-a5b9-2659da73bf79} = 29.4, !- Program Line 2
-  SET {6bd888d9-0256-467c-a9f2-573577ab0823} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {345a7f59-8e33-4225-b56b-f6a510470809}<23.9 && {345a7f59-8e33-4225-b56b-f6a510470809}>1.7, !- Program Line 4
-  SET {d3521b5e-2615-4a89-a5b9-2659da73bf79} = 29.4, !- Program Line 5
-  SET {6bd888d9-0256-467c-a9f2-573577ab0823} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {345a7f59-8e33-4225-b56b-f6a510470809}<23.9 && {345a7f59-8e33-4225-b56b-f6a510470809}>1.7, !- Program Line 7
-  SET {d3521b5e-2615-4a89-a5b9-2659da73bf79} = 29.4, !- Program Line 8
-  SET {6bd888d9-0256-467c-a9f2-573577ab0823} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {345a7f59-8e33-4225-b56b-f6a510470809}<23.9 && {345a7f59-8e33-4225-b56b-f6a510470809}>1.7, !- Program Line 10
-  SET {d3521b5e-2615-4a89-a5b9-2659da73bf79} = 29.4, !- Program Line 11
-  SET {6bd888d9-0256-467c-a9f2-573577ab0823} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {b962b440-39c2-4205-aa4b-33d885db92a0}<23.9 && {b962b440-39c2-4205-aa4b-33d885db92a0}>1.7, !- Program Line 1
+  SET {abb7047a-0eab-4ec6-b5df-7ef724017214} = 29.4, !- Program Line 2
+  SET {86b1c37e-2509-42ba-b877-735f53ff7ab1} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {b962b440-39c2-4205-aa4b-33d885db92a0}<23.9 && {b962b440-39c2-4205-aa4b-33d885db92a0}>1.7, !- Program Line 4
+  SET {abb7047a-0eab-4ec6-b5df-7ef724017214} = 29.4, !- Program Line 5
+  SET {86b1c37e-2509-42ba-b877-735f53ff7ab1} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {b962b440-39c2-4205-aa4b-33d885db92a0}<23.9 && {b962b440-39c2-4205-aa4b-33d885db92a0}>1.7, !- Program Line 7
+  SET {abb7047a-0eab-4ec6-b5df-7ef724017214} = 29.4, !- Program Line 8
+  SET {86b1c37e-2509-42ba-b877-735f53ff7ab1} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {b962b440-39c2-4205-aa4b-33d885db92a0}<23.9 && {b962b440-39c2-4205-aa4b-33d885db92a0}>1.7, !- Program Line 10
+  SET {abb7047a-0eab-4ec6-b5df-7ef724017214} = 29.4, !- Program Line 11
+  SET {86b1c37e-2509-42ba-b877-735f53ff7ab1} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {d3521b5e-2615-4a89-a5b9-2659da73bf79} = NULL, !- Program Line 14
-  SET {6bd888d9-0256-467c-a9f2-573577ab0823} = NULL, !- Program Line 15
+  SET {abb7047a-0eab-4ec6-b5df-7ef724017214} = NULL, !- Program Line 14
+  SET {86b1c37e-2509-42ba-b877-735f53ff7ab1} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0035-000000000002},  !- Handle
   ems_sys_6_mixed_shr_none_sh_c_e_sc_c_chw_ssf_vv_zh_b_e_zc_none_srf_vv__2_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {3d200674-e2bc-4927-b6f6-a742f4aa9dd0}<23.9 && {3d200674-e2bc-4927-b6f6-a742f4aa9dd0}>1.7, !- Program Line 1
-  SET {19e5bebd-7900-410f-a7cf-46ef4f881e13} = 29.4, !- Program Line 2
-  SET {0c4a40e1-7141-4315-bdeb-ee901d6f6cae} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {3d200674-e2bc-4927-b6f6-a742f4aa9dd0}<23.9 && {3d200674-e2bc-4927-b6f6-a742f4aa9dd0}>1.7, !- Program Line 4
-  SET {19e5bebd-7900-410f-a7cf-46ef4f881e13} = 29.4, !- Program Line 5
-  SET {0c4a40e1-7141-4315-bdeb-ee901d6f6cae} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {3d200674-e2bc-4927-b6f6-a742f4aa9dd0}<23.9 && {3d200674-e2bc-4927-b6f6-a742f4aa9dd0}>1.7, !- Program Line 7
-  SET {19e5bebd-7900-410f-a7cf-46ef4f881e13} = 29.4, !- Program Line 8
-  SET {0c4a40e1-7141-4315-bdeb-ee901d6f6cae} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {3d200674-e2bc-4927-b6f6-a742f4aa9dd0}<23.9 && {3d200674-e2bc-4927-b6f6-a742f4aa9dd0}>1.7, !- Program Line 10
-  SET {19e5bebd-7900-410f-a7cf-46ef4f881e13} = 29.4, !- Program Line 11
-  SET {0c4a40e1-7141-4315-bdeb-ee901d6f6cae} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {db320ca2-191d-4f9e-a5f2-2bafa057d3a9}<23.9 && {db320ca2-191d-4f9e-a5f2-2bafa057d3a9}>1.7, !- Program Line 1
+  SET {c68e84a2-ee7d-4f14-92b6-cf990cc282cf} = 29.4, !- Program Line 2
+  SET {950a7bd5-d42a-465c-80f1-f8eadeda5e9c} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {db320ca2-191d-4f9e-a5f2-2bafa057d3a9}<23.9 && {db320ca2-191d-4f9e-a5f2-2bafa057d3a9}>1.7, !- Program Line 4
+  SET {c68e84a2-ee7d-4f14-92b6-cf990cc282cf} = 29.4, !- Program Line 5
+  SET {950a7bd5-d42a-465c-80f1-f8eadeda5e9c} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {db320ca2-191d-4f9e-a5f2-2bafa057d3a9}<23.9 && {db320ca2-191d-4f9e-a5f2-2bafa057d3a9}>1.7, !- Program Line 7
+  SET {c68e84a2-ee7d-4f14-92b6-cf990cc282cf} = 29.4, !- Program Line 8
+  SET {950a7bd5-d42a-465c-80f1-f8eadeda5e9c} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {db320ca2-191d-4f9e-a5f2-2bafa057d3a9}<23.9 && {db320ca2-191d-4f9e-a5f2-2bafa057d3a9}>1.7, !- Program Line 10
+  SET {c68e84a2-ee7d-4f14-92b6-cf990cc282cf} = 29.4, !- Program Line 11
+  SET {950a7bd5-d42a-465c-80f1-f8eadeda5e9c} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {19e5bebd-7900-410f-a7cf-46ef4f881e13} = NULL, !- Program Line 14
-  SET {0c4a40e1-7141-4315-bdeb-ee901d6f6cae} = NULL, !- Program Line 15
+  SET {c68e84a2-ee7d-4f14-92b6-cf990cc282cf} = NULL, !- Program Line 14
+  SET {950a7bd5-d42a-465c-80f1-f8eadeda5e9c} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:ProgramCallingManager,
@@ -7536,7 +7536,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0062-000000000041},  !- Handle
   Schedule Day 4,                          !- Name
-  {00000000-0000-0000-0065-000000000008},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0065-000000000007},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -7614,7 +7614,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0062-000000000042},  !- Handle
   Schedule Day 5,                          !- Name
-  {00000000-0000-0000-0065-000000000008},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0065-000000000007},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
   0,                                       !- Minute 1
@@ -7623,7 +7623,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0062-000000000043},  !- Handle
   Schedule Day 6,                          !- Name
-  {00000000-0000-0000-0065-000000000008},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0065-000000000007},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
   0,                                       !- Minute 1
@@ -7668,7 +7668,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0062-000000000048},  !- Handle
   Supply Air Temp Default 1,               !- Name
-  {00000000-0000-0000-0065-000000000008},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0065-000000000007},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
   0,                                       !- Minute 1
@@ -7677,7 +7677,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0062-000000000049},  !- Handle
   Supply Air Temp Default 2,               !- Name
-  {00000000-0000-0000-0065-000000000008},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0065-000000000007},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
   0,                                       !- Minute 1
@@ -7686,7 +7686,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0062-000000000050},  !- Handle
   Supply Air Temp Default,                 !- Name
-  {00000000-0000-0000-0065-000000000008},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0065-000000000007},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
   0,                                       !- Minute 1
@@ -7869,7 +7869,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0062-000000000055},  !- Handle
   satCW Temp 1,                            !- Name
-  {00000000-0000-0000-0065-000000000008},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0065-000000000007},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -8181,7 +8181,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0062-000000000059},  !- Handle
   sunCW Temp 1,                            !- Name
-  {00000000-0000-0000-0065-000000000008},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0065-000000000007},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -8592,7 +8592,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0062-000000000072},  !- Handle
   wkdCW Temp 1,                            !- Name
-  {00000000-0000-0000-0065-000000000008},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0065-000000000007},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -9349,7 +9349,7 @@ OS:Schedule:Ruleset,
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0064-000000000003},  !- Handle
   CW Temp,                                 !- Name
-  {00000000-0000-0000-0065-000000000008},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0065-000000000007},  !- Schedule Type Limits Name
   {00000000-0000-0000-0062-000000000041};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
@@ -9429,13 +9429,13 @@ OS:Schedule:Ruleset,
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0064-000000000016},  !- Handle
   Schedule Ruleset 1,                      !- Name
-  {00000000-0000-0000-0065-000000000008},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0065-000000000007},  !- Schedule Type Limits Name
   {00000000-0000-0000-0062-000000000042};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0064-000000000017},  !- Handle
   Schedule Ruleset 2,                      !- Name
-  {00000000-0000-0000-0065-000000000008},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0065-000000000007},  !- Schedule Type Limits Name
   {00000000-0000-0000-0062-000000000043};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
@@ -9447,19 +9447,19 @@ OS:Schedule:Ruleset,
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0064-000000000019},  !- Handle
   Supply Air Temp 1,                       !- Name
-  {00000000-0000-0000-0065-000000000008},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0065-000000000007},  !- Schedule Type Limits Name
   {00000000-0000-0000-0062-000000000048};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0064-000000000020},  !- Handle
   Supply Air Temp 2,                       !- Name
-  {00000000-0000-0000-0065-000000000008},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0065-000000000007},  !- Schedule Type Limits Name
   {00000000-0000-0000-0062-000000000049};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0064-000000000021},  !- Handle
   Supply Air Temp,                         !- Name
-  {00000000-0000-0000-0065-000000000008},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0065-000000000007},  !- Schedule Type Limits Name
   {00000000-0000-0000-0062-000000000050};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
@@ -11070,7 +11070,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0082-000000000002},  !- Handle
@@ -11085,7 +11086,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0082-000000000003},  !- Handle
@@ -11100,7 +11102,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0082-000000000004},  !- Handle
@@ -11115,7 +11118,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0082-000000000005},  !- Handle
@@ -11130,7 +11134,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0082-000000000006},  !- Handle
@@ -11145,7 +11150,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0082-000000000007},  !- Handle
@@ -11160,7 +11166,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0082-000000000008},  !- Handle
@@ -11175,7 +11182,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0082-000000000009},  !- Handle
@@ -11190,7 +11198,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0082-000000000010},  !- Handle
@@ -11205,7 +11214,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0082-000000000011},  !- Handle
@@ -11220,7 +11230,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0082-000000000012},  !- Handle
@@ -11235,7 +11246,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0082-000000000013},  !- Handle
@@ -11250,7 +11262,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0082-000000000014},  !- Handle
@@ -11265,7 +11278,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0082-000000000015},  !- Handle
@@ -11280,7 +11294,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceType,
   {00000000-0000-0000-0083-000000000001},  !- Handle
@@ -15135,7 +15150,7 @@ OS:Timestep,
 
 OS:Version,
   {00000000-0000-0000-0096-000000000001},  !- Handle
-  3.9.0;                                   !- Version Identifier
+  3.10.0;                                  !- Version Identifier
 
 OS:WaterHeater:Mixed,
   {00000000-0000-0000-0097-000000000001},  !- Handle

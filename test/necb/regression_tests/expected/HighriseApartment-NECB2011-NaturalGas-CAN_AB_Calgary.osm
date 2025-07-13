@@ -43477,7 +43477,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000002},  !- Handle
@@ -43492,7 +43493,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000003},  !- Handle
@@ -43507,7 +43509,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000004},  !- Handle
@@ -43522,7 +43525,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000005},  !- Handle
@@ -43537,7 +43541,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000006},  !- Handle
@@ -43552,7 +43557,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000007},  !- Handle
@@ -43567,7 +43573,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000008},  !- Handle
@@ -43582,7 +43589,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000009},  !- Handle
@@ -43597,7 +43605,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000010},  !- Handle
@@ -43612,7 +43621,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000011},  !- Handle
@@ -43627,7 +43637,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000012},  !- Handle
@@ -43642,7 +43653,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000013},  !- Handle
@@ -43657,7 +43669,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000014},  !- Handle
@@ -43672,7 +43685,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000015},  !- Handle
@@ -43687,7 +43701,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000016},  !- Handle
@@ -43702,7 +43717,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000017},  !- Handle
@@ -43717,7 +43733,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000018},  !- Handle
@@ -43732,7 +43749,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000019},  !- Handle
@@ -43747,7 +43765,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000020},  !- Handle
@@ -43762,7 +43781,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000021},  !- Handle
@@ -43777,7 +43797,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000022},  !- Handle
@@ -43792,7 +43813,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000023},  !- Handle
@@ -43807,7 +43829,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000024},  !- Handle
@@ -43822,7 +43845,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000025},  !- Handle
@@ -43837,7 +43861,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000026},  !- Handle
@@ -43852,7 +43877,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000027},  !- Handle
@@ -43867,7 +43893,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000028},  !- Handle
@@ -43882,7 +43909,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000029},  !- Handle
@@ -43897,7 +43925,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000030},  !- Handle
@@ -43912,7 +43941,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000031},  !- Handle
@@ -43927,7 +43957,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000032},  !- Handle
@@ -43942,7 +43973,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000033},  !- Handle
@@ -43957,7 +43989,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000034},  !- Handle
@@ -43972,7 +44005,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000035},  !- Handle
@@ -43987,7 +44021,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000036},  !- Handle
@@ -44002,7 +44037,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000037},  !- Handle
@@ -44017,7 +44053,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000038},  !- Handle
@@ -44032,7 +44069,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000039},  !- Handle
@@ -44047,7 +44085,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000040},  !- Handle
@@ -44062,7 +44101,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000041},  !- Handle
@@ -44077,7 +44117,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000042},  !- Handle
@@ -44092,7 +44133,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000043},  !- Handle
@@ -44107,7 +44149,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000044},  !- Handle
@@ -44122,7 +44165,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000045},  !- Handle
@@ -44137,7 +44181,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000046},  !- Handle
@@ -44152,7 +44197,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000047},  !- Handle
@@ -44167,7 +44213,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000048},  !- Handle
@@ -44182,7 +44229,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000049},  !- Handle
@@ -44197,7 +44245,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000050},  !- Handle
@@ -44212,7 +44261,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000051},  !- Handle
@@ -44227,7 +44277,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000052},  !- Handle
@@ -44242,7 +44293,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000053},  !- Handle
@@ -44257,7 +44309,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000054},  !- Handle
@@ -44272,7 +44325,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000055},  !- Handle
@@ -44287,7 +44341,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000056},  !- Handle
@@ -44302,7 +44357,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000057},  !- Handle
@@ -44317,7 +44373,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000058},  !- Handle
@@ -44332,7 +44389,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000059},  !- Handle
@@ -44347,7 +44405,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000060},  !- Handle
@@ -44362,7 +44421,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000061},  !- Handle
@@ -44377,7 +44437,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000062},  !- Handle
@@ -44392,7 +44453,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000063},  !- Handle
@@ -44407,7 +44469,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000064},  !- Handle
@@ -44422,7 +44485,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000065},  !- Handle
@@ -44437,7 +44501,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000066},  !- Handle
@@ -44452,7 +44517,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000067},  !- Handle
@@ -44467,7 +44533,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000068},  !- Handle
@@ -44482,7 +44549,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000069},  !- Handle
@@ -44497,7 +44565,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000070},  !- Handle
@@ -44512,7 +44581,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000071},  !- Handle
@@ -44527,7 +44597,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000072},  !- Handle
@@ -44542,7 +44613,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000073},  !- Handle
@@ -44557,7 +44629,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000074},  !- Handle
@@ -44572,7 +44645,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000075},  !- Handle
@@ -44587,7 +44661,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000076},  !- Handle
@@ -44602,7 +44677,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000077},  !- Handle
@@ -44617,7 +44693,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000078},  !- Handle
@@ -44632,7 +44709,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000079},  !- Handle
@@ -44647,7 +44725,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000080},  !- Handle
@@ -44662,7 +44741,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000081},  !- Handle
@@ -44677,7 +44757,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000082},  !- Handle
@@ -44692,7 +44773,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000083},  !- Handle
@@ -44707,7 +44789,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000084},  !- Handle
@@ -44722,7 +44805,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000085},  !- Handle
@@ -44737,7 +44821,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000086},  !- Handle
@@ -44752,7 +44837,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000087},  !- Handle
@@ -44767,7 +44853,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000088},  !- Handle
@@ -44782,7 +44869,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000089},  !- Handle
@@ -44797,7 +44885,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000090},  !- Handle
@@ -44812,7 +44901,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceType,
   {00000000-0000-0000-0085-000000000001},  !- Handle
@@ -61519,7 +61609,7 @@ OS:Timestep,
 
 OS:Version,
   {00000000-0000-0000-0096-000000000001},  !- Handle
-  3.9.0;                                   !- Version Identifier
+  3.10.0;                                  !- Version Identifier
 
 OS:WaterHeater:Mixed,
   {00000000-0000-0000-0097-000000000001},  !- Handle

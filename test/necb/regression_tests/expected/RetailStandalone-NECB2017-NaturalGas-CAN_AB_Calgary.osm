@@ -3464,21 +3464,21 @@ OS:EnergyManagementSystem:Actuator,
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0035-000000000001},  !- Handle
   ems_sys_3_mixed_shr_none_sc_dx_sh_c_g_ssf_cv_zh_b_hw_zc_none_srf_none__3_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {744b1dc7-e3a5-4c7d-8a51-741975e08f0e}<23.9 && {744b1dc7-e3a5-4c7d-8a51-741975e08f0e}>1.7, !- Program Line 1
-  SET {21383d86-5463-401d-a988-0151ec0bf55c} = 29.4, !- Program Line 2
-  SET {9ef3b8e2-0bcb-46d9-bbd7-a0aa4201bc0f} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {744b1dc7-e3a5-4c7d-8a51-741975e08f0e}<23.9 && {744b1dc7-e3a5-4c7d-8a51-741975e08f0e}>1.7, !- Program Line 4
-  SET {21383d86-5463-401d-a988-0151ec0bf55c} = 29.4, !- Program Line 5
-  SET {9ef3b8e2-0bcb-46d9-bbd7-a0aa4201bc0f} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {744b1dc7-e3a5-4c7d-8a51-741975e08f0e}<23.9 && {744b1dc7-e3a5-4c7d-8a51-741975e08f0e}>1.7, !- Program Line 7
-  SET {21383d86-5463-401d-a988-0151ec0bf55c} = 29.4, !- Program Line 8
-  SET {9ef3b8e2-0bcb-46d9-bbd7-a0aa4201bc0f} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {744b1dc7-e3a5-4c7d-8a51-741975e08f0e}<23.9 && {744b1dc7-e3a5-4c7d-8a51-741975e08f0e}>1.7, !- Program Line 10
-  SET {21383d86-5463-401d-a988-0151ec0bf55c} = 29.4, !- Program Line 11
-  SET {9ef3b8e2-0bcb-46d9-bbd7-a0aa4201bc0f} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {49ad3c83-6aea-4627-96fd-b50b60d7d6fd}<23.9 && {49ad3c83-6aea-4627-96fd-b50b60d7d6fd}>1.7, !- Program Line 1
+  SET {533f2eb0-580e-4623-9a90-eeafec68b0cf} = 29.4, !- Program Line 2
+  SET {2abed87e-64ae-41eb-a905-ee438cd5f568} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {49ad3c83-6aea-4627-96fd-b50b60d7d6fd}<23.9 && {49ad3c83-6aea-4627-96fd-b50b60d7d6fd}>1.7, !- Program Line 4
+  SET {533f2eb0-580e-4623-9a90-eeafec68b0cf} = 29.4, !- Program Line 5
+  SET {2abed87e-64ae-41eb-a905-ee438cd5f568} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {49ad3c83-6aea-4627-96fd-b50b60d7d6fd}<23.9 && {49ad3c83-6aea-4627-96fd-b50b60d7d6fd}>1.7, !- Program Line 7
+  SET {533f2eb0-580e-4623-9a90-eeafec68b0cf} = 29.4, !- Program Line 8
+  SET {2abed87e-64ae-41eb-a905-ee438cd5f568} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {49ad3c83-6aea-4627-96fd-b50b60d7d6fd}<23.9 && {49ad3c83-6aea-4627-96fd-b50b60d7d6fd}>1.7, !- Program Line 10
+  SET {533f2eb0-580e-4623-9a90-eeafec68b0cf} = 29.4, !- Program Line 11
+  SET {2abed87e-64ae-41eb-a905-ee438cd5f568} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {21383d86-5463-401d-a988-0151ec0bf55c} = NULL, !- Program Line 14
-  SET {9ef3b8e2-0bcb-46d9-bbd7-a0aa4201bc0f} = NULL, !- Program Line 15
+  SET {533f2eb0-580e-4623-9a90-eeafec68b0cf} = NULL, !- Program Line 14
+  SET {2abed87e-64ae-41eb-a905-ee438cd5f568} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:ProgramCallingManager,
@@ -9056,7 +9056,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000002},  !- Handle
@@ -9071,7 +9072,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000003},  !- Handle
@@ -9086,7 +9088,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000004},  !- Handle
@@ -9101,7 +9104,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0084-000000000005},  !- Handle
@@ -9116,7 +9120,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceType,
   {00000000-0000-0000-0085-000000000001},  !- Handle
@@ -11236,7 +11241,7 @@ OS:Timestep,
 
 OS:Version,
   {00000000-0000-0000-0098-000000000001},  !- Handle
-  3.9.0;                                   !- Version Identifier
+  3.10.0;                                  !- Version Identifier
 
 OS:WaterHeater:Mixed,
   {00000000-0000-0000-0099-000000000001},  !- Handle

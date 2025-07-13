@@ -3458,7 +3458,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0055-000000000002},  !- Handle
@@ -3473,7 +3474,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceInfiltration:DesignFlowRate,
   {00000000-0000-0000-0055-000000000003},  !- Handle
@@ -3488,7 +3490,8 @@ OS:SpaceInfiltration:DesignFlowRate,
   0,                                       !- Constant Term Coefficient
   0,                                       !- Temperature Term Coefficient
   0.224,                                   !- Velocity Term Coefficient
-  0;                                       !- Velocity Squared Term Coefficient
+  0,                                       !- Velocity Squared Term Coefficient
+  Outdoor;                                 !- Density Basis
 
 OS:SpaceType,
   {00000000-0000-0000-0056-000000000001},  !- Handle
@@ -4363,7 +4366,7 @@ OS:Timestep,
 
 OS:Version,
   {00000000-0000-0000-0067-000000000001},  !- Handle
-  3.9.0;                                   !- Version Identifier
+  3.10.0;                                  !- Version Identifier
 
 OS:WaterHeater:Mixed,
   {00000000-0000-0000-0068-000000000001},  !- Handle

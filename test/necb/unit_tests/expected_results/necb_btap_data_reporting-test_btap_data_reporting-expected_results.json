@@ -95,11 +95,7 @@
       "zones_total_outdoor_air_mechanical_ventilation_flow_per_conditioned_floor_area_m3_per_s_m2": 0.0035580906050031035,
       "zones_total_outdoor_air_natural_ventilation_flow_per_conditioned_floor_area_m3_per_s_m2": 0.0,
       "zones_total_outdoor_air_infiltration_flow_per_conditioned_floor_area_m3_per_s_m2": 0.000034399546862326785,
-<<<<<<< HEAD
       "zones_total_outdoor_air_mechanical_ventilation_flow_per_exterior_area_m3_per_s_m2": 0.002151760309931107,
-=======
-      "zones_total_outdoor_air_mechanical_ventilation_flow_per_exterior_area_m3_per_s_m2": 0.0021507199033060894,
->>>>>>> origin/nrcan_merge_master
       "zones_total_outdoor_air_natural_ventilation_flow_per_exterior_area_m3_per_s_m2": 0.0,
       "zones_total_outdoor_air_infiltration_flow_per_exterior_area_m3_per_s_m2": 0.000020803174464947433,
       "envelope_exterior_surface_table": [
