@@ -1409,8 +1409,9 @@ class BTAPCosting
   #
   def get_story_cent_to_edge(building_story:, prototype_creator:, target_cent:, tol: 8, full_length: false)
     ceiling_start = []
+    space_mod = OpenstudioStandards::Space
     building_story.spaces.sort.each do |space|
-      if (OpenstudioStandards::Space.space_heated?(space) || OpenstudioStandards::Space.space_cooled?(space)) && !OpenstudioStandards::Space.space_plenum?(space)
+      if (space_mod.space_heated?(space) || space_mod.space_cooled?(space)) && !space_mod.space_plenum?(space)
         origin = [space.xOrigin.to_f, space.yOrigin.to_f, space.zOrigin.to_f]
         space.surfaces.each do |surface|
           if surface.surfaceType.to_s.upcase == 'ROOFCEILING'
@@ -1928,8 +1929,9 @@ class BTAPCosting
   def get_predominant_floor_space_type_area(hvac_floor:, prototype_creator:)
     spaces = hvac_floor[:story].spaces
     space_list = []
+    space_mod = OpenstudioStandards::Space
     spaces.sort.each do |space|
-      if (OpenstudioStandards::Space.space_cooled?(space) || OpenstudioStandards::Space.space_heated?(space)) && !OpenstudioStandards::Space.space_plenum?(space)
+      if (space_mod.space_cooled?(space) || space_mod.space_heated?(space)) && !space_mod.space_plenum?(space)
         space_type = space.spaceType.get.nameString[15..-1]
         if space_list.empty?
           space_list << {
