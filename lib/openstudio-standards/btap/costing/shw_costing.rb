@@ -36,7 +36,7 @@ class BTAPCosting
     num_hphw_tanks = 0
     num_high_eff_gas_tanks = 0
     num_high_eff_oil_tanks = 0
- 
+
     # HPHW heaters are stored outside of the plant loop
     # Iterate through these first to determine if their are HPHW heaters
     model.getWaterHeaterHeatPumps.each do |hphw|
@@ -413,11 +413,12 @@ class BTAPCosting
     total_shw_dist_cost += shw_main_cost[:cost]
     #determine if space is wet:  prototype_creator.is_an_necb_wet_space?(space)
     #Sort spaces by floor and conditioned spaces
+    space_mod = OpenstudioStandards::Space
     model.getBuildingStorys.sort.each do |build_story|
       public_wash = false
       other_public_wash = false
       build_story.spaces.sort.each do |space|
-        next unless (prototype_creator.space_heated?(space) || prototype_creator.space_cooled?(space)) && !prototype_creator.space_plenum?(space)
+        next unless (space_mod.space_heated?(space) || space_mod.space_cooled?(space)) && !space_mod.space_plenum?(space)
         sp_type_name = space.spaceType.get.nameString
         shw_neccesary = shw_sp_types.select {|table_sp_type|
           !/#{table_sp_type.upcase}/.match(sp_type_name.upcase).nil?
