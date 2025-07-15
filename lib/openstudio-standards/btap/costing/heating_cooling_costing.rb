@@ -1142,13 +1142,14 @@ class BTAPCosting
 
   def getGeometryData(model, prototype_creator)
     num_of_above_ground_stories = model.getBuilding.standardsNumberOfAboveGroundStories.to_i
+    space_mod = OpenstudioStandards::Space
     if model.building.get.nominalFloortoFloorHeight().empty?
       volume = model.building.get.airVolume()
       flrArea = 0.0
       if model.building.get.conditionedFloorArea.empty?
         model.getThermalZones.sort.each do |tz|
           tz.spaces.sort.each do |tz_space|
-            flrArea += tz_space.floorArea.to_f if ( (prototype_creator.space_cooled?(tz_space)) || (prototype_creator.space_heated?(tz_space)) )
+            flrArea += tz_space.floorArea.to_f if ( (space_mod.space_cooled?(tz_space)) || (space_mod.space_heated?(tz_space)) )
           end
           flrArea += tz.floorArea
         end
