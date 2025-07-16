@@ -106,8 +106,6 @@ module OpenstudioStandards
       case_credit_sch = OpenStudio::Model::ScheduleRuleset.new(model)
       case_credit_sch.setName("#{ref_case.name} Case Credit")
       case_credit_sch.defaultDaySchedule.setName("#{ref_case.name} Case Credit Default")
-      case_credit_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 7, 0, 0), 1.0)
-      case_credit_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 21, 0, 0), 1.0)
       case_credit_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 1.0)
       ref_case.setCaseDefrostSchedule(defrost_sch)
       ref_case.setCaseDefrostDripDownSchedule(dripdown_sch)
