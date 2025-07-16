@@ -150,7 +150,7 @@ class TestThermalZone < Minitest::Test
     assert_equal(true, @zone.thermal_zone_electric_heat?(thermal_zone))
 
     # test a mixed system
-    std.remove_hvac(model)
+    OpenstudioStandards::HVAC.remove_hvac(model)
     std.model_add_hvac_system(model, 'DOAS', ht = 'NaturalGas', znht = nil, cl = 'Electricity', model.getThermalZones,
                               air_loop_cooling_type: 'DX')
     std.model_add_hvac_system(model, 'VRF', ht = 'Electricity', znht = nil, cl = 'Electricity', model.getThermalZones)

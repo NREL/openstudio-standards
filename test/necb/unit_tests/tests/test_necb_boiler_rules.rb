@@ -130,10 +130,10 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
         for int in 0..fuel_type_cap[ifuel].size - 1
           output_line_text += "#{ifuel},#{fuel_type_min_cap[ifuel][int]},#{fuel_type_max_cap[ifuel][int]},"
           if efficiency_type[ifuel][int] == 'Annual Fuel Utilization Efficiency (AFUE)'
-            actual_boiler_eff[ifuel][int] = (standard.thermal_eff_to_afue(actual_boiler_thermal_eff[ifuel][int]) + 0.0001).round(3)
+            actual_boiler_eff[ifuel][int] = (OpenstudioStandards::HVAC.thermal_eff_to_afue(actual_boiler_thermal_eff[ifuel][int]) + 0.0001).round(3)
             output_line_text += "#{actual_boiler_eff[ifuel][int]},,\n"
           elsif efficiency_type[ifuel][int] == 'Combustion Efficiency'
-            actual_boiler_eff[ifuel][int] = (standard.thermal_eff_to_comb_eff(actual_boiler_thermal_eff[ifuel][int]) + 0.0001).round(3)
+            actual_boiler_eff[ifuel][int] = (OpenstudioStandards::HVAC.thermal_eff_to_comb_eff(actual_boiler_thermal_eff[ifuel][int]) + 0.0001).round(3)
             output_line_text += ",,#{actual_boiler_eff[ifuel][int]}\n"
           elsif efficiency_type[ifuel][int] == 'Thermal Efficiency'
             actual_boiler_eff[ifuel][int] = (actual_boiler_thermal_eff[ifuel][int] + 0.0001).round(3)
