@@ -1144,6 +1144,7 @@ class NECB2011 < Standard
         autosized_capacity = coil.autosizedRatedTotalHeatingCapacity
         if autosized_capacity.is_initialized && autosized_capacity.get < 1.0
           coil.setRatedTotalHeatingCapacity(1.0)
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC',  "DX Heating Coil #{coil.name.to_s} has a rated capacity less than 1.0 kW and has been resized to 1.0 kW to avoid sizing run failure.")
           dx_coil_changed = true
         end
       end
@@ -1152,6 +1153,7 @@ class NECB2011 < Standard
           autosized_capacity = stage.autosizedGrossRatedHeatingCapacity
           if autosized_capacity.is_initialized && autosized_capacity.get < 1.0
             stage.setGrossRatedHeatingCapacity(1.0)
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC',  "A DX Heating Coil #{coil.name.to_s} stage has a rated capacity less than 1.0 kW and has been resized to 1.0 kW to avoid sizing run failure.")
             dx_coil_changed = true
           end
         end
@@ -1161,6 +1163,7 @@ class NECB2011 < Standard
       if !dx_coil_changed
         raise("sizing run 1 failed! check #{sizing_run_dir} (DX coil sizes adjusted, but no further changes possible)")
       end
+      puts "Rerunning sizing run after adjusting DX heating coil sizes to 1.0 kW."
       # Otherwise, loop will rerun sizing
     end
 
