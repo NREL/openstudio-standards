@@ -437,9 +437,6 @@ class NECB2011 < Standard
     apply_weather_data(model: model,
                        epw_file: epw_file,
                        custom_weather_folder: custom_weather_folder,
-    apply_weather_data(model: model,
-                       epw_file: epw_file,
-                       custom_weather_folder: custom_weather_folder,
                        btap_weather: btap_weather)
     primary_heating_fuel = validate_primary_heating_fuel(primary_heating_fuel: primary_heating_fuel, model: model)
     self.fuel_type_set = SystemFuels.new()
