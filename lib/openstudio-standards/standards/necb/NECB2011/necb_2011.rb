@@ -667,9 +667,9 @@ class NECB2011 < Standard
     ecm.add_airloop_economizer(model: model, airloop_economizer_type: airloop_economizer_type)
     # Perform a second sizing run if needed
     if (!unitary_cop.nil? && unitary_cop != 'NECB_Default') || !model.getPlantLoops.empty?
-      if model_run_sizing_run(model, "#{sizing_run_dir}/SR2") == false
-        raise('sizing run 2 failed!')
-      end
+      # Do a sizing run
+      try_sizing_run(model: model, sizing_run_dir: sizing_run_dir, sizing_run_subdir: 'SR2')
+      #end
     end
     # apply unitary cop
     ecm.modify_unitary_cop(model: model, unitary_cop: unitary_cop, sizing_done: true, sql_db_vars_map: sql_db_vars_map)
@@ -1128,7 +1128,7 @@ class NECB2011 < Standard
   # @param necb_reference_hp [Boolean] if true, NECB reference model rules for heat pumps will be used.
   def apply_standard_efficiencies(model:, sizing_run_dir:, dcv_type: 'NECB_Default', necb_reference_hp: false)
     # Do a sizing run
-    try_sizing_run(model: model, sizing_run_dir: sizing_run_dir)
+    try_sizing_run(model: model, sizing_run_dir: sizing_run_dir, sizing_run_subdir: 'plant_loops')
 
     climate_zone = 'NECB HDD Method'
 
@@ -2690,14 +2690,14 @@ class NECB2011 < Standard
   # Arguments:
   # model (OpenStudio::Model::Model): The model to run the sizing run on.
   # sizing_run_dir (String): The directory where the sizing run files will be saved.
-  def try_sizing_run(model:, sizing_run_dir:)
+  def try_sizing_run(model:, sizing_run_dir:, sizing_run_subdir:)
         raise('validation of model failed.') unless validate_initial_model(model)
 
     # Do a sizing run to determine the system capacities.  If a sizing run fails, hard size any failing DX heating coils
     # to 1.0 kW and rerun the sizing run until it succeeds.  If no DX heating coils are found, or none had a small
     # capacity then raise an error.
     loop do
-      sizing_run_success = model_run_sizing_run(model, "#{sizing_run_dir}/plant_loops")
+      sizing_run_success = model_run_sizing_run(model, "#{sizing_run_dir}/#{sizing_run_subdir}")
       break if sizing_run_success
 
       # Sizing run failed, check all DX heating coils and set their size to 1 if less than 1
@@ -2726,7 +2726,7 @@ class NECB2011 < Standard
 
       # If no DX coil was changed, break loop and raise error
       if !dx_coil_changed
-        raise("sizing run 1 failed! check #{sizing_run_dir} (DX coil sizes adjusted, but no further changes possible)")
+        raise("sizing run failed! check #{sizing_run_dir}/#{sizing_run_subdir} (DX coil sizes adjusted, but no further changes possible)")
       end
       puts "Rerunning sizing run after adjusting DX heating coil capacity to 1.0 kW."
       # Otherwise, loop will rerun sizing
