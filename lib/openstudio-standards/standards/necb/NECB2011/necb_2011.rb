@@ -2697,7 +2697,7 @@ class NECB2011 < Standard
     # to 1.0 kW and rerun the sizing run until it succeeds.  If no DX heating coils are found, or none had a small
     # capacity then raise an error.
     loop do
-      sizing_run_success = model_run_sizing_run(model, "#{sizing_run_dir}/#{sizing_run_subdir}")
+      sizing_run_success = model_run_sizing_run(model, "#{sizing_run_dir}/#{sizing_run_subdir}", true)
       break if sizing_run_success
 
       # Sizing run failed, check all DX heating coils and set their size to 1 if less than 1

@@ -71,9 +71,7 @@ class NECB2011
     # create new thermal zones one to one with spaces.
     model_create_thermal_zones(model)
     # do a sizing run.
-    if model_run_sizing_run(model, "#{sizing_run_dir}/autozone") == false
-      raise('autorun sizing run failed!')
-    end
+    try_sizing_run(model: model, sizing_run_dir: sizing_run_dir, sizing_run_subdir: 'autozone')
 
     # collect sizing information on each space.
     store_space_sizing_loads(model)
@@ -114,9 +112,7 @@ class NECB2011
     end
 
     # do a sizing run.
-    if model_run_sizing_run(model, "#{sizing_run_dir}/autozone_systems") == false
-      raise('autorun sizing run failed!')
-    end
+    try_sizing_run(model: model, sizing_run_dir: sizing_run_dir, sizing_run_subdir: 'autozone_systems')
 
     # collect sizing information on each space.
     store_space_sizing_loads(model)
@@ -236,7 +232,7 @@ class NECB2011
   def stored_space_heating_load(space)
     if @stored_space_heating_sizing_loads.nil?
       # do a sizing run.
-      raise("autorun sizing run failed! in #{Dir.pwd}/autozone ") if model_run_sizing_run(space.model, "#{Dir.pwd}/autozone") == false
+      try_sizing_run(model: space.model, sizing_run_dir: "#{Dir.pwd}", sizing_run_subdir: 'autozone')
 
       # collect sizing information on each space.
       store_space_sizing_loads(space.model)
@@ -248,7 +244,7 @@ class NECB2011
   def stored_space_cooling_load(space)
     if @stored_space_cooling_sizing_loads.nil?
       # do a sizing run.
-      raise('autorun sizing run failed!') if model_run_sizing_run(space.model, "#{Dir.pwd}/autozone") == false
+      try_sizing_run(model: space.model, sizing_run_dir: "#{Dir.pwd}", sizing_run_subdir: 'autozone')
 
       # collect sizing information on each space.
       store_space_sizing_loads(space.model)
