@@ -65,7 +65,7 @@ class BTAPPRE1980 < NECB2011
 
   def apply_standard_efficiencies(model:, sizing_run_dir:, dcv_type: 'NECB_Default', necb_reference_hp:false)
     # Do a sizing run
-    try_sizing_run(model: model, sizing_run_dir: sizing_run_dir)
+    try_sizing_run(model: model, sizing_run_dir: sizing_run_dir, sizing_run_subdir: 'plant_loops')
 
     climate_zone = 'NECB HDD Method'
 
