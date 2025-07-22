@@ -33,11 +33,12 @@ module OpenstudioStandards
       # create cases
       medium_temperature_cases = []
       low_temperature_cases = []
-      ref_equip_list[:cases].each do |ref_case|
+      ref_equip_list[:cases].each_with_index do |ref_case, index|
         case_ = OpenstudioStandards::Refrigeration.create_case(model,
                                                                template: template,
                                                                case_type: ref_case[:case_type],
                                                                case_length: ref_case[:length],
+                                                               defrost_start_hour: index,
                                                                thermal_zone: thermal_zone_case)
         if case_.caseOperatingTemperature > -3.0
           medium_temperature_cases << case_
@@ -58,11 +59,12 @@ module OpenstudioStandards
       # create walkins
       medium_temperature_walkins = []
       low_temperature_walkins = []
-      ref_equip_list[:walkins].each do |walkin|
+      ref_equip_list[:walkins].each_with_index do |walkin, index|
         ref_walkin = OpenstudioStandards::Refrigeration.create_walkin(model,
                                                                       name: walkin[:walkin_name],
                                                                       template: template,
                                                                       walkin_type: walkin[:walkin_type],
+                                                                      defrost_start_hour: index,
                                                                       thermal_zone: thermal_zone_walkin)
         if ref_walkin.operatingTemperature > -3.0
           medium_temperature_walkins << ref_walkin

@@ -10,12 +10,18 @@ module OpenstudioStandards
     # @param name [String] Name of the refrigeration walkin
     # @param template [String] Technology or standards level, either 'old', 'new', or 'advanced'
     # @param walkin_type [String] The walkin type. See refrigeration_walkins data for valid options under walkin_type.
+    # @param defrost_schedule [OpenStudio::Model::Schedule] OpenStudio Schedule object with boolean values for the defrost schedule
+    # @param defrost_start_hour [Double] Start hour between 0 and 24 for. Used if defrost_schedule not specified.
+    # @param dripdown_schedule [OpenStudio::Model::Schedule] OpenStudio Schedule object with boolean values for the dripdown schedule
     # @param thermal_zone [OpenStudio::Model::ThermalZone] Thermal zone with the walkin. If nil, will look up from the model.
     # @return [OpenStudio::Model::RefrigerationWalkIn] the refrigeration walkin
     def self.create_walkin(model,
                            name: nil,
                            template: 'new',
                            walkin_type: 'Walk-in Cooler - 120SF with no glass door',
+                           defrost_schedule: nil,
+                           defrost_start_hour: 0,
+                           dripdown_schedule: nil,
                            thermal_zone: nil)
       # get thermal zone if not provided
       if thermal_zone.nil?
@@ -78,29 +84,54 @@ module OpenstudioStandards
       ref_walkin.zoneBoundaries.each { |zb| zb.setStockingDoorOpeningProtectionTypeFacingZone(walkins_properties[:stocking_door_opening_protection]) }
       ref_walkin.setZoneBoundaryThermalZone(thermal_zone)
 
-      # place holders for schedules until data provided from ORNL
-      i = 0
-      # Defrost schedule
-      defrost_sch = OpenStudio::Model::ScheduleRuleset.new(model)
-      defrost_sch.setName("#{ref_walkin.name} Defrost")
-      defrost_sch.defaultDaySchedule.setName("#{ref_walkin.name} Defrost Default")
-      defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, i, 0, 0), 0)
-      defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, i, 59, 0), 1)
-      defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, i + 10, 0, 0), 0)
-      defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, i + 10, 59, 0), 1)
-      defrost_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0)
+      # defrost properties, default to 4 defrosts of 30 minute duration per day
+      defrost_duration = walkins_properties[:defrost_duration].nil? ? 30 : walkins_properties[:defrost_duration]
+      defrosts_per_day = walkins_properties[:defrosts_per_day].nil? ? 4 : walkins_properties[:defrosts_per_day]
+      dripdown_duration = walkins_properties[:dripdown_duration].nil? ? 45 : walkins_properties[:dripdown_duration]
 
-      # Dripdown schedule
-      dripdown_sch = OpenStudio::Model::ScheduleRuleset.new(model)
-      dripdown_sch.setName("#{ref_walkin.name} Defrost")
-      dripdown_sch.defaultDaySchedule.setName("#{ref_walkin.name} Defrost Default")
-      dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, i, 0, 0), 0)
-      dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, i, 59, 0), 1)
-      dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, i + 10, 0, 0), 0)
-      dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, i + 10, 59, 0), 1)
-      dripdown_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0)
-      ref_walkin.setDefrostSchedule(defrost_sch)
-      ref_walkin.setDefrostDripDownSchedule(dripdown_sch)
+      # defrost hours are calculated from the start hour and number of defrosts per day
+      defrost_interval = (24 / defrosts_per_day).floor
+      defrost_hours = (1..defrosts_per_day).map { |i| defrost_start_hour + ((i - 1) * defrost_interval) }
+      defrost_hours.map! { |hr| hr > 23 ? hr - 24 : hr }
+      defrost_hours.sort!
+
+      # Defrost schedule
+      if defrost_schedule.nil?
+        defrost_schedule = OpenStudio::Model::ScheduleRuleset.new(model)
+        defrost_schedule.setName("#{ref_walkin.name} Defrost")
+        defrost_schedule.defaultDaySchedule.setName("#{ref_walkin.name} Defrost Default")
+        defrost_hours.each do |defrost_hour|
+          defrost_schedule.defaultDaySchedule.addValue(OpenStudio::Time.new(0, defrost_hour, 0, 0), 0)
+          defrost_schedule.defaultDaySchedule.addValue(OpenStudio::Time.new(0, defrost_hour, defrost_duration, 0), 1)
+        end
+        defrost_schedule.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0)
+      else
+        unless defrost_schedule.to_Schedule.is_initialized
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Refrigeration', "Input for defrost_schedule #{defrost_schedule} is not a valid OpenStudio::Model::Schedule object")
+          return nil
+        end
+      end
+
+      # Dripdown schedule, synced with defrost schedule
+      if dripdown_schedule.nil?
+        dripdown_schedule = OpenStudio::Model::ScheduleRuleset.new(model)
+        dripdown_schedule.setName("#{ref_walkin.name} Dripdown")
+        dripdown_schedule.defaultDaySchedule.setName("#{ref_walkin.name} Dripdown Default")
+        defrost_hours.each do |defrost_hour|
+          dripdown_schedule.defaultDaySchedule.addValue(OpenStudio::Time.new(0, defrost_hour, 0, 0), 0)
+          dripdown_schedule.defaultDaySchedule.addValue(OpenStudio::Time.new(0, defrost_hour, dripdown_duration, 0), 1)
+        end
+        dripdown_schedule.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0)
+      else
+        unless dripdown_schedule.to_Schedule.is_initialized
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Refrigeration', "Input for dripdown_schedule #{dripdown_schedule} is not a valid OpenStudio::Model::Schedule object")
+          return nil
+        end
+      end
+
+      # set schedules
+      ref_walkin.setDefrostSchedule(defrost_schedule)
+      ref_walkin.setDefrostDripDownSchedule(dripdown_schedule)
 
       # stocking schedule
       # ref_walkin.setRestockingSchedule(model.alwaysOffDiscreteSchedule)
