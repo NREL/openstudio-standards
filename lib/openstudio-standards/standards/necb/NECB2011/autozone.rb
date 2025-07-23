@@ -69,7 +69,7 @@ class NECB2011
     # Remove any Thermal zones assigned before
     model.getThermalZones.each(&:remove)
     # create new thermal zones one to one with spaces.
-    model_create_thermal_zones(model)
+    model_create_thermal_zones(model, space_multiplier_map)
     # do a sizing run.
     try_sizing_run(model: model, sizing_run_dir: sizing_run_dir, sizing_run_subdir: 'autozone')
 
@@ -362,6 +362,7 @@ class NECB2011
       tz_name = "ALL_ST=#{space.spaceType.get.standardsSpaceType.get}_FL=#{space.buildingStory.get.name}_SCH=#{determine_dominant_schedule([space])}"
       zone.setName(tz_name)
       # sets space mulitplier unless it is nil or 1.
+      test = @space_multiplier_map
       unless space_multiplier_map[space.name.to_s].nil? || (space_multiplier_map[space.name.to_s] == 1)
         zone.setMultiplier(space_multiplier_map[space.name.to_s])
       end
