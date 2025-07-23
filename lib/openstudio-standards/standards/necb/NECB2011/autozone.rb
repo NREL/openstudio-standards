@@ -362,7 +362,6 @@ class NECB2011
       tz_name = "ALL_ST=#{space.spaceType.get.standardsSpaceType.get}_FL=#{space.buildingStory.get.name}_SCH=#{determine_dominant_schedule([space])}"
       zone.setName(tz_name)
       # sets space mulitplier unless it is nil or 1.
-      test = @space_multiplier_map
       unless space_multiplier_map[space.name.to_s].nil? || (space_multiplier_map[space.name.to_s] == 1)
         zone.setMultiplier(space_multiplier_map[space.name.to_s])
       end
