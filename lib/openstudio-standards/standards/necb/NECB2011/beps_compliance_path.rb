@@ -118,6 +118,11 @@ class NECB2011
         # set fraction radiant  ##
         definition.setFractionRadiant(0.3)
 
+        # Set thermal comfort model types to for thermal resilience calculations
+        definition.setThermalComfortModelType(0,'Fanger')
+        definition.setThermalComfortModelType(1,'Pierce')
+        definition.setThermalComfortModelType(2,'AdaptiveCEN15251')
+
         # Clothing schedule for thermal comfort metrics
         clothing_sch = space_type.model.getScheduleRulesetByName('Clothing Schedule')
         if clothing_sch.is_initialized
