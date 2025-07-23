@@ -2691,7 +2691,7 @@ class NECB2011 < Standard
   # model (OpenStudio::Model::Model): The model to run the sizing run on.
   # sizing_run_dir (String): The directory where the sizing run files will be saved.
   def try_sizing_run(model:, sizing_run_dir:, sizing_run_subdir:)
-        raise('validation of model failed.') unless validate_initial_model(model)
+    raise('validation of model failed.') unless validate_initial_model(model)
 
     # Do a sizing run to determine the system capacities.  If a sizing run fails, hard size any failing DX heating coils
     # to 1.0 kW and rerun the sizing run until it succeeds.  If no DX heating coils are found, or none had a small
