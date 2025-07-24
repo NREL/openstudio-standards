@@ -83,16 +83,9 @@
   { key: '*',     variable: 'Zone Thermostat Cooling Setpoint Temperature',     frequency: 'hourly',     operation: '*',     unit: '*' },
   { key: '*',     variable: 'Zone Thermal Comfort Fanger Model PMV',     frequency: 'hourly',     operation: '*',     unit: '*' },
   { key: '*',     variable: 'Zone Thermal Comfort Fanger Model PPD',     frequency: 'hourly',     operation: '*',     unit: '*' },
-  { key: '*',     variable: 'Zone Thermal Comfort Pierce Model Effective Temperature PMV',     frequency: 'hourly',     operation: '*',     unit: '*' },
-  { key: '*',     variable: 'Zone Thermal Comfort Pierce Model Effective Temperature SET',     frequency: 'hourly',     operation: '*',     unit: '*' },
   { key: '*',     variable: 'Zone Thermal Comfort Pierce Model Standard Effective Temperature',     frequency: 'hourly',     operation: '*',     unit: '*' },
-  { key: '*',     variable: 'Zone Thermal Comfort Pierce Model Discomfort Index',     frequency: 'hourly',     operation: '*',     unit: '*' },
   { key: '*',     variable: 'Zone Thermal Comfort CEN 15251 Adaptive Model Category III Status',     frequency: 'hourly',     operation: '*',     unit: '*' },
-  { key: '*',     variable: 'Zone Thermal Comfort CEN 15251 Adaptive Model Running Mean Outdoor Air Temperature',     frequency: 'hourly',     operation: '*',     unit: '*' },
-  { key: '*',     variable: 'Zone Thermal Comfort CEN 15251 Adaptive Model Temperature',     frequency: 'hourly',     operation: '*',     unit: '*' },
-  { key: '*',     variable: 'Zone Heat Index',     frequency: 'hourly',     operation: '*',     unit: '*' },
-  { key: '*',     variable: 'Zone Humidity Index',     frequency: 'hourly',     operation: '*',     unit: '*' }
-  
+  { key: '*',     variable: 'Zone Thermal Comfort CEN 15251 Adaptive Model Temperature',     frequency: 'hourly',     operation: '*',     unit: '*' }  
 ]
 :output_meters: [
   {    name: 'NaturalGas:Facility',     frequency: 'hourly'},
