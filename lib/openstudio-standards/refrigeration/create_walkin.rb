@@ -84,54 +84,58 @@ module OpenstudioStandards
       ref_walkin.zoneBoundaries.each { |zb| zb.setStockingDoorOpeningProtectionTypeFacingZone(walkins_properties[:stocking_door_opening_protection]) }
       ref_walkin.setZoneBoundaryThermalZone(thermal_zone)
 
-      # defrost properties, default to 4 defrosts of 30 minute duration per day
-      defrost_duration = walkins_properties[:defrost_duration].nil? ? 30 : walkins_properties[:defrost_duration]
-      defrosts_per_day = walkins_properties[:defrosts_per_day].nil? ? 4 : walkins_properties[:defrosts_per_day]
-      dripdown_duration = walkins_properties[:dripdown_duration].nil? ? 45 : walkins_properties[:dripdown_duration]
+      # only add defrost schedules if not OffCycle
+      unless walkins_properties[:defrost_type] == 'OffCycle'
+        # defrost properties, default to two 45 minute defrost cycles per day followed by a 5 minute dripdown duration
+        defrost_duration = walkins_properties[:defrost_duration].nil? ? 45 : walkins_properties[:defrost_duration]
+        defrosts_per_day = walkins_properties[:defrosts_per_day].nil? ? 2 : walkins_properties[:defrosts_per_day]
+        dripdown_duration = walkins_properties[:dripdown_duration].nil? ? 5 : walkins_properties[:dripdown_duration]
 
-      # defrost hours are calculated from the start hour and number of defrosts per day
-      defrost_interval = (24 / defrosts_per_day).floor
-      defrost_hours = (1..defrosts_per_day).map { |i| defrost_start_hour + ((i - 1) * defrost_interval) }
-      defrost_hours.map! { |hr| hr > 23 ? hr - 24 : hr }
-      defrost_hours.sort!
+        # defrost hours are calculated from the start hour and number of defrosts per day
+        defrost_interval = (24 / defrosts_per_day).floor
+        defrost_hours = (1..defrosts_per_day).map { |i| defrost_start_hour + ((i - 1) * defrost_interval) }
+        defrost_hours.map! { |hr| hr > 23 ? hr - 24 : hr }
+        defrost_hours.sort!
 
-      # Defrost schedule
-      if defrost_schedule.nil?
-        defrost_schedule = OpenStudio::Model::ScheduleRuleset.new(model)
-        defrost_schedule.setName("#{ref_walkin.name} Defrost")
-        defrost_schedule.defaultDaySchedule.setName("#{ref_walkin.name} Defrost Default")
-        defrost_hours.each do |defrost_hour|
-          defrost_schedule.defaultDaySchedule.addValue(OpenStudio::Time.new(0, defrost_hour, 0, 0), 0)
-          defrost_schedule.defaultDaySchedule.addValue(OpenStudio::Time.new(0, defrost_hour, defrost_duration, 0), 1)
+        # Defrost schedule
+        if defrost_schedule.nil?
+          defrost_schedule = OpenStudio::Model::ScheduleRuleset.new(model)
+          defrost_schedule.setName("#{ref_walkin.name} Defrost")
+          defrost_schedule.defaultDaySchedule.setName("#{ref_walkin.name} Defrost Default")
+          defrost_hours.each do |defrost_hour|
+            defrost_schedule.defaultDaySchedule.addValue(OpenStudio::Time.new(0, defrost_hour, 0, 0), 0)
+            defrost_schedule.defaultDaySchedule.addValue(OpenStudio::Time.new(0, defrost_hour, defrost_duration, 0), 1)
+          end
+          defrost_schedule.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0)
+        else
+          unless defrost_schedule.to_Schedule.is_initialized
+            OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Refrigeration', "Input for defrost_schedule #{defrost_schedule} is not a valid OpenStudio::Model::Schedule object")
+            return nil
+          end
         end
-        defrost_schedule.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0)
-      else
-        unless defrost_schedule.to_Schedule.is_initialized
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Refrigeration', "Input for defrost_schedule #{defrost_schedule} is not a valid OpenStudio::Model::Schedule object")
-          return nil
+        ref_walkin.setDefrostSchedule(defrost_schedule)
+
+        # Dripdown schedule, synced with defrost schedule
+        if dripdown_schedule.nil?
+          dripdown_schedule = OpenStudio::Model::ScheduleRuleset.new(model)
+          dripdown_schedule.setName("#{ref_walkin.name} Dripdown")
+          dripdown_schedule.defaultDaySchedule.setName("#{ref_walkin.name} Dripdown Default")
+          defrost_hours.each do |defrost_hour|
+            dripdown_hour = (defrost_duration + dripdown_duration) > 59 ? defrost_hour + 1 : defrost_hour
+            dripdown_hour = dripdown_hour > 23 ? dripdown_hour - 24 : dripdown_hour
+            dripdown_end_min = (defrost_duration + dripdown_duration) > 59 ? defrost_duration + dripdown_duration - 60 : defrost_duration + dripdown_duration
+            dripdown_schedule.defaultDaySchedule.addValue(OpenStudio::Time.new(0, defrost_hour, defrost_duration, 0), 0)
+            dripdown_schedule.defaultDaySchedule.addValue(OpenStudio::Time.new(0, dripdown_hour, dripdown_end_min, 0), 1)
+          end
+          dripdown_schedule.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0)
+        else
+          unless dripdown_schedule.to_Schedule.is_initialized
+            OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Refrigeration', "Input for dripdown_schedule #{dripdown_schedule} is not a valid OpenStudio::Model::Schedule object")
+            return nil
+          end
         end
+        ref_walkin.setDefrostDripDownSchedule(dripdown_schedule)
       end
-
-      # Dripdown schedule, synced with defrost schedule
-      if dripdown_schedule.nil?
-        dripdown_schedule = OpenStudio::Model::ScheduleRuleset.new(model)
-        dripdown_schedule.setName("#{ref_walkin.name} Dripdown")
-        dripdown_schedule.defaultDaySchedule.setName("#{ref_walkin.name} Dripdown Default")
-        defrost_hours.each do |defrost_hour|
-          dripdown_schedule.defaultDaySchedule.addValue(OpenStudio::Time.new(0, defrost_hour, 0, 0), 0)
-          dripdown_schedule.defaultDaySchedule.addValue(OpenStudio::Time.new(0, defrost_hour, dripdown_duration, 0), 1)
-        end
-        dripdown_schedule.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0)
-      else
-        unless dripdown_schedule.to_Schedule.is_initialized
-          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Refrigeration', "Input for dripdown_schedule #{dripdown_schedule} is not a valid OpenStudio::Model::Schedule object")
-          return nil
-        end
-      end
-
-      # set schedules
-      ref_walkin.setDefrostSchedule(defrost_schedule)
-      ref_walkin.setDefrostDripDownSchedule(dripdown_schedule)
 
       # stocking schedule
       # ref_walkin.setRestockingSchedule(model.alwaysOffDiscreteSchedule)
