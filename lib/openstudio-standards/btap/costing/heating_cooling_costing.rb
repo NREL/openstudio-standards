@@ -909,8 +909,6 @@ class BTAPCosting
       matCost, labCost = getHVACCost('GSHP outdoor piping cost', 'gshp_buried_pipe', pipe_dia_mm, false)
       pipingCost = matCost * gshp_dist
 
-      raise "Intentionally raising an error to stop costing for GSHP interior piping."
-
       # Interior piping cost
       # Get mechanical room lacotion (assume this is where the GSHP is)
       mech_room, cond_spaces = prototype_creator.find_mech_room(model)
