@@ -42,7 +42,7 @@ module ASHRAEPRMCoilDX
     # get thermal zone
     thermal_zone = OpenstudioStandards::HVAC.hvac_component_get_thermal_zone(coil_dx)
 
-    if !thermal_zone.nil?
+    if thermal_zone.nil?
       OpenStudio.logFree(OpenStudio::Error, 'prm.log', "Unable to determine thermal zone for coil #{coil_dx.name}.")
       return multiplier
     end
