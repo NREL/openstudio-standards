@@ -9,9 +9,6 @@ class Standard
   # @param fan_constant_volume [OpenStudio::Model::FanConstantVolume] constant volume fan object
   # @return [Boolean] returns true if successful, false if not
   def fan_constant_volume_apply_prototype_fan_pressure_rise(fan_constant_volume)
-    # Don't modify unit heater fans
-    return true if fan_constant_volume.name.to_s.include?('UnitHeater Fan')
-
     # Get the max flow rate from the fan.
     maximum_flow_rate_m3_per_s = nil
     if fan_constant_volume.maximumFlowRate.is_initialized
@@ -26,8 +23,7 @@ class Standard
     # Convert max flow rate to cfm
     maximum_flow_rate_cfm = OpenStudio.convert(maximum_flow_rate_m3_per_s, 'm^3/s', 'cfm').get
 
-    # Pressure rise will be determined based on the
-    # following logic.
+    # Pressure rise will be determined based on the following logic.
     pressure_rise_in_h2o = 0.0
 
     # If the fan lives inside of a zone hvac equipment

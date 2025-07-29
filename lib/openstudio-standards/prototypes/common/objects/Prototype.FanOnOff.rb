@@ -24,8 +24,7 @@ class Standard
     # Convert max flow rate to cfm
     maximum_flow_rate_cfm = OpenStudio.convert(maximum_flow_rate_m3_per_s, 'm^3/s', 'cfm').get
 
-    # Pressure rise will be determined based on the
-    # following logic.
+    # Pressure rise will be determined based on the following logic.
     pressure_rise_in_h2o = 0.0
 
     # If the fan lives inside of a zone hvac equipment

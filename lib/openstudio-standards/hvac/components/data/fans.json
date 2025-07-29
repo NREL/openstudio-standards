@@ -255,7 +255,7 @@
     {
       "name": "Unit_Heater_Fan",
       "type": "ConstantVolume",
-      "pressure_rise": null,
+      "pressure_rise": 0.2,
       "fan_efficiency": 0.53625,
       "motor_efficiency": 0.825,
       "motor_in_airstream_fraction": 1.0,
