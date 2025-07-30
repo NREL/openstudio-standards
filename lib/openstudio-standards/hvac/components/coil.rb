@@ -51,7 +51,7 @@ module OpenstudioStandards
           containing_comp = coil_dx.containingHVACComponent.get
           if containing_comp.to_AirLoopHVACUnitarySystem.is_initialized
             htg_coil = containing_comp.to_AirLoopHVACUnitarySystem.get.heatingCoil
-            if htg_coil.is_intialized?
+            unless htg_coil.empty?
               heat_pump = ['OS_Coil_Heating_DX_SingleSpeed',
                            'OS_Coil_Heating_DX_MultiSpeed',
                            'OS_Coil_Heating_DX_VariableSpeed',
