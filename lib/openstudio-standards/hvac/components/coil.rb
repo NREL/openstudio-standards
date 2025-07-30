@@ -49,7 +49,15 @@ module OpenstudioStandards
       if coil_dx.airLoopHVAC.empty?
         if coil_dx.containingHVACComponent.is_initialized
           containing_comp = coil_dx.containingHVACComponent.get
-          if containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAir.is_initialized
+          if containing_comp.to_AirLoopHVACUnitarySystem.is_initialized
+            htg_coil = containing_comp.to_AirLoopHVACUnitarySystem.get.heatingCoil
+            if htg_coil.is_intialized?
+              heat_pump = ['OS_Coil_Heating_DX_SingleSpeed',
+                           'OS_Coil_Heating_DX_MultiSpeed',
+                           'OS_Coil_Heating_DX_VariableSpeed',
+                           'OS_Coil_Heating_WaterToAirHeatPump_EquationFit'].include?(htg_coil.get.iddObjectType.valueName.to_s)
+            end
+          elsif containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAir.is_initialized
             heat_pump = true
           elsif containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.is_initialized
             htg_coil = containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.get.heatingCoil
@@ -65,6 +73,7 @@ module OpenstudioStandards
         end
       else
         if !coil_dx.airLoopHVAC.get.supplyComponents('OS:Coil:Heating:DX:SingleSpeed'.to_IddObjectType).empty? ||
+           !coil_dx.airLoopHVAC.get.supplyComponents('OS:Coil:Heating:DX:MultiSpeed'.to_IddObjectType).empty? ||
            !coil_dx.airLoopHVAC.get.supplyComponents('OS:Coil:Heating:DX:VariableSpeed'.to_IddObjectType).empty?
           heat_pump = true
         end
@@ -133,26 +142,26 @@ module OpenstudioStandards
       if coil_dx.airLoopHVAC.is_initialized
         air_loop = coil_dx.airLoopHVAC.get
         htg_type = if !air_loop.supplyComponents('OS:Coil:Heating:Gas'.to_IddObjectType).empty?
-                    'All Other'
-                  elsif !air_loop.supplyComponents('OS:Coil:Heating:Water'.to_IddObjectType).empty?
-                    'All Other'
-                  elsif !air_loop.supplyComponents('OS:Coil:Heating:DX:SingleSpeed'.to_IddObjectType).empty?
-                    'All Other'
-                  elsif !air_loop.supplyComponents('OS:Coil:Heating:DX:MultiSpeed'.to_IddObjectType).empty?
-                    'All Other'
-                  elsif !air_loop.supplyComponents('OS:Coil:Heating:DX:VariableSpeed'.to_IddObjectType).empty?
-                    'All Other'
-                  elsif !air_loop.supplyComponents('OS:Coil:Heating:Gas:MultiStage'.to_IddObjectType).empty?
-                    'All Other'
-                  elsif !air_loop.supplyComponents('OS:Coil:Heating:Desuperheater'.to_IddObjectType).empty?
-                    'All Other'
-                  elsif !air_loop.supplyComponents('OS:Coil:Heating:WaterToAirHeatPump:EquationFit'.to_IddObjectType).empty?
-                    'All Other'
-                  elsif !air_loop.supplyComponents('OS:Coil:Heating:Electric'.to_IddObjectType).empty?
-                    'Electric Resistance or None'
-                  else
-                    'Electric Resistance or None'
-                  end
+                     'All Other'
+                   elsif !air_loop.supplyComponents('OS:Coil:Heating:Water'.to_IddObjectType).empty?
+                     'All Other'
+                   elsif !air_loop.supplyComponents('OS:Coil:Heating:DX:SingleSpeed'.to_IddObjectType).empty?
+                     'All Other'
+                   elsif !air_loop.supplyComponents('OS:Coil:Heating:DX:MultiSpeed'.to_IddObjectType).empty?
+                     'All Other'
+                   elsif !air_loop.supplyComponents('OS:Coil:Heating:DX:VariableSpeed'.to_IddObjectType).empty?
+                     'All Other'
+                   elsif !air_loop.supplyComponents('OS:Coil:Heating:Gas:MultiStage'.to_IddObjectType).empty?
+                     'All Other'
+                   elsif !air_loop.supplyComponents('OS:Coil:Heating:Desuperheater'.to_IddObjectType).empty?
+                     'All Other'
+                   elsif !air_loop.supplyComponents('OS:Coil:Heating:WaterToAirHeatPump:EquationFit'.to_IddObjectType).empty?
+                     'All Other'
+                   elsif !air_loop.supplyComponents('OS:Coil:Heating:Electric'.to_IddObjectType).empty?
+                     'Electric Resistance or None'
+                   else
+                     'Electric Resistance or None'
+                   end
       end
 
       return htg_type
