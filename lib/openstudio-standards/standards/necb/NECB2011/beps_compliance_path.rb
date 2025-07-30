@@ -135,6 +135,7 @@ class NECB2011
           sch_rule = OpenStudio::Model::ScheduleRule.new(clothing_sch)
           sch_rule.daySchedule.setName('Clothing Schedule Summer Clothes')
           sch_rule.daySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), 0.5)
+          sch_rule.setApplyAllDays(true)
           sch_rule.setStartDate(OpenStudio::Date.new(OpenStudio::MonthOfYear.new(5), 1))
           sch_rule.setEndDate(OpenStudio::Date.new(OpenStudio::MonthOfYear.new(9), 30))
         end
