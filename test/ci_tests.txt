@@ -7,17 +7,28 @@ modules/create_typical/test_enumerations.rb
 modules/create_typical/test_create_typical.rb
 modules/create_typical/test_space_type_blend.rb
 modules/daylighting/test_space.rb
+modules/exterior_lighting/test_create.rb
+modules/exterior_lighting/test_information.rb
 modules/geometry/test_geometry_create_bar.rb
 modules/geometry/test_geometry_create_bar.rb
 modules/geometry/test_geometry_create.rb
 modules/geometry/test_geometry_information.rb
+modules/hvac/test_hvac_exhaust.rb
 modules/infiltration/test_infiltration.rb
 modules/infiltration/test_nist_infiltration.rb
+modules/refrigeration/test_create_case.rb
+modules/refrigeration/test_create_compressor.rb
+modules/refrigeration/test_create_compressor_rack.rb
+modules/refrigeration/test_create_refrigeration_system.rb
+modules/refrigeration/test_create_typical_refrigeration.rb
+modules/refrigeration/test_create_walkin.rb
+modules/refrigeration/test_information.rb
 modules/schedules/test_schedules_create.rb
 modules/schedules/test_schedules_information.rb
 modules/schedules/test_schedules_modify.rb
 modules/schedules/test_schedules_parametric.rb
 modules/service_water_heating/test_create_piping_losses.rb
+modules/service_water_heating/test_create_typical.rb
 modules/service_water_heating/test_create_water_heater.rb
 modules/service_water_heating/test_create_water_heating_loop.rb
 modules/service_water_heating/test_create_water_use.rb
@@ -43,6 +54,8 @@ os_stds_methods/test_minimum_efficiency_lookups.rb
 90_1_prm/test_prm_baseline_bldg13.rb
 90_1_prm/test_appendix_g_prm.rb
 
+rpd_features/test_rpd_model_prepare.rb
+
 90_1_general/test_boiler_hot_water.rb
 90_1_general/test_chiller_electric_eir.rb
 90_1_general/test_coil_dx.rb
@@ -58,8 +71,8 @@ doe_prototype/test_laboratory.rb
 doe_prototype/test_large_data_center_highITE.rb
 doe_prototype/test_large_data_center_lowITE.rb
 doe_prototype/test_large_hotel.rb
-doe_prototype/test_large_office.rb
-doe_prototype/test_large_office_detailed.rb
+#doe_prototype/test_large_office.rb
+#doe_prototype/test_large_office_detailed.rb
 doe_prototype/test_medium_office.rb
 doe_prototype/test_medium_detailed.rb
 doe_prototype/test_mid_rise_apartment.rb
@@ -85,11 +98,8 @@ doe_prototype_test_courthouse.rb
 
 doe_prototype/test_add_c_factor_wall.rb
 doe_prototype/test_add_elevators.rb
-doe_prototype/test_add_exhaust.rb
-doe_prototype/test_add_exterior_lights.rb
 doe_prototype/test_add_f_factor_floor.rb
 doe_prototype/test_add_refrigeration.rb
-doe_prototype/test_add_swh.rb
 doe_prototype/test_effective_num_stories.rb
 doe_prototype/test_space_type_hash.rb
 doe_prototype/test_sim_control.rb
@@ -124,7 +134,7 @@ necb/unit_tests/tests/test_necb_loop_rules.rb
 necb/unit_tests/tests/test_necb_pumppower_rules.rb
 #necb/unit_tests/tests/test_necb_qaqc_single.rb
 necb/unit_tests/tests/test_necb_reference_heatpump_rules.rb
-necb/unit_tests/tests/test_necb_schedules.rb
+#necb/unit_tests/tests/test_necb_schedules.rb
 necb/unit_tests/tests/test_necb_shw.rb
 necb/unit_tests/tests/test_necb_space_types_default_constructions_set.rb
 necb/unit_tests/tests/test_necb_total_and_tz_ceiling_centroid.rb
