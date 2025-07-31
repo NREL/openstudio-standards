@@ -17,9 +17,14 @@ class Standard
       sub_category = 'CRAC'
     end
     capacity_w = OpenstudioStandards::HVAC.coil_cooling_water_to_air_heat_pump_get_capacity(coil_cooling_water_to_air_heat_pump)
+
+    # Check to make sure properties were found
+    if capacity_w.nil? || capacity_w < 1
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingWaterToAirHeatPumpEquationFit', "For #{coil_cooling_water_to_air_heat_pump.name}, cannot determine capacity.")
+      return nil
+    end
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
-    return nil unless capacity_kbtu_per_hr > 0.0
 
     # Look up the efficiency characteristics
     if computer_room_air_conditioner
