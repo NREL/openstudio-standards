@@ -657,9 +657,8 @@ class AppendixGPRMTests < Minitest::Test
                              fan_type: 'ConstantVolume')
           zones.each do |zone|
             zone.equipment.each do |zone_equipment|
-              puts "zone #{zone.name} zone_equipment #{zone_equipment.name} is #{zone_equipment} for building #{model_ptac.getBuilding.name} and thermal zone is a plenum is #{OpenstudioStandards::ThermalZone.thermal_zone_plenum?(zone)}"
               ptac = zone_equipment.to_ZoneHVACPackagedTerminalAirConditioner.get
-              ptac.supplyAirFan.to_FanConstantVolume.get.setMaximumFlowRate(100)
+              ptac.supplyAirFan.to_FanOnOff.get.setMaximumFlowRate(100)
               clg_coil = ptac.coolingCoil.to_CoilCoolingDXSingleSpeed.get
               capacity_cool_w = OpenStudio.convert(key_cool, 'Btu/hr', 'W'). get
               clg_coil.setRatedTotalCoolingCapacity(capacity_cool_w)
@@ -697,7 +696,7 @@ class AppendixGPRMTests < Minitest::Test
             zones.each do |zone|
               zone.equipment.each do |zone_equipment|
                 pthp = zone_equipment.to_ZoneHVACPackagedTerminalHeatPump.get
-                pthp.supplyAirFan.to_FanConstantVolume.get.setMaximumFlowRate(100)
+                pthp.supplyAirFan.to_FanOnOff.get.setMaximumFlowRate(100)
                 clg_coil = pthp.coolingCoil.to_CoilCoolingDXSingleSpeed.get
                 capacity_cool_w = OpenStudio.convert(key_cool, 'Btu/hr', 'W'). get
                 clg_coil.setRatedTotalCoolingCapacity(capacity_cool_w)
