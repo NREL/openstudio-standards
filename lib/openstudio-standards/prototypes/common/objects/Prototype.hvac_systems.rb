@@ -5253,7 +5253,7 @@ class Standard
       radiant_loops << radiant_loop
 
       # rename nodes before adding EMS code
-      rename_plant_loop_nodes(model)
+      OpenstudioStandards::HVAC.rename_plant_loop_nodes(model)
 
       # set radiant loop controls
       case control_strategy.downcase
