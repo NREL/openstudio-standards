@@ -249,8 +249,8 @@ class BTAPDatapoint
         @cost_result = nil
         if @options[:enable_costing]
           # Perform costing
-          costs_path = File.join(input_folder_cache, 'costs.csv')
-          local_cost_factors_path = File.join(input_folder_cache, 'local_cost_factors.csv')
+          costs_path = File.join(__dir__, '..','..','..','btap','costing','common_resources', 'costs.csv')
+          local_cost_factors_path = File.join(__dir__, '..','..','..','btap','costing','common_resources', 'costs_local_factors.csv')
           costing = BTAPCosting.new(costs_csv: costs_path, factors_csv: local_cost_factors_path)
           costing.load_database
 
