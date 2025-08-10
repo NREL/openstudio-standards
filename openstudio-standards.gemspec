@@ -55,4 +55,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'aws-sdk-s3'
   spec.add_development_dependency 'git-revision'
   spec.add_development_dependency 'bundler-audit'
+  # Add solargraph for code completion and documentation generation, and MCP support.
+  spec.add_development_dependency 'solargraph', '~> 0.46.0' 
 end
