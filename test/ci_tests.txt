@@ -110,13 +110,21 @@ cbes_prototype/test_retail_standalone.rb
 
 # NECB unit tests (in alphebetical order)
 necb/unit_tests/tests/test_daylighting_sensor_control.rb
-necb/unit_tests/tests/test_dcv.rb
+necb/unit_tests/tests/test_dcv_fsr_necb2011.rb
+necb/unit_tests/tests/test_dcv_fsr_necb2015.rb
+necb/unit_tests/tests/test_dcv_fsr_necb2017.rb
+necb/unit_tests/tests/test_dcv_largeoffice_necb2011.rb
+necb/unit_tests/tests/test_dcv_largeoffice_necb2015.rb
+necb/unit_tests/tests/test_dcv_largeoffice_necb2017.rb
 necb/unit_tests/tests/test_ecm_hs14_cgshp_fancoils.rb
 necb/unit_tests/tests/test_ecm_chiller.rb
 #necb/unit_tests/tests/test_ecm_erv.rb
 #necb/unit_tests/tests/test_ecm_modify_unitary_rules.rb
 necb/unit_tests/tests/test_ecm_scaling_loads.rb
-necb/unit_tests/tests/test_insuite_central_doas.rb
+necb/unit_tests/tests/test_insuite_central_doas_highriseapartment_one_sys_per_bldg.rb
+necb/unit_tests/tests/test_insuite_central_doas_largehotel_one_sys_per_dwelling_unit.rb
+necb/unit_tests/tests/test_insuite_central_doas_largehotel_one_sys_per_bldg.rb
+necb/unit_tests/tests/test_insuite_central_doas_highriseapartment_one_sys_per_dwelling_unit.rb
 necb/unit_tests/tests/test_led_lighting.rb
 #necb/unit_tests/tests/test_necb_airloop_sizing_parameters.rb
 necb/unit_tests/tests/test_necb_auto_zone_test.rb
