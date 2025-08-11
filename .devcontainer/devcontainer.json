@@ -25,5 +25,5 @@
 	},
 	// This is set as a env variable in the container, but it is also used to set the default shell in the container, just in case. 
     "runArgs": ["--env", "LANG=en_US.UTF-8"],
-    "postCreateCommand": "if [ \"$(curl -k -o /dev/null -s -w \"%{http_code}\" \"https://intranet.nrcan.gc.ca/\")\" -ge 200 ] && [ \"$(curl -o /dev/null -s -w \"%{http_code}\" \"https://intranet.nrcan.gc.ca/\")\" -lt 400 ]; then echo \"nrcan network detected.\" && git clone https://github.com/canmet-energy/linux_nrcan_certs.git && cd linux_nrcan_certs && ./install_nrcan_certs.sh && cd .. && rm -fr linux_nrcan_certs ; fi &&/venv/bin/python -m venv ${containerWorkspaceFolder}/.venv && cp Gemfile.lock.$OPENSTUDIO_VERSION Gemfile.lock && bundle config set path '${containerWorkspaceFolder}/vendor/bundle'&& bundle install && bash -c 'curl -fsSLk https://deb.nodesource.com/setup_18.x | sudo -E bash - && sudo apt-get install -y nodejs && sudo apt-get update && sudo npm config set strict-ssl false && sudo npm install -g @anthropic-ai/claude-code'"
+    "postCreateCommand": "bash .devcontainer/setup.sh"
 }
