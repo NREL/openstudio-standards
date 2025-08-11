@@ -155,7 +155,7 @@ class BtapResults_Test < Minitest::Test
     # set up runner, this will happen automatically when measure is run in PAT or OpenStudio. Ensure files exist.
     runner = OpenStudio::Measure::OSRunner.new(OpenStudio::WorkflowJSON.new)
     test_dir = "#{File.dirname(__FILE__)}/output"
-    if !Dir.exists?(test_dir)
+    if !Dir.exist?(test_dir)
       Dir.mkdir(test_dir)
     end
 
@@ -164,7 +164,7 @@ class BtapResults_Test < Minitest::Test
     if @test_file.nil?
       model_name = "#{building_type}-#{template}-#{File.basename(epw_file, '.epw')}"
       run_dir = "#{test_dir}/#{model_name}"
-      if !Dir.exists?(run_dir)
+      if !Dir.exist?(run_dir)
         Dir.mkdir(run_dir)
       end
       #create standard model
@@ -184,7 +184,7 @@ class BtapResults_Test < Minitest::Test
     else
       model_name = @test_file
       run_dir = "#{test_dir}/#{model_name[0..-5]}"
-      if !Dir.exists?(run_dir)
+      if !Dir.exist?(run_dir)
         Dir.mkdir(run_dir)
       end
       top_dir_element = /btap_costing/ =~ File.expand_path(File.dirname(__FILE__))

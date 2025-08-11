@@ -140,7 +140,7 @@ class BTAPResults_HS14_Test < Minitest::Test
   )
 
     test_dir = "#{File.dirname(__FILE__)}/output"
-    if !Dir.exists?(test_dir)
+    if !Dir.exist?(test_dir)
       Dir.mkdir(test_dir)
     end
 
@@ -151,7 +151,7 @@ class BTAPResults_HS14_Test < Minitest::Test
       model_name = "#{building_type}-#{template}-#{File.basename(epw_file, '.epw')}-ecm_system_name-#{ecm_system_name}"
       puts model_name
       run_dir = "#{test_dir}/#{model_name}"
-      if !Dir.exists?(run_dir)
+      if !Dir.exist?(run_dir)
         Dir.mkdir(run_dir)
       end
       #create standard model
@@ -223,7 +223,7 @@ class BTAPResults_HS14_Test < Minitest::Test
     else
       model_name = @test_file
       run_dir = "#{test_dir}/#{model_name[0..-5]}"
-      if !Dir.exists?(run_dir)
+      if !Dir.exist?(run_dir)
         Dir.mkdir(run_dir)
       end
       top_dir_element = /btap_costing/ =~ File.expand_path(File.dirname( __FILE__))

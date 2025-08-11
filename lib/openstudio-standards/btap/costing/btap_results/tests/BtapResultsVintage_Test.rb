@@ -152,7 +152,7 @@ class BTAPResults_Test < Minitest::Test
                                                      baseline_system_zones_map_option:)
 
     test_dir = "#{File.dirname(__FILE__)}/output"
-    if !Dir.exists?(test_dir)
+    if !Dir.exist?(test_dir)
       Dir.mkdir(test_dir)
     end
 
@@ -163,7 +163,7 @@ class BTAPResults_Test < Minitest::Test
       model_name = "#{building_type}-#{template}-DefaultFuel-#{File.basename(epw_file, '.epw')}"  #NOTE: "primary_heating_fuel" has been set to "DefaultFuel" instead of 'FuelOilNo2' and its associated "model_name" has been changed in a way to use an expected result file that already exits on github.
       puts model_name
       run_dir = "#{test_dir}/#{model_name}"
-      if !Dir.exists?(run_dir)
+      if !Dir.exist?(run_dir)
         Dir.mkdir(run_dir)
       end
       #create standard model
@@ -259,7 +259,7 @@ class BTAPResults_Test < Minitest::Test
     else
       model_name = @test_file
       run_dir = "#{test_dir}/#{model_name[0..-5]}"
-      if !Dir.exists?(run_dir)
+      if !Dir.exist?(run_dir)
         Dir.mkdir(run_dir)
       end
       top_dir_element = /btap_costing/ =~ File.expand_path(File.dirname( __FILE__))

@@ -91,12 +91,12 @@ class Btap_results_helper
       # Create OSM file.
 
       # Create the main output folder if it doesn not exist.
-      unless Dir.exists?(out_dir)
+      unless Dir.exist?(out_dir)
         FileUtils.mkdir_p(out_dir)
       end
 
       # Delete / Create folder for run workflow.
-      unless Dir.exists?(run_dir)
+      unless Dir.exist?(run_dir)
         FileUtils.mkdir_p(run_dir)
       end
 
