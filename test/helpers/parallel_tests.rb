@@ -124,7 +124,7 @@ class ParallelTests
       timings_json[file_name.to_s]['start'] = Time.now.to_i
       did_all_tests_pass = false unless write_results(Open3.capture3('bundle', 'exec', "ruby '#{test_file}' -n '#{test_name}'"), test_file, test_name)
       timings_json[file_name.to_s]['end'] = Time.now.to_i
-      timings_json[file_name.to_s]['total'] = timings_json[file_name.to_s]['end'] - timings_json[file_name.to_s]['start']
+      timings_json[file_name.to_s]['time'] = timings_json[file_name.to_s]['end'] - timings_json[file_name.to_s]['start']
     end
 
     #Sometimes the runs fail.
@@ -146,10 +146,17 @@ class ParallelTests
         timings_json[file_name.to_s]['start'] = Time.now.to_i
         did_all_tests_pass = false unless write_results(Open3.capture3('bundle', 'exec', "ruby '#{test_file}' -n '#{test_name}'"), test_file, test_name)
         timings_json[file_name.to_s]['end'] = Time.now.to_i
-        timings_json[file_name.to_s]['total'] = timings_json[file_name.to_s]['end'] - timings_json[file_name.to_s]['start']
+        timings_json[file_name.to_s]['time'] = timings_json[file_name.to_s]['end'] - timings_json[file_name.to_s]['start']
       end
     end
-    # File.open(File.join(File.dirname(__FILE__), 'helpers', 'ci_test_helper', 'timings.json'), 'w') {|file| file.puts(JSON.pretty_generate(timings_json.sort {|a, z| a <=> z}.to_h))}
+    # Before saving the file, sort tests by the total time.
+    timings_json = Hash[ timings_json.sort_by { |k, v| v['time'] } ]
+    # Get rid of start and end
+    timings_json.each do |file_name, data|
+      data.delete('start')
+      data.delete('end')
+    end
+    File.open(File.join(File.dirname(__FILE__), 'ci_test_helper', 'timings.json'), 'w') {|file| file.puts(JSON.pretty_generate(timings_json))}
     return did_all_tests_pass
   end
 end
