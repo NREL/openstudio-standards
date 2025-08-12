@@ -18,9 +18,10 @@ module DCVTestHelper
     @dcv_type = DCV_TYPE
   end
 
-  def run_dcv_test(template, building_type)
+  def run_dcv_test(template, building_type, dcv_type)
     @template = template
     @building_type = building_type
+    @dcv_type = dcv_type
     @test_results_array = []
     
     setup_file_paths
@@ -32,9 +33,9 @@ module DCVTestHelper
   private
 
   def setup_file_paths
-    @output_folder = File.join(__dir__, '../output/test_dcv', @template, @building_type)
-    @expected_results_file = File.join(__dir__, '../../expected_results/', "dcv_#{@template}_#{@building_type}_expected_results.json")
-    @test_results_file = File.join(__dir__, '../../expected_results/', "dcv_#{@template}_#{@building_type}_test_results.json")
+    @output_folder = File.join(__dir__, '../output/test_dcv', @dcv_type, @template, @building_type)
+    @expected_results_file = File.join(__dir__, '../../expected_results/', "dcv_#{@dcv_type}_#{@template}_#{@building_type}_expected_results.json")
+    @test_results_file = File.join(__dir__, '../../expected_results/', "dcv_#{@dcv_type}_#{@template}_#{@building_type}_test_results.json")
     @sizing_run_dir = File.join(@output_folder, 'sizing_folder')
     
     FileUtils.mkdir_p(@output_folder)

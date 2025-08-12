@@ -7,7 +7,7 @@ class NECB_DCV_LargeOffice_2015_Tests < Minitest::Test
     setup_dcv_test
   end
 
-  def test_dcv_largeoffice_necb2015
-    run_dcv_test('NECB2015', 'LargeOffice')
+  def test_dcv_occ_largeoffice_necb2015
+    run_dcv_test('NECB2015', 'LargeOffice', 'Occupancy_based_DCV')
   end
 end
