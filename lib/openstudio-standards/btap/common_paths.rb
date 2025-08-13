@@ -27,14 +27,16 @@ class CommonPaths
   # Costing database location
   attr_reader :costing_database_path
 
+  # Embodied carbon data
+  attr_reader :carbon_data_path
+
   # Other
   attr_reader :error_log
   attr_reader :cost_output_file
   attr_reader :mech_sizing_data_file
 
   def initialize
-    dir_relative                  = __dir__
-    dir_database                  = "#{dir_relative}/common_resources"
+    dir_database                  = "#{__dir__}/../common_resources"
 
     @locations_path               = "#{dir_database}/locations.csv"
     @construction_sets_path       = "#{dir_database}/construction_sets.csv"
@@ -67,12 +69,14 @@ class CommonPaths
     ]
 
     @costs_path                   = "#{dir_database}/costs.csv"
-    @costs_local_factors_path      = "#{dir_database}/costs_local_factors.csv"
+    @costs_local_factors_path     = "#{dir_database}/costs_local_factors.csv"
 
-    @costing_database_path        = "#{dir_relative}/costing_database.json"
+    @costing_database_path        = "#{__dir__}/costing_database.json"
 
-    @error_log                    = "#{dir_relative}/errors.json"
-    @cost_output_file             = "#{dir_relative}/cost_output.json"
-    @mech_sizing_data_file        = "#{dir_relative}/mech_sizing.json"
+    @carbon_data_path             = "#{__dir__}/carbon_data.csv"
+
+    @error_log                    = "#{__dir__}/errors.json"
+    @cost_output_file             = "#{__dir__}/cost_output.json"
+    @mech_sizing_data_file        = "#{__dir__}/mech_sizing.json"
   end
 end
