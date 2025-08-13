@@ -36,7 +36,7 @@ class CommonPaths
   attr_reader :mech_sizing_data_file
 
   def initialize
-    dir_database                  = "#{__dir__}/../common_resources"
+    dir_database                  = "#{__dir__}/common_resources"
 
     @locations_path               = "#{dir_database}/locations.csv"
     @construction_sets_path       = "#{dir_database}/construction_sets.csv"
@@ -77,6 +77,6 @@ class CommonPaths
 
     @error_log                    = "#{__dir__}/errors.json"
     @cost_output_file             = "#{__dir__}/cost_output.json"
-    @mech_sizing_data_file        = "#{__dir__}/mech_sizing.json"
+    @mech_sizing_data_file        = "#{__dir__}/costing/mech_sizing.json"
   end
 end
