@@ -2,7 +2,7 @@ require_relative '../../../helpers/minitest_helper'
 require_relative '../../../helpers/create_doe_prototype_helper'
 require 'json'
 
-# This checks space dimensions are adequately calculated (e.g. width, height).
+# This checks if space dimensions are adequately calculated (e.g. width, height).
 class NECB_Dimensions_Tests < Minitest::Test
   def test_necb_dimensions()
     translator = OpenStudio::OSVersion::VersionTranslator.new
@@ -42,8 +42,8 @@ class NECB_Dimensions_Tests < Minitest::Test
 
       err_msg = "BTAP/Dimensions: empty space '#{id}' (#{cas})?"
       assert(space.is_initialized, err_msg)
-      space = space.get
-
+      space  = space.get
+      
       height = BTAP::Geometry::Spaces.space_height(space)
       width  = BTAP::Geometry::Spaces.space_width(space)
 

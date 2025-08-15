@@ -44,7 +44,7 @@ module BTAP
     # local workforce, on-site vs prefab, etc.
     #
     # Ensuring consistency between building STRUCTURE, envelope selection,
-    # internal mass definitions, etc. is key in harmonizing predicted energy
+    # internal mass definitions, etc. is key to harmonizing predicted energy
     # use, peak demand assessments, GHG emissions, vs thermal resilience and
     # embodied energy/GHG tallies.
     #
