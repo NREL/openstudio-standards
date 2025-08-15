@@ -46,13 +46,13 @@ os_stds_methods/test_misc.rb
 os_stds_methods/test_radiant_controls.rb
 os_stds_methods/test_minimum_efficiency_lookups.rb
 
-# 90_1_prm/test_prm_baseline_bldg.rb
+90_1_prm/test_prm_baseline_bldg.rb
 90_1_prm/test_prm_baseline_bldg4.rb
 90_1_prm/test_prm_baseline_bldg10.rb
 90_1_prm/test_prm_baseline_bldg11.rb
 90_1_prm/test_prm_baseline_bldg12.rb
 90_1_prm/test_prm_baseline_bldg13.rb
-# 90_1_prm/test_appendix_g_prm.rb
+90_1_prm/test_appendix_g_prm.rb
 
 rpd_features/test_rpd_model_prepare.rb
 
@@ -88,12 +88,12 @@ doe_prototype/test_small_office.rb
 doe_prototype/test_small_office_detailed.rb
 doe_prototype/test_strip_mall.rb
 doe_prototype/test_supermarket.rb
-# doe_prototype/test_supertall_building.rb
+doe_prototype/test_supertall_building.rb
 doe_prototype/test_tall_building.rb
 doe_prototype/test_warehouse.rb
 doe_prototype/test_performance.rb
 doe_prototype/test_regression.rb
-# doe_prototype/test_college.rb
+doe_prototype/test_college.rb
 doe_prototype_test_courthouse.rb
 
 doe_prototype/test_add_c_factor_wall.rb
@@ -102,7 +102,7 @@ doe_prototype/test_add_f_factor_floor.rb
 doe_prototype/test_add_refrigeration.rb
 doe_prototype/test_effective_num_stories.rb
 doe_prototype/test_space_type_hash.rb
-# doe_prototype/test_sim_control.rb
+doe_prototype/test_sim_control.rb
 
 cbes_prototype/test_small_office.rb
 cbes_prototype/test_medium_office.rb
