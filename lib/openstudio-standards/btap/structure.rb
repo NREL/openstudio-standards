@@ -224,7 +224,7 @@ module BTAP
     # For instance, a multi-unit residential building (MURB) would have a
     # typical "wood" framed, load-bearing envelope/STRUCTURE up to (and
     # including) 4 stories above-grade. This default STRUCTURE assignment
-    # switches to reinforced "concrete" post + flat slab beyond 5 stories.
+    # switches to reinforced "concrete" post + flat slab beyond 4 stories.
     # Building CATEGORIES that hold neither :stories nor :height key:value pairs
     # simply retain the same STRUCTURE option by default, regardless of scale
     # (e.g. "robust", "commerce").
@@ -426,6 +426,7 @@ module BTAP
       #  - 99% insulation  : 0.1504 m3/m2 x  19 kg/m3 =   2.9 kg/m2 (10.7%)
       #  - drywall (2x)    : 0.0250 m3/m2 x 785 kg/m3 =  19.6 kg/m2 (72.0%)
       #                                               =  27.2 kg/m2
+      #
       # For CMU partitions, representative material volumes (per m2):
       #  - 10" medium weight CMU                      = 250.0 kg/m2 (approx.)
 
