@@ -3,7 +3,6 @@ require 'optparse'
 require 'logger'
 require 'minitest/autorun'
 require_relative '../../btap_workflow.rb'
-require_relative '../../common_paths.rb'
 require 'fileutils'
 #require 'optparse'
 

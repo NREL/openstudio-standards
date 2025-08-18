@@ -1,6 +1,5 @@
 require 'json'
 require_relative 'costing_database_wrapper'
-require_relative '../common_paths'
 
 class SimpleLinearRegression
   #https://gist.github.com/rweald/3516193#file-full-slr-class-snippet-rb
