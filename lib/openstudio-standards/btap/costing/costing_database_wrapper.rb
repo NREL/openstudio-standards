@@ -1,7 +1,6 @@
 require 'singleton'
 require 'json'
 require 'csv'
-require_relative '../common_paths'
 
 # Singleton class to centralize all database operations
 class CostingDatabase
