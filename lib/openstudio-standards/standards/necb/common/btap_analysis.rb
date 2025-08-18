@@ -1,8 +1,7 @@
 require 'openstudio'
 
 class BTAPAnalysis
-  def initialize(model:, output_folder:, template:)
-    @model         = model
+  def initialize(output_folder:, template:)
     @output_folder = output_folder
     @template      = template
     @cp            = CommonPaths.instance
@@ -34,21 +33,22 @@ end
 
 # For a no-simulation run, the SQL file, template, and datapoint ID must be provided.
 class BTAPNoSimAnalysis < BTAPAnalysis
-  def initialize(model:, output_folder:, template:, sql_file:, datapoint_id:)
-    super(model: model, output_folder: output_folder, template: template)
-    sql_file      = sql_file
+  def initialize(model_path:, output_folder:, template:, sql_file_path:, datapoint_id:)
+    super(output_folder: output_folder, template: template)
+    @model        = BTAP::FileIO.load_osm(model_path)
     @template     = template
     @standard     = Standard.build(template)
     @datapoint_id = datapoint_id
     @analysis_id  = SecureRandom.uuid
-    @model.setSqlFile(OpenStudio::SqlFile.new(sql_file))
+    @model.setSqlFile(OpenStudio::SqlFile.new(sql_file_path))
     @qaqc = BTAPDatapoint.build_qaqc(@model, @standard, @datapoint_id, @analysis_id)             
   end
 end
 
 class BTAPDatapointAnalysis < BTAPAnalysis
   def initialize(model:, output_folder:, template:, standard:, qaqc:)
-    super(model: model, output_folder: output_folder, template: template)
+    super(output_folder: output_folder, template: template)
+    @model    = model
     @standard = standard
     @qaqc     = qaqc
   end
