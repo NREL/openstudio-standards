@@ -10,7 +10,6 @@ rescue LoadError
   puts 'OpenStudio Measure Tester Gem not installed -- will not be able to aggregate and dashboard the results of tests'
 end
 require_relative '../../btap_workflow.rb'
-require_relative '../../common_paths.rb'
 require 'fileutils'
 #require 'optparse'
 
