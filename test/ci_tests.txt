@@ -58,7 +58,8 @@ os_stds_methods/test_minimum_efficiency_lookups.rb
 90_1_prm/test_building_rotation_check.rb
 90_1_prm/test_computer_rooms_equipment_schedule.rb
 90_1_prm/test_daylighting_control.rb
-90_1_prm/test_dcv.rb
+90_1_prm/test_dcv_01.rb
+90_1_prm/test_dcv_02.rb
 90_1_prm/test_economizer_exception.rb
 90_1_prm/test_elevators.rb
 90_1_prm/test_envelope.rb
@@ -73,7 +74,9 @@ os_stds_methods/test_minimum_efficiency_lookups.rb
 90_1_prm/test_hvac_baseline_05.rb
 90_1_prm/test_hvac_efficiency.rb
 90_1_prm/test_hvac_psz_split_from_mz.rb
-90_1_prm/test_hvac_sizing.rb
+90_1_prm/test_hvac_sizing_01.rb
+90_1_prm/test_hvac_sizing_02.rb
+90_1_prm/test_hvac_sizing_03.rb
 90_1_prm/test_infiltration.rb
 90_1_prm/test_isresidential.rb
 90_1_prm/test_lighting_exceptions.rb
@@ -88,7 +91,8 @@ os_stds_methods/test_minimum_efficiency_lookups.rb
 90_1_prm/test_num_systems_in_zone.rb
 90_1_prm/test_pe_userdata_handling.rb
 90_1_prm/test_pipe_insulation.rb
-90_1_prm/test_plant_temp_reset_ctrl.rb
+90_1_prm/test_plant_temp_reset_ctrl_01.rb
+90_1_prm/test_plant_temp_reset_ctrl_02.rb
 90_1_prm/test_preheat_coil_ctrl.rb
 90_1_prm/test_proposed_model_residential_lpd.rb
 90_1_prm/test_return_air_type.rb
