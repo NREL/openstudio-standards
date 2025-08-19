@@ -3,9 +3,19 @@ require_relative './prm_check'
 require_relative './prm_test_model_generator'
 # Part of the ASHRAE 90.1 Appendix G Performance Rating Method (PRM) baseline automation implementation test suite
 # @author Doug Maddox (PNNL), Jeremy Lerond (PNNL), and Yunyang Ye (PNNL)
-class AppendixGPRMTests < Minitest::Test
+class AppendixGPRMHVACSizingTests < Minitest::Test
   def test_hvac_sizing_01
     model_hash = prm_test_helper('hvac_sizing_01', require_prototype = false, require_baseline = true)
+    check_hvac_sizing(model_hash['baseline'])
+  end
+
+  def test_hvac_sizing_02
+    model_hash = prm_test_helper('hvac_sizing_02', require_prototype = false, require_baseline = true)
+    check_hvac_sizing(model_hash['baseline'])
+  end
+
+  def test_hvac_sizing_03
+    model_hash = prm_test_helper('hvac_sizing_03', require_prototype = false, require_baseline = true)
     check_hvac_sizing(model_hash['baseline'])
   end
 end

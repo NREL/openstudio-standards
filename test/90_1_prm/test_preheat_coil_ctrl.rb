@@ -3,7 +3,7 @@ require_relative './prm_check'
 require_relative './prm_test_model_generator'
 # Part of the ASHRAE 90.1 Appendix G Performance Rating Method (PRM) baseline automation implementation test suite
 # @author Doug Maddox (PNNL), Jeremy Lerond (PNNL), and Yunyang Ye (PNNL)
-class AppendixGPRMTests < Minitest::Test
+class AppendixGPRMPreheatCoilTests < Minitest::Test
   def test_preheat_coil_ctrl
     model_hash = prm_test_helper('preheat_coil_ctrl', require_prototype = false, require_baseline = true)
     check_preheat_coil_ctrl(model_hash['baseline'])
