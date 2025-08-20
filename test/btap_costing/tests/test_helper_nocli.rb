@@ -87,7 +87,6 @@ class Btap_results_helper
 
     # Do costing.
     costing = BTAPCosting.new(costs_csv: cp.costs_path, factors_csv: cp.costs_local_factors_path)
-    costing.load_database
 
     cost_result, _ = costing.cost_audit_all(model: model, prototype_creator: standard, template_type: template)
     cost_result_json_path = File.join(run_dir, '/cost_results.json')

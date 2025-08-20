@@ -295,7 +295,6 @@ class BTAPResults_Test < Minitest::Test
 
     #create osm file to use mimic PAT/OS server called final
     costing = BTAPCosting.new()
-    costing.load_database()
 
     cost_result, _ = costing.cost_audit_all(model: model,
                                          prototype_creator: standard,
