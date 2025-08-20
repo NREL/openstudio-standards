@@ -159,7 +159,7 @@ class Standard
 
     # loop method
     each_method = use_parallel && degs_from_org.size > 1 ? ->(collection, &block) { Parallel.each(collection, in_process: 4, &block) } : ->(collection, &block) { collection.each(&block) }
-    
+
     # Create baseline model for each orientation
     each_method.call(degs_from_org) do |degs|
       # New baseline model:
@@ -774,10 +774,10 @@ class Standard
       end
 
       # This is only used for the stable baseline (2016 and later)
-if !applicable_zones.nil? && !applicable_zones.include?(zone)
-          # This zone is not part of the current hvac_building_type
-          next
-        end
+      if !applicable_zones.nil? && !applicable_zones.include?(zone)
+        # This zone is not part of the current hvac_building_type
+        next
+      end
 
       # Skip unconditioned zones
       heated = OpenstudioStandards::ThermalZone.thermal_zone_heated?(zone)
