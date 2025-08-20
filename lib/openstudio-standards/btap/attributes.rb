@@ -1,22 +1,46 @@
 # BTAP Attributes: Currently stores model attributes related to envelopes. 
-require 'singleton'
+require 'openstudio'
 
 module BTAP
+
+  # Class modifications to simplyify post-analysis functions
+  class OpenStudio::Model::Model
+    def getThermalZonesSorted
+      return @zones_sorted
+    end
+
+    def <<(zone) # Override the append operator to compile the sorted zones
+      @zones_sorted << zone
+    end
+  end
+
+  class OpenStudio::Model::ThermalZone
+    def getSpacesSorted
+      return @spaces_sorted
+    end
+
+    def <<(space)
+      @spaces_sorted
+    end
+  end
+
+  class OpenStudio::Model::Space
+    attr_reader :surfaces_hash
+  end
+
   class Attributes
-    include Singleton
-
-    @@model = nil
-
-    attr_reader :costed_surfaces
-    attr_reader :storage
+    attr_reader :model
     attr_reader :zones
     attr_reader :spaces
-    attr_reader :surfaces
+    attr_reader :surface_types
     
-    def initialize()
-      
-      # Surfaces considered for envelope costing
-      @costed_surfaces = [ 
+    def initialize(model, prototype_creator)
+      @model             = model
+      @prototype_creator = prototype_creator
+      @costing_database  = CostingDatabase.instance
+
+      # Surfaces considered for envelope costing and carbon
+      @surface_types = [ 
         "ExteriorWall",
         "ExteriorRoof",
         "ExteriorFloor",
@@ -33,66 +57,71 @@ module BTAP
         "GroundContactFloor"
       ]
 
-      @zones    = [] # BTAP::Zone
-      @spaces   = [] # BTAP::Space
-      @surfaces = [] # BTAP::Surface
+      @zones    = [] 
+      @spaces   = [] 
 
       self.compile
     end
 
     # Compile all the pertinent data into this class' data structure. 
     def compile
-      @@model.getThermalZones.sort.each do |zone|
-        zone_wrapper = BTAP::Zone.new(zone)
-        @zones << zone_wrapper
+      template_type = @prototype_creator.template
+      num_of_above_ground_stories = @model.getBuilding.standardsNumberOfAboveGroundStories.to_i
+      
+      # Iterate through the data structures while also saving their sorted order later for reference.
+      @model.instance_variable_set(:@zones_sorted, [])
+
+      @model.getThermalZones.sort.each do |zone|
+        @model << zone
+        @zones << zone
+        zone.instance_variable_set(:@spaces_sorted, [])
+
         zone.spaces.sort.each do |space|
           if space.spaceType.empty? or space.spaceType.get.standardsSpaceType.empty? or space.spaceType.get.standardsBuildingType.empty?
             raise ("standards Space type and building type is not defined for space:#{space.name.get}. Skipping this space.")
           end
+          zone    << space
+          @spaces << space
 
-          space_wrapper = BTAP::Space.new(space)
-          zone_wrapper.spaces << space_wrapper
-          @spaces << space_wrapper
+          space_type    = space.spaceType.get.standardsSpaceType
+          building_type = space.spaceType.get.standardsBuildingType
+
+          construction_set = @costing_database['raw']['construction_sets'].select { |data|
+            data['template'].to_s.gsub(/\s*/, '') == template_type               and
+            data['building_type'].to_s.downcase   == building_type.to_s.downcase and
+            data['space_type'].to_s.downcase      == space_type.to_s.downcase    and
+            data['min_stories'].to_i              <= num_of_above_ground_stories and
+            data['max_stories'].to_i              >= num_of_above_ground_stories
+          }.first
           
+          surfaces_hash = {}
+
           # Exterior
           exterior_surfaces = BTAP::Geometry::Surfaces::filter_by_boundary_condition(space.surfaces, "Outdoors")
-          space_wrapper["ExteriorWall"]  = BTAP::Surface.new(BTAP::Geometry::Surfaces::filter_by_surface_types(exterior_surfaces, "Wall"))
-          space_wrapper["ExteriorRoof"]  = BTAP::Surface.new(BTAP::Geometry::Surfaces::filter_by_surface_types(exterior_surfaces, "RoofCeiling"))
-          space_wrapper["ExteriorFloor"] = BTAP::Surface.new(BTAP::Geometry::Surfaces::filter_by_surface_types(exterior_surfaces, "Floor"))
+          surfaces_hash["ExteriorWall"]  = BTAP::Geometry::Surfaces::filter_by_surface_types(exterior_surfaces, "Wall").sort
+          surfaces_hash["ExteriorRoof"]  = BTAP::Geometry::Surfaces::filter_by_surface_types(exterior_surfaces, "RoofCeiling").sort
+          surfaces_hash["ExteriorFloor"] = BTAP::Geometry::Surfaces::filter_by_surface_types(exterior_surfaces, "Floor").sort
 
           # Exterior Subsurfaces
           exterior_subsurfaces = exterior_surfaces.flat_map(&:subSurfaces)
-          space_wrapper["ExteriorFixedWindow"]             = BTAP::Surface.new(BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(exterior_subsurfaces, ["FixedWindow"]))
-          space_wrapper["ExteriorOperableWindow"]          = BTAP::Surface.new(BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(exterior_subsurfaces, ["OperableWindow"]))
-          space_wrapper["ExteriorSkylight"]                = BTAP::Surface.new(BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(exterior_subsurfaces, ["Skylight"]))
-          space_wrapper["ExteriorTubularDaylightDiffuser"] = BTAP::Surface.new(BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(exterior_subsurfaces, ["TubularDaylightDiffuser"]))
-          space_wrapper["ExteriorTubularDaylightDome"]     = BTAP::Surface.new(BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(exterior_subsurfaces, ["TubularDaylightDome"]))
-          space_wrapper["ExteriorDoor"]                    = BTAP::Surface.new(BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(exterior_subsurfaces, ["Door"]))
-          space_wrapper["ExteriorGlassDoor"]               = BTAP::Surface.new(BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(exterior_subsurfaces, ["GlassDoor"]))
-          space_wrapper["ExteriorOverheadDoor"]            = BTAP::Surface.new(BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(exterior_subsurfaces, ["OverheadDoor"]))
+          surfaces_hash["ExteriorFixedWindow"]             = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(exterior_subsurfaces, ["FixedWindow"]).sort
+          surfaces_hash["ExteriorOperableWindow"]          = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(exterior_subsurfaces, ["OperableWindow"]).sort
+          surfaces_hash["ExteriorSkylight"]                = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(exterior_subsurfaces, ["Skylight"]).sort
+          surfaces_hash["ExteriorTubularDaylightDiffuser"] = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(exterior_subsurfaces, ["TubularDaylightDiffuser"]).sort
+          surfaces_hash["ExteriorTubularDaylightDome"]     = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(exterior_subsurfaces, ["TubularDaylightDome"]).sort
+          surfaces_hash["ExteriorDoor"]                    = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(exterior_subsurfaces, ["Door"]).sort
+          surfaces_hash["ExteriorGlassDoor"]               = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(exterior_subsurfaces, ["GlassDoor"]).sort
+          surfaces_hash["ExteriorOverheadDoor"]            = BTAP::Geometry::Surfaces::filter_subsurfaces_by_types(exterior_subsurfaces, ["OverheadDoor"]).sort
 
           # Ground Surfaces
           ground_surfaces  = BTAP::Geometry::Surfaces::filter_by_boundary_condition(space.surfaces, "Ground")
           ground_surfaces += BTAP::Geometry::Surfaces::filter_by_boundary_condition(space.surfaces, "Foundation")
-          space_wrapper["GroundContactWall"]  = BTAP::Surface.new(BTAP::Geometry::Surfaces::filter_by_surface_types(ground_surfaces, "Wall"))
-          space_wrapper["GroundContactRoof"]  = BTAP::Surface.new(BTAP::Geometry::Surfaces::filter_by_surface_types(ground_surfaces, "RoofCeiling"))
-          space_wrapper["GroundContactFloor"] = BTAP::Surface.new(BTAP::Geometry::Surfaces::filter_by_surface_types(ground_surfaces, "Floor"))
+          surfaces_hash["GroundContactWall"]  = BTAP::Geometry::Surfaces::filter_by_surface_types(ground_surfaces, "Wall").sort
+          surfaces_hash["GroundContactRoof"]  = BTAP::Geometry::Surfaces::filter_by_surface_types(ground_surfaces, "RoofCeiling").sort
+          surfaces_hash["GroundContactFloor"] = BTAP::Geometry::Surfaces::filter_by_surface_types(ground_surfaces, "Floor").sort
 
-          # Put all surfaces into the total list of surfaces for this space.
-          @costed_surfaces.each do |surface|
-            @surfaces << space_wrapper[surface]
-          end
+          space.instance_variable_set(:@surfaces_hash, surfaces_hash)
         end
-      end
-    end
-
-    class << self
-      def set_model(model)
-        @@model = model
-      end
-
-      def model
-        return model
       end
     end
 
@@ -101,7 +130,7 @@ module BTAP
         puts("Zone: #{zone.get.name.get}")
         zone.spaces.each do |space|
           puts("  Space: #{space.get.name.get}")
-          costed_surfaces.each do |surface|
+          @surface_types.each do |surface|
             puts("      Surface: #{space.surfaces[surface].get}")
           end
         end
@@ -123,7 +152,7 @@ module BTAP
     end
 
     def test_attributes_model
-      @@model.getThermalZones.sort.each do |zone|
+      @model.getThermalZones.sort.each do |zone|
         puts("Zone: #{zone.name.get}")
         zone.spaces.sort.each do |space|
           puts("  Space: #{space.name.get}")
@@ -132,49 +161,6 @@ module BTAP
           end
         end
       end
-    end
-  end
-
-  # Wrapper class for zones
-  class Zone
-    attr_reader :get
-    attr_reader :spaces
-
-    def initialize(zone)
-      @get = zone
-      @spaces  = []
-    end
-
-    def <<(space) # Overload the append operator to add spaces
-      @spaces << space
-    end
-  end
-
-  # Wrapper class for spaces
-  class Space
-    attr_reader :get
-    attr_reader :surfaces
-
-    def initialize(space)
-      @get  = space
-      @surfaces = {} # Store surfaces a hash
-    end
-    
-    def [](surface) # Overload the element of operator to hash surfaces based on @costed_surfaces
-      @surfaces[surface]
-    end
-
-    def []=(surface_type, surface_value) # Overload the element assignment operator
-      @surfaces[surface_type] = surface_value
-    end
-  end
-
-  # Wrapper class for surfaces
-  class Surface
-    attr_reader :get
-
-    def initialize(surface)
-      @get = surface
     end
   end
 end

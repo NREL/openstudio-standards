@@ -73,7 +73,7 @@ class CommonPaths
 
     @costing_database_path        = "#{__dir__}/costing_database.json"
 
-    @carbon_data_path             = "#{__dir__}/carbon_data.csv"
+    @carbon_data_path             = "#{dir_database}/carbon_data.csv"
 
     @error_log                    = "#{__dir__}/errors.json"
     @cost_output_file             = "#{__dir__}/cost_output.json"
