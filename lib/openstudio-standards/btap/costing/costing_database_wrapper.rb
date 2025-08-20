@@ -9,11 +9,8 @@ class CostingDatabase
   def initialize
     @cp = CommonPaths.instance # Stores paths
     @db = Hash.new             # Stores the costing database
-  end
 
-  # Load the database from the individual CSV files
-  def load_database
-
+    # Load the database from the individual CSV files
     # Load costing data
     @db['costs'] = []                # Costing data
     @db['localization_factors'] = [] # Local costing factors
