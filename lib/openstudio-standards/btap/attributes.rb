@@ -124,43 +124,5 @@ module BTAP
         end
       end
     end
-
-    def test_attributes_wrapper
-      @zones.each do |zone|
-        puts("Zone: #{zone.get.name.get}")
-        zone.spaces.each do |space|
-          puts("  Space: #{space.get.name.get}")
-          @surface_types.each do |surface|
-            puts("      Surface: #{space.surfaces[surface].get}")
-          end
-        end
-      end
-    end
-
-    def test_arrays
-      @zones.each do |zone|
-        puts("Zone: #{zone.get.name.get}")
-      end
-      
-      @spaces.each do |space|
-        puts("  Space: #{space.get.name.get}")
-      end
-
-      @surfaces.each do |surface|
-        puts("      Surface: #{surface.get}")
-      end
-    end
-
-    def test_attributes_model
-      @model.getThermalZones.sort.each do |zone|
-        puts("Zone: #{zone.name.get}")
-        zone.spaces.sort.each do |space|
-          puts("  Space: #{space.name.get}")
-          space.surfaces.sort.each do |surface|
-          puts("      Surface: #{surface.name.get}")
-          end
-        end
-      end
-    end
   end
 end
