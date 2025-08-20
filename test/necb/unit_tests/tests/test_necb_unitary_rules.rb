@@ -163,7 +163,6 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
       logger.error(msg)
       return {ERROR: msg}
     end
-    
     # Extract results and generate hash.
     capacity_btu_per_hr = OpenStudio.convert(cap.to_f, 'kW', 'Btu/hr').get
     dx_units = model.getCoilCoolingDXSingleSpeeds

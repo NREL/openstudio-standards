@@ -77,13 +77,13 @@ class BTAPDatapoint
     @dp_output_folder = File.join(output_folder, @options[:datapoint_id])
 
     # Show versions in yml file.
-    @options[:btap_costing_git_revision] = Git::Revision.commit_short
     @options[:os_git_revision] = OpenstudioStandards.git_revision
 
     # Get users' inputs for the parameters needed for the calculation af net present value
     @npv_start_year = @options[:npv_start_year]
     @npv_end_year = @options[:npv_end_year]
     @npv_discount_rate = @options[:npv_discount_rate]
+    @npv_discount_rate_carbon = @options[:npv_discount_rate_carbon]
 
     # Save configuration to temp folder.
     File.open(File.join(@dp_temp_folder, 'run_options.yml'), 'w') { |file| file.write(@options.to_yaml) }
@@ -92,6 +92,10 @@ class BTAPDatapoint
       # This dynamically creates a class by string using the factory method design pattern.
       @options[:template] = 'NECB2011' if @options[:algorithm_type] == 'osm_batch'
       @standard = Standard.build(@options[:template])
+
+      # Set use the convert_arg_to_bool method from the standard class to set the @oerd_utility_pricing_flag
+      @oerd_utility_pricing = @standard.convert_arg_to_bool(variable: @options[:oerd_utility_pricing], default: false)
+      @utility_pricing_year = @standard.convert_arg_to_f(variable: @options[:utility_pricing_year], default: 2020)
 
       # This allows you to select the skeleton model from our built in starting points. You can add a custom file as
       # it will search the libary first,.
@@ -120,7 +124,13 @@ class BTAPDatapoint
         @standard.model_apply_standard(model: model,
                                        epw_file: @options[:epw_file],
                                        custom_weather_folder: weather_folder,
+                                       btap_weather: @options[:btap_weather],
                                        sizing_run_dir: File.join(@dp_temp_folder, 'sizing_folder'),
+                                       hvac_system_primary: @options[:hvac_system_primary],
+                                       hvac_system_dwelling_units: @options[:hvac_system_dwelling_units],
+                                       hvac_system_washrooms: @options[:hvac_system_washrooms],
+                                       hvac_system_corridor: @options[:hvac_system_corridor],
+                                       hvac_system_storage: @options[:hvac_system_storage],
                                        primary_heating_fuel: @options[:primary_heating_fuel],
                                        necb_reference_hp: @options[:necb_reference_hp],
                                        necb_reference_hp_supp_fuel: @options[:necb_reference_hp_supp_fuel],
@@ -179,11 +189,13 @@ class BTAPDatapoint
                                        necb_hdd: @options[:necb_hdd],
                                        boiler_fuel: @options[:boiler_fuel],
                                        boiler_cap_ratio: @options[:boiler_cap_ratio],
-                                       swh_fuel: @options[:swh_fuel]
+                                       swh_fuel: @options[:swh_fuel],
+                                       airloop_fancoils_heating: @options[:airloop_fancoils_heating],
+                                       oerd_utility_pricing: @oerd_utility_pricing
                                        )
       end
 
-      # Save model to to disk.
+      # Save model to disk.
       puts "saving model to #{File.join(@dp_temp_folder, 'output.osm')}"
       BTAP::FileIO.save_osm(model, File.join(@dp_temp_folder, 'output.osm'))
 
@@ -235,10 +247,13 @@ class BTAPDatapoint
         model.setSqlFile(sql)
 
         @cost_result = nil
-        if defined?(BTAPCosting)
+        if @options[:enable_costing]
           # Perform costing
-          costing = BTAPCosting.new
+          costs_path = File.join(input_folder_cache, 'costs.csv')
+          local_cost_factors_path = File.join(input_folder_cache, 'local_cost_factors.csv')
+          costing = BTAPCosting.new(costs_csv: costs_path, factors_csv: local_cost_factors_path)
           costing.load_database
+
           @cost_result, @btap_items = costing.cost_audit_all(model: model, prototype_creator: @standard, template_type: @options[:template])
           @qaqc[:costing_information] = @cost_result
           File.open(File.join(@dp_temp_folder, 'cost_results.json'), 'w') { |f| f.write(JSON.pretty_generate(@cost_result, allow_nan: true)) }
@@ -253,7 +268,10 @@ class BTAPDatapoint
                                   qaqc: @qaqc,
                                   npv_start_year: @npv_start_year,
                                   npv_end_year: @npv_end_year,
-                                  npv_discount_rate: @npv_discount_rate).btap_data
+                                  npv_discount_rate: @npv_discount_rate,
+                                  npv_discount_rate_carbon: @npv_discount_rate_carbon,
+                                  oerd_utility_pricing: @oerd_utility_pricing,
+                                  utility_pricing_year: @utility_pricing_year).btap_data
 
         # Write Files
         File.open(File.join(@dp_temp_folder, 'btap_data.json'), 'w') { |f| f.write(JSON.pretty_generate(@btap_data.sort.to_h, allow_nan: true)) }
@@ -477,7 +495,7 @@ class BTAPDatapoint
         SELECT ReportDataDictionaryIndex
         FROM ReportDataDictionary
         WHERE ReportingFrequency == 'Zone Timestep'
-                                                       "
+        "
     #===================================================================================================================
     # Get timestep data for each output.
     model.sqlFile.get.execAndReturnVectorOfInt(query).get.each do |rdd_index|

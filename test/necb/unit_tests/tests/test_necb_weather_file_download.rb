@@ -24,7 +24,7 @@ class NECB_Download_Weather_Files_Test < Minitest::Test
 
     # Download and verify weather files.
     weather_locations.each do |location|
-      standard.get_weather_file_from_repo(epw_file: "#{location}.epw")
+      standard.get_weather_file_from_repo(epw_file: "#{location}.epw", btap_weather: true)
       weather_file_extensions.each do |ext|
         file = File.join(weather_folder, "#{location}.#{ext}")
         assert(File.exist?(file), "The file #{file} does not exist.")
@@ -39,3 +39,5 @@ class NECB_Download_Weather_Files_Test < Minitest::Test
     end
   end
 end
+
+

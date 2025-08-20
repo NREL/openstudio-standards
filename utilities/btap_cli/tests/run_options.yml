@@ -1,10 +1,12 @@
 :adv_dx_units: NECB_Default
+:airloop_fancoils_heating: NECB_Default
 :analysis_id: c3ae0124-f685-46a1-8798-433713d702fc
 :analysis_name: test_analysis_para
 :baseline_system_zones_map_option: NECB_Default
 :boiler_eff: NECB_Default
 :boiler_fuel: NECB_Default
 :boiler_cap_ratio: NECB_Default
+:btap_weather: true
 :building_type: FullServiceRestaurant
 :chiller_type: NECB_Default
 :compute_environment: local
@@ -13,6 +15,7 @@
 :dcv_type: NECB_Default
 :door_construction_cond: NECB_Default
 :ecm_system_name: NECB_Default
+:enable_costing: false
 :electrical_loads_scale: NECB_Default
 :epw_file:  CAN_QC_Montreal.Intl.AP.716270_CWEC2020.epw
 :erv_package: NECB_Default
@@ -28,6 +31,11 @@
 :ground_floor_cond: NECB_Default
 :ground_roof_cond: NECB_Default
 :ground_wall_cond: NECB_Default
+:hvac_system_primary: NECB_Default
+:hvac_system_dwelling_units: NECB_Default
+:hvac_system_washrooms: NECB_Default
+:hvac_system_corridor: NECB_Default
+:hvac_system_storage: NECB_Default
 :infiltration_scale: NECB_Default
 :lights_scale: NECB_Default
 :lights_type: NECB_Default
@@ -39,7 +47,7 @@
 :oa_scale: NECB_Default
 :occupancy_loads_scale: NECB_Default
 :overhead_door_cond: NECB_Default
-:primary_heating_fuel: FuelOilNo2
+:primary_heating_fuel: NaturalGasHPGasBackup
 :pv_ground_azimuth_angle: NECB_Default
 :pv_ground_module_description: NECB_Default
 :pv_ground_tilt_angle: NECB_Default
@@ -57,10 +65,13 @@
 :skylight_solar_trans: NECB_Default
 :srr_set: NECB_Default
 :swh_fuel: NECB_Default
-:template: NECB2017
+:template: NECB2020
 :npv_start_year: NECB_Default
 :npv_end_year: NECB_Default
 :npv_discount_rate: NECB_Default
+:npv_discount_rate_carbon: NECB_Default
+:oerd_utility_pricing: NECB_Default
+:utility_pricing_year: NECB_Default
 :tbd_option: NECB_Default
 :output_variables: [
   {    key: '*',     variable: 'Zone Air Temperature',     frequency: 'hourly'}

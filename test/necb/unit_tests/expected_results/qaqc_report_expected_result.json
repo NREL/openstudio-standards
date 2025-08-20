@@ -269,8 +269,8 @@
         "shw_m3_per_s": 0.0,
         "waterUseEquipment": [
           {
-            "peak_flow_rate": 2.39515451281452e-05,
-            "peak_flow_rate_per_area": 6.442950741383873e-08,
+            "peak_flow_rate": 0.0000239515451281452,
+            "peak_flow_rate_per_area": 0.00000006442950741383873,
             "shw_watts_per_person": -11.986207841240901
           }
         ]
@@ -292,8 +292,8 @@
         "shw_m3_per_s": 0.0,
         "waterUseEquipment": [
           {
-            "peak_flow_rate": 4.49574007408925e-06,
-            "peak_flow_rate_per_area": 3.224943293840053e-08,
+            "peak_flow_rate": 0.00000449574007408925,
+            "peak_flow_rate_per_area": 0.00000003224943293840053,
             "shw_watts_per_person": -5.9995555061282815
           }
         ]
@@ -331,8 +331,8 @@
       "shw_m3_per_s": 0.0,
       "waterUseEquipment": [
         {
-          "peak_flow_rate": 2.39515451281452e-05,
-          "peak_flow_rate_per_area": 6.442950741383873e-08,
+          "peak_flow_rate": 0.0000239515451281452,
+          "peak_flow_rate_per_area": 0.00000006442950741383873,
           "shw_watts_per_person": -11.986207841240901
         }
       ]
@@ -354,8 +354,8 @@
       "shw_m3_per_s": 0.0,
       "waterUseEquipment": [
         {
-          "peak_flow_rate": 4.49574007408925e-06,
-          "peak_flow_rate_per_area": 3.224943293840053e-08,
+          "peak_flow_rate": 0.00000449574007408925,
+          "peak_flow_rate_per_area": 0.00000003224943293840053,
           "shw_watts_per_person": -5.9995555061282815
         }
       ]
@@ -573,7 +573,7 @@
           "name": "Main Service Water Loop Circulator Pump",
           "type": "Pump:ConstantSpeed",
           "head_pa": 284784.23,
-          "water_flow_m3_per_s": 2.8e-05,
+          "water_flow_m3_per_s": 0.000028,
           "electric_power_w": -1.0,
           "motor_efficency": 0.7
         }
