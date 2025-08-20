@@ -107,9 +107,6 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
     # Test specific inputs.
     cap = test_case[:test_capacity_kW]
     vintage = test_pars[:vintage]
-    standard = get_standard(vintage)
-    standard.fuel_type_set = SystemFuels.new()
-    standard.fuel_type_set.set_defaults(standards_data: standard.standards_data, primary_heating_fuel: fuel_type)
 
     # Define the test name.
     name = "#{vintage}_sys3_MauHtgCoilType-#{heating_type}_Speed-#{speed}_cap-#{cap.to_int}kW"
@@ -135,6 +132,9 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
 
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
+      standard = get_standard(vintage)
+      standard.fuel_type_set = SystemFuels.new()
+      standard.fuel_type_set.set_defaults(standards_data: standard.standards_data, primary_heating_fuel: fuel_type)
       standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, fuel_type, always_on)
       case speed
       when 'single'
@@ -261,9 +261,6 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
     mau_cooling_type = test_pars[:mau_cooling_type]
     fuel_type = test_pars[:fuel_type]
     vintage = test_pars[:vintage]
-    standard = get_standard(vintage)
-    standard.fuel_type_set = SystemFuels.new()
-    standard.fuel_type_set.set_defaults(standards_data: standard.standards_data, primary_heating_fuel: fuel_type)
 
     # Define the test name.
     name = "#{vintage}_sys2_CoolingType_#{fuel_type}_kW_chiller_type-#{chiller_type}_#{mau_cooling_type}"
@@ -283,6 +280,9 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
 
       hw_loop = OpenStudio::Model::PlantLoop.new(model)
       always_on = model.alwaysOnDiscreteSchedule
+      standard = get_standard(vintage)
+      standard.fuel_type_set = SystemFuels.new()
+      standard.fuel_type_set.set_defaults(standards_data: standard.standards_data, primary_heating_fuel: fuel_type)
       standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, fuel_type, always_on)
 
       standard.add_sys2_FPFC_sys5_TPFC(model: model,
