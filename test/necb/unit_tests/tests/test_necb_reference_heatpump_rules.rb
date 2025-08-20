@@ -935,7 +935,6 @@ def test_ref_heatpump_heating_low_temp
 
         # Run sizing.
         run_sizing(model: model, template: template, save_model_versions: false, output_dir: output_folder, necb_ref_hp: true) if PERFORM_STANDARDS
-
         # non-sys6 uses AirLoopHVACUnitaryHeatPumpAirToAirs
         unless sys_number == 'sys6'
           model.getAirLoopHVACUnitaryHeatPumpAirToAirs.each do |heatpump|
