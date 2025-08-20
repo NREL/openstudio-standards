@@ -240,7 +240,6 @@ class BTAPResults_HS14_Test < Minitest::Test
     model.save(model_out_path, true)
 
     costing = BTAPCosting.new()
-    costing.load_database()
 
     cost_result, _ = costing.cost_audit_all(model: model,
                                          prototype_creator: standard,

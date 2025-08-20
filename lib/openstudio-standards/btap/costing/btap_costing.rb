@@ -55,10 +55,6 @@ class BTAPCosting
     end
   end
 
-  def load_database()
-    @costing_database.load_database
-  end
-
   def validate_database()
     @costing_database.validate_database
   end
