@@ -222,7 +222,7 @@ module CoilDX
     case template
     when '90.1-2004', '90.1-2007'
       return 'New Construction'
-    when '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019'
+    else # '90.1-2010', '90.1-2013', '90.1-2016', '90.1-2019', others
       return 'Standard Size'
     end
   end
