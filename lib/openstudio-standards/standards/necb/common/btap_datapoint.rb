@@ -240,8 +240,9 @@ class BTAPDatapoint
             factors_csv: @cp.costs_local_factors_path)
         end
 
+        @carbon_result = nil
         if @options[:enable_carbon]
-
+          @carbon_result = post_analysis.run_carbon
         end
 
         @qaqc[:options] = @options # This is options sent on the command line
@@ -249,6 +250,7 @@ class BTAPDatapoint
         @btap_data = BTAPData.new(model: model,
                                   runner: nil,
                                   cost_result: @cost_result,
+                                  carbon_result: @carbon_result,
                                   qaqc: @qaqc,
                                   npv_start_year: @npv_start_year,
                                   npv_end_year: @npv_end_year,
