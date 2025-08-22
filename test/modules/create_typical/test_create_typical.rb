@@ -15,7 +15,7 @@ class TestCreateTypical < Minitest::Test
     OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
 
     # set output directory
-    output_dir = "#{__dir__}/output/test_create_typical_building_from_model"
+    output_dir = "#{__dir__}/output/#{__method__}"
     FileUtils.mkdir output_dir unless Dir.exist? output_dir
 
     # apply create typical
@@ -37,7 +37,7 @@ class TestCreateTypical < Minitest::Test
     OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
 
     # set output directory
-    output_dir = "#{__dir__}/output/test_create_typical_building_from_model_comstock"
+    output_dir = "#{__dir__}/output/#{__method__}"
     FileUtils.mkdir output_dir unless Dir.exist? output_dir
 
     # apply create typical
@@ -59,7 +59,7 @@ class TestCreateTypical < Minitest::Test
     OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
 
     # set output directory
-    output_dir = "#{__dir__}/output/test_create_typical_deer_building_from_model"
+    output_dir = "#{__dir__}/output/#{__method__}"
     FileUtils.mkdir output_dir unless Dir.exist? output_dir
 
     # apply create typical
@@ -81,7 +81,7 @@ class TestCreateTypical < Minitest::Test
     OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
 
     # set output directory
-    output_dir = "#{__dir__}/output/test_create_typical_comstock_deer_building_from_model"
+    output_dir = "#{__dir__}/output/#{__method__}"
     FileUtils.mkdir output_dir unless Dir.exist? output_dir
 
     # apply create typical
@@ -120,7 +120,7 @@ class TestCreateTypical < Minitest::Test
     hvac_mapping_hash = JSON.parse(hvac_zone_json)
 
     # set output directory
-    output_dir = "#{__dir__}/output/test_create_typical_building_from_model_with_hvac_mapping"
+    output_dir = "#{__dir__}/output/#{__method__}"
     FileUtils.mkdir output_dir unless Dir.exist? output_dir
 
     # apply create typical with zone mapping
@@ -149,7 +149,7 @@ class TestCreateTypical < Minitest::Test
     OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
 
     # set output directory
-    output_dir = "#{__dir__}/output/test_create_typical_ese_op_hrs_overnight"
+    output_dir = "#{__dir__}/output/#{__method__}"
     FileUtils.mkdir output_dir unless Dir.exist? output_dir
 
     # apply create typical
@@ -184,13 +184,36 @@ class TestCreateTypical < Minitest::Test
     OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
 
     # set output directory
-    output_dir = "#{__dir__}/output/test_create_typical_building_from_model_comstock_restaurant"
+    output_dir = "#{__dir__}/output/#{__method__}"
     FileUtils.mkdir output_dir unless Dir.exist? output_dir
 
     # apply create typical
     starting_size = model.getModelObjects.size
     result = @create.create_typical_building_from_model(model, template,
                                                         climate_zone: climate_zone,
+                                                        sizing_run_directory: output_dir)
+    ending_size = model.getModelObjects.size
+    assert(result)
+    assert(starting_size < ending_size)
+  end
+
+  def test_create_typical_building_from_model_comstock_retail_pthp
+    # load model and set up weather file
+    template = 'ComStock 90.1-2013'
+    climate_zone = 'ASHRAE 169-2013-4A'
+    std = Standard.build(template)
+    model = std.safe_load_model("#{File.dirname(__FILE__)}/../../../data/geometry/ASHRAERetailStripmall.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+
+    # set output directory
+    output_dir = "#{__dir__}/output/#{__method__}"
+    FileUtils.mkdir output_dir unless Dir.exist? output_dir
+
+    # apply create typical
+    starting_size = model.getModelObjects.size
+    result = @create.create_typical_building_from_model(model, template,
+                                                        climate_zone: climate_zone,
+                                                        hvac_system_type: 'PTHP',
                                                         sizing_run_directory: output_dir)
     ending_size = model.getModelObjects.size
     assert(result)
@@ -206,7 +229,7 @@ class TestCreateTypical < Minitest::Test
     OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
 
     # set output directory
-    output_dir = "#{__dir__}/output/test_create_typical_laboratory_building"
+    output_dir = "#{__dir__}/output/#{__method__}"
     FileUtils.mkdir output_dir unless Dir.exist? output_dir
 
     # apply create typical
@@ -228,7 +251,7 @@ class TestCreateTypical < Minitest::Test
     OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
 
     # set output directory
-    output_dir = "#{__dir__}/output/test_create_typical_comstock_supermarket"
+    output_dir = "#{__dir__}/output/#{__method__}"
     FileUtils.mkdir output_dir unless Dir.exist? output_dir
 
     # apply create typical
@@ -251,7 +274,7 @@ class TestCreateTypical < Minitest::Test
     OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
 
     # set output directory
-    output_dir = "#{__dir__}/output/test_create_typical_deer_gro"
+    output_dir = "#{__dir__}/output/#{__method__}"
     FileUtils.mkdir output_dir unless Dir.exist? output_dir
 
     # apply create typical
