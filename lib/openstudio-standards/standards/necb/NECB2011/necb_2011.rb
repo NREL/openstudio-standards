@@ -29,9 +29,10 @@ class NECB2011 < Standard
     return default if variable.nil?
     if variable.is_a? String
       return true if variable.to_s.downcase == 'true'
-      return false
+      return false if variable.to_s.downcase == 'false'
+      return default
     end
-    return true if variable == true
+    return variable if variable.is_a?(TrueClass) || variable.is_a?(FalseClass)
     return default
   end
 
