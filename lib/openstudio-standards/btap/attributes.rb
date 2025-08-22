@@ -1,5 +1,5 @@
 # BTAP Attributes: Currently stores model attributes related to envelopes. 
-require 'openstudio'
+require "openstudio"
 
 module BTAP
 
@@ -26,6 +26,14 @@ module BTAP
 
   class OpenStudio::Model::Space
     attr_reader :surfaces_hash
+  end
+
+  class OpenStudio::Model::Surface
+    attr_reader :construction_hash # Stores the construction for this surface.
+  end
+
+  class OpenStudio::Model::SubSurface
+    attr_reader :construction_hash # Same as the previous.
   end
 
   class Attributes
@@ -63,7 +71,8 @@ module BTAP
       self.compile
     end
 
-    # Compile all the pertinent data into this class' data structure. 
+    # Compile all the pertinent data into the data structures of this class while also appending
+    # to the exisitng OpenStudio ones. 
     def compile
       template_type = @prototype_creator.template
       num_of_above_ground_stories = @model.getBuilding.standardsNumberOfAboveGroundStories.to_i
@@ -86,13 +95,15 @@ module BTAP
           space_type    = space.spaceType.get.standardsSpaceType
           building_type = space.spaceType.get.standardsBuildingType
 
-          construction_set = @costing_database['raw']['construction_sets'].select { |data|
-            data['template'].to_s.gsub(/\s*/, '') == template_type               and
-            data['building_type'].to_s.downcase   == building_type.to_s.downcase and
-            data['space_type'].to_s.downcase      == space_type.to_s.downcase    and
-            data['min_stories'].to_i              <= num_of_above_ground_stories and
-            data['max_stories'].to_i              >= num_of_above_ground_stories
+          # Compile a list of construction sets for each space.
+          construction_set = @costing_database["raw"]["construction_sets"].select { |data|
+            data["template"].to_s.gsub(/\s*/, "") == template_type               and
+            data["building_type"].to_s.downcase   == building_type.to_s.downcase and
+            data["space_type"].to_s.downcase      == space_type.to_s.downcase    and
+            data["min_stories"].to_i              <= num_of_above_ground_stories and
+            data["max_stories"].to_i              >= num_of_above_ground_stories
           }.first
+          space.instance_variable_set(:@construction_set, construction_set)
           
           surfaces_hash = {}
 
@@ -121,6 +132,15 @@ module BTAP
           surfaces_hash["GroundContactFloor"] = BTAP::Geometry::Surfaces::filter_by_surface_types(ground_surfaces, "Floor").sort
 
           space.instance_variable_set(:@surfaces_hash, surfaces_hash)
+
+          @surface_types.each do |surface_type|
+            space.surfaces_hash[surface_type].each do |surface|
+              construction_hash = @costing_database["raw"]["constructions_opaque"].find { |construction|
+                construction["construction_type_name"] == construction_set[surface_type]
+              }
+              surface.instance_variable_set(:@construction_hash, construction_hash)
+            end
+          end
         end
       end
     end
