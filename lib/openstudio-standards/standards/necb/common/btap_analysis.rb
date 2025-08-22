@@ -1,5 +1,11 @@
 require 'openstudio'
 
+# BTAP Analysis:
+#   Class to instantiate post-analysis mechanisms like costing or carbon 
+#   calculation.
+#   Can be done during a simulation or without one given an OSM file and its SQL 
+#   file, along with a few other parameters. 
+
 # Abstract class, only instantiate BTAPNoSimAnalysis or BTAPDatapointAnalysis.
 class BTAPAnalysis
   def initialize(output_folder:, template:)
