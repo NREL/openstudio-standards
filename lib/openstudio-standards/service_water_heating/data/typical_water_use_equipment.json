@@ -6,10 +6,10 @@
       "water_use_equipment": [
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.02,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.02,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "Courthouse BLDG_SWH_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -22,10 +22,10 @@
       "water_use_equipment": [
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.02,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.02,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "Courthouse BLDG_SWH_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -38,20 +38,20 @@
       "water_use_equipment": [
         {
           "equipment_name": "Dishwasher Booster",
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.054,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.054,
           "loop_type": "Shared",
-          "temperature": 180.0,
+          "mixed_water_temperature_f": 180.0,
           "flow_rate_schedule": "RestaurantSitDown BLDG_SWH_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
         },
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.036,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.036,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 120.0,
           "flow_rate_schedule": "RestaurantSitDown BLDG_SWH_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -64,10 +64,10 @@
       "water_use_equipment": [
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.003663158,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.003663158,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "ApartmentHighRise APT_DHW_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -80,10 +80,10 @@
       "water_use_equipment": [
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.003333333,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.003333333,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "Hospital BLDG_SWH_EXTD_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -96,10 +96,10 @@
       "water_use_equipment": [
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.003333333,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.003333333,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "Hospital BLDG_SWH_EXTD_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -112,10 +112,10 @@
       "water_use_equipment": [
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.003333333,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.003333333,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "Hospital BLDG_SWH_EXTD_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -128,20 +128,20 @@
       "water_use_equipment": [
         {
           "equipment_name": "Dishwasher Booster",
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.009,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.009,
           "loop_type": "Shared",
-          "temperature": 180.0,
+          "mixed_water_temperature_f": 180.0,
           "flow_rate_schedule": "Hospital BLDG_SWH_EXTD_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
         },
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.006,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.006,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 120.0,
           "flow_rate_schedule": "Hospital BLDG_SWH_EXTD_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -154,10 +154,10 @@
       "water_use_equipment": [
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.000701754,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.000701754,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "Hospital BLDG_SWH_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -170,10 +170,10 @@
       "water_use_equipment": [
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.003333333,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.003333333,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "Hospital BLDG_SWH_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -186,10 +186,10 @@
       "water_use_equipment": [
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.003571429,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.003571429,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "Hospital BLDG_SWH_EXTD_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -202,10 +202,10 @@
       "water_use_equipment": [
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.000189394,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.000189394,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "Hospital BLDG_SWH_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -218,10 +218,10 @@
       "water_use_equipment": [
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.000190476,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.000190476,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "Hospital BLDG_SWH_EXTD_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -234,10 +234,10 @@
       "water_use_equipment": [
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.00297619,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.00297619,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "HotelLarge GuestRoom_SWH_Sch",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -250,20 +250,20 @@
       "water_use_equipment": [
         {
           "equipment_name": "Dishwasher Booster",
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.072,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.072,
           "loop_type": "Shared",
-          "temperature": 180.0,
+          "mixed_water_temperature_f": 180.0,
           "flow_rate_schedule": "HotelLarge BLDG_SWH_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
         },
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.048,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.048,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 120.0,
           "flow_rate_schedule": "HotelLarge BLDG_SWH_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -276,10 +276,10 @@
       "water_use_equipment": [
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.186428571,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.186428571,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "HotelLarge LaundryRoom_SWH_Sch_Post2004",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -292,10 +292,10 @@
       "water_use_equipment": [
         {
           "equipment_name": null,
-          "peak_flow_rate": 3.48,
-          "peak_flow_rate_per_area": 0.003663158,
+          "peak_flow_rate_gph": 3.48,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.003663158,
           "loop_type": "One Per Unit",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "ApartmentMidRise APT_DHW_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -308,30 +308,30 @@
       "water_use_equipment": [
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.02,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.02,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "OfficeMedium BLDG_SWH_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
         },
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.02,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.02,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "OfficeMedium BLDG_SWH_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
         },
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.02,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.02,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "OfficeSmall BLDG_SWH_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -344,10 +344,10 @@
       "water_use_equipment": [
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.000516521,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.000516521,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "OfficeLarge BLDG_SWH_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -360,10 +360,10 @@
       "water_use_equipment": [
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.000516521,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.000516521,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "OfficeLarge BLDG_SWH_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -376,10 +376,10 @@
       "water_use_equipment": [
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.000516521,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.000516521,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "OfficeLarge BLDG_SWH_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -392,10 +392,10 @@
       "water_use_equipment": [
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.000950996,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.000950996,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "OfficeMedium BLDG_SWH_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -408,10 +408,10 @@
       "water_use_equipment": [
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.000545256,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.000545256,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "OfficeSmall BLDG_SWH_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -424,10 +424,10 @@
       "water_use_equipment": [
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.018518519,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.018518519,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "OutPatientHealthCare BLDG_SWH_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -440,10 +440,10 @@
       "water_use_equipment": [
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.004545455,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.004545455,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "OutPatientHealthCare BLDG_SWH_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -456,10 +456,10 @@
       "water_use_equipment": [
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.011904762,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.011904762,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "OutPatientHealthCare BLDG_SWH_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -472,10 +472,10 @@
       "water_use_equipment": [
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.025423729,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.025423729,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "OutPatientHealthCare BLDG_SWH_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -488,10 +488,10 @@
       "water_use_equipment": [
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.006329114,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.006329114,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "OutPatientHealthCare BLDG_SWH_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -504,10 +504,10 @@
       "water_use_equipment": [
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.002114165,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.002114165,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "OutPatientHealthCare BLDG_SWH_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -520,10 +520,10 @@
       "water_use_equipment": [
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.007590133,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.007590133,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "OutPatientHealthCare BLDG_SWH_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -536,10 +536,10 @@
       "water_use_equipment": [
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.007017544,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.007017544,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "OutPatientHealthCare BLDG_SWH_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -552,10 +552,10 @@
       "water_use_equipment": [
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.002222222,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.002222222,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "OutPatientHealthCare BLDG_SWH_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -568,10 +568,10 @@
       "water_use_equipment": [
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.02,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.02,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "SchoolPrimary BLDG_SWH_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -584,20 +584,20 @@
       "water_use_equipment": [
         {
           "equipment_name": "Dishwasher Booster",
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.034,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.034,
           "loop_type": "Shared",
-          "temperature": 180.0,
+          "mixed_water_temperature_f": 180.0,
           "flow_rate_schedule": "SchoolSecondary BLDG_SWH_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
         },
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.023,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.023,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 120.0,
           "flow_rate_schedule": "SchoolSecondary BLDG_SWH_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -610,20 +610,20 @@
       "water_use_equipment": [
         {
           "equipment_name": "Dishwasher Booster",
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.033,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.033,
           "loop_type": "Shared",
-          "temperature": 180.0,
+          "mixed_water_temperature_f": 180.0,
           "flow_rate_schedule": "SchoolPrimary BLDG_SWH_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
         },
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.022,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.022,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 120.0,
           "flow_rate_schedule": "SchoolPrimary BLDG_SWH_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -636,10 +636,10 @@
       "water_use_equipment": [
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.032,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.032,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "RestaurantFastFood BLDG_SWH_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -652,10 +652,10 @@
       "water_use_equipment": [
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.007499177,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.007499177,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "SchoolSecondary BLDG_SWH_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -668,10 +668,10 @@
       "water_use_equipment": [
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.02,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.02,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "SchoolSecondary BLDG_SWH_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -684,10 +684,10 @@
       "water_use_equipment": [
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.006324786,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.006324786,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "HotelSmall GuestRoom_SHW_Sch",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -700,10 +700,10 @@
       "water_use_equipment": [
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.006324786,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.006324786,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "HotelSmall AlwaysOff",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -716,10 +716,10 @@
       "water_use_equipment": [
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.064102564,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.064102564,
           "loop_type": "One Per Space",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "HotelSmall LaundryRoom_SHW_Sch",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -732,10 +732,10 @@
       "water_use_equipment": [
         {
           "equipment_name": null,
-          "peak_flow_rate": 1.8,
-          "peak_flow_rate_per_area": null,
+          "peak_flow_rate_gph": 1.8,
+          "peak_flow_rate_gph_per_floor_area_ft2": null,
           "loop_type": "One Per Space",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "RetailStripmall Type1_SWH_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -748,10 +748,10 @@
       "water_use_equipment": [
         {
           "equipment_name": null,
-          "peak_flow_rate": 1.8,
-          "peak_flow_rate_per_area": null,
+          "peak_flow_rate_gph": 1.8,
+          "peak_flow_rate_gph_per_floor_area_ft2": null,
           "loop_type": "One Per Space",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "RetailStripmall Type2_SWH_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -764,10 +764,10 @@
       "water_use_equipment": [
         {
           "equipment_name": null,
-          "peak_flow_rate": 1.8,
-          "peak_flow_rate_per_area": null,
+          "peak_flow_rate_gph": 1.8,
+          "peak_flow_rate_gph_per_floor_area_ft2": null,
           "loop_type": "One Per Space",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "RetailStripmall Type3_SWH_SCH",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -780,10 +780,10 @@
       "water_use_equipment": [
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.002141786,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.002141786,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "SuperMarket Bldg Swh",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05
@@ -796,10 +796,10 @@
       "water_use_equipment": [
         {
           "equipment_name": null,
-          "peak_flow_rate": null,
-          "peak_flow_rate_per_area": 0.002141786,
+          "peak_flow_rate_gph": null,
+          "peak_flow_rate_gph_per_floor_area_ft2": 0.002141786,
           "loop_type": "Shared",
-          "temperature": 140.0,
+          "mixed_water_temperature_f": 110.0,
           "flow_rate_schedule": "SuperMarket Bldg Swh",
           "sensible_fraction": 0.2,
           "latent_fraction": 0.05

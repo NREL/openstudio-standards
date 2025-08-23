@@ -38,10 +38,10 @@ def csv_to_json(input_csv = 'typical_water_use_equipment.csv',
     # Add water_use_equipment entry
     water_use_entry = {
       equipment_name: row[:equipment_name],
-      peak_flow_rate: row[:peak_flow_rate]&.to_f, # gallons / hour
-      peak_flow_rate_per_area: row[:peak_flow_rate_per_area]&.to_f, # gallons / hour-ft^2
+      peak_flow_rate_gph: row[:peak_flow_rate_gph]&.to_f, # gallons / hour
+      peak_flow_rate_gph_per_floor_area_ft2: row[:peak_flow_rate_gph_per_floor_area_ft2]&.to_f, # gallons / hour-ft^2
       loop_type: row[:loop_type],
-      temperature: row[:temperature]&.to_f, # deg F
+      mixed_water_temperature_f: row[:mixed_water_temperature_f]&.to_f, # deg F
       flow_rate_schedule: row[:flow_rate_schedule],
       sensible_fraction: row[:sensible_fraction]&.to_f,
       latent_fraction: row[:latent_fraction]&.to_f
@@ -83,10 +83,10 @@ def json_to_csv(input_json = 'typical_water_use_equipment.json',
     :space_type,
     :building_type,
     :equipment_name,
-    :peak_flow_rate,
-    :peak_flow_rate_per_area,
+    :peak_flow_rate_gph,
+    :peak_flow_rate_gph_per_floor_area_ft2,
     :loop_type,
-    :temperature,
+    :mixed_water_temperature_f,
     :flow_rate_schedule,
     :sensible_fraction,
     :latent_fraction
@@ -103,10 +103,10 @@ def json_to_csv(input_json = 'typical_water_use_equipment.json',
           space_type,
           building_type,
           equipment[:equipment_name],
-          equipment[:peak_flow_rate],
-          equipment[:peak_flow_rate_per_area],
+          equipment[:peak_flow_rate_gph],
+          equipment[:peak_flow_rate_gph_per_floor_area_ft2],
           equipment[:loop_type],
-          equipment[:temperature],
+          equipment[:mixed_water_temperature_f],
           equipment[:flow_rate_schedule],
           equipment[:sensible_fraction],
           equipment[:latent_fraction]
