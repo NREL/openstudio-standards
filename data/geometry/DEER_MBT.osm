@@ -2978,7 +2978,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   MBT,                                    !- Standards Building Type
-  Conference;                             !- Standards Space Type
+  conference/meeting/multipurpose;      !- Standards Space Type
 
 OS:SpaceType,
   {7f93896f-4a7a-445f-a6c5-0efec97cfe2c}, !- Handle
@@ -2988,7 +2988,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   MBT,                                    !- Standards Building Type
-  CorridorStairway;                       !- Standards Space Type
+  stairwell;      !- Standards Space Type
 
 OS:SpaceType,
   {c995cbb2-f342-4bfb-bc86-4b32307b3592}, !- Handle
@@ -2998,7 +2998,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   MBT,                                    !- Standards Building Type
-  Laboratory;                             !- Standards Space Type
+  laboratory;      !- Standards Space Type
 
 OS:SpaceType,
   {8905b938-64e5-4658-8ce9-6a78f3092278}, !- Handle
@@ -3008,7 +3008,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   MBT,                                    !- Standards Building Type
-  OfficeOpen;                             !- Standards Space Type
+  office;      !- Standards Space Type
 
 OS:SpaceType,
   {926df76e-5ffd-43ae-892b-f551ddbef75d}, !- Handle
@@ -3018,7 +3018,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   MBT,                                    !- Standards Building Type
-  Dining;                                 !- Standards Space Type
+  dining;      !- Standards Space Type
 
 OS:SpaceType,
   {90fe549d-fb78-4870-860e-a1358fb2c662}, !- Handle
@@ -3028,7 +3028,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   MBT,                                    !- Standards Building Type
-  Kitchen;                                !- Standards Space Type
+  food preparation;      !- Standards Space Type
 
 OS:ThermalZone,
   {2e00aab7-823c-4dfe-be61-ffc7e68a9bab}, !- Handle
@@ -4842,7 +4842,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Building Type
-  Plenum;                                 !- Standards Space Type
+  plenum;      !- Standards Space Type
 
 OS:Surface,
   {333214f2-7420-4a46-be3a-c46c94702c03}, !- Handle

@@ -18477,7 +18477,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  OpenOffice;                             !- Standards Space Type
+  office;      !- Standards Space Type
 
 OS:Rendering:Color,
   {1387cc37-4d7b-4f7f-86b3-e285075a148e}, !- Handle
@@ -18495,7 +18495,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  ClosedOffice;                           !- Standards Space Type
+  office;      !- Standards Space Type
 
 OS:Rendering:Color,
   {cc772eef-de54-43c2-b85a-a10de18e5b13}, !- Handle
@@ -18513,7 +18513,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  Elec/MechRoom;                          !- Standards Space Type
+  electrical/mechanical;      !- Standards Space Type
 
 OS:Rendering:Color,
   {f95a3f05-079b-4b27-8005-df87c23246f2}, !- Handle
@@ -18531,7 +18531,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  Corridor;                               !- Standards Space Type
+  corridor;      !- Standards Space Type
 
 OS:Rendering:Color,
   {4f50db8c-15e9-426f-83d2-9ec9581b4aa8}, !- Handle
@@ -18549,7 +18549,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  Restroom;                               !- Standards Space Type
+  restroom;      !- Standards Space Type
 
 OS:Rendering:Color,
   {1708cbe5-533e-4dcd-bdfd-a7905b49eb3f}, !- Handle
@@ -18567,7 +18567,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  Lobby;                                  !- Standards Space Type
+  lobby;      !- Standards Space Type
 
 OS:Rendering:Color,
   {51d0357b-8dcc-46a8-8147-6e4ae929de2d}, !- Handle
@@ -18585,7 +18585,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  Stair;                                  !- Standards Space Type
+  stairwell;      !- Standards Space Type
 
 OS:Rendering:Color,
   {5b4db05a-e3aa-4691-a828-be7c19730c34}, !- Handle
@@ -18604,7 +18604,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  Dining;                                 !- Standards Space Type
+  dining;      !- Standards Space Type
 
 OS:Rendering:Color,
   {81238171-1bb6-49b8-96f6-58b5e3fbf0f8}, !- Handle
@@ -18622,7 +18622,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  Conference;                             !- Standards Space Type
+  conference/meeting/multipurpose;      !- Standards Space Type
 
 OS:Rendering:Color,
   {329a96ca-030a-4aa0-92d7-862dbb62dbda}, !- Handle
@@ -18640,7 +18640,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  Storage;                                !- Standards Space Type
+  storage;      !- Standards Space Type
 
 OS:Rendering:Color,
   {69347753-25b6-4f5c-b66a-2d8ce0fc90d4}, !- Handle
@@ -18658,7 +18658,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  Classroom;                              !- Standards Space Type
+  classroom/lecture/training;      !- Standards Space Type
 
 OS:Rendering:Color,
   {70112ab4-810d-4a54-933c-8dc9a21f3119}, !- Handle
@@ -18676,7 +18676,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  BreakRoom;                              !- Standards Space Type
+  lounge/breakroom;      !- Standards Space Type
 
 OS:Rendering:Color,
   {95ccf356-3dd3-40f5-8b41-746c84a8c446}, !- Handle
@@ -18694,7 +18694,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  OfficeLarge Data Center;                !- Standards Space Type
+  datacenter/low ite;      !- Standards Space Type
 
 OS:Rendering:Color,
   {dfe7bc47-b47a-465d-8dfe-aac3a9a32494}, !- Handle
@@ -18712,7 +18712,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  OfficeLarge Main Data Center;           !- Standards Space Type
+  datacenter/high ite;      !- Standards Space Type
 
 OS:Rendering:Color,
   {711e801a-193d-4b81-a8dc-027496c01cd2}, !- Handle
