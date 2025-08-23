@@ -10,7 +10,7 @@ class NECB_TBD_Tests < Minitest::Test
     # File paths.
     @output_folder = File.join(__dir__, 'output/test_necb_tbd')
     @expected_results_file = File.join(__dir__, '../expected_results/necb_tbd_expected_results.json')
-    @test_results_file = File.join(__dir__, '../expected_results/necb_tbd_test_results.json')
+    @test_results_file = File.join(__dir__, '../expected_results/necb_tbd-test_results.json')
     @sizing_run_dir = File.join(@output_folder, 'sizing_folder')
     @test_results_array = [] # test results storage array
 

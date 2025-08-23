@@ -32,7 +32,7 @@ OS:AdditionalProperties,
 
 OS:AirLoopHVAC,
   {00000000-0000-0000-0002-000000000001},  !- Handle
-  sys_1|doas|shr>erv|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1, !- Name
+  sys_1|doas|shr>erv|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1, !- Name
   ,                                        !- Controller List Name
   {00000000-0000-0000-0067-000000000020},  !- Availability Schedule
   {00000000-0000-0000-0008-000000000001},  !- Availability Manager List Name
@@ -54,7 +54,7 @@ OS:AirLoopHVAC,
 
 OS:AirLoopHVAC,
   {00000000-0000-0000-0002-000000000002},  !- Handle
-  sys_1|doas|shr>erv|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none|, !- Name
+  sys_1|doas|shr>erv|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none|, !- Name
   ,                                        !- Controller List Name
   {00000000-0000-0000-0067-000000000021},  !- Availability Schedule
   {00000000-0000-0000-0008-000000000002},  !- Availability Manager List Name
@@ -2635,7 +2635,7 @@ OS:HeatBalanceAlgorithm,
 
 OS:HeatExchanger:AirToAir:SensibleAndLatent,
   {00000000-0000-0000-0044-000000000001},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 ERV, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 ERV, !- Name
   {00000000-0000-0000-0064-000000000002},  !- Availability Schedule
   autosize,                                !- Nominal Supply Air Flow Rate {m3/s}
   0.5,                                     !- Sensible Effectiveness at 100% Heating Air Flow {dimensionless}
@@ -2661,7 +2661,7 @@ OS:HeatExchanger:AirToAir:SensibleAndLatent,
 
 OS:HeatExchanger:AirToAir:SensibleAndLatent,
   {00000000-0000-0000-0044-000000000002},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| ERV, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| ERV, !- Name
   {00000000-0000-0000-0064-000000000002},  !- Availability Schedule
   autosize,                                !- Nominal Supply Air Flow Rate {m3/s}
   0.5,                                     !- Sensible Effectiveness at 100% Heating Air Flow {dimensionless}
@@ -3678,109 +3678,109 @@ OS:Node,
 
 OS:Node,
   {00000000-0000-0000-0052-000000000072},  !- Handle
-  sys_1|doas|shr>erv|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Demand Inlet Node, !- Name
+  sys_1|doas|shr>erv|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Demand Inlet Node, !- Name
   {00000000-0000-0000-0015-000000000068},  !- Inlet Port
   {00000000-0000-0000-0015-000000000070};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0052-000000000073},  !- Handle
-  sys_1|doas|shr>erv|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Demand Outlet Node, !- Name
+  sys_1|doas|shr>erv|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Demand Outlet Node, !- Name
   {00000000-0000-0000-0015-000000000071},  !- Inlet Port
   {00000000-0000-0000-0015-000000000069};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0052-000000000074},  !- Handle
-  sys_1|doas|shr>erv|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Mixed Air Node, !- Name
+  sys_1|doas|shr>erv|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Mixed Air Node, !- Name
   {00000000-0000-0000-0015-000000000078},  !- Inlet Port
   {00000000-0000-0000-0015-000000000079};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0052-000000000075},  !- Handle
-  sys_1|doas|shr>erv|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Outdoor Air Node, !- Name
+  sys_1|doas|shr>erv|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Outdoor Air Node, !- Name
   ,                                        !- Inlet Port
   {00000000-0000-0000-0015-000000000170};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0052-000000000076},  !- Handle
-  sys_1|doas|shr>erv|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Relief Air Node, !- Name
+  sys_1|doas|shr>erv|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Relief Air Node, !- Name
   {00000000-0000-0000-0015-000000000175},  !- Inlet Port
   ;                                        !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0052-000000000077},  !- Handle
-  sys_1|doas|shr>erv|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Supply Inlet Node, !- Name
+  sys_1|doas|shr>erv|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Supply Inlet Node, !- Name
   {00000000-0000-0000-0015-000000000066},  !- Inlet Port
   {00000000-0000-0000-0015-000000000077};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0052-000000000078},  !- Handle
-  sys_1|doas|shr>erv|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Supply Outlet Node, !- Name
+  sys_1|doas|shr>erv|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Supply Outlet Node, !- Name
   {00000000-0000-0000-0015-000000000076},  !- Inlet Port
   {00000000-0000-0000-0015-000000000067};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0052-000000000079},  !- Handle
-  sys_1|doas|shr>erv|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Demand Inlet Node, !- Name
+  sys_1|doas|shr>erv|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Demand Inlet Node, !- Name
   {00000000-0000-0000-0015-000000000044},  !- Inlet Port
   {00000000-0000-0000-0015-000000000046};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0052-000000000080},  !- Handle
-  sys_1|doas|shr>erv|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Demand Outlet Node, !- Name
+  sys_1|doas|shr>erv|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Demand Outlet Node, !- Name
   {00000000-0000-0000-0015-000000000047},  !- Inlet Port
   {00000000-0000-0000-0015-000000000045};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0052-000000000081},  !- Handle
-  sys_1|doas|shr>erv|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Mixed Air Node, !- Name
+  sys_1|doas|shr>erv|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Mixed Air Node, !- Name
   {00000000-0000-0000-0015-000000000054},  !- Inlet Port
   {00000000-0000-0000-0015-000000000055};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0052-000000000082},  !- Handle
-  sys_1|doas|shr>erv|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Outdoor Air Node, !- Name
+  sys_1|doas|shr>erv|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Outdoor Air Node, !- Name
   ,                                        !- Inlet Port
   {00000000-0000-0000-0015-000000000164};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0052-000000000083},  !- Handle
-  sys_1|doas|shr>erv|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Relief Air Node, !- Name
+  sys_1|doas|shr>erv|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Relief Air Node, !- Name
   {00000000-0000-0000-0015-000000000169},  !- Inlet Port
   ;                                        !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0052-000000000084},  !- Handle
-  sys_1|doas|shr>erv|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Supply Inlet Node, !- Name
+  sys_1|doas|shr>erv|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Supply Inlet Node, !- Name
   {00000000-0000-0000-0015-000000000042},  !- Inlet Port
   {00000000-0000-0000-0015-000000000053};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0052-000000000085},  !- Handle
-  sys_1|doas|shr>erv|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Supply Outlet Node, !- Name
+  sys_1|doas|shr>erv|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Supply Outlet Node, !- Name
   {00000000-0000-0000-0015-000000000052},  !- Inlet Port
   {00000000-0000-0000-0015-000000000043};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0052-000000000086},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 ERV Primary Outlet Air Node, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 ERV Primary Outlet Air Node, !- Name
   {00000000-0000-0000-0015-000000000171},  !- Inlet Port
   {00000000-0000-0000-0015-000000000172};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0052-000000000087},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 ERV Secondary Inlet Air Node, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 ERV Secondary Inlet Air Node, !- Name
   {00000000-0000-0000-0015-000000000173},  !- Inlet Port
   {00000000-0000-0000-0015-000000000174};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0052-000000000088},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| ERV Primary Outlet Air Node, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| ERV Primary Outlet Air Node, !- Name
   {00000000-0000-0000-0015-000000000165},  !- Inlet Port
   {00000000-0000-0000-0015-000000000166};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0052-000000000089},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| ERV Secondary Inlet Air Node, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| ERV Secondary Inlet Air Node, !- Name
   {00000000-0000-0000-0015-000000000167},  !- Inlet Port
   {00000000-0000-0000-0015-000000000168};  !- Outlet Port
 
@@ -4256,13 +4256,13 @@ OS:Schedule:Constant,
   {00000000-0000-0000-0064-000000000003},  !- Handle
   Schedule Constant 1,                     !- Name
   {00000000-0000-0000-0068-000000000007},  !- Schedule Type Limits Name
-  50;                                      !- Value
+  60;                                      !- Value
 
 OS:Schedule:Constant,
   {00000000-0000-0000-0064-000000000004},  !- Handle
   Schedule Constant 2,                     !- Name
   {00000000-0000-0000-0068-000000000007},  !- Schedule Type Limits Name
-  50;                                      !- Value
+  60;                                      !- Value
 
 OS:Schedule:Constant,
   {00000000-0000-0000-0064-000000000005},  !- Handle
@@ -5289,7 +5289,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0065-000000000050},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Occ Sch Default, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Occ Sch Default, !- Name
   {00000000-0000-0000-0068-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
@@ -5304,7 +5304,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0065-000000000051},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Occ Sch Summer Design Day, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Occ Sch Summer Design Day, !- Name
   {00000000-0000-0000-0068-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
@@ -5313,7 +5313,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0065-000000000052},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Occ Sch Winter Design Day, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Occ Sch Winter Design Day, !- Name
   {00000000-0000-0000-0068-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
@@ -5322,7 +5322,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0065-000000000053},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Occ Sch Default, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Occ Sch Default, !- Name
   {00000000-0000-0000-0068-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
@@ -5337,7 +5337,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0065-000000000054},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Occ Sch Summer Design Day, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Occ Sch Summer Design Day, !- Name
   {00000000-0000-0000-0068-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
@@ -5346,7 +5346,7 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0065-000000000055},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Occ Sch Winter Design Day, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Occ Sch Winter Design Day, !- Name
   {00000000-0000-0000-0068-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
@@ -5965,7 +5965,7 @@ OS:Schedule:Ruleset,
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0067-000000000020},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Occ Sch, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Occ Sch, !- Name
   {00000000-0000-0000-0068-000000000004},  !- Schedule Type Limits Name
   {00000000-0000-0000-0065-000000000050},  !- Default Day Schedule Name
   {00000000-0000-0000-0065-000000000051},  !- Summer Design Day Schedule Name
@@ -5973,7 +5973,7 @@ OS:Schedule:Ruleset,
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0067-000000000021},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Occ Sch, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Occ Sch, !- Name
   {00000000-0000-0000-0068-000000000004},  !- Schedule Type Limits Name
   {00000000-0000-0000-0065-000000000053},  !- Default Day Schedule Name
   {00000000-0000-0000-0065-000000000054},  !- Summer Design Day Schedule Name
@@ -6239,7 +6239,7 @@ OS:Sizing:Plant,
   {00000000-0000-0000-0081-000000000002},  !- Handle
   {00000000-0000-0000-0058-000000000002},  !- Plant or Condenser Loop Name
   Heating,                                 !- Loop Type
-  50,                                      !- Design Loop Exit Temperature {C}
+  60,                                      !- Design Loop Exit Temperature {C}
   5,                                       !- Loop Design Temperature Difference {deltaC}
   NonCoincident,                           !- Sizing Option
   1,                                       !- Zone Timesteps in Averaging Window
@@ -7423,7 +7423,7 @@ OS:SurfaceProperty:ExposedFoundationPerimeter,
 
 OS:Table:IndependentVariable,
   {00000000-0000-0000-0095-000000000001},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 ERV_LatentCooling_IndependentVariable, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 ERV_LatentCooling_IndependentVariable, !- Name
   Linear,                                  !- Interpolation Method
   Linear,                                  !- Extrapolation Method
   0,                                       !- Minimum Value {BasedOnField A5}
@@ -7438,7 +7438,7 @@ OS:Table:IndependentVariable,
 
 OS:Table:IndependentVariable,
   {00000000-0000-0000-0095-000000000002},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 ERV_LatentHeating_IndependentVariable, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 ERV_LatentHeating_IndependentVariable, !- Name
   Linear,                                  !- Interpolation Method
   Linear,                                  !- Extrapolation Method
   0,                                       !- Minimum Value {BasedOnField A5}
@@ -7453,7 +7453,7 @@ OS:Table:IndependentVariable,
 
 OS:Table:IndependentVariable,
   {00000000-0000-0000-0095-000000000003},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 ERV_SensibleCooling_IndependentVariable, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 ERV_SensibleCooling_IndependentVariable, !- Name
   Linear,                                  !- Interpolation Method
   Linear,                                  !- Extrapolation Method
   0,                                       !- Minimum Value {BasedOnField A5}
@@ -7468,7 +7468,7 @@ OS:Table:IndependentVariable,
 
 OS:Table:IndependentVariable,
   {00000000-0000-0000-0095-000000000004},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 ERV_SensibleHeating_IndependentVariable, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 ERV_SensibleHeating_IndependentVariable, !- Name
   Linear,                                  !- Interpolation Method
   Linear,                                  !- Extrapolation Method
   0,                                       !- Minimum Value {BasedOnField A5}
@@ -7483,7 +7483,7 @@ OS:Table:IndependentVariable,
 
 OS:Table:IndependentVariable,
   {00000000-0000-0000-0095-000000000005},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| ERV_LatentCooling_IndependentVariable, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| ERV_LatentCooling_IndependentVariable, !- Name
   Linear,                                  !- Interpolation Method
   Linear,                                  !- Extrapolation Method
   0,                                       !- Minimum Value {BasedOnField A5}
@@ -7498,7 +7498,7 @@ OS:Table:IndependentVariable,
 
 OS:Table:IndependentVariable,
   {00000000-0000-0000-0095-000000000006},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| ERV_LatentHeating_IndependentVariable, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| ERV_LatentHeating_IndependentVariable, !- Name
   Linear,                                  !- Interpolation Method
   Linear,                                  !- Extrapolation Method
   0,                                       !- Minimum Value {BasedOnField A5}
@@ -7513,7 +7513,7 @@ OS:Table:IndependentVariable,
 
 OS:Table:IndependentVariable,
   {00000000-0000-0000-0095-000000000007},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| ERV_SensibleCooling_IndependentVariable, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| ERV_SensibleCooling_IndependentVariable, !- Name
   Linear,                                  !- Interpolation Method
   Linear,                                  !- Extrapolation Method
   0,                                       !- Minimum Value {BasedOnField A5}
@@ -7528,7 +7528,7 @@ OS:Table:IndependentVariable,
 
 OS:Table:IndependentVariable,
   {00000000-0000-0000-0095-000000000008},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| ERV_SensibleHeating_IndependentVariable, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| ERV_SensibleHeating_IndependentVariable, !- Name
   Linear,                                  !- Interpolation Method
   Linear,                                  !- Extrapolation Method
   0,                                       !- Minimum Value {BasedOnField A5}
@@ -7543,7 +7543,7 @@ OS:Table:IndependentVariable,
 
 OS:Table:Lookup,
   {00000000-0000-0000-0096-000000000001},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 ERV_LatCoolEff 1, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 ERV_LatCoolEff 1, !- Name
   {00000000-0000-0000-0051-000000000010},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
@@ -7558,7 +7558,7 @@ OS:Table:Lookup,
 
 OS:Table:Lookup,
   {00000000-0000-0000-0096-000000000002},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 ERV_LatHeatEff 1, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 ERV_LatHeatEff 1, !- Name
   {00000000-0000-0000-0051-000000000015},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
@@ -7573,7 +7573,7 @@ OS:Table:Lookup,
 
 OS:Table:Lookup,
   {00000000-0000-0000-0096-000000000003},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 ERV_SensCoolEff 1, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 ERV_SensCoolEff 1, !- Name
   {00000000-0000-0000-0051-000000000009},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
@@ -7588,7 +7588,7 @@ OS:Table:Lookup,
 
 OS:Table:Lookup,
   {00000000-0000-0000-0096-000000000004},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 ERV_SensHeatEff 1, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 ERV_SensHeatEff 1, !- Name
   {00000000-0000-0000-0051-000000000014},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
@@ -7603,7 +7603,7 @@ OS:Table:Lookup,
 
 OS:Table:Lookup,
   {00000000-0000-0000-0096-000000000005},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| ERV_LatCoolEff 1, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| ERV_LatCoolEff 1, !- Name
   {00000000-0000-0000-0051-000000000013},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
@@ -7618,7 +7618,7 @@ OS:Table:Lookup,
 
 OS:Table:Lookup,
   {00000000-0000-0000-0096-000000000006},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| ERV_LatHeatEff 1, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| ERV_LatHeatEff 1, !- Name
   {00000000-0000-0000-0051-000000000016},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
@@ -7633,7 +7633,7 @@ OS:Table:Lookup,
 
 OS:Table:Lookup,
   {00000000-0000-0000-0096-000000000007},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| ERV_SensCoolEff 1, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| ERV_SensCoolEff 1, !- Name
   {00000000-0000-0000-0051-000000000012},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
@@ -7648,7 +7648,7 @@ OS:Table:Lookup,
 
 OS:Table:Lookup,
   {00000000-0000-0000-0096-000000000008},  !- Handle
-  sys_1|doas|shr>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| ERV_SensHeatEff 1, !- Name
+  sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| ERV_SensHeatEff 1, !- Name
   {00000000-0000-0000-0051-000000000011},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor

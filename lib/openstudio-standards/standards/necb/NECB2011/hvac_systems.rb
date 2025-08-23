@@ -746,14 +746,24 @@ class NECB2011
 
     # Set cooling tower properties now that the new COP of the chiller is set
     if chiller_electric_eir.name.to_s.include? 'Primary Chiller'
+      # Get the cooling tower based on the condenser water loop rather than assume that there is only one cooling tower loop.
+      clg_towers = []
+      tower_cap = capacity_w * (1.0 + 1.0 / chiller_electric_eir.referenceCOP)
+      condenser_loop = chiller_electric_eir.condenserWaterLoop.get
+      condenser_loop.supplyComponents.each do |supply_comp|
+        if supply_comp.to_CoolingTowerSingleSpeed.is_initialized
+          clg_towers << supply_comp.to_CoolingTowerSingleSpeed.get
+        end
+      end
       # Single speed tower model assumes 25% extra for compressor power
       tower_cap = capacity_w * (1.0 + 1.0 / chiller_electric_eir.referenceCOP)
       if (tower_cap / 1000.0) < 1750
-        clg_tower_objs[0].setNumberofCells(1)
+        clg_towers[0].setNumberofCells(1)
       else
-        clg_tower_objs[0].setNumberofCells((tower_cap / (1000 * 1750) + 0.5).round)
+        clg_towers[0].setNumberofCells((tower_cap / (1000 * 1750) + 0.5).round)
       end
-      clg_tower_objs[0].setFanPoweratDesignAirFlowRate(0.015 * tower_cap)
+            # Only apply cooling tower fan power if power is greater than 13kW.  This is to avoid EnergyPlus issues with some small cooling towers.
+      clg_towers[0].setFanPoweratDesignAirFlowRate(0.015 * tower_cap) if (tower_cap * 0.015 > 13000.0)
     end
 
     # Append the name with size and kw/ton
@@ -2197,7 +2207,7 @@ class NECB2011
   # "sys_oa": "mixed" or "doas"
   # "sys_name_pars" is a hash for the remaining system name parts for heat recovery,
   # heating, cooling, supply fan, zone heating, zone cooling, and return fan
-  def assign_base_sys_name(airloop, sys_abbr:, sys_oa:, sys_name_pars:)
+  def assign_base_sys_name(air_loop:, sys_abbr:, sys_oa:, sys_name_pars:)
     sys_name = "#{sys_abbr}|#{sys_oa}|"
     sys_name_pars.each do |key, value|
       case key.downcase
@@ -2215,24 +2225,36 @@ class NECB2011
           sys_name += 'sh>c-e'
         when 'hot water'
           sys_name += 'sh>c-hw'
-        when 'gas'
+        when 'gas', 'g'
           sys_name += 'sh>c-g'
-        when 'dx'
+        when 'dx' , 'ashp'
           sys_name += 'sh>ashp'
+        when 'ashp>c-g'
+          sys_name += 'sh>ashp>c-g'
+        when 'ashp>c-e'
+          sys_name += 'sh>ashp>c-e'
+        when 'ashp>c-hw'
+          sys_name += 'sh>ashp>c-hw'
         when 'ccashp'
           sys_name += 'sh>ccashp'
-        when 'ashp'
-          sys_name += 'sh>ashp'
+        when 'ccashp>c-g'
+          sys_name += 'sh>ccashp>c-g'
+        when 'ccashp>c-e'
+          sys_name += 'sh>ccashp>c-e'
+        when 'ccashp>c-hw'
+          sys_name += 'sh>ccashp>c-hw'
+        else
+          sys_name += 'sh>none'
         end
 
       when 'sys_clg'
         case value.downcase
         when 'none'
           sys_name += 'sc>none'
-        when 'chilled water'
+        when 'chilled water','hydronic'
           sys_name += 'sc>c-chw'
         when 'dx'
-          if sys_name_pars['sys_htg'] == 'dx'
+          if sys_name_pars['sys_htg'] == 'dx' || sys_name_pars['sys_htg'] == 'ashp>c-g' || sys_name_pars['sys_htg'] == 'ashp>c-e' || sys_name_pars['sys_htg'] == 'ashp>c-hw'
             sys_name += 'sc>ashp'
           else
             sys_name += 'sc>dx'
@@ -2262,9 +2284,9 @@ class NECB2011
         when 'hot water'
           sys_name += 'zh>b-hw'
         when 'tpfc'
-          sys_name += 'zh>fpfc'
-        when 'fpfc'
           sys_name += 'zh>tpfc'
+        when 'fpfc'
+          sys_name += 'zh>fpfc'
         when 'pthp'
           sys_name += 'zh>pthp'
         end
@@ -2296,7 +2318,10 @@ class NECB2011
       sys_name += '|'
     end
 
-    airloop.setName(sys_name)
+    air_loop.setName(sys_name)
+    return detect_air_system_type(air_loop: air_loop,
+                                  old_system_name: sys_name,
+                                  sys_abbr: sys_abbr)
   end
 
   # Method to update the base system name based on the inputs provided.
@@ -2387,6 +2412,10 @@ class NECB2011
         end
       end
 
+      # If cooling supplied by something other than a DX coil do not follow NECB reference HP rule; proceed as usual
+      if clg_coil.nil?
+        return super(coil_heating_dx_single_speed)
+      end
       # Paired cooling coil parameters
       clg_coil = clg_coil.to_CoilCoolingDXSingleSpeed.get
       capacity_w = coil_cooling_dx_single_speed_find_capacity(clg_coil)

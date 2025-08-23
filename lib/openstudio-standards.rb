@@ -106,6 +106,17 @@ module OpenstudioStandards
 
   # BTAP (Natural Resources Canada)
   require_relative 'openstudio-standards/btap/btap'
+  require_relative 'openstudio-standards/btap/costing/btap_costing'
+  require_relative 'openstudio-standards/btap/costing/ventilation_costing'
+  require_relative 'openstudio-standards/btap/costing/envelope_costing'
+  require_relative 'openstudio-standards/btap/costing/lighting_costing'
+  require_relative 'openstudio-standards/btap/costing/heating_cooling_costing'
+  require_relative 'openstudio-standards/btap/costing/shw_costing'
+  require_relative 'openstudio-standards/btap/costing/dcv_costing'
+  require_relative 'openstudio-standards/btap/costing/daylighting_sensor_control_costing'
+  require_relative 'openstudio-standards/btap/costing/led_lighting_costing'
+  require_relative 'openstudio-standards/btap/costing/pv_ground_costing'
+  require_relative 'openstudio-standards/btap/costing/nv_costing'
 
   # Utilities
   require_relative 'openstudio-standards/utilities/logging'
@@ -137,6 +148,7 @@ module OpenstudioStandards
   require_relative "#{stds}/necb/NECB2011/hvac_system_3_and_8_multi_speed"
   require_relative "#{stds}/necb/NECB2011/hvac_system_4"
   require_relative "#{stds}/necb/NECB2011/hvac_system_6"
+  require_relative "#{stds}/necb/NECB2011/hvac_namer"
   require_relative "#{stds}/necb/NECB2011/service_water_heating"
   require_relative "#{stds}/necb/NECB2011/electrical_power_systems_and_motors"
   require_relative "#{stds}/necb/NECB2011/beps_compliance_path"

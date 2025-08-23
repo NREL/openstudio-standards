@@ -64,10 +64,10 @@ class BTAPPRE1980 < NECB2011
   end
 
   def apply_standard_efficiencies(model:, sizing_run_dir:, dcv_type: 'NECB_Default', necb_reference_hp:false)
-    raise('validation of model failed.') unless validate_initial_model(model)
+    # Do a sizing run
+    try_sizing_run(model: model, sizing_run_dir: sizing_run_dir, sizing_run_subdir: 'plant_loops')
 
     climate_zone = 'NECB HDD Method'
-    raise("sizing run 1 failed! check #{sizing_run_dir}") if model_run_sizing_run(model, "#{sizing_run_dir}/plant_loops") == false
 
     # This is needed for NECB2011 as a workaround for sizing the reheat boxes
     model.getAirTerminalSingleDuctVAVReheats.each { |iobj| air_terminal_single_duct_vav_reheat_set_heating_cap(iobj) }
@@ -86,29 +86,4 @@ class BTAPPRE1980 < NECB2011
     return true
   end
 
-  # This method sets the primary heating fuel to either NaturalGas or Electricity if a HP fuel type is set.
-  def validate_primary_heating_fuel(primary_heating_fuel:, model:)
-    if primary_heating_fuel.to_s.downcase == 'defaultfuel' || primary_heating_fuel.to_s.downcase == 'necb_default'
-      epw = OpenStudio::EpwFile.new(model.weatherFile.get.path.get)
-      default_fuel = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.stateProvinceRegion) }['fueltype_set']
-      if default_fuel.nil?
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.swh', "Could not find a default fuel for #{epw.stateProvinceRegion}.  Using Electricity as the fuel type instead.")
-        return 'Electricity'
-      end
-      return default_fuel
-    end
-    return primary_heating_fuel unless primary_heating_fuel == 'NaturalGasHPGasBackup' || primary_heating_fuel == 'NaturalGasHPElecBackupMixed' || primary_heating_fuel == 'ElectricityHPElecBackup' || primary_heating_fuel == 'ElectricityHPGasBackupMixed'
-    case primary_heating_fuel
-    when "NaturalGasHPGasBackup"
-      primary_heating_fuel = 'NaturalGas'
-    when "NaturalGasHPElecBackupMixed"
-      primary_heating_fuel = 'NaturalGas'
-    when "ElectricityHPElecBackup"
-      primary_heating_fuel = 'Electricity'
-    when "ElectricityHPGasBackupMixed"
-      primary_heating_fuel = 'Electricity'
-    end
-    OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.Model', "Attemted to apply an NECB HP primary_heating_fuel to a vintage building type.  Replacing the selected primary_heating_fuel with #{primary_heating_fuel}.")
-    return primary_heating_fuel
-  end
 end
