@@ -174,7 +174,7 @@ class Standard
     # Check to make sure properties were found
     if ac_props.nil?
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXTwoSpeed', "For #{coil_cooling_dx_two_speed.name}, cannot find efficiency info using #{search_criteria} and capacity #{capacity_btu_per_hr} btu/hr, cannot apply efficiency standard.")
-      return false
+      return sql_db_vars_map
     end
 
     # Make the total COOL-CAP-FT curve
