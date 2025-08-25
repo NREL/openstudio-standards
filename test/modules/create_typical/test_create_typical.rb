@@ -199,7 +199,7 @@ class TestCreateTypical < Minitest::Test
 
   def test_create_typical_building_from_model_comstock_retail_pthp
     # load model and set up weather file
-    template = 'ComStock 90.1-2013'
+    template = 'ComStock 90.1-2007'
     climate_zone = 'ASHRAE 169-2013-4A'
     std = Standard.build(template)
     model = std.safe_load_model("#{File.dirname(__FILE__)}/../../../data/geometry/ASHRAERetailStripmall.osm")
