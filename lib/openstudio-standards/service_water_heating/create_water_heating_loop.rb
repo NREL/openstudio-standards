@@ -64,7 +64,7 @@ module OpenstudioStandards
 
       # service water heating loop controls
       swh_temp_f = OpenStudio.convert(service_water_temperature, 'C', 'F').get
-      swh_delta_t_r = 30.0 # default to (140F - 110F) = 30 R temperature difference
+      swh_delta_t_r = 9.0 # default to 9 R temperature difference
       swh_delta_t_k = OpenStudio.convert(swh_delta_t_r, 'R', 'K').get
       swh_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
                                                                                      service_water_temperature,
@@ -233,7 +233,7 @@ module OpenstudioStandards
 
       # Service water heating loop controls
       swh_temp_f = OpenStudio.convert(service_water_temperature, 'C', 'F').get
-      swh_delta_t_r = 40.0 # default to (180F - 140F) = 40 R temperature difference
+      swh_delta_t_r = 9.0 # default to 9 R temperature difference
       swh_delta_t_k = OpenStudio.convert(swh_delta_t_r, 'R', 'K').get
       swh_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
                                                                                      service_water_temperature,
