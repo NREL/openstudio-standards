@@ -252,7 +252,7 @@ class Standard
       (template == 'BTAP1980TO2010'))
       if search_criteria.keys.include?('equipment_type')
         equipment_type = search_criteria['equipment_type']
-        if ['PTHP'].include?(equipment_type)
+        if ['PTHP'].include?(equipment_type) && template.include?('90.1')
           search_criteria['application'] = coil_dx_packaged_terminal_application(coil_heating_dx_single_speed)
         end
       elsif !coil_dx_heat_pump?(coil_heating_dx_single_speed) # `coil_dx_heat_pump?` returns false when a DX heating coil is wrapped into a AirloopHVAC:UnitarySystem
