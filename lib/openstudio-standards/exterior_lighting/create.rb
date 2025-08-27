@@ -65,19 +65,19 @@ module OpenstudioStandards
     # @param control_option [String] Options are 'ScheduleNameOnly' and 'AstronomicalClock'.
     #   'ScheduleNameOnly' will follow the schedule. 'AstronomicalClock' will follow the schedule, but turn off lights when the sun is up.
     # @return [Array<OpenStudio::Model::ExteriorLights>] Array of OpenStudio ExteriorLights object
-    def self.model_create_typical_exterior_lighting(model,
-                                                    standard: nil,
-                                                    lighting_generation: 'default',
-                                                    lighting_zone: 3,
-                                                    onsite_parking_fraction: 1.0,
-                                                    add_base_site_allowance: false,
-                                                    use_model_for_entries_and_canopies: false,
-                                                    control_option: 'AstronomicalClock')
+    def self.create_typical_exterior_lighting(model,
+                                              standard: nil,
+                                              lighting_generation: 'default',
+                                              lighting_zone: 3,
+                                              onsite_parking_fraction: 1.0,
+                                              add_base_site_allowance: false,
+                                              use_model_for_entries_and_canopies: false,
+                                              control_option: 'AstronomicalClock')
       exterior_lights = []
       installed_power = 0.0
       # get the exterior lighting properties from standard or the lighting_generation
       if standard.nil?
-        exterior_lighting_properties = OpenstudioStandards::ExteriorLighting.model_get_exterior_lighting_properties(lighting_generation: lighting_generation)
+        exterior_lighting_properties = OpenstudioStandards::ExteriorLighting.exterior_lighting_properties(lighting_generation: lighting_generation)
         lookup_key = lighting_generation
       else
         lookup_key = standard.template
