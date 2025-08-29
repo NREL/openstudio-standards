@@ -1,13 +1,6 @@
-#require '/usr/local/openstudio-2.8.1/Ruby/openstudio'
-require 'openstudio-standards'
-require 'openstudio/ruleset/ShowRunnerOutput'
+require_relative '../../../../../openstudio-standards.rb'
 require 'minitest/autorun'
 require 'optparse'
-begin
-  require 'openstudio_measure_tester/test_helper'
-rescue LoadError
-  puts 'OpenStudio Measure Tester Gem not installed -- will not be able to aggregate and dashboard the results of tests'
-end
 require 'fileutils'
 require 'minitest/unit'
 require 'optparse'
@@ -529,4 +522,3 @@ class BTAPResults_Test < Minitest::Test
     end
   end
 end
-
