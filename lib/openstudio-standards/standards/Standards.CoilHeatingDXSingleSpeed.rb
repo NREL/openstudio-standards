@@ -154,7 +154,7 @@ class Standard
 
     # Check to make sure properties were found
     if hp_props.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{coil_heating_dx_single_speed.name}, cannot find efficiency info using #{search_criteria}, cannot apply efficiency standard.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{coil_heating_dx_single_speed.name}, cannot find efficiency info using #{search_criteria} and capacity #{capacity_btu_per_hr} btu/hr, cannot apply efficiency standard.")
       return false
     end
 
@@ -252,7 +252,7 @@ class Standard
       (template == 'BTAP1980TO2010'))
       if search_criteria.keys.include?('equipment_type')
         equipment_type = search_criteria['equipment_type']
-        if ['PTHP'].include?(equipment_type)
+        if ['PTHP'].include?(equipment_type) && template.include?('90.1')
           search_criteria['application'] = coil_dx_packaged_terminal_application(coil_heating_dx_single_speed)
         end
       elsif !coil_dx_heat_pump?(coil_heating_dx_single_speed) # `coil_dx_heat_pump?` returns false when a DX heating coil is wrapped into a AirloopHVAC:UnitarySystem
@@ -281,8 +281,8 @@ class Standard
 
     # Check to make sure properties were found
     if hp_props.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{coil_heating_dx_single_speed.name}, cannot find efficiency info using #{search_criteria}, cannot apply efficiency standard.")
-      return false
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{coil_heating_dx_single_speed.name}, cannot find efficiency info using #{search_criteria} and capacity #{capacity_btu_per_hr} btu/hr, cannot apply efficiency standard.")
+      return sql_db_vars_map
     end
 
     equipment_type_field = search_criteria['equipment_type']

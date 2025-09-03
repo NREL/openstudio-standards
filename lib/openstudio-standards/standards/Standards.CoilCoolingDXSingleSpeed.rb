@@ -64,7 +64,7 @@ class Standard
       (template == 'BTAP1980TO2010'))
       if search_criteria.keys.include?('equipment_type')
         equipment_type = search_criteria['equipment_type']
-        if ['PTAC', 'PTHP'].include?(equipment_type)
+        if ['PTAC', 'PTHP'].include?(equipment_type) && template.include?('90.1')
           search_criteria['application'] = coil_dx_packaged_terminal_application(coil_cooling_dx_single_speed)
         end
       elsif !coil_dx_heat_pump?(coil_cooling_dx_single_speed)
@@ -83,10 +83,9 @@ class Standard
     # Lookup efficiencies depending on whether it is a unitary AC or a heat pump
     ac_props = nil
     ac_props = model_find_object(database, search_criteria, capacity_btu_per_hr, Date.today)
-
     # Check to make sure properties were found
     if ac_props.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{coil_cooling_dx_single_speed.name}, cannot find efficiency info using #{search_criteria}, cannot apply efficiency standard.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{coil_cooling_dx_single_speed.name}, cannot find efficiency info using #{search_criteria} and capacity #{capacity_btu_per_hr} btu/hr, cannot apply efficiency standard.")
       return false
     end
 
@@ -238,7 +237,7 @@ class Standard
       (template == 'BTAP1980TO2010'))
       if search_criteria.keys.include?('equipment_type')
         equipment_type = search_criteria['equipment_type']
-        if ['PTAC', 'PTHP'].include?(equipment_type)
+        if ['PTAC', 'PTHP'].include?(equipment_type) && template.include?('90.1')
           search_criteria['application'] = coil_dx_packaged_terminal_application(coil_cooling_dx_single_speed)
         end
       elsif !coil_dx_heat_pump?(coil_cooling_dx_single_speed)
@@ -259,8 +258,8 @@ class Standard
 
     # Check to make sure properties were found
     if ac_props.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{coil_cooling_dx_single_speed.name}, cannot find efficiency info using #{search_criteria}, cannot apply efficiency standard.")
-      return false
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXSingleSpeed', "For #{coil_cooling_dx_single_speed.name}, cannot find efficiency info using #{search_criteria} and capacity #{capacity_btu_per_hr} btu/hr, cannot apply efficiency standard.")
+      return sql_db_vars_map
     end
 
     equipment_type_field = search_criteria['equipment_type']

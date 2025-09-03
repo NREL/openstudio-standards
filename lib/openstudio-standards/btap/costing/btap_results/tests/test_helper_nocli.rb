@@ -1,14 +1,7 @@
-require '/usr/local/openstudio-3.7.0/Ruby/openstudio'
-require 'openstudio-standards'
-require 'openstudio/ruleset/ShowRunnerOutput'
+require_relative '../../../../../openstudio-standards.rb'
 require 'optparse'
 require 'logger'
 require 'minitest/autorun'
-begin
-  require 'openstudio_measure_tester/test_helper'
-rescue LoadError
-  puts 'OpenStudio Measure Tester Gem not installed -- will not be able to aggregate and dashboard the results of tests'
-end
 require_relative '../../btap_workflow.rb'
 require_relative '../../common_paths.rb'
 require 'fileutils'
@@ -165,4 +158,3 @@ class Btap_results_helper
 end
 end
 Btap_results_helper.new().btap_results_regression_test()
-
