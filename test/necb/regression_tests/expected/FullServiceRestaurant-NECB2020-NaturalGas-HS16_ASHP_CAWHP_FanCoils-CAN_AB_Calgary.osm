@@ -4491,13 +4491,13 @@ OS:Schedule:Constant,
   {00000000-0000-0000-0066-000000000003},  !- Handle
   Schedule Constant 1,                     !- Name
   {00000000-0000-0000-0070-000000000007},  !- Schedule Type Limits Name
-  50;                                      !- Value
+  60;                                      !- Value
 
 OS:Schedule:Constant,
   {00000000-0000-0000-0066-000000000004},  !- Handle
   Schedule Constant 2,                     !- Name
   {00000000-0000-0000-0070-000000000007},  !- Schedule Type Limits Name
-  50;                                      !- Value
+  60;                                      !- Value
 
 OS:Schedule:Constant,
   {00000000-0000-0000-0066-000000000005},  !- Handle
@@ -6474,7 +6474,7 @@ OS:Sizing:Plant,
   {00000000-0000-0000-0083-000000000002},  !- Handle
   {00000000-0000-0000-0060-000000000002},  !- Plant or Condenser Loop Name
   Heating,                                 !- Loop Type
-  50,                                      !- Design Loop Exit Temperature {C}
+  60,                                      !- Design Loop Exit Temperature {C}
   5,                                       !- Loop Design Temperature Difference {deltaC}
   NonCoincident,                           !- Sizing Option
   1,                                       !- Zone Timesteps in Averaging Window

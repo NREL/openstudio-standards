@@ -15015,7 +15015,7 @@ OS:CoolingTower:SingleSpeed,
   {00000000-0000-0000-0021-000000001088},  !- Water Outlet Node Name
   autosize,                                !- Design Water Flow Rate {m3/s}
   autosize,                                !- Design Air Flow Rate {m3/s}
-  109.03105694567,                         !- Fan Power at Design Air Flow Rate {W}
+  autosize,                                !- Fan Power at Design Air Flow Rate {W}
   autosize,                                !- U-Factor Times Area Value at Design Air Flow Rate {W/K}
   autosize,                                !- Air Flow Rate in Free Convection Regime {m3/s}
   autosize,                                !- U-Factor Times Area Value at Free Convection Air Flow Rate {W/K}
@@ -20570,42 +20570,42 @@ OS:ModelObjectList,
 OS:ModelObjectList,
   {00000000-0000-0000-0052-000000000033},  !- Handle
   Table Lookup 1 Independent Variable List 32, !- Name
-  {00000000-0000-0000-0098-000000000024};  !- Model Object 1
+  {00000000-0000-0000-0098-000000000032};  !- Model Object 1
 
 OS:ModelObjectList,
   {00000000-0000-0000-0052-000000000034},  !- Handle
   Table Lookup 1 Independent Variable List 33, !- Name
-  {00000000-0000-0000-0098-000000000022};  !- Model Object 1
+  {00000000-0000-0000-0098-000000000030};  !- Model Object 1
 
 OS:ModelObjectList,
   {00000000-0000-0000-0052-000000000035},  !- Handle
   Table Lookup 1 Independent Variable List 34, !- Name
-  {00000000-0000-0000-0098-000000000023};  !- Model Object 1
+  {00000000-0000-0000-0098-000000000031};  !- Model Object 1
 
 OS:ModelObjectList,
   {00000000-0000-0000-0052-000000000036},  !- Handle
   Table Lookup 1 Independent Variable List 35, !- Name
-  {00000000-0000-0000-0098-000000000021};  !- Model Object 1
+  {00000000-0000-0000-0098-000000000029};  !- Model Object 1
 
 OS:ModelObjectList,
   {00000000-0000-0000-0052-000000000037},  !- Handle
   Table Lookup 1 Independent Variable List 36, !- Name
-  {00000000-0000-0000-0098-000000000032};  !- Model Object 1
+  {00000000-0000-0000-0098-000000000024};  !- Model Object 1
 
 OS:ModelObjectList,
   {00000000-0000-0000-0052-000000000038},  !- Handle
   Table Lookup 1 Independent Variable List 37, !- Name
-  {00000000-0000-0000-0098-000000000030};  !- Model Object 1
+  {00000000-0000-0000-0098-000000000022};  !- Model Object 1
 
 OS:ModelObjectList,
   {00000000-0000-0000-0052-000000000039},  !- Handle
   Table Lookup 1 Independent Variable List 38, !- Name
-  {00000000-0000-0000-0098-000000000031};  !- Model Object 1
+  {00000000-0000-0000-0098-000000000023};  !- Model Object 1
 
 OS:ModelObjectList,
   {00000000-0000-0000-0052-000000000040},  !- Handle
   Table Lookup 1 Independent Variable List 39, !- Name
-  {00000000-0000-0000-0098-000000000029};  !- Model Object 1
+  {00000000-0000-0000-0098-000000000021};  !- Model Object 1
 
 OS:ModelObjectList,
   {00000000-0000-0000-0052-000000000041},  !- Handle
@@ -20650,22 +20650,22 @@ OS:ModelObjectList,
 OS:ModelObjectList,
   {00000000-0000-0000-0052-000000000049},  !- Handle
   Table Lookup 1 Independent Variable List 48, !- Name
-  {00000000-0000-0000-0098-000000000016};  !- Model Object 1
+  {00000000-0000-0000-0098-000000000008};  !- Model Object 1
 
 OS:ModelObjectList,
   {00000000-0000-0000-0052-000000000050},  !- Handle
   Table Lookup 1 Independent Variable List 49, !- Name
-  {00000000-0000-0000-0098-000000000014};  !- Model Object 1
+  {00000000-0000-0000-0098-000000000006};  !- Model Object 1
 
 OS:ModelObjectList,
   {00000000-0000-0000-0052-000000000051},  !- Handle
   Table Lookup 1 Independent Variable List 50, !- Name
-  {00000000-0000-0000-0098-000000000015};  !- Model Object 1
+  {00000000-0000-0000-0098-000000000007};  !- Model Object 1
 
 OS:ModelObjectList,
   {00000000-0000-0000-0052-000000000052},  !- Handle
   Table Lookup 1 Independent Variable List 51, !- Name
-  {00000000-0000-0000-0098-000000000013};  !- Model Object 1
+  {00000000-0000-0000-0098-000000000005};  !- Model Object 1
 
 OS:ModelObjectList,
   {00000000-0000-0000-0052-000000000053},  !- Handle
@@ -20690,22 +20690,22 @@ OS:ModelObjectList,
 OS:ModelObjectList,
   {00000000-0000-0000-0052-000000000057},  !- Handle
   Table Lookup 1 Independent Variable List 56, !- Name
-  {00000000-0000-0000-0098-000000000008};  !- Model Object 1
+  {00000000-0000-0000-0098-000000000016};  !- Model Object 1
 
 OS:ModelObjectList,
   {00000000-0000-0000-0052-000000000058},  !- Handle
   Table Lookup 1 Independent Variable List 57, !- Name
-  {00000000-0000-0000-0098-000000000006};  !- Model Object 1
+  {00000000-0000-0000-0098-000000000014};  !- Model Object 1
 
 OS:ModelObjectList,
   {00000000-0000-0000-0052-000000000059},  !- Handle
   Table Lookup 1 Independent Variable List 58, !- Name
-  {00000000-0000-0000-0098-000000000007};  !- Model Object 1
+  {00000000-0000-0000-0098-000000000015};  !- Model Object 1
 
 OS:ModelObjectList,
   {00000000-0000-0000-0052-000000000060},  !- Handle
   Table Lookup 1 Independent Variable List 59, !- Name
-  {00000000-0000-0000-0098-000000000005};  !- Model Object 1
+  {00000000-0000-0000-0098-000000000013};  !- Model Object 1
 
 OS:ModelObjectList,
   {00000000-0000-0000-0052-000000000061},  !- Handle
@@ -30891,7 +30891,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0066-000000000158},  !- Handle
   Schedule Day 5,                          !- Name
-  {00000000-0000-0000-0069-000000000009},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0069-000000000008},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -30969,7 +30969,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0066-000000000159},  !- Handle
   Schedule Day 6,                          !- Name
-  {00000000-0000-0000-0069-000000000009},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0069-000000000008},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
   0,                                       !- Minute 1
@@ -30978,7 +30978,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0066-000000000160},  !- Handle
   Schedule Day 7,                          !- Name
-  {00000000-0000-0000-0069-000000000009},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0069-000000000008},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
   0,                                       !- Minute 1
@@ -31026,7 +31026,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0066-000000000164},  !- Handle
   Supply Air Temp Default,                 !- Name
-  {00000000-0000-0000-0069-000000000009},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0069-000000000008},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
   0,                                       !- Minute 1
@@ -31209,7 +31209,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0066-000000000169},  !- Handle
   satCW Temp 1,                            !- Name
-  {00000000-0000-0000-0069-000000000009},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0069-000000000008},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -31677,7 +31677,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0066-000000000175},  !- Handle
   sunCW Temp 1,                            !- Name
-  {00000000-0000-0000-0069-000000000009},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0069-000000000008},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -32400,7 +32400,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0066-000000000205},  !- Handle
   wkdCW Temp 1,                            !- Name
-  {00000000-0000-0000-0069-000000000009},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0069-000000000008},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -35042,7 +35042,7 @@ OS:Schedule:Ruleset,
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0068-000000000003},  !- Handle
   CW Temp,                                 !- Name
-  {00000000-0000-0000-0069-000000000009},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0069-000000000008},  !- Schedule Type Limits Name
   {00000000-0000-0000-0066-000000000158};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
@@ -35290,13 +35290,13 @@ OS:Schedule:Ruleset,
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0068-000000000044},  !- Handle
   Schedule Ruleset 1,                      !- Name
-  {00000000-0000-0000-0069-000000000009},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0069-000000000008},  !- Schedule Type Limits Name
   {00000000-0000-0000-0066-000000000159};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0068-000000000045},  !- Handle
   Schedule Ruleset 2,                      !- Name
-  {00000000-0000-0000-0069-000000000009},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0069-000000000008},  !- Schedule Type Limits Name
   {00000000-0000-0000-0066-000000000160};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
@@ -35308,7 +35308,7 @@ OS:Schedule:Ruleset,
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0068-000000000047},  !- Handle
   Supply Air Temp,                         !- Name
-  {00000000-0000-0000-0069-000000000009},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0069-000000000008},  !- Schedule Type Limits Name
   {00000000-0000-0000-0066-000000000164};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
@@ -35649,7 +35649,7 @@ OS:SetpointManager:SingleZone:Reheat,
   Setpoint Manager Single Zone Reheat 2,   !- Name
   13,                                      !- Minimum Supply Air Temperature {C}
   43,                                      !- Maximum Supply Air Temperature {C}
-  {00000000-0000-0000-0100-000000000012},  !- Control Zone Name
+  {00000000-0000-0000-0100-000000000007},  !- Control Zone Name
   {00000000-0000-0000-0053-000000000673};  !- Setpoint Node or NodeList Name
 
 OS:SetpointManager:SingleZone:Reheat,
@@ -35657,7 +35657,7 @@ OS:SetpointManager:SingleZone:Reheat,
   Setpoint Manager Single Zone Reheat 3,   !- Name
   13,                                      !- Minimum Supply Air Temperature {C}
   43,                                      !- Maximum Supply Air Temperature {C}
-  {00000000-0000-0000-0100-000000000067},  !- Control Zone Name
+  {00000000-0000-0000-0100-000000000060},  !- Control Zone Name
   {00000000-0000-0000-0053-000000000680};  !- Setpoint Node or NodeList Name
 
 OS:SetpointManager:SingleZone:Reheat,
@@ -52344,7 +52344,7 @@ OS:Table:Lookup,
 OS:Table:Lookup,
   {00000000-0000-0000-0099-000000000005},  !- Handle
   sys_3|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| 1 ERV_LatCoolEff 1, !- Name
-  {00000000-0000-0000-0052-000000000060},  !- Independent Variable List Name
+  {00000000-0000-0000-0052-000000000052},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
   0,                                       !- Minimum Output {BasedOnField A5}
@@ -52359,7 +52359,7 @@ OS:Table:Lookup,
 OS:Table:Lookup,
   {00000000-0000-0000-0099-000000000006},  !- Handle
   sys_3|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| 1 ERV_LatHeatEff 1, !- Name
-  {00000000-0000-0000-0052-000000000058},  !- Independent Variable List Name
+  {00000000-0000-0000-0052-000000000050},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
   0,                                       !- Minimum Output {BasedOnField A5}
@@ -52374,7 +52374,7 @@ OS:Table:Lookup,
 OS:Table:Lookup,
   {00000000-0000-0000-0099-000000000007},  !- Handle
   sys_3|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| 1 ERV_SensCoolEff 1, !- Name
-  {00000000-0000-0000-0052-000000000059},  !- Independent Variable List Name
+  {00000000-0000-0000-0052-000000000051},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
   0,                                       !- Minimum Output {BasedOnField A5}
@@ -52389,7 +52389,7 @@ OS:Table:Lookup,
 OS:Table:Lookup,
   {00000000-0000-0000-0099-000000000008},  !- Handle
   sys_3|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| 1 ERV_SensHeatEff 1, !- Name
-  {00000000-0000-0000-0052-000000000057},  !- Independent Variable List Name
+  {00000000-0000-0000-0052-000000000049},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
   0,                                       !- Minimum Output {BasedOnField A5}
@@ -52464,7 +52464,7 @@ OS:Table:Lookup,
 OS:Table:Lookup,
   {00000000-0000-0000-0099-000000000013},  !- Handle
   sys_3|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| ERV_LatCoolEff 1, !- Name
-  {00000000-0000-0000-0052-000000000052},  !- Independent Variable List Name
+  {00000000-0000-0000-0052-000000000060},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
   0,                                       !- Minimum Output {BasedOnField A5}
@@ -52479,7 +52479,7 @@ OS:Table:Lookup,
 OS:Table:Lookup,
   {00000000-0000-0000-0099-000000000014},  !- Handle
   sys_3|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| ERV_LatHeatEff 1, !- Name
-  {00000000-0000-0000-0052-000000000050},  !- Independent Variable List Name
+  {00000000-0000-0000-0052-000000000058},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
   0,                                       !- Minimum Output {BasedOnField A5}
@@ -52494,7 +52494,7 @@ OS:Table:Lookup,
 OS:Table:Lookup,
   {00000000-0000-0000-0099-000000000015},  !- Handle
   sys_3|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| ERV_SensCoolEff 1, !- Name
-  {00000000-0000-0000-0052-000000000051},  !- Independent Variable List Name
+  {00000000-0000-0000-0052-000000000059},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
   0,                                       !- Minimum Output {BasedOnField A5}
@@ -52509,7 +52509,7 @@ OS:Table:Lookup,
 OS:Table:Lookup,
   {00000000-0000-0000-0099-000000000016},  !- Handle
   sys_3|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| ERV_SensHeatEff 1, !- Name
-  {00000000-0000-0000-0052-000000000049},  !- Independent Variable List Name
+  {00000000-0000-0000-0052-000000000057},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
   0,                                       !- Minimum Output {BasedOnField A5}
@@ -52584,7 +52584,7 @@ OS:Table:Lookup,
 OS:Table:Lookup,
   {00000000-0000-0000-0099-000000000021},  !- Handle
   sys_4|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| 2 ERV_LatCoolEff 1, !- Name
-  {00000000-0000-0000-0052-000000000036},  !- Independent Variable List Name
+  {00000000-0000-0000-0052-000000000040},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
   0,                                       !- Minimum Output {BasedOnField A5}
@@ -52599,7 +52599,7 @@ OS:Table:Lookup,
 OS:Table:Lookup,
   {00000000-0000-0000-0099-000000000022},  !- Handle
   sys_4|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| 2 ERV_LatHeatEff 1, !- Name
-  {00000000-0000-0000-0052-000000000034},  !- Independent Variable List Name
+  {00000000-0000-0000-0052-000000000038},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
   0,                                       !- Minimum Output {BasedOnField A5}
@@ -52614,7 +52614,7 @@ OS:Table:Lookup,
 OS:Table:Lookup,
   {00000000-0000-0000-0099-000000000023},  !- Handle
   sys_4|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| 2 ERV_SensCoolEff 1, !- Name
-  {00000000-0000-0000-0052-000000000035},  !- Independent Variable List Name
+  {00000000-0000-0000-0052-000000000039},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
   0,                                       !- Minimum Output {BasedOnField A5}
@@ -52629,7 +52629,7 @@ OS:Table:Lookup,
 OS:Table:Lookup,
   {00000000-0000-0000-0099-000000000024},  !- Handle
   sys_4|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| 2 ERV_SensHeatEff 1, !- Name
-  {00000000-0000-0000-0052-000000000033},  !- Independent Variable List Name
+  {00000000-0000-0000-0052-000000000037},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
   0,                                       !- Minimum Output {BasedOnField A5}
@@ -52704,7 +52704,7 @@ OS:Table:Lookup,
 OS:Table:Lookup,
   {00000000-0000-0000-0099-000000000029},  !- Handle
   sys_6|mixed|shr>none|sh>c-hw|sc>c-chw|ssf>vv|zh>b-hw|zc>none|srf>vv| ERV_LatCoolEff 1, !- Name
-  {00000000-0000-0000-0052-000000000040},  !- Independent Variable List Name
+  {00000000-0000-0000-0052-000000000036},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
   0,                                       !- Minimum Output {BasedOnField A5}
@@ -52719,7 +52719,7 @@ OS:Table:Lookup,
 OS:Table:Lookup,
   {00000000-0000-0000-0099-000000000030},  !- Handle
   sys_6|mixed|shr>none|sh>c-hw|sc>c-chw|ssf>vv|zh>b-hw|zc>none|srf>vv| ERV_LatHeatEff 1, !- Name
-  {00000000-0000-0000-0052-000000000038},  !- Independent Variable List Name
+  {00000000-0000-0000-0052-000000000034},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
   0,                                       !- Minimum Output {BasedOnField A5}
@@ -52734,7 +52734,7 @@ OS:Table:Lookup,
 OS:Table:Lookup,
   {00000000-0000-0000-0099-000000000031},  !- Handle
   sys_6|mixed|shr>none|sh>c-hw|sc>c-chw|ssf>vv|zh>b-hw|zc>none|srf>vv| ERV_SensCoolEff 1, !- Name
-  {00000000-0000-0000-0052-000000000039},  !- Independent Variable List Name
+  {00000000-0000-0000-0052-000000000035},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
   0,                                       !- Minimum Output {BasedOnField A5}
@@ -52749,7 +52749,7 @@ OS:Table:Lookup,
 OS:Table:Lookup,
   {00000000-0000-0000-0099-000000000032},  !- Handle
   sys_6|mixed|shr>none|sh>c-hw|sc>c-chw|ssf>vv|zh>b-hw|zc>none|srf>vv| ERV_SensHeatEff 1, !- Name
-  {00000000-0000-0000-0052-000000000037},  !- Independent Variable List Name
+  {00000000-0000-0000-0052-000000000033},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
   0,                                       !- Minimum Output {BasedOnField A5}

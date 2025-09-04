@@ -2,7 +2,7 @@ require 'openstudio'
 require 'securerandom'
 require 'optparse'
 require 'yaml'
-#require 'git-revision'
+# require 'git-revision'
 # resource_folder = File.join(__dir__, '..', '..', 'measures/btap_results/resources')
 # OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 
@@ -77,7 +77,6 @@ class BTAPDatapoint
     @dp_output_folder = File.join(output_folder, @options[:datapoint_id])
 
     # Show versions in yml file.
-    @options[:btap_costing_git_revision] = Git::Revision.commit_short
     @options[:os_git_revision] = OpenstudioStandards.git_revision
 
     # Get users' inputs for the parameters needed for the calculation af net present value
@@ -125,7 +124,13 @@ class BTAPDatapoint
         @standard.model_apply_standard(model: model,
                                        epw_file: @options[:epw_file],
                                        custom_weather_folder: weather_folder,
+                                       btap_weather: @options[:btap_weather],
                                        sizing_run_dir: File.join(@dp_temp_folder, 'sizing_folder'),
+                                       hvac_system_primary: @options[:hvac_system_primary],
+                                       hvac_system_dwelling_units: @options[:hvac_system_dwelling_units],
+                                       hvac_system_washrooms: @options[:hvac_system_washrooms],
+                                       hvac_system_corridor: @options[:hvac_system_corridor],
+                                       hvac_system_storage: @options[:hvac_system_storage],
                                        primary_heating_fuel: @options[:primary_heating_fuel],
                                        necb_reference_hp: @options[:necb_reference_hp],
                                        necb_reference_hp_supp_fuel: @options[:necb_reference_hp_supp_fuel],
@@ -185,6 +190,7 @@ class BTAPDatapoint
                                        boiler_fuel: @options[:boiler_fuel],
                                        boiler_cap_ratio: @options[:boiler_cap_ratio],
                                        swh_fuel: @options[:swh_fuel],
+                                       airloop_fancoils_heating: @options[:airloop_fancoils_heating],
                                        oerd_utility_pricing: @oerd_utility_pricing
                                        )
       end
@@ -241,10 +247,13 @@ class BTAPDatapoint
         model.setSqlFile(sql)
 
         @cost_result = nil
-        if defined?(BTAPCosting)
+        if @options[:enable_costing]
           # Perform costing
-          costing = BTAPCosting.new
+          costs_path = File.absolute_path(File.join(__dir__, '..','..','..','btap','costing','common_resources', 'costs.csv'))
+          local_cost_factors_path = File.absolute_path(File.join(__dir__, '..','..','..','btap','costing','common_resources', 'costs_local_factors.csv'))
+          costing = BTAPCosting.new(costs_csv: costs_path, factors_csv: local_cost_factors_path)
           costing.load_database
+
           @cost_result, @btap_items = costing.cost_audit_all(model: model, prototype_creator: @standard, template_type: @options[:template])
           @qaqc[:costing_information] = @cost_result
           File.open(File.join(@dp_temp_folder, 'cost_results.json'), 'w') { |f| f.write(JSON.pretty_generate(@cost_result, allow_nan: true)) }
