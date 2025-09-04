@@ -614,7 +614,13 @@ module BTAP
         comply[stypes] = false
       end
 
-      args[:io_path] = @model[:constructions].values.first[combo] # PSI set
+      # Building-wide PSI set.
+      @model[:constructions].values.each do |v|
+        args[:io_path] = v[combo] if v.key?(combo)
+      end
+
+      return false if args[:io_path].nil?
+
       args[:option ] = ""
 
       loop do
@@ -625,13 +631,19 @@ module BTAP
           if quality == :bad
             quality = :good
             combo   = "#{perform.to_s}_#{quality.to_s}".to_sym
-            args[:io_path] = @model[:constructions].values.first[combo]
+
+            @model[:constructions].values.each do |v|
+              args[:io_path] = v[combo] if v.key?(combo)
+            end
           elsif perform == :lp
             # Switch 'perform' from :lp to :hp - reset quality to :bad.
             perform = :hp
             quality = :bad
             combo   = "#{perform.to_s}_#{quality.to_s}".to_sym
-            args[:io_path] = @model[:constructions].values.first[combo]
+
+            @model[:constructions].values.each do |v|
+              args[:io_path] = v[combo] if v.key?(combo)
+            end
           end
 
           # Delete previously-generated TBD args Uo key/value pairs.
@@ -860,17 +872,13 @@ module BTAP
       # Yet referecing TBD-cloned OpenStudio objects (e.g. key :construction)
       # is a no-no (e.g. seg faults).
       res[:surfaces].each do |id, surface|
-        next unless surface.key?(:construction)
-        next unless surface.key?(:space)
         next unless surface.key?(:type)      # :wall, :ceiling or :floor
         next unless surface.key?(:filmRSI)   # sum of air film resistances
         next unless surface.key?(:index)     # deratable layer index
-        next unless surface.key?(:ltype)     # :massless or :standard layer
         next unless surface.key?(:r)         # deratable layer RSi
         next unless surface.key?(:deratable) # true or false
 
         next unless surface[:deratable   ]
-        next unless surface[:construction].is_a?(cl)
         next     if surface[:index       ].nil?
 
         stypes = case surface[:type]
@@ -894,7 +902,17 @@ module BTAP
         end
 
         srf = srf.get
-        lc  = srf.construction
+
+        space = srf.space
+
+        if space.empty?
+          lgs << "Missing space: #{id} (#{mth})?"
+          return false
+        end
+
+        space = space.get
+
+        lc = srf.construction
 
         if lc.empty?
           lgs << "Mismatched construction: #{id} (#{mth})?"
@@ -912,7 +930,6 @@ module BTAP
 
         unless @model[:constructions].key?(lc)
           @model[:constructions][lc]             = {}
-          @model[:constructions][lc][:ltype    ] = surface[:ltype]   # material
           @model[:constructions][lc][:index    ] = surface[:index]   # material
           @model[:constructions][lc][:r        ] = surface[:r]       # material
           @model[:constructions][lc][:filmRSI  ] = surface[:filmRSI] # assembly
@@ -941,9 +958,9 @@ module BTAP
         film = [@model[:constructions][lc][:filmRSI], surface[:filmRSI]].min
 
         @model[:constructions][lc][:filmRSI ] = film
-        @model[:constructions][lc][:stypes  ] << stypes    # expect 1x
-        @model[:constructions][lc][:surfaces] << id        # expect many
-        @model[:constructions][lc][:spaces  ] << srf.space # expect less
+        @model[:constructions][lc][:stypes  ] << stypes           # 1x
+        @model[:constructions][lc][:surfaces] << id               # many
+        @model[:constructions][lc][:spaces  ] << space.nameString # less
       end
 
       # Loop through all tracked deratable constructions. Ensure a single

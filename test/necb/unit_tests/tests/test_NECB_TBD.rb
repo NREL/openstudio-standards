@@ -20,17 +20,18 @@ class NECB_TBD_Tests < Minitest::Test
     # Hard setting climate & fuel.
     @epw  = 'CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw'
     @fuel = 'Electricity'
+    @srr  = 'osut' # @todo
 
     #Range of test options.
     @templates = [
-      # 'NECB2011',
-      # 'NECB2015',
-      # 'NECB2017',
+      'NECB2011',
+      'NECB2015',
+      'NECB2017',
       'NECB2020'
     ]
 
     @buildings = [
-      # 'FullServiceRestaurant',
+      'FullServiceRestaurant',
       # 'HighriseApartment',
       # 'Hospital',
       # 'LargeHotel',
@@ -60,9 +61,9 @@ class NECB_TBD_Tests < Minitest::Test
     #
     # Otherwise, :bad vs :good PSI factor sets refer to costed BTAP details.
     @options = [
-                # 'none',
-                # 'bad',
-                # 'good',
+                'none',
+                'bad',
+                'good',
                 'uprate'
                ]
 
