@@ -90,7 +90,7 @@ module OpenstudioStandards
     def self.coil_dx_heating_type(coil_dx)
       htg_type = nil
 
-      # If Unitary or Zone HVAC
+      # If Unitary or Zone HVAC (could be a unitary system on an air loop)
       if coil_dx.airLoopHVAC.empty?
         if coil_dx.containingHVACComponent.is_initialized
           containing_comp = coil_dx.containingHVACComponent.get
@@ -104,7 +104,7 @@ module OpenstudioStandards
               htg_coil = htg_coil.get
               if htg_coil.to_CoilHeatingElectric.is_initialized || htg_coil.to_CoilHeatingDXMultiSpeed.is_initialized
                 htg_type = 'Electric Resistance or None'
-              elsif htg_coil.to_CoilHeatingGas.is_initialized || htg_coil.to_CoilHeatingGasMultiStage.is_initialized
+              elsif htg_coil.to_CoilHeatingGas.is_initialized || htg_coil.to_CoilHeatingGasMultiStage.is_initialized || htg_coil.to_CoilHeatingWater.is_initialized
                 htg_type = 'All Other'
               end
             else
@@ -115,7 +115,7 @@ module OpenstudioStandards
             supp_htg_coil = containing_comp.to_AirLoopHVACUnitaryHeatPumpAirToAirMultiSpeed.get.supplementalHeatingCoil
             if htg_coil.to_CoilHeatingDXMultiSpeed.is_initialized || supp_htg_coil.to_CoilHeatingElectric.is_initialized
               htg_type = 'Electric Resistance or None'
-            elsif htg_coil.to_CoilHeatingGasMultiStage.is_initialized || htg_coil.to_CoilHeatingGas.is_initialized
+            elsif htg_coil.to_CoilHeatingGas.is_initialized || htg_coil.to_CoilHeatingGasMultiStage.is_initialized || htg_coil.to_CoilHeatingWater.is_initialized
               htg_type = 'All Other'
             end
           end
@@ -127,7 +127,7 @@ module OpenstudioStandards
             htg_coil = containing_comp.to_ZoneHVACPackagedTerminalAirConditioner.get.heatingCoil
             if htg_coil.to_CoilHeatingElectric.is_initialized
               htg_type = 'Electric Resistance or None'
-            elsif htg_coil.to_CoilHeatingWater.is_initialized || htg_coil.to_CoilHeatingGas.is_initialized
+            elsif htg_coil.to_CoilHeatingGas.is_initialized || htg_coil.to_CoilHeatingGasMultiStage.is_initialized || htg_coil.to_CoilHeatingWater.is_initialized
               htg_type = 'All Other'
             end
           # PTHP
