@@ -97,7 +97,7 @@ class NECB_Structure_Tests < Minitest::Test
             set = set.get
             id  = set.nameString
             err_msg = "BTAP::Structure default construction set #{id} (#{cas})?"
-            assert(id.include?("ATTIC"), err_msg)
+            assert_includes(id, "ATTIC", err_msg)
 
             attic.surfaces.each do |surface|
               id = surface.nameString
@@ -110,12 +110,12 @@ class NECB_Structure_Tests < Minitest::Test
 
                 # Soffit 'floor' not insulated.
                 c.layers.each do |layer|
-                  assert(layer.nameString.include?("material"), err_msg)
+                  assert_includes(layer.nameString, "material", err_msg)
                 end
               else
                 id = c.layers.last.nameString
                 err_msg = "BTAP::Structure #{id} insulation layer (#{cas})?"
-                assert(id.include?("cellulose"), err_msg)
+                assert_includes(id, "cellulose", err_msg)
               end
             end
           end
@@ -129,7 +129,7 @@ class NECB_Structure_Tests < Minitest::Test
             set = set.get
             id  = set.nameString
             err_msg = "BTAP::Structure default construction set #{id} (#{cas})?"
-            assert(id.include?("PLENUM"), err_msg)
+            assert_includes(id, "PLENUM", err_msg)
 
             plenum.surfaces.each do |surface|
               next unless surface.surfaceType.downcase == "floor"
@@ -138,28 +138,28 @@ class NECB_Structure_Tests < Minitest::Test
               c  = surface.construction.get.to_LayeredConstruction.get
               n  = c.layers.size
               err_msg = "BTAP::Structure #{id} ##{n} layers (#{cas})?"
-              assert(n == 1, err_msg)
+              assert_equal(n, 1, err_msg)
 
               id = c.layers.first.nameString
               err_msg = "BTAP::Structure #{id} tile (#{cas})?"
-              assert(id.include?("material"), err_msg)
+              assert_includes(id, "material", err_msg)
             end
           end
 
           s = st.structure
 
           err_msg = "BTAP::Structure #{s.class} (#{cas})?"
-          assert(s.is_a?(BTAP::Structure), err_msg)
+          assert_kind_of(BTAP::Structure, s, err_msg)
           err_msg = "BTAP::Structure data #{s.data.class} (#{cas})?"
-          assert(s.data.is_a?(Hash), err_msg)
+          assert_kind_of(Hash, s.data, err_msg)
           err_msg = "BTAP::Structure category #{s.category.class} (#{cas})?"
-          assert(s.category.is_a?(String), err_msg)
+          assert_kind_of(String, s.category, err_msg)
           err_msg = "BTAP::Structure structure #{s.structure.class} (#{cas})?"
-          assert(s.structure.is_a?(Symbol), err_msg)
+          assert_kind_of(Symbol, s.structure, err_msg)
           err_msg = "BTAP::Structure liveload #{s.liveload.class} (#{cas})?"
-          assert(s.liveload.respond_to?(:to_f), err_msg)
+          assert_kind_of(Float, s.liveload, err_msg)
           err_msg = "BTAP::Structure deadload #{s.deadload.class} (#{cas})?"
-          assert(s.deadload.respond_to?(:to_f), err_msg)
+          assert_kind_of(Float, s.deadload, err_msg)
           err_msg = "BTAP::Structure missing categories (#{cas})?"
           assert(s.data.key?(:category), err_msg)
           err_msg = "BTAP::Structure missing structures (#{cas})?"
@@ -184,7 +184,7 @@ class NECB_Structure_Tests < Minitest::Test
             refute_empty(c, err_msg)
             layers  = c.get.layers
             err_msg = "BTAP::Structure #{id} construction layers (#{cas})?"
-            assert(layers.size == 1, err_msg)
+            assert_equal(layers.size, 1, err_msg)
             mat     = layers.first.to_StandardOpaqueMaterial
             err_msg = "BTAP::Structure #{id} material (#{cas})?"
             refute_empty(mat, err_msg)

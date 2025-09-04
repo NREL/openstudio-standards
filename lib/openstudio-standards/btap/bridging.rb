@@ -29,57 +29,48 @@ module BTAP
     # @author: Denis Bourgeois
 
     # --- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- --- #
-    # BTAP/TBD data extracted from the BTAP costing spreadsheet:
+    # BTAP/TBD data initially extracted from the BTAP costing spreadsheet:
     #
     #   - range of clear-field Uo factors
     #   - range of PSI factors (i.e. MAJOR thermal bridging), e.g. corners
     #
-    # NOTE: This module is to be adapted once new BTAP structure/envelope data
-    #       model/classes are in place, including file formats (e.g. CSV, JSON).
-    #
     # Ref: EVOKE BTAP costing spreadsheet modifications (2022), synced with:
     #      - Building Envelope Thermal Bridging Guide (BETBG)
     #      - ASHRAE RP-1365, ISO-12011, etc.
+    #
+    # This module has been subsequently adapted following the adoption of new
+    # BTAP structure/envelope data model/classes.
 
     # --- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- --- #
-    # BTAP costing data (both original BTAP constructions and EVOKE's
-    # additions) hold sub-variants based on cladding/veneer, e.g.:
+    # BTAP costing data (both original BTAP envelope entries and EVOKE add-ons)
+    # hold sub-variants based on cladding/veneer, e.g.:
     #
     #   - "BTAP-ExteriorWall-WoodFramed-5" ... brick veneer
     #   - "BTAP-ExteriorWall-WoodFramed-1" ... wood siding
     #
     # Not all of these sub-variants are currently used within BTAP, e.g.
     # "BTAP-ExteriorWall-WoodFramed-1" is unused. BTAP/TBD data is limited
-    # to the following wall constructions (paired LP & HP variants).
+    # to the following wall assemblies (paired LP & HP variants), which
+    # eventually should be located in a shared file (e.g. CSV, JSON).
     #
-    # NOTE: This will soon be revised, largely inferred from building structure
-    #       selection.
-    #
-    #
-    # ---- (Basic) Low Performance (LP) assemblies
-    #
-    #   ID    : (layers)
+    #   -----   Low Performance (LP) assemblies
+    #   ID    : layers
     #   -----   ------------------------------------------
     #   STEL1 : cladding | board   | wool | frame | gypsum
     #   WOOD5 : brick    | board   | wool | frame | gypsum
-    #   MTAL1 : panel    | xps     | wool | frame | gypsum
     #   MASS2 : brick    | xps     |      | cmu   |
     #   MASS4 : precast  | xps     | wool | frame | gypsum
-    #   MASS6 : brick    | xps     |      | cmu   |
     #
-    # ---- High Performance (HP) variants
-    #
-    #   ID    : (layers)
+    #   -----   High Performance (HP) variants
+    #   ID    : layers
     #   -----   ------------------------------------------
     #   STEL2 : cladding | board   | wool | frame | gypsum ... switch from STEL1
     #   WOOD7 : brick    | mineral | wool | frame | gypsum ... switch from WOOD5
-    #   MTALD : panel    | polyiso | foam | frame | gypsum ... switch from MTAL1
     #   MASSB : brick    | mineral | cmu  | foam  | gypsum ... switch from MASS2
     #   MASS8 : precast  | xps     | wool | frame | gypsum ... switch from MASS4
-    #   MASSC : cladding | mineral | cmu  | foam  | gypsum ... switch from MASS6
     #
     # Paired LPs & HPs vall variants are critical for 'uprating' cases, e.g.
-    # NECB2017. See below, and end of this document for additional NOTES.
+    # NECB2017/2020. See below, and end of this document for additional NOTES.
 
     MASS2      = "BTAP-ExteriorWall-Mass-2"              # LP wall
     MASS2_BAD  = "BTAP-ExteriorWall-Mass-2 bad"          # LP "bad" PSI factors
@@ -95,20 +86,6 @@ module BTAP
     MASS8_BAD  = "BTAP-ExteriorWall-Mass-8c bad"
     MASS8_GOOD = "BTAP-ExteriorWall-Mass-8c good"
 
-    MASS6      = "BTAP-ExteriorWall-Mass-6"
-    MASS6_BAD  = "BTAP-ExteriorWall-Mass-6 bad"
-    MASS6_GOOD = "BTAP-ExteriorWall-Mass-6 good"
-    MASSC      = "BTAP-ExteriorWall-Mass-10c"            # HP, from @Uo < 0.247
-    MASSC_BAD  = "BTAP-ExteriorWall-Mass-10c bad"
-    MASSC_GOOD = "BTAP-ExteriorWall-Mass-10c good"
-
-    MTAL1      = "BTAP-ExteriorWall-Metal-1"
-    MTAL1_BAD  = "BTAP-ExteriorWall-Metal-1 bad"
-    MTAL1_GOOD = "BTAP-ExteriorWall-Metal-1 good"
-    MTALD      = "BTAP-ExteriorWall-Metal-1d"            # HP, from @Uo < 0.183
-    MTALD_BAD  = "BTAP-ExteriorWall-Metal-1d bad"
-    MTALD_GOOD = "BTAP-ExteriorWall-Metal-1d good"
-
     WOOD5      = "BTAP-ExteriorWall-WoodFramed-5"
     WOOD5_BAD  = "BTAP-ExteriorWall-WoodFramed-5 bad"
     WOOD5_GOOD = "BTAP-ExteriorWall-WoodFramed-5 good"
@@ -123,11 +100,8 @@ module BTAP
     STEL2_BAD  = "BTAP-ExteriorWall-SteelFramed-2 bad"
     STEL2_GOOD = "BTAP-ExteriorWall-SteelFramed-2 good"
 
-    ROOFS      = "BTAP-ExteriorRoof-IEAD-4"
+    ROOF       = "BTAP-ExteriorRoof-IEAD-4"
     FLOOR      = "BTAP-ExteriorFloor-SteelFramed-1"
-
-    UMIN       = 0.010
-    UMAX       = 5.678
 
     # --- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- --- #
     # There are 2 distinct BTAP "building_envelope.rb" files to enrich with
@@ -152,8 +126,8 @@ module BTAP
     # instead assess prescriptive Ut compliance for vintages NECB2017 and
     # NECB2020, the BTAP/TBD must be set to "uprate" so it can iteratively reset
     # combined Uo & PSI factors towards finding the least expensive, yet
-    # compliant, combination. Why? Improved Uo construction variants are
-    # necessarily required, given:
+    # compliant, combination. Why? Improved Uo assembly variants are necessarily
+    # required, given:
     #
     #   Ut = Uo + ( ∑psi x L )/A + ( ∑khi x n )/A   (ref: rd2.github.io/tbd)
     #
@@ -161,15 +135,15 @@ module BTAP
     # conductances, Ut simply equates to Uo. Yet for ANY added linear or
     # point conductance, Uo factors must necessarily be lower than required
     # NECB2017 or NECB2020 Ut factors. EVOKE's 2022 contribution extends
-    # initial (pre-2022) BTAP wall construction variants, offering much
+    # initial (pre-2022) BTAP wall assembly variants, offering much
     # lower Uo factors (in some cases slightly below 0.1 W/m2.K or ~R70).
     # These BTAP upgrades provide more options for attaining required Ut
     # factors. For some variants, this simply implies a thicker insulation
-    # layer. For others, it involves more radical construction changes, such
+    # layer. For others, it involves more radical assembly changes, such
     # as switching over to the latest commercially-available HP
     # thermally-broken cladding clips. While some solutions are simple
     # (free) detailing changes, most improvements increase construction
-    # costs. Despite adding new HP constructions, it is unlikely that TBD
+    # costs. Despite adding new HP assemblies, it is unlikely that TBD
     # will find NECB2017 or NECB2020 compliant combinations (prescriptive
     # path) for EVERY OpenStudio model. Read here as to "why?":
     #
@@ -177,7 +151,7 @@ module BTAP
     #   spec/tbd_tests_spec.rb#L9219
     #
     # For these reasons, BTAP's use of TBD rests on an ITERATIVE uprating
-    # solution for e.g. NECB2017 and NECB2020:
+    # solution for NECB2017 and NECB2020:
     #
     #   1. TBD attempts to achieve NECB-required area-weighted Ut factors
     #      for above-grade walls (then for roofs and exposed floors),
@@ -187,256 +161,71 @@ module BTAP
     #
     #   2. If, for a given OpenStudio model, required area-weighted Ut
     #      factors cannot be achieved, TBD then switches over to "good"
-    #      (HP) thermal bridging detailing for that same construction, and
+    #      (HP) thermal bridging detailing for that same assembly, and
     #      repeats the exercise.
     #
     #   3. A subsequent failed attempt triggers a switch over to EVOKE's
     #      HP (improved Uo) assemblies. For instance:
     #        - "BTAP-ExteriorWall-WoodFramed-5" ... switches over to:
-    #        - "BTAP-ExteriorWall-WoodFramed-7b"
+    #        - "BTAP-ExteriorWall-WoodFramed-7"
     #
-    #      ... switching over to another construction this way also means
+    #      ... switching over to another assembly this way also means
     #      reverting back to "bad" (LP) thermal bridging PSI factors.
     #
     #   4. A final switch to "good" (HP) details is available (last resort).
     #
     # If NONE of the available combinations are sufficient:
-    #   - TBD red-flags a failed attempt at e.g. NECB2017 or NECB2020 compliance
+    #   - TBD red-flags a failed attempt at NECB2017 or NECB2020 compliance
     #   - TBD keeps iteration #4 Uo + PSI combo, then derates before a
     #     BTAP simulation run (giving some performance gap indication)
 
     # --- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- --- #
-    # There are 3x exceptions to the aforementioned iterative solution,
-    # hopefully to correct (@todo):
+    # Notes:
     #
-    #   - Steel-framed construction: the selected HP variant has metal
+    #   - Steel-framed assemblies: the selected HP variant has metal
     #     cladding. The only LP steel-framed BTAP option is wood-clad -
     #     something of an anomaly in commercial construction. By making the
     #     switch earlier to metal cladding, everywhere in Canada except
     #     (milder) SW BC and SW NS, it is hoped that a more consistent,
     #     apples-to-apples comparison is ensured.
     #
-    #   - CMU-construction with lightweight cladding: The HP variant 10c
-    #     (CMU, gypsum-finished, metal-clad) doesn't have any obvious LP
-    #     construction counterpart. The proposed solution is to rely on
-    #     Mass-6 constructions (literal copies of Mass-2 constructions,
-    #     which are unfinished and brick-clad), as a starting point for
-    #     milder climate zones only, and switch as early as possible to
-    #     10c constructions.
-    #
-    #   - ROOF and (exposed) FLOOR surfaces refer to a single LP/HP selection
-    #     respectively. This is expected to change in the future ...
+    #   - ROOF and (exposed) floor surfaces refer to a single LP/HP selection
+    #     respectively. This is expected to change in the future @todo.
 
     # --- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- --- #
-    # Preset BTAP/TBD wall construction parameters (to be revised, @todo).
-    #   :sptypes   : BTAP/TBD Hash of linked NECB SpaceTypes (symbols)
-    #   :uos       : BTAP/TBD Hash of associated of Uo sub-variants
-    #   :lp or :hp : low- or high-performance attribute
+    # Preset BTAP/TBD wall assembly parameters.
     @@data = {}
 
-    @@data[MASS2] = { sptypes: {}, uos: {}, lp: true }
-    @@data[MASSB] = { sptypes: {}, uos: {}, hp: true }
-    @@data[MASS4] = { sptypes: {}, uos: {}, lp: true }
-    @@data[MASS8] = { sptypes: {}, uos: {}, hp: true }
-    @@data[MASS6] = { sptypes: {}, uos: {}, lp: true }
-    @@data[MASSC] = { sptypes: {}, uos: {}, hp: true }
-    @@data[MTAL1] = { sptypes: {}, uos: {}, lp: true }
-    @@data[MTALD] = { sptypes: {}, uos: {}, hp: true }
-    @@data[WOOD5] = { sptypes: {}, uos: {}, lp: true }
-    @@data[WOOD7] = { sptypes: {}, uos: {}, hp: true }
-    @@data[STEL1] = { sptypes: {}, uos: {}, lp: true }
-    @@data[STEL2] = { sptypes: {}, uos: {}, hp: true }
-    @@data[FLOOR] = { sptypes: {}, uos: {}           }
-    @@data[ROOFS] = { sptypes: {}, uos: {}           }
+    # Construction sub-variant identified strictly by Uo, e.g. 0.314 W/m2.K.
+    @@data[MASS2] = {uos: [0.314, 0.278, 0.247, 0.210, 0.183]}
+    @@data[MASSB] = {uos: [0.130, 0.100]}
+
+    @@data[MASS4] = {uos: [0.314, 0.278, 0.247, 0.210, 0.183]}
+    @@data[MASS8] = {uos: [0.130, 0.100]}
+
+    @@data[WOOD5] = {uos: [0.314, 0.278, 0.247, 0.210, 0.183]}
+    @@data[WOOD7] = {uos: [0.130]}
+
+    @@data[STEL1] = {uos: [0.314, 0.278]}
+    @@data[STEL2] = {uos: [0.247, 0.210, 0.183, 0.130, 0.100, 0.080]}
+
+    @@data[FLOOR] = {uos: [0.227, 0.183, 0.162, 0.142, 0.116, 0.101]}
+    @@data[ROOF ] = {uos: [0.227, 0.193, 0.183, 0.162, 0.156, 0.142, 0.138, 0.121, 0.100]}
 
     # --- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- --- #
-    # A construction sub-variant is identified strictly by its Uo factor:
-    #
-    #   e.g. "314" describes a Uo factor of 0.314 W/m2.K
-    #
-    # Uo sub-variants point to empty arrays. These arrays initially held layer
-    # identifiers (integers), for BTAP costing only. These arrays may be
-    # reactivated at some point e.g. as Hash entries as additional metadata,
-    # e.g. $/m2, kg CO2/m2. Although potentially useful, such metadata should
-    # ideally be held elsewhere within BTAP. Maintaining empty arrays for now.
-    @@data[MASS2][:uos]["314"] = []
-    @@data[MASS2][:uos]["278"] = []
-    @@data[MASS2][:uos]["247"] = []
-    @@data[MASS2][:uos]["210"] = []
-    @@data[MASS2][:uos]["183"] = []
-    @@data[MASSB][:uos]["130"] = []
-    @@data[MASSB][:uos]["100"] = []
-
-    @@data[MASS4][:uos]["314"] = []
-    @@data[MASS4][:uos]["278"] = []
-    @@data[MASS4][:uos]["247"] = []
-    @@data[MASS4][:uos]["210"] = []
-    @@data[MASS4][:uos]["183"] = []
-    @@data[MASS8][:uos]["130"] = []
-    @@data[MASS8][:uos]["100"] = []
-
-    @@data[MASS6][:uos]["314"] = []
-    @@data[MASS6][:uos]["278"] = []
-    @@data[MASS6][:uos]["247"] = []
-    @@data[MASSC][:uos]["210"] = []
-    @@data[MASSC][:uos]["183"] = []
-    @@data[MASSC][:uos]["130"] = []
-    @@data[MASSC][:uos]["100"] = []
-    @@data[MASSC][:uos]["080"] = []
-
-    @@data[MTAL1][:uos]["314"] = []
-    @@data[MTAL1][:uos]["278"] = []
-    @@data[MTAL1][:uos]["247"] = []
-    @@data[MTAL1][:uos]["210"] = []
-    @@data[MTAL1][:uos]["183"] = []
-    @@data[MTALD][:uos]["130"] = []
-    @@data[MTALD][:uos]["100"] = []
-
-    @@data[WOOD5][:uos]["314"] = []
-    @@data[WOOD5][:uos]["278"] = []
-    @@data[WOOD5][:uos]["247"] = []
-    @@data[WOOD5][:uos]["210"] = []
-    @@data[WOOD5][:uos]["183"] = []
-    @@data[WOOD7][:uos]["130"] = []
-
-    @@data[STEL1][:uos]["314"] = []
-    @@data[STEL1][:uos]["278"] = []
-    @@data[STEL2][:uos]["247"] = []
-    @@data[STEL2][:uos]["210"] = []
-    @@data[STEL2][:uos]["183"] = []
-    @@data[STEL2][:uos]["130"] = []
-    @@data[STEL2][:uos]["100"] = []
-    @@data[STEL2][:uos]["080"] = []
-
-    @@data[FLOOR][:uos]["227"] = []
-    @@data[FLOOR][:uos]["183"] = []
-    @@data[FLOOR][:uos]["162"] = []
-    @@data[FLOOR][:uos]["142"] = []
-    @@data[FLOOR][:uos]["116"] = []
-    @@data[FLOOR][:uos]["101"] = []
-
-    @@data[ROOFS][:uos]["227"] = []
-    @@data[ROOFS][:uos]["193"] = []
-    @@data[ROOFS][:uos]["183"] = []
-    @@data[ROOFS][:uos]["162"] = []
-    @@data[ROOFS][:uos]["156"] = []
-    @@data[ROOFS][:uos]["142"] = []
-    @@data[ROOFS][:uos]["138"] = []
-    @@data[ROOFS][:uos]["121"] = []
-    @@data[ROOFS][:uos]["100"] = []
-
-    # --- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- --- #
-    # In BTAP, each NECB building/space type is linked to a default construction
-    # set, which holds one of the preceding wall options. This is key here,
-    # given the construction-specific nature of MAJOR thermal bridging.
-    #
-    # NOTE: Expect radical changes to the NECB building/space type model (@todo).
-    #
-    # Each of these wall options holds NECB building (or space) type keywords
-    # (see below). The default (fall back) keyword is :office. String pattern
-    # recognition, e.g.:
-    #
-    #   :gym from "Gymnasium/Fitness centre exercise area"
-    #
-    # ... is implemented elsewhere in the BTAP/TBD class. The default BTAP
-    # wall construction for :office (fall back) is STEL1. Subsequent PSI
-    # factor selection is based strictly on selected wall construction, i.e.
-    # regardless of selected roof, fenestration, etc. The linkage remains valid
-    # for both building and space types (regardless of NECB vintage).
-
-    # "BTAP-ExteriorWall-Mass-2" & "BTAP-ExteriorWall-Mass-2b"
-    @@data[MASS2][:sptypes][:exercise       ] = {}
-    @@data[MASS2][:sptypes][:firestation    ] = {}
-    @@data[MASS2][:sptypes][:gym            ] = {}
-    @@data[MASSB][:sptypes][:exercise       ] = {}
-    @@data[MASSB][:sptypes][:firestation    ] = {}
-    @@data[MASSB][:sptypes][:gym            ] = {}
-
-    # "BTAP-ExteriorWall-Mass-4" & "BTAP-ExteriorWall-Mass-8c"
-    @@data[MASS4][:sptypes][:courthouse     ] = {}
-    @@data[MASS4][:sptypes][:museum         ] = {}
-    @@data[MASS4][:sptypes][:parking        ] = {}
-    @@data[MASS4][:sptypes][:post           ] = {}
-    @@data[MASS4][:sptypes][:transportation ] = {}
-    @@data[MASS8][:sptypes][:courthouse     ] = {}
-    @@data[MASS8][:sptypes][:museum         ] = {}
-    @@data[MASS8][:sptypes][:parking        ] = {}
-    @@data[MASS8][:sptypes][:post           ] = {}
-    @@data[MASS8][:sptypes][:transportation ] = {}
-
-    # "BTAP-ExteriorWall-Mass-6" & "BTAP-ExteriorWall-Mass-10c"
-    @@data[MASS6][:sptypes][:automotive     ] = {}
-    @@data[MASS6][:sptypes][:penitentiary   ] = {}
-    @@data[MASS6][:sptypes][:arena          ] = {}
-    @@data[MASS6][:sptypes][:warehouse      ] = {}
-    @@data[MASS6][:sptypes][:storage        ] = {}
-    @@data[MASSC][:sptypes][:automotive     ] = {}
-    @@data[MASSC][:sptypes][:penitentiary   ] = {}
-    @@data[MASSC][:sptypes][:arena          ] = {}
-    @@data[MASSC][:sptypes][:warehouse      ] = {}
-    @@data[MASSC][:sptypes][:storage        ] = {}
-
-    # "BTAP-ExteriorWall-Metal-1" & "BTAP-ExteriorWall-Metal-1d"
-    @@data[MTAL1][:sptypes][:mfg            ] = {}
-    @@data[MTAL1][:sptypes][:workshop       ] = {}
-    @@data[MTALD][:sptypes][:mfg            ] = {}
-    @@data[MTALD][:sptypes][:workshop       ] = {}
-
-    # "BTAP-ExteriorWall-WoodFramed-5" & "BTAP-ExteriorWall-WoodFramed-7"
-    @@data[WOOD5][:sptypes][:religious      ] = {}
-    @@data[WOOD5][:sptypes][:dwelling       ] = {} # if < 5 stories
-    @@data[WOOD5][:sptypes][:library        ] = {} # if < 3 stories
-    @@data[WOOD5][:sptypes][:school         ] = {} # if < 3 stories
-    @@data[WOOD7][:sptypes][:religious      ] = {}
-    @@data[WOOD7][:sptypes][:dwelling       ] = {} # if < 5 stories
-    @@data[WOOD7][:sptypes][:library        ] = {} # if < 3 stories
-    @@data[WOOD7][:sptypes][:school         ] = {} # if < 3 stories
-
-    # "BTAP-ExteriorWall-SteelFramed-1" & "BTAP-ExteriorWall-SteelFramed-2"
-    @@data[STEL1][:sptypes][:dwelling5      ] = {} # if > 4 stories
-    @@data[STEL1][:sptypes][:library3       ] = {} # if > 2 stories
-    @@data[STEL1][:sptypes][:school3        ] = {} # if > 2 stories
-    @@data[STEL1][:sptypes][:convention     ] = {}
-    @@data[STEL1][:sptypes][:dining         ] = {}
-    @@data[STEL1][:sptypes][:health         ] = {}
-    @@data[STEL1][:sptypes][:hospital       ] = {}
-    @@data[STEL1][:sptypes][:motion         ] = {}
-    @@data[STEL1][:sptypes][:performance    ] = {}
-    @@data[STEL1][:sptypes][:police         ] = {}
-    @@data[STEL1][:sptypes][:retail         ] = {}
-    @@data[STEL1][:sptypes][:town           ] = {}
-    @@data[STEL1][:sptypes][:office         ] = {}
-    @@data[STEL2][:sptypes][:dwelling5      ] = {} # if > 4 stories
-    @@data[STEL2][:sptypes][:library3       ] = {} # if > 2 stories
-    @@data[STEL2][:sptypes][:school3        ] = {} # if > 2 stories
-    @@data[STEL2][:sptypes][:convention     ] = {}
-    @@data[STEL2][:sptypes][:dining         ] = {}
-    @@data[STEL2][:sptypes][:health         ] = {}
-    @@data[STEL2][:sptypes][:hospital       ] = {}
-    @@data[STEL2][:sptypes][:motion         ] = {}
-    @@data[STEL2][:sptypes][:performance    ] = {}
-    @@data[STEL2][:sptypes][:police         ] = {}
-    @@data[STEL2][:sptypes][:retail         ] = {}
-    @@data[STEL2][:sptypes][:town           ] = {}
-    @@data[STEL2][:sptypes][:office         ] = {}
-
-    # --- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- --- #
-    # Initialize PSI factor qualities per wall construction.
+    # Initialize PSI factor qualities per wall assembly.
     @@data.values.each do |construction|
       construction[:bad ] = {}
       construction[:good] = {}
     end
 
     # Thermal bridge types :balcony, :party and :joint are NOT expected to
-    # be processed soon within BTAP. They are not costed out either, nor are
-    # carbon intensities associated to them. At some point, it may be wise to do
-    # so (notably for cantilevered balconies in MURBs). Default, generic BETBG
-    # PSI factors are nonetheless provided here (just in case):
-    #
-    #   - for the "bad" BTAP cases, retained values are those of the
-    #     generic "bad" BETBG set
-    #   - while "good" BTAP values are those of the generic BETBG
-    #     "efficient" set
+    # be processed soon within BTAP. They are neither costed out, nor are carbon
+    # intensities (kg CO2eq/linear meter) associated to them. At some point, it
+    # may be wise to do so (notably cantilevered balconies in MURBs) - @todo.
+    # Default, generic BETBG PSI factors are nonetheless provided here:
+    #   - for "bad" BTAP cases : generic BETBG set "bad"
+    #   - for "good" BTAP cases: generic BETBG set "efficient"
 
     @@data[MASS2][ :bad][:id          ] = MASS2_BAD
     @@data[MASS2][ :bad][:rimjoist    ] = { psi: 0.470 }
@@ -525,94 +314,6 @@ module BTAP
     @@data[MASS8][:good][:party       ] = { psi: 0.200 }
     @@data[MASS8][:good][:grade       ] = { psi: 0.320 }
     @@data[MASS8][:good][:joint       ] = { psi: 0.100 }
-
-    @@data[MASS6][ :bad][:id          ] = MASS6_BAD
-    @@data[MASS6][ :bad][:rimjoist    ] = { psi: 0.470 }
-    @@data[MASS6][ :bad][:parapet     ] = { psi: 0.500 }
-    @@data[MASS6][ :bad][:fenestration] = { psi: 0.350 }
-    @@data[MASS6][ :bad][:door        ] = { psi: 0.000 }
-    @@data[MASS6][ :bad][:corner      ] = { psi: 0.150 }
-    @@data[MASS6][ :bad][:balcony     ] = { psi: 1.000 }
-    @@data[MASS6][ :bad][:party       ] = { psi: 0.850 }
-    @@data[MASS6][ :bad][:grade       ] = { psi: 0.520 }
-    @@data[MASS6][ :bad][:joint       ] = { psi: 0.300 }
-
-    @@data[MASS6][:good][:id          ] = MASS6_GOOD
-    @@data[MASS6][:good][:rimjoist    ] = { psi: 0.100 }
-    @@data[MASS6][:good][:parapet     ] = { psi: 0.230 }
-    @@data[MASS6][:good][:fenestration] = { psi: 0.078 }
-    @@data[MASS6][:good][:door        ] = { psi: 0.000 }
-    @@data[MASS6][:good][:corner      ] = { psi: 0.090 }
-    @@data[MASS6][:good][:balcony     ] = { psi: 0.200 }
-    @@data[MASS6][:good][:party       ] = { psi: 0.200 }
-    @@data[MASS6][:good][:grade       ] = { psi: 0.090 }
-    @@data[MASS6][:good][:joint       ] = { psi: 0.100 }
-
-    @@data[MASSC][ :bad][:id          ] = MASSC_BAD
-    @@data[MASSC][ :bad][:rimjoist    ] = { psi: 0.170 }
-    @@data[MASSC][ :bad][:parapet     ] = { psi: 0.500 }
-    @@data[MASSC][ :bad][:fenestration] = { psi: 0.350 }
-    @@data[MASSC][ :bad][:door        ] = { psi: 0.000 }
-    @@data[MASSC][ :bad][:corner      ] = { psi: 0.150 }
-    @@data[MASSC][ :bad][:balcony     ] = { psi: 1.000 }
-    @@data[MASSC][ :bad][:party       ] = { psi: 0.850 }
-    @@data[MASSC][ :bad][:grade       ] = { psi: 0.720 }
-    @@data[MASSC][ :bad][:joint       ] = { psi: 0.300 }
-
-    @@data[MASSC][:good][:id          ] = MASSC_GOOD
-    @@data[MASSC][:good][:rimjoist    ] = { psi: 0.017 }
-    @@data[MASSC][:good][:parapet     ] = { psi: 0.230 }
-    @@data[MASSC][:good][:fenestration] = { psi: 0.078 }
-    @@data[MASSC][:good][:door        ] = { psi: 0.000 }
-    @@data[MASSC][:good][:corner      ] = { psi: 0.090 }
-    @@data[MASSC][:good][:balcony     ] = { psi: 0.200 }
-    @@data[MASSC][:good][:party       ] = { psi: 0.200 }
-    @@data[MASSC][:good][:grade       ] = { psi: 0.470 }
-    @@data[MASSC][:good][:joint       ] = { psi: 0.100 }
-
-    @@data[MTAL1][ :bad][:id          ] = MTAL1_BAD
-    @@data[MTAL1][ :bad][:rimjoist    ] = { psi: 0.320 }
-    @@data[MTAL1][ :bad][:parapet     ] = { psi: 0.420 }
-    @@data[MTAL1][ :bad][:fenestration] = { psi: 0.520 }
-    @@data[MTAL1][ :bad][:door        ] = { psi: 0.000 }
-    @@data[MTAL1][ :bad][:corner      ] = { psi: 0.150 }
-    @@data[MTAL1][ :bad][:balcony     ] = { psi: 1.000 }
-    @@data[MTAL1][ :bad][:party       ] = { psi: 0.850 }
-    @@data[MTAL1][ :bad][:grade       ] = { psi: 0.700 }
-    @@data[MTAL1][ :bad][:joint       ] = { psi: 0.300 }
-
-    @@data[MTAL1][:good][:id          ] = MTAL1_GOOD
-    @@data[MTAL1][:good][:rimjoist    ] = { psi: 0.030 }
-    @@data[MTAL1][:good][:parapet     ] = { psi: 0.350 }
-    @@data[MTAL1][:good][:fenestration] = { psi: 0.078 }
-    @@data[MTAL1][:good][:door        ] = { psi: 0.000 }
-    @@data[MTAL1][:good][:corner      ] = { psi: 0.070 }
-    @@data[MTAL1][:good][:balcony     ] = { psi: 0.200 }
-    @@data[MTAL1][:good][:party       ] = { psi: 0.200 }
-    @@data[MTAL1][:good][:grade       ] = { psi: 0.500 }
-    @@data[MTAL1][:good][:joint       ] = { psi: 0.100 }
-
-    @@data[MTALD][ :bad][:id          ] = MTALD_BAD
-    @@data[MTALD][ :bad][:rimjoist    ] = { psi: 0.320 }
-    @@data[MTALD][ :bad][:parapet     ] = { psi: 0.420 }
-    @@data[MTALD][ :bad][:fenestration] = { psi: 0.520 }
-    @@data[MTALD][ :bad][:door        ] = { psi: 0.000 }
-    @@data[MTALD][ :bad][:corner      ] = { psi: 0.150 }
-    @@data[MTALD][ :bad][:balcony     ] = { psi: 1.000 }
-    @@data[MTALD][ :bad][:party       ] = { psi: 0.850 }
-    @@data[MTALD][ :bad][:grade       ] = { psi: 0.700 }
-    @@data[MTALD][ :bad][:joint       ] = { psi: 0.300 }
-
-    @@data[MTALD][:good][:id          ] = MTALD_GOOD
-    @@data[MTALD][:good][:rimjoist    ] = { psi: 0.030 }
-    @@data[MTALD][:good][:parapet     ] = { psi: 0.350 }
-    @@data[MTALD][:good][:fenestration] = { psi: 0.078 }
-    @@data[MTALD][:good][:door        ] = { psi: 0.000 }
-    @@data[MTALD][:good][:corner      ] = { psi: 0.070 }
-    @@data[MTALD][:good][:balcony     ] = { psi: 0.200 }
-    @@data[MTALD][:good][:party       ] = { psi: 0.200 }
-    @@data[MTALD][:good][:grade       ] = { psi: 0.500 }
-    @@data[MTALD][:good][:joint       ] = { psi: 0.100 }
 
     @@data[WOOD5][ :bad][:id          ] = WOOD5_BAD
     @@data[WOOD5][ :bad][:rimjoist    ] = { psi: 0.050 }
@@ -704,162 +405,117 @@ module BTAP
     # --- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- --- #
 
     ##
-    # Retrieve TBD building/space type keyword (to revise @todo).
+    # Retrieves BTAP-costed assembly.
     #
-    # @param spacetype [String] NECB (or other) building/space type
-    # @param stories [Integer] number of building stories
+    # @param structure [BTAP::Structure] BTAP Structure object
+    # @param stype [:walls, :floors or :roofs] surface type
+    # @param perform [:hp or :lp] high- or low-performance variant
     #
-    # @return [Symbol] matching TBD keyword (:office if failure)
-    def spacetype(sptype = "", stories = 999)
-      tp  = sptype.downcase
-      typ = :office
+    # @return [String] BTAP assembly identifier for costing
+    def costed_assembly(structure = nil, stype = :walls, perform = :lp)
+      stype   = :walls unless [:roofs, :floors].include?(stype)
+      perform = :lp    unless perform == :hp
+      return STEL1 unless structure.is_a?(BTAP::Structure)
 
-      return typ unless stories.is_a?(Integer) && stories.between?(1,999)
+      # Select BTAP-costed assembly, matching:
+      #   - BTAP::Structure generated construction parameters
+      #   - requested high (HP) vs low-performance (LP) PSI-factor level
+      #
+      # Ideally, chosen PSI factor sets and matching OpenStudio constructions
+      # shouldn't strictly be based on selected BTAP assemblies (e.g.
+      # wood-framed vs steel-framed, cladding choice), but also on selected
+      # building 'structure', e.g.:
+      #
+      #   - "wood-framed" MURB
+      #   - "steel post/beam" office building
+      #   - "reinforced concrete post/beam" public library
+      #   - "metal(-building)" warehouse
+      #   - "mass-timber (CLT)" university pavilion
+      #
+      # Major thermal bridges often consist of anchors or supports that transmit
+      # structural loads (and by the same token, 'heat') to a building's main
+      # structure. Examples include balconies, parapets and shelf angles).
+      # Highly conductive building structures (e.g. steel, aluminium) exacerbate
+      # thermal bridging effects - so building structural selection matters.
+      #
+      # The BTAP::Structure module generates such attributes, yet BTAP's costed
+      # thermal bridging database doesn't yet distinguish between building
+      # structures - @todo. For the moment, BTAP PSI set selection is strictly
+      # based on BTAP::Structure's :framing, :cladding and :finish attributes,
+      # which must be set prior to initiating BTAP's TBD's thermal bridging
+      # solution:
 
-      typ = :exercise       if tp.include?("exercise"     )
-      typ = :firestation    if tp.include?("fire"         )
-      typ = :gym            if tp.include?("gym"          )
-      typ = :gym            if tp.include?("locker"       )
-      typ = :courthouse     if tp.include?("courthouse"   )
-      typ = :courtrhouse    if tp.include?("courtroom"    )
-      typ = :museum         if tp.include?("museum"       )
-      typ = :parking        if tp.include?("parking"      )
-      typ = :post           if tp.include?("post"         )
-      typ = :transportation if tp.include?("transp"       )
-      typ = :transportation if tp.include?("maintenance"  )
-      typ = :automotive     if tp.include?("automotive"   )
-      typ = :penitentiary   if tp.include?("penitentiary" )
-      typ = :penitentiary   if tp.include?("confinement"  )
-      typ = :arena          if tp.include?("arena"        )
-      typ = :warehouse      if tp.include?("warehouse"    )
-      typ = :storage        if tp.include?("storage"      )
-      typ = :mfg            if tp.include?("mfg"          )
-      typ = :mfg            if tp.include?("manufacturing")
-      typ = :mfg            if tp.include?("loading"      )
-      typ = :workshop       if tp.include?("workshop"     )
-      typ = :religious      if tp.include?("religious"    )
-      typ = :dwelling5      if tp.include?("dorm"         )
-      typ = :dwelling5      if tp.include?("otel"         )
-      typ = :dwelling5      if tp.include?("residential"  )
-      typ = :dwelling5      if tp.include?("long-term"    )
-      typ = :dwelling5      if tp.include?("dwelling"     )
-      typ = :dwelling5      if tp.include?("lodging"      )
-      typ = :dwelling5      if tp.include?("RP-28"        )
-      typ = :dwelling5      if tp.include?("guest"        )
-      typ = :dwelling       if tp.include?("dorm"         ) && stories < 5
-      typ = :dwelling       if tp.include?("otel"         ) && stories < 5
-      typ = :dwelling       if tp.include?("residential"  ) && stories < 5
-      typ = :dwelling       if tp.include?("long-term"    ) && stories < 5
-      typ = :dwelling       if tp.include?("dwelling"     ) && stories < 5
-      typ = :dwelling       if tp.include?("lodging"      ) && stories < 5
-      typ = :dwelling       if tp.include?("RP-28"        ) && stories < 5
-      typ = :dwelling       if tp.include?("guest"        ) && stories < 5
-      typ = :library3       if tp.include?("library"      )
-      typ = :library        if tp.include?("library"      ) && stories < 3
-      typ = :school3        if tp.include?("school"       )
-      typ = :school3        if tp.include?("classroom"    )
-      typ = :school3        if tp.include?("lab"          )
-      typ = :school3        if tp.include?("auditorium"   )
-      typ = :school         if tp.include?("school"       ) && stories < 3
-      typ = :school         if tp.include?("classroom"    ) && stories < 3
-      typ = :school         if tp.include?("lab"          ) && stories < 3
-      typ = :school         if tp.include?("auditorium"   ) && stories < 3
-      typ = :convention     if tp.include?("convention"   )
-      typ = :dining         if tp.include?("dining"       )
-      typ = :dining         if tp.include?("food"         )
-      typ = :health         if tp.include?("health"       )
-      typ = :hospital       if tp.include?("hospital"     )
-      typ = :hospital       if tp.include?("emergency"    )
-      typ = :hospital       if tp.include?("laundry"      )
-      typ = :hospital       if tp.include?("pharmacy"     )
-      typ = :motion         if tp.include?("motion"       )
-      typ = :performance    if tp.include?("perform"      )
-      typ = :police         if tp.include?("police"       )
-      typ = :retail         if tp.include?("retail"       )
-      typ = :retail         if tp.include?("sales"        )
-      typ = :town           if tp.include?("town"         )
-
-      typ
-    end
-
-    ##
-    # Retrieve building/space type-specific assembly/construction (to revise @todo).
-    #
-    # @param sptype [Symbol] BTAP/TBD spacetype
-    # @param stypes [Symbol] :walls, :floors or :roofs
-    # @param perform [Symbol] :lp (low-) or :hp (high-performance)
-    #
-    # @return [String] corresponding BTAP construction (STEL2 if fail)
-    def assembly(sptype = :office, stypes = :walls, perform = :hp)
-      return FLOOR if stypes == :floors
-      return ROOFS if stypes == :roofs
-
-      @@data.each do |id, construction|
-        next  unless construction.key?(perform)
-        return id if construction[:sptypes].key?(sptype)
+      # Light gauge steel framing by default. Override if wood, cmu or precast.
+      case stype
+      when :roofs  then return ROOF
+      when :floors then return FLOOR
+      else
+        case structure.framing
+        when :wood
+          c1 = WOOD5
+          c2 = WOOD7
+        when :cmu
+          c1 = MASS2
+          c2 = MASSB
+        else
+          if structure.cladding == :heavy && structure.finish == :heavy
+            c1 = MASS4
+            c2 = MASS8
+          else
+            c1 = STEL1
+            c2 = STEL2
+          end
+        end
       end
 
-      STEL2
+      perform == :lp ? c1 : c2
     end
 
     ##
-    # Retrieve nearest building/space type-specific assembly Uo factor.
+    # Retrieves nearest assembly Uo factor.
     #
-    # @param construction [String] BTAP construction identifier
+    # @param assembly [String] BTAP assembly identifier
     # @param uo [Double] target Uo in W/m2.K
     #
-    # @return [Double] costed BTAP construction Uo factor (nil if fail)
-    def costed_uo(construction = STEL2, uo = UMAX)
-      construction = STEL2 unless @@data.key?(construction)
-      uo           = UMAX  unless uo.is_a?(Numeric) && uo.between?(UMIN, UMAX)
+    # @return [Double] costed BTAP assembly Uo factor (nil if fail)
+    def costed_uo(assembly = "", uo = nil)
+      return nil unless @@data.key?(assembly)
+      return nil unless uo.is_a?(Numeric)
 
-      @@data[construction][:uos].keys.each do |u|
-        val = u.to_f / 1000
-        return nil unless val.is_a?(Numeric) && val.between?(UMIN, UMAX)
-        return val     if val < uo || (val - uo).abs < 0.001
-      end
+      uMIN = BTAP::Resources::Envelope::Constructions::Umin
+      uMAX = BTAP::Resources::Envelope::Constructions::Umax
+      uo   = uo.clamp(uMIN, uMAX)
 
-      nil
-    end
-
-    ##
-    # Retrieve lowest building/space type-specific assembly Uo factor.
-    #
-    # @param construction [String] BTAP construction identifier
-    #
-    # @return [Double] lowest costed BTAP construction Uo factor (nil if fail)
-    def lowest_uo(construction = STEL2)
-      uos          = []
-      construction = STEL2 unless @@data.key?(construction)
-
-      @@data[construction][:uos].keys.each do |u|
-        val = u.to_f / 1000
-        return nil unless val.is_a?(Numeric) && val.between?(UMIN, UMAX)
-
-        uos << val
-      end
-
-      return uos.min unless uos.empty?
+      @@data[assembly][:uos].each { |u| return u if u.round(3) <= uo.round(3) }
 
       nil
     end
 
     ##
-    # Retrieve assembly-specific PSI factor set.
+    # Retrieves lowest costed assembly Uo factor.
     #
-    # @param assembly [String] BTAP/TBD wall construction
+    # @param assembly [String] BTAP assembly identifier
+    #
+    # @return [Double] lowest costed BTAP assembly Uo factor (nil if fail)
+    def lowest_uo(assembly = "")
+      return nil unless @@data.key?(assembly)
+
+      @@data[assembly][:uos].min
+    end
+
+    ##
+    # Retrieves assembly-specific PSI factor set.
+    #
+    # @param assembly [String] BTAP/TBD wall construction identifier
     # @param quality [Symbol] BTAP/TBD PSI quality (:bad or :good)
     #
     # @return [Hash] BTAP/TBD PSI factor set (defaults to STEL2, :good)
     def set(assembly = STEL2, quality = :good)
-      psi = {}
-      chx = @@data[STEL2][:good  ]
-      chx = @@data[STEL2][quality]          if @@data[STEL2   ].key?(quality)
+      assembly = STEL2 unless @@data.key?(assembly)
+      quality  = :good unless @@data[assembly].key?(quality)
 
-      if @@data.key?(assembly)
-        chx = @@data[assembly][quality]     if @@data[assembly].key?(quality)
-        chx = @@data[assembly][:good  ] unless @@data[assembly].key?(quality)
-      end
+      chx = @@data[assembly][quality]
+      psi = {}
 
       psi[:id          ] = chx[:id          ]
       psi[:rimjoist    ] = chx[:rimjoist    ][:psi]
@@ -900,7 +556,7 @@ module BTAP
     ERR  = TBD::ERR
     FTL  = TBD::FTL
 
-    # @return [Hash] BTAP/TBD Hash, specific to an OpenStudio model
+    # @return [Hash] BTAP/TBD hash, specific to an OpenStudio model
     attr_reader :model
 
     # @return [Hash] logged messages TBD reports back to BTAP
@@ -910,55 +566,40 @@ module BTAP
     attr_reader :tally
 
     ##
-    # Initialize OpenStudio model-specific BTAP/TBD data - uprates/derates.
+    # Initializes OpenStudio model-specific BTAP/TBD data - uprates/derates.
     #
     # @param model [OpenStudio::Model::Model] a model
-    # @param argh [Hash] BTAP/TBD argument hash
+    # @param [Hash] argh BTAP/TBD argument hash
+    # @option argh [BTAP::Structure] structure a BTAP STRUCTURE object
+    # @option argh [Hash] walls exterior wall parameters e.g. :uo, :ut
+    # @option argh [Hash] floors exposed floor parameters e.g. :uo, :ut
+    # @option argh [Hash] roofs exterior roof parameters e.g. :uo, :ut
+    # @option argh [:good, :bad] quality derating option (if not uprating)
+    # @option argh [Boolean] interpolate if TBD interpolates among Uo (uprate)
     def initialize(model = nil, argh = {})
+      btp       = BTAP::Resources::Envelope::Constructions # alias
+      mth       = "BTAP::Bridging::#{__callee__}"
       @model    = {}
       @tally    = {}
-      @feedback = { logs: [] }
+      @feedback = {logs: []}
       lgs       = @feedback[:logs]
 
-      argh[:interpolate] = false unless argh.key?(:interpolate)
-
-      # BTAP generates free-floating, unoccupied spaces (e.g. attics) as
-      # 'indirectly conditioned', rather than 'unconditioned' (e.g. vented
-      # attics). For instance, all outdoor-facing sloped roof surfaces of an
-      # attic in BTAP are insulated, while attic floors remain uninsulated. BTAP
-      # adds to the thermal zone of each unoccupied space a thermostat without
-      # referencing heating and/or cooling setpoint schedule objects. These
-      # conditions do not meet TBD's internal 'plenum' logic/check (which is
-      # based on OpenStudio-Standards), and so TBD ends up tagging such spaces
-      # as unconditioned. Consequently, TBD attempts to up/de-rate attic floors
-      # - not sloped roof surfaces. The upstream BTAP solution will undoubtedly
-      # need revision (@todo). In the meantime, and in an effort to harmonize TBD
-      # with BTAP's current approach, an OpenStudio model may be temporarily
-      # modified prior to TBD processes, ensuring that each attic space is
-      # temporarily mistaken as a conditioned plenum. The return variable of the
-      # following method is a Hash holding temporarily-modified spaces,
-      # i.e. buffer zones.
-      buffers = self.alter_buffers(model)
-
-      # Populate BTAP/TBD inputs with BTAP & OpenStudio model parameters,
-      # which returns 'true' if successful. Check @feedback logs if failure to
-      # populate (e.g. invalid argument hash, invalid OpenStudio model).
+      # Populate and validate BTAP/TBD & OpenStudio model parameters. This does
+      # a safe TBD trial run, returning true if successful. If false, TBD leaves
+      # the model unaltered. Check @feedback logs.
       return unless self.populate(model, argh)
 
       # Initialize loop controls and flags.
       initial  = true
       complies = false
-      comply   = {}     # specific to :walls, :floors & :roofs
-      perform  = :lp    # Low-performance wall constructions (revise, @todo)
-      quality  = :bad   # default PSI factors - BTAP users can reset to :good
-      quality  = :good if argh.key?(:quality) && argh[:quality] == :good
+      comply   = {} # specific to :walls, :floors & :roofs (if uprating)
+      perform  = :lp
+      quality  = argh[:quality] == :good ? :good : :bad
       combo    = "#{perform.to_s}_#{quality.to_s}".to_sym # e.g. :lp_bad
-      args     = {}     # initialize native TBD arguments
+      args     = {} # TBD's own argument hash
 
-      # Initialize surface types & native TBD args (if uprating).
-      [:walls, :floors, :roofs].each do |stypes|
-        next     if @model[stypes].empty?
-        next unless argh.key?(stypes)
+      # Initialize surface types & TBD arguments for iterative uprating runs.
+      @model[:stypes].each do |stypes|
         next unless argh[stypes].key?(:ut)
 
         stype  = stypes.to_s.chop
@@ -966,46 +607,40 @@ module BTAP
         option = "#{stype}_option".to_sym
         ut     = "#{stype}_ut".to_sym
 
-        args[uprate  ] = true
-        args[option  ] = "ALL #{stype} constructions"
-        args[ut      ] = argh[stypes][:ut]
+        args[uprate] = true
+        args[option] = "ALL #{stype} constructions"
+        args[ut    ] = argh[stypes][:ut]
 
         comply[stypes] = false
-
-        @model[:constructions] = {} unless @model.key?(:constructions)
       end
 
-      args[:io_path] = @model[combo] # contents of a "tbd.json" file
-      args[:option ] = ""            # safeguard
+      args[:io_path] = @model[:constructions].values.first[combo] # PSI set
+      args[:option ] = ""
 
       loop do
         if initial
           initial = false
         else
-          # Subsequent runs. Upgrade technologies. Reset TBD args.
+          # Subsequent uprating runs. Upgrade technologies. Reset TBD args.
           if quality == :bad
             quality = :good
             combo   = "#{perform.to_s}_#{quality.to_s}".to_sym
-            args[:io_path] = @model[combo]
+            args[:io_path] = @model[:constructions].values.first[combo]
           elsif perform == :lp
             # Switch 'perform' from :lp to :hp - reset quality to :bad.
             perform = :hp
             quality = :bad
             combo   = "#{perform.to_s}_#{quality.to_s}".to_sym
-            args[:io_path] = @model[combo]
+            args[:io_path] = @model[:constructions].values.first[combo]
           end
 
           # Delete previously-generated TBD args Uo key/value pairs.
-          [:walls, :floors, :roofs].each do |stypes|
+          @model[:stypes].each do |stypes|
             next unless comply.key?(stypes)
 
             uo = "#{stypes.to_s.chop}_uo".to_sym
             args.delete(uo) if args.key?(uo)
           end
-
-          # Reset previous @model constructions.
-          @model.delete(:constructions) if @model.key?(:constructions)
-          @model[:constructions] = {}
         end
 
         # Run TBD on cloned OpenStudio model - compliant combo?
@@ -1022,69 +657,51 @@ module BTAP
         end
 
         complies = true
-        # Check if TBD-uprated Uo factors are valid: TBD args Hash holds (new)
-        # uprated Uo keys/values for :walls, :floors AND/OR :roofs if uprating
+        # Check if TBD-uprated Uo factors are valid: TBD args hash holds (new)
+        # uprated Uo keys/values for :walls, :floors and/or :roofs if uprating
         # is successful. In most cases, uprating tends to fail for wall
         # constructions rather than roof or floor constructions, due to the
-        # typically larger density of linear thermal bridging per surface type
-        # area. Yet even if all constructions were successfully uprated by TBD,
-        # one must then determine if BTAP holds admissible (i.e. costed)
-        # assembly variants with corresponding Uo factors (see :uos key). If
-        # TBD-uprated Uo factors are lower than any of these admissible BTAP Uo
-        # factors, then no commercially available solution can been identified.
-        [:walls, :floors, :roofs].each do |stypes|
+        # typically larger density of linear thermal bridging per surface area
+        # Yet even if all constructions were successfully uprated by TBD, one
+        # must then determine if BTAP holds admissible (i.e. costed) assembly
+        # variants with corresponding Uo factors. If TBD-uprated Uo factors are
+        # lower than any of these admissible BTAP Uo factors, then no
+        # commercially available solution can been identified.
+        @model[:stypes].each do |stypes|
           next unless comply.key?(stypes) # true only if uprating
 
+          # TBD-estimated Uo target to meet NECB-required Ut - nil if invalid.
           stype_uo = "#{stypes.to_s.chop}_uo".to_sym
-          target   = nil # uprated Uo (if successful)
-          target   = args[stype_uo] if args.key?(stype_uo) # ... may be nil
+          target   = args.key?(stype_uo) ? args[stype_uo] : nil
+          assembly = self.costed_assembly(argh[:structure], stypes, perform)
 
-          comply[stypes] = true
+          uo = target ? self.costed_uo(assembly, target) : nil
 
-          @model[stypes].each do |id, surface|
-            next unless surface.key?(:sptype)
+          if uo
+            uo = target if argh[:interpolate]
+            comply[stypes] = true
+          else
+            uo = self.lowest_uo(assembly)
+            comply[stypes] = false
+          end
 
-            sptype = surface[:sptype] # e.g. :office
-            next unless @model[:sptypes].key?(sptype)
-            next unless @model[:sptypes][sptype].key?(stypes)
-            next unless @model[:sptypes][sptype][stypes].key?(perform)
+          @model[:constructions].each do |lc, v|
+            next unless v[:stypes] == stypes
 
-            construction = @model[:sptypes][sptype][stypes][perform]
-            uo = nil
-            ok = true
-            uo = self.costed_uo(construction, target) if target
-            ok = false  if uo.nil?
-            uo = target if ok && argh[:interpolate]
-            uo = self.lowest_uo(construction) unless ok # fallback
-            comply[stypes] = false            unless ok
-
-            unless @model[:constructions].key?(construction)
-              @model[:constructions][construction]             = {}
-              @model[:constructions][construction][:stypes   ] = stypes
-              @model[:constructions][construction][:uo       ] = uo
-              @model[:constructions][construction][:compliant] = ok
-              @model[:constructions][construction][:surfaces ] = {}
-            end
-
-            face = model.getSurfaceByName(id)
-            next if face.empty?
-
-            face = face.get
-            @model[:constructions][construction][:surfaces][id] = face
+            v[:uo] = uo
+            v[:compliant] = comply[stypes]
           end
 
           complies = false unless comply[stypes]
         end
 
-        break if complies
-        # Final BTAP uprating option, yet non-compliant: TBD's uprating
-        # features are requested, yet unable to locate either a physically- or
-        # economically-plausible Uo + PSI combo for 1x or more surface types.
+        # Exit if successful or if final BTAP uprating option.
         break if combo == :hp_good
-      end # of loop
+        break if complies
+      end
 
       # Post-loop steps (if uprating).
-      [:walls, :floors, :roofs].each do |stypes|
+      @model[:stypes].each do |stypes|
         next unless comply.key?(stypes) # true only if uprating
 
         # Cancel uprating request before final derating.
@@ -1094,18 +711,13 @@ module BTAP
         ut     = "#{stype}_ut".to_sym
         args.delete(uprate)
         args.delete(option)
-        args.delete(ut    )
+        args.delete(ut)
 
-        # Set uprated Uo factor for each BTAP 'deratable' construction.
-        @model[:constructions].each do |id, construction|
-          next unless construction.key?(:stypes   )
-          next unless construction.key?(:uo       )
-          next unless construction.key?(:compliant)
-          next unless construction.key?(:surfaces )
-          next unless construction[:stypes  ] == stypes
-          next     if construction[:surfaces].empty?
+        # Reset uprated Uo factor for each 'deratable' construction.
+        @model[:constructions].each do |lc, v|
+          next unless v[:stypes] == stypes
 
-          BTAP::Geometry::Surfaces.set_surfaces_construction_conductance(construction[:surfaces].values, construction[:uo])
+          v[:r] = btp.reset_uo(lc, v[:filmRSI], v[:index], v[:uo])
         end
       end
 
@@ -1121,336 +733,275 @@ module BTAP
 
       @model[:io      ] = res[:io      ] # TBD outputs (i.e. "tbd.out.json")
       @model[:surfaces] = res[:surfaces] # TBD derated surface data
-      @model[:argh    ] = argh           # method argument Hash
+      @model[:argh    ] = argh           # method argument hash
       @model[:args    ] = args           # last TBD inputs (i.e. "tbd.json")
 
       self.gen_tallies                   # tallies for BTAP costing
       self.gen_feedback                  # log success messages for BTAP
-
-      self.purge_buffer_schedules(model, buffers)
     end
 
     ##
-    # Modify BTAP-generated 'buffer zones' (e.g. attics) to ensure TBD tags
-    # these as indirectly conditioned spaces (e.g. plenums).
+    # Populates and validates BTAP/TBD & OpenStudio model parameters for thermal
+    # bridging. This also does a safe TBD trial run, returning true if
+    # successful. Check @feedback logs if false.
     #
     # @param model [OpenStudio::Model::Model] a model
-    #
-    # @return [Array] identifiers of modified buffer spaces in model
-    def alter_buffers(model = nil)
-      buffers = []
-      sched   = nil
-      lgs     = @feedback[:logs]
-      cl      = OpenStudio::Model::Model
-      lgs << "Invalid OpenStudio model (buffers)" unless model.is_a?(cl)
-      return buffers                              unless model.is_a?(cl)
-
-      model.getSpaces.each do |space|
-        next if space.partofTotalFloorArea
-        next if space.thermalZone.empty?
-
-        id    = space.nameString
-        zone  = space.thermalZone.get
-        next if zone.isPlenum
-        next if zone.thermostat.empty?
-
-        tstat  = zone.thermostat.get
-        staged = tstat.respond_to?(:heatingTemperatureSetpointSchedule)
-        tstat  = tstat.to_ZoneControlThermostatStagedDualSetpoint.get if staged
-        tstat  = tstat.to_ThermostatSetpointDualSetpoint.get      unless staged
-
-        if sched.nil?
-          name  = "TBD attic setpoint sched"
-          sched = OpenStudio::Model::ScheduleCompact.new(model)
-          sched.setName(name)
-        end
-
-        tstat.setHeatingTemperatureSetpointSchedule(sched)     if staged
-        tstat.setHeatingSetpointTemperatureSchedule(sched) unless staged
-
-        buffers << id
-      end
-
-      buffers
-    end
-
-    ##
-    # Remove previously BTAP/TBD-added heating setpoint schedules for 'buffer
-    # zones' (e.g. attics).
-    #
-    # @param model [OpenStudio::Model::Model] a model
-    # @param buffers [Array] identifiers of modified buffer spaces in model
-    #
-    # @return [Boolean] true if successful
-    def purge_buffer_schedules(model = nil, buffers = [])
-      scheds = []
-      lgs    = @feedback[:logs]
-      cl     = OpenStudio::Model::Model
-      lgs << "Invalid OpenStudio model (purge)" unless model.is_a?(cl)
-      lgs << "Invalid BTAP/TBD buffers"         unless buffers.is_a?(Array)
-      return false                              unless model.is_a?(cl)
-      return false                              unless buffers.is_a?(Array)
-
-      buffers.each do |id|
-        space = model.getSpaceByName(id)
-        next if space.empty?
-
-        space = space.get
-        next if space.thermalZone.empty?
-
-        zone = space.thermalZone.get
-        next if zone.thermostat.empty?
-
-        tstat  = zone.thermostat.get
-        staged = tstat.respond_to?(:heatingTemperatureSetpointSchedule)
-        tstat  = tstat.to_ZoneControlThermostatStagedDualSetpoint.get if staged
-        tstat  = tstat.to_ThermostatSetpointDualSetpoint.get      unless staged
-        sched  = tstat.heatingTemperatureSetpointSchedule             if staged
-        sched  = tstat.heatingSetpointTemperatureSchedule         unless staged
-        next if sched.empty?
-
-        sched = sched.get
-        scheds << sched.nameString
-        tstat.resetHeatingSetpointTemperatureSchedule             unless staged
-        tstat.resetHeatingTemperatureSetpointSchedule                 if staged
-      end
-
-      scheds.each do |sched|
-        schd = model.getScheduleByName(sched)
-        next if schd.empty?
-        schd = schd.get
-        schd.remove
-      end
-
-      true
-    end
-
-    ##
-    # Fetch min U-factor of outdoor-facing OpenStudio model surface types.
-    #
-    # @param model [OpenStudio::Model::Model] a model
-    # @param stype [Symbol] model surface type (e.g. :walls)
-    #
-    # @return [Float] min U factor (default 5.678 W/m2.K)
-    def minU(model = nil, stypes = :walls)
-      u     = UMAX
-      lgs   = @feedback[:logs]
-      cl    = OpenStudio::Model::Model
-      stype = stypes.to_s.chop.downcase
-      ok    = stype == "wall" || stype == "floor" || stype == "roof"
-      stype = "wall"                                     unless ok
-      lgs << "Invalid OpenStudio model (#{stypes} minU)" unless model.is_a?(cl)
-      return u                                           unless model.is_a?(cl)
-
-      model.getSurfaces.each do |s|
-        next unless s.surfaceType.downcase.include?(stype)
-        next unless s.outsideBoundaryCondition.downcase == "outdoors"
-        next if s.construction.empty?
-        next if s.construction.get.to_LayeredConstruction.empty?
-
-        lc = s.construction.get.to_LayeredConstruction.get
-        uo = 1 / TBD.rsi(lc, s.filmResistance)
-
-        u = [uo, u].min
-      end
-
-      # u0 = format("%.3f", u) # TEMPORARY
-      # puts "~~ Extracted #{stypes} minU (#{u0}) W/m2.K from OpenStudio model"
-
-      u
-    end
-
-    ##
-    # Populate BTAP/TBD model with BTAP & OpenStudio model parameters.
-    #
-    # @param model [OpenStudio::Model::Model] a model
-    # @param argh [Hash] BTAP/TBD argument hash
+    # @param [Hash] argh BTAP/TBD argument hash
+    # @option argh [BTAP::Structure] structure a BTAP STRUCTURE object
+    # @option argh [Hash] walls exterior wall parameters e.g. :uo, :ut
+    # @option argh [Hash] floors exposed floor parameters e.g. :uo, :ut
+    # @option argh [Hash] roofs exterior roof parameters e.g. :uo, :ut
+    # @option argh [Symbol] quality derating option (if not uprating)
+    # @option argh [Boolean] interpolate if TBD should pick between Uo values
     #
     # @return [Boolean] true if valid (check @feedback logs if false)
     def populate(model = nil, argh = {})
-      cl     = OpenStudio::Model::Model
-      args   = { option: "(non thermal bridging)" }    # for initial TBD dry run
-      lgs    = @feedback[:logs]
+      mth  = "BTAP::Bridging::#{__callee__}"
+      args = { option: "(non thermal bridging)" } # for initial TBD dry run
+      lgs  = @feedback[:logs]
+      cl   = OpenStudio::Model::LayeredConstruction
+      uMIN = BTAP::Resources::Envelope::Constructions::Umin
+      uMAX = BTAP::Resources::Envelope::Constructions::Umax
 
-      lgs << "Invalid OpenStudio model to de/up-rate" unless model.is_a?(cl)
-      lgs << "Invalid BTAP/TBD argument Hash"         unless argh.is_a?(Hash)
-      lgs << "Empty BTAP/TBD argument hash"               if argh.empty?
-      return false                                    unless model.is_a?(cl)
-      return false                                    unless argh.is_a?(Hash)
-      return false                                        if argh.empty?
+      unless model.is_a?(OpenStudio::Model::Model)
+        lgs << "Invalid OpenStudio model to de/up-rate (#{mth})"
+        return false
+      end
+
+      unless argh.is_a?(Hash)
+        lgs << "Invalid BTAP/TBD argument Hash (#{mth})"
+        return false
+      end
+
+      if argh.key?(:structure)
+        unless argh[:structure].is_a?(BTAP::Structure)
+          lgs << "Invalid BTAP::Structure (#{mth})"
+          return false
+        end
+      else
+        lgs << "Missing STRUCTURE key (#{mth})"
+        return false
+      end
+
+      # Building-wide envelope (e.g. assemblies, U-factors, PSI-factors) options
+      # depend on building structure-dependent features such as framing,
+      # cladding, etc. This will need to adapt to upcoming story/space
+      # construction/PSI customization - @todo.
+      strc = argh[:structure]
+
+      argh[:interpolate] = false unless argh.key?(:interpolate)
+      argh[:interpolate] = false unless [true, false].include?(argh[:interpolate])
+
+      [:walls, :floors, :roofs].each do |stypes|
+        unless argh.key?(stypes)
+          lgs << "Missing BTAP/TBD #{stypes} (#{mth})"
+          return false
+        end
+
+        unless argh[stypes].key?(:uo)
+          lgs << "Missing BTAP/TBD #{stypes} Uo (#{mth})"
+          return false
+        end
+
+        uo = argh[stypes][:uo]
+
+        unless uo.is_a?(Numeric) && uo.between?(uMIN, uMAX)
+          lgs << "Invalid BTAP/TBD #{stypes} Uo (#{mth})"
+          return false
+        end
+
+        next unless argh[stypes].key?(:ut)
+
+        ut = argh[stypes][:ut]
+
+        unless ut.is_a?(Numeric) && ut.between?(uMIN, uMAX)
+          lgs << "Invalid BTAP/TBD #{stypes} Ut (#{mth})"
+          return false
+        end
+      end
+
+      # Run TBD on a cloned OpenStudio model (dry run).
+      mdl = OpenStudio::Model::Model.new
+      mdl.addObjects(model.toIdfFile.objects)
+      TBD.clean!
+      res = TBD.process(mdl, args)
+
+      # TBD validation of OpenStudio model.
+      if TBD.fatal? || TBD.error?
+        lgs << "TBD-identified FATAL error(s):"     if TBD.fatal?
+        lgs << "TBD-identified non-FATAL error(s):" if TBD.error?
+
+        TBD.logs.each { |log| lgs << log[:message] }
+        return false if TBD.fatal?
+      end
 
       # Fetch number of stories in OpenStudio model.
       stories = model.getBuilding.standardsNumberOfAboveGroundStories
       stories = stories.get                  unless stories.empty?
       stories = model.getBuildingStorys.size unless stories.is_a?(Integer)
 
-      @model[:stories] = stories
-      @model[:stories] = 1   if stories < 1
-      @model[:stories] = 999 if stories > 999
+      # Story/space construction/PSI customization is yet to be implemented.
+      # Keeping placeholders for now - @todo.
+      @model[:stories] = stories.clamp(1, 999)
       @model[:spaces ] = {}
-      @model[:sptypes] = {}
 
-      # Run TBD on a cloned OpenStudio model (dry run).
-      mdl      = OpenStudio::Model::Model.new
-      mdl.addObjects(model.toIdfFile.objects)
-      TBD.clean!
-      res      = TBD.process(mdl, args)
-      surfaces = res[:surfaces]
+      # Initialize deratable opaque, layered constructions & surface types.
+      @model[:constructions] = {}
+      @model[:stypes       ] = []
 
-      # TBD validation of OpenStudio model.
-      lgs << "TBD-identified FATAL error(s):"      if TBD.fatal?
-      lgs << "TBD-identified non-FATAL error(s):"  if TBD.error?
-      TBD.logs.each { |log| lgs << log[:message] } if TBD.fatal? || TBD.error?
-      return false                                 if TBD.fatal?
-
-      lgs << "TBD: no deratable surfaces in model" if surfaces.nil?
-      return false                                 if surfaces.nil?
-
-      # Initialize deratable walls, exposed floors & roofs.
-      [:walls, :floors, :roofs].each { |stypes| @model[stypes] = {} }
-
-      surfaces.each do |id, surface|
-        next unless surface.key?(:type     ) # :wall, :floor, :ceiling
-        next unless surface.key?(:space    ) # OpenStudio space object
-        next unless surface.key?(:deratable) # true/false
-        next unless surface[:deratable]
-
-        stypes = :walls  if surface[:type] == :wall
-        stypes = :floors if surface[:type] == :floor
-        stypes = :roofs  if surface[:type] == :ceiling
-        next unless stypes == :walls || stypes == :floors || stypes == :roofs
-
-        space  = surface[:space].nameString
-        sptype = surface[:stype].nameString if surface.key?(:stype)
-        sptype = ""                     unless surface.key?(:stype)
-        typ    = self.spacetype(sptype, @model[:stories]) # e.g. :office
-
-        # Keep track of individual surface's space and spacetype keyword.
-        @model[stypes][id]          = {}
-        @model[stypes][id][:space ] = space
-        @model[stypes][id][:sptype] = typ
-
-        # Keep track of individual spaces and spacetypes.
-        exists = @model[:spaces].key?(space)
-        @model[:spaces][space]          = {}     unless exists
-        @model[:spaces][space][:sptype] = typ    unless exists
-
-        exists = @model[:sptypes].key?(typ)
-        @model[:sptypes][typ ]          = {}     unless exists
-        @model[:sptypes][typ ][:sptype] = sptype unless exists
-        next if @model[:sptypes][typ].key?(stypes)
-
-        # Low- vs Hi-Performance BTAP assemblies.
-        lo = self.assembly(typ, stypes, :lp)
-        hi = self.assembly(typ, stypes, :hp)
-        @model[:sptypes][typ][stypes]      = {}
-        @model[:sptypes][typ][stypes][:lp] = lo
-        @model[:sptypes][typ][stypes][:hp] = hi
-        next unless stypes == :walls
-
-        # Fetch bad vs good PSI factor sets - strictly a function of walls.
-        @model[:sptypes][typ][:lp_bad ] = self.set(lo, :bad )
-        @model[:sptypes][typ][:lp_good] = self.set(lo, :good)
-        @model[:sptypes][typ][:hp_bad ] = self.set(hi, :bad )
-        @model[:sptypes][typ][:hp_good] = self.set(hi, :good)
+      if res[:surfaces].nil?
+        lgs << "No deratable surfaces in model (#{mth})"
+        return false
       end
 
-      # BTAP-fed Uo (+ optional Ut) factors.
-      [:walls, :floors, :roofs].each do |stypes|
-        lgs << "Missing BTAP/TBD #{stypes}"    unless argh.key?(stypes)
-        lgs << "Missing BTAP/TBD #{stypes} Uo" unless argh[stypes].key?(:uo)
-        return false                           unless argh.key?(stypes)
-        return false                           unless argh[stypes].key?(:uo)
-        next                                       if @model[stypes].empty?
+      # TBD surface objects hold certain attributes (keys) to signal if they're
+      # deratable. Concentrating only on those. Relying on reported strings
+      # (e.g. surface identifier) or integers (e.g. a layer :index) seems fine.
+      # Yet referecing TBD-cloned OpenStudio objects (e.g. key :construction)
+      # is a no-no (e.g. seg faults).
+      res[:surfaces].each do |id, surface|
+        next unless surface.key?(:construction)
+        next unless surface.key?(:space)
+        next unless surface.key?(:type)      # :wall, :ceiling or :floor
+        next unless surface.key?(:filmRSI)   # sum of air film resistances
+        next unless surface.key?(:index)     # deratable layer index
+        next unless surface.key?(:ltype)     # :massless or :standard layer
+        next unless surface.key?(:r)         # deratable layer RSi
+        next unless surface.key?(:deratable) # true or false
 
-        uo = argh[stypes][:uo]
-        ok = uo.is_a?(Numeric) && uo.between?(UMIN, UMAX)
-        next if ok
+        next unless surface[:deratable   ]
+        next unless surface[:construction].is_a?(cl)
+        next     if surface[:index       ].nil?
 
-        uo = self.minU(model, stypes)
-        ok = uo.is_a?(Numeric) && uo.between?(UMIN, UMAX)
-        lgs << "Invalid BTAP/TBD #{stypes} Uo" unless ok
-        return false                           unless ok
+        stypes = case surface[:type]
+                 when :wall    then :walls
+                 when :floor   then :floors
+                 when :ceiling then :roofs
+                 else ""
+                 end
 
-        argh[stypes][:uo] = uo
-        next unless argh[stypes].key?(:ut)
+        next if stypes.empty?
 
-        argh[stypes][:ut] = uo
+        # Track surface type.
+        @model[:stypes] << stypes unless @model[:stypes].include?(stypes)
+
+        # Track TBD-targeted constructions for uprating/derating.
+        srf = model.getSurfaceByName(id)
+
+        if srf.empty?
+          lgs << "Mismatched surface: #{id} (#{mth})?"
+          return false
+        end
+
+        srf = srf.get
+        lc  = srf.construction
+
+        if lc.empty?
+          lgs << "Mismatched construction: #{id} (#{mth})?"
+          return false
+        end
+
+        lc = lc.get.to_LayeredConstruction
+
+        if lc.empty?
+          lgs << "Mismatched layered construction: #{id} (#{mth})?"
+          return false
+        end
+
+        lc = lc.get
+
+        unless @model[:constructions].key?(lc)
+          @model[:constructions][lc]             = {}
+          @model[:constructions][lc][:ltype    ] = surface[:ltype]   # material
+          @model[:constructions][lc][:index    ] = surface[:index]   # material
+          @model[:constructions][lc][:r        ] = surface[:r]       # material
+          @model[:constructions][lc][:filmRSI  ] = surface[:filmRSI] # assembly
+          @model[:constructions][lc][:uo       ] = nil               # assembly
+          @model[:constructions][lc][:compliant] = nil               # assembly
+          @model[:constructions][lc][:stypes   ] = []
+          @model[:constructions][lc][:surfaces ] = []
+          @model[:constructions][lc][:spaces   ] = []
+
+          # Generate TBD input hashes for both :good & :bad PSI factor sets.
+          # This depends solely on assigned wall constructions (e.g. steel- vs
+          # wood-framed) - not roof or floor constructions. Until space- and
+          # storey-specific structure/construction customization is enabled in
+          # BTAP, this is set for the entire building. In other words - for now
+          # - there should be a single assigned layered construction for all
+          # walls in a BTAP-altered OpenStudio model.
+          if stypes == :walls
+            @model[:constructions][lc][:lp_bad ] = self.inputs(strc, :lp, :bad )
+            @model[:constructions][lc][:lp_good] = self.inputs(strc, :lp, :good)
+            @model[:constructions][lc][:hp_bad ] = self.inputs(strc, :hp, :bad )
+            @model[:constructions][lc][:hp_good] = self.inputs(strc, :hp, :good)
+          end
+        end
+
+        # Select lowest applicable air film resistances (given surface slope).
+        film = [@model[:constructions][lc][:filmRSI], surface[:filmRSI]].min
+
+        @model[:constructions][lc][:filmRSI ] = film
+        @model[:constructions][lc][:stypes  ] << stypes    # expect 1x
+        @model[:constructions][lc][:surfaces] << id        # expect many
+        @model[:constructions][lc][:spaces  ] << srf.space # expect less
       end
 
-      # Generate native TBD input Hashes for the model, for both :good & :bad
-      # PSI factor sets. The typical TBD use case involves writing out the
-      # contents of either Hash (e.g. JSON::pretty_generate) as a "tbd.json"
-      # input file, to save under a standard OpenStudio "files" folder. At
-      # runtime, TBD then reopens the JSON file and populates its own data
-      # model in memory. Yet BTAP is not a typical use case. To avoid writing
-      # out (then re-reading) TBD JSON files/hashes (i.e. resource intensive),
-      # BTAP/TBD instead populates the TBD data model directly.
-      @model[:lp_bad ] = self.inputs(:lp, :bad )
-      @model[:lp_good] = self.inputs(:lp, :good)
-      @model[:hp_bad ] = self.inputs(:hp, :bad )
-      @model[:hp_good] = self.inputs(:hp, :good)
+      # Loop through all tracked deratable constructions. Ensure a single
+      # surface type per construction. Ensure at least one wall construction.
+      @model[:constructions].values.each { |v| v[:stypes].uniq! }
+      nb = 0
 
-      @model[:osm    ] = model
+      @model[:constructions].each do |lc, v|
+        if v[:stypes].size != 1
+          lgs << "Multiple surface types per construction (#{mth})?"
+          return false
+        else
+          v[:stypes] = v[:stypes].first
+        end
+
+        nb += 1 if v[:stypes] == :walls
+      end
+
+      if nb < 1
+        lgs << "No deratable walls (#{mth})?"
+        return false
+      end
+
+      @model[:osm] = model
 
       true
     end
 
     ##
-    # Generate (native) TBD input hash.
+    # Generate TBD input hash.
     #
+    # @param structure [BTAP::Structure] a BTAP STRUCTURE object
     # @param perform [Symbol] :lp or :hp wall variant
     # @param quality [Symbol] :bad or :good PSI-factor
     #
-    # @return [Hash] native TBD inputs
-    def inputs(perform = :hp, quality = :good)
+    # @return [Hash] TBD inputs
+    def inputs(structure = nil, perform = :hp, quality = :good)
       input   = {}
       psis    = {} # construction-specific PSI sets
-      sptypes = {} # space type-specific references to previous PSI sets
-      perform = :hp   unless perform == :lp  || perform == :hp
-      quality = :good unless quality == :bad || quality == :good
+      perform = :hp   unless [:lp, :hp].include?(perform)
+      quality = :good unless [:bad, :good].include?(quality)
 
-      # Once building-type construction selection is introduced within BTAP,
-      # define default TBD "building" PSI set. In the meantime, this is added
-      # strictly as a backup solution (just in case).
-      building = self.set(STEL1, quality) if perform == :lp
-      building = self.set(STEL2, quality) if perform == :hp
+      # A single PSI set for the entire building, based strictly on exterior
+      # wall selection. Adapt once BTAP::Structure supports STRUCTURE
+      # assignements per OpenStudio's building-to-space hierarchy, e.g. "cmu"
+      # gymnasium walls in an otherwise "steel"post/frame school. @todo
+      assembly = self.costed_assembly(structure, :walls, perform)
+      building_psi = self.set(assembly, quality)
 
-      psis[ building[:id] ] = building
-
-      # Collect unique BTAP/TBD instances.
-      combo = "#{perform.to_s}_#{quality.to_s}".to_sym
-
-      @model[:sptypes].values.each do |sptype|
-        next unless sptype.key?(combo)
-
-        psi = sptype[combo]
-        next if psis.key?(psi[:id])
-
-        psis[ psi[:id] ] = psi
-      end
+      psis[ building_psi[:id] ] = building_psi
 
       # TBD JSON schema added as a reminder. No schema validation in BTAP.
       schema = "https://github.com/rd2/tbd/blob/master/tbd.schema.json"
 
       input[:schema     ] = schema
       input[:description] = "TBD input for BTAP" # append run # ?
-      input[:psis       ] = psis.values
-
-      @model[:sptypes].values.each do |sptype|
-        next unless sptype.key?(combo)
-        next unless sptype.key?(:sptype)
-        next if sptypes.key?(sptype[:sptype])
-
-        sptypes[ sptype[:sptype] ] = { psi: sptype[combo][:id] }
-      end
-
-      sptypes.each do |id, sptype|
-        input[:spacetypes] = [] unless input.key?(:spacetypes)
-        input[:spacetypes] << { id: id, psi: sptype[:psi] }
-      end
-
-      input[:building] = { psi: building[:id] }
+      input[:psis       ] = psis.values          # maybe more than 1 in future
+      input[:building   ] = { psi: building_psi[:id] }
 
       input
     end
@@ -1460,8 +1011,9 @@ module BTAP
     #
     # @return [Boolean] true if BTAP/TBD tally is successful
     def gen_tallies
-      edges  = {}
+      edges = {}
       return false unless @model.key?(:io)
+      return false unless @model.key?(:constructions)
       return false unless @model[:io].key?(:edges)
 
       @model[:io][:edges].each do |e|
@@ -1478,10 +1030,6 @@ module BTAP
       return false if edges.empty?
 
       @tally[:edges] = edges
-
-      # Add final selection of (uprated) Uo factors per BTAP construction.
-      return true unless @model.key?(:constructions)
-
       @tally[:constructions] = @model[:constructions]
 
       true
@@ -1494,34 +1042,33 @@ module BTAP
     def gen_feedback
       lgs = @feedback[:logs]
       return false unless @model.key?(:complies) # all model constructions
-      return false unless @model.key?(:comply  ) # surface type specific ...
-      return false unless @model.key?(:argh    ) # BTAP/TBD inputs + ouputs
+      return false unless @model.key?(:comply)   # surface type specific ...
+      return false unless @model.key?(:argh)     # BTAP/TBD inputs + ouputs
+      return false unless @model.key?(:stypes)   # :walls, :roofs, :floors
 
       argh = @model[:argh]
 
       # Uprating. Report first on surface types (compliant or not).
-      [:walls, :floors, :roofs].each do |stypes|
+      @model[:stypes].each do |stypes|
         next unless @model[:comply].key?(stypes)
 
         ut  = format("%.3f", argh[stypes][:ut])
-        lg  = "Compliant "         if @model[:comply][stypes]
-        lg  = "Non-compliant " unless @model[:comply][stypes]
+        lg  = @model[:comply][stypes] ? "Compliant " : "Non-compliant "
         lg += "#{stypes}: Ut #{ut} W/m2.K"
         lgs << lg
 
         # Report then on required Uo factor per construction (compliant or not).
-        @model[:constructions].each do |id, construction|
-          next unless construction.key?(:stypes   )
-          next unless construction.key?(:uo       )
-          next unless construction.key?(:compliant)
-          next unless construction.key?(:surfaces )
-          next unless construction[:stypes  ] == stypes
-          next     if construction[:surfaces].empty?
+        @model[:constructions].each do |lc, v|
+          next unless v.key?(:stypes)
+          next unless v.key?(:uo)
+          next unless v.key?(:compliant)
+          next unless v.key?(:surfaces)
+          next unless v[:stypes  ] == stypes
+          next     if v[:surfaces].empty?
 
-          uo  = format("%.3f", construction[:uo])
-          lg  = "   Compliant "         if construction[:compliant]
-          lg  = "   Non-compliant " unless construction[:compliant]
-          lg += "#{id} Uo #{uo} (W/K.m2)"
+          uo  = format("%.3f", v[:uo])
+          lg  = v[:compliant] ? "   Compliant " : "   Non-compliant "
+          lg += "#{lc.nameString} Uo #{uo} (W/K.m2)"
           lgs << lg
         end
       end
@@ -1560,56 +1107,56 @@ module BTAP
       true
     end
 
-    def get_material_quantities()
-      material_quantities = {}
-      csv = CSV.read("#{File.dirname(__FILE__)}/../../../data/inventory/thermal_bridging.csv", headers: true)
-      tally_edges = @tally[:edges].transform_keys(&:to_s)
-
-      tally_edges.each do |edge_type_full, value|
-        edge_type = edge_type_full.delete_suffix('convex')
-        edge_type = 'fenestration' if ['head', 'jamb', 'sill'].include?(edge_type)
-
-        value.each do |wall_ref_and_quality, quantity|
-          /(.*)\s(.*)/ =~ wall_ref_and_quality
-          wall_reference = $1
-          quality = $2
-
-          if wall_reference =='BTAP-ExteriorWall-SteelFramed-1'
-            wall_reference = 'BTAP-ExteriorWall-SteelFramed-2'
-          end
-
-          next if edge_type == 'transition'
-
-          result = csv.find { |row| row['edge_type'] == edge_type &&
-            row['quality'] == quality &&
-            row['wall_reference'] == wall_reference
-          }
-
-          if result.nil?
-            puts ("#{edge_type}-#{wall_reference}-#{quality}")
-            puts "not found in tb database"
-            next
-          end
-
-          # Split
-          material_opaque_id_layers = result['material_opaque_id_layers'].split(",")
-          id_layers_quantity_multipliers = result['id_layers_quantity_multipliers'].split(",")
-
-          material_opaque_id_layers.zip(id_layers_quantity_multipliers).each do |id, scale|
-            material_quantities[id] = 0.0 if material_quantities[id].nil?
-            material_quantities[id] = material_quantities[id] + scale.to_f * quantity.to_f
-          end
-        end
-      end
-
-      material_opaque_id_quantities = []
-
-      material_quantities.each do |id,quantity|
-        material_opaque_id_quantities << { 'materials_opaque_id' => id, 'quantity' => quantity, 'domain'=> 'thermal_bridging' }
-      end
-
-      return material_opaque_id_quantities
-    end
+    # def get_material_quantities()
+    #   material_quantities = {}
+    #   csv = CSV.read("#{File.dirname(__FILE__)}/../../../data/inventory/thermal_bridging.csv", headers: true)
+    #   tally_edges = @tally[:edges].transform_keys(&:to_s)
+    #
+    #   tally_edges.each do |edge_type_full, value|
+    #     edge_type = edge_type_full.delete_suffix('convex')
+    #     edge_type = 'fenestration' if ['head', 'jamb', 'sill'].include?(edge_type)
+    #
+    #     value.each do |wall_ref_and_quality, quantity|
+    #       /(.*)\s(.*)/ =~ wall_ref_and_quality
+    #       wall_reference = $1
+    #       quality = $2
+    #
+    #       if wall_reference =='BTAP-ExteriorWall-SteelFramed-1'
+    #         wall_reference = 'BTAP-ExteriorWall-SteelFramed-2'
+    #       end
+    #
+    #       next if edge_type == 'transition'
+    #
+    #       result = csv.find { |row| row['edge_type'] == edge_type &&
+    #         row['quality'] == quality &&
+    #         row['wall_reference'] == wall_reference
+    #       }
+    #
+    #       if result.nil?
+    #         puts ("#{edge_type}-#{wall_reference}-#{quality}")
+    #         puts "not found in tb database"
+    #         next
+    #       end
+    #
+    #       # Split
+    #       material_opaque_id_layers = result['material_opaque_id_layers'].split(",")
+    #       id_layers_quantity_multipliers = result['id_layers_quantity_multipliers'].split(",")
+    #
+    #       material_opaque_id_layers.zip(id_layers_quantity_multipliers).each do |id, scale|
+    #         material_quantities[id] = 0.0 if material_quantities[id].nil?
+    #         material_quantities[id] = material_quantities[id] + scale.to_f * quantity.to_f
+    #       end
+    #     end
+    #   end
+    #
+    #   material_opaque_id_quantities = []
+    #
+    #   material_quantities.each do |id,quantity|
+    #     material_opaque_id_quantities << { 'materials_opaque_id' => id, 'quantity' => quantity, 'domain'=> 'thermal_bridging' }
+    #   end
+    #
+    #   return material_opaque_id_quantities
+    # end
   end
 end
 
@@ -1704,13 +1251,4 @@ end
 #       BTAP costing requires extending the areas (m2) of OpenStudio wall
 #       surfaces (along parapet edges) by 3'-6" (1.1 m) x parapet lengths, to
 #       account for the extra cost of completely wrapping the parapet in
-#       insulation for "good" (HP) details. See final TBD tally, @todo.
-#
-# NOTE: Overview of current BTAP building/space type construction link, e.g.:
-#
-#         - ALL dwelling units/buildings < 5 stories are wood-framed
-#         - ALL dwelling units/buildings > 4 stories are steel-framed
-#
-#       ... yet all (public) washrooms, corridors, stairwells, etc. are
-#       steel-framed (regardless of building type). Overview of possible fixes.
-#       @todo.
+#       insulation for "good" (HP) details. See final TBD tally - @todo.

@@ -161,8 +161,8 @@ module BTAP
     #   - load-bearing basement walls
     #   - basement columns, shear walls, etc. (internal mass)
     #
-    # Users can optionally assign STRUCTURE, FRAMING, CLADDING & FINISH options,
-    # as per OpenStudio's building-to-space hierarchy, e.g.:
+    # Hopefully, users may also assign STRUCTURE, FRAMING, CLADDING & FINISH
+    # options per OpenStudio's building-to-space hierarchy, e.g. - @todo:
     #
     #   Example A: Composite STRUCTURE:
     #     - "concrete" post/beam STRUCTURE for first 4 building stories
@@ -284,7 +284,8 @@ module BTAP
     # @param model [OpenStudio::Model::Model] a model
     # @param cat [:to_s] building category
     # @param lload [:to_f] non-occupant liveload (kg/m2 of floor area)
-    def initialize(model = nil, cat = "commerce", lload = 30)
+    # def initialize(model = nil, cat = "commerce", lload = 30)
+    def initialize(model = nil, activity = nil)
       mth       = "BTAP::Structure::#{__callee__}"
       @feedback = {logs: []}
       lgs       = @feedback[:logs]
@@ -293,6 +294,14 @@ module BTAP
         lgs << "Invalid or empty OpenStudio model (#{mth})"
         return
       end
+
+      unless activity.is_a?(BTAP::Activity)
+        lgs << "Invalid or empty BTAP::Activity instance (#{mth})"
+        return
+      end
+
+      cat = activity.category
+      lload = activity.liveload
 
       if cat.respond_to?(:to_s)
         cat = cat.to_s.downcase
@@ -319,9 +328,9 @@ module BTAP
       end
 
       # Cap internal mass density to 1000 kg/m3, and thickness to 6".
-      rho  = 1000.0
-      th   = 0.150
-      bldg = model.getBuilding
+      rho   = 1000.0
+      th    = 0.150
+      bldg  = model.getBuilding
 
       @category  = cat
       @structure = data[:category][cat][:small]
@@ -360,8 +369,9 @@ module BTAP
 
       # Set exterior cladding.
       @cladding = :light
-      @cladding = :medium if @category == "public"
-      @cladding = :heavy  if @category == "robust"
+      @cladding = :medium if @structure == :cmu
+      @cladding = :medium if @category  == "public"
+      @cladding = :heavy  if @category  == "robust"
 
       # Set interior finish.
       @finish = :light

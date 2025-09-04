@@ -28,7 +28,7 @@ class NECB_Dimensions_Tests < Minitest::Test
       model = translator.loadModel(path)
 
       err_msg = "BTAP/Dimensions: empty model (#{cas})?"
-      assert(model.is_initialized, err_msg)
+      refute_empty(model, err_msg)
       model = model.get
 
       id = case building
@@ -41,9 +41,9 @@ class NECB_Dimensions_Tests < Minitest::Test
       space = model.getSpaceByName(id)
 
       err_msg = "BTAP/Dimensions: empty space '#{id}' (#{cas})?"
-      assert(space.is_initialized, err_msg)
+      refute_empty(space, err_msg)
       space  = space.get
-      
+
       height = BTAP::Geometry::Spaces.space_height(space)
       width  = BTAP::Geometry::Spaces.space_width(space)
 
@@ -62,9 +62,9 @@ class NECB_Dimensions_Tests < Minitest::Test
                 end
 
       err_msg = "BTAP/Dimensions: height '#{id}' (#{cas})?"
-      assert(height.round(2) == hauteur.round(2), err_msg)
+      assert_in_delta(height, hauteur, 0.01, err_msg)
       err_msg = "BTAP/Dimensions: width '#{id}' (#{cas})?"
-      assert(width.round(2) == largeur.round(2), err_msg)
+      assert_in_delta(width, largeur, 0.01, err_msg)
 
       # Higher level feedback.
       fdback << "#{cas} : #{id} : height = #{height.round(2)} : width = #{width.round(2)}"

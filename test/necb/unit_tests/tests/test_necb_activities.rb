@@ -23,10 +23,10 @@ class NECB_Activity_Tests < Minitest::Test
     # Intial test condition.
     @test_passed = true
 
-    # Range of test options.
+    # Range of NECB templates.
     @templates = [
-      "NECB2011",
-      # "NECB2015",
+      # "NECB2011",
+      "NECB2015",
       # "NECB2017",
       # "NECB2020"
     ]
@@ -40,12 +40,14 @@ class NECB_Activity_Tests < Minitest::Test
       'LargeHotel',
       'LargeOffice',
       'LEEPMidriseApartment',
+      'LEEPMultiTower',
       'LEEPPointTower',
       'LEEPTownHouse',
-      'LEEPMultiTower',
       'LowRiseApartment',
       'MediumOffice',
       'MidriseApartment',
+      # 'NorthernEducation',  # *
+      # 'NorthernHealthCare', # *
       'Outpatient',
       'PrimarySchool',
       'QuickServiceRestaurant',
@@ -57,10 +59,17 @@ class NECB_Activity_Tests < Minitest::Test
       'Warehouse'
     ]
 
+    # (*) 'NorthernEducation' and 'NorthernHealthCare' have neither:
+    #       - Building.standardsNumberOfStories
+    #       - Building.standardsNumberOfAboveStories
+    #
+    #     ... and so both templates/models fail early on, irrespective of
+    #         BTAP::Activity features - @todo.
+
     fdback = []
     fdback << ""
     fdback << "BTAP::Activity Unit Tests"
-    fdback << "~~~~ ~~~~ ~~~~ ~~~~ ~~~~ "
+    fdback << "~~~~  ~~~~~~~~ ~~~~ ~~~~~ "
 
     @epws.sort.each          do |epw      |
       @buildings.sort.each   do |building |
@@ -139,7 +148,7 @@ class NECB_Activity_Tests < Minitest::Test
               assert_equal(prop, "unconditioned", err_msg)
             else
               err_msg = "BTAP::Activity #{id} plenum (#{cas})?"
-              assert(plnums.include?(building), err_msg)
+              assert_includes(plnums, building, err_msg)
 
               err_msg = "BTAP::Activity #{id} unconditioned (#{cas})?"
               assert_equal(prop, "nonresconditioned", err_msg)
@@ -149,13 +158,13 @@ class NECB_Activity_Tests < Minitest::Test
           a = st.activity
 
           err_msg = "Empty BTAP::Activity (#{cas})?"
-          assert(a.is_a?(BTAP::Activity), err_msg)
+          assert_kind_of(BTAP::Activity, a, err_msg)
           err_msg = "BTAP::Activity activity (#{cas})?"
-          assert(a.activity.is_a?(String), err_msg)
+          assert_kind_of(String, a.activity, err_msg)
           err_msg = "BTAP::Activity category (#{cas})?"
-          assert(a.category.is_a?(String), err_msg)
+          assert_kind_of(String, a.category, err_msg)
           err_msg = "BTAP::Activity liveload (#{cas})?"
-          assert(a.liveload.is_a?(Numeric), err_msg)
+          assert_kind_of(Numeric, a.liveload, err_msg)
 
           load = "liveload #{a.liveload.round} kg/m2"
 

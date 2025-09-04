@@ -52,8 +52,6 @@ module BTAP
     # scale) "housing". See lib/openstudio-standards/btap/structure.rb.
     @@data = {bldg: {}, space: {}}
 
-    @@data[:templates] = ["NECB2011", "NECB2015", "NECB2017", "NECB2020"]
-
     # Hard setting path for both files (temporary @todo).
     @@data[:bldg ][:file      ] = File.join(__dir__, "NECB_building_types.csv")
     @@data[:space][:file      ] = File.join(__dir__, "NECB_space_types.csv")
@@ -74,7 +72,7 @@ module BTAP
       #  "care,  20, housing, care, health/clinic/multi/residential, residential"
       #
       #   COL1: BTAP building ACTIVITY e.g. "care"
-      #   COL2: non-occupant liveload  e.g. 20 kg/m2, ~1/12 of NECB min liveload
+      #   COL2: non-occupant liveload  e.g. 20 kg/m2, ~1/12 of NBC min liveload
       #   COL3: BTAP building CATEGORY e.g. "housing"
       #   COL4: selected sub-string(s) e.g. "care", as in "Long-term care"
       #   COL5: rejected sub-string(s) e.g. "health", "multi", "residential"
@@ -91,13 +89,13 @@ module BTAP
       # A "long-term care" facility (e.g. NECB2020 building type, currently
       # found in BTAP datasets) would be identified as belonging to activity
       # 'care' by catching the substring "care" (COL4) in any of the
-      # NECB building types (e.g. JSON, CSV, XLSX files). As the same substring
-      # "care" is also found in both NECB building types:
+      # NECB building types (e.g. JSON, CSV, XLSX files). Yet the same substring
+      # "care" is found in both NECB building types:
       #
-      #   - Long-term care, and
-      #   - Health-care clinic
+      #   - "Long-term care"
+      #   - "Health-care clinic"
       #
-      # ... rejected substrings (COL6) prune out unwanted picks. By selecting
+      # ... rejected substrings (COL5) prune out unwanted picks. By selecting
       # COL4 substrings, then rejecting COL5 substrings, there should be a
       # single selected row. See NECB unit test test_necb_activities.rb.
       table.each do |row|
@@ -135,11 +133,11 @@ module BTAP
       #
       #   COL1: BTAP space ACTIVITY    e.g. "units::care"
       #   COL2: selected sub-string(s) e.g. "unit"
-      #   COL3: rejected sub-string    e.g. "museum"
+      #   COL3: rejected sub-string    e.g. "residential"
       #   COL4: fallback (if missing)  e.g. "units::residential"
       #
       # First, BTAP space 'activity' entries are namespaced, e.g.:
-      #   - "units": 1-word descriptor of the nature of the space 'activity'
+      #   - "units": 1-word descriptor on the nature of the space 'activity'
       #   - "care": references a building 'activity', see @@data[:bldg]
       #
       # There are 2 entries for BTAP space activity "units":
@@ -197,9 +195,6 @@ module BTAP
   class BTAP::Activity
     extend ActivityData
 
-    # @return [Integer] NECB template (e.g. "NECB2011")
-    attr_reader :template
-
     # @return [String] assigned or inferred building ACTIVITY (e.g. "warehouse")
     attr_reader :activity
 
@@ -220,11 +215,10 @@ module BTAP
     # Initialize BTAP Activity parameters.
     #
     # @param model [OpenStudio::Model::Model] a model
-    def initialize(model = nil, template = "NECB2011")
+    def initialize(model = nil)
       mth         = "BTAP::Activity::#{__callee__}"
       @feedback   = {logs: []}
       lgs         = @feedback[:logs]
-      @template   = template.respond_to?(:to_s) ? template.to_s : ""
       @activity   = ""
       @activities = {}
       @category   = ""
@@ -234,18 +228,8 @@ module BTAP
         return
       end
 
-      if template.empty?
-        lgs << "Invalid NECB template: #{template.class} (#{mth})"
-        return
-      else
-        unless data[:templates].include?(template)
-          lgs << "#{template}? Unknown NECB template (#{mth})"
-          return
-        end
-      end
-
-      # Tag spaces as un/conditioned with "space_conditioning_category". For now,
-      # this is simply determined based on whether spaces are:
+      # Tag spaces as un/conditioned with "space_conditioning_category". For
+      # now, this is simply determined based on whether spaces are:
       #   - part of the total floor area (i.e. occupied)
       #   - have "attic" included in their identifiers (i.e. unconditioned)
       #
@@ -445,9 +429,9 @@ module BTAP
       # typical office spaces (e.g. "openplan", "office"). This is odd, as NECBs
       # list "school/university" and "office" as admissible building types.
       # Inferring an overall building type/activity (e.g. "school"), based on
-      # the prevalence of space types in a model, becomes uncessarily
-      # challenging. A fallback solution is needed when predominant space types
-      # end up as "common" for a given model.
+      # the prevalence of space types (e.g. "classrooms") in a model, becomes
+      # unnecessarily challenging. A fallback solution is needed when
+      # predominant space types end up as "common" for a given model.
       #
       # One odd exception is 'audience' seating for an "auditorium", which is
       # found in all NECB editions. All listed 'audience' seating space types

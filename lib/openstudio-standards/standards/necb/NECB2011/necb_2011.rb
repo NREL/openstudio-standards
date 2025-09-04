@@ -39,7 +39,7 @@ class NECB2011 < Standard
   end
 
   # This method checks if a variable is a string.  If it is anything but a string it returns the default.  If it is a
-  # string set to "NECB_Default" it return the default.  Otherwise it returns the strirng set to it.
+  # string set to "NECB_Default" it return the default.  Otherwise it returns the string set to it.
   def convert_arg_to_string(variable:, default:)
     return default if variable.nil?
     if variable.is_a? String
@@ -280,7 +280,7 @@ class NECB2011 < Standard
                                    output_meters: nil,
                                    airloop_economizer_type: nil,
                                    baseline_system_zones_map_option: nil,
-                                   tbd_option: nil,
+                                   tbd_option: 'none',
                                    tbd_interpolate: false,
                                    necb_hdd: true,
                                    boiler_fuel: nil,
@@ -376,8 +376,8 @@ class NECB2011 < Standard
   # code versions without modifying the build_protoype_model method or copying it wholesale for a few changes.
   def model_apply_standard(model:,
                            construction_opt: '',
-                           tbd_option: nil,
-                           tbd_interpolate: nil,
+                           tbd_option: 'none',
+                           tbd_interpolate: false,
                            epw_file:,
                            custom_weather_folder: nil,
                            btap_weather: true,
@@ -460,7 +460,7 @@ class NECB2011 < Standard
     srr_set = convert_arg_to_f(variable: srr_set, default: -1)
     srr_opt = convert_arg_to_string(variable: srr_opt, default: '')
     construction_opt = convert_arg_to_string(variable: construction_opt, default: '')
-    massive = construction_opt == 'structure' ? true : false
+    massive = construction_opt == 'structure'
     necb_hdd = convert_arg_to_bool(variable: necb_hdd, default: true)
     boiler_fuel = convert_arg_to_string(variable: boiler_fuel, default: nil)
     boiler_cap_ratio = convert_arg_to_string(variable: boiler_cap_ratio, default: nil)
@@ -488,8 +488,8 @@ class NECB2011 < Standard
 
     output_meters = check_output_meters(output_meters: output_meters) if oerd_utility_pricing
 
-    assign_building_activity(model)
-    assign_building_structure(model, @activity.category, @activity.liveload)
+    assign_building_activity(model: model)
+    assign_building_structure(model: model, activity: @activity)
     apply_loads(model: model,
                 lights_type: lights_type,
                 lights_scale: lights_scale,
@@ -522,11 +522,13 @@ class NECB2011 < Standard
                                srr_opt: srr_opt,
                                necb_hdd: necb_hdd)
     apply_thermal_bridging(model: model,
-                           tbd_option: tbd_option,
-                           tbd_interpolate: tbd_interpolate,
-                           wall_U: ext_wall_cond,
-                           floor_U: ext_floor_cond,
-                           roof_U: ext_roof_cond)
+                           necb_hdd: necb_hdd,
+                           structure: @structure,
+                           option: tbd_option,
+                           interpolate: tbd_interpolate,
+                           wallU: ext_wall_cond,
+                           floorU: ext_floor_cond,
+                           roofU: ext_roof_cond)
     apply_auto_zoning(model: model,
                       sizing_run_dir: sizing_run_dir,
                       lights_type: lights_type,
@@ -808,15 +810,31 @@ class NECB2011 < Standard
     model.getInsideSurfaceConvectionAlgorithm.setAlgorithm('TARP')
     model.getOutsideSurfaceConvectionAlgorithm.setAlgorithm('TARP')
 
-    construction_opt = '' unless construction_opt.respond_to?(:to_s)
-    bldg_structure   = '' unless bldg_structure.respond_to?(:to_s)
+    construction_opt = '' unless construction_opt.respond_to?(:to_sym)
+    bldg_structure   = '' unless bldg_structure.respond_to?(:to_sym)
     construction_opt = construction_opt.to_s.downcase
     bldg_structure   = bldg_structure.to_s.downcase.to_sym
     bldg_structures  = @structure.data[:structure].keys
 
     if construction_opt == 'structure' && bldg_structures.include?(bldg_structure)
+      argh            = {}
+      argh[:eWallU  ] = ext_wall_cond          if ext_wall_cond
+      argh[:eFloorU ] = ext_floor_cond         if ext_floor_cond
+      argh[:eRoofU  ] = ext_roof_cond          if ext_roof_cond
+      argh[:gWallU  ] = ground_wall_cond       if ground_wall_cond
+      argh[:gFloorU ] = ground_floor_cond      if ground_floor_cond
+      argh[:gRoofU  ] = ground_roof_cond       if ground_roof_cond
+      argh[:doorU   ] = door_construction_cond if door_construction_cond
+      argh[:fenU    ] = fixed_window_cond      if fixed_window_cond
+      argh[:skyU    ] = skylight_solar_trans   if skylight_solar_trans
+      argh[:doorSHGC] = glass_door_solar_trans if glass_door_solar_trans
+      argh[:fenSHGC ] = fixed_wind_solar_trans if fixed_wind_solar_trans
+      argh[:skySHGC ] = skylight_solar_trans   if skylight_solar_trans
+
       assign_contruction_to_adiabatic_surfaces(model)
-      add_construction_sets(model, necb_hdd)
+      ok = add_construction_sets(model, necb_hdd, argh)
+
+      raise('NECB2011: Failed to assign default construction sets') unless ok
     else
       model_add_constructions(model)
       apply_standard_construction_properties(model: model,
@@ -1096,76 +1114,78 @@ class NECB2011 < Standard
   end
 
   ##
-  # Assigns BTAP building ACTIVITY.
+  # Initiates a BTAP building ACTIVITY.
   #
   # @param model [OpenStudio::Model::Model] a model
   #
-  # @return [Symbol] BTAP building ACTIVITY (see logs if failed)
-  def assign_building_activity(model = nil)
-    @activity = BTAP::Activity.new(model, @template)
+  # @return [BTAP::Activity] a BTAP building ACTIVITY (see logs if failed)
+  def assign_building_activity(model: nil)
+    @activity = BTAP::Activity.new(model)
   end
 
   ##
-  # Assigns BTAP building STRUCTURE.
+  # Initiates a BTAP building STRUCTURE.
   #
   # @param model [OpenStudio::Model::Model] a model
-  # @param cat [:to_s] a building category (e.g. "residential")
-  # @param lload [:to_f] non-occupant liveload (kg/m2 of floor area)
+  # @param activity [BTAP::Activity] a BTAP building ACTIVITY object
   #
-  # @return [Symbol] BTAP building STRUCTURE (see logs if failed)
-  def assign_building_structure(model = nil, cat = "commerce", lload = 30)
-    @structure = BTAP::Structure.new(model, cat, lload)
+  # @return [BTAP::Structure] a BTAP building STRUCTURE (see logs if failed)
+  def assign_building_structure(model: nil, activity: nil)
+    @structure = BTAP::Structure.new(model, activity)
   end
 
   ##
-  # (Optionally) uprates, then derates, envelope surface constructions due to
+  # (Optionally) uprates - then derates - envelope surface constructions due to
   # MAJOR thermal bridges (e.g. roof parapets, corners, fenestration
   # perimeters). See lib/openstudio-standards/btap/bridging.rb, which relies on
   # the Thermal Bridging & Derating (TBD) gem.
   #
   # @param model [OpenStudio::Model::Model] an OpenStudio model
-  # @param tbd_option [String] BTAP/TBD option
-  # @param tbd_interpolate [Boolean] true if TBD interpolates between costed Uo
-  # @param wall_U [Double] wall conductance in W/m2.K (nil by default)
-  # @param floor_U [Double] floor conductance in W/m2.K (nil by default)
-  # @param roof_U [Double] roof conductance in W/m2.K (nil by default)
+  # @param necb_hdd [Boolean] whether to rely on BTAP to set HDD (vs stat file)
+  # @param structure [BTAP::Structure] BTAP Structure object
+  # @param option [#to_sym] BTAP/TBD option e.g. "uprate"
+  # @param interpolate [Boolean] true if TBD interpolates among Uo (uprating)
+  # @param wallU [Numeric] optional wall Ut in W/m2.K if uprating
+  # @param floorU [Numeric] optional floor Ut in W/m2.K if uprating
+  # @param roofU [Numeric] optional roof Ut in W/m2.K if uprating
   #
   # @return [Boolean] true if successful, e.g. no errors, compliant if uprated
   def apply_thermal_bridging(model: nil,
-                             tbd_option: 'none',
-                             tbd_interpolate: false,
-                             wall_U: nil,
-                             floor_U: nil,
-                             roof_U: nil)
-    return false unless model.is_a?(OpenStudio::Model::Model)
-    return false unless tbd_option.respond_to?(:to_s)
+                             necb_hdd: true,
+                             structure: nil,
+                             option: 'none',
+                             interpolate: false,
+                             wallU: nil,
+                             floorU: nil,
+                             roofU: nil)
+    necb_hdd = true unless [true, false].include?(necb_hdd)
 
-    tbd_option = tbd_option.to_s
-    # 4x options:
-    #  - 'none' (TBD is ignored)
-    #  - derate using 'bad' PSI factors (BTAP-costed)
-    #  - derate using 'good' PSI factors (BTAP-costed)
-    #  - 'uprate' (then derate), i.e. iterative process (BTAP-costed)
-    ok = tbd_option == 'bad' || tbd_option == 'good' || tbd_option == 'uprate'
-    return true  if tbd_option == 'none'
-    return false unless ok
+    hdd    = get_necb_hdd18(model: model, necb_hdd: necb_hdd)
+    wallU  = wallU  ? wallU  : max_u_necb("wall", "outdoors", hdd)
+    floorU = floorU ? floorU : max_u_necb("floor", "outdoors", hdd)
+    roofU  = roofU  ? roofU  : max_u_necb("roofceiling", "outdoors", hdd)
 
-    argh = {} # BTAP/TBD arguments
-    ok = tbd_interpolate == true || tbd_interpolate == false
-    argh[:interpolate] = tbd_interpolate if ok
-    argh[:interpolate] = false       unless ok
+    argh             = {}
+    argh[:structure] = structure
+    argh[:walls    ] = { uo: wallU  }
+    argh[:floors   ] = { uo: floorU }
+    argh[:roofs    ] = { uo: roofU  }
 
-    argh[:walls ] = { uo: wall_U  }
-    argh[:floors] = { uo: floor_U }
-    argh[:roofs ] = { uo: roof_U  }
-
-    if tbd_option == 'uprate'
-      argh[:walls  ][:ut] = wall_U
-      argh[:floors ][:ut] = floor_U
-      argh[:roofs  ][:ut] = roof_U
-    elsif tbd_option == 'good'
+    case option.downcase
+    when 'none'
+      return true
+    when 'uprate'
+      argh[:walls  ][:ut] = wallU
+      argh[:floors ][:ut] = floorU
+      argh[:roofs  ][:ut] = roofU
+    when 'good'
       argh[:quality] = :good
-    end # default == :bad
+    else
+      argh[:quality] = :bad
+    end
+
+    argh[:interpolate] = interpolate
+    argh[:interpolate] = false unless [true, false].include?(interpolate)
 
     @tbd = BTAP::Bridging.new(model, argh)
 

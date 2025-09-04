@@ -10,6 +10,9 @@ class NECB_Skylights_Tests < Minitest::Test
     tres = '../expected_results/necb_skylights_test_results.json'
     sizd = 'sizing_folder'
 
+    plnums = ["LargeOffice", "MediumOffice"]
+    attics = ["FullServiceRestaurant", "QuickServiceRestaurant", "SmallOffice"]
+
     # File/folder paths.
     @output_folder         = File.join(__dir__, outd)
     @expected_results_file = File.join(__dir__, eres)
@@ -35,10 +38,18 @@ class NECB_Skylights_Tests < Minitest::Test
       'FullServiceRestaurant',
       'LargeOffice',
       'MediumOffice',
-      # 'NorthernEducation', # fails to open/validate with OS v3.7.0
+      # 'NorthernEducation',  # *
+      # 'NorthernHealthCare', # *
       'QuickServiceRestaurant',
       'SmallOffice'
     ]
+
+    # (*) 'NorthernEducation' and 'NorthernHealthCare' have neither:
+    #       - Building.standardsNumberOfStories
+    #       - Building.standardsNumberOfAboveStories
+    #
+    #     ... and so both templates/models fail early on, irrespective of
+    #         BTAP::Activity features - @todo.
 
     # NOTE: Skipping NorthernEducation for now:
     #   Minitest::UnexpectedError: RuntimeError: validation of model failed.
@@ -69,32 +80,33 @@ class NECB_Skylights_Tests < Minitest::Test
             model = st.model_create_prototype_model(template:template,
                                                     epw_file: epw,
                                                     building_type: building,
+                                                    construction_opt: 'structure',
                                                     srr_opt: option,
                                                     sizing_run_dir: @sizing_run_dir)
 
             # OSut addSkylight-specific info/warning/error feedback.
-            err_msg = "BTAP/OSut: OSut Hash (#{cas})?"
-            assert(st.osut.is_a?(Hash), err_msg)
-            err_msg = "BTAP/OSut: Missing nominal gross roof area (#{cas})?"
+            err_msg = "BTAP/Sky OSut Hash (#{cas})?"
+            assert_kind_of(Hash, st.osut, err_msg)
+            err_msg = "BTAP/Sky: Missing nominal gross roof area (#{cas})?"
             assert(st.osut.key?(:gra0), err_msg)
-            err_msg = "BTAP/OSut: Missing effective gross roof area (#{cas})?"
+            err_msg = "BTAP/Sky: Missing effective gross roof area (#{cas})?"
             assert(st.osut.key?(:graX), err_msg)
-            err_msg = "BTAP/OSut: Nominal gross roof area (#{cas})?"
-            assert(st.osut[:gra0].respond_to?(:to_f), err_msg)
-            err_msg = "BTAP/OSut: Effective gross roof area (#{cas})?"
-            assert(st.osut[:graX].respond_to?(:to_f), err_msg)
-            err_msg = "BTAP/OSut: Negative nomianl gross roof area (#{cas})?"
+            err_msg = "BTAP/Sky: Nominal gross roof area (#{cas})?"
+            assert_kind_of(Float, st.osut[:gra0], err_msg)
+            err_msg = "BTAP/Sky: Effective gross roof area (#{cas})?"
+            assert_kind_of(Float, st.osut[:graX], err_msg)
+            err_msg = "BTAP/Sky: Negative nomianl gross roof area (#{cas})?"
             assert(st.osut[:gra0] > 0, err_msg)
-            err_msg = "BTAP/OSut: Negative effective gross roof area (#{cas})?"
+            err_msg = "BTAP/Sky: Negative effective gross roof area (#{cas})?"
             assert(st.osut[:graX] > 0, err_msg)
-            err_msg = "BTAP/OSut: Missing log status (#{cas})?"
+            err_msg = "BTAP/Sky: Missing log status (#{cas})?"
             assert(st.osut.key?(:status), err_msg)
-            err_msg = "BTAP/OSut: Log status (#{cas})?"
-            assert(st.osut[:status].respond_to?(:to_i), err_msg)
-            err_msg = "BTAP/OSut: Missing OSut logs (#{cas})?"
+            err_msg = "BTAP/Sky: Log status (#{cas})?"
+            assert_kind_of(Integer, st.osut[:status], err_msg)
+            err_msg = "BTAP/Sky: Missing OSut logs (#{cas})?"
             assert(st.osut.key?(:logs), err_msg)
-            err_msg = "BTAP/OSut: OSut logs (#{cas})?"
-            assert(st.osut[:logs].is_a?(Array), err_msg)
+            err_msg = "BTAP/Sky: OSut logs (#{cas})?"
+            assert_kind_of(Array, st.osut[:logs], err_msg)
 
             # Tally skylight areas. Compare with GRAs.
             skm2 = 0
@@ -105,7 +117,7 @@ class NECB_Skylights_Tests < Minitest::Test
               skm2 += sub.grossArea
             end
 
-            assert(skm2 > 0, "BTAP/OSut: Negative skylight area (#{cas})?")
+            assert(skm2 > 0, "BTAP/Sky: area (#{cas})?")
             gra0 = st.osut[:gra0] # gross roof area (GRA) in m2, as per SDK
             graX = st.osut[:graX] # GRA minus overhang areas (see SmallOffice)
 
@@ -138,16 +150,89 @@ class NECB_Skylights_Tests < Minitest::Test
             # EnergyPlus, OpenStudio & OpenStudio-Standards would report here a
             # SRR% of 4.5%. The effective 'ratio' would vary based on geometry,
             # e.g. larger building footprint, wider overhangs.
-            if building == 'SmallOffice'
-              err_msg = "BTAP/OSut: GRA0 <= GRAX (#{cas})?"
+            if building == "SmallOffice"
+              err_msg = "BTAP/Sky: GRA0 <= GRAX (#{cas})?"
               assert(gra0.round > graX.round, err_msg)
             else
-              err_msg = "BTAP/OSut: GRA0 != GRAX (#{cas})?"
-              assert(gra0.round == graX.round, err_msg)
+              err_msg = "BTAP/Sky: GRA0 != GRAX (#{cas})?"
+              assert_equal(gra0.round, graX.round, err_msg)
+            end
+
+            lc = nil
+
+            # Ensure insulated skylight well walls in attics.
+            if attics.include?(building)
+              spaces = model.getSpaces.reject { |s| s.partofTotalFloorArea }
+              err_msg = "BTAP/Sky: ! 1x attic (#{cas})?"
+              assert_equal(spaces.size, 1, err_msg)
+              space = spaces.first
+              err_msg = "BTAP/Sky: Conditioned attic (#{cas})?"
+              assert(TBD.unconditioned?(space))
+
+              space.surfaces.each do |s|
+                next unless s.surfaceType.downcase == "wall"
+                next if s.outsideBoundaryCondition.downcase == "outdoors"
+                err_msg = "BTAP/Sky: Non-defaulted skylight construction (#{cas})?"
+                assert(s.isConstructionDefaulted)
+                next unless lc.nil?
+
+                lc = s.construction
+                err_msg = "BTAP/Sky: Skylight well wall construction #{cas}?"
+                refute(lc.empty?)
+                lc = lc.get.to_LayeredConstruction
+                err_msg = "BTAP/Sky: Layered well wall construction #{cas}?"
+                refute(lc.empty?)
+                lc = lc.get
+                err_msg = "BTAP/Sky: Uninsulated well wall (#{cas})?"
+                assert_equal(TBD.rsi(lc, s.filmResistance).round(2), 4.85)
+              end
+            elsif plnums.include?(building)
+              spaces = model.getSpaces.reject { |s| s.partofTotalFloorArea }
+              err_msg = "BTAP/Sky: ! 3x plenums (#{cas})?"
+              assert_equal(spaces.size, 3, err_msg)
+
+              # Pick tallest plenum.
+              top = nil
+
+              spaces.each do |space|
+                space.surfaces.each do |s|
+                  ty = s.surfaceType.downcase
+                  bc = s.outsideBoundaryCondition.downcase
+                  next unless ty == "roofceiling"
+                  next unless bc == "outdoors"
+
+                  top = space
+                  break
+                end
+              end
+
+              err_msg = "BTAP/Sky: Top plenum (#{cas})?"
+              refute_nil(top, err_msg)
+
+              err_msg = "BTAP/Sky: Unconditioned plenum (#{cas})?"
+              refute(TBD.unconditioned?(top))
+
+              top.surfaces.each do |s|
+                next unless s.surfaceType.downcase == "wall"
+                next if s.outsideBoundaryCondition.downcase == "outdoors"
+                err_msg = "BTAP/Sky: Non-defaulted skylight construction (#{cas})?"
+                assert(s.isConstructionDefaulted)
+                next unless lc.nil?
+
+                lc = s.construction
+                err_msg = "BTAP/Sky: Skylight well wall construction #{cas}?"
+                refute(lc.empty?)
+                lc = lc.get.to_LayeredConstruction
+                err_msg = "BTAP/Sky: Layered well wall construction #{cas}?"
+                refute(lc.empty?)
+                lc = lc.get
+                err_msg = "BTAP/Sky: Insulated well wall (#{cas})?"
+                assert_equal(TBD.rsi(lc, s.filmResistance).round(2), 0.56)
+              end
             end
 
             ratio = skm2 / graX
-            assert(ratio.round(2) == srr, "BTAP/OSut: Incorrect SRR (#{cas})?")
+            assert_equal(ratio.round(2), srr, "BTAP: SRR (#{cas})?")
 
             # Higher level feedback.
             fdback << ""
@@ -155,9 +240,9 @@ class NECB_Skylights_Tests < Minitest::Test
             status = st.osut[:status]
 
             st.osut[:logs].each do |log|
-              assert(log.is_a?(Hash), "BTAP/OSut: log (#{cas})?")
-              assert(log.key?(:level), "BTAP/OSut: log level (#{cas})?")
-              assert(log.key?(:message), "BTAP/OSut: log message (#{cas})?")
+              assert_kind_of(log, Hash, "BTAP: log (#{cas})?")
+              assert(log.key?(:level), "BTAP: log level (#{cas})?")
+              assert(log.key?(:message), "BTAP: log message (#{cas})?")
               next if log[:level] < 1 # 'INFO'
               next unless log.include?("(OSut::addSkylights)")
 
