@@ -36,7 +36,7 @@ OS:AirConditioner:VariableRefrigerantFlow,
   {00000000-0000-0000-0059-000000000002},  !- Availability Schedule
   27911.8114769906,                        !- Gross Rated Total Cooling Capacity {W}
   4.35,                                    !- Gross Rated Cooling COP {W/W}
-  -5,                                      !- Minimum Outdoor Temperature in Cooling Mode {C}
+  -10,                                     !- Minimum Outdoor Temperature in Cooling Mode {C}
   43,                                      !- Maximum Outdoor Temperature in Cooling Mode {C}
   {00000000-0000-0000-0025-000000000023},  !- Cooling Capacity Ratio Modifier Function of Low Temperature Curve Name
   {00000000-0000-0000-0026-000000000025},  !- Cooling Capacity Ratio Boundary Curve Name
@@ -3814,7 +3814,7 @@ OS:PlantLoop,
   ,                                        !- Primary Plant Equipment Operation Scheme
   {00000000-0000-0000-0048-000000000026},  !- Loop Temperature Setpoint Node Name
   60,                                      !- Maximum Loop Temperature {C}
-  10,                                      !- Minimum Loop Temperature {C}
+  51.66667,                                !- Minimum Loop Temperature {C}
   ,                                        !- Maximum Loop Flow Rate {m3/s}
   ,                                        !- Minimum Loop Flow Rate {m3/s}
   Autocalculate,                           !- Plant Loop Volume {m3}
