@@ -2382,12 +2382,13 @@ class ECMS
     search_criteria['name'] = eqpt_name
 
     # Get the capacity
+    multiplier = nil
     if ['PTAC', 'PTHP'].include?(OpenstudioStandards::HVAC.coil_dx_subcategory(coil_cooling_dx_single_speed))
       thermal_zone = OpenstudioStandards::HVAC.hvac_component_get_thermal_zone(coil_cooling_dx_single_speed)
       multiplier = thermal_zone.multiplier if !thermal_zone.nil?
     end
     capacity_w = OpenstudioStandards::HVAC.coil_cooling_dx_single_speed_get_capacity(coil_cooling_dx_single_speed, multiplier: multiplier)
-    capacity_w = [1.0,capacity_w].max
+    capacity_w = capacity_w.nil? ? 1.0 : [1.0, capacity_w].max
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
 
     # Lookup efficiencies
@@ -2457,7 +2458,7 @@ class ECMS
 
     # Get the capacity
     capacity_w = OpenstudioStandards::HVAC.coil_heating_get_paired_coil_cooling_capacity(coil_heating_dx_single_speed)
-    capacity_w = [1.0, capacity_w].max
+    capacity_w = capacity_w.nil? ? 1.0 : [1.0, capacity_w].max
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
 
     # Lookup efficiencies
@@ -2986,7 +2987,7 @@ class ECMS
   def coil_cooling_dx_single_speed_apply_cop(coil_cooling_dx_single_speed,
                                              search_criteria,
                                              rename = false)
-
+    multiplier = nil
     if ['PTAC', 'PTHP'].include?(OpenstudioStandards::HVAC.coil_dx_subcategory(coil_cooling_dx_single_speed))
       thermal_zone = OpenstudioStandards::HVAC.hvac_component_get_thermal_zone(coil_cooling_dx_single_speed)
       multiplier = thermal_zone.multiplier if !thermal_zone.nil?
@@ -3764,6 +3765,7 @@ class ECMS
         coil_name = coil.name.to_s
         if (sql_db_vars_map.has_key? coil_name) && !sizing_done then coil.setName(sql_db_vars_map[coil_name]) end
 
+        multiplier = nil
         if ['PTAC', 'PTHP'].include?(OpenstudioStandards::HVAC.coil_dx_subcategory(coil))
           thermal_zone = OpenstudioStandards::HVAC.hvac_component_get_thermal_zone(coil)
           multiplier = thermal_zone.multiplier if !thermal_zone.nil?
