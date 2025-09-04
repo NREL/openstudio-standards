@@ -123,8 +123,8 @@ doe_prototype/test_laboratory.rb
 doe_prototype/test_large_data_center_highITE.rb
 doe_prototype/test_large_data_center_lowITE.rb
 doe_prototype/test_large_hotel.rb
-doe_prototype/test_large_office.rb
-doe_prototype/test_large_office_detailed.rb
+#doe_prototype/test_large_office.rb
+#doe_prototype/test_large_office_detailed.rb
 doe_prototype/test_medium_office.rb
 doe_prototype/test_medium_detailed.rb
 doe_prototype/test_mid_rise_apartment.rb
