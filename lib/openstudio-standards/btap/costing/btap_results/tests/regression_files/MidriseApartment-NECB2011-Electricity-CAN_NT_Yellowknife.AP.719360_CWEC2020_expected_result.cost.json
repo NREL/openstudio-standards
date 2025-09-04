@@ -1402,25 +1402,25 @@
       {
         "sys_type": 1,
         "name": "sys_4|mixed|shr>none|sc>dx|sh>c-e|ssf>cv|zh>b-e|zc>none|srf>none|",
-        "airloop_flow_m3_per_s": 0.669,
+        "airloop_flow_m3_per_s": 0.671,
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 1000,
         "base_ahu_cost": 46199.46,
-        "revised_base_ahu_cost": 30921.54,
+        "revised_base_ahu_cost": 30985.18,
         "hrv": {},
         "equipment_info": [
           {
             "eq_category": "Coil_Cooling_DX_SingleSpeed",
             "heating_fuel": "none",
             "cooling_type": "DX",
-            "total_modeled_capacity_kw": 11.079,
+            "total_modeled_capacity_kw": 11.102,
             "cost": 17941.39
           },
           {
             "eq_category": "Coil_Heating_Electric",
             "heating_fuel": "elec",
             "cooling_type": "none",
-            "total_modeled_capacity_kw": 22.47,
+            "total_modeled_capacity_kw": 22.505,
             "cost": 10639.97
           }
         ],
@@ -1453,7 +1453,7 @@
         {
           "Floor": "Building Story 1",
           "Predominant_space_type": "Dwelling Unit(s)",
-          "SupplyDuctSize_in": 10.02,
+          "SupplyDuctSize_in": 10.03,
           "SupplyDuctLength_m": 47.3,
           "ReturnDuctSize_in": 0,
           "ReturnDuctLength_m": 0,
@@ -1463,7 +1463,7 @@
         {
           "Floor": "Building Story 2",
           "Predominant_space_type": "Dwelling Unit(s)",
-          "SupplyDuctSize_in": 9.63,
+          "SupplyDuctSize_in": 9.64,
           "SupplyDuctLength_m": 47.3,
           "ReturnDuctSize_in": 0,
           "ReturnDuctLength_m": 0,
@@ -1700,7 +1700,7 @@
               "ThermalZone": "WILD_ST=Corr. < 2.4m wide-sch-G_FL=Building Story 2_SCH=G",
               "ducting_direction": "Supply",
               "tz_mult": 2.0,
-              "airflow_m3ps": 0.119,
+              "airflow_m3ps": 0.12,
               "num_diff": 3,
               "ducting_lbs": 125,
               "duct_insulation_ft2": 96,
@@ -1852,8 +1852,8 @@
     "lighting": 253638,
     "heating_and_cooling": 300182,
     "shw": 151982,
-    "ventilation": 259351,
+    "ventilation": 259415,
     "renewables": 0,
-    "grand_total": 2654946
+    "grand_total": 2655010
   }
 }

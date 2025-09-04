@@ -1289,20 +1289,20 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 1.9,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2418,
+        "heat_cost": 2162,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 9831,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 21382
+        "cummultive_zonal_cost": 21127
       },
       {
         "systype": "HW",
         "zone_number": 4,
         "zone_name": "ALL_ST=Lounge/recreation_FL=BuildingStory1_SCH=B",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 0.9,
+        "heat_capacity(kW)": 1.0,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 1652,
         "cool_cost": 0,
@@ -1310,22 +1310,22 @@
         "piping_cost": 1389,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 24424
+        "cummultive_zonal_cost": 24169
       },
       {
         "systype": "HW",
         "zone_number": 5,
         "zone_name": "ALL_ST=Office - enclosed_FL=BuildingStory1_SCH=A",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 3.7,
+        "heat_capacity(kW)": 3.6,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 4580,
+        "heat_cost": 3183,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 5557,
         "wiring_cost": 0,
-        "num_units": 2,
-        "cummultive_zonal_cost": 34561
+        "num_units": 1.0,
+        "cummultive_zonal_cost": 32908
       },
       {
         "systype": "HW",
@@ -1340,7 +1340,7 @@
         "piping_cost": 4168,
         "wiring_cost": 0,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 41911
+        "cummultive_zonal_cost": 40258
       },
       {
         "systype": "HW",
@@ -1355,7 +1355,7 @@
         "piping_cost": 534,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 44098
+        "cummultive_zonal_cost": 42445
       },
       {
         "systype": "HW",
@@ -1370,7 +1370,7 @@
         "piping_cost": 3740,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 50256
+        "cummultive_zonal_cost": 48603
       },
       {
         "systype": "HW",
@@ -1385,7 +1385,7 @@
         "piping_cost": 3060,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 55478
+        "cummultive_zonal_cost": 53826
       },
       {
         "systype": "HW",
@@ -1400,7 +1400,7 @@
         "piping_cost": 437,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 57313
+        "cummultive_zonal_cost": 55661
       },
       {
         "systype": "HW",
@@ -1415,7 +1415,7 @@
         "piping_cost": 437,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 59148
+        "cummultive_zonal_cost": 57495
       },
       {
         "systype": "HW",
@@ -1430,7 +1430,7 @@
         "piping_cost": 3060,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 64371
+        "cummultive_zonal_cost": 62718
       },
       {
         "systype": "HW",
@@ -1445,7 +1445,7 @@
         "piping_cost": 437,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 66460
+        "cummultive_zonal_cost": 64808
       },
       {
         "systype": "HW",
@@ -1460,7 +1460,7 @@
         "piping_cost": 3060,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 71938
+        "cummultive_zonal_cost": 70286
       },
       {
         "systype": "HW",
@@ -1475,7 +1475,7 @@
         "piping_cost": 1389,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 75235
+        "cummultive_zonal_cost": 73582
       },
       {
         "systype": "HW",
@@ -1490,7 +1490,7 @@
         "piping_cost": 1389,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 78276
+        "cummultive_zonal_cost": 76624
       },
       {
         "systype": "HW",
@@ -1505,7 +1505,7 @@
         "piping_cost": 1389,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 81318
+        "cummultive_zonal_cost": 79666
       },
       {
         "systype": "HW",
@@ -1520,7 +1520,7 @@
         "piping_cost": 1389,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 84360
+        "cummultive_zonal_cost": 82707
       },
       {
         "systype": "HW",
@@ -1535,7 +1535,7 @@
         "piping_cost": 1389,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 87656
+        "cummultive_zonal_cost": 86004
       },
       {
         "systype": "HW",
@@ -1550,7 +1550,7 @@
         "piping_cost": 1137,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 90446
+        "cummultive_zonal_cost": 88793
       },
       {
         "systype": "HW",
@@ -1565,14 +1565,14 @@
         "piping_cost": 4546,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 97409
+        "cummultive_zonal_cost": 95757
       },
       {
         "systype": "HW",
         "zone_number": 22,
         "zone_name": "DU_BT=Space Function_ST=Hway lodging - rooms_FL=BuildingStory2_SCHF 2",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 0.8,
+        "heat_capacity(kW)": 0.7,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 1652,
         "cool_cost": 0,
@@ -1580,42 +1580,12 @@
         "piping_cost": 1137,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 100198
+        "cummultive_zonal_cost": 98546
       },
       {
         "systype": "HW",
         "zone_number": 23,
         "zone_name": "DU_BT=Space Function_ST=Hway lodging - rooms_FL=BuildingStory2_SCHF 3",
-        "zone_multiple": 1,
-        "heat_capacity(kW)": 2.1,
-        "cool_capacity(kW)": 0.0,
-        "heat_cost": 2418,
-        "cool_cost": 0,
-        "heatcool_cost": 0,
-        "piping_cost": 4546,
-        "wiring_cost": 0,
-        "num_units": 1,
-        "cummultive_zonal_cost": 107162
-      },
-      {
-        "systype": "HW",
-        "zone_number": 24,
-        "zone_name": "DU_BT=Space Function_ST=Hway lodging - rooms_FL=BuildingStory2_SCHF 4",
-        "zone_multiple": 1,
-        "heat_capacity(kW)": 2.3,
-        "cool_capacity(kW)": 0.0,
-        "heat_cost": 2418,
-        "cool_cost": 0,
-        "heatcool_cost": 0,
-        "piping_cost": 4546,
-        "wiring_cost": 0,
-        "num_units": 1,
-        "cummultive_zonal_cost": 114126
-      },
-      {
-        "systype": "HW",
-        "zone_number": 25,
-        "zone_name": "DU_BT=Space Function_ST=Hway lodging - rooms_FL=BuildingStory2_SCHF 5",
         "zone_multiple": 1,
         "heat_capacity(kW)": 2.0,
         "cool_capacity(kW)": 0.0,
@@ -1625,7 +1595,37 @@
         "piping_cost": 4546,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 121090
+        "cummultive_zonal_cost": 105510
+      },
+      {
+        "systype": "HW",
+        "zone_number": 24,
+        "zone_name": "DU_BT=Space Function_ST=Hway lodging - rooms_FL=BuildingStory2_SCHF 4",
+        "zone_multiple": 1,
+        "heat_capacity(kW)": 2.2,
+        "cool_capacity(kW)": 0.0,
+        "heat_cost": 2418,
+        "cool_cost": 0,
+        "heatcool_cost": 0,
+        "piping_cost": 4546,
+        "wiring_cost": 0,
+        "num_units": 1,
+        "cummultive_zonal_cost": 112474
+      },
+      {
+        "systype": "HW",
+        "zone_number": 25,
+        "zone_name": "DU_BT=Space Function_ST=Hway lodging - rooms_FL=BuildingStory2_SCHF 5",
+        "zone_multiple": 1,
+        "heat_capacity(kW)": 1.9,
+        "cool_capacity(kW)": 0.0,
+        "heat_cost": 2418,
+        "cool_cost": 0,
+        "heatcool_cost": 0,
+        "piping_cost": 4546,
+        "wiring_cost": 0,
+        "num_units": 1,
+        "cummultive_zonal_cost": 119438
       },
       {
         "systype": "HW",
@@ -1634,13 +1634,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 1.5,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2162,
+        "heat_cost": 1907,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 3497,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 126750
+        "cummultive_zonal_cost": 124843
       },
       {
         "systype": "HW",
@@ -1655,7 +1655,7 @@
         "piping_cost": 1137,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 129539
+        "cummultive_zonal_cost": 127632
       },
       {
         "systype": "HW",
@@ -1670,7 +1670,7 @@
         "piping_cost": 1137,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 132328
+        "cummultive_zonal_cost": 130421
       },
       {
         "systype": "HW",
@@ -1685,14 +1685,14 @@
         "piping_cost": 3672,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 138163
+        "cummultive_zonal_cost": 136255
       },
       {
         "systype": "HW",
         "zone_number": 30,
         "zone_name": "DU_BT=Space Function_ST=Hway lodging - rooms_FL=BuildingStory3_SCHF",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 2.6,
+        "heat_capacity(kW)": 2.5,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 2673,
         "cool_cost": 0,
@@ -1700,7 +1700,7 @@
         "piping_cost": 4546,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 145382
+        "cummultive_zonal_cost": 143474
       },
       {
         "systype": "HW",
@@ -1715,7 +1715,7 @@
         "piping_cost": 4546,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 152601
+        "cummultive_zonal_cost": 150693
       },
       {
         "systype": "HW",
@@ -1730,14 +1730,14 @@
         "piping_cost": 3672,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 158690
+        "cummultive_zonal_cost": 156783
       },
       {
         "systype": "HW",
         "zone_number": 33,
         "zone_name": "DU_BT=Space Function_ST=Hway lodging - rooms_FL=BuildingStory3_SCHF 3",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 2.6,
+        "heat_capacity(kW)": 2.5,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 2673,
         "cool_cost": 0,
@@ -1745,7 +1745,7 @@
         "piping_cost": 4546,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 165909
+        "cummultive_zonal_cost": 164002
       },
       {
         "systype": "HW",
@@ -1760,7 +1760,7 @@
         "piping_cost": 1137,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 168698
+        "cummultive_zonal_cost": 166791
       },
       {
         "systype": "HW",
@@ -1775,7 +1775,7 @@
         "piping_cost": 3497,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 174358
+        "cummultive_zonal_cost": 172450
       },
       {
         "systype": "HW",
@@ -1790,7 +1790,7 @@
         "piping_cost": 1137,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 177147
+        "cummultive_zonal_cost": 175240
       },
       {
         "systype": "HW",
@@ -1805,7 +1805,7 @@
         "piping_cost": 1137,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 179936
+        "cummultive_zonal_cost": 178029
       },
       {
         "systype": "HW",
@@ -1820,7 +1820,7 @@
         "piping_cost": 4546,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 187155
+        "cummultive_zonal_cost": 185248
       },
       {
         "systype": "HW",
@@ -1835,7 +1835,7 @@
         "piping_cost": 1137,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 189944
+        "cummultive_zonal_cost": 188037
       },
       {
         "systype": "HW",
@@ -1850,7 +1850,7 @@
         "piping_cost": 4546,
         "wiring_cost": 0,
         "num_units": 2,
-        "cummultive_zonal_cost": 200091
+        "cummultive_zonal_cost": 198183
       },
       {
         "systype": "HW",
@@ -1865,7 +1865,7 @@
         "piping_cost": 3497,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 206260
+        "cummultive_zonal_cost": 204353
       },
       {
         "systype": "HW",
@@ -1880,7 +1880,7 @@
         "piping_cost": 1137,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 209560
+        "cummultive_zonal_cost": 207652
       },
       {
         "systype": "HW",
@@ -1895,7 +1895,7 @@
         "piping_cost": 1137,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 212859
+        "cummultive_zonal_cost": 210951
       },
       {
         "systype": "HW",
@@ -1910,7 +1910,7 @@
         "piping_cost": 1137,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 216158
+        "cummultive_zonal_cost": 214250
       },
       {
         "systype": "HW",
@@ -1925,14 +1925,14 @@
         "piping_cost": 1137,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 219457
+        "cummultive_zonal_cost": 217549
       },
       {
         "systype": "HW",
         "zone_number": 46,
         "zone_name": "DU_BT=Space Function_ST=Hway lodging - rooms_FL=BuildingStory4_SCHF 6",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 5.4,
+        "heat_capacity(kW)": 5.3,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 5600,
         "cool_cost": 0,
@@ -1940,7 +1940,7 @@
         "piping_cost": 4546,
         "wiring_cost": 0,
         "num_units": 2,
-        "cummultive_zonal_cost": 229603
+        "cummultive_zonal_cost": 227696
       },
       {
         "systype": "HW",
@@ -1955,7 +1955,7 @@
         "piping_cost": 3672,
         "wiring_cost": 0,
         "num_units": 2,
-        "cummultive_zonal_cost": 238110
+        "cummultive_zonal_cost": 236203
       },
       {
         "systype": "HW",
@@ -1970,14 +1970,14 @@
         "piping_cost": 4546,
         "wiring_cost": 0,
         "num_units": 2,
-        "cummultive_zonal_cost": 248257
+        "cummultive_zonal_cost": 246349
       },
       {
         "systype": "HW",
         "zone_number": 49,
         "zone_name": "DU_BT=Space Function_ST=Hway lodging - rooms_FL=BuildingStory4_SCHF 9",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 5.5,
+        "heat_capacity(kW)": 5.4,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 5600,
         "cool_cost": 0,
@@ -1985,7 +1985,7 @@
         "piping_cost": 4546,
         "wiring_cost": 0,
         "num_units": 2,
-        "cummultive_zonal_cost": 258403
+        "cummultive_zonal_cost": 256496
       },
       {
         "systype": "HW",
@@ -2000,7 +2000,7 @@
         "piping_cost": 1389,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 261445
+        "cummultive_zonal_cost": 259537
       },
       {
         "systype": "HW",
@@ -2015,14 +2015,14 @@
         "piping_cost": 641,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 263738
+        "cummultive_zonal_cost": 261831
       },
       {
         "systype": "HW",
         "zone_number": 52,
         "zone_name": "WILD_ST=Corr. >= 2.4m wide-sch-F_FL=BuildingStory1_SCH=F 1",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 4.6,
+        "heat_capacity(kW)": 4.5,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 5090,
         "cool_cost": 0,
@@ -2030,7 +2030,7 @@
         "piping_cost": 3419,
         "wiring_cost": 0,
         "num_units": 2,
-        "cummultive_zonal_cost": 272248
+        "cummultive_zonal_cost": 270340
       },
       {
         "systype": "HW",
@@ -2045,7 +2045,7 @@
         "piping_cost": 1923,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 276589
+        "cummultive_zonal_cost": 274681
       },
       {
         "systype": "HW",
@@ -2060,7 +2060,7 @@
         "piping_cost": 525,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 278511
+        "cummultive_zonal_cost": 276603
       },
       {
         "systype": "HW",
@@ -2075,7 +2075,7 @@
         "piping_cost": 525,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 280433
+        "cummultive_zonal_cost": 278526
       },
       {
         "systype": "HW",
@@ -2090,7 +2090,7 @@
         "piping_cost": 1923,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 285284
+        "cummultive_zonal_cost": 283377
       },
       {
         "systype": "HW",
@@ -2105,7 +2105,7 @@
         "piping_cost": 1923,
         "wiring_cost": 0,
         "num_units": 2,
-        "cummultive_zonal_cost": 293318
+        "cummultive_zonal_cost": 291410
       },
       {
         "systype": "HW",
@@ -2120,14 +2120,14 @@
         "piping_cost": 525,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 295495
+        "cummultive_zonal_cost": 293587
       },
       {
         "systype": "HW",
         "zone_number": 59,
         "zone_name": "WILD_ST=Electrical/Mechanical-sch-F_FL=BuildingStory1_SCH=F",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 1.1,
+        "heat_capacity(kW)": 1.0,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 1652,
         "cool_cost": 0,
@@ -2135,7 +2135,7 @@
         "piping_cost": 1389,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 298536
+        "cummultive_zonal_cost": 296629
       },
       {
         "systype": "HW",
@@ -2150,14 +2150,14 @@
         "piping_cost": 3740,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 304694
+        "cummultive_zonal_cost": 302786
       },
       {
         "systype": "HW",
         "zone_number": 61,
         "zone_name": "WILD_ST=Stairway-sch-F_FL=BuildingStory1_SCH=F 1",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 2.0,
+        "heat_capacity(kW)": 1.9,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 2418,
         "cool_cost": 0,
@@ -2165,7 +2165,7 @@
         "piping_cost": 3740,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 310852
+        "cummultive_zonal_cost": 308944
       },
       {
         "systype": "HW",
@@ -2180,7 +2180,7 @@
         "piping_cost": 3060,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 315819
+        "cummultive_zonal_cost": 313912
       },
       {
         "systype": "HW",
@@ -2195,14 +2195,14 @@
         "piping_cost": 3060,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 321042
+        "cummultive_zonal_cost": 319134
       },
       {
         "systype": "HW",
         "zone_number": 64,
         "zone_name": "WILD_ST=Stairway-sch-F_FL=BuildingStory3_SCH=F",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 1.6,
+        "heat_capacity(kW)": 1.5,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 2162,
         "cool_cost": 0,
@@ -2210,7 +2210,7 @@
         "piping_cost": 3060,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 326265
+        "cummultive_zonal_cost": 324357
       },
       {
         "systype": "HW",
@@ -2225,7 +2225,7 @@
         "piping_cost": 3060,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 331487
+        "cummultive_zonal_cost": 329580
       },
       {
         "systype": "HW",
@@ -2240,7 +2240,7 @@
         "piping_cost": 3060,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 336965
+        "cummultive_zonal_cost": 335057
       },
       {
         "systype": "HW",
@@ -2255,7 +2255,7 @@
         "piping_cost": 3060,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 342442
+        "cummultive_zonal_cost": 340535
       }
     ]
   },
@@ -2285,18 +2285,18 @@
       {
         "sys_type": 1,
         "name": "sys_1|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-hw|zc>none|srf>none|",
-        "airloop_flow_m3_per_s": 3.975,
+        "airloop_flow_m3_per_s": 3.973,
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 4000,
         "base_ahu_cost": 53283.09,
-        "revised_base_ahu_cost": 52949.09,
+        "revised_base_ahu_cost": 52926.9,
         "hrv": {},
         "equipment_info": [
           {
             "eq_category": "Coil_Heating_DX_SingleSpeed",
             "heating_fuel": "HP",
             "cooling_type": "HP",
-            "total_modeled_capacity_kw": 65.799,
+            "total_modeled_capacity_kw": 65.772,
             "cost": 150747.42
           }
         ],
@@ -2823,25 +2823,25 @@
       {
         "sys_type": 1,
         "name": "sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| 1",
-        "airloop_flow_m3_per_s": 0.732,
+        "airloop_flow_m3_per_s": 0.73,
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 1000,
         "base_ahu_cost": 44333.63,
-        "revised_base_ahu_cost": 32453.26,
+        "revised_base_ahu_cost": 32369.11,
         "hrv": {},
         "equipment_info": [
           {
             "eq_category": "Coil_Heating_DX_SingleSpeed",
             "heating_fuel": "HP",
             "cooling_type": "HP",
-            "total_modeled_capacity_kw": 12.118,
+            "total_modeled_capacity_kw": 12.086,
             "cost": 30149.48
           },
           {
             "eq_category": "Coil_Heating_Gas",
             "heating_fuel": "Gas",
             "cooling_type": "none",
-            "total_modeled_capacity_kw": 30.971,
+            "total_modeled_capacity_kw": 30.924,
             "cost": 1468.23
           }
         ],
@@ -2850,25 +2850,25 @@
       {
         "sys_type": 1,
         "name": "sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| 2",
-        "airloop_flow_m3_per_s": 1.717,
+        "airloop_flow_m3_per_s": 1.714,
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 2500,
         "base_ahu_cost": 53187.15,
-        "revised_base_ahu_cost": 36532.16,
+        "revised_base_ahu_cost": 36467.95,
         "hrv": {},
         "equipment_info": [
           {
             "eq_category": "Coil_Heating_DX_SingleSpeed",
             "heating_fuel": "HP",
             "cooling_type": "HP",
-            "total_modeled_capacity_kw": 28.425,
+            "total_modeled_capacity_kw": 28.375,
             "cost": 63764.52
           },
           {
             "eq_category": "Coil_Heating_Gas",
             "heating_fuel": "Gas",
             "cooling_type": "none",
-            "total_modeled_capacity_kw": 57.358,
+            "total_modeled_capacity_kw": 57.282,
             "cost": 4850.05
           }
         ],
@@ -2969,14 +2969,14 @@
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 1000,
         "base_ahu_cost": 11127.89,
-        "revised_base_ahu_cost": 5679.59,
+        "revised_base_ahu_cost": 5679.99,
         "hrv": {},
         "equipment_info": [
           {
             "eq_category": "Coil_Heating_DX_SingleSpeed",
             "heating_fuel": "HP",
             "cooling_type": "HP",
-            "total_modeled_capacity_kw": 8.46,
+            "total_modeled_capacity_kw": 8.461,
             "cost": 14100.54
           }
         ],
@@ -3033,7 +3033,7 @@
         {
           "Floor": "BuildingStory1",
           "Predominant_space_type": "Hotel/Motel - lobby",
-          "SupplyDuctSize_in": 28.32,
+          "SupplyDuctSize_in": 28.29,
           "SupplyDuctLength_m": 55.8,
           "ReturnDuctSize_in": 21.63,
           "ReturnDuctLength_m": 55.8,
@@ -3105,7 +3105,7 @@
               "ThermalZone": "DU_BT=Space Function_ST=Hway lodging - rooms_FL=BuildingStory1_SCHF 2",
               "ducting_direction": "Supply",
               "tz_mult": 1.0,
-              "airflow_m3ps": 0.039,
+              "airflow_m3ps": 0.038,
               "num_diff": 2,
               "ducting_lbs": 55,
               "duct_insulation_ft2": 40,
@@ -3117,7 +3117,7 @@
               "ThermalZone": "DU_BT=Space Function_ST=Hway lodging - rooms_FL=BuildingStory1_SCHF 3",
               "ducting_direction": "Supply",
               "tz_mult": 1.0,
-              "airflow_m3ps": 0.04,
+              "airflow_m3ps": 0.039,
               "num_diff": 2,
               "ducting_lbs": 55,
               "duct_insulation_ft2": 40,
@@ -3225,7 +3225,7 @@
               "ThermalZone": "ALL_ST=Storage area - occsens_FL=BuildingStory1_SCH=E",
               "ducting_direction": "Supply",
               "tz_mult": 1.0,
-              "airflow_m3ps": 0.139,
+              "airflow_m3ps": 0.137,
               "num_diff": 3,
               "ducting_lbs": 125,
               "duct_insulation_ft2": 96,
@@ -3261,7 +3261,7 @@
               "ThermalZone": "WILD_ST=Corr. >= 2.4m wide-sch-F_FL=BuildingStory1_SCH=F",
               "ducting_direction": "Supply",
               "tz_mult": 1.0,
-              "airflow_m3ps": 0.028,
+              "airflow_m3ps": 0.027,
               "num_diff": 2,
               "ducting_lbs": 55,
               "duct_insulation_ft2": 40,
@@ -3273,7 +3273,7 @@
               "ThermalZone": "WILD_ST=Corr. >= 2.4m wide-sch-F_FL=BuildingStory1_SCH=F 1",
               "ducting_direction": "Supply",
               "tz_mult": 1.0,
-              "airflow_m3ps": 0.182,
+              "airflow_m3ps": 0.18,
               "num_diff": 3,
               "ducting_lbs": 125,
               "duct_insulation_ft2": 96,
@@ -3285,7 +3285,7 @@
               "ThermalZone": "WILD_ST=Electrical/Mechanical-sch-F_FL=BuildingStory1_SCH=F",
               "ducting_direction": "Supply",
               "tz_mult": 1.0,
-              "airflow_m3ps": 0.042,
+              "airflow_m3ps": 0.041,
               "num_diff": 2,
               "ducting_lbs": 55,
               "duct_insulation_ft2": 40,
@@ -3345,7 +3345,7 @@
               "ThermalZone": "ALL_ST=Office - enclosed_FL=BuildingStory1_SCH=A",
               "ducting_direction": "Supply",
               "tz_mult": 1.0,
-              "airflow_m3ps": 0.22,
+              "airflow_m3ps": 0.221,
               "num_diff": 4,
               "ducting_lbs": 190,
               "duct_insulation_ft2": 144,
@@ -3357,7 +3357,7 @@
               "ThermalZone": "ALL_ST=Office - enclosed_FL=BuildingStory1_SCH=A",
               "ducting_direction": "Return",
               "tz_mult": 1.0,
-              "airflow_m3ps": 0.22,
+              "airflow_m3ps": 0.221,
               "num_diff": 4,
               "ducting_lbs": 190,
               "duct_insulation_ft2": 144,
@@ -3792,7 +3792,7 @@
               "ThermalZone": "DU_BT=Space Function_ST=Hway lodging - rooms_FL=BuildingStory4_SCHF 2",
               "ducting_direction": "Supply",
               "tz_mult": 1.0,
-              "airflow_m3ps": 0.068,
+              "airflow_m3ps": 0.067,
               "num_diff": 2,
               "ducting_lbs": 55,
               "duct_insulation_ft2": 40,
@@ -3989,10 +3989,10 @@
     "envelope": 2319175,
     "thermal_bridging": 0,
     "lighting": 858567,
-    "heating_and_cooling": 428729,
+    "heating_and_cooling": 426821,
     "shw": 64703,
-    "ventilation": 999663,
+    "ventilation": 999493,
     "renewables": 0,
-    "grand_total": 4670836
+    "grand_total": 4668759
   }
 }

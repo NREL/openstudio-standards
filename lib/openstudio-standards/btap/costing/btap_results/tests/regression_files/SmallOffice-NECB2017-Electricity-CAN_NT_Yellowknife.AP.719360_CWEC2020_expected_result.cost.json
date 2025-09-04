@@ -293,7 +293,7 @@
         "heatcool_cost": 0,
         "piping_cost": 0,
         "wiring_cost": 984,
-        "num_units": 5.001648145053476,
+        "num_units": 5.001995947526738,
         "cummultive_zonal_cost": 12094
       },
       {
@@ -308,7 +308,7 @@
         "heatcool_cost": 0,
         "piping_cost": 0,
         "wiring_cost": 984,
-        "num_units": 5.014496991978609,
+        "num_units": 5.014844794451871,
         "cummultive_zonal_cost": 15621
       },
       {
@@ -360,7 +360,7 @@
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 1000,
         "base_ahu_cost": 66951.57,
-        "revised_base_ahu_cost": 14657.52,
+        "revised_base_ahu_cost": 14664.04,
         "hrv": {
           "hrv_type": "HeatExchanger_AirToAir_SensibleAndLatent",
           "hrv_name": "sys_3|mixed|shr>none|sc>dx|sh>c-e|ssf>cv|zh>b-e|zc>none|srf>none| ERV",
@@ -374,14 +374,14 @@
             "eq_category": "Coil_Cooling_DX_SingleSpeed",
             "heating_fuel": "none",
             "cooling_type": "DX",
-            "total_modeled_capacity_kw": 3.624,
+            "total_modeled_capacity_kw": 3.626,
             "cost": 16066.88
           },
           {
             "eq_category": "Coil_Heating_Electric",
             "heating_fuel": "elec",
             "cooling_type": "none",
-            "total_modeled_capacity_kw": 13.244,
+            "total_modeled_capacity_kw": 13.246,
             "cost": 5646.68
           }
         ],
@@ -394,7 +394,7 @@
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 1000,
         "base_ahu_cost": 66951.57,
-        "revised_base_ahu_cost": 19401.72,
+        "revised_base_ahu_cost": 19403.25,
         "hrv": {
           "hrv_type": "HeatExchanger_AirToAir_SensibleAndLatent",
           "hrv_name": "sys_3|mixed|shr>none|sc>dx|sh>c-e|ssf>cv|zh>b-e|zc>none|srf>none| 1 ERV",
@@ -428,7 +428,7 @@
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 1000,
         "base_ahu_cost": 66951.57,
-        "revised_base_ahu_cost": 12441.34,
+        "revised_base_ahu_cost": 12442.21,
         "hrv": {
           "hrv_type": "HeatExchanger_AirToAir_SensibleAndLatent",
           "hrv_name": "sys_3|mixed|shr>none|sc>dx|sh>c-e|ssf>cv|zh>b-e|zc>none|srf>none| 2 ERV",
@@ -462,7 +462,7 @@
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 1000,
         "base_ahu_cost": 66951.57,
-        "revised_base_ahu_cost": 14651.91,
+        "revised_base_ahu_cost": 14652.82,
         "hrv": {
           "hrv_type": "HeatExchanger_AirToAir_SensibleAndLatent",
           "hrv_name": "sys_3|mixed|shr>none|sc>dx|sh>c-e|ssf>cv|zh>b-e|zc>none|srf>none| 3 ERV",
@@ -496,7 +496,7 @@
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 1000,
         "base_ahu_cost": 66951.57,
-        "revised_base_ahu_cost": 19354.21,
+        "revised_base_ahu_cost": 19355.74,
         "hrv": {
           "hrv_type": "HeatExchanger_AirToAir_SensibleAndLatent",
           "hrv_name": "sys_3|mixed|shr>none|sc>dx|sh>c-e|ssf>cv|zh>b-e|zc>none|srf>none| 4 ERV",
@@ -510,7 +510,7 @@
             "eq_category": "Coil_Cooling_DX_SingleSpeed",
             "heating_fuel": "none",
             "cooling_type": "DX",
-            "total_modeled_capacity_kw": 4.785,
+            "total_modeled_capacity_kw": 4.786,
             "cost": 13975.78
           },
           {
@@ -705,8 +705,8 @@
     "lighting": 109770,
     "heating_and_cooling": 21153,
     "shw": 36329,
-    "ventilation": 292022,
+    "ventilation": 292033,
     "renewables": 0,
-    "grand_total": 1093156
+    "grand_total": 1093168
   }
 }

@@ -198,7 +198,7 @@ OS:Boiler:HotWater,
   {00000000-0000-0000-0009-000000000001},  !- Handle
   Boiler Hot Water 1 750kBtu/hr 0.8 Thermal Eff, !- Name
   NaturalGas,                              !- Fuel Type
-  131820.703125,                           !- Nominal Capacity {W}
+  131820.7875,                             !- Nominal Capacity {W}
   0.8,                                     !- Nominal Thermal Efficiency
   ,                                        !- Efficiency Curve Temperature Evaluation Variable
   {00000000-0000-0000-0025-000000000001},  !- Normalized Boiler Efficiency Curve Name
@@ -250,7 +250,7 @@ OS:BuildingStory,
 OS:Chiller:Electric:EIR,
   {00000000-0000-0000-0012-000000000001},  !- Handle
   ChillerAirCooled Scroll,                 !- Name
-  45384.196875,                            !- Reference Capacity {W}
+  45383.925,                               !- Reference Capacity {W}
   2.866,                                   !- Reference COP {W/W}
   ,                                        !- Reference Leaving Chilled Water Temperature {C}
   ,                                        !- Reference Entering Condenser Fluid Temperature {C}
@@ -275,19 +275,25 @@ OS:Chiller:Electric:EIR,
   Autosize,                                !- Design Heat Recovery Water Flow Rate {m3/s}
   ,                                        !- Heat Recovery Inlet Node Name
   ,                                        !- Heat Recovery Outlet Node Name
-  1,                                       !- Sizing Factor
-  0,                                       !- Basin Heater Capacity {W/K}
+  ,                                        !- Sizing Factor
+  ,                                        !- Basin Heater Capacity {W/K}
   10,                                      !- Basin Heater Setpoint Temperature {C}
   ,                                        !- Basin Heater Operating Schedule Name
   1,                                       !- Condenser Heat Recovery Relative Capacity Fraction
   ,                                        !- Heat Recovery Inlet High Temperature Limit Schedule Name
   ,                                        !- Heat Recovery Leaving Temperature Setpoint Node Name
-  General;                                 !- End-Use Subcategory
+  General,                                 !- End-Use Subcategory
+  ConstantFlow,                            !- Condenser Flow Control
+  ,                                        !- Condenser Loop Flow Rate Fraction Function of Loop Part Load Ratio Curve Name
+  ,                                        !- Temperature Difference Across Condenser Schedule Name
+  0.2,                                     !- Condenser Minimum Flow Fraction
+  ,                                        !- Thermosiphon Capacity Fraction Curve Name
+  0;                                       !- Thermosiphon Minimum Temperature Difference
 
 OS:Chiller:Electric:EIR,
   {00000000-0000-0000-0012-000000000002},  !- Handle
   ChillerWaterCooled Reciprocating 9tons 0.9kW/ton, !- Name
-  30256.13125,                             !- Reference Capacity {W}
+  30255.95,                                !- Reference Capacity {W}
   3.8,                                     !- Reference COP {W/W}
   ,                                        !- Reference Leaving Chilled Water Temperature {C}
   ,                                        !- Reference Entering Condenser Fluid Temperature {C}
@@ -312,14 +318,20 @@ OS:Chiller:Electric:EIR,
   Autosize,                                !- Design Heat Recovery Water Flow Rate {m3/s}
   ,                                        !- Heat Recovery Inlet Node Name
   ,                                        !- Heat Recovery Outlet Node Name
-  1,                                       !- Sizing Factor
-  0,                                       !- Basin Heater Capacity {W/K}
+  ,                                        !- Sizing Factor
+  ,                                        !- Basin Heater Capacity {W/K}
   10,                                      !- Basin Heater Setpoint Temperature {C}
   ,                                        !- Basin Heater Operating Schedule Name
   1,                                       !- Condenser Heat Recovery Relative Capacity Fraction
   ,                                        !- Heat Recovery Inlet High Temperature Limit Schedule Name
   ,                                        !- Heat Recovery Leaving Temperature Setpoint Node Name
-  General;                                 !- End-Use Subcategory
+  General,                                 !- End-Use Subcategory
+  ConstantFlow,                            !- Condenser Flow Control
+  ,                                        !- Condenser Loop Flow Rate Fraction Function of Loop Part Load Ratio Curve Name
+  ,                                        !- Temperature Difference Across Condenser Schedule Name
+  0.2,                                     !- Condenser Minimum Flow Fraction
+  ,                                        !- Thermosiphon Capacity Fraction Curve Name
+  0;                                       !- Thermosiphon Minimum Temperature Difference
 
 OS:ClimateZones,
   {00000000-0000-0000-0013-000000000001},  !- Handle
@@ -2276,8 +2288,8 @@ OS:Controller:OutdoorAir,
   ,                                        !- Time of Day Economizer Control Schedule Name
   No,                                      !- High Humidity Control
   ,                                        !- Humidistat Control Zone Name
-  ,                                        !- High Humidity Outdoor Air Flow Ratio
-  ,                                        !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
+  1,                                       !- High Humidity Outdoor Air Flow Ratio
+  Yes,                                     !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
   BypassWhenWithinEconomizerLimits,        !- Heat Recovery Bypass Control Type
   InterlockedWithMechanicalCooling;        !- Economizer Operation Staging
 
@@ -2306,8 +2318,8 @@ OS:Controller:OutdoorAir,
   ,                                        !- Time of Day Economizer Control Schedule Name
   No,                                      !- High Humidity Control
   ,                                        !- Humidistat Control Zone Name
-  ,                                        !- High Humidity Outdoor Air Flow Ratio
-  ,                                        !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
+  1,                                       !- High Humidity Outdoor Air Flow Ratio
+  Yes,                                     !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
   BypassWhenWithinEconomizerLimits,        !- Heat Recovery Bypass Control Type
   InterlockedWithMechanicalCooling;        !- Economizer Operation Staging
 
@@ -2816,7 +2828,7 @@ OS:DistrictCooling,
   DistrictCooling GLHX,                    !- Name
   {00000000-0000-0000-0016-000000000190},  !- Chilled Water Inlet Node Name
   {00000000-0000-0000-0016-000000000191},  !- Chilled Water Outlet Node Name
-  32338.1493156708,                        !- Nominal Capacity {W}
+  32339.0946245687,                        !- Nominal Capacity {W}
   {00000000-0000-0000-0063-000000000002};  !- Capacity Fraction Schedule
 
 OS:DistrictHeating:Water,
@@ -2824,7 +2836,7 @@ OS:DistrictHeating:Water,
   DistrictHeating GLHX,                    !- Name
   {00000000-0000-0000-0016-000000000181},  !- Hot Water Inlet Node Name
   {00000000-0000-0000-0016-000000000182},  !- Hot Water Outlet Node Name
-  34567.6860746263,                        !- Nominal Capacity {W}
+  34564.9171833238,                        !- Nominal Capacity {W}
   {00000000-0000-0000-0063-000000000002};  !- Capacity Fraction Schedule
 
 OS:ElectricEquipment,
@@ -2973,7 +2985,7 @@ OS:HeatPump:WaterToWater:EquationFit:Heating,
   {00000000-0000-0000-0016-000000000194},  !- Load Side Outlet Node Name
   Autosize,                                !- Reference Load Side Flow Rate {m3/s}
   Autosize,                                !- Reference Source Side Flow Rate {m3/s}
-  87880.46875,                             !- Reference Heating Capacity {W}
+  87880.525,                               !- Reference Heating Capacity {W}
   Autosize,                                !- Reference Heating Power Consumption {W}
   {00000000-0000-0000-0027-000000000003},  !- Heating Capacity Curve Name
   {00000000-0000-0000-0027-000000000004},  !- Heating Compressor Power Curve Name
@@ -4231,7 +4243,7 @@ OS:PlantLoop,
   {00000000-0000-0000-0050-000000000045},  !- Loop Temperature Setpoint Node Name
   ,                                        !- Maximum Loop Temperature {C}
   ,                                        !- Minimum Loop Temperature {C}
-  0.00547289997339249,                     !- Maximum Loop Flow Rate {m3/s}
+  0.0054728957824409,                      !- Maximum Loop Flow Rate {m3/s}
   ,                                        !- Minimum Loop Flow Rate {m3/s}
   Autocalculate,                           !- Plant Loop Volume {m3}
   {00000000-0000-0000-0016-000000000170},  !- Plant Side Inlet Node Name
@@ -4431,7 +4443,7 @@ OS:Pump:VariableSpeed,
   PumpVariableSpeed 2,                     !- Name
   {00000000-0000-0000-0016-000000000178},  !- Inlet Node Name
   {00000000-0000-0000-0016-000000000179},  !- Outlet Node Name
-  0.00547289997339249,                     !- Rated Flow Rate {m3/s}
+  0.0054728957824409,                      !- Rated Flow Rate {m3/s}
   ,                                        !- Rated Pump Head {Pa}
   ,                                        !- Rated Power Consumption {W}
   0.865,                                   !- Motor Efficiency
@@ -6573,7 +6585,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0081-000000000002},  !- Handle
@@ -6608,7 +6627,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0081-000000000003},  !- Handle
@@ -6643,7 +6669,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:SizingPeriod:DesignDay,
   {00000000-0000-0000-0082-000000000001},  !- Handle
@@ -7694,7 +7727,7 @@ OS:Timestep,
 
 OS:Version,
   {00000000-0000-0000-0096-000000000001},  !- Handle
-  3.7.0;                                   !- Version Identifier
+  3.9.0;                                   !- Version Identifier
 
 OS:WaterHeater:Mixed,
   {00000000-0000-0000-0097-000000000001},  !- Handle

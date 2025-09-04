@@ -34,7 +34,7 @@ OS:AirConditioner:VariableRefrigerantFlow,
   {00000000-0000-0000-0002-000000000001},  !- Handle
   VRF Outdoor Unit,                        !- Name
   {00000000-0000-0000-0061-000000000002},  !- Availability Schedule
-  50349.8320608611,                        !- Gross Rated Total Cooling Capacity {W}
+  50349.938167354,                         !- Gross Rated Total Cooling Capacity {W}
   4.28,                                    !- Gross Rated Cooling COP {W/W}
   -10,                                     !- Minimum Outdoor Temperature in Cooling Mode {C}
   43,                                      !- Maximum Outdoor Temperature in Cooling Mode {C}
@@ -48,9 +48,9 @@ OS:AirConditioner:VariableRefrigerantFlow,
   {00000000-0000-0000-0028-000000000032},  !- Cooling Energy Input Ratio Modifier Function of High Part-Load Ratio Curve Name
   {00000000-0000-0000-0030-000000000016},  !- Cooling Combination Ratio Correction Factor Curve Name
   {00000000-0000-0000-0028-000000000036},  !- Cooling Part-Load Fraction Correlation Curve Name
-  50349.8320608611,                        !- Gross Rated Heating Capacity {W}
+  50349.938167354,                         !- Gross Rated Heating Capacity {W}
   1,                                       !- Rated Heating Capacity Sizing Ratio {W/W}
-  4.56719135129455,                        !- Rated Heating COP {W/W}
+  4.56719157634507,                        !- Rated Heating COP {W/W}
   -25,                                     !- Minimum Outdoor Temperature in Heating Mode {C}
   30,                                      !- Maximum Outdoor Temperature in Heating Mode {C}
   {00000000-0000-0000-0027-000000000025},  !- Heating Capacity Ratio Modifier Function of Low Temperature Curve Name
@@ -270,7 +270,7 @@ OS:Boiler:HotWater,
   {00000000-0000-0000-0010-000000000001},  !- Handle
   Primary Boiler 112kBtu/hr 0.8 Thermal Eff, !- Name
   NaturalGas,                              !- Fuel Type
-  32737.8315144741,                        !- Nominal Capacity {W}
+  32738.3252466744,                        !- Nominal Capacity {W}
   0.8,                                     !- Nominal Thermal Efficiency
   ,                                        !- Efficiency Curve Temperature Evaluation Variable
   {00000000-0000-0000-0028-000000000012},  !- Normalized Boiler Efficiency Curve Name
@@ -1817,8 +1817,8 @@ OS:Controller:OutdoorAir,
   ,                                        !- Time of Day Economizer Control Schedule Name
   No,                                      !- High Humidity Control
   ,                                        !- Humidistat Control Zone Name
-  ,                                        !- High Humidity Outdoor Air Flow Ratio
-  ,                                        !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
+  1,                                       !- High Humidity Outdoor Air Flow Ratio
+  Yes,                                     !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
   BypassWhenWithinEconomizerLimits,        !- Heat Recovery Bypass Control Type
   InterlockedWithMechanicalCooling;        !- Economizer Operation Staging
 
@@ -1847,8 +1847,8 @@ OS:Controller:OutdoorAir,
   ,                                        !- Time of Day Economizer Control Schedule Name
   No,                                      !- High Humidity Control
   ,                                        !- Humidistat Control Zone Name
-  ,                                        !- High Humidity Outdoor Air Flow Ratio
-  ,                                        !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
+  1,                                       !- High Humidity Outdoor Air Flow Ratio
+  Yes,                                     !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
   BypassWhenWithinEconomizerLimits,        !- Heat Recovery Bypass Control Type
   InterlockedWithMechanicalCooling;        !- Economizer Operation Staging
 
@@ -6310,7 +6310,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0079-000000000002},  !- Handle
@@ -6345,7 +6352,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0079-000000000003},  !- Handle
@@ -6380,7 +6394,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:SizingPeriod:DesignDay,
   {00000000-0000-0000-0080-000000000001},  !- Handle
@@ -7573,7 +7594,7 @@ OS:Timestep,
 
 OS:Version,
   {00000000-0000-0000-0096-000000000001},  !- Handle
-  3.7.0;                                   !- Version Identifier
+  3.9.0;                                   !- Version Identifier
 
 OS:WaterHeater:Mixed,
   {00000000-0000-0000-0097-000000000001},  !- Handle

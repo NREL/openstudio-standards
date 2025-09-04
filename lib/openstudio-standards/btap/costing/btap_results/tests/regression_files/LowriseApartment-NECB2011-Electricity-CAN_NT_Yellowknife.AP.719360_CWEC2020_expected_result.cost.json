@@ -1136,21 +1136,21 @@
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 1000,
         "base_ahu_cost": 66426.11,
-        "revised_base_ahu_cost": 28974.69,
+        "revised_base_ahu_cost": 28984.69,
         "hrv": {},
         "equipment_info": [
           {
             "eq_category": "Coil_Cooling_DX_SingleSpeed",
             "heating_fuel": "none",
             "cooling_type": "DX",
-            "total_modeled_capacity_kw": 7.221,
+            "total_modeled_capacity_kw": 7.223,
             "cost": 15158.07
           },
           {
             "eq_category": "Coil_Heating_Electric",
             "heating_fuel": "elec",
             "cooling_type": "none",
-            "total_modeled_capacity_kw": 14.129,
+            "total_modeled_capacity_kw": 14.133,
             "cost": 1970.96
           }
         ],
@@ -1510,8 +1510,8 @@
     "lighting": 142672,
     "heating_and_cooling": 188153,
     "shw": 53474,
-    "ventilation": 169204,
+    "ventilation": 169214,
     "renewables": 0,
-    "grand_total": 1674558
+    "grand_total": 1674568
   }
 }

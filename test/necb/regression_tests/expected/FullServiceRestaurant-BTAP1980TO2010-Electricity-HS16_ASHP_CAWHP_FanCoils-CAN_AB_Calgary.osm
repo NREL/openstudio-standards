@@ -190,7 +190,7 @@ OS:Boiler:HotWater,
   {00000000-0000-0000-0009-000000000001},  !- Handle
   Boiler Hot Water 1 235kBtu/hr 1.0 Thermal Eff, !- Name
   Electricity,                             !- Fuel Type
-  68869.578125,                            !- Nominal Capacity {W}
+  68869.71875,                             !- Nominal Capacity {W}
   1,                                       !- Nominal Thermal Efficiency
   ,                                        !- Efficiency Curve Temperature Evaluation Variable
   {00000000-0000-0000-0026-000000000001},  !- Normalized Boiler Efficiency Curve Name
@@ -1920,8 +1920,8 @@ OS:Controller:OutdoorAir,
   ,                                        !- Time of Day Economizer Control Schedule Name
   No,                                      !- High Humidity Control
   ,                                        !- Humidistat Control Zone Name
-  ,                                        !- High Humidity Outdoor Air Flow Ratio
-  ,                                        !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
+  1,                                       !- High Humidity Outdoor Air Flow Ratio
+  Yes,                                     !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
   BypassWhenWithinEconomizerLimits,        !- Heat Recovery Bypass Control Type
   InterlockedWithMechanicalCooling;        !- Economizer Operation Staging
 
@@ -1950,8 +1950,8 @@ OS:Controller:OutdoorAir,
   ,                                        !- Time of Day Economizer Control Schedule Name
   No,                                      !- High Humidity Control
   ,                                        !- Humidistat Control Zone Name
-  ,                                        !- High Humidity Outdoor Air Flow Ratio
-  ,                                        !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
+  1,                                       !- High Humidity Outdoor Air Flow Ratio
+  Yes,                                     !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
   BypassWhenWithinEconomizerLimits,        !- Heat Recovery Bypass Control Type
   InterlockedWithMechanicalCooling;        !- Economizer Operation Staging
 
@@ -2828,10 +2828,13 @@ OS:HeatPump:PlantLoop:EIR:Cooling,
   AirSource,                               !- Condenser Type
   ,                                        !- Source Side Inlet Node Name
   ,                                        !- Source Side Outlet Node Name
+  ,                                        !- Heat Recovery Inlet Node Name
+  ,                                        !- Heat Recovery Outlet Node Name
   ,                                        !- Companion Heat Pump Name
   Autosize,                                !- Load Side Reference Flow Rate {m3/s}
   Autosize,                                !- Source Side Reference Flow Rate {m3/s}
-  43630.63671875,                          !- Reference Capacity {W}
+  Autosize,                                !- Heat Recovery Reference Flow Rate {m3/s}
+  43630.1875,                              !- Reference Capacity {W}
   3,                                       !- Reference Coefficient of Performance {W/W}
   1,                                       !- Sizing Factor
   {00000000-0000-0000-0025-000000000003},  !- Capacity Modifier Function of Temperature Curve Name
@@ -2841,7 +2844,14 @@ OS:HeatPump:PlantLoop:EIR:Cooling,
   VariableSpeedPumping,                    !- Flow Mode
   0.2,                                     !- Minimum Part Load Ratio
   -100,                                    !- Minimum Source Inlet Temperature {C}
-  100;                                     !- Maximum Source Inlet Temperature {C}
+  100,                                     !- Maximum Source Inlet Temperature {C}
+  ,                                        !- Minimum Supply Water Temperature Curve Name
+  ,                                        !- Maximum Supply Water Temperature Curve Name
+  60,                                      !- Maximum Heat Recovery Outlet Temperature {C}
+  ,                                        !- Heat Recovery Capacity Modifier Function of Temperature Curve Name
+  ,                                        !- Heat Recovery Electric Input to Output Ratio Modifier Function of Temperature Curve Name
+  ,                                        !- Thermosiphon Capacity Fraction Curve Name
+  0;                                       !- Thermosiphon Minimum Temperature Difference
 
 OS:HeatPump:PlantLoop:EIR:Heating,
   {00000000-0000-0000-0047-000000000001},  !- Handle
@@ -2851,10 +2861,13 @@ OS:HeatPump:PlantLoop:EIR:Heating,
   AirSource,                               !- Condenser Type
   ,                                        !- Source Side Inlet Node Name
   ,                                        !- Source Side Outlet Node Name
+  ,                                        !- Heat Recovery Inlet Node Name
+  ,                                        !- Heat Recovery Outlet Node Name
   {00000000-0000-0000-0046-000000000001},  !- Companion Heat Pump Name
   Autosize,                                !- Load Side Reference Flow Rate {m3/s}
   Autosize,                                !- Source Side Reference Flow Rate {m3/s}
-  43630.63671875,                          !- Reference Capacity {W}
+  Autosize,                                !- Heat Recovery Reference Flow Rate {m3/s}
+  43630.1875,                              !- Reference Capacity {W}
   3,                                       !- Reference Coefficient of Performance {W/W}
   1,                                       !- Sizing Factor
   {00000000-0000-0000-0025-000000000012},  !- Capacity Modifier Function of Temperature Curve Name
@@ -2872,7 +2885,12 @@ OS:HeatPump:PlantLoop:EIR:Heating,
   ,                                        !- Dry Outdoor Correction Factor Curve Name
   10,                                      !- Maximum Outdoor Dry Bulb Temperature For Defrost Operation
   OnDemand,                                !- Heat Pump Defrost Control
-  0.058333;                                !- Heat Pump Defrost Time Period Fraction
+  0.058333,                                !- Heat Pump Defrost Time Period Fraction
+  ,                                        !- Defrost Energy Input Ratio Function of Temperature Curve Name
+  ,                                        !- Timed Empirical Defrost Frequency Curve Name
+  ,                                        !- Timed Empirical Defrost Heat Load Penalty Curve Name
+  ,                                        !- Timed Empirical Defrost Heat Input Energy Fraction Curve Name
+  4.5;                                     !- Minimum Heat Recovery Outlet Temperature {C}
 
 OS:Lights,
   {00000000-0000-0000-0048-000000000001},  !- Handle
@@ -6203,7 +6221,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0083-000000000002},  !- Handle
@@ -6238,7 +6263,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0083-000000000003},  !- Handle
@@ -6273,7 +6305,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:SizingPeriod:DesignDay,
   {00000000-0000-0000-0084-000000000001},  !- Handle
@@ -7324,7 +7363,7 @@ OS:Timestep,
 
 OS:Version,
   {00000000-0000-0000-0098-000000000001},  !- Handle
-  3.7.0;                                   !- Version Identifier
+  3.9.0;                                   !- Version Identifier
 
 OS:WaterHeater:Mixed,
   {00000000-0000-0000-0099-000000000001},  !- Handle

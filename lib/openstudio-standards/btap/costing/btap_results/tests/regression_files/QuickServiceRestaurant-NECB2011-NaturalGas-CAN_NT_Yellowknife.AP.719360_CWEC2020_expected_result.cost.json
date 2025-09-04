@@ -270,7 +270,7 @@
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 1000,
         "base_ahu_cost": 73053.44,
-        "revised_base_ahu_cost": 18669.08,
+        "revised_base_ahu_cost": 18667.19,
         "hrv": {},
         "equipment_info": [
           {
@@ -284,7 +284,7 @@
             "eq_category": "Coil_Heating_Gas",
             "heating_fuel": "Gas",
             "cooling_type": "none",
-            "total_modeled_capacity_kw": 19.31,
+            "total_modeled_capacity_kw": 19.309,
             "cost": 4349.98
           }
         ],
@@ -427,8 +427,8 @@
     "lighting": 49895,
     "heating_and_cooling": 52305,
     "shw": 15685,
-    "ventilation": 327111,
+    "ventilation": 327109,
     "renewables": 0,
-    "grand_total": 746877
+    "grand_total": 746875
   }
 }

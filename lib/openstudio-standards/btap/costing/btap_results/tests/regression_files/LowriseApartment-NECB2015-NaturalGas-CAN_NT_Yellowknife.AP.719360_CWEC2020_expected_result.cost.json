@@ -677,7 +677,7 @@
         "zone_number": 7,
         "zone_name": "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 2_SCHG",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 2.2,
+        "heat_capacity(kW)": 2.3,
         "cool_capacity(kW)": 2.1,
         "heat_cost": 0,
         "cool_cost": 5831,
@@ -692,7 +692,7 @@
         "zone_number": 7,
         "zone_name": "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 2_SCHG",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 2.2,
+        "heat_capacity(kW)": 2.3,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 2418,
         "cool_cost": 0,
@@ -797,7 +797,7 @@
         "zone_number": 11,
         "zone_name": "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 2_SCHG 8",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 3.1,
+        "heat_capacity(kW)": 3.2,
         "cool_capacity(kW)": 3.8,
         "heat_cost": 0,
         "cool_cost": 922,
@@ -812,7 +812,7 @@
         "zone_number": 11,
         "zone_name": "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 2_SCHG 8",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 3.1,
+        "heat_capacity(kW)": 3.2,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 2928,
         "cool_cost": 0,
@@ -1136,21 +1136,21 @@
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 1000,
         "base_ahu_cost": 72527.97,
-        "revised_base_ahu_cost": 31387.76,
+        "revised_base_ahu_cost": 31433.14,
         "hrv": {},
         "equipment_info": [
           {
             "eq_category": "Coil_Cooling_DX_SingleSpeed",
             "heating_fuel": "none",
             "cooling_type": "DX",
-            "total_modeled_capacity_kw": 7.164,
+            "total_modeled_capacity_kw": 7.174,
             "cost": 15158.07
           },
           {
             "eq_category": "Coil_Heating_Gas",
             "heating_fuel": "Gas",
             "cooling_type": "none",
-            "total_modeled_capacity_kw": 14.043,
+            "total_modeled_capacity_kw": 14.059,
             "cost": 555.61
           }
         ],
@@ -1193,7 +1193,7 @@
         {
           "Floor": "Building Story 2",
           "Predominant_space_type": "Dwelling units general",
-          "SupplyDuctSize_in": 9.23,
+          "SupplyDuctSize_in": 9.24,
           "SupplyDuctLength_m": 36.0,
           "ReturnDuctSize_in": 0,
           "ReturnDuctLength_m": 0,
@@ -1510,8 +1510,8 @@
     "lighting": 142672,
     "heating_and_cooling": 369423,
     "shw": 56483,
-    "ventilation": 220731,
+    "ventilation": 220776,
     "renewables": 0,
-    "grand_total": 1910364
+    "grand_total": 1910410
   }
 }

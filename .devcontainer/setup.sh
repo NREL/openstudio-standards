@@ -42,6 +42,8 @@ if [ "$(curl -k -o /dev/null -s -w "%{http_code}" "https://intranet.nrcan.gc.ca/
     echo "🔐 NRCAN network detected - installing certificates..."
     git clone https://github.com/canmet-energy/linux_nrcan_certs.git >/dev/null 2>&1
     cd linux_nrcan_certs
+    git checkout ruby_3.2
+    git pull
     ./install_nrcan_certs.sh >/dev/null 2>&1
     cd ..
     rm -fr linux_nrcan_certs

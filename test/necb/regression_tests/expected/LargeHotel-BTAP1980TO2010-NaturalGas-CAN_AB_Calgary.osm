@@ -1282,9 +1282,9 @@ OS:AvailabilityManagerAssignmentList,
 
 OS:Boiler:HotWater,
   {00000000-0000-0000-0010-000000000001},  !- Handle
-  Primary Boiler 2932kBtu/hr 0.8 Thermal Eff, !- Name
+  Primary Boiler 2930kBtu/hr 0.8 Thermal Eff, !- Name
   NaturalGas,                              !- Fuel Type
-  859419.590946329,                        !- Nominal Capacity {W}
+  858788.251802835,                        !- Nominal Capacity {W}
   0.8,                                     !- Nominal Thermal Efficiency
   ,                                        !- Efficiency Curve Temperature Evaluation Variable
   {00000000-0000-0000-0031-000000000001},  !- Normalized Boiler Efficiency Curve Name
@@ -1378,7 +1378,7 @@ OS:BuildingStory,
 OS:Chiller:Electric:EIR,
   {00000000-0000-0000-0013-000000000001},  !- Handle
   Primary Chiller WaterCooled Reciprocating 24tons 0.9kW/ton, !- Name
-  84571.1275302314,                        !- Reference Capacity {W}
+  84574.7135728696,                        !- Reference Capacity {W}
   3.8,                                     !- Reference COP {W/W}
   ,                                        !- Reference Leaving Chilled Water Temperature {C}
   ,                                        !- Reference Entering Condenser Fluid Temperature {C}
@@ -1403,14 +1403,20 @@ OS:Chiller:Electric:EIR,
   Autosize,                                !- Design Heat Recovery Water Flow Rate {m3/s}
   ,                                        !- Heat Recovery Inlet Node Name
   ,                                        !- Heat Recovery Outlet Node Name
-  1,                                       !- Sizing Factor
-  0,                                       !- Basin Heater Capacity {W/K}
+  ,                                        !- Sizing Factor
+  ,                                        !- Basin Heater Capacity {W/K}
   10,                                      !- Basin Heater Setpoint Temperature {C}
   ,                                        !- Basin Heater Operating Schedule Name
   1,                                       !- Condenser Heat Recovery Relative Capacity Fraction
   ,                                        !- Heat Recovery Inlet High Temperature Limit Schedule Name
   ,                                        !- Heat Recovery Leaving Temperature Setpoint Node Name
-  General;                                 !- End-Use Subcategory
+  General,                                 !- End-Use Subcategory
+  ConstantFlow,                            !- Condenser Flow Control
+  ,                                        !- Condenser Loop Flow Rate Fraction Function of Loop Part Load Ratio Curve Name
+  ,                                        !- Temperature Difference Across Condenser Schedule Name
+  0.2,                                     !- Condenser Minimum Flow Fraction
+  ,                                        !- Thermosiphon Capacity Fraction Curve Name
+  0;                                       !- Thermosiphon Minimum Temperature Difference
 
 OS:Chiller:Electric:EIR,
   {00000000-0000-0000-0013-000000000002},  !- Handle
@@ -1440,14 +1446,20 @@ OS:Chiller:Electric:EIR,
   Autosize,                                !- Design Heat Recovery Water Flow Rate {m3/s}
   ,                                        !- Heat Recovery Inlet Node Name
   ,                                        !- Heat Recovery Outlet Node Name
-  1,                                       !- Sizing Factor
-  0,                                       !- Basin Heater Capacity {W/K}
+  ,                                        !- Sizing Factor
+  ,                                        !- Basin Heater Capacity {W/K}
   10,                                      !- Basin Heater Setpoint Temperature {C}
   ,                                        !- Basin Heater Operating Schedule Name
   1,                                       !- Condenser Heat Recovery Relative Capacity Fraction
   ,                                        !- Heat Recovery Inlet High Temperature Limit Schedule Name
   ,                                        !- Heat Recovery Leaving Temperature Setpoint Node Name
-  General;                                 !- End-Use Subcategory
+  General,                                 !- End-Use Subcategory
+  ConstantFlow,                            !- Condenser Flow Control
+  ,                                        !- Condenser Loop Flow Rate Fraction Function of Loop Part Load Ratio Curve Name
+  ,                                        !- Temperature Difference Across Condenser Schedule Name
+  0.2,                                     !- Condenser Minimum Flow Fraction
+  ,                                        !- Thermosiphon Capacity Fraction Curve Name
+  0;                                       !- Thermosiphon Minimum Temperature Difference
 
 OS:ClimateZones,
   {00000000-0000-0000-0014-000000000001},  !- Handle
@@ -4128,7 +4140,7 @@ OS:Coil:Heating:Water,
   ,                                        !- Air Inlet Node Name
   ,                                        !- Air Outlet Node Name
   NominalCapacity,                         !- Performance Input Method
-  13862.68658638,                          !- Rated Capacity {W}
+  13863.1050109863,                        !- Rated Capacity {W}
   ,                                        !- Rated Inlet Water Temperature {C}
   ,                                        !- Rated Inlet Air Temperature {C}
   ,                                        !- Rated Outlet Water Temperature {C}
@@ -4146,7 +4158,7 @@ OS:Coil:Heating:Water,
   ,                                        !- Air Inlet Node Name
   ,                                        !- Air Outlet Node Name
   NominalCapacity,                         !- Performance Input Method
-  32804.7414779663,                        !- Rated Capacity {W}
+  32806.9275856018,                        !- Rated Capacity {W}
   ,                                        !- Rated Inlet Water Temperature {C}
   ,                                        !- Rated Inlet Air Temperature {C}
   ,                                        !- Rated Outlet Water Temperature {C}
@@ -4164,7 +4176,7 @@ OS:Coil:Heating:Water,
   ,                                        !- Air Inlet Node Name
   ,                                        !- Air Outlet Node Name
   NominalCapacity,                         !- Performance Input Method
-  5214.46087360382,                        !- Rated Capacity {W}
+  5214.58768844604,                        !- Rated Capacity {W}
   ,                                        !- Rated Inlet Water Temperature {C}
   ,                                        !- Rated Inlet Air Temperature {C}
   ,                                        !- Rated Outlet Water Temperature {C}
@@ -4182,7 +4194,7 @@ OS:Coil:Heating:Water,
   ,                                        !- Air Inlet Node Name
   ,                                        !- Air Outlet Node Name
   NominalCapacity,                         !- Performance Input Method
-  1712.46771812439,                        !- Rated Capacity {W}
+  1712.58568167686,                        !- Rated Capacity {W}
   ,                                        !- Rated Inlet Water Temperature {C}
   ,                                        !- Rated Inlet Air Temperature {C}
   ,                                        !- Rated Outlet Water Temperature {C}
@@ -16095,8 +16107,8 @@ OS:Controller:OutdoorAir,
   ,                                        !- Time of Day Economizer Control Schedule Name
   No,                                      !- High Humidity Control
   ,                                        !- Humidistat Control Zone Name
-  ,                                        !- High Humidity Outdoor Air Flow Ratio
-  ,                                        !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
+  1,                                       !- High Humidity Outdoor Air Flow Ratio
+  Yes,                                     !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
   BypassWhenWithinEconomizerLimits,        !- Heat Recovery Bypass Control Type
   InterlockedWithMechanicalCooling;        !- Economizer Operation Staging
 
@@ -16125,8 +16137,8 @@ OS:Controller:OutdoorAir,
   ,                                        !- Time of Day Economizer Control Schedule Name
   No,                                      !- High Humidity Control
   ,                                        !- Humidistat Control Zone Name
-  ,                                        !- High Humidity Outdoor Air Flow Ratio
-  ,                                        !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
+  1,                                       !- High Humidity Outdoor Air Flow Ratio
+  Yes,                                     !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
   BypassWhenWithinEconomizerLimits,        !- Heat Recovery Bypass Control Type
   InterlockedWithMechanicalCooling;        !- Economizer Operation Staging
 
@@ -16155,8 +16167,8 @@ OS:Controller:OutdoorAir,
   ,                                        !- Time of Day Economizer Control Schedule Name
   No,                                      !- High Humidity Control
   ,                                        !- Humidistat Control Zone Name
-  ,                                        !- High Humidity Outdoor Air Flow Ratio
-  ,                                        !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
+  1,                                       !- High Humidity Outdoor Air Flow Ratio
+  Yes,                                     !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
   BypassWhenWithinEconomizerLimits,        !- Heat Recovery Bypass Control Type
   InterlockedWithMechanicalCooling;        !- Economizer Operation Staging
 
@@ -16185,8 +16197,8 @@ OS:Controller:OutdoorAir,
   ,                                        !- Time of Day Economizer Control Schedule Name
   No,                                      !- High Humidity Control
   ,                                        !- Humidistat Control Zone Name
-  ,                                        !- High Humidity Outdoor Air Flow Ratio
-  ,                                        !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
+  1,                                       !- High Humidity Outdoor Air Flow Ratio
+  Yes,                                     !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
   BypassWhenWithinEconomizerLimits,        !- Heat Recovery Bypass Control Type
   InterlockedWithMechanicalCooling;        !- Economizer Operation Staging
 
@@ -16215,8 +16227,8 @@ OS:Controller:OutdoorAir,
   ,                                        !- Time of Day Economizer Control Schedule Name
   No,                                      !- High Humidity Control
   ,                                        !- Humidistat Control Zone Name
-  ,                                        !- High Humidity Outdoor Air Flow Ratio
-  ,                                        !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
+  1,                                       !- High Humidity Outdoor Air Flow Ratio
+  Yes,                                     !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
   BypassWhenWithinEconomizerLimits,        !- Heat Recovery Bypass Control Type
   InterlockedWithMechanicalCooling;        !- Economizer Operation Staging
 
@@ -16245,8 +16257,8 @@ OS:Controller:OutdoorAir,
   ,                                        !- Time of Day Economizer Control Schedule Name
   No,                                      !- High Humidity Control
   ,                                        !- Humidistat Control Zone Name
-  ,                                        !- High Humidity Outdoor Air Flow Ratio
-  ,                                        !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
+  1,                                       !- High Humidity Outdoor Air Flow Ratio
+  Yes,                                     !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
   BypassWhenWithinEconomizerLimits,        !- Heat Recovery Bypass Control Type
   InterlockedWithMechanicalCooling;        !- Economizer Operation Staging
 
@@ -16275,8 +16287,8 @@ OS:Controller:OutdoorAir,
   ,                                        !- Time of Day Economizer Control Schedule Name
   No,                                      !- High Humidity Control
   ,                                        !- Humidistat Control Zone Name
-  ,                                        !- High Humidity Outdoor Air Flow Ratio
-  ,                                        !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
+  1,                                       !- High Humidity Outdoor Air Flow Ratio
+  Yes,                                     !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
   BypassWhenWithinEconomizerLimits,        !- Heat Recovery Bypass Control Type
   InterlockedWithMechanicalCooling;        !- Economizer Operation Staging
 
@@ -16383,7 +16395,7 @@ OS:CoolingTower:SingleSpeed,
   {00000000-0000-0000-0021-000000001009},  !- Water Outlet Node Name
   autosize,                                !- Design Water Flow Rate {m3/s}
   autosize,                                !- Design Air Flow Rate {m3/s}
-  1602.40031109912,                        !- Fan Power at Design Air Flow Rate {W}
+  1602.46825717016,                        !- Fan Power at Design Air Flow Rate {W}
   autosize,                                !- U-Factor Times Area Value at Design Air Flow Rate {W/K}
   autosize,                                !- Air Flow Rate in Free Convection Regime {m3/s}
   autosize,                                !- U-Factor Times Area Value at Free Convection Air Flow Rate {W/K}
@@ -21794,41 +21806,41 @@ OS:EnergyManagementSystem:Actuator,
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0042-000000000001},  !- Handle
   ems_sys_6_mixed_shr_none_sh_c_hw_sc_c_chw_ssf_vv_zh_b_hw_zc_none_srf_vv__OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {8ea83b31-5d6b-4c96-b259-3d55109f3dd4}<23.9 && {8ea83b31-5d6b-4c96-b259-3d55109f3dd4}>1.7, !- Program Line 1
-  SET {de090858-c37f-4eb2-9804-9745e1360878} = 29.4, !- Program Line 2
-  SET {30bbac58-04ca-4f17-b930-c993ef9d3c80} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {8ea83b31-5d6b-4c96-b259-3d55109f3dd4}<23.9 && {8ea83b31-5d6b-4c96-b259-3d55109f3dd4}>1.7, !- Program Line 4
-  SET {de090858-c37f-4eb2-9804-9745e1360878} = 29.4, !- Program Line 5
-  SET {30bbac58-04ca-4f17-b930-c993ef9d3c80} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {8ea83b31-5d6b-4c96-b259-3d55109f3dd4}<23.9 && {8ea83b31-5d6b-4c96-b259-3d55109f3dd4}>1.7, !- Program Line 7
-  SET {de090858-c37f-4eb2-9804-9745e1360878} = 29.4, !- Program Line 8
-  SET {30bbac58-04ca-4f17-b930-c993ef9d3c80} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {8ea83b31-5d6b-4c96-b259-3d55109f3dd4}<23.9 && {8ea83b31-5d6b-4c96-b259-3d55109f3dd4}>1.7, !- Program Line 10
-  SET {de090858-c37f-4eb2-9804-9745e1360878} = 29.4, !- Program Line 11
-  SET {30bbac58-04ca-4f17-b930-c993ef9d3c80} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {54586a38-a599-4b2c-9960-79c12cb81ff3}<23.9 && {54586a38-a599-4b2c-9960-79c12cb81ff3}>1.7, !- Program Line 1
+  SET {dc00b84c-72ed-496b-9367-7214578061ed} = 29.4, !- Program Line 2
+  SET {fd09f357-9b5f-4c85-af70-bda2376cba0c} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {54586a38-a599-4b2c-9960-79c12cb81ff3}<23.9 && {54586a38-a599-4b2c-9960-79c12cb81ff3}>1.7, !- Program Line 4
+  SET {dc00b84c-72ed-496b-9367-7214578061ed} = 29.4, !- Program Line 5
+  SET {fd09f357-9b5f-4c85-af70-bda2376cba0c} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {54586a38-a599-4b2c-9960-79c12cb81ff3}<23.9 && {54586a38-a599-4b2c-9960-79c12cb81ff3}>1.7, !- Program Line 7
+  SET {dc00b84c-72ed-496b-9367-7214578061ed} = 29.4, !- Program Line 8
+  SET {fd09f357-9b5f-4c85-af70-bda2376cba0c} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {54586a38-a599-4b2c-9960-79c12cb81ff3}<23.9 && {54586a38-a599-4b2c-9960-79c12cb81ff3}>1.7, !- Program Line 10
+  SET {dc00b84c-72ed-496b-9367-7214578061ed} = 29.4, !- Program Line 11
+  SET {fd09f357-9b5f-4c85-af70-bda2376cba0c} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {de090858-c37f-4eb2-9804-9745e1360878} = NULL, !- Program Line 14
-  SET {30bbac58-04ca-4f17-b930-c993ef9d3c80} = NULL, !- Program Line 15
+  SET {dc00b84c-72ed-496b-9367-7214578061ed} = NULL, !- Program Line 14
+  SET {fd09f357-9b5f-4c85-af70-bda2376cba0c} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0042-000000000002},  !- Handle
   ems_sys_6_mixed_shr_none_sh_c_hw_sc_c_chw_ssf_vv_zh_b_hw_zc_none_srf_vv__OptimumStartProg1, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {8ea83b31-5d6b-4c96-b259-3d55109f3dd4}<23.9 && {8ea83b31-5d6b-4c96-b259-3d55109f3dd4}>1.7, !- Program Line 1
-  SET {18f1d693-511e-4c12-9271-ac5757d7b159} = 29.4, !- Program Line 2
-  SET {e4cdfbf4-7454-4391-a731-e216c2e90b1a} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {8ea83b31-5d6b-4c96-b259-3d55109f3dd4}<23.9 && {8ea83b31-5d6b-4c96-b259-3d55109f3dd4}>1.7, !- Program Line 4
-  SET {18f1d693-511e-4c12-9271-ac5757d7b159} = 29.4, !- Program Line 5
-  SET {e4cdfbf4-7454-4391-a731-e216c2e90b1a} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {8ea83b31-5d6b-4c96-b259-3d55109f3dd4}<23.9 && {8ea83b31-5d6b-4c96-b259-3d55109f3dd4}>1.7, !- Program Line 7
-  SET {18f1d693-511e-4c12-9271-ac5757d7b159} = 29.4, !- Program Line 8
-  SET {e4cdfbf4-7454-4391-a731-e216c2e90b1a} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {8ea83b31-5d6b-4c96-b259-3d55109f3dd4}<23.9 && {8ea83b31-5d6b-4c96-b259-3d55109f3dd4}>1.7, !- Program Line 10
-  SET {18f1d693-511e-4c12-9271-ac5757d7b159} = 29.4, !- Program Line 11
-  SET {e4cdfbf4-7454-4391-a731-e216c2e90b1a} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {54586a38-a599-4b2c-9960-79c12cb81ff3}<23.9 && {54586a38-a599-4b2c-9960-79c12cb81ff3}>1.7, !- Program Line 1
+  SET {59770bbe-e5c1-4444-85fb-d58328cdef97} = 29.4, !- Program Line 2
+  SET {7082ae79-cb0b-42bb-9ffb-f26498f64546} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {54586a38-a599-4b2c-9960-79c12cb81ff3}<23.9 && {54586a38-a599-4b2c-9960-79c12cb81ff3}>1.7, !- Program Line 4
+  SET {59770bbe-e5c1-4444-85fb-d58328cdef97} = 29.4, !- Program Line 5
+  SET {7082ae79-cb0b-42bb-9ffb-f26498f64546} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {54586a38-a599-4b2c-9960-79c12cb81ff3}<23.9 && {54586a38-a599-4b2c-9960-79c12cb81ff3}>1.7, !- Program Line 7
+  SET {59770bbe-e5c1-4444-85fb-d58328cdef97} = 29.4, !- Program Line 8
+  SET {7082ae79-cb0b-42bb-9ffb-f26498f64546} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {54586a38-a599-4b2c-9960-79c12cb81ff3}<23.9 && {54586a38-a599-4b2c-9960-79c12cb81ff3}>1.7, !- Program Line 10
+  SET {59770bbe-e5c1-4444-85fb-d58328cdef97} = 29.4, !- Program Line 11
+  SET {7082ae79-cb0b-42bb-9ffb-f26498f64546} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {18f1d693-511e-4c12-9271-ac5757d7b159} = NULL, !- Program Line 14
-  SET {e4cdfbf4-7454-4391-a731-e216c2e90b1a} = NULL, !- Program Line 15
+  SET {59770bbe-e5c1-4444-85fb-d58328cdef97} = NULL, !- Program Line 14
+  SET {7082ae79-cb0b-42bb-9ffb-f26498f64546} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:ProgramCallingManager,
@@ -27119,13 +27131,13 @@ OS:Node,
 
 OS:Node,
   {00000000-0000-0000-0058-000000000575},  !- Handle
-  Primary Boiler 2932kBtu/hr 0.8 Thermal Eff Inlet Water Node, !- Name
+  Primary Boiler 2930kBtu/hr 0.8 Thermal Eff Inlet Water Node, !- Name
   {00000000-0000-0000-0021-000000000090},  !- Inlet Port
   {00000000-0000-0000-0021-000000000100};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0058-000000000576},  !- Handle
-  Primary Boiler 2932kBtu/hr 0.8 Thermal Eff Outlet Water Node, !- Name
+  Primary Boiler 2930kBtu/hr 0.8 Thermal Eff Outlet Water Node, !- Name
   {00000000-0000-0000-0021-000000000101},  !- Inlet Port
   {00000000-0000-0000-0021-000000000102};  !- Outlet Port
 
@@ -39345,7 +39357,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000002},  !- Handle
@@ -39380,7 +39399,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000003},  !- Handle
@@ -39415,7 +39441,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000004},  !- Handle
@@ -39450,7 +39483,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000005},  !- Handle
@@ -39485,7 +39525,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000006},  !- Handle
@@ -39520,7 +39567,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000007},  !- Handle
@@ -39555,7 +39609,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000008},  !- Handle
@@ -39590,7 +39651,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000009},  !- Handle
@@ -39625,7 +39693,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000010},  !- Handle
@@ -39660,7 +39735,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000011},  !- Handle
@@ -39695,7 +39777,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000012},  !- Handle
@@ -39730,7 +39819,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000013},  !- Handle
@@ -39765,7 +39861,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000014},  !- Handle
@@ -39800,7 +39903,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000015},  !- Handle
@@ -39835,7 +39945,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000016},  !- Handle
@@ -39870,7 +39987,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000017},  !- Handle
@@ -39905,7 +40029,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000018},  !- Handle
@@ -39940,7 +40071,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000019},  !- Handle
@@ -39975,7 +40113,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000020},  !- Handle
@@ -40010,7 +40155,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000021},  !- Handle
@@ -40045,7 +40197,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000022},  !- Handle
@@ -40080,7 +40239,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000023},  !- Handle
@@ -40115,7 +40281,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000024},  !- Handle
@@ -40150,7 +40323,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000025},  !- Handle
@@ -40185,7 +40365,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000026},  !- Handle
@@ -40220,7 +40407,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000027},  !- Handle
@@ -40255,7 +40449,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000028},  !- Handle
@@ -40290,7 +40491,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000029},  !- Handle
@@ -40325,7 +40533,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000030},  !- Handle
@@ -40360,7 +40575,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000031},  !- Handle
@@ -40395,7 +40617,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000032},  !- Handle
@@ -40430,7 +40659,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000033},  !- Handle
@@ -40465,7 +40701,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000034},  !- Handle
@@ -40500,7 +40743,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000035},  !- Handle
@@ -40535,7 +40785,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000036},  !- Handle
@@ -40570,7 +40827,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000037},  !- Handle
@@ -40605,7 +40869,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000038},  !- Handle
@@ -40640,7 +40911,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000039},  !- Handle
@@ -40675,7 +40953,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000040},  !- Handle
@@ -40710,7 +40995,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000041},  !- Handle
@@ -40745,7 +41037,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000042},  !- Handle
@@ -40780,7 +41079,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000043},  !- Handle
@@ -40815,7 +41121,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000044},  !- Handle
@@ -40850,7 +41163,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000045},  !- Handle
@@ -40885,7 +41205,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000046},  !- Handle
@@ -40920,7 +41247,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000047},  !- Handle
@@ -40955,7 +41289,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000048},  !- Handle
@@ -40990,7 +41331,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000049},  !- Handle
@@ -41025,7 +41373,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000050},  !- Handle
@@ -41060,7 +41415,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000051},  !- Handle
@@ -41095,7 +41457,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000052},  !- Handle
@@ -41130,7 +41499,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000053},  !- Handle
@@ -41165,7 +41541,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000054},  !- Handle
@@ -41200,7 +41583,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000055},  !- Handle
@@ -41235,7 +41625,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000056},  !- Handle
@@ -41270,7 +41667,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000057},  !- Handle
@@ -41305,7 +41709,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000058},  !- Handle
@@ -41340,7 +41751,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000059},  !- Handle
@@ -41375,7 +41793,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000060},  !- Handle
@@ -41410,7 +41835,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000061},  !- Handle
@@ -41445,7 +41877,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000062},  !- Handle
@@ -41480,7 +41919,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000063},  !- Handle
@@ -41515,7 +41961,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000064},  !- Handle
@@ -41550,7 +42003,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000065},  !- Handle
@@ -41585,7 +42045,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0090-000000000066},  !- Handle
@@ -41620,7 +42087,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:SizingPeriod:DesignDay,
   {00000000-0000-0000-0091-000000000001},  !- Handle
@@ -56625,7 +57099,7 @@ OS:Timestep,
 
 OS:Version,
   {00000000-0000-0000-0105-000000000001},  !- Handle
-  3.7.0;                                   !- Version Identifier
+  3.9.0;                                   !- Version Identifier
 
 OS:WaterHeater:Mixed,
   {00000000-0000-0000-0106-000000000001},  !- Handle
@@ -60358,6 +60832,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -60378,6 +60853,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -60398,6 +60874,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -60418,6 +60895,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -60438,6 +60916,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -60458,6 +60937,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -60478,6 +60958,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -60498,6 +60979,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -60518,6 +61000,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -60538,6 +61021,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -60558,6 +61042,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -60578,6 +61063,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -60598,6 +61084,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -60618,6 +61105,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -60638,6 +61126,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -60658,6 +61147,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -60678,6 +61168,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -60698,6 +61189,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -60718,6 +61210,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -60738,6 +61231,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -60758,6 +61252,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -60778,6 +61273,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -60798,6 +61294,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -60818,6 +61315,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -60838,6 +61336,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -60858,6 +61357,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -60878,6 +61378,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -60898,6 +61399,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -60918,6 +61420,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -60938,6 +61441,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -60958,6 +61462,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -60978,6 +61483,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -60998,6 +61504,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -61018,6 +61525,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -61038,6 +61546,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -61058,6 +61567,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -61078,6 +61588,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -61098,6 +61609,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -61118,6 +61630,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -61138,6 +61651,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -61158,6 +61672,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -61178,6 +61693,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -61198,6 +61714,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -61218,6 +61735,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -61238,6 +61756,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -61258,6 +61777,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -61278,6 +61798,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -61298,6 +61819,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -61318,6 +61840,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -61338,6 +61861,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -61358,6 +61882,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -61378,6 +61903,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}
@@ -61398,6 +61924,7 @@ OS:ZoneHVAC:PackagedTerminalAirConditioner,
   Autosize,                                !- Supply Air Flow Rate During Cooling Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate During Heating Operation {m3/s}
   Autosize,                                !- Supply Air Flow Rate When No Cooling or Heating is Needed {m3/s}
+  Yes,                                     !- No Load Supply Air Flow Rate Control Set To Low Speed
   1e-05,                                   !- Outdoor Air Flow Rate During Cooling Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate During Heating Operation {m3/s}
   1e-05,                                   !- Outdoor Air Flow Rate When No Cooling or Heating is Needed {m3/s}

@@ -186,7 +186,7 @@ OS:Boiler:HotWater,
   {00000000-0000-0000-0009-000000000001},  !- Handle
   Primary Boiler 82kBtu/hr 0.9 AFUE,       !- Name
   NaturalGas,                              !- Fuel Type
-  24048.5664312154,                        !- Nominal Capacity {W}
+  24049.4385737937,                        !- Nominal Capacity {W}
   0.9,                                     !- Nominal Thermal Efficiency
   ,                                        !- Efficiency Curve Temperature Evaluation Variable
   {00000000-0000-0000-0024-000000000001},  !- Normalized Boiler Efficiency Curve Name
@@ -387,21 +387,21 @@ OS:Coil:Heating:Water:Baseboard,
 
 OS:Connection,
   {00000000-0000-0000-0016-000000000001},  !- Handle
-  {00000000-0000-0000-0088-000000000001},  !- Source Object
+  {00000000-0000-0000-0090-000000000001},  !- Source Object
   11,                                      !- Outlet Port
   {00000000-0000-0000-0044-000000000003},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
   {00000000-0000-0000-0016-000000000002},  !- Handle
-  {00000000-0000-0000-0088-000000000002},  !- Source Object
+  {00000000-0000-0000-0090-000000000002},  !- Source Object
   11,                                      !- Outlet Port
   {00000000-0000-0000-0044-000000000005},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
   {00000000-0000-0000-0016-000000000003},  !- Handle
-  {00000000-0000-0000-0088-000000000003},  !- Source Object
+  {00000000-0000-0000-0090-000000000003},  !- Source Object
   11,                                      !- Outlet Port
   {00000000-0000-0000-0044-000000000007},  !- Target Object
   2;                                       !- Inlet Port
@@ -984,12 +984,12 @@ OS:Connection,
   {00000000-0000-0000-0016-000000000086},  !- Handle
   {00000000-0000-0000-0044-000000000001},  !- Source Object
   3,                                       !- Outlet Port
-  {00000000-0000-0000-0092-000000000001},  !- Target Object
+  {00000000-0000-0000-0094-000000000001},  !- Target Object
   31;                                      !- Inlet Port
 
 OS:Connection,
   {00000000-0000-0000-0016-000000000087},  !- Handle
-  {00000000-0000-0000-0092-000000000001},  !- Source Object
+  {00000000-0000-0000-0094-000000000001},  !- Source Object
   32,                                      !- Outlet Port
   {00000000-0000-0000-0044-000000000002},  !- Target Object
   2;                                       !- Inlet Port
@@ -1103,12 +1103,12 @@ OS:Connection,
   {00000000-0000-0000-0016-000000000103},  !- Handle
   {00000000-0000-0000-0044-000000000018},  !- Source Object
   3,                                       !- Outlet Port
-  {00000000-0000-0000-0094-000000000001},  !- Target Object
+  {00000000-0000-0000-0096-000000000001},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
   {00000000-0000-0000-0016-000000000104},  !- Handle
-  {00000000-0000-0000-0094-000000000001},  !- Source Object
+  {00000000-0000-0000-0096-000000000001},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0044-000000000019},  !- Target Object
   2;                                       !- Inlet Port
@@ -1131,12 +1131,12 @@ OS:Connection,
   {00000000-0000-0000-0016-000000000107},  !- Handle
   {00000000-0000-0000-0044-000000000024},  !- Source Object
   3,                                       !- Outlet Port
-  {00000000-0000-0000-0094-000000000002},  !- Target Object
+  {00000000-0000-0000-0096-000000000002},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
   {00000000-0000-0000-0016-000000000108},  !- Handle
-  {00000000-0000-0000-0094-000000000002},  !- Source Object
+  {00000000-0000-0000-0096-000000000002},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0044-000000000025},  !- Target Object
   2;                                       !- Inlet Port
@@ -1153,12 +1153,12 @@ OS:Connection,
   {00000000-0000-0000-0044-000000000057},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0038-000000000002},  !- Target Object
-  12;                                      !- Inlet Port
+  8;                                       !- Inlet Port
 
 OS:Connection,
   {00000000-0000-0000-0016-000000000111},  !- Handle
   {00000000-0000-0000-0038-000000000002},  !- Source Object
-  13,                                      !- Outlet Port
+  9,                                       !- Outlet Port
   {00000000-0000-0000-0044-000000000063},  !- Target Object
   2;                                       !- Inlet Port
 
@@ -1181,12 +1181,12 @@ OS:Connection,
   {00000000-0000-0000-0044-000000000064},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0038-000000000002},  !- Target Object
-  14;                                      !- Inlet Port
+  10;                                      !- Inlet Port
 
 OS:Connection,
   {00000000-0000-0000-0016-000000000115},  !- Handle
   {00000000-0000-0000-0038-000000000002},  !- Source Object
-  15,                                      !- Outlet Port
+  11,                                      !- Outlet Port
   {00000000-0000-0000-0044-000000000058},  !- Target Object
   2;                                       !- Inlet Port
 
@@ -1195,12 +1195,12 @@ OS:Connection,
   {00000000-0000-0000-0044-000000000050},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0038-000000000001},  !- Target Object
-  12;                                      !- Inlet Port
+  8;                                       !- Inlet Port
 
 OS:Connection,
   {00000000-0000-0000-0016-000000000117},  !- Handle
   {00000000-0000-0000-0038-000000000001},  !- Source Object
-  13,                                      !- Outlet Port
+  9,                                       !- Outlet Port
   {00000000-0000-0000-0044-000000000061},  !- Target Object
   2;                                       !- Inlet Port
 
@@ -1223,12 +1223,12 @@ OS:Connection,
   {00000000-0000-0000-0044-000000000062},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0038-000000000001},  !- Target Object
-  14;                                      !- Inlet Port
+  10;                                      !- Inlet Port
 
 OS:Connection,
   {00000000-0000-0000-0016-000000000121},  !- Handle
   {00000000-0000-0000-0038-000000000001},  !- Source Object
-  15,                                      !- Outlet Port
+  11,                                      !- Outlet Port
   {00000000-0000-0000-0044-000000000051},  !- Target Object
   2;                                       !- Inlet Port
 
@@ -1296,25 +1296,25 @@ OS:Construction,
   {00000000-0000-0000-0019-000000000001},  !- Handle
   BTAP-Ext-DaylightDiffuser,               !- Name
   ,                                        !- Surface Rendering Name
-  {00000000-0000-0000-0098-000000000001};  !- Layer 1
+  {00000000-0000-0000-0100-000000000001};  !- Layer 1
 
 OS:Construction,
   {00000000-0000-0000-0019-000000000002},  !- Handle
   BTAP-Ext-DaylightDiffuser:U=0.241 SHGC=0.600, !- Name
   ,                                        !- Surface Rendering Name
-  {00000000-0000-0000-0098-000000000003};  !- Layer 1
+  {00000000-0000-0000-0100-000000000003};  !- Layer 1
 
 OS:Construction,
   {00000000-0000-0000-0019-000000000003},  !- Handle
   BTAP-Ext-DaylightDomes,                  !- Name
   ,                                        !- Surface Rendering Name
-  {00000000-0000-0000-0098-000000000001};  !- Layer 1
+  {00000000-0000-0000-0100-000000000001};  !- Layer 1
 
 OS:Construction,
   {00000000-0000-0000-0019-000000000004},  !- Handle
   BTAP-Ext-DaylightDomes:U=0.241 SHGC=0.600, !- Name
   ,                                        !- Surface Rendering Name
-  {00000000-0000-0000-0098-000000000003};  !- Layer 1
+  {00000000-0000-0000-0100-000000000003};  !- Layer 1
 
 OS:Construction,
   {00000000-0000-0000-0019-000000000005},  !- Handle
@@ -1334,13 +1334,13 @@ OS:Construction,
   {00000000-0000-0000-0019-000000000007},  !- Handle
   BTAP-Ext-FixedWindow,                    !- Name
   ,                                        !- Surface Rendering Name
-  {00000000-0000-0000-0098-000000000001};  !- Layer 1
+  {00000000-0000-0000-0100-000000000001};  !- Layer 1
 
 OS:Construction,
   {00000000-0000-0000-0019-000000000008},  !- Handle
   BTAP-Ext-FixedWindow:U=0.173 SHGC=0.600, !- Name
   ,                                        !- Surface Rendering Name
-  {00000000-0000-0000-0098-000000000002};  !- Layer 1
+  {00000000-0000-0000-0100-000000000002};  !- Layer 1
 
 OS:Construction,
   {00000000-0000-0000-0019-000000000009},  !- Handle
@@ -1362,13 +1362,13 @@ OS:Construction,
   {00000000-0000-0000-0019-000000000011},  !- Handle
   BTAP-Ext-GlassDoors,                     !- Name
   ,                                        !- Surface Rendering Name
-  {00000000-0000-0000-0098-000000000001};  !- Layer 1
+  {00000000-0000-0000-0100-000000000001};  !- Layer 1
 
 OS:Construction,
   {00000000-0000-0000-0019-000000000012},  !- Handle
   BTAP-Ext-GlassDoors:U=0.173 SHGC=0.600,  !- Name
   ,                                        !- Surface Rendering Name
-  {00000000-0000-0000-0098-000000000002};  !- Layer 1
+  {00000000-0000-0000-0100-000000000002};  !- Layer 1
 
 OS:Construction,
   {00000000-0000-0000-0019-000000000013},  !- Handle
@@ -1400,13 +1400,13 @@ OS:Construction,
   {00000000-0000-0000-0019-000000000017},  !- Handle
   BTAP-Ext-Skylights,                      !- Name
   ,                                        !- Surface Rendering Name
-  {00000000-0000-0000-0098-000000000001};  !- Layer 1
+  {00000000-0000-0000-0100-000000000001};  !- Layer 1
 
 OS:Construction,
   {00000000-0000-0000-0019-000000000018},  !- Handle
   BTAP-Ext-Skylights:U=0.241 SHGC=0.600,   !- Name
   ,                                        !- Surface Rendering Name
-  {00000000-0000-0000-0098-000000000003};  !- Layer 1
+  {00000000-0000-0000-0100-000000000003};  !- Layer 1
 
 OS:Construction,
   {00000000-0000-0000-0019-000000000019},  !- Handle
@@ -1512,7 +1512,7 @@ OS:Construction,
   {00000000-0000-0000-0019-000000000033},  !- Handle
   BTAP-Int-Window,                         !- Name
   ,                                        !- Surface Rendering Name
-  {00000000-0000-0000-0098-000000000001};  !- Layer 1
+  {00000000-0000-0000-0100-000000000001};  !- Layer 1
 
 OS:Construction,
   {00000000-0000-0000-0019-000000000034},  !- Handle
@@ -1581,8 +1581,8 @@ OS:Controller:OutdoorAir,
   ,                                        !- Time of Day Economizer Control Schedule Name
   No,                                      !- High Humidity Control
   ,                                        !- Humidistat Control Zone Name
-  ,                                        !- High Humidity Outdoor Air Flow Ratio
-  ,                                        !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
+  1,                                       !- High Humidity Outdoor Air Flow Ratio
+  Yes,                                     !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
   BypassWhenOAFlowGreaterThanMinimum,      !- Heat Recovery Bypass Control Type
   InterlockedWithMechanicalCooling;        !- Economizer Operation Staging
 
@@ -1611,8 +1611,8 @@ OS:Controller:OutdoorAir,
   ,                                        !- Time of Day Economizer Control Schedule Name
   No,                                      !- High Humidity Control
   ,                                        !- Humidistat Control Zone Name
-  ,                                        !- High Humidity Outdoor Air Flow Ratio
-  ,                                        !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
+  1,                                       !- High Humidity Outdoor Air Flow Ratio
+  Yes,                                     !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
   BypassWhenOAFlowGreaterThanMinimum,      !- Heat Recovery Bypass Control Type
   InterlockedWithMechanicalCooling;        !- Economizer Operation Staging
 
@@ -2098,12 +2098,8 @@ OS:HeatExchanger:AirToAir:SensibleAndLatent,
   autosize,                                !- Nominal Supply Air Flow Rate {m3/s}
   0.5,                                     !- Sensible Effectiveness at 100% Heating Air Flow {dimensionless}
   0.5,                                     !- Latent Effectiveness at 100% Heating Air Flow {dimensionless}
-  0.5,                                     !- Sensible Effectiveness at 75% Heating Air Flow {dimensionless}
-  0.5,                                     !- Latent Effectiveness at 75% Heating Air Flow {dimensionless}
   0.5,                                     !- Sensible Effectiveness at 100% Cooling Air Flow {dimensionless}
   0.5,                                     !- Latent Effectiveness at 100% Cooling Air Flow {dimensionless}
-  0.5,                                     !- Sensible Effectiveness at 75% Cooling Air Flow {dimensionless}
-  0.5,                                     !- Latent Effectiveness at 75% Cooling Air Flow {dimensionless}
   {00000000-0000-0000-0016-000000000116},  !- Supply Air Inlet Node
   {00000000-0000-0000-0016-000000000117},  !- Supply Air Outlet Node
   {00000000-0000-0000-0016-000000000120},  !- Exhaust Air Inlet Node
@@ -2115,7 +2111,11 @@ OS:HeatExchanger:AirToAir:SensibleAndLatent,
   -23.3,                                   !- Threshold Temperature {C}
   0.167,                                   !- Initial Defrost Time Fraction {dimensionless}
   1.44,                                    !- Rate of Defrost Time Fraction Increase {1/K}
-  Yes;                                     !- Economizer Lockout
+  Yes,                                     !- Economizer Lockout
+  {00000000-0000-0000-0089-000000000004},  !- Sensible Effectiveness of Heating Air Flow Curve Name
+  {00000000-0000-0000-0089-000000000002},  !- Latent Effectiveness of Heating Air Flow Curve Name
+  {00000000-0000-0000-0089-000000000003},  !- Sensible Effectiveness of Cooling Air Flow Curve Name
+  {00000000-0000-0000-0089-000000000001};  !- Latent Effectiveness of Cooling Air Flow Curve Name
 
 OS:HeatExchanger:AirToAir:SensibleAndLatent,
   {00000000-0000-0000-0038-000000000002},  !- Handle
@@ -2124,12 +2124,8 @@ OS:HeatExchanger:AirToAir:SensibleAndLatent,
   autosize,                                !- Nominal Supply Air Flow Rate {m3/s}
   0.5,                                     !- Sensible Effectiveness at 100% Heating Air Flow {dimensionless}
   0.5,                                     !- Latent Effectiveness at 100% Heating Air Flow {dimensionless}
-  0.5,                                     !- Sensible Effectiveness at 75% Heating Air Flow {dimensionless}
-  0.5,                                     !- Latent Effectiveness at 75% Heating Air Flow {dimensionless}
   0.5,                                     !- Sensible Effectiveness at 100% Cooling Air Flow {dimensionless}
   0.5,                                     !- Latent Effectiveness at 100% Cooling Air Flow {dimensionless}
-  0.5,                                     !- Sensible Effectiveness at 75% Cooling Air Flow {dimensionless}
-  0.5,                                     !- Latent Effectiveness at 75% Cooling Air Flow {dimensionless}
   {00000000-0000-0000-0016-000000000110},  !- Supply Air Inlet Node
   {00000000-0000-0000-0016-000000000111},  !- Supply Air Outlet Node
   {00000000-0000-0000-0016-000000000114},  !- Exhaust Air Inlet Node
@@ -2141,7 +2137,11 @@ OS:HeatExchanger:AirToAir:SensibleAndLatent,
   -23.3,                                   !- Threshold Temperature {C}
   0.167,                                   !- Initial Defrost Time Fraction {dimensionless}
   1.44,                                    !- Rate of Defrost Time Fraction Increase {1/K}
-  Yes;                                     !- Economizer Lockout
+  Yes,                                     !- Economizer Lockout
+  {00000000-0000-0000-0089-000000000008},  !- Sensible Effectiveness of Heating Air Flow Curve Name
+  {00000000-0000-0000-0089-000000000006},  !- Latent Effectiveness of Heating Air Flow Curve Name
+  {00000000-0000-0000-0089-000000000007},  !- Sensible Effectiveness of Cooling Air Flow Curve Name
+  {00000000-0000-0000-0089-000000000005};  !- Latent Effectiveness of Cooling Air Flow Curve Name
 
 OS:Lights,
   {00000000-0000-0000-0039-000000000001},  !- Handle
@@ -2595,6 +2595,46 @@ OS:ModelObjectList,
 OS:ModelObjectList,
   {00000000-0000-0000-0043-000000000008},  !- Handle
   Availability Manager Night Cycle 2 Heating Zone Fans Only Zone List; !- Name
+
+OS:ModelObjectList,
+  {00000000-0000-0000-0043-000000000009},  !- Handle
+  Table Lookup 1 Independent Variable List 10, !- Name
+  {00000000-0000-0000-0088-000000000003};  !- Model Object 1
+
+OS:ModelObjectList,
+  {00000000-0000-0000-0043-000000000010},  !- Handle
+  Table Lookup 1 Independent Variable List 11, !- Name
+  {00000000-0000-0000-0088-000000000001};  !- Model Object 1
+
+OS:ModelObjectList,
+  {00000000-0000-0000-0043-000000000011},  !- Handle
+  Table Lookup 1 Independent Variable List 12, !- Name
+  {00000000-0000-0000-0088-000000000008};  !- Model Object 1
+
+OS:ModelObjectList,
+  {00000000-0000-0000-0043-000000000012},  !- Handle
+  Table Lookup 1 Independent Variable List 13, !- Name
+  {00000000-0000-0000-0088-000000000007};  !- Model Object 1
+
+OS:ModelObjectList,
+  {00000000-0000-0000-0043-000000000013},  !- Handle
+  Table Lookup 1 Independent Variable List 14, !- Name
+  {00000000-0000-0000-0088-000000000005};  !- Model Object 1
+
+OS:ModelObjectList,
+  {00000000-0000-0000-0043-000000000014},  !- Handle
+  Table Lookup 1 Independent Variable List 8, !- Name
+  {00000000-0000-0000-0088-000000000004};  !- Model Object 1
+
+OS:ModelObjectList,
+  {00000000-0000-0000-0043-000000000015},  !- Handle
+  Table Lookup 1 Independent Variable List 9, !- Name
+  {00000000-0000-0000-0088-000000000002};  !- Model Object 1
+
+OS:ModelObjectList,
+  {00000000-0000-0000-0043-000000000016},  !- Handle
+  Table Lookup 1 Independent Variable List, !- Name
+  {00000000-0000-0000-0088-000000000006};  !- Model Object 1
 
 OS:Node,
   {00000000-0000-0000-0044-000000000001},  !- Handle
@@ -3160,42 +3200,42 @@ OS:PlantLoop,
 
 OS:PortList,
   {00000000-0000-0000-0051-000000000001},  !- Handle
-  {00000000-0000-0000-0088-000000000001};  !- HVAC Component
+  {00000000-0000-0000-0090-000000000001};  !- HVAC Component
 
 OS:PortList,
   {00000000-0000-0000-0051-000000000002},  !- Handle
-  {00000000-0000-0000-0088-000000000001};  !- HVAC Component
+  {00000000-0000-0000-0090-000000000001};  !- HVAC Component
 
 OS:PortList,
   {00000000-0000-0000-0051-000000000003},  !- Handle
-  {00000000-0000-0000-0088-000000000001};  !- HVAC Component
+  {00000000-0000-0000-0090-000000000001};  !- HVAC Component
 
 OS:PortList,
   {00000000-0000-0000-0051-000000000004},  !- Handle
-  {00000000-0000-0000-0088-000000000002},  !- HVAC Component
+  {00000000-0000-0000-0090-000000000002},  !- HVAC Component
   {00000000-0000-0000-0016-000000000046};  !- Port 1
 
 OS:PortList,
   {00000000-0000-0000-0051-000000000005},  !- Handle
-  {00000000-0000-0000-0088-000000000002};  !- HVAC Component
+  {00000000-0000-0000-0090-000000000002};  !- HVAC Component
 
 OS:PortList,
   {00000000-0000-0000-0051-000000000006},  !- Handle
-  {00000000-0000-0000-0088-000000000002},  !- HVAC Component
+  {00000000-0000-0000-0090-000000000002},  !- HVAC Component
   {00000000-0000-0000-0016-000000000047};  !- Port 1
 
 OS:PortList,
   {00000000-0000-0000-0051-000000000007},  !- Handle
-  {00000000-0000-0000-0088-000000000003},  !- HVAC Component
+  {00000000-0000-0000-0090-000000000003},  !- HVAC Component
   {00000000-0000-0000-0016-000000000070};  !- Port 1
 
 OS:PortList,
   {00000000-0000-0000-0051-000000000008},  !- Handle
-  {00000000-0000-0000-0088-000000000003};  !- HVAC Component
+  {00000000-0000-0000-0090-000000000003};  !- HVAC Component
 
 OS:PortList,
   {00000000-0000-0000-0051-000000000009},  !- Handle
-  {00000000-0000-0000-0088-000000000003},  !- HVAC Component
+  {00000000-0000-0000-0090-000000000003},  !- HVAC Component
   {00000000-0000-0000-0016-000000000071};  !- Port 1
 
 OS:Pump:ConstantSpeed,
@@ -5176,7 +5216,7 @@ OS:SetpointManager:SingleZone:Reheat,
   Setpoint Manager Single Zone Reheat 1,   !- Name
   13,                                      !- Minimum Supply Air Temperature {C}
   43,                                      !- Maximum Supply Air Temperature {C}
-  {00000000-0000-0000-0088-000000000002},  !- Control Zone Name
+  {00000000-0000-0000-0090-000000000002},  !- Control Zone Name
   {00000000-0000-0000-0044-000000000060};  !- Setpoint Node or NodeList Name
 
 OS:SetpointManager:SingleZone:Reheat,
@@ -5184,7 +5224,7 @@ OS:SetpointManager:SingleZone:Reheat,
   Setpoint Manager Single Zone Reheat 2,   !- Name
   13,                                      !- Minimum Supply Air Temperature {C}
   43,                                      !- Maximum Supply Air Temperature {C}
-  {00000000-0000-0000-0088-000000000003},  !- Control Zone Name
+  {00000000-0000-0000-0090-000000000003},  !- Control Zone Name
   {00000000-0000-0000-0044-000000000053};  !- Setpoint Node or NodeList Name
 
 OS:ShadowCalculation,
@@ -5400,7 +5440,7 @@ OS:Sizing:System,
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0076-000000000001},  !- Handle
-  {00000000-0000-0000-0088-000000000001},  !- Zone or ZoneList Name
+  {00000000-0000-0000-0090-000000000001},  !- Zone or ZoneList Name
   SupplyAirTemperature,                    !- Zone Cooling Design Supply Air Temperature Input Method
   14,                                      !- Zone Cooling Design Supply Air Temperature {C}
   11.11,                                   !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
@@ -5431,11 +5471,18 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0076-000000000002},  !- Handle
-  {00000000-0000-0000-0088-000000000002},  !- Zone or ZoneList Name
+  {00000000-0000-0000-0090-000000000002},  !- Zone or ZoneList Name
   TemperatureDifference,                   !- Zone Cooling Design Supply Air Temperature Input Method
   14,                                      !- Zone Cooling Design Supply Air Temperature {C}
   11,                                      !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
@@ -5466,11 +5513,18 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0076-000000000003},  !- Handle
-  {00000000-0000-0000-0088-000000000003},  !- Zone or ZoneList Name
+  {00000000-0000-0000-0090-000000000003},  !- Zone or ZoneList Name
   TemperatureDifference,                   !- Zone Cooling Design Supply Air Temperature Input Method
   14,                                      !- Zone Cooling Design Supply Air Temperature {C}
   11,                                      !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
@@ -5501,7 +5555,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:SizingPeriod:DesignDay,
   {00000000-0000-0000-0077-000000000001},  !- Handle
@@ -5594,7 +5655,7 @@ OS:Space,
   0,                                       !- Y Origin {m}
   0,                                       !- Z Origin {m}
   {00000000-0000-0000-0011-000000000001},  !- Building Story Name
-  {00000000-0000-0000-0088-000000000002},  !- Thermal Zone Name
+  {00000000-0000-0000-0090-000000000002},  !- Thermal Zone Name
   Yes,                                     !- Part of Total Floor Area
   ,                                        !- Design Specification Outdoor Air Object Name
   ,                                        !- Building Unit Name
@@ -5611,7 +5672,7 @@ OS:Space,
   0,                                       !- Y Origin {m}
   0,                                       !- Z Origin {m}
   {00000000-0000-0000-0011-000000000001},  !- Building Story Name
-  {00000000-0000-0000-0088-000000000003},  !- Thermal Zone Name
+  {00000000-0000-0000-0090-000000000003},  !- Thermal Zone Name
   Yes,                                     !- Part of Total Floor Area
   ,                                        !- Design Specification Outdoor Air Object Name
   ,                                        !- Building Unit Name
@@ -5628,7 +5689,7 @@ OS:Space,
   0,                                       !- Y Origin {m}
   3.0488,                                  !- Z Origin {m}
   {00000000-0000-0000-0011-000000000002},  !- Building Story Name
-  {00000000-0000-0000-0088-000000000001},  !- Thermal Zone Name
+  {00000000-0000-0000-0090-000000000001},  !- Thermal Zone Name
   No,                                      !- Part of Total Floor Area
   ,                                        !- Design Specification Outdoor Air Object Name
   ,                                        !- Building Unit Name
@@ -5963,7 +6024,7 @@ OS:StandardsInformation:Material,
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0082-000000000012},  !- Handle
-  {00000000-0000-0000-0098-000000000001};  !- Material Name
+  {00000000-0000-0000-0100-000000000001};  !- Material Name
 
 OS:StandardsInformation:Material,
   {00000000-0000-0000-0082-000000000013},  !- Handle
@@ -6461,8 +6522,248 @@ OS:SurfaceProperty:ExposedFoundationPerimeter,
   TotalExposedPerimeter,                   !- Exposed Perimeter Calculation Method
   34.9407;                                 !- Total Exposed Perimeter {m}
 
-OS:ThermalZone,
+OS:Table:IndependentVariable,
   {00000000-0000-0000-0088-000000000001},  !- Handle
+  sys_3|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| 1 ERV_LatentCooling_IndependentVariable, !- Name
+  Linear,                                  !- Interpolation Method
+  Linear,                                  !- Extrapolation Method
+  0,                                       !- Minimum Value {BasedOnField A5}
+  10,                                      !- Maximum Value {BasedOnField A5}
+  ,                                        !- Normalization Reference Value {BasedOnField A5}
+  Dimensionless,                           !- Unit Type
+  ,                                        !- External File Name
+  ,                                        !- External File Column Number
+  ,                                        !- External File Starting Row Number
+  0.75,                                    !- Value 1
+  1;                                       !- Value 2
+
+OS:Table:IndependentVariable,
+  {00000000-0000-0000-0088-000000000002},  !- Handle
+  sys_3|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| 1 ERV_LatentHeating_IndependentVariable, !- Name
+  Linear,                                  !- Interpolation Method
+  Linear,                                  !- Extrapolation Method
+  0,                                       !- Minimum Value {BasedOnField A5}
+  10,                                      !- Maximum Value {BasedOnField A5}
+  ,                                        !- Normalization Reference Value {BasedOnField A5}
+  Dimensionless,                           !- Unit Type
+  ,                                        !- External File Name
+  ,                                        !- External File Column Number
+  ,                                        !- External File Starting Row Number
+  0.75,                                    !- Value 1
+  1;                                       !- Value 2
+
+OS:Table:IndependentVariable,
+  {00000000-0000-0000-0088-000000000003},  !- Handle
+  sys_3|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| 1 ERV_SensibleCooling_IndependentVariable, !- Name
+  Linear,                                  !- Interpolation Method
+  Linear,                                  !- Extrapolation Method
+  0,                                       !- Minimum Value {BasedOnField A5}
+  10,                                      !- Maximum Value {BasedOnField A5}
+  ,                                        !- Normalization Reference Value {BasedOnField A5}
+  Dimensionless,                           !- Unit Type
+  ,                                        !- External File Name
+  ,                                        !- External File Column Number
+  ,                                        !- External File Starting Row Number
+  0.75,                                    !- Value 1
+  1;                                       !- Value 2
+
+OS:Table:IndependentVariable,
+  {00000000-0000-0000-0088-000000000004},  !- Handle
+  sys_3|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| 1 ERV_SensibleHeating_IndependentVariable, !- Name
+  Linear,                                  !- Interpolation Method
+  Linear,                                  !- Extrapolation Method
+  0,                                       !- Minimum Value {BasedOnField A5}
+  10,                                      !- Maximum Value {BasedOnField A5}
+  ,                                        !- Normalization Reference Value {BasedOnField A5}
+  Dimensionless,                           !- Unit Type
+  ,                                        !- External File Name
+  ,                                        !- External File Column Number
+  ,                                        !- External File Starting Row Number
+  0.75,                                    !- Value 1
+  1;                                       !- Value 2
+
+OS:Table:IndependentVariable,
+  {00000000-0000-0000-0088-000000000005},  !- Handle
+  sys_3|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| ERV_LatentCooling_IndependentVariable, !- Name
+  Linear,                                  !- Interpolation Method
+  Linear,                                  !- Extrapolation Method
+  0,                                       !- Minimum Value {BasedOnField A5}
+  10,                                      !- Maximum Value {BasedOnField A5}
+  ,                                        !- Normalization Reference Value {BasedOnField A5}
+  Dimensionless,                           !- Unit Type
+  ,                                        !- External File Name
+  ,                                        !- External File Column Number
+  ,                                        !- External File Starting Row Number
+  0.75,                                    !- Value 1
+  1;                                       !- Value 2
+
+OS:Table:IndependentVariable,
+  {00000000-0000-0000-0088-000000000006},  !- Handle
+  sys_3|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| ERV_LatentHeating_IndependentVariable, !- Name
+  Linear,                                  !- Interpolation Method
+  Linear,                                  !- Extrapolation Method
+  0,                                       !- Minimum Value {BasedOnField A5}
+  10,                                      !- Maximum Value {BasedOnField A5}
+  ,                                        !- Normalization Reference Value {BasedOnField A5}
+  Dimensionless,                           !- Unit Type
+  ,                                        !- External File Name
+  ,                                        !- External File Column Number
+  ,                                        !- External File Starting Row Number
+  0.75,                                    !- Value 1
+  1;                                       !- Value 2
+
+OS:Table:IndependentVariable,
+  {00000000-0000-0000-0088-000000000007},  !- Handle
+  sys_3|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| ERV_SensibleCooling_IndependentVariable, !- Name
+  Linear,                                  !- Interpolation Method
+  Linear,                                  !- Extrapolation Method
+  0,                                       !- Minimum Value {BasedOnField A5}
+  10,                                      !- Maximum Value {BasedOnField A5}
+  ,                                        !- Normalization Reference Value {BasedOnField A5}
+  Dimensionless,                           !- Unit Type
+  ,                                        !- External File Name
+  ,                                        !- External File Column Number
+  ,                                        !- External File Starting Row Number
+  0.75,                                    !- Value 1
+  1;                                       !- Value 2
+
+OS:Table:IndependentVariable,
+  {00000000-0000-0000-0088-000000000008},  !- Handle
+  sys_3|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| ERV_SensibleHeating_IndependentVariable, !- Name
+  Linear,                                  !- Interpolation Method
+  Linear,                                  !- Extrapolation Method
+  0,                                       !- Minimum Value {BasedOnField A5}
+  10,                                      !- Maximum Value {BasedOnField A5}
+  ,                                        !- Normalization Reference Value {BasedOnField A5}
+  Dimensionless,                           !- Unit Type
+  ,                                        !- External File Name
+  ,                                        !- External File Column Number
+  ,                                        !- External File Starting Row Number
+  0.75,                                    !- Value 1
+  1;                                       !- Value 2
+
+OS:Table:Lookup,
+  {00000000-0000-0000-0089-000000000001},  !- Handle
+  sys_3|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| 1 ERV_LatCoolEff 1, !- Name
+  {00000000-0000-0000-0043-000000000010},  !- Independent Variable List Name
+  DivisorOnly,                             !- Normalization Method
+  0.5,                                     !- Normalization Divisor
+  0,                                       !- Minimum Output {BasedOnField A5}
+  10,                                      !- Maximum Output {BasedOnField A5}
+  Dimensionless,                           !- Output Unit Type
+  ,                                        !- External File Name
+  ,                                        !- External File Column Number
+  ,                                        !- External File Starting Row Number
+  0.5,                                     !- Output Value 1 {BasedOnField A5}
+  0.5;                                     !- Output Value 2 {BasedOnField A5}
+
+OS:Table:Lookup,
+  {00000000-0000-0000-0089-000000000002},  !- Handle
+  sys_3|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| 1 ERV_LatHeatEff 1, !- Name
+  {00000000-0000-0000-0043-000000000015},  !- Independent Variable List Name
+  DivisorOnly,                             !- Normalization Method
+  0.5,                                     !- Normalization Divisor
+  0,                                       !- Minimum Output {BasedOnField A5}
+  10,                                      !- Maximum Output {BasedOnField A5}
+  Dimensionless,                           !- Output Unit Type
+  ,                                        !- External File Name
+  ,                                        !- External File Column Number
+  ,                                        !- External File Starting Row Number
+  0.5,                                     !- Output Value 1 {BasedOnField A5}
+  0.5;                                     !- Output Value 2 {BasedOnField A5}
+
+OS:Table:Lookup,
+  {00000000-0000-0000-0089-000000000003},  !- Handle
+  sys_3|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| 1 ERV_SensCoolEff 1, !- Name
+  {00000000-0000-0000-0043-000000000009},  !- Independent Variable List Name
+  DivisorOnly,                             !- Normalization Method
+  0.5,                                     !- Normalization Divisor
+  0,                                       !- Minimum Output {BasedOnField A5}
+  10,                                      !- Maximum Output {BasedOnField A5}
+  Dimensionless,                           !- Output Unit Type
+  ,                                        !- External File Name
+  ,                                        !- External File Column Number
+  ,                                        !- External File Starting Row Number
+  0.5,                                     !- Output Value 1 {BasedOnField A5}
+  0.5;                                     !- Output Value 2 {BasedOnField A5}
+
+OS:Table:Lookup,
+  {00000000-0000-0000-0089-000000000004},  !- Handle
+  sys_3|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| 1 ERV_SensHeatEff 1, !- Name
+  {00000000-0000-0000-0043-000000000014},  !- Independent Variable List Name
+  DivisorOnly,                             !- Normalization Method
+  0.5,                                     !- Normalization Divisor
+  0,                                       !- Minimum Output {BasedOnField A5}
+  10,                                      !- Maximum Output {BasedOnField A5}
+  Dimensionless,                           !- Output Unit Type
+  ,                                        !- External File Name
+  ,                                        !- External File Column Number
+  ,                                        !- External File Starting Row Number
+  0.5,                                     !- Output Value 1 {BasedOnField A5}
+  0.5;                                     !- Output Value 2 {BasedOnField A5}
+
+OS:Table:Lookup,
+  {00000000-0000-0000-0089-000000000005},  !- Handle
+  sys_3|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| ERV_LatCoolEff 1, !- Name
+  {00000000-0000-0000-0043-000000000013},  !- Independent Variable List Name
+  DivisorOnly,                             !- Normalization Method
+  0.5,                                     !- Normalization Divisor
+  0,                                       !- Minimum Output {BasedOnField A5}
+  10,                                      !- Maximum Output {BasedOnField A5}
+  Dimensionless,                           !- Output Unit Type
+  ,                                        !- External File Name
+  ,                                        !- External File Column Number
+  ,                                        !- External File Starting Row Number
+  0.5,                                     !- Output Value 1 {BasedOnField A5}
+  0.5;                                     !- Output Value 2 {BasedOnField A5}
+
+OS:Table:Lookup,
+  {00000000-0000-0000-0089-000000000006},  !- Handle
+  sys_3|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| ERV_LatHeatEff 1, !- Name
+  {00000000-0000-0000-0043-000000000016},  !- Independent Variable List Name
+  DivisorOnly,                             !- Normalization Method
+  0.5,                                     !- Normalization Divisor
+  0,                                       !- Minimum Output {BasedOnField A5}
+  10,                                      !- Maximum Output {BasedOnField A5}
+  Dimensionless,                           !- Output Unit Type
+  ,                                        !- External File Name
+  ,                                        !- External File Column Number
+  ,                                        !- External File Starting Row Number
+  0.5,                                     !- Output Value 1 {BasedOnField A5}
+  0.5;                                     !- Output Value 2 {BasedOnField A5}
+
+OS:Table:Lookup,
+  {00000000-0000-0000-0089-000000000007},  !- Handle
+  sys_3|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| ERV_SensCoolEff 1, !- Name
+  {00000000-0000-0000-0043-000000000012},  !- Independent Variable List Name
+  DivisorOnly,                             !- Normalization Method
+  0.5,                                     !- Normalization Divisor
+  0,                                       !- Minimum Output {BasedOnField A5}
+  10,                                      !- Maximum Output {BasedOnField A5}
+  Dimensionless,                           !- Output Unit Type
+  ,                                        !- External File Name
+  ,                                        !- External File Column Number
+  ,                                        !- External File Starting Row Number
+  0.5,                                     !- Output Value 1 {BasedOnField A5}
+  0.5;                                     !- Output Value 2 {BasedOnField A5}
+
+OS:Table:Lookup,
+  {00000000-0000-0000-0089-000000000008},  !- Handle
+  sys_3|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| ERV_SensHeatEff 1, !- Name
+  {00000000-0000-0000-0043-000000000011},  !- Independent Variable List Name
+  DivisorOnly,                             !- Normalization Method
+  0.5,                                     !- Normalization Divisor
+  0,                                       !- Minimum Output {BasedOnField A5}
+  10,                                      !- Maximum Output {BasedOnField A5}
+  Dimensionless,                           !- Output Unit Type
+  ,                                        !- External File Name
+  ,                                        !- External File Column Number
+  ,                                        !- External File Starting Row Number
+  0.5,                                     !- Output Value 1 {BasedOnField A5}
+  0.5;                                     !- Output Value 2 {BasedOnField A5}
+
+OS:ThermalZone,
+  {00000000-0000-0000-0090-000000000001},  !- Handle
   ALL_ST=- undefined -_FL=Building Story 2_SCH=A, !- Name
   ,                                        !- Multiplier
   ,                                        !- Ceiling Height {m}
@@ -6481,11 +6782,11 @@ OS:ThermalZone,
   ,                                        !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                        !- Illuminance Map Name
   {00000000-0000-0000-0054-000000000001},  !- Group Rendering Name
-  {00000000-0000-0000-0089-000000000003},  !- Thermostat Name
+  {00000000-0000-0000-0091-000000000003},  !- Thermostat Name
   No;                                      !- Use Ideal Air Loads
 
 OS:ThermalZone,
-  {00000000-0000-0000-0088-000000000002},  !- Handle
+  {00000000-0000-0000-0090-000000000002},  !- Handle
   ALL_ST=Dining area - family dining_FL=Building Story 1_SCH=B, !- Name
   ,                                        !- Multiplier
   ,                                        !- Ceiling Height {m}
@@ -6504,11 +6805,11 @@ OS:ThermalZone,
   ,                                        !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                        !- Illuminance Map Name
   {00000000-0000-0000-0054-000000000002},  !- Group Rendering Name
-  {00000000-0000-0000-0089-000000000007},  !- Thermostat Name
+  {00000000-0000-0000-0091-000000000007},  !- Thermostat Name
   No;                                      !- Use Ideal Air Loads
 
 OS:ThermalZone,
-  {00000000-0000-0000-0088-000000000003},  !- Handle
+  {00000000-0000-0000-0090-000000000003},  !- Handle
   ALL_ST=Food preparation area_FL=Building Story 1_SCH=B, !- Name
   ,                                        !- Multiplier
   ,                                        !- Ceiling Height {m}
@@ -6527,83 +6828,83 @@ OS:ThermalZone,
   ,                                        !- Fraction of Zone Controlled by Secondary Daylighting Control
   ,                                        !- Illuminance Map Name
   {00000000-0000-0000-0054-000000000003},  !- Group Rendering Name
-  {00000000-0000-0000-0089-000000000011},  !- Thermostat Name
+  {00000000-0000-0000-0091-000000000011},  !- Thermostat Name
   No;                                      !- Use Ideal Air Loads
 
 OS:ThermostatSetpoint:DualSetpoint,
-  {00000000-0000-0000-0089-000000000001},  !- Handle
+  {00000000-0000-0000-0091-000000000001},  !- Handle
   Space Function - undefined - Thermostat 1; !- Name
 
 OS:ThermostatSetpoint:DualSetpoint,
-  {00000000-0000-0000-0089-000000000002},  !- Handle
+  {00000000-0000-0000-0091-000000000002},  !- Handle
   Space Function - undefined - Thermostat 2; !- Name
 
 OS:ThermostatSetpoint:DualSetpoint,
-  {00000000-0000-0000-0089-000000000003},  !- Handle
+  {00000000-0000-0000-0091-000000000003},  !- Handle
   Space Function - undefined - Thermostat 3; !- Name
 
 OS:ThermostatSetpoint:DualSetpoint,
-  {00000000-0000-0000-0089-000000000004},  !- Handle
+  {00000000-0000-0000-0091-000000000004},  !- Handle
   Space Function - undefined - Thermostat; !- Name
 
 OS:ThermostatSetpoint:DualSetpoint,
-  {00000000-0000-0000-0089-000000000005},  !- Handle
+  {00000000-0000-0000-0091-000000000005},  !- Handle
   Space Function Dining area - family dining Thermostat 1, !- Name
   {00000000-0000-0000-0059-000000000014},  !- Heating Setpoint Temperature Schedule Name
   {00000000-0000-0000-0059-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
-  {00000000-0000-0000-0089-000000000006},  !- Handle
+  {00000000-0000-0000-0091-000000000006},  !- Handle
   Space Function Dining area - family dining Thermostat 2, !- Name
   {00000000-0000-0000-0059-000000000014},  !- Heating Setpoint Temperature Schedule Name
   {00000000-0000-0000-0059-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
-  {00000000-0000-0000-0089-000000000007},  !- Handle
+  {00000000-0000-0000-0091-000000000007},  !- Handle
   Space Function Dining area - family dining Thermostat 3, !- Name
   {00000000-0000-0000-0059-000000000014},  !- Heating Setpoint Temperature Schedule Name
   {00000000-0000-0000-0059-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
-  {00000000-0000-0000-0089-000000000008},  !- Handle
+  {00000000-0000-0000-0091-000000000008},  !- Handle
   Space Function Dining area - family dining Thermostat, !- Name
   {00000000-0000-0000-0059-000000000014},  !- Heating Setpoint Temperature Schedule Name
   {00000000-0000-0000-0059-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
-  {00000000-0000-0000-0089-000000000009},  !- Handle
+  {00000000-0000-0000-0091-000000000009},  !- Handle
   Space Function Food preparation area Thermostat 1, !- Name
   {00000000-0000-0000-0059-000000000014},  !- Heating Setpoint Temperature Schedule Name
   {00000000-0000-0000-0059-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
-  {00000000-0000-0000-0089-000000000010},  !- Handle
+  {00000000-0000-0000-0091-000000000010},  !- Handle
   Space Function Food preparation area Thermostat 2, !- Name
   {00000000-0000-0000-0059-000000000014},  !- Heating Setpoint Temperature Schedule Name
   {00000000-0000-0000-0059-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
-  {00000000-0000-0000-0089-000000000011},  !- Handle
+  {00000000-0000-0000-0091-000000000011},  !- Handle
   Space Function Food preparation area Thermostat 3, !- Name
   {00000000-0000-0000-0059-000000000014},  !- Heating Setpoint Temperature Schedule Name
   {00000000-0000-0000-0059-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
-  {00000000-0000-0000-0089-000000000012},  !- Handle
+  {00000000-0000-0000-0091-000000000012},  !- Handle
   Space Function Food preparation area Thermostat, !- Name
   {00000000-0000-0000-0059-000000000014},  !- Heating Setpoint Temperature Schedule Name
   {00000000-0000-0000-0059-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:Timestep,
-  {00000000-0000-0000-0090-000000000001},  !- Handle
+  {00000000-0000-0000-0092-000000000001},  !- Handle
   6;                                       !- Number of Timesteps per Hour
 
 OS:Version,
-  {00000000-0000-0000-0091-000000000001},  !- Handle
-  3.7.0;                                   !- Version Identifier
+  {00000000-0000-0000-0093-000000000001},  !- Handle
+  3.9.0;                                   !- Version Identifier
 
 OS:WaterHeater:Mixed,
-  {00000000-0000-0000-0092-000000000001},  !- Handle
+  {00000000-0000-0000-0094-000000000001},  !- Handle
   48gal NaturalGas Water Heater - 33kBtu/hr 0.82 Therm Eff, !- Name
   0.182319801786776,                       !- Tank Volume {m3}
   {00000000-0000-0000-0059-000000000017},  !- Setpoint Temperature Schedule Name
@@ -6648,15 +6949,15 @@ OS:WaterHeater:Mixed,
   General;                                 !- End-Use Subcategory
 
 OS:WaterHeater:Sizing,
-  {00000000-0000-0000-0093-000000000001},  !- Handle
-  {00000000-0000-0000-0092-000000000001},  !- WaterHeater Name
+  {00000000-0000-0000-0095-000000000001},  !- Handle
+  {00000000-0000-0000-0094-000000000001},  !- WaterHeater Name
   PeakDraw,                                !- Design Mode
   0.538503,                                !- Time Storage Can Meet Peak Draw {hr}
   0,                                       !- Time for Tank Recovery {hr}
   1;                                       !- Nominal Tank Volume for Autosizing Plant Connections {m3}
 
 OS:WaterUse:Connections,
-  {00000000-0000-0000-0094-000000000001},  !- Handle
+  {00000000-0000-0000-0096-000000000001},  !- Handle
   Dining WUC 0.38gpm 140F,                 !- Name
   {00000000-0000-0000-0016-000000000103},  !- Inlet Node Name
   {00000000-0000-0000-0016-000000000104},  !- Outlet Node Name
@@ -6667,10 +6968,10 @@ OS:WaterUse:Connections,
   None,                                    !- Drain Water Heat Exchanger Type
   Plant,                                   !- Drain Water Heat Exchanger Destination
   ,                                        !- Drain Water Heat Exchanger U-Factor Times Area {W/K}
-  {00000000-0000-0000-0095-000000000001};  !- Water Use Equipment Name 1
+  {00000000-0000-0000-0097-000000000001};  !- Water Use Equipment Name 1
 
 OS:WaterUse:Connections,
-  {00000000-0000-0000-0094-000000000002},  !- Handle
+  {00000000-0000-0000-0096-000000000002},  !- Handle
   Kitchen WUC 0.07gpm 140F,                !- Name
   {00000000-0000-0000-0016-000000000107},  !- Inlet Node Name
   {00000000-0000-0000-0016-000000000108},  !- Outlet Node Name
@@ -6681,24 +6982,24 @@ OS:WaterUse:Connections,
   None,                                    !- Drain Water Heat Exchanger Type
   Plant,                                   !- Drain Water Heat Exchanger Destination
   ,                                        !- Drain Water Heat Exchanger U-Factor Times Area {W/K}
-  {00000000-0000-0000-0095-000000000002};  !- Water Use Equipment Name 1
+  {00000000-0000-0000-0097-000000000002};  !- Water Use Equipment Name 1
 
 OS:WaterUse:Equipment,
-  {00000000-0000-0000-0095-000000000001},  !- Handle
+  {00000000-0000-0000-0097-000000000001},  !- Handle
   Dining Service Water Use 0.38gpm 140F,   !- Name
-  {00000000-0000-0000-0096-000000000001},  !- Water Use Equipment Definition Name
+  {00000000-0000-0000-0098-000000000001},  !- Water Use Equipment Definition Name
   {00000000-0000-0000-0078-000000000001},  !- Space Name
   {00000000-0000-0000-0059-000000000012};  !- Flow Rate Fraction Schedule Name
 
 OS:WaterUse:Equipment,
-  {00000000-0000-0000-0095-000000000002},  !- Handle
+  {00000000-0000-0000-0097-000000000002},  !- Handle
   Kitchen Service Water Use 0.07gpm 140F,  !- Name
-  {00000000-0000-0000-0096-000000000002},  !- Water Use Equipment Definition Name
+  {00000000-0000-0000-0098-000000000002},  !- Water Use Equipment Definition Name
   {00000000-0000-0000-0078-000000000002},  !- Space Name
   {00000000-0000-0000-0059-000000000012};  !- Flow Rate Fraction Schedule Name
 
 OS:WaterUse:Equipment:Definition,
-  {00000000-0000-0000-0096-000000000001},  !- Handle
+  {00000000-0000-0000-0098-000000000001},  !- Handle
   Dining 0.38gpm 140F,                     !- Name
   ,                                        !- End-Use Subcategory
   2.36932898320809e-05,                    !- Peak Flow Rate {m3/s}
@@ -6707,7 +7008,7 @@ OS:WaterUse:Equipment:Definition,
   {00000000-0000-0000-0059-000000000004};  !- Latent Fraction Schedule Name
 
 OS:WaterUse:Equipment:Definition,
-  {00000000-0000-0000-0096-000000000002},  !- Handle
+  {00000000-0000-0000-0098-000000000002},  !- Handle
   Kitchen 0.07gpm 140F,                    !- Name
   ,                                        !- End-Use Subcategory
   4.44248204859448e-06,                    !- Peak Flow Rate {m3/s}
@@ -6716,7 +7017,7 @@ OS:WaterUse:Equipment:Definition,
   {00000000-0000-0000-0059-000000000004};  !- Latent Fraction Schedule Name
 
 OS:WeatherFile,
-  {00000000-0000-0000-0097-000000000001},  !- Handle
+  {00000000-0000-0000-0099-000000000001},  !- Handle
   Calgary Intl AP,                         !- City
   AB,                                      !- State Province Region
   CAN,                                     !- Country
@@ -6732,55 +7033,55 @@ OS:WeatherFile,
   Sunday;                                  !- Start Day of Week
 
 OS:WindowMaterial:SimpleGlazingSystem,
-  {00000000-0000-0000-0098-000000000001},  !- Handle
+  {00000000-0000-0000-0100-000000000001},  !- Handle
   SimpleGlazing,                           !- Name
   2.2,                                     !- U-Factor {W/m2-K}
   0.6,                                     !- Solar Heat Gain Coefficient
   0.21;                                    !- Visible Transmittance
 
 OS:WindowMaterial:SimpleGlazingSystem,
-  {00000000-0000-0000-0098-000000000002},  !- Handle
+  {00000000-0000-0000-0100-000000000002},  !- Handle
   SimpleGlazing:U=0.173 SHGC=0.600,        !- Name
   1.73,                                    !- U-Factor {W/m2-K}
   0.6,                                     !- Solar Heat Gain Coefficient
   0.21;                                    !- Visible Transmittance
 
 OS:WindowMaterial:SimpleGlazingSystem,
-  {00000000-0000-0000-0098-000000000003},  !- Handle
+  {00000000-0000-0000-0100-000000000003},  !- Handle
   SimpleGlazing:U=0.241 SHGC=0.600,        !- Name
   2.41,                                    !- U-Factor {W/m2-K}
   0.6,                                     !- Solar Heat Gain Coefficient
   0.21;                                    !- Visible Transmittance
 
 OS:YearDescription,
-  {00000000-0000-0000-0099-000000000001},  !- Handle
+  {00000000-0000-0000-0101-000000000001},  !- Handle
   ,                                        !- Calendar Year
   Sunday;                                  !- Day of Week for Start Day
 
 OS:ZoneHVAC:Baseboard:Convective:Water,
-  {00000000-0000-0000-0100-000000000001},  !- Handle
+  {00000000-0000-0000-0102-000000000001},  !- Handle
   Zone HVAC Baseboard Convective Water 1,  !- Name
   {00000000-0000-0000-0056-000000000001},  !- Availability Schedule Name
   {00000000-0000-0000-0015-000000000001};  !- Heating Coil Name
 
 OS:ZoneHVAC:Baseboard:Convective:Water,
-  {00000000-0000-0000-0100-000000000002},  !- Handle
+  {00000000-0000-0000-0102-000000000002},  !- Handle
   Zone HVAC Baseboard Convective Water 2,  !- Name
   {00000000-0000-0000-0056-000000000001},  !- Availability Schedule Name
   {00000000-0000-0000-0015-000000000002};  !- Heating Coil Name
 
 OS:ZoneHVAC:EquipmentList,
-  {00000000-0000-0000-0101-000000000001},  !- Handle
+  {00000000-0000-0000-0103-000000000001},  !- Handle
   ALL_ST=- undefined -_FL=Building Story 2_SCH=A Zone HVAC Equipment List, !- Name
-  {00000000-0000-0000-0088-000000000001},  !- Thermal Zone
+  {00000000-0000-0000-0090-000000000001},  !- Thermal Zone
   ;                                        !- Load Distribution Scheme
 
 OS:ZoneHVAC:EquipmentList,
-  {00000000-0000-0000-0101-000000000002},  !- Handle
+  {00000000-0000-0000-0103-000000000002},  !- Handle
   ALL_ST=Dining area - family dining_FL=Building Story 1_SCH=B Zone HVAC Equipment List, !- Name
-  {00000000-0000-0000-0088-000000000002},  !- Thermal Zone
+  {00000000-0000-0000-0090-000000000002},  !- Thermal Zone
   ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0100-000000000001},  !- Zone Equipment 1
+  {00000000-0000-0000-0102-000000000001},  !- Zone Equipment 1
   1,                                       !- Zone Equipment Cooling Sequence 1
   1,                                       !- Zone Equipment Heating or No-Load Sequence 1
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
@@ -6792,11 +7093,11 @@ OS:ZoneHVAC:EquipmentList,
   ;                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 2
 
 OS:ZoneHVAC:EquipmentList,
-  {00000000-0000-0000-0101-000000000003},  !- Handle
+  {00000000-0000-0000-0103-000000000003},  !- Handle
   ALL_ST=Food preparation area_FL=Building Story 1_SCH=B Zone HVAC Equipment List, !- Name
-  {00000000-0000-0000-0088-000000000003},  !- Thermal Zone
+  {00000000-0000-0000-0090-000000000003},  !- Thermal Zone
   ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0100-000000000002},  !- Zone Equipment 1
+  {00000000-0000-0000-0102-000000000002},  !- Zone Equipment 1
   1,                                       !- Zone Equipment Cooling Sequence 1
   1,                                       !- Zone Equipment Heating or No-Load Sequence 1
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
