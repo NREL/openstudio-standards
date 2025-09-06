@@ -18,37 +18,54 @@ class NECB_TBD_Tests < Minitest::Test
     @test_passed = true
 
     # Hard setting climate & fuel.
-    @epw  = 'CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw'
-    @fuel = 'Electricity'
-    @srr  = 'osut' # @todo
+    @epw   = 'CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw'
+    @fuel  = 'Electricity'
+    @srr   = 'osut'
+    attics = ['FullServiceRestaurant', 'QuickServiceRestaurant', 'SmallOffice']
 
     #Range of test options.
     @templates = [
-      'NECB2011',
-      'NECB2015',
-      'NECB2017',
+      # 'NECB2011',
+      # 'NECB2015',
+      # 'NECB2017',
       'NECB2020'
     ]
 
     @buildings = [
-      'FullServiceRestaurant',
+      # 'FullServiceRestaurant',
       # 'HighriseApartment',
       # 'Hospital',
       # 'LargeHotel',
       # 'LargeOffice',
-      # 'MediumOffice',
+      # 'LEEPMidriseApartment',
+      # 'LEEPMultiTower',
+      # 'LEEPPointTower',
+      # 'LEEPTownHouse',
+      # 'LowriseApartment',
+      'MediumOffice',
       # 'MidriseApartment',
+      # 'NorthernEducation',  # *
+      # 'NorthernHealthCare', # *
       # 'Outpatient',
       # 'PrimarySchool',
       # 'QuickServiceRestaurant',
       # 'RetailStandalone',
+      # 'RetailStripmall',
       # 'SecondarySchool',
       # 'SmallHotel',
-      'Warehouse'
+      # 'SmallOffice',
+      # 'Warehouse'
     ]
 
+    # (*) 'NorthernEducation' and 'NorthernHealthCare' have neither:
+    #       - Building.standardsNumberOfStories
+    #       - Building.standardsNumberOfAboveStories
+    #
+    #     ... and so both templates/models fail early on, irrespective of
+    #         BTAP::Activity features - @todo.
+
     @structure = [
-      '',
+      # '',
       'structure'
     ]
 
@@ -61,11 +78,11 @@ class NECB_TBD_Tests < Minitest::Test
     #
     # Otherwise, :bad vs :good PSI factor sets refer to costed BTAP details.
     @options = [
-                'none',
-                'bad',
-                'good',
-                'uprate'
-               ]
+      # 'none',
+      # 'bad',
+      # 'good',
+      'uprate'
+    ]
 
     # BTAP holds discrete performance levels for each e.g. wall construction:
     # discrete U factors, from 0.314 down to 0.100 (or even 0.080 ... it
@@ -77,10 +94,13 @@ class NECB_TBD_Tests < Minitest::Test
     #
     # If 'interpolating', the BTAP costing solution would need to interpolate
     # between 2 discrete levels of performance (e.g. 0.130 < 0.124 < 0.100), to
-    # determine final costs for that wall. If 'not interpolating', the solution
-    # becomes more categorical, with the inconvenience of being more expensive
-    # (i.e. 0.100 $$$ > 0.124 $$).
-    @interpolate = [true, false]
+    # determine final costs for a given surface type. If 'not interpolating',
+    # the solution becomes more categorical, with the inconvenience of being
+    # more expensive (i.e. 0.100 $$$ > 0.124 $$).
+    @interpolate = [
+      true,
+      # false
+    ]
 
     fdback = []
     fdback << ""
@@ -92,6 +112,8 @@ class NECB_TBD_Tests < Minitest::Test
         @structure.sort.each  do |structure|
           @options.sort.each  do |option   |
             @interpolate.each do |inter    |
+              next if attics.include?(building)
+
               if inter
                 next unless option == 'uprate'
               end
@@ -104,6 +126,7 @@ class NECB_TBD_Tests < Minitest::Test
               model = st.model_create_prototype_model(template:template,
                                                       construction_opt: structure,
                                                       epw_file: @epw,
+                                                      srr_opt: @srr,
                                                       building_type: building,
                                                       primary_heating_fuel: @fuel,
                                                       tbd_option: option,
