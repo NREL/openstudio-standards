@@ -17,7 +17,7 @@ class NECB_scaling_loads_Tests < Minitest::Test
 
     # Define test parameters that apply to all tests.
     test_parameters = {TestMethod: __method__,
-                       SaveIntermediateModels: true,
+                       SaveIntermediateModels: false,
                        epw_file: 'CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw', 
                        fuel_type: 'NaturalGas'}
 
