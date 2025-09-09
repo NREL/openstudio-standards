@@ -21,7 +21,6 @@ class NECB_TBD_Tests < Minitest::Test
     @epw   = 'CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw'
     @fuel  = 'Electricity'
     @srr   = 'osut'
-    attics = ['FullServiceRestaurant', 'QuickServiceRestaurant', 'SmallOffice']
 
     #Range of test options.
     @templates = [
@@ -32,29 +31,29 @@ class NECB_TBD_Tests < Minitest::Test
     ]
 
     @buildings = [
-      # 'FullServiceRestaurant',
-      # 'HighriseApartment',
-      # 'Hospital',
-      # 'LargeHotel',
-      # 'LargeOffice',
-      # 'LEEPMidriseApartment',
-      # 'LEEPMultiTower',
-      # 'LEEPPointTower',
-      # 'LEEPTownHouse',
-      # 'LowriseApartment',
+      'FullServiceRestaurant',
+      'HighriseApartment',
+      'Hospital',
+      'LargeHotel',
+      'LargeOffice',
+      'LEEPMidriseApartment',
+      'LEEPMultiTower',
+      'LEEPPointTower',
+      'LEEPTownHouse',
+      'LowriseApartment',
       'MediumOffice',
-      # 'MidriseApartment',
+      'MidriseApartment',
       # 'NorthernEducation',  # *
       # 'NorthernHealthCare', # *
-      # 'Outpatient',
-      # 'PrimarySchool',
-      # 'QuickServiceRestaurant',
-      # 'RetailStandalone',
-      # 'RetailStripmall',
-      # 'SecondarySchool',
-      # 'SmallHotel',
-      # 'SmallOffice',
-      # 'Warehouse'
+      'Outpatient',
+      'PrimarySchool',
+      'QuickServiceRestaurant',
+      'RetailStandalone',
+      'RetailStripmall',
+      'SecondarySchool',
+      'SmallHotel',
+      'SmallOffice',
+      'Warehouse'
     ]
 
     # (*) 'NorthernEducation' and 'NorthernHealthCare' have neither:
@@ -65,7 +64,7 @@ class NECB_TBD_Tests < Minitest::Test
     #         BTAP::Activity features - @todo.
 
     @structure = [
-      # '',
+      '',
       'structure'
     ]
 
@@ -112,11 +111,12 @@ class NECB_TBD_Tests < Minitest::Test
         @structure.sort.each  do |structure|
           @options.sort.each  do |option   |
             @interpolate.each do |inter    |
-              next if attics.include?(building)
-
               if inter
                 next unless option == 'uprate'
               end
+
+              # Temporary @todo.
+              next if structure.empty? && building == 'SmallOffice'
 
               cas  = "CASE #{option} | #{building} (#{template})"
               cas += " - interpolating" if inter && option == 'uprate'
@@ -168,9 +168,6 @@ class NECB_TBD_Tests < Minitest::Test
                 err_msg = "BTAP/TBD: Missing tally Hash (#{cas})?"
                 assert_kind_of(Hash, st.tbd.tally, err_msg)
                 err_msg = "BTAP/TBD: Missing model 'comply' key (#{cas})?"
-
-                st.tbd.feedback[:logs].each { |log| puts log }
-                next
 
                 assert(st.tbd.model.key?(:comply), err_msg)
                 fdback << "BTAP/TBD: #{cas} complies" if st.tbd.model[:comply]

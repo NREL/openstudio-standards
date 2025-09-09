@@ -668,7 +668,7 @@ class NECB2011
 
     # Ensure insulating layer uniqueness for each insulated construction.
     lyr = TBD.insulatingLayer(gFloor)
-    btp.assign_unique_material(gFloor, lyr[:index]) if lyr[:index]
+    TBD.assignUniqueMaterial(gFloor, lyr[:index]) if lyr[:index]
 
     # Insulated basement wall. A more nuanced treatment is necessary for
     # multiple basement stories - no insulation required below 2.4m from grade.
@@ -678,7 +678,7 @@ class NECB2011
     gWall          = TBD.genConstruction(model, specs)
 
     lyr = TBD.insulatingLayer(gWall)
-    btp.assign_unique_material(gWall, lyr[:index]) if lyr[:index]
+    TBD.assignUniqueMaterial(gWall, lyr[:index]) if lyr[:index]
 
     # Insulated basement roof. Again, a more nuanced approach is necessary if
     # the basement roof is below 1.2m from grade (e.g. a tunnel).
@@ -690,7 +690,7 @@ class NECB2011
     gRoof          = TBD.genConstruction(model, specs)
 
     lyr = TBD.insulatingLayer(gRoof)
-    btp.assign_unique_material(gRoof, lyr[:index]) if lyr[:index]
+    TBD.assignUniqueMaterial(gRoof, lyr[:index]) if lyr[:index]
 
     # Outdoor-facing wall.
     specs          = {}
@@ -703,7 +703,7 @@ class NECB2011
     eWall          = TBD.genConstruction(model, specs)
 
     lyr = TBD.insulatingLayer(eWall)
-    btp.assign_unique_material(eWall, lyr[:index]) if lyr[:index]
+    TBD.assignUniqueMaterial(eWall, lyr[:index]) if lyr[:index]
 
     # Outdoor-facing roof.
     specs          = {}
@@ -719,7 +719,7 @@ class NECB2011
     eRoof          = TBD.genConstruction(model, specs)
 
     lyr = TBD.insulatingLayer(eRoof)
-    btp.assign_unique_material(eRoof, lyr[:index]) if lyr[:index]
+    TBD.assignUniqueMaterial(eRoof, lyr[:index]) if lyr[:index]
 
     # Outdoor-facing floor.
     specs          = {}
@@ -731,7 +731,7 @@ class NECB2011
     eFloor         = TBD.genConstruction(model, specs)
 
     lyr = TBD.insulatingLayer(eFloor)
-    btp.assign_unique_material(eFloor, lyr[:index]) if lyr[:index]
+    TBD.assignUniqueMaterial(eFloor, lyr[:index]) if lyr[:index]
 
     # Outdoor-facing, opaque door.
     specs          = {}
@@ -879,7 +879,7 @@ class NECB2011
       iAtticWall     = TBD.genConstruction(model, specs)
 
       lyr = TBD.insulatingLayer(iAtticWall)
-      btp.assign_unique_material(iAtticWall, lyr[:index]) if lyr[:index]
+      TBD.assignUniqueMaterial(iAtticWall, lyr[:index]) if lyr[:index]
 
       specs          = {}
       specs[:type  ] = :floor
@@ -890,7 +890,7 @@ class NECB2011
       iAtticFloor    = TBD.genConstruction(model, specs)
 
       lyr = TBD.insulatingLayer(iAtticFloor)
-      btp.assign_unique_material(iAtticFloor, lyr[:index]) if lyr[:index]
+      TBD.assignUniqueMaterial(iAtticFloor, lyr[:index]) if lyr[:index]
 
       specs          = {}
       specs[:type  ] = :floor
@@ -902,7 +902,7 @@ class NECB2011
       iAtticRoof     = TBD.genConstruction(model, specs)
 
       lyr = TBD.insulatingLayer(iAtticRoof)
-      btp.assign_unique_material(iAtticRoof, lyr[:index]) if lyr[:index]
+      TBD.assignUniqueMaterial(iAtticRoof, lyr[:index]) if lyr[:index]
 
       intATTIC = OpenStudio::Model::DefaultSurfaceConstructions.new(model)
       solATTIC = OpenStudio::Model::DefaultSurfaceConstructions.new(model)

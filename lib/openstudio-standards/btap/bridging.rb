@@ -482,9 +482,7 @@ module BTAP
       return nil unless @@data.key?(assembly)
       return nil unless uo.is_a?(Numeric)
 
-      uMIN = BTAP::Resources::Envelope::Constructions::Umin
-      uMAX = BTAP::Resources::Envelope::Constructions::Umax
-      uo   = uo.clamp(uMIN, uMAX)
+      uo = uo.clamp(TBD::UMIN, TBD::UMAX)
 
       @@data[assembly][:uos].each { |u| return u if u.round(3) <= uo.round(3) }
 
@@ -659,6 +657,10 @@ module BTAP
         mdl = OpenStudio::Model::Model.new
         mdl.addObjects(model.toIdfFile.objects)
         TBD.clean!
+
+        # fil = File.join("/Users/rd2/Desktop/test.osm")
+        # mdl.save(fil, true)
+
         res = TBD.process(mdl, args)
 
         # Halt all processes if fatal errors raised by TBD (e.g. badly formatted
@@ -729,7 +731,7 @@ module BTAP
         @model[:constructions].each do |lc, v|
           next unless v[:stypes] == stypes
 
-          v[:r] = btp.reset_uo(lc, v[:filmRSI], v[:index], v[:uo])
+          v[:r] = TBD.resetUo(lc, v[:filmRSI], v[:index], v[:uo])
         end
       end
 
@@ -772,8 +774,6 @@ module BTAP
       args = { option: "(non thermal bridging)" } # for initial TBD dry run
       lgs  = @feedback[:logs]
       cl   = OpenStudio::Model::LayeredConstruction
-      uMIN = BTAP::Resources::Envelope::Constructions::Umin
-      uMAX = BTAP::Resources::Envelope::Constructions::Umax
 
       unless model.is_a?(OpenStudio::Model::Model)
         lgs << "Invalid OpenStudio model to de/up-rate (#{mth})"
@@ -817,7 +817,7 @@ module BTAP
 
         uo = argh[stypes][:uo]
 
-        unless uo.is_a?(Numeric) && uo.between?(uMIN, uMAX)
+        unless uo.is_a?(Numeric) && uo.between?(TBD::UMIN, TBD::UMAX)
           lgs << "Invalid BTAP/TBD #{stypes} Uo (#{mth})"
           return false
         end
@@ -826,7 +826,7 @@ module BTAP
 
         ut = argh[stypes][:ut]
 
-        unless ut.is_a?(Numeric) && ut.between?(uMIN, uMAX)
+        unless ut.is_a?(Numeric) && ut.between?(TBD::UMIN, TBD::UMAX)
           lgs << "Invalid BTAP/TBD #{stypes} Ut (#{mth})"
           return false
         end
