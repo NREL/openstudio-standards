@@ -878,8 +878,8 @@ module BTAP
         next unless surface.key?(:r)         # deratable layer RSi
         next unless surface.key?(:deratable) # true or false
 
-        next unless surface[:deratable   ]
-        next     if surface[:index       ].nil?
+        next unless surface[:deratable]
+        next unless surface[:index    ]
 
         stypes = case surface[:type]
                  when :wall    then :walls
@@ -902,7 +902,6 @@ module BTAP
         end
 
         srf = srf.get
-
         space = srf.space
 
         if space.empty?
@@ -911,7 +910,6 @@ module BTAP
         end
 
         space = space.get
-
         lc = srf.construction
 
         if lc.empty?
@@ -974,6 +972,14 @@ module BTAP
           return false
         else
           v[:stypes] = v[:stypes].first
+
+          # Assign construction for each deratable surface.
+          v[:surfaces].each do |id|
+            surface = model.getSurfaceByName(id)
+            next if surface.empty?
+
+            surface.get.setConstruction(lc)
+          end
         end
 
         nb += 1 if v[:stypes] == :walls

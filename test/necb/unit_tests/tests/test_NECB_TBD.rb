@@ -22,7 +22,7 @@ class NECB_TBD_Tests < Minitest::Test
     @fuel  = 'Electricity'
     @srr   = 'osut'
 
-    #Range of test options.
+    # Range of test options.
     @templates = [
       # 'NECB2011',
       # 'NECB2015',
@@ -43,8 +43,8 @@ class NECB_TBD_Tests < Minitest::Test
       'LowriseApartment',
       'MediumOffice',
       'MidriseApartment',
-      # 'NorthernEducation',  # *
-      # 'NorthernHealthCare', # *
+      'NorthernEducation',  # *
+      'NorthernHealthCare', # *
       'Outpatient',
       'PrimarySchool',
       'QuickServiceRestaurant',
@@ -111,14 +111,12 @@ class NECB_TBD_Tests < Minitest::Test
         @structure.sort.each  do |structure|
           @options.sort.each  do |option   |
             @interpolate.each do |inter    |
-              if inter
-                next unless option == 'uprate'
-              end
-
-              # Temporary @todo.
-              next if structure.empty? && building == 'SmallOffice'
+              next if building == "NorthernEducation"
+              next if building == "NorthernHealthCare"
+              next if inter && option != "uprate"
 
               cas  = "CASE #{option} | #{building} (#{template})"
+              cas += " - structure" unless structure.empty?
               cas += " - interpolating" if inter && option == 'uprate'
               fdback << ""
               fdback << cas
@@ -169,8 +167,13 @@ class NECB_TBD_Tests < Minitest::Test
                 assert_kind_of(Hash, st.tbd.tally, err_msg)
                 err_msg = "BTAP/TBD: Missing model 'comply' key (#{cas})?"
 
-                assert(st.tbd.model.key?(:comply), err_msg)
-                fdback << "BTAP/TBD: #{cas} complies" if st.tbd.model[:comply]
+                assert(st.tbd.model.key?(:complies), err_msg)
+
+                if st.tbd.model[:complies]
+                  fdback << " ... compliant!"
+                else
+                  fdback << " ... non-compliant!"
+                end
 
                 err_msg = "BTAP/TBD: Missing TBD 'surfaces' (#{cas})?"
                 assert(st.tbd.model.key?(:surfaces), err_msg)
@@ -205,9 +208,6 @@ class NECB_TBD_Tests < Minitest::Test
                 end
 
                 st.tbd.feedback[:logs].each do |log|
-                  # next if log.include?("(OSut::scheduleCompactMinMax)")
-                  # next if log.include?("TBD-identified non-FATAL error(s):")
-
                   fdback << log
                   # NOTE: BTAP/TBD feedback logs are simple strings. Look up
                   # st.tbd.tally Hash to extract quantities for costing.
