@@ -56,6 +56,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'bundler-audit'
   # spec.add_runtime_dependency     'tbd', '~> 3'
   spec.add_development_dependency "tbd",  "3.5.0"
-  spec.add_development_dependency "osut", "0.8.0"
 
 end
