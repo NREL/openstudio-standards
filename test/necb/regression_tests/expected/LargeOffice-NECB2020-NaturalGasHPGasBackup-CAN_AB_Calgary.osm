@@ -869,11 +869,11 @@ OS:Coil:Cooling:DX:SingleSpeed,
 
 OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0014-000000000003},  !- Handle
-  CoilCoolingDXSingleSpeed_ashp 2 388kBtu/hr 10.0EER, !- Name
+  CoilCoolingDXSingleSpeed_ashp 2 388kBtu/hr 9.8EER, !- Name
   {00000000-0000-0000-0058-000000000001},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.46671670650253,                        !- Rated COP {W/W}
+  3.40010964509975,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -904,11 +904,11 @@ OS:Coil:Cooling:DX:SingleSpeed,
 
 OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0014-000000000004},  !- Handle
-  CoilCoolingDXSingleSpeed_ashp 3 5718kBtu/hr 9.7EER, !- Name
+  CoilCoolingDXSingleSpeed_ashp 3 5718kBtu/hr 9.5EER, !- Name
   {00000000-0000-0000-0058-000000000001},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.36680611439836,                        !- Rated COP {W/W}
+  3.30019905299558,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -939,11 +939,11 @@ OS:Coil:Cooling:DX:SingleSpeed,
 
 OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0014-000000000005},  !- Handle
-  CoilCoolingDXSingleSpeed_ashp 4 580kBtu/hr 10.0EER, !- Name
+  CoilCoolingDXSingleSpeed_ashp 4 580kBtu/hr 9.8EER, !- Name
   {00000000-0000-0000-0058-000000000001},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.46671670650253,                        !- Rated COP {W/W}
+  3.40010964509975,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -974,10 +974,10 @@ OS:Coil:Cooling:DX:SingleSpeed,
 
 OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0015-000000000001},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 1 23 Clg kBtu/hr 3.3COPH, !- Name
+  CoilHeatingDXSingleSpeed_ashp 1 32 Clg kBtu/hr 3.3COPH, !- Name
   {00000000-0000-0000-0058-000000000001},  !- Availability Schedule Name
-  6692.13878548456,                        !- Rated Total Heating Capacity {W}
-  3.51575238218808,                        !- Rated COP {W/W}
+  Autosize,                                !- Rated Total Heating Capacity {W}
+  3.51999535148235,                        !- Rated COP {W/W}
   Autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -1001,10 +1001,37 @@ OS:Coil:Heating:DX:SingleSpeed,
 
 OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0015-000000000002},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 2 281 Clg kBtu/hr 3.2COPH, !- Name
+  CoilHeatingDXSingleSpeed_ashp 103 Clg kBtu/hr 3.3COPH, !- Name
   {00000000-0000-0000-0058-000000000001},  !- Availability Schedule Name
-  82432.0832695572,                        !- Rated Total Heating Capacity {W}
-  3.5316094451135,                         !- Rated COP {W/W}
+  Autosize,                                !- Rated Total Heating Capacity {W}
+  3.55502320204616,                        !- Rated COP {W/W}
+  Autosize,                                !- Rated Air Flow Rate {m3/s}
+  773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
+  934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
+  {00000000-0000-0000-0018-000000000084},  !- Air Inlet Node Name
+  {00000000-0000-0000-0018-000000000081},  !- Air Outlet Node Name
+  {00000000-0000-0000-0025-000000000029},  !- Total Heating Capacity Function of Temperature Curve Name
+  {00000000-0000-0000-0025-000000000028},  !- Total Heating Capacity Function of Flow Fraction Curve Name
+  {00000000-0000-0000-0025-000000000030},  !- Energy Input Ratio Function of Temperature Curve Name
+  {00000000-0000-0000-0026-000000000018},  !- Energy Input Ratio Function of Flow Fraction Curve Name
+  {00000000-0000-0000-0025-000000000031},  !- Part Load Fraction Correlation Curve Name
+  ,                                        !- Defrost Energy Input Ratio Function of Temperature Curve Name
+  -10,                                     !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}
+  ,                                        !- Maximum Outdoor Dry-Bulb Temperature for Defrost Operation {C}
+  ,                                        !- Crankcase Heater Capacity {W}
+  ,                                        !- Crankcase Heater Capacity Function of Temperature Curve Name
+  ,                                        !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
+  Resistive,                               !- Defrost Strategy
+  Timed,                                   !- Defrost Control
+  0.166667,                                !- Defrost Time Period Fraction
+  2000;                                    !- Resistive Defrost Heater Capacity {W}
+
+OS:Coil:Heating:DX:SingleSpeed,
+  {00000000-0000-0000-0015-000000000003},  !- Handle
+  CoilHeatingDXSingleSpeed_ashp 2 388 Clg kBtu/hr 3.2COPH, !- Name
+  {00000000-0000-0000-0058-000000000001},  !- Availability Schedule Name
+  Autosize,                                !- Rated Total Heating Capacity {W}
+  3.58228952187119,                        !- Rated COP {W/W}
   Autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -1027,11 +1054,11 @@ OS:Coil:Heating:DX:SingleSpeed,
   2000;                                    !- Resistive Defrost Heater Capacity {W}
 
 OS:Coil:Heating:DX:SingleSpeed,
-  {00000000-0000-0000-0015-000000000003},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 3 4142 Clg kBtu/hr 3.2COPH, !- Name
+  {00000000-0000-0000-0015-000000000004},  !- Handle
+  CoilHeatingDXSingleSpeed_ashp 3 5718 Clg kBtu/hr 3.2COPH, !- Name
   {00000000-0000-0000-0058-000000000001},  !- Availability Schedule Name
-  1213947.20393963,                        !- Rated Total Heating Capacity {W}
-  5.36012687890333,                        !- Rated COP {W/W}
+  Autosize,                                !- Rated Total Heating Capacity {W}
+  6.1064738719091,                         !- Rated COP {W/W}
   Autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -1054,43 +1081,16 @@ OS:Coil:Heating:DX:SingleSpeed,
   2000;                                    !- Resistive Defrost Heater Capacity {W}
 
 OS:Coil:Heating:DX:SingleSpeed,
-  {00000000-0000-0000-0015-000000000004},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 4 420 Clg kBtu/hr 3.2COPH, !- Name
+  {00000000-0000-0000-0015-000000000005},  !- Handle
+  CoilHeatingDXSingleSpeed_ashp 4 580 Clg kBtu/hr 3.2COPH, !- Name
   {00000000-0000-0000-0058-000000000001},  !- Availability Schedule Name
-  123139.566598407,                        !- Rated Total Heating Capacity {W}
-  3.59739234239236,                        !- Rated COP {W/W}
+  Autosize,                                !- Rated Total Heating Capacity {W}
+  3.67309979074966,                        !- Rated COP {W/W}
   Autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
   {00000000-0000-0000-0018-000000000285},  !- Air Inlet Node Name
   {00000000-0000-0000-0018-000000000282},  !- Air Outlet Node Name
-  {00000000-0000-0000-0025-000000000029},  !- Total Heating Capacity Function of Temperature Curve Name
-  {00000000-0000-0000-0025-000000000028},  !- Total Heating Capacity Function of Flow Fraction Curve Name
-  {00000000-0000-0000-0025-000000000030},  !- Energy Input Ratio Function of Temperature Curve Name
-  {00000000-0000-0000-0026-000000000018},  !- Energy Input Ratio Function of Flow Fraction Curve Name
-  {00000000-0000-0000-0025-000000000031},  !- Part Load Fraction Correlation Curve Name
-  ,                                        !- Defrost Energy Input Ratio Function of Temperature Curve Name
-  -10,                                     !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}
-  ,                                        !- Maximum Outdoor Dry-Bulb Temperature for Defrost Operation {C}
-  ,                                        !- Crankcase Heater Capacity {W}
-  ,                                        !- Crankcase Heater Capacity Function of Temperature Curve Name
-  ,                                        !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
-  Resistive,                               !- Defrost Strategy
-  Timed,                                   !- Defrost Control
-  0.166667,                                !- Defrost Time Period Fraction
-  2000;                                    !- Resistive Defrost Heater Capacity {W}
-
-OS:Coil:Heating:DX:SingleSpeed,
-  {00000000-0000-0000-0015-000000000005},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 75 Clg kBtu/hr 3.3COPH, !- Name
-  {00000000-0000-0000-0058-000000000001},  !- Availability Schedule Name
-  21918.2437301494,                        !- Rated Total Heating Capacity {W}
-  3.54112653341565,                        !- Rated COP {W/W}
-  Autosize,                                !- Rated Air Flow Rate {m3/s}
-  773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
-  934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
-  {00000000-0000-0000-0018-000000000084},  !- Air Inlet Node Name
-  {00000000-0000-0000-0018-000000000081},  !- Air Outlet Node Name
   {00000000-0000-0000-0025-000000000029},  !- Total Heating Capacity Function of Temperature Curve Name
   {00000000-0000-0000-0025-000000000028},  !- Total Heating Capacity Function of Flow Fraction Curve Name
   {00000000-0000-0000-0025-000000000030},  !- Energy Input Ratio Function of Temperature Curve Name
@@ -2189,14 +2189,14 @@ OS:Connection,
 
 OS:Connection,
   {00000000-0000-0000-0018-000000000081},  !- Handle
-  {00000000-0000-0000-0015-000000000005},  !- Source Object
+  {00000000-0000-0000-0015-000000000002},  !- Source Object
   9,                                       !- Outlet Port
-  {00000000-0000-0000-0048-000000000134},  !- Target Object
+  {00000000-0000-0000-0048-000000000131},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
   {00000000-0000-0000-0018-000000000082},  !- Handle
-  {00000000-0000-0000-0048-000000000134},  !- Source Object
+  {00000000-0000-0000-0048-000000000131},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0016-000000000001},  !- Target Object
   5;                                       !- Inlet Port
@@ -2212,7 +2212,7 @@ OS:Connection,
   {00000000-0000-0000-0018-000000000084},  !- Handle
   {00000000-0000-0000-0048-000000000126},  !- Source Object
   3,                                       !- Outlet Port
-  {00000000-0000-0000-0015-000000000005},  !- Target Object
+  {00000000-0000-0000-0015-000000000002},  !- Target Object
   8;                                       !- Inlet Port
 
 OS:Connection,
@@ -2532,14 +2532,14 @@ OS:Connection,
 
 OS:Connection,
   {00000000-0000-0000-0018-000000000130},  !- Handle
-  {00000000-0000-0000-0015-000000000002},  !- Source Object
+  {00000000-0000-0000-0015-000000000003},  !- Source Object
   9,                                       !- Outlet Port
-  {00000000-0000-0000-0048-000000000131},  !- Target Object
+  {00000000-0000-0000-0048-000000000132},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
   {00000000-0000-0000-0018-000000000131},  !- Handle
-  {00000000-0000-0000-0048-000000000131},  !- Source Object
+  {00000000-0000-0000-0048-000000000132},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0039-000000000006},  !- Target Object
   8;                                       !- Inlet Port
@@ -2555,7 +2555,7 @@ OS:Connection,
   {00000000-0000-0000-0018-000000000133},  !- Handle
   {00000000-0000-0000-0048-000000000127},  !- Source Object
   3,                                       !- Outlet Port
-  {00000000-0000-0000-0015-000000000002},  !- Target Object
+  {00000000-0000-0000-0015-000000000003},  !- Target Object
   8;                                       !- Inlet Port
 
 OS:Connection,
@@ -3064,14 +3064,14 @@ OS:Connection,
 
 OS:Connection,
   {00000000-0000-0000-0018-000000000206},  !- Handle
-  {00000000-0000-0000-0015-000000000003},  !- Source Object
+  {00000000-0000-0000-0015-000000000004},  !- Source Object
   9,                                       !- Outlet Port
-  {00000000-0000-0000-0048-000000000132},  !- Target Object
+  {00000000-0000-0000-0048-000000000133},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
   {00000000-0000-0000-0018-000000000207},  !- Handle
-  {00000000-0000-0000-0048-000000000132},  !- Source Object
+  {00000000-0000-0000-0048-000000000133},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0039-000000000007},  !- Target Object
   8;                                       !- Inlet Port
@@ -3087,7 +3087,7 @@ OS:Connection,
   {00000000-0000-0000-0018-000000000209},  !- Handle
   {00000000-0000-0000-0048-000000000128},  !- Source Object
   3,                                       !- Outlet Port
-  {00000000-0000-0000-0015-000000000003},  !- Target Object
+  {00000000-0000-0000-0015-000000000004},  !- Target Object
   8;                                       !- Inlet Port
 
 OS:Connection,
@@ -3596,14 +3596,14 @@ OS:Connection,
 
 OS:Connection,
   {00000000-0000-0000-0018-000000000282},  !- Handle
-  {00000000-0000-0000-0015-000000000004},  !- Source Object
+  {00000000-0000-0000-0015-000000000005},  !- Source Object
   9,                                       !- Outlet Port
-  {00000000-0000-0000-0048-000000000133},  !- Target Object
+  {00000000-0000-0000-0048-000000000134},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
   {00000000-0000-0000-0018-000000000283},  !- Handle
-  {00000000-0000-0000-0048-000000000133},  !- Source Object
+  {00000000-0000-0000-0048-000000000134},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0039-000000000008},  !- Target Object
   8;                                       !- Inlet Port
@@ -3619,7 +3619,7 @@ OS:Connection,
   {00000000-0000-0000-0018-000000000285},  !- Handle
   {00000000-0000-0000-0048-000000000129},  !- Source Object
   3,                                       !- Outlet Port
-  {00000000-0000-0000-0015-000000000004},  !- Target Object
+  {00000000-0000-0000-0015-000000000005},  !- Target Object
   8;                                       !- Inlet Port
 
 OS:Connection,
@@ -6479,61 +6479,61 @@ OS:EnergyManagementSystem:Actuator,
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0035-000000000001},  !- Handle
   ems_sys_6_mixed_shr_none_sh_ashp_sc_ashp_ssf_cv_zh_b_hw_zc_none_srf_cv__1_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {82844c4d-df9f-47d9-84d8-294b36cbb7aa}<23.9 && {82844c4d-df9f-47d9-84d8-294b36cbb7aa}>1.7, !- Program Line 1
-  SET {571b9a6f-37cc-498d-adcf-b156a0435bb4} = 29.4, !- Program Line 2
-  SET {0668dc7c-ca4e-4d37-b5f6-b7a059415473} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {82844c4d-df9f-47d9-84d8-294b36cbb7aa}<23.9 && {82844c4d-df9f-47d9-84d8-294b36cbb7aa}>1.7, !- Program Line 4
-  SET {571b9a6f-37cc-498d-adcf-b156a0435bb4} = 29.4, !- Program Line 5
-  SET {0668dc7c-ca4e-4d37-b5f6-b7a059415473} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {82844c4d-df9f-47d9-84d8-294b36cbb7aa}<23.9 && {82844c4d-df9f-47d9-84d8-294b36cbb7aa}>1.7, !- Program Line 7
-  SET {571b9a6f-37cc-498d-adcf-b156a0435bb4} = 29.4, !- Program Line 8
-  SET {0668dc7c-ca4e-4d37-b5f6-b7a059415473} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {82844c4d-df9f-47d9-84d8-294b36cbb7aa}<23.9 && {82844c4d-df9f-47d9-84d8-294b36cbb7aa}>1.7, !- Program Line 10
-  SET {571b9a6f-37cc-498d-adcf-b156a0435bb4} = 29.4, !- Program Line 11
-  SET {0668dc7c-ca4e-4d37-b5f6-b7a059415473} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {1cb7193e-201e-4599-88b8-47c5eb5b0cbc}<23.9 && {1cb7193e-201e-4599-88b8-47c5eb5b0cbc}>1.7, !- Program Line 1
+  SET {d27e4aab-23fc-4176-9a69-3e15c9297eb9} = 29.4, !- Program Line 2
+  SET {f18ed934-bf55-419b-920f-cf90ec45df95} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {1cb7193e-201e-4599-88b8-47c5eb5b0cbc}<23.9 && {1cb7193e-201e-4599-88b8-47c5eb5b0cbc}>1.7, !- Program Line 4
+  SET {d27e4aab-23fc-4176-9a69-3e15c9297eb9} = 29.4, !- Program Line 5
+  SET {f18ed934-bf55-419b-920f-cf90ec45df95} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {1cb7193e-201e-4599-88b8-47c5eb5b0cbc}<23.9 && {1cb7193e-201e-4599-88b8-47c5eb5b0cbc}>1.7, !- Program Line 7
+  SET {d27e4aab-23fc-4176-9a69-3e15c9297eb9} = 29.4, !- Program Line 8
+  SET {f18ed934-bf55-419b-920f-cf90ec45df95} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {1cb7193e-201e-4599-88b8-47c5eb5b0cbc}<23.9 && {1cb7193e-201e-4599-88b8-47c5eb5b0cbc}>1.7, !- Program Line 10
+  SET {d27e4aab-23fc-4176-9a69-3e15c9297eb9} = 29.4, !- Program Line 11
+  SET {f18ed934-bf55-419b-920f-cf90ec45df95} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {571b9a6f-37cc-498d-adcf-b156a0435bb4} = NULL, !- Program Line 14
-  SET {0668dc7c-ca4e-4d37-b5f6-b7a059415473} = NULL, !- Program Line 15
+  SET {d27e4aab-23fc-4176-9a69-3e15c9297eb9} = NULL, !- Program Line 14
+  SET {f18ed934-bf55-419b-920f-cf90ec45df95} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0035-000000000002},  !- Handle
   ems_sys_6_mixed_shr_none_sh_ashp_sc_ashp_ssf_cv_zh_b_hw_zc_none_srf_cv__2_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {95d52c8a-d7ef-4385-81ba-6bf53055f4c0}<23.9 && {95d52c8a-d7ef-4385-81ba-6bf53055f4c0}>1.7, !- Program Line 1
-  SET {243288f6-b043-4c85-b115-09bbb6290e59} = 29.4, !- Program Line 2
-  SET {01d87f0f-7b5d-4770-98a1-4345cbbc95f5} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {95d52c8a-d7ef-4385-81ba-6bf53055f4c0}<23.9 && {95d52c8a-d7ef-4385-81ba-6bf53055f4c0}>1.7, !- Program Line 4
-  SET {243288f6-b043-4c85-b115-09bbb6290e59} = 29.4, !- Program Line 5
-  SET {01d87f0f-7b5d-4770-98a1-4345cbbc95f5} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {95d52c8a-d7ef-4385-81ba-6bf53055f4c0}<23.9 && {95d52c8a-d7ef-4385-81ba-6bf53055f4c0}>1.7, !- Program Line 7
-  SET {243288f6-b043-4c85-b115-09bbb6290e59} = 29.4, !- Program Line 8
-  SET {01d87f0f-7b5d-4770-98a1-4345cbbc95f5} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {95d52c8a-d7ef-4385-81ba-6bf53055f4c0}<23.9 && {95d52c8a-d7ef-4385-81ba-6bf53055f4c0}>1.7, !- Program Line 10
-  SET {243288f6-b043-4c85-b115-09bbb6290e59} = 29.4, !- Program Line 11
-  SET {01d87f0f-7b5d-4770-98a1-4345cbbc95f5} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {7f0d3ff1-94ce-4020-a35a-992613a1f47d}<23.9 && {7f0d3ff1-94ce-4020-a35a-992613a1f47d}>1.7, !- Program Line 1
+  SET {9b1a4d32-6218-42f4-aff4-739b97b34459} = 29.4, !- Program Line 2
+  SET {1233426a-24d7-4a8d-bb1a-58f98acd88ba} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {7f0d3ff1-94ce-4020-a35a-992613a1f47d}<23.9 && {7f0d3ff1-94ce-4020-a35a-992613a1f47d}>1.7, !- Program Line 4
+  SET {9b1a4d32-6218-42f4-aff4-739b97b34459} = 29.4, !- Program Line 5
+  SET {1233426a-24d7-4a8d-bb1a-58f98acd88ba} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {7f0d3ff1-94ce-4020-a35a-992613a1f47d}<23.9 && {7f0d3ff1-94ce-4020-a35a-992613a1f47d}>1.7, !- Program Line 7
+  SET {9b1a4d32-6218-42f4-aff4-739b97b34459} = 29.4, !- Program Line 8
+  SET {1233426a-24d7-4a8d-bb1a-58f98acd88ba} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {7f0d3ff1-94ce-4020-a35a-992613a1f47d}<23.9 && {7f0d3ff1-94ce-4020-a35a-992613a1f47d}>1.7, !- Program Line 10
+  SET {9b1a4d32-6218-42f4-aff4-739b97b34459} = 29.4, !- Program Line 11
+  SET {1233426a-24d7-4a8d-bb1a-58f98acd88ba} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {243288f6-b043-4c85-b115-09bbb6290e59} = NULL, !- Program Line 14
-  SET {01d87f0f-7b5d-4770-98a1-4345cbbc95f5} = NULL, !- Program Line 15
+  SET {9b1a4d32-6218-42f4-aff4-739b97b34459} = NULL, !- Program Line 14
+  SET {1233426a-24d7-4a8d-bb1a-58f98acd88ba} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0035-000000000003},  !- Handle
   ems_sys_6_mixed_shr_none_sh_ashp_sc_ashp_ssf_cv_zh_b_hw_zc_none_srf_cv__3_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {5653a1c1-c1a0-4021-9477-549b575c27a4}<23.9 && {5653a1c1-c1a0-4021-9477-549b575c27a4}>1.7, !- Program Line 1
-  SET {daa4286c-c523-4486-a96b-50d618c37d7f} = 29.4, !- Program Line 2
-  SET {7aa7d951-1bb2-4e12-96c1-e968f26ffa7d} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {5653a1c1-c1a0-4021-9477-549b575c27a4}<23.9 && {5653a1c1-c1a0-4021-9477-549b575c27a4}>1.7, !- Program Line 4
-  SET {daa4286c-c523-4486-a96b-50d618c37d7f} = 29.4, !- Program Line 5
-  SET {7aa7d951-1bb2-4e12-96c1-e968f26ffa7d} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {5653a1c1-c1a0-4021-9477-549b575c27a4}<23.9 && {5653a1c1-c1a0-4021-9477-549b575c27a4}>1.7, !- Program Line 7
-  SET {daa4286c-c523-4486-a96b-50d618c37d7f} = 29.4, !- Program Line 8
-  SET {7aa7d951-1bb2-4e12-96c1-e968f26ffa7d} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {5653a1c1-c1a0-4021-9477-549b575c27a4}<23.9 && {5653a1c1-c1a0-4021-9477-549b575c27a4}>1.7, !- Program Line 10
-  SET {daa4286c-c523-4486-a96b-50d618c37d7f} = 29.4, !- Program Line 11
-  SET {7aa7d951-1bb2-4e12-96c1-e968f26ffa7d} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {a0d16ddd-b565-4b86-8802-00fb1496bc60}<23.9 && {a0d16ddd-b565-4b86-8802-00fb1496bc60}>1.7, !- Program Line 1
+  SET {3252c0c9-f3dd-4cb3-8eac-a2aeb9bbb3f3} = 29.4, !- Program Line 2
+  SET {b99e2ae9-e00d-41ed-9cae-5cf6ba8291cc} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {a0d16ddd-b565-4b86-8802-00fb1496bc60}<23.9 && {a0d16ddd-b565-4b86-8802-00fb1496bc60}>1.7, !- Program Line 4
+  SET {3252c0c9-f3dd-4cb3-8eac-a2aeb9bbb3f3} = 29.4, !- Program Line 5
+  SET {b99e2ae9-e00d-41ed-9cae-5cf6ba8291cc} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {a0d16ddd-b565-4b86-8802-00fb1496bc60}<23.9 && {a0d16ddd-b565-4b86-8802-00fb1496bc60}>1.7, !- Program Line 7
+  SET {3252c0c9-f3dd-4cb3-8eac-a2aeb9bbb3f3} = 29.4, !- Program Line 8
+  SET {b99e2ae9-e00d-41ed-9cae-5cf6ba8291cc} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {a0d16ddd-b565-4b86-8802-00fb1496bc60}<23.9 && {a0d16ddd-b565-4b86-8802-00fb1496bc60}>1.7, !- Program Line 10
+  SET {3252c0c9-f3dd-4cb3-8eac-a2aeb9bbb3f3} = 29.4, !- Program Line 11
+  SET {b99e2ae9-e00d-41ed-9cae-5cf6ba8291cc} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {daa4286c-c523-4486-a96b-50d618c37d7f} = NULL, !- Program Line 14
-  SET {7aa7d951-1bb2-4e12-96c1-e968f26ffa7d} = NULL, !- Program Line 15
+  SET {3252c0c9-f3dd-4cb3-8eac-a2aeb9bbb3f3} = NULL, !- Program Line 14
+  SET {b99e2ae9-e00d-41ed-9cae-5cf6ba8291cc} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:ProgramCallingManager,
@@ -8225,51 +8225,51 @@ OS:Node,
 
 OS:Node,
   {00000000-0000-0000-0048-000000000127},  !- Handle
-  CoilCoolingDXSingleSpeed_ashp 2 388kBtu/hr 10.0EER Outlet Air Node, !- Name
+  CoilCoolingDXSingleSpeed_ashp 2 388kBtu/hr 9.8EER Outlet Air Node, !- Name
   {00000000-0000-0000-0018-000000000132},  !- Inlet Port
   {00000000-0000-0000-0018-000000000133};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0048-000000000128},  !- Handle
-  CoilCoolingDXSingleSpeed_ashp 3 5718kBtu/hr 9.7EER Outlet Air Node, !- Name
+  CoilCoolingDXSingleSpeed_ashp 3 5718kBtu/hr 9.5EER Outlet Air Node, !- Name
   {00000000-0000-0000-0018-000000000208},  !- Inlet Port
   {00000000-0000-0000-0018-000000000209};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0048-000000000129},  !- Handle
-  CoilCoolingDXSingleSpeed_ashp 4 580kBtu/hr 10.0EER Outlet Air Node, !- Name
+  CoilCoolingDXSingleSpeed_ashp 4 580kBtu/hr 9.8EER Outlet Air Node, !- Name
   {00000000-0000-0000-0018-000000000284},  !- Inlet Port
   {00000000-0000-0000-0018-000000000285};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0048-000000000130},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 1 23 Clg kBtu/hr 3.3COPH Outlet Air Node, !- Name
+  CoilHeatingDXSingleSpeed_ashp 1 32 Clg kBtu/hr 3.3COPH Outlet Air Node, !- Name
   {00000000-0000-0000-0018-000000000104},  !- Inlet Port
   {00000000-0000-0000-0018-000000000105};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0048-000000000131},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 2 281 Clg kBtu/hr 3.2COPH Outlet Air Node, !- Name
+  CoilHeatingDXSingleSpeed_ashp 103 Clg kBtu/hr 3.3COPH Outlet Air Node, !- Name
+  {00000000-0000-0000-0018-000000000081},  !- Inlet Port
+  {00000000-0000-0000-0018-000000000082};  !- Outlet Port
+
+OS:Node,
+  {00000000-0000-0000-0048-000000000132},  !- Handle
+  CoilHeatingDXSingleSpeed_ashp 2 388 Clg kBtu/hr 3.2COPH Outlet Air Node, !- Name
   {00000000-0000-0000-0018-000000000130},  !- Inlet Port
   {00000000-0000-0000-0018-000000000131};  !- Outlet Port
 
 OS:Node,
-  {00000000-0000-0000-0048-000000000132},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 3 4142 Clg kBtu/hr 3.2COPH Outlet Air Node, !- Name
+  {00000000-0000-0000-0048-000000000133},  !- Handle
+  CoilHeatingDXSingleSpeed_ashp 3 5718 Clg kBtu/hr 3.2COPH Outlet Air Node, !- Name
   {00000000-0000-0000-0018-000000000206},  !- Inlet Port
   {00000000-0000-0000-0018-000000000207};  !- Outlet Port
 
 OS:Node,
-  {00000000-0000-0000-0048-000000000133},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 4 420 Clg kBtu/hr 3.2COPH Outlet Air Node, !- Name
+  {00000000-0000-0000-0048-000000000134},  !- Handle
+  CoilHeatingDXSingleSpeed_ashp 4 580 Clg kBtu/hr 3.2COPH Outlet Air Node, !- Name
   {00000000-0000-0000-0018-000000000282},  !- Inlet Port
   {00000000-0000-0000-0018-000000000283};  !- Outlet Port
-
-OS:Node,
-  {00000000-0000-0000-0048-000000000134},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 75 Clg kBtu/hr 3.3COPH Outlet Air Node, !- Name
-  {00000000-0000-0000-0018-000000000081},  !- Inlet Port
-  {00000000-0000-0000-0018-000000000082};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0048-000000000135},  !- Handle
@@ -9075,7 +9075,7 @@ OS:PlantLoop,
   ,                                        !- Primary Plant Equipment Operation Scheme
   {00000000-0000-0000-0048-000000000157},  !- Loop Temperature Setpoint Node Name
   60,                                      !- Maximum Loop Temperature {C}
-  51.66667,                                !- Minimum Loop Temperature {C}
+  51.6666666666667,                        !- Minimum Loop Temperature {C}
   ,                                        !- Maximum Loop Flow Rate {m3/s}
   ,                                        !- Minimum Loop Flow Rate {m3/s}
   Autocalculate,                           !- Plant Loop Volume {m3}
@@ -18571,7 +18571,7 @@ OS:WaterHeater:Sizing,
   {00000000-0000-0000-0096-000000000001},  !- WaterHeater Name
   PeakDraw,                                !- Design Mode
   0.538503,                                !- Time Storage Can Meet Peak Draw {hr}
-  0,                                       !- Time for Tank Recovery {hr}
+  0.5,                                     !- Time for Tank Recovery {hr}
   1;                                       !- Nominal Tank Volume for Autosizing Plant Connections {m3}
 
 OS:WaterUse:Connections,

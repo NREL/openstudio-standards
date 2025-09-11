@@ -1606,11 +1606,11 @@ OS:Coil:Cooling:DX:SingleSpeed,
 
 OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0013-000000000002},  !- Handle
-  CoilCoolingDXSingleSpeed_ashp 953kBtu/hr 9.7EER, !- Name
+  CoilCoolingDXSingleSpeed_ashp 953kBtu/hr 9.5EER, !- Name
   {00000000-0000-0000-0061-000000000001},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.36680611439836,                        !- Rated COP {W/W}
+  3.30019905299558,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -1641,10 +1641,10 @@ OS:Coil:Cooling:DX:SingleSpeed,
 
 OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0014-000000000001},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 1 57 Clg kBtu/hr 3.3COPH, !- Name
+  CoilHeatingDXSingleSpeed_ashp 1 79 Clg kBtu/hr 3.3COPH, !- Name
   {00000000-0000-0000-0061-000000000001},  !- Availability Schedule Name
-  16758.281287151,                         !- Rated Total Heating Capacity {W}
-  3.53252750774014,                        !- Rated COP {W/W}
+  Autosize,                                !- Rated Total Heating Capacity {W}
+  3.54315264197679,                        !- Rated COP {W/W}
   Autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -1668,10 +1668,10 @@ OS:Coil:Heating:DX:SingleSpeed,
 
 OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0014-000000000002},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 691 Clg kBtu/hr 3.2COPH, !- Name
+  CoilHeatingDXSingleSpeed_ashp 953 Clg kBtu/hr 3.2COPH, !- Name
   {00000000-0000-0000-0061-000000000001},  !- Availability Schedule Name
-  202368.469531774,                        !- Rated Total Heating Capacity {W}
-  3.72542547922566,                        !- Rated COP {W/W}
+  Autosize,                                !- Rated Total Heating Capacity {W}
+  3.84984365674117,                        !- Rated COP {W/W}
   Autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -10883,21 +10883,21 @@ OS:EnergyManagementSystem:Actuator,
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0034-000000000001},  !- Handle
   ems_sys_1_mixed_shr_none_sc_ashp_sh_ashp_c_g_ssf_cv_zh_b_e_zc_none_srf_none__OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {4b317f4f-3350-4c3f-97b6-042ab17b6228}<23.9 && {4b317f4f-3350-4c3f-97b6-042ab17b6228}>1.7, !- Program Line 1
-  SET {6495e126-894b-4a68-af73-d726bd0c1503} = 29.4, !- Program Line 2
-  SET {1067e457-f56a-42e9-a955-f54e806b0377} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {4b317f4f-3350-4c3f-97b6-042ab17b6228}<23.9 && {4b317f4f-3350-4c3f-97b6-042ab17b6228}>1.7, !- Program Line 4
-  SET {6495e126-894b-4a68-af73-d726bd0c1503} = 29.4, !- Program Line 5
-  SET {1067e457-f56a-42e9-a955-f54e806b0377} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {4b317f4f-3350-4c3f-97b6-042ab17b6228}<23.9 && {4b317f4f-3350-4c3f-97b6-042ab17b6228}>1.7, !- Program Line 7
-  SET {6495e126-894b-4a68-af73-d726bd0c1503} = 29.4, !- Program Line 8
-  SET {1067e457-f56a-42e9-a955-f54e806b0377} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {4b317f4f-3350-4c3f-97b6-042ab17b6228}<23.9 && {4b317f4f-3350-4c3f-97b6-042ab17b6228}>1.7, !- Program Line 10
-  SET {6495e126-894b-4a68-af73-d726bd0c1503} = 29.4, !- Program Line 11
-  SET {1067e457-f56a-42e9-a955-f54e806b0377} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {80edea11-71a1-46cc-ad1a-8da1576f8fc0}<23.9 && {80edea11-71a1-46cc-ad1a-8da1576f8fc0}>1.7, !- Program Line 1
+  SET {1c5d837a-b7c1-4a3c-b419-ee71113c654a} = 29.4, !- Program Line 2
+  SET {7adb1d5f-3be1-4d89-8943-f841c85f456c} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {80edea11-71a1-46cc-ad1a-8da1576f8fc0}<23.9 && {80edea11-71a1-46cc-ad1a-8da1576f8fc0}>1.7, !- Program Line 4
+  SET {1c5d837a-b7c1-4a3c-b419-ee71113c654a} = 29.4, !- Program Line 5
+  SET {7adb1d5f-3be1-4d89-8943-f841c85f456c} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {80edea11-71a1-46cc-ad1a-8da1576f8fc0}<23.9 && {80edea11-71a1-46cc-ad1a-8da1576f8fc0}>1.7, !- Program Line 7
+  SET {1c5d837a-b7c1-4a3c-b419-ee71113c654a} = 29.4, !- Program Line 8
+  SET {7adb1d5f-3be1-4d89-8943-f841c85f456c} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {80edea11-71a1-46cc-ad1a-8da1576f8fc0}<23.9 && {80edea11-71a1-46cc-ad1a-8da1576f8fc0}>1.7, !- Program Line 10
+  SET {1c5d837a-b7c1-4a3c-b419-ee71113c654a} = 29.4, !- Program Line 11
+  SET {7adb1d5f-3be1-4d89-8943-f841c85f456c} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {6495e126-894b-4a68-af73-d726bd0c1503} = NULL, !- Program Line 14
-  SET {1067e457-f56a-42e9-a955-f54e806b0377} = NULL, !- Program Line 15
+  SET {1c5d837a-b7c1-4a3c-b419-ee71113c654a} = NULL, !- Program Line 14
+  SET {7adb1d5f-3be1-4d89-8943-f841c85f456c} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:ProgramCallingManager,
@@ -12673,19 +12673,19 @@ OS:Node,
 
 OS:Node,
   {00000000-0000-0000-0050-000000000185},  !- Handle
-  CoilCoolingDXSingleSpeed_ashp 953kBtu/hr 9.7EER Outlet Air Node, !- Name
+  CoilCoolingDXSingleSpeed_ashp 953kBtu/hr 9.5EER Outlet Air Node, !- Name
   {00000000-0000-0000-0016-000000000100},  !- Inlet Port
   {00000000-0000-0000-0016-000000000101};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0050-000000000186},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 1 57 Clg kBtu/hr 3.3COPH Outlet Air Node, !- Name
+  CoilHeatingDXSingleSpeed_ashp 1 79 Clg kBtu/hr 3.3COPH Outlet Air Node, !- Name
   {00000000-0000-0000-0016-000000000594},  !- Inlet Port
   {00000000-0000-0000-0016-000000000595};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0050-000000000187},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 691 Clg kBtu/hr 3.2COPH Outlet Air Node, !- Name
+  CoilHeatingDXSingleSpeed_ashp 953 Clg kBtu/hr 3.2COPH Outlet Air Node, !- Name
   {00000000-0000-0000-0016-000000000098},  !- Inlet Port
   {00000000-0000-0000-0016-000000000099};  !- Outlet Port
 
@@ -15022,7 +15022,7 @@ OS:PlantLoop,
   ,                                        !- Primary Plant Equipment Operation Scheme
   {00000000-0000-0000-0050-000000000494},  !- Loop Temperature Setpoint Node Name
   60,                                      !- Maximum Loop Temperature {C}
-  51.66667,                                !- Minimum Loop Temperature {C}
+  51.6666666666667,                        !- Minimum Loop Temperature {C}
   ,                                        !- Maximum Loop Flow Rate {m3/s}
   ,                                        !- Minimum Loop Flow Rate {m3/s}
   Autocalculate,                           !- Plant Loop Volume {m3}
@@ -43832,7 +43832,7 @@ OS:WaterHeater:Sizing,
   {00000000-0000-0000-0099-000000000001},  !- WaterHeater Name
   PeakDraw,                                !- Design Mode
   0.538503,                                !- Time Storage Can Meet Peak Draw {hr}
-  0,                                       !- Time for Tank Recovery {hr}
+  1,                                       !- Time for Tank Recovery {hr}
   1;                                       !- Nominal Tank Volume for Autosizing Plant Connections {m3}
 
 OS:WaterUse:Connections,
