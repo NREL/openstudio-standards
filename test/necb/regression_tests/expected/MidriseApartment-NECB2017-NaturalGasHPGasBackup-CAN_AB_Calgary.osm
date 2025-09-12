@@ -1,5 +1,49 @@
 OS:AdditionalProperties,
   {00000000-0000-0000-0001-000000000001},  !- Handle
+  {00000000-0000-0000-0031-000000000001},  !- Object Name
+  Ref OA per area,                         !- Feature Name 1
+  Double,                                  !- Feature Data Type 1
+  0.050000000000000003,                    !- Feature Value 1
+  Ref OA per person,                       !- Feature Name 2
+  Double,                                  !- Feature Data Type 2
+  0,                                       !- Feature Value 2
+  Ref OA ach,                              !- Feature Name 3
+  Double,                                  !- Feature Data Type 3
+  0,                                       !- Feature Value 3
+  Ref occupancy per 1000ft2,               !- Feature Name 4
+  Double,                                  !- Feature Data Type 4
+  0,                                       !- Feature Value 4
+  Ref standard,                            !- Feature Name 5
+  String,                                  !- Feature Data Type 5
+  ASHRAE 62-2001 Table 2,                  !- Feature Value 5
+  Ref space type,                          !- Feature Name 6
+  String,                                  !- Feature Data Type 6
+  Public Spaces-Corridors and utilities;   !- Feature Value 6
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000002},  !- Handle
+  {00000000-0000-0000-0031-000000000002},  !- Object Name
+  Ref OA per area,                         !- Feature Name 1
+  Double,                                  !- Feature Data Type 1
+  0.059999999999999998,                    !- Feature Value 1
+  Ref OA per person,                       !- Feature Name 2
+  Double,                                  !- Feature Data Type 2
+  0,                                       !- Feature Value 2
+  Ref OA ach,                              !- Feature Name 3
+  Double,                                  !- Feature Data Type 3
+  0,                                       !- Feature Value 3
+  Ref occupancy per 1000ft2,               !- Feature Name 4
+  Double,                                  !- Feature Data Type 4
+  0,                                       !- Feature Value 4
+  Ref standard,                            !- Feature Name 5
+  String,                                  !- Feature Data Type 5
+  ASHRAE 62-2001 Table 2,                  !- Feature Value 5
+  Ref space type,                          !- Feature Name 6
+  String,                                  !- Feature Data Type 6
+  Living areas (Table 2&#44 assume 10 ft ceiling); !- Feature Value 6
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000003},  !- Handle
   {00000000-0000-0000-0065-000000000020},  !- Object Name
   max_occ_in_spaces,                       !- Feature Name 1
   Double,                                  !- Feature Data Type 1
@@ -15,7 +59,7 @@ OS:AdditionalProperties,
   2024-01-01 01:00:00 UTC;                 !- Feature Value 4
 
 OS:AdditionalProperties,
-  {00000000-0000-0000-0001-000000000002},  !- Handle
+  {00000000-0000-0000-0001-000000000004},  !- Handle
   {00000000-0000-0000-0065-000000000021},  !- Object Name
   max_occ_in_spaces,                       !- Feature Name 1
   Double,                                  !- Feature Data Type 1
@@ -717,10 +761,10 @@ OS:Coil:Cooling:DX:SingleSpeed,
 
 OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0015-000000000001},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 1 31 Clg kBtu/hr 3.1COPH, !- Name
+  CoilHeatingDXSingleSpeed_ashp 1 31 Htg kBtu/hr 14SEER, !- Name
   {00000000-0000-0000-0062-000000000001},  !- Availability Schedule Name
   9177.72352595735,                        !- Rated Total Heating Capacity {W}
-  3.30656763973747,                        !- Rated COP {W/W}
+  3.8248,                                  !- Rated COP {W/W}
   Autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -744,7 +788,7 @@ OS:Coil:Heating:DX:SingleSpeed,
 
 OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0015-000000000002},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 374 Clg kBtu/hr 3.2COPH, !- Name
+  CoilHeatingDXSingleSpeed_ashp 374 Htg kBtu/hr 3.2COPH, !- Name
   {00000000-0000-0000-0062-000000000001},  !- Availability Schedule Name
   109594.753802172,                        !- Rated Total Heating Capacity {W}
   3.57550405660377,                        !- Rated COP {W/W}
@@ -5834,21 +5878,21 @@ OS:EnergyManagementSystem:Actuator,
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0035-000000000001},  !- Handle
   ems_sys_1_mixed_shr_none_sc_ashp_sh_ashp_c_g_ssf_cv_zh_b_hw_zc_none_srf_none__OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {9327bd53-bbe7-4752-aca2-c0b5be121a14}<23.9 && {9327bd53-bbe7-4752-aca2-c0b5be121a14}>1.7, !- Program Line 1
-  SET {c2220ab2-3981-4e06-bbd4-fddc05002612} = 29.4, !- Program Line 2
-  SET {b77dabac-6427-4805-b32c-aa0c8eaab77d} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {9327bd53-bbe7-4752-aca2-c0b5be121a14}<23.9 && {9327bd53-bbe7-4752-aca2-c0b5be121a14}>1.7, !- Program Line 4
-  SET {c2220ab2-3981-4e06-bbd4-fddc05002612} = 29.4, !- Program Line 5
-  SET {b77dabac-6427-4805-b32c-aa0c8eaab77d} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {9327bd53-bbe7-4752-aca2-c0b5be121a14}<23.9 && {9327bd53-bbe7-4752-aca2-c0b5be121a14}>1.7, !- Program Line 7
-  SET {c2220ab2-3981-4e06-bbd4-fddc05002612} = 29.4, !- Program Line 8
-  SET {b77dabac-6427-4805-b32c-aa0c8eaab77d} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {9327bd53-bbe7-4752-aca2-c0b5be121a14}<23.9 && {9327bd53-bbe7-4752-aca2-c0b5be121a14}>1.7, !- Program Line 10
-  SET {c2220ab2-3981-4e06-bbd4-fddc05002612} = 29.4, !- Program Line 11
-  SET {b77dabac-6427-4805-b32c-aa0c8eaab77d} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {9a873209-42c2-4e69-a748-e9d3712b3380}<23.9 && {9a873209-42c2-4e69-a748-e9d3712b3380}>1.7, !- Program Line 1
+  SET {be4fd616-a65c-41a8-8678-6517fcd4f5a5} = 29.4, !- Program Line 2
+  SET {bd3d2514-c721-4a75-8959-a629951027dc} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {9a873209-42c2-4e69-a748-e9d3712b3380}<23.9 && {9a873209-42c2-4e69-a748-e9d3712b3380}>1.7, !- Program Line 4
+  SET {be4fd616-a65c-41a8-8678-6517fcd4f5a5} = 29.4, !- Program Line 5
+  SET {bd3d2514-c721-4a75-8959-a629951027dc} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {9a873209-42c2-4e69-a748-e9d3712b3380}<23.9 && {9a873209-42c2-4e69-a748-e9d3712b3380}>1.7, !- Program Line 7
+  SET {be4fd616-a65c-41a8-8678-6517fcd4f5a5} = 29.4, !- Program Line 8
+  SET {bd3d2514-c721-4a75-8959-a629951027dc} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {9a873209-42c2-4e69-a748-e9d3712b3380}<23.9 && {9a873209-42c2-4e69-a748-e9d3712b3380}>1.7, !- Program Line 10
+  SET {be4fd616-a65c-41a8-8678-6517fcd4f5a5} = 29.4, !- Program Line 11
+  SET {bd3d2514-c721-4a75-8959-a629951027dc} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {c2220ab2-3981-4e06-bbd4-fddc05002612} = NULL, !- Program Line 14
-  SET {b77dabac-6427-4805-b32c-aa0c8eaab77d} = NULL, !- Program Line 15
+  SET {be4fd616-a65c-41a8-8678-6517fcd4f5a5} = NULL, !- Program Line 14
+  SET {bd3d2514-c721-4a75-8959-a629951027dc} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:ProgramCallingManager,
@@ -7131,13 +7175,13 @@ OS:Node,
 
 OS:Node,
   {00000000-0000-0000-0050-000000000114},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 1 31 Clg kBtu/hr 3.1COPH Outlet Air Node, !- Name
+  CoilHeatingDXSingleSpeed_ashp 1 31 Htg kBtu/hr 14SEER Outlet Air Node, !- Name
   {00000000-0000-0000-0018-000000000315},  !- Inlet Port
   {00000000-0000-0000-0018-000000000316};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0050-000000000115},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 374 Clg kBtu/hr 3.2COPH Outlet Air Node, !- Name
+  CoilHeatingDXSingleSpeed_ashp 374 Htg kBtu/hr 3.2COPH Outlet Air Node, !- Name
   {00000000-0000-0000-0018-000000000060},  !- Inlet Port
   {00000000-0000-0000-0018-000000000061};  !- Outlet Port
 

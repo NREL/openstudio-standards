@@ -1,5 +1,291 @@
 OS:AdditionalProperties,
   {00000000-0000-0000-0001-000000000001},  !- Handle
+  {00000000-0000-0000-0038-000000000001},  !- Object Name
+  Ref OA per area,                         !- Feature Name 1
+  Double,                                  !- Feature Data Type 1
+  0.059999999999999998,                    !- Feature Value 1
+  Ref OA per person,                       !- Feature Name 2
+  Double,                                  !- Feature Data Type 2
+  0,                                       !- Feature Value 2
+  Ref OA ach,                              !- Feature Name 3
+  Double,                                  !- Feature Data Type 3
+  0,                                       !- Feature Value 3
+  Ref occupancy per 1000ft2,               !- Feature Name 4
+  Double,                                  !- Feature Data Type 4
+  0,                                       !- Feature Value 4
+  Ref standard,                            !- Feature Name 5
+  String,                                  !- Feature Data Type 5
+  ASHRAE 62.1-2016 Occupancy,              !- Feature Value 5
+  Ref space type,                          !- Feature Name 6
+  String,                                  !- Feature Data Type 6
+  Common corridors;                        !- Feature Value 6
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000002},  !- Handle
+  {00000000-0000-0000-0038-000000000003},  !- Object Name
+  Ref OA per area,                         !- Feature Name 1
+  Double,                                  !- Feature Data Type 1
+  0.17999999999999999,                     !- Feature Value 1
+  Ref OA per person,                       !- Feature Name 2
+  Double,                                  !- Feature Data Type 2
+  7.5,                                     !- Feature Value 2
+  Ref OA ach,                              !- Feature Name 3
+  Double,                                  !- Feature Data Type 3
+  0,                                       !- Feature Value 3
+  Ref occupancy per 1000ft2,               !- Feature Name 4
+  Double,                                  !- Feature Data Type 4
+  70,                                      !- Feature Value 4
+  Ref standard,                            !- Feature Name 5
+  String,                                  !- Feature Data Type 5
+  ASHRAE 62.1-2016 Occupancy,              !- Feature Value 5
+  Ref space type,                          !- Feature Name 6
+  String,                                  !- Feature Data Type 6
+  Restaurant dinng rooms;                  !- Feature Value 6
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000003},  !- Handle
+  {00000000-0000-0000-0038-000000000004},  !- Object Name
+  Ref OA per area,                         !- Feature Name 1
+  Double,                                  !- Feature Data Type 1
+  0.059999999999999998,                    !- Feature Value 1
+  Ref OA per person,                       !- Feature Name 2
+  Double,                                  !- Feature Data Type 2
+  0,                                       !- Feature Value 2
+  Ref OA ach,                              !- Feature Name 3
+  Double,                                  !- Feature Data Type 3
+  0,                                       !- Feature Value 3
+  Ref occupancy per 1000ft2,               !- Feature Name 4
+  Double,                                  !- Feature Data Type 4
+  0,                                       !- Feature Value 4
+  Ref standard,                            !- Feature Name 5
+  String,                                  !- Feature Data Type 5
+  ASHRAE 62.1-2016 Occupancy,              !- Feature Value 5
+  Ref space type,                          !- Feature Name 6
+  String,                                  !- Feature Data Type 6
+  Common corridors;                        !- Feature Value 6
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000004},  !- Handle
+  {00000000-0000-0000-0038-000000000006},  !- Object Name
+  Ref OA per area,                         !- Feature Name 1
+  Double,                                  !- Feature Data Type 1
+  0.12,                                    !- Feature Value 1
+  Ref OA per person,                       !- Feature Name 2
+  Double,                                  !- Feature Data Type 2
+  7.5,                                     !- Feature Value 2
+  Ref OA ach,                              !- Feature Name 3
+  Double,                                  !- Feature Data Type 3
+  0,                                       !- Feature Value 3
+  Ref occupancy per 1000ft2,               !- Feature Name 4
+  Double,                                  !- Feature Data Type 4
+  20,                                      !- Feature Value 4
+  Ref standard,                            !- Feature Name 5
+  String,                                  !- Feature Data Type 5
+  ASHRAE 62.1-2016 Occupancy,              !- Feature Value 5
+  Ref space type,                          !- Feature Name 6
+  String,                                  !- Feature Data Type 6
+  Kitchen (cooking);                       !- Feature Value 6
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000005},  !- Handle
+  {00000000-0000-0000-0038-000000000007},  !- Object Name
+  Ref OA per area,                         !- Feature Name 1
+  Double,                                  !- Feature Data Type 1
+  0.059999999999999998,                    !- Feature Value 1
+  Ref OA per person,                       !- Feature Name 2
+  Double,                                  !- Feature Data Type 2
+  5,                                       !- Feature Value 2
+  Ref OA ach,                              !- Feature Name 3
+  Double,                                  !- Feature Data Type 3
+  0,                                       !- Feature Value 3
+  Ref occupancy per 1000ft2,               !- Feature Name 4
+  Double,                                  !- Feature Data Type 4
+  10,                                      !- Feature Value 4
+  Ref standard,                            !- Feature Name 5
+  String,                                  !- Feature Data Type 5
+  ASHRAE 62.1-2016 Occupancy,              !- Feature Value 5
+  Ref space type,                          !- Feature Name 6
+  String,                                  !- Feature Data Type 6
+  Bedroom/living room;                     !- Feature Value 6
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000006},  !- Handle
+  {00000000-0000-0000-0038-000000000008},  !- Object Name
+  Ref OA per area,                         !- Feature Name 1
+  Double,                                  !- Feature Data Type 1
+  0.12,                                    !- Feature Value 1
+  Ref OA per person,                       !- Feature Name 2
+  Double,                                  !- Feature Data Type 2
+  5,                                       !- Feature Value 2
+  Ref OA ach,                              !- Feature Name 3
+  Double,                                  !- Feature Data Type 3
+  0,                                       !- Feature Value 3
+  Ref occupancy per 1000ft2,               !- Feature Name 4
+  Double,                                  !- Feature Data Type 4
+  10,                                      !- Feature Value 4
+  Ref standard,                            !- Feature Name 5
+  String,                                  !- Feature Data Type 5
+  ASHRAE 62.1-2016 Occupancy,              !- Feature Value 5
+  Ref space type,                          !- Feature Name 6
+  String,                                  !- Feature Data Type 6
+  Laundry rooms&#44 central;               !- Feature Value 6
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000007},  !- Handle
+  {00000000-0000-0000-0038-000000000009},  !- Object Name
+  Ref OA per area,                         !- Feature Name 1
+  Double,                                  !- Feature Data Type 1
+  0.059999999999999998,                    !- Feature Value 1
+  Ref OA per person,                       !- Feature Name 2
+  Double,                                  !- Feature Data Type 2
+  7.5,                                     !- Feature Value 2
+  Ref OA ach,                              !- Feature Name 3
+  Double,                                  !- Feature Data Type 3
+  0,                                       !- Feature Value 3
+  Ref occupancy per 1000ft2,               !- Feature Name 4
+  Double,                                  !- Feature Data Type 4
+  30,                                      !- Feature Value 4
+  Ref standard,                            !- Feature Name 5
+  String,                                  !- Feature Data Type 5
+  ASHRAE 62.1-2016 Occupancy,              !- Feature Value 5
+  Ref space type,                          !- Feature Name 6
+  String,                                  !- Feature Data Type 6
+  Lobbies/prefunction;                     !- Feature Value 6
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000008},  !- Handle
+  {00000000-0000-0000-0038-000000000010},  !- Object Name
+  Ref OA per area,                         !- Feature Name 1
+  Double,                                  !- Feature Data Type 1
+  0.059999999999999998,                    !- Feature Value 1
+  Ref OA per person,                       !- Feature Name 2
+  Double,                                  !- Feature Data Type 2
+  7.5,                                     !- Feature Value 2
+  Ref OA ach,                              !- Feature Name 3
+  Double,                                  !- Feature Data Type 3
+  0,                                       !- Feature Value 3
+  Ref occupancy per 1000ft2,               !- Feature Name 4
+  Double,                                  !- Feature Data Type 4
+  40,                                      !- Feature Value 4
+  Ref standard,                            !- Feature Name 5
+  String,                                  !- Feature Data Type 5
+  ASHRAE 62.1-2016 Occupancy,              !- Feature Value 5
+  Ref space type,                          !- Feature Name 6
+  String,                                  !- Feature Data Type 6
+  Mall common areas;                       !- Feature Value 6
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000009},  !- Handle
+  {00000000-0000-0000-0038-000000000011},  !- Object Name
+  Ref OA per area,                         !- Feature Name 1
+  Double,                                  !- Feature Data Type 1
+  0.12,                                    !- Feature Value 1
+  Ref OA per person,                       !- Feature Name 2
+  Double,                                  !- Feature Data Type 2
+  7.5,                                     !- Feature Value 2
+  Ref OA ach,                              !- Feature Name 3
+  Double,                                  !- Feature Data Type 3
+  0,                                       !- Feature Value 3
+  Ref occupancy per 1000ft2,               !- Feature Name 4
+  Double,                                  !- Feature Data Type 4
+  15,                                      !- Feature Value 4
+  Ref standard,                            !- Feature Name 5
+  String,                                  !- Feature Data Type 5
+  ASHRAE 62.1-2016 Occupancy,              !- Feature Value 5
+  Ref space type,                          !- Feature Name 6
+  String,                                  !- Feature Data Type 6
+  Sales (except as below);                 !- Feature Value 6
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000010},  !- Handle
+  {00000000-0000-0000-0038-000000000013},  !- Object Name
+  Ref OA per area,                         !- Feature Name 1
+  Double,                                  !- Feature Data Type 1
+  0.059999999999999998,                    !- Feature Value 1
+  Ref OA per person,                       !- Feature Name 2
+  Double,                                  !- Feature Data Type 2
+  5,                                       !- Feature Value 2
+  Ref OA ach,                              !- Feature Name 3
+  Double,                                  !- Feature Data Type 3
+  0,                                       !- Feature Value 3
+  Ref occupancy per 1000ft2,               !- Feature Name 4
+  Double,                                  !- Feature Data Type 4
+  2,                                       !- Feature Value 4
+  Ref standard,                            !- Feature Name 5
+  String,                                  !- Feature Data Type 5
+  ASHRAE 62.1-2016 Occupancy,              !- Feature Value 5
+  Ref space type,                          !- Feature Name 6
+  String,                                  !- Feature Data Type 6
+  Occupiable storage rooms for dry material; !- Feature Value 6
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000011},  !- Handle
+  {00000000-0000-0000-0038-000000000012},  !- Object Name
+  Ref OA per area,                         !- Feature Name 1
+  Double,                                  !- Feature Data Type 1
+  0.059999999999999998,                    !- Feature Value 1
+  Ref OA per person,                       !- Feature Name 2
+  Double,                                  !- Feature Data Type 2
+  5,                                       !- Feature Value 2
+  Ref OA ach,                              !- Feature Name 3
+  Double,                                  !- Feature Data Type 3
+  0,                                       !- Feature Value 3
+  Ref occupancy per 1000ft2,               !- Feature Name 4
+  Double,                                  !- Feature Data Type 4
+  2,                                       !- Feature Value 4
+  Ref standard,                            !- Feature Name 5
+  String,                                  !- Feature Data Type 5
+  ASHRAE 62.1-2016 Occupancy,              !- Feature Value 5
+  Ref space type,                          !- Feature Name 6
+  String,                                  !- Feature Data Type 6
+  Occupiable storage rooms for dry material; !- Feature Value 6
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000012},  !- Handle
+  {00000000-0000-0000-0038-000000000002},  !- Object Name
+  Ref OA per area,                         !- Feature Name 1
+  Double,                                  !- Feature Data Type 1
+  0.059999999999999998,                    !- Feature Value 1
+  Ref OA per person,                       !- Feature Name 2
+  Double,                                  !- Feature Data Type 2
+  0,                                       !- Feature Value 2
+  Ref OA ach,                              !- Feature Name 3
+  Double,                                  !- Feature Data Type 3
+  0,                                       !- Feature Value 3
+  Ref occupancy per 1000ft2,               !- Feature Name 4
+  Double,                                  !- Feature Data Type 4
+  0,                                       !- Feature Value 4
+  Ref standard,                            !- Feature Name 5
+  String,                                  !- Feature Data Type 5
+  ASHRAE 62.1-2016 Occupancy,              !- Feature Value 5
+  Ref space type,                          !- Feature Name 6
+  String,                                  !- Feature Data Type 6
+  Common corridors;                        !- Feature Value 6
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000013},  !- Handle
+  {00000000-0000-0000-0038-000000000005},  !- Object Name
+  Ref OA per area,                         !- Feature Name 1
+  Double,                                  !- Feature Data Type 1
+  0.059999999999999998,                    !- Feature Value 1
+  Ref OA per person,                       !- Feature Name 2
+  Double,                                  !- Feature Data Type 2
+  0,                                       !- Feature Value 2
+  Ref OA ach,                              !- Feature Name 3
+  Double,                                  !- Feature Data Type 3
+  0,                                       !- Feature Value 3
+  Ref occupancy per 1000ft2,               !- Feature Name 4
+  Double,                                  !- Feature Data Type 4
+  0,                                       !- Feature Value 4
+  Ref standard,                            !- Feature Name 5
+  String,                                  !- Feature Data Type 5
+  ASHRAE 62.1-2016 Occupancy,              !- Feature Value 5
+  Ref space type,                          !- Feature Name 6
+  String,                                  !- Feature Data Type 6
+  Common corridors;                        !- Feature Value 6
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000014},  !- Handle
   {00000000-0000-0000-0073-000000000054},  !- Object Name
   max_occ_in_spaces,                       !- Feature Name 1
   Double,                                  !- Feature Data Type 1
@@ -15,7 +301,7 @@ OS:AdditionalProperties,
   2024-01-01 01:00:00 UTC;                 !- Feature Value 4
 
 OS:AdditionalProperties,
-  {00000000-0000-0000-0001-000000000002},  !- Handle
+  {00000000-0000-0000-0001-000000000015},  !- Handle
   {00000000-0000-0000-0073-000000000056},  !- Object Name
   max_occ_in_spaces,                       !- Feature Name 1
   Double,                                  !- Feature Data Type 1
@@ -31,7 +317,7 @@ OS:AdditionalProperties,
   2024-01-01 01:00:00 UTC;                 !- Feature Value 4
 
 OS:AdditionalProperties,
-  {00000000-0000-0000-0001-000000000003},  !- Handle
+  {00000000-0000-0000-0001-000000000016},  !- Handle
   {00000000-0000-0000-0073-000000000055},  !- Object Name
   max_occ_in_spaces,                       !- Feature Name 1
   Double,                                  !- Feature Data Type 1
@@ -47,7 +333,7 @@ OS:AdditionalProperties,
   2024-01-01 01:00:00 UTC;                 !- Feature Value 4
 
 OS:AdditionalProperties,
-  {00000000-0000-0000-0001-000000000004},  !- Handle
+  {00000000-0000-0000-0001-000000000017},  !- Handle
   {00000000-0000-0000-0073-000000000058},  !- Object Name
   max_occ_in_spaces,                       !- Feature Name 1
   Double,                                  !- Feature Data Type 1
@@ -63,7 +349,7 @@ OS:AdditionalProperties,
   2024-01-01 01:00:00 UTC;                 !- Feature Value 4
 
 OS:AdditionalProperties,
-  {00000000-0000-0000-0001-000000000005},  !- Handle
+  {00000000-0000-0000-0001-000000000018},  !- Handle
   {00000000-0000-0000-0073-000000000057},  !- Object Name
   max_occ_in_spaces,                       !- Feature Name 1
   Double,                                  !- Feature Data Type 1
@@ -79,7 +365,7 @@ OS:AdditionalProperties,
   2024-01-01 01:00:00 UTC;                 !- Feature Value 4
 
 OS:AdditionalProperties,
-  {00000000-0000-0000-0001-000000000006},  !- Handle
+  {00000000-0000-0000-0001-000000000019},  !- Handle
   {00000000-0000-0000-0073-000000000059},  !- Object Name
   max_occ_in_spaces,                       !- Feature Name 1
   Double,                                  !- Feature Data Type 1
@@ -95,11 +381,11 @@ OS:AdditionalProperties,
   2024-01-01 01:00:00 UTC;                 !- Feature Value 4
 
 OS:AdditionalProperties,
-  {00000000-0000-0000-0001-000000000007},  !- Handle
+  {00000000-0000-0000-0001-000000000020},  !- Handle
   {00000000-0000-0000-0013-000000000001};  !- Object Name
 
 OS:AdditionalProperties,
-  {00000000-0000-0000-0001-000000000008},  !- Handle
+  {00000000-0000-0000-0001-000000000021},  !- Handle
   {00000000-0000-0000-0013-000000000002};  !- Object Name
 
 OS:AirLoopHVAC,
@@ -3248,11 +3534,11 @@ OS:Coil:Cooling:DX:SingleSpeed,
 
 OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0015-000000000054},  !- Handle
-  CoilCoolingDXSingleSpeed_dx 1 112kBtu/hr 9.26EER, !- Name
+  CoilCoolingDXSingleSpeed_dx 1 112kBtu/hr 11.0EER, !- Name
   {00000000-0000-0000-0070-000000000002},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.22027057931225,                        !- Rated COP {W/W}
+  3.79975201351641,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -3283,11 +3569,11 @@ OS:Coil:Cooling:DX:SingleSpeed,
 
 OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0015-000000000055},  !- Handle
-  CoilCoolingDXSingleSpeed_dx 147kBtu/hr 9.08EER, !- Name
+  CoilCoolingDXSingleSpeed_dx 147kBtu/hr 10.8EER, !- Name
   {00000000-0000-0000-0070-000000000002},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.16032422404975,                        !- Rated COP {W/W}
+  3.73314495211364,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -3318,11 +3604,11 @@ OS:Coil:Cooling:DX:SingleSpeed,
 
 OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0015-000000000056},  !- Handle
-  CoilCoolingDXSingleSpeed_dx 2 224kBtu/hr 9.08EER, !- Name
+  CoilCoolingDXSingleSpeed_dx 2 224kBtu/hr 10.8EER, !- Name
   {00000000-0000-0000-0070-000000000002},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.16032422404975,                        !- Rated COP {W/W}
+  3.73314495211364,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -3353,11 +3639,11 @@ OS:Coil:Cooling:DX:SingleSpeed,
 
 OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0015-000000000057},  !- Handle
-  CoilCoolingDXSingleSpeed_dx 3 143kBtu/hr 9.08EER, !- Name
+  CoilCoolingDXSingleSpeed_dx 3 143kBtu/hr 10.8EER, !- Name
   {00000000-0000-0000-0070-000000000002},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.16032422404975,                        !- Rated COP {W/W}
+  3.73314495211364,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -3388,11 +3674,11 @@ OS:Coil:Cooling:DX:SingleSpeed,
 
 OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0015-000000000058},  !- Handle
-  CoilCoolingDXSingleSpeed_dx 4 70kBtu/hr 9.26EER, !- Name
+  CoilCoolingDXSingleSpeed_dx 4 70kBtu/hr 11.0EER, !- Name
   {00000000-0000-0000-0070-000000000002},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.22027057931225,                        !- Rated COP {W/W}
+  3.79975201351641,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -21499,41 +21785,41 @@ OS:EnergyManagementSystem:Actuator,
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0042-000000000001},  !- Handle
   ems_sys_6_mixed_shr_none_sh_c_hw_sc_c_chw_ssf_vv_zh_b_hw_zc_none_srf_vv__OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {76defc6a-865b-42eb-b854-354df2c88803}<23.9 && {76defc6a-865b-42eb-b854-354df2c88803}>1.7, !- Program Line 1
-  SET {24eda299-b7b2-4668-8329-61e7cb12aefd} = 29.4, !- Program Line 2
-  SET {248c98b1-dbdc-4f44-a672-e8cb574fb217} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {76defc6a-865b-42eb-b854-354df2c88803}<23.9 && {76defc6a-865b-42eb-b854-354df2c88803}>1.7, !- Program Line 4
-  SET {24eda299-b7b2-4668-8329-61e7cb12aefd} = 29.4, !- Program Line 5
-  SET {248c98b1-dbdc-4f44-a672-e8cb574fb217} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {76defc6a-865b-42eb-b854-354df2c88803}<23.9 && {76defc6a-865b-42eb-b854-354df2c88803}>1.7, !- Program Line 7
-  SET {24eda299-b7b2-4668-8329-61e7cb12aefd} = 29.4, !- Program Line 8
-  SET {248c98b1-dbdc-4f44-a672-e8cb574fb217} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {76defc6a-865b-42eb-b854-354df2c88803}<23.9 && {76defc6a-865b-42eb-b854-354df2c88803}>1.7, !- Program Line 10
-  SET {24eda299-b7b2-4668-8329-61e7cb12aefd} = 29.4, !- Program Line 11
-  SET {248c98b1-dbdc-4f44-a672-e8cb574fb217} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {18f52114-6ee1-4578-97e5-5bafd69f8cf9}<23.9 && {18f52114-6ee1-4578-97e5-5bafd69f8cf9}>1.7, !- Program Line 1
+  SET {27818aa7-e3a0-4282-bac6-75d84445429f} = 29.4, !- Program Line 2
+  SET {0ac7ea87-610d-4333-8749-9919b0d58b19} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {18f52114-6ee1-4578-97e5-5bafd69f8cf9}<23.9 && {18f52114-6ee1-4578-97e5-5bafd69f8cf9}>1.7, !- Program Line 4
+  SET {27818aa7-e3a0-4282-bac6-75d84445429f} = 29.4, !- Program Line 5
+  SET {0ac7ea87-610d-4333-8749-9919b0d58b19} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {18f52114-6ee1-4578-97e5-5bafd69f8cf9}<23.9 && {18f52114-6ee1-4578-97e5-5bafd69f8cf9}>1.7, !- Program Line 7
+  SET {27818aa7-e3a0-4282-bac6-75d84445429f} = 29.4, !- Program Line 8
+  SET {0ac7ea87-610d-4333-8749-9919b0d58b19} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {18f52114-6ee1-4578-97e5-5bafd69f8cf9}<23.9 && {18f52114-6ee1-4578-97e5-5bafd69f8cf9}>1.7, !- Program Line 10
+  SET {27818aa7-e3a0-4282-bac6-75d84445429f} = 29.4, !- Program Line 11
+  SET {0ac7ea87-610d-4333-8749-9919b0d58b19} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {24eda299-b7b2-4668-8329-61e7cb12aefd} = NULL, !- Program Line 14
-  SET {248c98b1-dbdc-4f44-a672-e8cb574fb217} = NULL, !- Program Line 15
+  SET {27818aa7-e3a0-4282-bac6-75d84445429f} = NULL, !- Program Line 14
+  SET {0ac7ea87-610d-4333-8749-9919b0d58b19} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0042-000000000002},  !- Handle
   ems_sys_6_mixed_shr_none_sh_c_hw_sc_c_chw_ssf_vv_zh_b_hw_zc_none_srf_vv__OptimumStartProg1, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {76defc6a-865b-42eb-b854-354df2c88803}<23.9 && {76defc6a-865b-42eb-b854-354df2c88803}>1.7, !- Program Line 1
-  SET {249f775a-5a60-463d-b187-8f3c4b61879a} = 29.4, !- Program Line 2
-  SET {d6e3dcb2-2094-4220-b900-9e179bdc86df} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {76defc6a-865b-42eb-b854-354df2c88803}<23.9 && {76defc6a-865b-42eb-b854-354df2c88803}>1.7, !- Program Line 4
-  SET {249f775a-5a60-463d-b187-8f3c4b61879a} = 29.4, !- Program Line 5
-  SET {d6e3dcb2-2094-4220-b900-9e179bdc86df} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {76defc6a-865b-42eb-b854-354df2c88803}<23.9 && {76defc6a-865b-42eb-b854-354df2c88803}>1.7, !- Program Line 7
-  SET {249f775a-5a60-463d-b187-8f3c4b61879a} = 29.4, !- Program Line 8
-  SET {d6e3dcb2-2094-4220-b900-9e179bdc86df} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {76defc6a-865b-42eb-b854-354df2c88803}<23.9 && {76defc6a-865b-42eb-b854-354df2c88803}>1.7, !- Program Line 10
-  SET {249f775a-5a60-463d-b187-8f3c4b61879a} = 29.4, !- Program Line 11
-  SET {d6e3dcb2-2094-4220-b900-9e179bdc86df} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {18f52114-6ee1-4578-97e5-5bafd69f8cf9}<23.9 && {18f52114-6ee1-4578-97e5-5bafd69f8cf9}>1.7, !- Program Line 1
+  SET {3e906c69-4c69-4992-8bf3-baf2fa458478} = 29.4, !- Program Line 2
+  SET {044e0395-aac5-46f8-aee5-c40862d6d1f3} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {18f52114-6ee1-4578-97e5-5bafd69f8cf9}<23.9 && {18f52114-6ee1-4578-97e5-5bafd69f8cf9}>1.7, !- Program Line 4
+  SET {3e906c69-4c69-4992-8bf3-baf2fa458478} = 29.4, !- Program Line 5
+  SET {044e0395-aac5-46f8-aee5-c40862d6d1f3} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {18f52114-6ee1-4578-97e5-5bafd69f8cf9}<23.9 && {18f52114-6ee1-4578-97e5-5bafd69f8cf9}>1.7, !- Program Line 7
+  SET {3e906c69-4c69-4992-8bf3-baf2fa458478} = 29.4, !- Program Line 8
+  SET {044e0395-aac5-46f8-aee5-c40862d6d1f3} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {18f52114-6ee1-4578-97e5-5bafd69f8cf9}<23.9 && {18f52114-6ee1-4578-97e5-5bafd69f8cf9}>1.7, !- Program Line 10
+  SET {3e906c69-4c69-4992-8bf3-baf2fa458478} = 29.4, !- Program Line 11
+  SET {044e0395-aac5-46f8-aee5-c40862d6d1f3} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {249f775a-5a60-463d-b187-8f3c4b61879a} = NULL, !- Program Line 14
-  SET {d6e3dcb2-2094-4220-b900-9e179bdc86df} = NULL, !- Program Line 15
+  SET {3e906c69-4c69-4992-8bf3-baf2fa458478} = NULL, !- Program Line 14
+  SET {044e0395-aac5-46f8-aee5-c40862d6d1f3} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:ProgramCallingManager,
@@ -25305,31 +25591,31 @@ OS:Node,
 
 OS:Node,
   {00000000-0000-0000-0058-000000000318},  !- Handle
-  CoilCoolingDXSingleSpeed_dx 1 112kBtu/hr 9.26EER Outlet Air Node, !- Name
+  CoilCoolingDXSingleSpeed_dx 1 112kBtu/hr 11.0EER Outlet Air Node, !- Name
   {00000000-0000-0000-0021-000000000882},  !- Inlet Port
   {00000000-0000-0000-0021-000000000883};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0058-000000000319},  !- Handle
-  CoilCoolingDXSingleSpeed_dx 147kBtu/hr 9.08EER Outlet Air Node, !- Name
+  CoilCoolingDXSingleSpeed_dx 147kBtu/hr 10.8EER Outlet Air Node, !- Name
   {00000000-0000-0000-0021-000000000126},  !- Inlet Port
   {00000000-0000-0000-0021-000000000127};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0058-000000000320},  !- Handle
-  CoilCoolingDXSingleSpeed_dx 2 224kBtu/hr 9.08EER Outlet Air Node, !- Name
+  CoilCoolingDXSingleSpeed_dx 2 224kBtu/hr 10.8EER Outlet Air Node, !- Name
   {00000000-0000-0000-0021-000000000916},  !- Inlet Port
   {00000000-0000-0000-0021-000000000917};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0058-000000000321},  !- Handle
-  CoilCoolingDXSingleSpeed_dx 3 143kBtu/hr 9.08EER Outlet Air Node, !- Name
+  CoilCoolingDXSingleSpeed_dx 3 143kBtu/hr 10.8EER Outlet Air Node, !- Name
   {00000000-0000-0000-0021-000000001106},  !- Inlet Port
   {00000000-0000-0000-0021-000000001107};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0058-000000000322},  !- Handle
-  CoilCoolingDXSingleSpeed_dx 4 70kBtu/hr 9.26EER Outlet Air Node, !- Name
+  CoilCoolingDXSingleSpeed_dx 4 70kBtu/hr 11.0EER Outlet Air Node, !- Name
   {00000000-0000-0000-0021-000000001140},  !- Inlet Port
   {00000000-0000-0000-0021-000000001141};  !- Outlet Port
 
@@ -34477,7 +34763,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0071-000000000169},  !- Handle
   Schedule Day 4,                          !- Name
-  {00000000-0000-0000-0074-000000000010},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0074-000000000008},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -34555,7 +34841,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0071-000000000170},  !- Handle
   Schedule Day 5,                          !- Name
-  {00000000-0000-0000-0074-000000000009},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0074-000000000008},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -34633,7 +34919,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0071-000000000171},  !- Handle
   Schedule Day 6,                          !- Name
-  {00000000-0000-0000-0074-000000000009},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0074-000000000008},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
   0,                                       !- Minute 1
@@ -34642,7 +34928,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0071-000000000172},  !- Handle
   Schedule Day 7,                          !- Name
-  {00000000-0000-0000-0074-000000000009},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0074-000000000008},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
   0,                                       !- Minute 1
@@ -34690,7 +34976,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0071-000000000176},  !- Handle
   Supply Air Temp Default,                 !- Name
-  {00000000-0000-0000-0074-000000000009},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0074-000000000008},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
   0,                                       !- Minute 1
@@ -34717,7 +35003,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0071-000000000179},  !- Handle
   satCHW Temp 1,                           !- Name
-  {00000000-0000-0000-0074-000000000010},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0074-000000000008},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -34873,7 +35159,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0071-000000000181},  !- Handle
   satCW Temp 1,                            !- Name
-  {00000000-0000-0000-0074-000000000009},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0074-000000000008},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -35185,7 +35471,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0071-000000000185},  !- Handle
   sunCHW Temp 1,                           !- Name
-  {00000000-0000-0000-0074-000000000010},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0074-000000000008},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -35341,7 +35627,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0071-000000000187},  !- Handle
   sunCW Temp 1,                            !- Name
-  {00000000-0000-0000-0074-000000000009},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0074-000000000008},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -35845,7 +36131,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0071-000000000209},  !- Handle
   wkdCHW Temp 1,                           !- Name
-  {00000000-0000-0000-0074-000000000010},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0074-000000000008},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -36001,7 +36287,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0071-000000000211},  !- Handle
   wkdCW Temp 1,                            !- Name
-  {00000000-0000-0000-0074-000000000009},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0074-000000000008},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -38789,13 +39075,13 @@ OS:Schedule:Ruleset,
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0073-000000000002},  !- Handle
   CHW Temp,                                !- Name
-  {00000000-0000-0000-0074-000000000010},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0074-000000000008},  !- Schedule Type Limits Name
   {00000000-0000-0000-0071-000000000169};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0073-000000000003},  !- Handle
   CW Temp,                                 !- Name
-  {00000000-0000-0000-0074-000000000009},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0074-000000000008},  !- Schedule Type Limits Name
   {00000000-0000-0000-0071-000000000170};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
@@ -39067,13 +39353,13 @@ OS:Schedule:Ruleset,
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0073-000000000048},  !- Handle
   Schedule Ruleset 1,                      !- Name
-  {00000000-0000-0000-0074-000000000009},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0074-000000000008},  !- Schedule Type Limits Name
   {00000000-0000-0000-0071-000000000171};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0073-000000000049},  !- Handle
   Schedule Ruleset 2,                      !- Name
-  {00000000-0000-0000-0074-000000000009},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0074-000000000008},  !- Schedule Type Limits Name
   {00000000-0000-0000-0071-000000000172};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
@@ -39085,7 +39371,7 @@ OS:Schedule:Ruleset,
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0073-000000000051},  !- Handle
   Supply Air Temp,                         !- Name
-  {00000000-0000-0000-0074-000000000009},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0074-000000000008},  !- Schedule Type Limits Name
   {00000000-0000-0000-0071-000000000176};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
