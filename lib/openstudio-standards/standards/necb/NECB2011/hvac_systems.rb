@@ -2396,15 +2396,18 @@ class NECB2011
     end
 
     # Join name parts with '|' separator
-    updated_name = name_parts.join('|')
+    sys_name = ''
+    name_parts.each { |part| sys_name += "#{part}|" }
 
-    # Append '|' at the end only if the modified name is different from the original name
-    updated_name += "|" if updated_name != original_name
+    # Check if the last part of the system name is an integer.  If it is, then remove the last part from the system name.
+    check_int = begin
+                  Integer(name_parts.last.strip)
+                rescue StandardError
+                  nil
+                end
+    sys_name = sys_name.chop unless check_int.nil?
 
-    # Remove the last part of the name if it's an integer
-    updated_name.chomp!('|') if updated_name.split('|').last.to_i.to_s == updated_name.split('|').last
-
-    airloop.setName(updated_name)
+    airloop.setName(sys_name)
   end
 
   def coil_heating_dx_single_speed_find_capacity(coil_heating_dx_single_speed, necb_reference_hp = false)
