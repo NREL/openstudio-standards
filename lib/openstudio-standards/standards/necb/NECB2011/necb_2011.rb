@@ -32,9 +32,10 @@ class NECB2011 < Standard
     return default if variable.nil?
     if variable.is_a? String
       return true if variable.to_s.downcase == 'true'
-      return false
+      return false if variable.to_s.downcase == 'false'
+      return default
     end
-    return true if variable == true
+    return variable if variable.is_a?(TrueClass) || variable.is_a?(FalseClass)
     return default
   end
 
@@ -287,9 +288,7 @@ class NECB2011 < Standard
                                    boiler_cap_ratio: nil,
                                    airloop_fancoils_heating: nil,
                                    oerd_utility_pricing: nil)
-
     model = load_building_type_from_library(building_type: building_type)
-
     return model_apply_standard(model: model,
                                 construction_opt: construction_opt,
                                 tbd_option: tbd_option,
@@ -359,7 +358,8 @@ class NECB2011 < Standard
                                 boiler_fuel: boiler_fuel,
                                 boiler_cap_ratio: boiler_cap_ratio,
                                 airloop_fancoils_heating: airloop_fancoils_heating,
-                                oerd_utility_pricing: oerd_utility_pricing)
+                                oerd_utility_pricing: oerd_utility_pricing
+                                )
   end
 
   def load_building_type_from_library(building_type:)
@@ -692,9 +692,9 @@ class NECB2011 < Standard
     ecm.add_airloop_economizer(model: model, airloop_economizer_type: airloop_economizer_type)
     # Perform a second sizing run if needed
     if (!unitary_cop.nil? && unitary_cop != 'NECB_Default') || !model.getPlantLoops.empty?
-      if model_run_sizing_run(model, "#{sizing_run_dir}/SR2") == false
-        raise('sizing run 2 failed!')
-      end
+      # Do a sizing run
+      try_sizing_run(model: model, sizing_run_dir: sizing_run_dir, sizing_run_subdir: 'SR2')
+      #end
     end
     # apply unitary cop
     ecm.modify_unitary_cop(model: model, unitary_cop: unitary_cop, sizing_done: true, sql_db_vars_map: sql_db_vars_map)
@@ -1190,6 +1190,27 @@ class NECB2011 < Standard
     @tbd = BTAP::Bridging.new(model, argh)
 
     true
+  end
+
+  # Apply the air leakage requirements to the model, as described in PNNL section 5.2.1.6.
+  # This method creates customized infiltration objects for each space
+  # and removes the SpaceType-level infiltration objects.
+  #
+  # @param model [OpenStudio::Model::Model] OpenStudio model object
+  # @return [Boolean] returns true if successful, false if not
+  # @todo This infiltration method is not used by the Reference buildings, fix this inconsistency.
+  def model_apply_infiltration_standard(model)
+    # Set the infiltration rate at each space
+    model.getSpaces.sort.each do |space|
+      space_apply_infiltration_rate(space)
+    end
+
+    # Remove infiltration rates set at the space type
+    model.getSpaceTypes.sort.each do |space_type|
+      space_type.spaceInfiltrationDesignFlowRates.each(&:remove)
+    end
+
+    return true
   end
 
   # @param necb_reference_hp [Boolean] if true, NECB reference model rules for heat pumps will be used.
@@ -2748,5 +2769,55 @@ class NECB2011 < Standard
       end
     end
     return output_meters
+  end
+
+  # This method is used to do a sizing run on the model.  It will return true if the sizing run was successful and
+  # will generate an error if it was not.  The method will also resize any DX heating coils that have a capacity less than 1.0 kW to
+  # 1.0 kW and rerun the sizing run until it succeeds or the sizing run continues to fail.
+  #
+  # Arguments:
+  # model (OpenStudio::Model::Model): The model to run the sizing run on.
+  # sizing_run_dir (String): The directory where the sizing run files will be saved.
+  def try_sizing_run(model:, sizing_run_dir:, sizing_run_subdir:)
+    raise('validation of model failed.') unless validate_initial_model(model)
+
+    # Do a sizing run to determine the system capacities.  If a sizing run fails, hard size any failing DX heating coils
+    # to 1.0 kW and rerun the sizing run until it succeeds.  If no DX heating coils are found, or none had a small
+    # capacity then raise an error.
+    loop do
+      sizing_run_success = model_run_sizing_run(model, "#{sizing_run_dir}/#{sizing_run_subdir}", true)
+      break if sizing_run_success
+
+      # Sizing run failed, check all DX heating coils and set their size to 1 if less than 1
+      dx_coil_changed = false
+
+      model.getCoilHeatingDXSingleSpeeds.each do |coil|
+        autosized_capacity = coil.autosizedRatedTotalHeatingCapacity
+        if autosized_capacity.is_initialized && autosized_capacity.get < 1.0
+          coil.setRatedTotalHeatingCapacity(1.0)
+          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC',  "DX Heating Coil #{coil.name.to_s} has a rated capacity less than 1.0 kW and has been resized to 1.0 kW to avoid sizing run failure.")
+          puts "DX Heating Coil #{coil.name.to_s} has a rated capacity less than 1.0 kW and has been resized to 1.0 kW to avoid sizing run failure."
+          dx_coil_changed = true
+        end
+      end
+      model.getCoilHeatingDXMultiSpeeds.each do |coil|
+        coil.stages.each do |stage|
+          autosized_capacity = stage.autosizedGrossRatedHeatingCapacity
+          if autosized_capacity.is_initialized && autosized_capacity.get < 1.0
+            stage.setGrossRatedHeatingCapacity(1.0)
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC',  "A DX Heating Coil #{coil.name.to_s} stage has a rated capacity less than 1.0 kW and has been resized to 1.0 kW to avoid sizing run failure.")
+            puts "A DX Heating Coil #{coil.name.to_s} stage has a rated capacity less than 1.0 kW and has been resized to 1.0 kW to avoid sizing run failure."
+            dx_coil_changed = true
+          end
+        end
+      end
+
+      # If no DX coil was changed, break loop and raise error
+      if !dx_coil_changed
+        raise("sizing run failed! check #{sizing_run_dir}/#{sizing_run_subdir} (DX coil sizes adjusted, but no further changes possible)")
+      end
+      puts "Rerunning sizing run after adjusting DX heating coil capacity to 1.0 kW."
+      # Otherwise, loop will rerun sizing
+    end
   end
 end
