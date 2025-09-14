@@ -858,8 +858,11 @@ class NECB2011 < Standard
     model_create_thermal_zones(model, @space_multiplier_map)
   end
 
-  # apply the Kiva foundation model to floors and walls with ground boundary condition
+  # Apply the Kiva foundation model to floors and walls with ground boundary condition
   # created by: Kamel Haddad (kamel.haddad@nrcan-rncan.gc.ca)
+  # 'massive' edit: denis@rd2.ca
+  #
+  # @param massive [Boolean] whether opaque materials are standard (not massless)
   def apply_kiva_foundation(model, massive = false)
     # define a Kiva model for the whole bldg that's used for the first floor in contact with ground in each zone
     bldg_kiva_model = OpenStudio::Model::FoundationKiva.new(model)
@@ -888,7 +891,8 @@ class NECB2011 < Standard
             kiva_model.setWallDepthBelowSlab(0.0)
             zone_kiva_models << kiva_model
           end
-          # Kiva model only works with standard materials. Replace constructions massless materials with standard ones.
+          # Kiva model only works with standard materials. Replace constructions
+          # massless materials with standard ones. Skip check if 'massive'.
           if massive
             c = gfloor.construction.get.to_LayeredConstruction.get
             gfloor.setOutsideBoundaryCondition('Foundation')
@@ -1215,10 +1219,10 @@ class NECB2011 < Standard
 
   # @param necb_reference_hp [Boolean] if true, NECB reference model rules for heat pumps will be used.
   def apply_standard_efficiencies(model:, sizing_run_dir:, dcv_type: 'NECB_Default', necb_reference_hp: false)
-    raise('validation of model failed.') unless validate_initial_model(model)
+    # Do a sizing run
+    try_sizing_run(model: model, sizing_run_dir: sizing_run_dir, sizing_run_subdir: 'plant_loops')
 
     climate_zone = 'NECB HDD Method'
-    raise("sizing run 1 failed! check #{sizing_run_dir}") if model_run_sizing_run(model, "#{sizing_run_dir}/plant_loops") == false
 
     # This is needed for NECB2011 as a workaround for sizing the reheat boxes.
     model.getAirTerminalSingleDuctVAVReheats.each { |iobj| air_terminal_single_duct_vav_reheat_set_heating_cap(iobj) }
@@ -2097,7 +2101,7 @@ class NECB2011 < Standard
       space_type_apply_internal_loads(space_type: space_type, lights_type: lights_type, lights_scale: lights_scale)
 
       # Schedules
-      space_type_apply_internal_load_schedules(space_type, true, true, true, true, true, true, true)
+      space_type_apply_internal_load_schedules(space_type, true, true, true, true, true, true)
     end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying space types (loads)')
