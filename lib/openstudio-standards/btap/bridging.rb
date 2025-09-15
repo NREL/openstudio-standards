@@ -434,7 +434,7 @@ module BTAP
       #
       # Major thermal bridges often consist of anchors or supports that transmit
       # structural loads (and by the same token, 'heat') to a building's main
-      # structure. Examples include balconies, parapets and shelf angles).
+      # structure. Examples include balconies, parapets and shelf angles.
       # Highly conductive building structures (e.g. steel, aluminium) exacerbate
       # thermal bridging effects - so building structural selection matters.
       #

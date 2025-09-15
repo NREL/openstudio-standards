@@ -2,8 +2,7 @@ require_relative '../../../helpers/minitest_helper'
 require_relative '../../../helpers/create_doe_prototype_helper'
 require 'json'
 
-
-#This test will check that TBD is correctly deployed within BTAP.
+# This checks whether TBD is correctly deployed within BTAP.
 class NECB_TBD_Tests < Minitest::Test
   def test_necb_tbd()
 
