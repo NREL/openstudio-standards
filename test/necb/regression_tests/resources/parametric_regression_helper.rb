@@ -57,4 +57,3 @@ class ParametricRegressionHelper < NECBRegressionHelper
     return self
   end
 end
-
