@@ -3197,6 +3197,8 @@ if !applicable_zones.nil? && !applicable_zones.include?(zone)
                                                                       target_includes_interior_film_coefficients: u_includes_int_film,
                                                                       target_includes_exterior_film_coefficients: u_includes_ext_film)
         else
+          # create a new construction for the specific surface
+          construction = OpenstudioStandards::Constructions.construction_deep_copy(construction)
           OpenstudioStandards::Constructions.construction_set_surface_slab_f_factor(construction, target_f_factor_ip, surface)
         end
       elsif target_c_factor_ip && (data['intended_surface_type'] == 'GroundContactWall' || data['intended_surface_type'] == 'GroundContactRoof')
@@ -3212,6 +3214,8 @@ if !applicable_zones.nil? && !applicable_zones.include?(zone)
                                                                       target_includes_interior_film_coefficients: u_includes_int_film,
                                                                       target_includes_exterior_film_coefficients: u_includes_ext_film)
         else
+          # create a new construction for the specific surface
+          construction = OpenstudioStandards::Constructions.construction_deep_copy(construction)
           OpenstudioStandards::Constructions.construction_set_surface_underground_wall_c_factor(construction, target_c_factor_ip, surface)
         end
       end
