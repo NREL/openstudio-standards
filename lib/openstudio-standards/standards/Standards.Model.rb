@@ -3093,11 +3093,27 @@ if !applicable_zones.nil? && !applicable_zones.include?(zone)
     intended_surface_type ||= ''
 
     # Make a new construction and set the standards details
+    is_layered_construction = true
+
     if intended_surface_type == 'GroundContactFloor' && !surface.nil?
-      construction = OpenStudio::Model::FFactorGroundFloorConstruction.new(model)
+      if construction_props
+        construction = OpenStudio::Model::FFactorGroundFloorConstruction.new(model)
+        is_layered_construction = false
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Construction properties not specified for '#{construction_name}', cannot create F-Factor Ground Floor Construction.  A regular construction will be created instead, and Surface '#{surface.name}' will be set to use the 'Ground' outside boundary condition (previously '#{surface.outsideBoundaryCondition}').")
+        surface.setOutsideBoundaryCondition('Ground')
+      end
     elsif intended_surface_type == 'GroundContactWall' && !surface.nil?
-      construction = OpenStudio::Model::CFactorUndergroundWallConstruction.new(model)
-    else
+      if construction_props
+        construction = OpenStudio::Model::CFactorUndergroundWallConstruction.new(model)
+        is_layered_construction = false
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Construction properties not specified for '#{construction_name}', cannot create C-Factor Underground Wall Construction.  A regular construction will be created instead, and Surface '#{surface.name}' will be set to use the 'Ground' outside boundary condition (previously '#{surface.outsideBoundaryCondition}').")
+        surface.setOutsideBoundaryCondition('Ground')
+      end
+    end
+
+    if is_layered_construction
       construction = OpenStudio::Model::Construction.new(model)
       # Add the material layers to the construction
       layers = OpenStudio::Model::MaterialVector.new
