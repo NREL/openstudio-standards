@@ -3054,11 +3054,24 @@ if !applicable_zones.nil? && !applicable_zones.include?(zone)
   # @return [OpenStudio::Model::Construction] construction object
   # @todo make return an OptionalConstruction
   def model_add_construction(model, construction_name, construction_props = nil, surface = nil)
+    intended_surface_type = construction_props&.[]('intended_surface_type') || ''
+
     # First check model and return construction if it already exists
     model.getConstructions.sort.each do |construction|
       if construction.name.get.to_s == construction_name
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Already added construction: #{construction_name}")
-        return construction
+        valid = true
+        if !surface.nil?
+          if intended_surface_type == 'GroundContactFloor' && construction.iddObjectType.valueName != 'OS_Construction_FfactorGroundFloor'
+            valid = false
+          elsif intended_surface_type == 'GroundContactWall' && construction.iddObjectType.valueName != 'OS_Construction_CfactorUndergroundWall'
+            valid = false
+          end
+        end
+        if valid
+          return construction
+        end
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Already added construction: '#{construction_name}' but its type '#{construction.iddObjectType.valueName}' is not valid for the intended surface type '#{intended_surface_type}'. A new construction will be created.")
       end
     end
 
@@ -3076,10 +3089,13 @@ if !applicable_zones.nil? && !applicable_zones.include?(zone)
       return OpenStudio::Model::OptionalConstruction.new
     end
 
+    intended_surface_type = data["intended_surface_type"]
+    intended_surface_type ||= ''
+
     # Make a new construction and set the standards details
-    if data['intended_surface_type'] == 'GroundContactFloor' && !surface.nil?
+    if intended_surface_type == 'GroundContactFloor' && !surface.nil?
       construction = OpenStudio::Model::FFactorGroundFloorConstruction.new(model)
-    elsif data['intended_surface_type'] == 'GroundContactWall' && !surface.nil?
+    elsif intended_surface_type == 'GroundContactWall' && !surface.nil?
       construction = OpenStudio::Model::CFactorUndergroundWallConstruction.new(model)
     else
       construction = OpenStudio::Model::Construction.new(model)
@@ -3096,8 +3112,6 @@ if !applicable_zones.nil? && !applicable_zones.include?(zone)
     construction.setName(construction_name)
     standards_info = construction.standardsInformation
 
-    intended_surface_type = data['intended_surface_type']
-    intended_surface_type ||= ''
     standards_info.setIntendedSurfaceType(intended_surface_type)
 
     standards_construction_type = data['standards_construction_type']
