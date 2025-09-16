@@ -7,8 +7,7 @@ $OPENSTUDIO_LOG.setLogLevel(OpenStudio::Debug)
 # @param runner [OpenStudio::Measure::OSRunner] The Measure runner to add the messages to
 # @param debug [Boolean] If true, include the debug messages in the log
 # @param custom_exclusions [Array<String>] An array of custom strings to exclude from the log
-# @return [Runner] The same Measure runner, with messages from the openstudio-standards library added
-def log_messages_to_runner(runner, debug = false, custom_exclusions = [])
+def log_messages_to_runner(runner, debug = false, custom_exclusions: nil)
   log_message_exclusions = [
     'UseWeatherFile', # 'UseWeatherFile' is not yet a supported option for YearDescription
     'Skipping layer', # Annoying/bogus "Skipping layer" warnings
@@ -19,14 +18,13 @@ def log_messages_to_runner(runner, debug = false, custom_exclusions = [])
     'has multiple parents', # Bogus errors about curves having multiple parents
     'does not have an Output', # Warning from EMS translation
     'Prior to OpenStudio 2.6.2, this field was returning a double, it now returns an Optional double' # Warning about OS API change
-  ]
+  ] + Array(custom_exclusions)
 
   $OPENSTUDIO_LOG.logMessages.each do |msg|
     # DLM: you can filter on log channel here for now
     if /openstudio.*/ =~ msg.logChannel # /openstudio\.model\..*/
       # Skip certain messages that are irrelevant/misleading
       next if log_message_exclusions.any? { |ex| msg.logMessage.include?(ex) }
-      next if custom_exclusions.any? { |ex| msg.logMessage.include?(ex) }
 
       # Report the message in the correct way
       if msg.logLevel == OpenStudio::Info
