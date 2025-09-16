@@ -35,7 +35,7 @@ def log_messages_to_runner(runner, debug = false, custom_exclusions = [])
         runner.registerWarning("[#{msg.logChannel}] #{msg.logMessage}")
       elsif msg.logLevel == OpenStudio::Error
         runner.registerError("[#{msg.logChannel}] #{msg.logMessage}")
-      elsif msg.logLevel == OpenStudio::Debug && debug
+      elsif debug && msg.logLevel == OpenStudio::Debug
         runner.registerInfo("DEBUG - #{msg.logMessage}")
       end
     end
