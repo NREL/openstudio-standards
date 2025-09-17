@@ -1,15 +1,8 @@
-require '/usr/local/openstudio-3.7.0/Ruby/openstudio'
-require 'openstudio-standards'
-require 'openstudio/ruleset/ShowRunnerOutput'
+require_relative '../../../../../openstudio-standards.rb'
 require 'optparse'
 require 'logger'
 require 'minitest/autorun'
-begin
-  require 'openstudio_measure_tester/test_helper'
-rescue LoadError
-  puts 'OpenStudio Measure Tester Gem not installed -- will not be able to aggregate and dashboard the results of tests'
-end
-require_relative '../resources/btap_workflow.rb'
+require_relative '../../btap_workflow.rb'
 require 'fileutils'
 require 'optparse'
 
@@ -91,12 +84,12 @@ class Btap_results_helper
       # Create OSM file.
 
       # Create the main output folder if it doesn not exist.
-      unless Dir.exists?(out_dir)
+      unless Dir.exist?(out_dir)
         FileUtils.mkdir_p(out_dir)
       end
 
       # Delete / Create folder for run workflow.
-      unless Dir.exists?(run_dir)
+      unless Dir.exist?(run_dir)
         FileUtils.mkdir_p(run_dir)
       end
 
@@ -134,10 +127,10 @@ class Btap_results_helper
     regression_files_folder = "#{File.dirname(__FILE__)}/regression_files"
     expected_result_filename = "#{regression_files_folder}/#{model_name}_expected_result.cost.json"
     test_result_filename = "#{regression_files_folder}/#{model_name}_test_result.cost.json"
-    FileUtils.rm(test_result_filename) if File.exists?(test_result_filename)
+    FileUtils.rm(test_result_filename) if File.exist?(test_result_filename)
     puts("Writing test results to #{test_result_filename}")
     FileUtils.cp(cost_result_json_path, test_result_filename)
-    if File.exists?(expected_result_filename)
+    if File.exist?(expected_result_filename)
       unless FileUtils.compare_file(cost_result_json_path, expected_result_filename)
         #raise("Regression test for #{model_name} produces differences. Examine expected and test result differences in the #{File.dirname(__FILE__)}/regression_files folder ")
         expected_hash = JSON.parse(File.read(expected_result_filename))
@@ -190,4 +183,3 @@ class Btap_results_helper
 end
 end
 Btap_results_helper.new().btap_results_regression_test()
-

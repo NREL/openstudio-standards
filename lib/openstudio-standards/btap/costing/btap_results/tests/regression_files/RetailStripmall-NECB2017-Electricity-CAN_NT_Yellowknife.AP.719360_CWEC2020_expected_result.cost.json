@@ -481,11 +481,11 @@
       {
         "sys_type": 3,
         "name": "sys_3|mixed|shr>erv|sc>dx|sh>c-e|ssf>cv|zh>b-e|zc>none|srf>none|",
-        "airloop_flow_m3_per_s": 4.956,
+        "airloop_flow_m3_per_s": 4.961,
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 5000,
         "base_ahu_cost": 184104.72,
-        "revised_base_ahu_cost": 182478.49,
+        "revised_base_ahu_cost": 182654.5,
         "hrv": {
           "hrv_type": "HeatExchanger_AirToAir_SensibleAndLatent",
           "hrv_name": "sys_3|mixed|shr>none|sc>dx|sh>c-e|ssf>cv|zh>b-e|zc>none|srf>none| ERV",
@@ -499,14 +499,14 @@
             "eq_category": "Coil_Cooling_DX_SingleSpeed",
             "heating_fuel": "none",
             "cooling_type": "DX",
-            "total_modeled_capacity_kw": 82.037,
+            "total_modeled_capacity_kw": 82.116,
             "cost": 124433.57
           },
           {
             "eq_category": "Coil_Heating_Electric",
             "heating_fuel": "elec",
             "cooling_type": "none",
-            "total_modeled_capacity_kw": 298.534,
+            "total_modeled_capacity_kw": 298.654,
             "cost": 138319.58
           }
         ],
@@ -515,11 +515,11 @@
       {
         "sys_type": 3,
         "name": "sys_3|mixed|shr>erv|sc>dx|sh>c-e|ssf>cv|zh>b-e|zc>none|srf>none| 1",
-        "airloop_flow_m3_per_s": 0.876,
+        "airloop_flow_m3_per_s": 0.879,
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 1000,
         "base_ahu_cost": 66951.57,
-        "revised_base_ahu_cost": 58652.69,
+        "revised_base_ahu_cost": 58854.13,
         "hrv": {
           "hrv_type": "HeatExchanger_AirToAir_SensibleAndLatent",
           "hrv_name": "sys_3|mixed|shr>none|sc>dx|sh>c-e|ssf>cv|zh>b-e|zc>none|srf>none| 1 ERV",
@@ -533,14 +533,14 @@
             "eq_category": "Coil_Cooling_DX_SingleSpeed",
             "heating_fuel": "none",
             "cooling_type": "DX",
-            "total_modeled_capacity_kw": 14.502,
+            "total_modeled_capacity_kw": 14.551,
             "cost": 14153.99
           },
           {
             "eq_category": "Coil_Heating_Electric",
             "heating_fuel": "elec",
             "cooling_type": "none",
-            "total_modeled_capacity_kw": 41.237,
+            "total_modeled_capacity_kw": 41.312,
             "cost": 21279.94
           }
         ],
@@ -549,11 +549,11 @@
       {
         "sys_type": 3,
         "name": "sys_3|mixed|shr>erv|sc>dx|sh>c-e|ssf>cv|zh>b-e|zc>none|srf>none| 2",
-        "airloop_flow_m3_per_s": 1.399,
+        "airloop_flow_m3_per_s": 1.4,
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 2500,
         "base_ahu_cost": 160763.22,
-        "revised_base_ahu_cost": 89982.18,
+        "revised_base_ahu_cost": 90010.99,
         "hrv": {
           "hrv_type": "HeatExchanger_AirToAir_SensibleAndLatent",
           "hrv_name": "sys_3|mixed|shr>none|sc>dx|sh>c-e|ssf>cv|zh>b-e|zc>none|srf>none| 2 ERV",
@@ -567,14 +567,14 @@
             "eq_category": "Coil_Cooling_DX_SingleSpeed",
             "heating_fuel": "none",
             "cooling_type": "DX",
-            "total_modeled_capacity_kw": 23.163,
+            "total_modeled_capacity_kw": 23.171,
             "cost": 30273.89
           },
           {
             "eq_category": "Coil_Heating_Electric",
             "heating_fuel": "elec",
             "cooling_type": "none",
-            "total_modeled_capacity_kw": 74.43,
+            "total_modeled_capacity_kw": 74.442,
             "cost": 9414.14
           }
         ],
@@ -605,9 +605,9 @@
         {
           "Floor": "Building Story 1",
           "Predominant_space_type": "Sales area",
-          "SupplyDuctSize_in": 44.8,
+          "SupplyDuctSize_in": 44.82,
           "SupplyDuctLength_m": 91.4,
-          "ReturnDuctSize_in": 44.8,
+          "ReturnDuctSize_in": 44.82,
           "ReturnDuctLength_m": 91.4,
           "TotalDuctCost": 133082.59,
           "Multiplier": 1.0
@@ -647,7 +647,7 @@
               "ThermalZone": "ALL_ST=Sales area_FL=Building Story 1_SCH=C 2",
               "ducting_direction": "Supply",
               "tz_mult": 1.0,
-              "airflow_m3ps": 0.557,
+              "airflow_m3ps": 0.558,
               "num_diff": 6,
               "ducting_lbs": 395,
               "duct_insulation_ft2": 306,
@@ -659,7 +659,7 @@
               "ThermalZone": "ALL_ST=Sales area_FL=Building Story 1_SCH=C 2",
               "ducting_direction": "Return",
               "tz_mult": 1.0,
-              "airflow_m3ps": 0.557,
+              "airflow_m3ps": 0.558,
               "num_diff": 6,
               "ducting_lbs": 395,
               "duct_insulation_ft2": 306,
@@ -671,7 +671,7 @@
               "ThermalZone": "ALL_ST=Sales area_FL=Building Story 1_SCH=C 3",
               "ducting_direction": "Supply",
               "tz_mult": 1.0,
-              "airflow_m3ps": 1.057,
+              "airflow_m3ps": 1.058,
               "num_diff": 9,
               "ducting_lbs": 360,
               "duct_insulation_ft2": 225,
@@ -683,7 +683,7 @@
               "ThermalZone": "ALL_ST=Sales area_FL=Building Story 1_SCH=C 3",
               "ducting_direction": "Return",
               "tz_mult": 1.0,
-              "airflow_m3ps": 1.057,
+              "airflow_m3ps": 1.058,
               "num_diff": 9,
               "ducting_lbs": 360,
               "duct_insulation_ft2": 225,
@@ -791,7 +791,7 @@
               "ThermalZone": "ALL_ST=Sales area_FL=Building Story 1_SCH=C 9",
               "ducting_direction": "Supply",
               "tz_mult": 1.0,
-              "airflow_m3ps": 0.546,
+              "airflow_m3ps": 0.547,
               "num_diff": 6,
               "ducting_lbs": 395,
               "duct_insulation_ft2": 306,
@@ -803,7 +803,7 @@
               "ThermalZone": "ALL_ST=Sales area_FL=Building Story 1_SCH=C 9",
               "ducting_direction": "Return",
               "tz_mult": 1.0,
-              "airflow_m3ps": 0.546,
+              "airflow_m3ps": 0.547,
               "num_diff": 6,
               "ducting_lbs": 395,
               "duct_insulation_ft2": 306,
@@ -815,7 +815,7 @@
               "ThermalZone": "ALL_ST=Sales area_FL=Building Story 1_SCH=C 1",
               "ducting_direction": "Supply",
               "tz_mult": 1.0,
-              "airflow_m3ps": 0.876,
+              "airflow_m3ps": 0.879,
               "num_diff": 8,
               "ducting_lbs": 795,
               "duct_insulation_ft2": 528,
@@ -827,7 +827,7 @@
               "ThermalZone": "ALL_ST=Sales area_FL=Building Story 1_SCH=C 1",
               "ducting_direction": "Return",
               "tz_mult": 1.0,
-              "airflow_m3ps": 0.876,
+              "airflow_m3ps": 0.879,
               "num_diff": 8,
               "ducting_lbs": 795,
               "duct_insulation_ft2": 528,
@@ -839,7 +839,7 @@
               "ThermalZone": "ALL_ST=Sales area_FL=Building Story 1_SCH=C 7",
               "ducting_direction": "Supply",
               "tz_mult": 1.0,
-              "airflow_m3ps": 1.399,
+              "airflow_m3ps": 1.4,
               "num_diff": 12,
               "ducting_lbs": 480,
               "duct_insulation_ft2": 300,
@@ -851,7 +851,7 @@
               "ThermalZone": "ALL_ST=Sales area_FL=Building Story 1_SCH=C 7",
               "ducting_direction": "Return",
               "tz_mult": 1.0,
-              "airflow_m3ps": 1.399,
+              "airflow_m3ps": 1.4,
               "num_diff": 12,
               "ducting_lbs": 480,
               "duct_insulation_ft2": 300,
@@ -882,8 +882,8 @@
     "lighting": 665687,
     "heating_and_cooling": 86262,
     "shw": 38971,
-    "ventilation": 1261956,
+    "ventilation": 1262362,
     "renewables": 0,
-    "grand_total": 4712907
+    "grand_total": 4713313
   }
 }

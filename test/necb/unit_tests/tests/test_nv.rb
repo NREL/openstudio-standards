@@ -11,24 +11,24 @@ class ECM_NatVent_Tests < Minitest::Test
     define_folders(__dir__)
     define_std_ranges
   end
-  
+
   # Test to validate the ventilation requirements.
   # Makes use of the template design pattern with the work done by the do_* method below (i.e. 'do_' prepended to the current method name)
   def test_natural_vent
     logger.info "Starting suite of tests for: #{__method__}"
-    
+
     # Define test parameters that apply to all tests.
     test_parameters = { TestMethod: __method__,
                         SaveIntermediateModels: true,
                         epw_file: 'CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw',
                         fuel_type: 'NaturalGas' }
-    
+
     # Define test cases.
     test_cases = {}
 
     test_cases_hash = {
       vintage: ['NECB2017'], #@AllTemplates,
-      archetype: ['FullServiceRestaurant', 'Hospital'],
+      archetype: ['FullServiceRestaurant', 'SmallHotel'],
       TestCase: ["ZoneResults"],
       TestPars: {  } # :oaf => "tbd"
     }
@@ -76,10 +76,10 @@ class ECM_NatVent_Tests < Minitest::Test
     output_folder = method_output_folder("#{test_name}/#{name_short}/")
     logger.info "Starting individual test: #{name}"
     results = {}
-	
+
     # (1) Create archetype with NV active
     # (2) loop through space types in the model and change them to the desired space type
-    # (3) call standard.model_add_loads(model, 'NECB_Default', 1.0) 
+    # (3) call standard.model_add_loads(model, 'NECB_Default', 1.0)
     # (4) check ventilation
 
     # Wrap test in begin/rescue/ensure.

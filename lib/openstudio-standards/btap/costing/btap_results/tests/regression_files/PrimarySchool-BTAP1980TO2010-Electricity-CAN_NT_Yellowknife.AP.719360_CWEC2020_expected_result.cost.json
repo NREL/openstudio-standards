@@ -839,7 +839,7 @@
         "heatcool_cost": 0,
         "piping_cost": 0,
         "wiring_cost": 779,
-        "num_units": 14.00643904578877,
+        "num_units": 14.006445312499999,
         "cummultive_zonal_cost": 301058
       },
       {
@@ -1150,7 +1150,7 @@
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 2500,
         "base_ahu_cost": 160763.22,
-        "revised_base_ahu_cost": 96570.77,
+        "revised_base_ahu_cost": 96570.98,
         "hrv": {},
         "equipment_info": [
           {
@@ -1231,7 +1231,7 @@
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 2500,
         "base_ahu_cost": 160763.22,
-        "revised_base_ahu_cost": 81825.42,
+        "revised_base_ahu_cost": 81825.51,
         "hrv": {},
         "equipment_info": [
           {
@@ -1258,7 +1258,7 @@
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 1000,
         "base_ahu_cost": 66951.57,
-        "revised_base_ahu_cost": 25506.73,
+        "revised_base_ahu_cost": 25506.72,
         "hrv": {},
         "equipment_info": [
           {
@@ -1312,7 +1312,7 @@
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 2500,
         "base_ahu_cost": 160763.22,
-        "revised_base_ahu_cost": 87593.1,
+        "revised_base_ahu_cost": 87593.16,
         "hrv": {},
         "equipment_info": [
           {
@@ -1949,7 +1949,7 @@
     "lighting": 1443173,
     "heating_and_cooling": 351646,
     "shw": 213252,
-    "ventilation": 4598494,
+    "ventilation": 4598495,
     "renewables": 0,
     "grand_total": 6772621
   }

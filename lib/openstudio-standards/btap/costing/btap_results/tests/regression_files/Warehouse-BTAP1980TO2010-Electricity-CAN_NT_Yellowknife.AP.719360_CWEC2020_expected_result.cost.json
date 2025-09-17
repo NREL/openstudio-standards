@@ -224,7 +224,7 @@
         "heatcool_cost": 0,
         "piping_cost": 0,
         "wiring_cost": 1436,
-        "num_units": 18.085981366978608,
+        "num_units": 18.08594585561497,
         "cummultive_zonal_cost": 10606
       },
       {
@@ -376,7 +376,7 @@
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 1000,
         "base_ahu_cost": 66951.57,
-        "revised_base_ahu_cost": 44987.95,
+        "revised_base_ahu_cost": 44987.86,
         "hrv": {},
         "equipment_info": [
           {
@@ -508,6 +508,6 @@
     "shw": 40211,
     "ventilation": 321537,
     "renewables": 0,
-    "grand_total": 1483547
+    "grand_total": 1483546
   }
 }

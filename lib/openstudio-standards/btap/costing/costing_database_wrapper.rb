@@ -12,22 +12,8 @@ class CostingDatabase
     @db = Hash.new             # Stores the costing database
   end
 
-  # Load the database from the compiled JSON file
-  def load_database()
-    File.open(@cp.costing_database_path) do |file|
-      @db = JSON.parse(file.read)
-    end
-  end
-
-  # Save the database to the compiled JSON file
-  def save_database
-    File.open(@cp.costing_database_path, "w") do |file|
-      file.write(JSON.pretty_generate(@db))
-    end
-  end
-
   # Load the database from the individual CSV files
-  def load_database_from_resources
+  def load_database
 
     # Load costing data
     @db['costs'] = []                # Costing data
@@ -102,14 +88,10 @@ class CostingDatabase
     end
   end
 
-  # Re-load data from the CSV files into costing_database.json and do some additional validation 
-  # checks. Save the database if the checks pass. Used to update the database. when new entries are
-  # added to the CSV files.
+  # Validate the construction sets and the AHU items.
   def validate_database()
-    load_database_from_resources()
     validate_constructions_sets()
     validate_ahu_items_and_quantities()
-    save_database()
   end
 
   def validate_constructions_sets()

@@ -587,7 +587,7 @@
         "zone_number": 7,
         "zone_name": "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 2_SCHG",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 2.2,
+        "heat_capacity(kW)": 2.3,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 2418,
         "cool_cost": 0,
@@ -647,7 +647,7 @@
         "zone_number": 11,
         "zone_name": "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 2_SCHG 8",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 3.1,
+        "heat_capacity(kW)": 3.2,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 2928,
         "cool_cost": 0,
@@ -835,18 +835,18 @@
       {
         "sys_type": 1,
         "name": "sys_1|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-hw|zc>none|srf>none|",
-        "airloop_flow_m3_per_s": 4.014,
+        "airloop_flow_m3_per_s": 4.015,
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 6000,
         "base_ahu_cost": 79218.24,
-        "revised_base_ahu_cost": 53002.7,
+        "revised_base_ahu_cost": 53008.02,
         "hrv": {},
         "equipment_info": [
           {
             "eq_category": "Coil_Heating_DX_SingleSpeed",
             "heating_fuel": "HP",
             "cooling_type": "HP",
-            "total_modeled_capacity_kw": 66.453,
+            "total_modeled_capacity_kw": 66.46,
             "cost": 159411.3
           }
         ],
@@ -1112,21 +1112,21 @@
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 1000,
         "base_ahu_cost": 72527.97,
-        "revised_base_ahu_cost": 29937.28,
+        "revised_base_ahu_cost": 29982.66,
         "hrv": {},
         "equipment_info": [
           {
             "eq_category": "Coil_Heating_DX_SingleSpeed",
             "heating_fuel": "HP",
             "cooling_type": "HP",
-            "total_modeled_capacity_kw": 6.833,
+            "total_modeled_capacity_kw": 6.843,
             "cost": 10671.15
           },
           {
             "eq_category": "Coil_Heating_Gas",
             "heating_fuel": "Gas",
             "cooling_type": "none",
-            "total_modeled_capacity_kw": 13.544,
+            "total_modeled_capacity_kw": 13.559,
             "cost": 555.61
           }
         ],
@@ -1209,7 +1209,7 @@
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 1_SCHG 10",
               "ducting_direction": "Supply",
               "tz_mult": 1.0,
-              "airflow_m3ps": 0.114,
+              "airflow_m3ps": 0.115,
               "num_diff": 3,
               "ducting_lbs": 125,
               "duct_insulation_ft2": 96,
@@ -1486,8 +1486,8 @@
     "lighting": 142672,
     "heating_and_cooling": 249307,
     "shw": 56483,
-    "ventilation": 404241,
+    "ventilation": 404292,
     "renewables": 0,
-    "grand_total": 1973758
+    "grand_total": 1973809
   }
 }

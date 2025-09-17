@@ -1181,7 +1181,7 @@
         "zone_number": 2,
         "zone_name": "ALL_ST=Hospital - laundry/washing_FL=Building Story 2_SCH=C",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 3.9,
+        "heat_capacity(kW)": 3.7,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 4580,
         "cool_cost": 0,
@@ -1226,22 +1226,22 @@
         "zone_number": 5,
         "zone_name": "ALL_ST=Hotel/Motel - lobby_FL=Building Story 2_SCH=H",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 22.1,
+        "heat_capacity(kW)": 21.8,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 21258,
+        "heat_cost": 21003,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 42449,
         "wiring_cost": 0,
         "num_units": 7,
-        "cummultive_zonal_cost": 167883
+        "cummultive_zonal_cost": 167628
       },
       {
         "systype": "HW",
         "zone_number": 6,
         "zone_name": "ALL_ST=Retail - mall concourse_FL=Building Story 2_SCH=C",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 19.1,
+        "heat_capacity(kW)": 19.0,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 18330,
         "cool_cost": 0,
@@ -1249,14 +1249,14 @@
         "piping_cost": 14857,
         "wiring_cost": 0,
         "num_units": 6,
-        "cummultive_zonal_cost": 201070
+        "cummultive_zonal_cost": 200815
       },
       {
         "systype": "HW",
         "zone_number": 7,
         "zone_name": "ALL_ST=Retail - sales_FL=Building Story 2_SCH=C",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 2.3,
+        "heat_capacity(kW)": 2.1,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 2418,
         "cool_cost": 0,
@@ -1264,14 +1264,14 @@
         "piping_cost": 2594,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 206082
+        "cummultive_zonal_cost": 205827
       },
       {
         "systype": "HW",
         "zone_number": 8,
         "zone_name": "ALL_ST=Retail - sales_FL=Building Story 2_SCH=C 1",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 7.4,
+        "heat_capacity(kW)": 7.3,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 7763,
         "cool_cost": 0,
@@ -1279,7 +1279,7 @@
         "piping_cost": 6721,
         "wiring_cost": 0,
         "num_units": 3,
-        "cummultive_zonal_cost": 220565
+        "cummultive_zonal_cost": 220310
       },
       {
         "systype": "HW",
@@ -1294,7 +1294,7 @@
         "piping_cost": 3537,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 226775
+        "cummultive_zonal_cost": 226520
       },
       {
         "systype": null,
@@ -1309,14 +1309,14 @@
         "piping_cost": 0,
         "wiring_cost": 0,
         "num_units": null,
-        "cummultive_zonal_cost": 226775
+        "cummultive_zonal_cost": 226520
       },
       {
         "systype": "HW",
         "zone_number": 10,
         "zone_name": "ALL_ST=Storage area_FL=Building Story 1_SCH=E",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 36.0,
+        "heat_capacity(kW)": 36.2,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 34243,
         "cool_cost": 0,
@@ -1324,14 +1324,14 @@
         "piping_cost": 0,
         "wiring_cost": 0,
         "num_units": 11,
-        "cummultive_zonal_cost": 261018
+        "cummultive_zonal_cost": 260763
       },
       {
         "systype": null,
         "zone_number": 10,
         "zone_name": "ALL_ST=Storage area_FL=Building Story 1_SCH=E",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 36.0,
+        "heat_capacity(kW)": 36.2,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 0,
         "cool_cost": 0,
@@ -1339,7 +1339,7 @@
         "piping_cost": 0,
         "wiring_cost": 0,
         "num_units": null,
-        "cummultive_zonal_cost": 261018
+        "cummultive_zonal_cost": 260763
       },
       {
         "systype": "PTAC",
@@ -1354,7 +1354,7 @@
         "piping_cost": 0,
         "wiring_cost": 1120,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 268056
+        "cummultive_zonal_cost": 267801
       },
       {
         "systype": "HW",
@@ -1369,7 +1369,7 @@
         "piping_cost": 4353,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 281059
+        "cummultive_zonal_cost": 280804
       },
       {
         "systype": "PTAC",
@@ -1384,7 +1384,7 @@
         "piping_cost": 0,
         "wiring_cost": 1120,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 288097
+        "cummultive_zonal_cost": 287842
       },
       {
         "systype": "HW",
@@ -1399,7 +1399,7 @@
         "piping_cost": 4353,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 301100
+        "cummultive_zonal_cost": 300845
       },
       {
         "systype": "PTAC",
@@ -1414,7 +1414,7 @@
         "piping_cost": 0,
         "wiring_cost": 1120,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 308138
+        "cummultive_zonal_cost": 307883
       },
       {
         "systype": "HW",
@@ -1429,7 +1429,7 @@
         "piping_cost": 4353,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 321141
+        "cummultive_zonal_cost": 320886
       },
       {
         "systype": "PTAC",
@@ -1444,7 +1444,7 @@
         "piping_cost": 0,
         "wiring_cost": 4014,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 334936
+        "cummultive_zonal_cost": 334681
       },
       {
         "systype": "HW",
@@ -1459,7 +1459,7 @@
         "piping_cost": 15602,
         "wiring_cost": 0,
         "num_units": 2,
-        "cummultive_zonal_cost": 369878
+        "cummultive_zonal_cost": 369623
       },
       {
         "systype": "PTAC",
@@ -1474,7 +1474,7 @@
         "piping_cost": 0,
         "wiring_cost": 4014,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 377581
+        "cummultive_zonal_cost": 377326
       },
       {
         "systype": "HW",
@@ -1489,7 +1489,7 @@
         "piping_cost": 15602,
         "wiring_cost": 0,
         "num_units": 2,
-        "cummultive_zonal_cost": 412523
+        "cummultive_zonal_cost": 412268
       },
       {
         "systype": "PTAC",
@@ -1504,7 +1504,7 @@
         "piping_cost": 0,
         "wiring_cost": 1120,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 419561
+        "cummultive_zonal_cost": 419306
       },
       {
         "systype": "HW",
@@ -1519,7 +1519,7 @@
         "piping_cost": 4353,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 432564
+        "cummultive_zonal_cost": 432309
       },
       {
         "systype": "PTAC",
@@ -1534,7 +1534,7 @@
         "piping_cost": 0,
         "wiring_cost": 1120,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 439602
+        "cummultive_zonal_cost": 439347
       },
       {
         "systype": "HW",
@@ -1549,7 +1549,7 @@
         "piping_cost": 4353,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 452605
+        "cummultive_zonal_cost": 452350
       },
       {
         "systype": "PTAC",
@@ -1564,7 +1564,7 @@
         "piping_cost": 0,
         "wiring_cost": 1120,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 459643
+        "cummultive_zonal_cost": 459388
       },
       {
         "systype": "HW",
@@ -1579,7 +1579,7 @@
         "piping_cost": 4353,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 472646
+        "cummultive_zonal_cost": 472391
       },
       {
         "systype": "PTAC",
@@ -1594,7 +1594,7 @@
         "piping_cost": 0,
         "wiring_cost": 1120,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 479684
+        "cummultive_zonal_cost": 479429
       },
       {
         "systype": "HW",
@@ -1609,7 +1609,7 @@
         "piping_cost": 4353,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 492687
+        "cummultive_zonal_cost": 492432
       },
       {
         "systype": "PTAC",
@@ -1624,7 +1624,7 @@
         "piping_cost": 0,
         "wiring_cost": 4014,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 506482
+        "cummultive_zonal_cost": 506227
       },
       {
         "systype": "HW",
@@ -1639,7 +1639,7 @@
         "piping_cost": 15600,
         "wiring_cost": 0,
         "num_units": 2,
-        "cummultive_zonal_cost": 541422
+        "cummultive_zonal_cost": 541167
       },
       {
         "systype": "PTAC",
@@ -1654,7 +1654,7 @@
         "piping_cost": 0,
         "wiring_cost": 1120,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 548460
+        "cummultive_zonal_cost": 548205
       },
       {
         "systype": "HW",
@@ -1669,7 +1669,7 @@
         "piping_cost": 4353,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 561463
+        "cummultive_zonal_cost": 561208
       },
       {
         "systype": "PTAC",
@@ -1684,7 +1684,7 @@
         "piping_cost": 0,
         "wiring_cost": 1120,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 568502
+        "cummultive_zonal_cost": 568247
       },
       {
         "systype": "HW",
@@ -1699,7 +1699,7 @@
         "piping_cost": 4354,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 581506
+        "cummultive_zonal_cost": 581251
       },
       {
         "systype": "PTAC",
@@ -1714,7 +1714,7 @@
         "piping_cost": 0,
         "wiring_cost": 1120,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 588544
+        "cummultive_zonal_cost": 588289
       },
       {
         "systype": "HW",
@@ -1729,7 +1729,7 @@
         "piping_cost": 4353,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 601547
+        "cummultive_zonal_cost": 601292
       },
       {
         "systype": "PTAC",
@@ -1744,7 +1744,7 @@
         "piping_cost": 0,
         "wiring_cost": 1120,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 608585
+        "cummultive_zonal_cost": 608330
       },
       {
         "systype": "HW",
@@ -1759,7 +1759,7 @@
         "piping_cost": 4353,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 621588
+        "cummultive_zonal_cost": 621333
       },
       {
         "systype": "PTAC",
@@ -1774,7 +1774,7 @@
         "piping_cost": 0,
         "wiring_cost": 1120,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 628627
+        "cummultive_zonal_cost": 628372
       },
       {
         "systype": "HW",
@@ -1789,7 +1789,7 @@
         "piping_cost": 4354,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 641631
+        "cummultive_zonal_cost": 641376
       },
       {
         "systype": "PTAC",
@@ -1804,7 +1804,7 @@
         "piping_cost": 0,
         "wiring_cost": 1120,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 648669
+        "cummultive_zonal_cost": 648414
       },
       {
         "systype": "HW",
@@ -1819,7 +1819,7 @@
         "piping_cost": 4354,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 661674
+        "cummultive_zonal_cost": 661419
       },
       {
         "systype": "PTAC",
@@ -1834,7 +1834,7 @@
         "piping_cost": 0,
         "wiring_cost": 1120,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 668712
+        "cummultive_zonal_cost": 668457
       },
       {
         "systype": "HW",
@@ -1849,7 +1849,7 @@
         "piping_cost": 4353,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 681715
+        "cummultive_zonal_cost": 681460
       },
       {
         "systype": "PTAC",
@@ -1864,7 +1864,7 @@
         "piping_cost": 0,
         "wiring_cost": 1120,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 688753
+        "cummultive_zonal_cost": 688498
       },
       {
         "systype": "HW",
@@ -1879,7 +1879,7 @@
         "piping_cost": 4354,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 701757
+        "cummultive_zonal_cost": 701502
       },
       {
         "systype": "PTAC",
@@ -1894,7 +1894,7 @@
         "piping_cost": 0,
         "wiring_cost": 1120,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 708796
+        "cummultive_zonal_cost": 708541
       },
       {
         "systype": "HW",
@@ -1909,7 +1909,7 @@
         "piping_cost": 4354,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 721800
+        "cummultive_zonal_cost": 721545
       },
       {
         "systype": "PTAC",
@@ -1924,7 +1924,7 @@
         "piping_cost": 0,
         "wiring_cost": 1120,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 728838
+        "cummultive_zonal_cost": 728583
       },
       {
         "systype": "HW",
@@ -1939,7 +1939,7 @@
         "piping_cost": 4354,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 741843
+        "cummultive_zonal_cost": 741588
       },
       {
         "systype": "PTAC",
@@ -1954,7 +1954,7 @@
         "piping_cost": 0,
         "wiring_cost": 1120,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 748881
+        "cummultive_zonal_cost": 748626
       },
       {
         "systype": "HW",
@@ -1969,7 +1969,7 @@
         "piping_cost": 4354,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 761885
+        "cummultive_zonal_cost": 761630
       },
       {
         "systype": "PTAC",
@@ -1984,7 +1984,7 @@
         "piping_cost": 0,
         "wiring_cost": 1120,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 768923
+        "cummultive_zonal_cost": 768668
       },
       {
         "systype": "HW",
@@ -1999,7 +1999,7 @@
         "piping_cost": 4353,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 781926
+        "cummultive_zonal_cost": 781671
       },
       {
         "systype": "PTAC",
@@ -2014,7 +2014,7 @@
         "piping_cost": 0,
         "wiring_cost": 1120,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 788965
+        "cummultive_zonal_cost": 788710
       },
       {
         "systype": "HW",
@@ -2029,7 +2029,7 @@
         "piping_cost": 4354,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 801969
+        "cummultive_zonal_cost": 801714
       },
       {
         "systype": "PTAC",
@@ -2044,7 +2044,7 @@
         "piping_cost": 0,
         "wiring_cost": 4014,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 815764
+        "cummultive_zonal_cost": 815509
       },
       {
         "systype": "HW",
@@ -2059,7 +2059,7 @@
         "piping_cost": 15600,
         "wiring_cost": 0,
         "num_units": 2,
-        "cummultive_zonal_cost": 850704
+        "cummultive_zonal_cost": 850449
       },
       {
         "systype": "PTAC",
@@ -2074,7 +2074,7 @@
         "piping_cost": 0,
         "wiring_cost": 1118,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 857740
+        "cummultive_zonal_cost": 857485
       },
       {
         "systype": "HW",
@@ -2089,7 +2089,7 @@
         "piping_cost": 4346,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 870736
+        "cummultive_zonal_cost": 870481
       },
       {
         "systype": "PTAC",
@@ -2104,7 +2104,7 @@
         "piping_cost": 0,
         "wiring_cost": 1120,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 877775
+        "cummultive_zonal_cost": 877520
       },
       {
         "systype": "HW",
@@ -2119,7 +2119,7 @@
         "piping_cost": 4354,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 890779
+        "cummultive_zonal_cost": 890524
       },
       {
         "systype": "PTAC",
@@ -2134,7 +2134,7 @@
         "piping_cost": 0,
         "wiring_cost": 1120,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 897817
+        "cummultive_zonal_cost": 897562
       },
       {
         "systype": "HW",
@@ -2149,7 +2149,7 @@
         "piping_cost": 4354,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 910822
+        "cummultive_zonal_cost": 910566
       },
       {
         "systype": "PTAC",
@@ -2164,7 +2164,7 @@
         "piping_cost": 0,
         "wiring_cost": 1120,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 917860
+        "cummultive_zonal_cost": 917605
       },
       {
         "systype": "HW",
@@ -2179,7 +2179,7 @@
         "piping_cost": 4354,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 930864
+        "cummultive_zonal_cost": 930609
       },
       {
         "systype": "PTAC",
@@ -2194,7 +2194,7 @@
         "piping_cost": 0,
         "wiring_cost": 1120,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 937903
+        "cummultive_zonal_cost": 937648
       },
       {
         "systype": "HW",
@@ -2209,7 +2209,7 @@
         "piping_cost": 4354,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 950907
+        "cummultive_zonal_cost": 950652
       },
       {
         "systype": "PTAC",
@@ -2224,7 +2224,7 @@
         "piping_cost": 0,
         "wiring_cost": 1120,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 957945
+        "cummultive_zonal_cost": 957690
       },
       {
         "systype": "HW",
@@ -2239,7 +2239,7 @@
         "piping_cost": 4354,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 970949
+        "cummultive_zonal_cost": 970694
       },
       {
         "systype": "PTAC",
@@ -2254,7 +2254,7 @@
         "piping_cost": 0,
         "wiring_cost": 1120,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 977988
+        "cummultive_zonal_cost": 977733
       },
       {
         "systype": "HW",
@@ -2269,7 +2269,7 @@
         "piping_cost": 4353,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 990991
+        "cummultive_zonal_cost": 990736
       },
       {
         "systype": "PTAC",
@@ -2284,7 +2284,7 @@
         "piping_cost": 0,
         "wiring_cost": 1120,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 998029
+        "cummultive_zonal_cost": 997774
       },
       {
         "systype": "HW",
@@ -2299,7 +2299,7 @@
         "piping_cost": 4354,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 1011033
+        "cummultive_zonal_cost": 1010778
       },
       {
         "systype": "PTAC",
@@ -2314,7 +2314,7 @@
         "piping_cost": 0,
         "wiring_cost": 1120,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 1018071
+        "cummultive_zonal_cost": 1017816
       },
       {
         "systype": "HW",
@@ -2329,7 +2329,7 @@
         "piping_cost": 4353,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 1031074
+        "cummultive_zonal_cost": 1030819
       },
       {
         "systype": "PTAC",
@@ -2344,7 +2344,7 @@
         "piping_cost": 0,
         "wiring_cost": 1120,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 1038113
+        "cummultive_zonal_cost": 1037858
       },
       {
         "systype": "HW",
@@ -2359,7 +2359,7 @@
         "piping_cost": 4354,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 1051117
+        "cummultive_zonal_cost": 1050862
       },
       {
         "systype": "PTAC",
@@ -2374,7 +2374,7 @@
         "piping_cost": 0,
         "wiring_cost": 1120,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 1058155
+        "cummultive_zonal_cost": 1057900
       },
       {
         "systype": "HW",
@@ -2389,7 +2389,7 @@
         "piping_cost": 4353,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 1071158
+        "cummultive_zonal_cost": 1070903
       },
       {
         "systype": "PTAC",
@@ -2404,7 +2404,7 @@
         "piping_cost": 0,
         "wiring_cost": 1120,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 1078196
+        "cummultive_zonal_cost": 1077941
       },
       {
         "systype": "HW",
@@ -2419,7 +2419,7 @@
         "piping_cost": 4354,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 1091201
+        "cummultive_zonal_cost": 1090946
       },
       {
         "systype": "PTAC",
@@ -2434,7 +2434,7 @@
         "piping_cost": 0,
         "wiring_cost": 1120,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 1098239
+        "cummultive_zonal_cost": 1097984
       },
       {
         "systype": "HW",
@@ -2449,7 +2449,7 @@
         "piping_cost": 4354,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 1111243
+        "cummultive_zonal_cost": 1110988
       },
       {
         "systype": "PTAC",
@@ -2464,7 +2464,7 @@
         "piping_cost": 0,
         "wiring_cost": 1120,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 1118281
+        "cummultive_zonal_cost": 1118026
       },
       {
         "systype": "HW",
@@ -2479,7 +2479,7 @@
         "piping_cost": 4353,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 1131284
+        "cummultive_zonal_cost": 1131029
       },
       {
         "systype": "PTAC",
@@ -2494,7 +2494,7 @@
         "piping_cost": 0,
         "wiring_cost": 1123,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 1138326
+        "cummultive_zonal_cost": 1138071
       },
       {
         "systype": "HW",
@@ -2509,7 +2509,7 @@
         "piping_cost": 4366,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 1151342
+        "cummultive_zonal_cost": 1151087
       },
       {
         "systype": "PTAC",
@@ -2524,7 +2524,7 @@
         "piping_cost": 0,
         "wiring_cost": 1120,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 1158380
+        "cummultive_zonal_cost": 1158125
       },
       {
         "systype": "HW",
@@ -2539,7 +2539,7 @@
         "piping_cost": 4354,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 1171385
+        "cummultive_zonal_cost": 1171130
       },
       {
         "systype": "PTAC",
@@ -2554,7 +2554,7 @@
         "piping_cost": 0,
         "wiring_cost": 1120,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 1178423
+        "cummultive_zonal_cost": 1178168
       },
       {
         "systype": "HW",
@@ -2569,7 +2569,7 @@
         "piping_cost": 4353,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 1191426
+        "cummultive_zonal_cost": 1191171
       },
       {
         "systype": "PTAC",
@@ -2584,7 +2584,7 @@
         "piping_cost": 0,
         "wiring_cost": 1120,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 1198464
+        "cummultive_zonal_cost": 1198209
       },
       {
         "systype": "HW",
@@ -2599,7 +2599,7 @@
         "piping_cost": 4353,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 1211467
+        "cummultive_zonal_cost": 1211212
       },
       {
         "systype": "PTAC",
@@ -2614,7 +2614,7 @@
         "piping_cost": 0,
         "wiring_cost": 513,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 1217811
+        "cummultive_zonal_cost": 1217556
       },
       {
         "systype": "HW",
@@ -2629,7 +2629,7 @@
         "piping_cost": 1994,
         "wiring_cost": 0,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 1222988
+        "cummultive_zonal_cost": 1222733
       },
       {
         "systype": "PTAC",
@@ -2644,7 +2644,7 @@
         "piping_cost": 0,
         "wiring_cost": 513,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 1229332
+        "cummultive_zonal_cost": 1229077
       },
       {
         "systype": "HW",
@@ -2659,7 +2659,7 @@
         "piping_cost": 1996,
         "wiring_cost": 0,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 1234510
+        "cummultive_zonal_cost": 1234255
       },
       {
         "systype": "PTAC",
@@ -2674,7 +2674,7 @@
         "piping_cost": 0,
         "wiring_cost": 513,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 1240854
+        "cummultive_zonal_cost": 1240599
       },
       {
         "systype": "HW",
@@ -2689,7 +2689,7 @@
         "piping_cost": 1996,
         "wiring_cost": 0,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 1246032
+        "cummultive_zonal_cost": 1245777
       },
       {
         "systype": "PTAC",
@@ -2704,7 +2704,7 @@
         "piping_cost": 0,
         "wiring_cost": 513,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 1252376
+        "cummultive_zonal_cost": 1252121
       },
       {
         "systype": "HW",
@@ -2719,7 +2719,7 @@
         "piping_cost": 1996,
         "wiring_cost": 0,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 1257554
+        "cummultive_zonal_cost": 1257299
       },
       {
         "systype": "PTAC",
@@ -2734,7 +2734,7 @@
         "piping_cost": 0,
         "wiring_cost": 513,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 1263898
+        "cummultive_zonal_cost": 1263643
       },
       {
         "systype": "HW",
@@ -2749,7 +2749,7 @@
         "piping_cost": 1996,
         "wiring_cost": 0,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 1269076
+        "cummultive_zonal_cost": 1268821
       },
       {
         "systype": "PTAC",
@@ -2764,7 +2764,7 @@
         "piping_cost": 0,
         "wiring_cost": 513,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 1275421
+        "cummultive_zonal_cost": 1275166
       },
       {
         "systype": "HW",
@@ -2779,7 +2779,7 @@
         "piping_cost": 1996,
         "wiring_cost": 0,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 1280599
+        "cummultive_zonal_cost": 1280344
       },
       {
         "systype": "PTAC",
@@ -2794,7 +2794,7 @@
         "piping_cost": 0,
         "wiring_cost": 513,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 1286943
+        "cummultive_zonal_cost": 1286688
       },
       {
         "systype": "HW",
@@ -2809,7 +2809,7 @@
         "piping_cost": 1996,
         "wiring_cost": 0,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 1292121
+        "cummultive_zonal_cost": 1291866
       },
       {
         "systype": "PTAC",
@@ -2824,7 +2824,7 @@
         "piping_cost": 0,
         "wiring_cost": 513,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 1298465
+        "cummultive_zonal_cost": 1298210
       },
       {
         "systype": "HW",
@@ -2839,7 +2839,7 @@
         "piping_cost": 1996,
         "wiring_cost": 0,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 1303643
+        "cummultive_zonal_cost": 1303388
       },
       {
         "systype": "PTAC",
@@ -2854,7 +2854,7 @@
         "piping_cost": 0,
         "wiring_cost": 1003,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 1305569
+        "cummultive_zonal_cost": 1305314
       },
       {
         "systype": "HW",
@@ -2869,7 +2869,7 @@
         "piping_cost": 3900,
         "wiring_cost": 0,
         "num_units": 2,
-        "cummultive_zonal_cost": 1315324
+        "cummultive_zonal_cost": 1315069
       },
       {
         "systype": "PTAC",
@@ -2884,7 +2884,7 @@
         "piping_cost": 0,
         "wiring_cost": 1003,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 1317250
+        "cummultive_zonal_cost": 1316995
       },
       {
         "systype": "HW",
@@ -2899,7 +2899,7 @@
         "piping_cost": 3900,
         "wiring_cost": 0,
         "num_units": 2,
-        "cummultive_zonal_cost": 1327005
+        "cummultive_zonal_cost": 1326750
       },
       {
         "systype": "PTAC",
@@ -2914,7 +2914,7 @@
         "piping_cost": 0,
         "wiring_cost": 513,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 1333349
+        "cummultive_zonal_cost": 1333094
       },
       {
         "systype": "HW",
@@ -2929,14 +2929,14 @@
         "piping_cost": 1996,
         "wiring_cost": 0,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 1338527
+        "cummultive_zonal_cost": 1338272
       },
       {
         "systype": "HW",
         "zone_number": 64,
         "zone_name": "WILD_ST=Corr. >= 2.4m wide-sch-E_FL=Building Story 3_SCH=F",
         "zone_multiple": 4,
-        "heat_capacity(kW)": 59.9,
+        "heat_capacity(kW)": 60.0,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 58550,
         "cool_cost": 0,
@@ -2944,14 +2944,14 @@
         "piping_cost": 18865,
         "wiring_cost": 0,
         "num_units": 5,
-        "cummultive_zonal_cost": 1415943
+        "cummultive_zonal_cost": 1415688
       },
       {
         "systype": null,
         "zone_number": 64,
         "zone_name": "WILD_ST=Corr. >= 2.4m wide-sch-E_FL=Building Story 3_SCH=F",
         "zone_multiple": 4,
-        "heat_capacity(kW)": 59.9,
+        "heat_capacity(kW)": 60.0,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 0,
         "cool_cost": 0,
@@ -2959,7 +2959,7 @@
         "piping_cost": 0,
         "wiring_cost": 0,
         "num_units": null,
-        "cummultive_zonal_cost": 1415943
+        "cummultive_zonal_cost": 1415688
       },
       {
         "systype": "HW",
@@ -2974,7 +2974,7 @@
         "piping_cost": 8345,
         "wiring_cost": 0,
         "num_units": 15,
-        "cummultive_zonal_cost": 1471771
+        "cummultive_zonal_cost": 1471516
       },
       {
         "systype": null,
@@ -2989,7 +2989,7 @@
         "piping_cost": 0,
         "wiring_cost": 0,
         "num_units": null,
-        "cummultive_zonal_cost": 1471771
+        "cummultive_zonal_cost": 1471516
       },
       {
         "systype": "HW",
@@ -3004,7 +3004,7 @@
         "piping_cost": 6131,
         "wiring_cost": 0,
         "num_units": 2,
-        "cummultive_zonal_cost": 1483502
+        "cummultive_zonal_cost": 1483247
       },
       {
         "systype": null,
@@ -3019,7 +3019,7 @@
         "piping_cost": 0,
         "wiring_cost": 0,
         "num_units": null,
-        "cummultive_zonal_cost": 1483502
+        "cummultive_zonal_cost": 1483247
       }
     ]
   },
@@ -3160,25 +3160,25 @@
       {
         "sys_type": 3,
         "name": "sys_3|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| 1",
-        "airloop_flow_m3_per_s": 0.155,
+        "airloop_flow_m3_per_s": 0.153,
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 1000,
         "base_ahu_cost": 73053.44,
-        "revised_base_ahu_cost": 11330.3,
+        "revised_base_ahu_cost": 11199.6,
         "hrv": {},
         "equipment_info": [
           {
             "eq_category": "Coil_Cooling_DX_SingleSpeed",
             "heating_fuel": "none",
             "cooling_type": "DX",
-            "total_modeled_capacity_kw": 2.567,
+            "total_modeled_capacity_kw": 2.538,
             "cost": 16997.83
           },
           {
             "eq_category": "Coil_Heating_Gas",
             "heating_fuel": "Gas",
             "cooling_type": "none",
-            "total_modeled_capacity_kw": 11.222,
+            "total_modeled_capacity_kw": 11.173,
             "cost": 3712.21
           }
         ],
@@ -3191,7 +3191,7 @@
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 1000,
         "base_ahu_cost": 73053.44,
-        "revised_base_ahu_cost": 38951.26,
+        "revised_base_ahu_cost": 38950.72,
         "hrv": {},
         "equipment_info": [
           {
@@ -3222,21 +3222,21 @@
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 5000,
         "base_ahu_cost": 162393.85,
-        "revised_base_ahu_cost": 147871.52,
+        "revised_base_ahu_cost": 147874.69,
         "hrv": {},
         "equipment_info": [
           {
             "eq_category": "Coil_Cooling_Water",
             "heating_fuel": "none",
             "cooling_type": "CHW",
-            "total_modeled_capacity_kw": 74.651,
+            "total_modeled_capacity_kw": 74.653,
             "cost": 32195.79
           },
           {
             "eq_category": "Coil_Heating_Water",
             "heating_fuel": "HW",
             "cooling_type": "none",
-            "total_modeled_capacity_kw": 96.78,
+            "total_modeled_capacity_kw": 96.782,
             "cost": 78475.94
           }
         ],
@@ -3341,7 +3341,7 @@
         {
           "Floor": "Building Story 2",
           "Predominant_space_type": "Hotel/Motel - lobby",
-          "SupplyDuctSize_in": 36.58,
+          "SupplyDuctSize_in": 36.57,
           "SupplyDuctLength_m": 78.2,
           "ReturnDuctSize_in": 36.14,
           "ReturnDuctLength_m": 78.2,
@@ -4111,7 +4111,7 @@
               "ThermalZone": "ALL_ST=Hospital - laundry/washing_FL=Building Story 2_SCH=C",
               "ducting_direction": "Supply",
               "tz_mult": 1.0,
-              "airflow_m3ps": 0.155,
+              "airflow_m3ps": 0.153,
               "num_diff": 3,
               "ducting_lbs": 125,
               "duct_insulation_ft2": 96,
@@ -4123,7 +4123,7 @@
               "ThermalZone": "ALL_ST=Hospital - laundry/washing_FL=Building Story 2_SCH=C",
               "ducting_direction": "Return",
               "tz_mult": 1.0,
-              "airflow_m3ps": 0.155,
+              "airflow_m3ps": 0.153,
               "num_diff": 3,
               "ducting_lbs": 125,
               "duct_insulation_ft2": 96,
@@ -4301,10 +4301,10 @@
     "envelope": 229309,
     "thermal_bridging": 0,
     "lighting": 2431258,
-    "heating_and_cooling": 2017273,
+    "heating_and_cooling": 2017018,
     "shw": 128951,
-    "ventilation": 2538253,
+    "ventilation": 2538125,
     "renewables": 0,
-    "grand_total": 7345046
+    "grand_total": 7344662
   }
 }

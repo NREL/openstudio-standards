@@ -428,22 +428,22 @@
         "zone_number": 4,
         "zone_name": "ALL_ST=Office - open plan_FL=Building Story 1_SCH=A",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 13.6,
+        "heat_capacity(kW)": 11.8,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 7606,
+        "heat_cost": 6592,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
         "wiring_cost": 0,
-        "num_units": 15,
-        "cummultive_zonal_cost": 7606
+        "num_units": 13,
+        "cummultive_zonal_cost": 6592
       },
       {
         "systype": "BB",
         "zone_number": 5,
         "zone_name": "ALL_ST=Office - open plan_FL=Building Story 1_SCH=A 1",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 6.5,
+        "heat_capacity(kW)": 6.4,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 3550,
         "cool_cost": 0,
@@ -451,14 +451,14 @@
         "piping_cost": 0,
         "wiring_cost": 1794,
         "num_units": 7,
-        "cummultive_zonal_cost": 12950
+        "cummultive_zonal_cost": 11936
       },
       {
         "systype": "BB",
         "zone_number": 6,
         "zone_name": "ALL_ST=Office - open plan_FL=Building Story 1_SCH=A 2",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 9.8,
+        "heat_capacity(kW)": 9.6,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 5578,
         "cool_cost": 0,
@@ -466,14 +466,14 @@
         "piping_cost": 0,
         "wiring_cost": 2692,
         "num_units": 11,
-        "cummultive_zonal_cost": 21220
+        "cummultive_zonal_cost": 20205
       },
       {
         "systype": "BB",
         "zone_number": 7,
         "zone_name": "ALL_ST=Office - open plan_FL=Building Story 1_SCH=A 3",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 9.9,
+        "heat_capacity(kW)": 9.6,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 5578,
         "cool_cost": 0,
@@ -481,44 +481,44 @@
         "piping_cost": 0,
         "wiring_cost": 2692,
         "num_units": 11,
-        "cummultive_zonal_cost": 29489
+        "cummultive_zonal_cost": 28475
       },
       {
         "systype": "BB",
         "zone_number": 8,
         "zone_name": "ALL_ST=Office - open plan_FL=Building Story 1_SCH=A 4",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 6.6,
+        "heat_capacity(kW)": 6.4,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 3561,
+        "heat_cost": 3550,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
         "wiring_cost": 1794,
-        "num_units": 7.022708994819519,
-        "cummultive_zonal_cost": 34845
+        "num_units": 7,
+        "cummultive_zonal_cost": 33819
       },
       {
         "systype": "BB",
         "zone_number": 9,
         "zone_name": "ALL_ST=Office - open plan_FL=Building Story 2_SCH=A",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 8.3,
+        "heat_capacity(kW)": 7.0,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 4564,
+        "heat_cost": 4057,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
         "wiring_cost": 0,
-        "num_units": 9,
-        "cummultive_zonal_cost": 39408
+        "num_units": 8,
+        "cummultive_zonal_cost": 37875
       },
       {
         "systype": "BB",
         "zone_number": 10,
         "zone_name": "ALL_ST=Office - open plan_FL=Building Story 2_SCH=A 1",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 5.2,
+        "heat_capacity(kW)": 5.0,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 3042,
         "cool_cost": 0,
@@ -526,44 +526,44 @@
         "piping_cost": 0,
         "wiring_cost": 1794,
         "num_units": 6,
-        "cummultive_zonal_cost": 44245
+        "cummultive_zonal_cost": 42712
       },
       {
         "systype": "BB",
         "zone_number": 11,
         "zone_name": "ALL_ST=Office - open plan_FL=Building Story 2_SCH=A 2",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 7.7,
+        "heat_capacity(kW)": 7.4,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 4564,
+        "heat_cost": 4057,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
         "wiring_cost": 2692,
-        "num_units": 9,
-        "cummultive_zonal_cost": 51500
+        "num_units": 8,
+        "cummultive_zonal_cost": 49461
       },
       {
         "systype": "BB",
         "zone_number": 12,
         "zone_name": "ALL_ST=Office - open plan_FL=Building Story 2_SCH=A 3",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 7.7,
+        "heat_capacity(kW)": 7.4,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 4564,
+        "heat_cost": 4057,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
         "wiring_cost": 2692,
-        "num_units": 9,
-        "cummultive_zonal_cost": 58756
+        "num_units": 8,
+        "cummultive_zonal_cost": 56209
       },
       {
         "systype": "BB",
         "zone_number": 13,
         "zone_name": "ALL_ST=Office - open plan_FL=Building Story 2_SCH=A 4",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 5.1,
+        "heat_capacity(kW)": 4.9,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 3042,
         "cool_cost": 0,
@@ -571,14 +571,14 @@
         "piping_cost": 0,
         "wiring_cost": 1794,
         "num_units": 6,
-        "cummultive_zonal_cost": 63593
+        "cummultive_zonal_cost": 61046
       },
       {
         "systype": "BB",
         "zone_number": 14,
         "zone_name": "ALL_ST=Office - open plan_FL=Building Story 3_SCH=A",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 11.6,
+        "heat_capacity(kW)": 11.3,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 6592,
         "cool_cost": 0,
@@ -586,44 +586,44 @@
         "piping_cost": 0,
         "wiring_cost": 2692,
         "num_units": 13,
-        "cummultive_zonal_cost": 72876
+        "cummultive_zonal_cost": 70329
       },
       {
         "systype": "BB",
         "zone_number": 15,
         "zone_name": "ALL_ST=Office - open plan_FL=Building Story 3_SCH=A 1",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 7.6,
+        "heat_capacity(kW)": 7.5,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 4564,
+        "heat_cost": 4057,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
         "wiring_cost": 1794,
-        "num_units": 9,
-        "cummultive_zonal_cost": 79234
+        "num_units": 8,
+        "cummultive_zonal_cost": 76180
       },
       {
         "systype": "BB",
         "zone_number": 16,
         "zone_name": "ALL_ST=Office - open plan_FL=Building Story 3_SCH=A 2",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 24.9,
+        "heat_capacity(kW)": 23.2,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 13691,
+        "heat_cost": 12677,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
         "wiring_cost": 0,
-        "num_units": 27,
-        "cummultive_zonal_cost": 92925
+        "num_units": 25,
+        "cummultive_zonal_cost": 88857
       },
       {
         "systype": "BB",
         "zone_number": 17,
         "zone_name": "ALL_ST=Office - open plan_FL=Building Story 3_SCH=A 3",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 11.7,
+        "heat_capacity(kW)": 11.4,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 6592,
         "cool_cost": 0,
@@ -631,22 +631,22 @@
         "piping_cost": 0,
         "wiring_cost": 2692,
         "num_units": 13,
-        "cummultive_zonal_cost": 102209
+        "cummultive_zonal_cost": 98141
       },
       {
         "systype": "BB",
         "zone_number": 18,
         "zone_name": "ALL_ST=Office - open plan_FL=Building Story 3_SCH=A 4",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 7.7,
+        "heat_capacity(kW)": 7.5,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 4564,
+        "heat_cost": 4068,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
         "wiring_cost": 1794,
-        "num_units": 9,
-        "cummultive_zonal_cost": 108567
+        "num_units": 8.022939296457219,
+        "cummultive_zonal_cost": 104004
       }
     ]
   },
@@ -681,25 +681,25 @@
       {
         "sys_type": 6,
         "name": "sys_6|mixed|shr>none|sh>c-e|sc>c-chw|ssf>vv|zh>b-e|zc>none|srf>vv|",
-        "airloop_flow_m3_per_s": 2.917,
+        "airloop_flow_m3_per_s": 2.907,
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 5000,
         "base_ahu_cost": 153514.06,
-        "revised_base_ahu_cost": 89554.24,
+        "revised_base_ahu_cost": 89262.24,
         "hrv": {},
         "equipment_info": [
           {
             "eq_category": "Coil_Cooling_Water",
             "heating_fuel": "none",
             "cooling_type": "CHW",
-            "total_modeled_capacity_kw": 44.622,
+            "total_modeled_capacity_kw": 44.477,
             "cost": 19317.48
           },
           {
             "eq_category": "Coil_Heating_Electric",
             "heating_fuel": "elec",
             "cooling_type": "none",
-            "total_modeled_capacity_kw": 54.872,
+            "total_modeled_capacity_kw": 54.693,
             "cost": 7060.6
           }
         ],
@@ -725,7 +725,7 @@
             "box_name": "Air Terminal Single Duct VAV Reheat 3",
             "unit_info": {
               "size_kw": 0.0,
-              "air_flow_m3_per_s": 0.458,
+              "air_flow_m3_per_s": 0.459,
               "pipe_dist_m": 22.8,
               "elect_dist_m": 22.8,
               "num_units": 1
@@ -753,7 +753,7 @@
             "box_name": "Air Terminal Single Duct VAV Reheat 4",
             "unit_info": {
               "size_kw": 0.0,
-              "air_flow_m3_per_s": 0.393,
+              "air_flow_m3_per_s": 0.383,
               "pipe_dist_m": 14.4,
               "elect_dist_m": 14.4,
               "num_units": 1
@@ -779,25 +779,25 @@
       {
         "sys_type": 6,
         "name": "sys_6|mixed|shr>none|sh>c-e|sc>c-chw|ssf>vv|zh>b-e|zc>none|srf>vv| 1",
-        "airloop_flow_m3_per_s": 3.756,
+        "airloop_flow_m3_per_s": 3.76,
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 5000,
         "base_ahu_cost": 153514.06,
-        "revised_base_ahu_cost": 115324.95,
+        "revised_base_ahu_cost": 115436.25,
         "hrv": {},
         "equipment_info": [
           {
             "eq_category": "Coil_Cooling_Water",
             "heating_fuel": "none",
             "cooling_type": "CHW",
-            "total_modeled_capacity_kw": 57.421,
+            "total_modeled_capacity_kw": 57.477,
             "cost": 25756.63
           },
           {
             "eq_category": "Coil_Heating_Electric",
             "heating_fuel": "elec",
             "cooling_type": "none",
-            "total_modeled_capacity_kw": 70.662,
+            "total_modeled_capacity_kw": 70.73,
             "cost": 31919.9
           }
         ],
@@ -809,7 +809,7 @@
             "box_name": "Air Terminal Single Duct VAV Reheat 6",
             "unit_info": {
               "size_kw": 0.0,
-              "air_flow_m3_per_s": 1.327,
+              "air_flow_m3_per_s": 1.329,
               "pipe_dist_m": 0.0,
               "elect_dist_m": 0.0,
               "num_units": 1
@@ -823,7 +823,7 @@
             "box_name": "Air Terminal Single Duct VAV Reheat 10",
             "unit_info": {
               "size_kw": 0.0,
-              "air_flow_m3_per_s": 0.617,
+              "air_flow_m3_per_s": 0.618,
               "pipe_dist_m": 22.8,
               "elect_dist_m": 22.8,
               "num_units": 1
@@ -837,7 +837,7 @@
             "box_name": "Air Terminal Single Duct VAV Reheat 9",
             "unit_info": {
               "size_kw": 0.0,
-              "air_flow_m3_per_s": 0.392,
+              "air_flow_m3_per_s": 0.393,
               "pipe_dist_m": 14.4,
               "elect_dist_m": 14.4,
               "num_units": 1
@@ -865,7 +865,7 @@
             "box_name": "Air Terminal Single Duct VAV Reheat 8",
             "unit_info": {
               "size_kw": 0.0,
-              "air_flow_m3_per_s": 0.577,
+              "air_flow_m3_per_s": 0.578,
               "pipe_dist_m": 22.8,
               "elect_dist_m": 22.8,
               "num_units": 1
@@ -877,25 +877,25 @@
       {
         "sys_type": 6,
         "name": "sys_6|mixed|shr>none|sh>c-e|sc>c-chw|ssf>vv|zh>b-e|zc>none|srf>vv| 2",
-        "airloop_flow_m3_per_s": 4.609,
+        "airloop_flow_m3_per_s": 4.615,
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 5000,
         "base_ahu_cost": 153514.06,
-        "revised_base_ahu_cost": 141517.92,
+        "revised_base_ahu_cost": 141682.52,
         "hrv": {},
         "equipment_info": [
           {
             "eq_category": "Coil_Cooling_Water",
             "heating_fuel": "none",
             "cooling_type": "CHW",
-            "total_modeled_capacity_kw": 70.466,
-            "cost": 56054.24
+            "total_modeled_capacity_kw": 70.548,
+            "cost": 32195.79
           },
           {
             "eq_category": "Coil_Heating_Electric",
             "heating_fuel": "elec",
             "cooling_type": "none",
-            "total_modeled_capacity_kw": 71.98,
+            "total_modeled_capacity_kw": 71.963,
             "cost": 31919.9
           }
         ],
@@ -921,7 +921,7 @@
             "box_name": "Air Terminal Single Duct VAV Reheat 13",
             "unit_info": {
               "size_kw": 0.0,
-              "air_flow_m3_per_s": 0.657,
+              "air_flow_m3_per_s": 0.658,
               "pipe_dist_m": 22.8,
               "elect_dist_m": 22.8,
               "num_units": 1
@@ -935,7 +935,7 @@
             "box_name": "Air Terminal Single Duct VAV Reheat 11",
             "unit_info": {
               "size_kw": 0.0,
-              "air_flow_m3_per_s": 1.782,
+              "air_flow_m3_per_s": 1.785,
               "pipe_dist_m": 0.0,
               "elect_dist_m": 0.0,
               "num_units": 1
@@ -963,7 +963,7 @@
             "box_name": "Air Terminal Single Duct VAV Reheat 15",
             "unit_info": {
               "size_kw": 0.0,
-              "air_flow_m3_per_s": 0.697,
+              "air_flow_m3_per_s": 0.698,
               "pipe_dist_m": 22.8,
               "elect_dist_m": 22.8,
               "num_units": 1
@@ -994,9 +994,9 @@
         {
           "Floor": "Building Story 1",
           "Predominant_space_type": "Office - open plan",
-          "SupplyDuctSize_in": 28.45,
+          "SupplyDuctSize_in": 28.4,
           "SupplyDuctLength_m": 56.4,
-          "ReturnDuctSize_in": 28.45,
+          "ReturnDuctSize_in": 28.4,
           "ReturnDuctLength_m": 56.4,
           "TotalDuctCost": 45082.36,
           "Multiplier": 1.0
@@ -1004,9 +1004,9 @@
         {
           "Floor": "Building Story 2",
           "Predominant_space_type": "Office - open plan",
-          "SupplyDuctSize_in": 32.28,
+          "SupplyDuctSize_in": 32.3,
           "SupplyDuctLength_m": 56.4,
-          "ReturnDuctSize_in": 32.28,
+          "ReturnDuctSize_in": 32.3,
           "ReturnDuctLength_m": 56.4,
           "TotalDuctCost": 82033.84,
           "Multiplier": 1.0
@@ -1014,9 +1014,9 @@
         {
           "Floor": "Building Story 3",
           "Predominant_space_type": "Office - open plan",
-          "SupplyDuctSize_in": 35.76,
+          "SupplyDuctSize_in": 35.78,
           "SupplyDuctLength_m": 56.4,
-          "ReturnDuctSize_in": 35.76,
+          "ReturnDuctSize_in": 35.78,
           "ReturnDuctLength_m": 56.4,
           "TotalDuctCost": 82033.84,
           "Multiplier": 1.0
@@ -1056,7 +1056,7 @@
               "ThermalZone": "ALL_ST=Office - open plan_FL=Building Story 1_SCH=A 1",
               "ducting_direction": "Supply",
               "tz_mult": 1.0,
-              "airflow_m3ps": 0.458,
+              "airflow_m3ps": 0.459,
               "num_diff": 5,
               "ducting_lbs": 290,
               "duct_insulation_ft2": 224,
@@ -1068,7 +1068,7 @@
               "ThermalZone": "ALL_ST=Office - open plan_FL=Building Story 1_SCH=A 1",
               "ducting_direction": "Return",
               "tz_mult": 1.0,
-              "airflow_m3ps": 0.458,
+              "airflow_m3ps": 0.459,
               "num_diff": 5,
               "ducting_lbs": 290,
               "duct_insulation_ft2": 224,
@@ -1104,7 +1104,7 @@
               "ThermalZone": "ALL_ST=Office - open plan_FL=Building Story 1_SCH=A 3",
               "ducting_direction": "Supply",
               "tz_mult": 1.0,
-              "airflow_m3ps": 0.393,
+              "airflow_m3ps": 0.383,
               "num_diff": 5,
               "ducting_lbs": 290,
               "duct_insulation_ft2": 224,
@@ -1116,7 +1116,7 @@
               "ThermalZone": "ALL_ST=Office - open plan_FL=Building Story 1_SCH=A 3",
               "ducting_direction": "Return",
               "tz_mult": 1.0,
-              "airflow_m3ps": 0.393,
+              "airflow_m3ps": 0.383,
               "num_diff": 5,
               "ducting_lbs": 290,
               "duct_insulation_ft2": 224,
@@ -1157,7 +1157,7 @@
               "ThermalZone": "ALL_ST=Office - open plan_FL=Building Story 2_SCH=A",
               "ducting_direction": "Supply",
               "tz_mult": 1.0,
-              "airflow_m3ps": 1.327,
+              "airflow_m3ps": 1.329,
               "num_diff": 11,
               "ducting_lbs": 440,
               "duct_insulation_ft2": 275,
@@ -1169,7 +1169,7 @@
               "ThermalZone": "ALL_ST=Office - open plan_FL=Building Story 2_SCH=A",
               "ducting_direction": "Return",
               "tz_mult": 1.0,
-              "airflow_m3ps": 1.327,
+              "airflow_m3ps": 1.329,
               "num_diff": 11,
               "ducting_lbs": 440,
               "duct_insulation_ft2": 275,
@@ -1181,7 +1181,7 @@
               "ThermalZone": "ALL_ST=Office - open plan_FL=Building Story 2_SCH=A 1",
               "ducting_direction": "Supply",
               "tz_mult": 1.0,
-              "airflow_m3ps": 0.617,
+              "airflow_m3ps": 0.618,
               "num_diff": 6,
               "ducting_lbs": 495,
               "duct_insulation_ft2": 380,
@@ -1193,7 +1193,7 @@
               "ThermalZone": "ALL_ST=Office - open plan_FL=Building Story 2_SCH=A 1",
               "ducting_direction": "Return",
               "tz_mult": 1.0,
-              "airflow_m3ps": 0.617,
+              "airflow_m3ps": 0.618,
               "num_diff": 6,
               "ducting_lbs": 495,
               "duct_insulation_ft2": 380,
@@ -1205,7 +1205,7 @@
               "ThermalZone": "ALL_ST=Office - open plan_FL=Building Story 2_SCH=A 2",
               "ducting_direction": "Supply",
               "tz_mult": 1.0,
-              "airflow_m3ps": 0.392,
+              "airflow_m3ps": 0.393,
               "num_diff": 5,
               "ducting_lbs": 290,
               "duct_insulation_ft2": 224,
@@ -1217,7 +1217,7 @@
               "ThermalZone": "ALL_ST=Office - open plan_FL=Building Story 2_SCH=A 2",
               "ducting_direction": "Return",
               "tz_mult": 1.0,
-              "airflow_m3ps": 0.392,
+              "airflow_m3ps": 0.393,
               "num_diff": 5,
               "ducting_lbs": 290,
               "duct_insulation_ft2": 224,
@@ -1253,7 +1253,7 @@
               "ThermalZone": "ALL_ST=Office - open plan_FL=Building Story 2_SCH=A 4",
               "ducting_direction": "Supply",
               "tz_mult": 1.0,
-              "airflow_m3ps": 0.577,
+              "airflow_m3ps": 0.578,
               "num_diff": 6,
               "ducting_lbs": 395,
               "duct_insulation_ft2": 306,
@@ -1265,7 +1265,7 @@
               "ThermalZone": "ALL_ST=Office - open plan_FL=Building Story 2_SCH=A 4",
               "ducting_direction": "Return",
               "tz_mult": 1.0,
-              "airflow_m3ps": 0.577,
+              "airflow_m3ps": 0.578,
               "num_diff": 6,
               "ducting_lbs": 395,
               "duct_insulation_ft2": 306,
@@ -1306,7 +1306,7 @@
               "ThermalZone": "ALL_ST=Office - open plan_FL=Building Story 3_SCH=A 1",
               "ducting_direction": "Supply",
               "tz_mult": 1.0,
-              "airflow_m3ps": 0.657,
+              "airflow_m3ps": 0.658,
               "num_diff": 6,
               "ducting_lbs": 495,
               "duct_insulation_ft2": 380,
@@ -1318,7 +1318,7 @@
               "ThermalZone": "ALL_ST=Office - open plan_FL=Building Story 3_SCH=A 1",
               "ducting_direction": "Return",
               "tz_mult": 1.0,
-              "airflow_m3ps": 0.657,
+              "airflow_m3ps": 0.658,
               "num_diff": 6,
               "ducting_lbs": 495,
               "duct_insulation_ft2": 380,
@@ -1330,7 +1330,7 @@
               "ThermalZone": "ALL_ST=Office - open plan_FL=Building Story 3_SCH=A 2",
               "ducting_direction": "Supply",
               "tz_mult": 1.0,
-              "airflow_m3ps": 1.782,
+              "airflow_m3ps": 1.785,
               "num_diff": 15,
               "ducting_lbs": 600,
               "duct_insulation_ft2": 375,
@@ -1342,7 +1342,7 @@
               "ThermalZone": "ALL_ST=Office - open plan_FL=Building Story 3_SCH=A 2",
               "ducting_direction": "Return",
               "tz_mult": 1.0,
-              "airflow_m3ps": 1.782,
+              "airflow_m3ps": 1.785,
               "num_diff": 15,
               "ducting_lbs": 600,
               "duct_insulation_ft2": 375,
@@ -1378,7 +1378,7 @@
               "ThermalZone": "ALL_ST=Office - open plan_FL=Building Story 3_SCH=A 4",
               "ducting_direction": "Supply",
               "tz_mult": 1.0,
-              "airflow_m3ps": 0.697,
+              "airflow_m3ps": 0.698,
               "num_diff": 6,
               "ducting_lbs": 495,
               "duct_insulation_ft2": 380,
@@ -1390,7 +1390,7 @@
               "ThermalZone": "ALL_ST=Office - open plan_FL=Building Story 3_SCH=A 4",
               "ducting_direction": "Return",
               "tz_mult": 1.0,
-              "airflow_m3ps": 0.697,
+              "airflow_m3ps": 0.698,
               "num_diff": 6,
               "ducting_lbs": 495,
               "duct_insulation_ft2": 380,
@@ -1427,10 +1427,10 @@
     "envelope": 2889437,
     "thermal_bridging": 0,
     "lighting": 1069917,
-    "heating_and_cooling": 519980,
+    "heating_and_cooling": 515416,
     "shw": 152219,
-    "ventilation": 1751852,
+    "ventilation": 1727978,
     "renewables": 0,
-    "grand_total": 6383406
+    "grand_total": 6354968
   }
 }

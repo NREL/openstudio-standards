@@ -827,7 +827,7 @@
         "zone_number": 9,
         "zone_name": "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 2_SCHG",
         "zone_multiple": 2,
-        "heat_capacity(kW)": 4.0,
+        "heat_capacity(kW)": 4.1,
         "cool_capacity(kW)": 3.8,
         "heat_cost": 0,
         "cool_cost": 11661,
@@ -842,7 +842,7 @@
         "zone_number": 9,
         "zone_name": "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 2_SCHG",
         "zone_multiple": 2,
-        "heat_capacity(kW)": 4.0,
+        "heat_capacity(kW)": 4.1,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 3042,
         "cool_cost": 0,
@@ -857,7 +857,7 @@
         "zone_number": 10,
         "zone_name": "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 2_SCHG 1",
         "zone_multiple": 2,
-        "heat_capacity(kW)": 4.0,
+        "heat_capacity(kW)": 4.1,
         "cool_capacity(kW)": 4.0,
         "heat_cost": 0,
         "cool_cost": 11661,
@@ -872,7 +872,7 @@
         "zone_number": 10,
         "zone_name": "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 2_SCHG 1",
         "zone_multiple": 2,
-        "heat_capacity(kW)": 4.0,
+        "heat_capacity(kW)": 4.1,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 3042,
         "cool_cost": 0,
@@ -947,7 +947,7 @@
         "zone_number": 13,
         "zone_name": "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 2_SCHG 4",
         "zone_multiple": 2,
-        "heat_capacity(kW)": 6.0,
+        "heat_capacity(kW)": 6.1,
         "cool_capacity(kW)": 8.8,
         "heat_cost": 0,
         "cool_cost": 1845,
@@ -962,7 +962,7 @@
         "zone_number": 13,
         "zone_name": "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 2_SCHG 4",
         "zone_multiple": 2,
-        "heat_capacity(kW)": 6.0,
+        "heat_capacity(kW)": 6.1,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 4057,
         "cool_cost": 0,
@@ -1322,15 +1322,15 @@
         "zone_number": 26,
         "zone_name": "WILD_ST=Corridor/Transition area other-sch-G_FL=Building Story 2_SCH=G",
         "zone_multiple": 2,
-        "heat_capacity(kW)": 5.6,
+        "heat_capacity(kW)": 5.7,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 3053,
+        "heat_cost": 3068,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
         "wiring_cost": 522,
-        "num_units": 3.0106756036931817,
-        "cummultive_zonal_cost": 275503
+        "num_units": 3.024873882436497,
+        "cummultive_zonal_cost": 275517
       },
       {
         "systype": "BB",
@@ -1345,7 +1345,7 @@
         "piping_cost": 0,
         "wiring_cost": 261,
         "num_units": 6,
-        "cummultive_zonal_cost": 278807
+        "cummultive_zonal_cost": 278821
       }
     ]
   },
@@ -1409,11 +1409,11 @@
       {
         "sys_type": 1,
         "name": "sys_4|mixed|shr>erv|sc>dx|sh>c-e|ssf>cv|zh>b-e|zc>none|srf>none|",
-        "airloop_flow_m3_per_s": 0.568,
+        "airloop_flow_m3_per_s": 0.569,
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 1000,
         "base_ahu_cost": 46199.46,
-        "revised_base_ahu_cost": 26236.13,
+        "revised_base_ahu_cost": 26297.22,
         "hrv": {
           "hrv_type": "HeatExchanger_AirToAir_SensibleAndLatent",
           "hrv_name": "sys_4|mixed|shr>none|sc>dx|sh>c-e|ssf>cv|zh>b-e|zc>none|srf>none| ERV",
@@ -1427,14 +1427,14 @@
             "eq_category": "Coil_Cooling_DX_SingleSpeed",
             "heating_fuel": "none",
             "cooling_type": "DX",
-            "total_modeled_capacity_kw": 9.401,
+            "total_modeled_capacity_kw": 9.422,
             "cost": 28255.29
           },
           {
             "eq_category": "Coil_Heating_Electric",
             "heating_fuel": "elec",
             "cooling_type": "none",
-            "total_modeled_capacity_kw": 21.091,
+            "total_modeled_capacity_kw": 21.124,
             "cost": 10639.97
           }
         ],
@@ -1477,7 +1477,7 @@
         {
           "Floor": "Building Story 2",
           "Predominant_space_type": "Dwelling units general",
-          "SupplyDuctSize_in": 10.45,
+          "SupplyDuctSize_in": 10.46,
           "SupplyDuctLength_m": 47.3,
           "ReturnDuctSize_in": 0,
           "ReturnDuctLength_m": 0,
@@ -1601,7 +1601,7 @@
               "ThermalZone": "WILD_ST=Corridor/Transition area other-sch-G_FL=Building Story 1_SCH=G",
               "ducting_direction": "Supply",
               "tz_mult": 1.0,
-              "airflow_m3ps": 0.145,
+              "airflow_m3ps": 0.146,
               "num_diff": 3,
               "ducting_lbs": 125,
               "duct_insulation_ft2": 96,
@@ -2106,10 +2106,10 @@
     "envelope": 1671574,
     "thermal_bridging": 0,
     "lighting": 327908,
-    "heating_and_cooling": 278807,
+    "heating_and_cooling": 278821,
     "shw": 203257,
-    "ventilation": 318926,
+    "ventilation": 318987,
     "renewables": 0,
-    "grand_total": 2800471
+    "grand_total": 2800547
   }
 }

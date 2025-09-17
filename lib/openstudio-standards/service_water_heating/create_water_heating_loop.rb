@@ -47,12 +47,15 @@ module OpenstudioStandards
 
       # create service water heating loop
       service_water_loop = OpenStudio::Model::PlantLoop.new(model)
-      service_water_loop.setMinimumLoopTemperature(10.0)
       if service_water_temperature > 60.0
         service_water_loop.setMaximumLoopTemperature(service_water_temperature)
       else
         service_water_loop.setMaximumLoopTemperature(60.0)
       end
+
+      # set minimum temperature of 125F for legionella growth risk
+      swh_loop_min_c = OpenStudio.convert(125.0, 'F', 'C').get
+      service_water_loop.setMinimumLoopTemperature(swh_loop_min_c)
 
       if system_name.nil?
         system_name = 'Service Water Loop'
@@ -61,7 +64,7 @@ module OpenstudioStandards
 
       # service water heating loop controls
       swh_temp_f = OpenStudio.convert(service_water_temperature, 'C', 'F').get
-      swh_delta_t_r = 9.0 # 9F delta-T
+      swh_delta_t_r = 9.0 # default to 9 R temperature difference
       swh_delta_t_k = OpenStudio.convert(swh_delta_t_r, 'R', 'K').get
       swh_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
                                                                                      service_water_temperature,
@@ -204,6 +207,16 @@ module OpenstudioStandards
       booster_service_water_loop = OpenStudio::Model::PlantLoop.new(model)
       booster_service_water_loop.setName('Booster Service Water Loop')
 
+      if service_water_temperature > 82.2
+        service_water_loop.setMaximumLoopTemperature(service_water_temperature)
+      else
+        service_water_loop.setMaximumLoopTemperature(82.2)
+      end
+
+      # set minimum temperature of 125F for legionella growth risk
+      swh_loop_min_c = OpenStudio.convert(125.0, 'F', 'C').get
+      service_water_loop.setMinimumLoopTemperature(swh_loop_min_c)
+
       # create and add booster water heater to loop
       booster_water_heater = OpenstudioStandards::ServiceWaterHeating.create_water_heater(model,
                                                                                           water_heater_capacity: water_heater_capacity,
@@ -220,7 +233,7 @@ module OpenstudioStandards
 
       # Service water heating loop controls
       swh_temp_f = OpenStudio.convert(service_water_temperature, 'C', 'F').get
-      swh_delta_t_r = 9.0 # 9F delta-T
+      swh_delta_t_r = 9.0 # default to 9 R temperature difference
       swh_delta_t_k = OpenStudio.convert(swh_delta_t_r, 'R', 'K').get
       swh_temp_sch = OpenstudioStandards::Schedules.create_constant_schedule_ruleset(model,
                                                                                      service_water_temperature,

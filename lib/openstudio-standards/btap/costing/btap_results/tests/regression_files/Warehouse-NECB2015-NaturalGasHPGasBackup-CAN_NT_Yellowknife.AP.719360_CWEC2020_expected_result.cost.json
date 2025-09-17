@@ -233,7 +233,7 @@
         "zone_number": 1,
         "zone_name": "ALL_ST=Office enclosed <= 25 m2_FL=Building Story 1_SCH=A",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 12.4,
+        "heat_capacity(kW)": 12.5,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 11965,
         "cool_cost": 0,
@@ -301,25 +301,25 @@
       {
         "sys_type": 1,
         "name": "sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-hw|zc>none|srf>none|",
-        "airloop_flow_m3_per_s": 4.632,
+        "airloop_flow_m3_per_s": 4.633,
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 6000,
         "base_ahu_cost": 85320.11,
-        "revised_base_ahu_cost": 65870.24,
+        "revised_base_ahu_cost": 65884.41,
         "hrv": {},
         "equipment_info": [
           {
             "eq_category": "Coil_Heating_DX_SingleSpeed",
             "heating_fuel": "HP",
             "cooling_type": "HP",
-            "total_modeled_capacity_kw": 76.68,
+            "total_modeled_capacity_kw": 76.696,
             "cost": 180896.9
           },
           {
             "eq_category": "Coil_Heating_Gas",
             "heating_fuel": "Gas",
             "cooling_type": "none",
-            "total_modeled_capacity_kw": 141.565,
+            "total_modeled_capacity_kw": 141.589,
             "cost": 40817.66
           }
         ],
@@ -362,21 +362,21 @@
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 1000,
         "base_ahu_cost": 73053.44,
-        "revised_base_ahu_cost": 45114.78,
+        "revised_base_ahu_cost": 45168.01,
         "hrv": {},
         "equipment_info": [
           {
             "eq_category": "Coil_Heating_DX_SingleSpeed",
             "heating_fuel": "HP",
             "cooling_type": "HP",
-            "total_modeled_capacity_kw": 10.223,
+            "total_modeled_capacity_kw": 10.235,
             "cost": 14100.54
           },
           {
             "eq_category": "Coil_Heating_Gas",
             "heating_fuel": "Gas",
             "cooling_type": "none",
-            "total_modeled_capacity_kw": 27.736,
+            "total_modeled_capacity_kw": 27.755,
             "cost": 1963.89
           }
         ],
@@ -409,7 +409,7 @@
           "Predominant_space_type": "Warehouse storage area medium to bulky palletized items",
           "SupplyDuctSize_in": 60.27,
           "SupplyDuctLength_m": 102.5,
-          "ReturnDuctSize_in": 13.09,
+          "ReturnDuctSize_in": 13.1,
           "ReturnDuctLength_m": 102.5,
           "TotalDuctCost": 87331.45,
           "Multiplier": 1.0
@@ -449,7 +449,7 @@
               "ThermalZone": "ALL_ST=Warehouse storage area small hand-carried items(4)_FL=Building Story 1_SCH=A",
               "ducting_direction": "Supply",
               "tz_mult": 1.0,
-              "airflow_m3ps": 4.632,
+              "airflow_m3ps": 4.633,
               "num_diff": 39,
               "ducting_lbs": 1560,
               "duct_insulation_ft2": 975,
@@ -492,8 +492,8 @@
     "lighting": 866186,
     "heating_and_cooling": 483812,
     "shw": 32696,
-    "ventilation": 1060141,
+    "ventilation": 1060209,
     "renewables": 0,
-    "grand_total": 8261962
+    "grand_total": 8262029
   }
 }

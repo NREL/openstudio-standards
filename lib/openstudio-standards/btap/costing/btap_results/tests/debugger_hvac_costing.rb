@@ -1,13 +1,6 @@
-require '/usr/local/openstudio-2.8.1/Ruby/openstudio'
-require 'openstudio-standards'
-require 'openstudio/ruleset/ShowRunnerOutput'
+require_relative '../../../../../openstudio-standards.rb'
 require 'minitest/autorun'
 require 'optparse'
-begin
-  require 'openstudio_measure_tester/test_helper'
-rescue LoadError
-  puts 'OpenStudio Measure Tester Gem not installed -- will not be able to aggregate and dashboard the results of tests'
-end
 require_relative '../../NZEHVAC/measure.rb'
 require 'fileutils'
 require 'minitest/unit'
@@ -155,7 +148,7 @@ class BtapResults_Test < Minitest::Test
     # set up runner, this will happen automatically when measure is run in PAT or OpenStudio. Ensure files exist.
     runner = OpenStudio::Measure::OSRunner.new(OpenStudio::WorkflowJSON.new)
     test_dir = "#{File.dirname(__FILE__)}/output"
-    if !Dir.exists?(test_dir)
+    if !Dir.exist?(test_dir)
       Dir.mkdir(test_dir)
     end
 
@@ -164,7 +157,7 @@ class BtapResults_Test < Minitest::Test
     if @test_file.nil?
       model_name = "#{building_type}-#{template}-#{File.basename(epw_file, '.epw')}"
       run_dir = "#{test_dir}/#{model_name}"
-      if !Dir.exists?(run_dir)
+      if !Dir.exist?(run_dir)
         Dir.mkdir(run_dir)
       end
       #create standard model
@@ -184,7 +177,7 @@ class BtapResults_Test < Minitest::Test
     else
       model_name = @test_file
       run_dir = "#{test_dir}/#{model_name[0..-5]}"
-      if !Dir.exists?(run_dir)
+      if !Dir.exist?(run_dir)
         Dir.mkdir(run_dir)
       end
       top_dir_element = /btap_costing/ =~ File.expand_path(File.dirname(__FILE__))
@@ -317,7 +310,7 @@ class BtapResults_Test < Minitest::Test
     regression_files_folder = "#{File.dirname(__FILE__)}/regression_files"
     expected_result_filename = "#{regression_files_folder}/#{model_name}_expected_result.cost.json"
     test_result_filename = "#{regression_files_folder}/#{model_name}_test_result.cost.json"
-    FileUtils.rm(test_result_filename) if File.exists?(test_result_filename)
+    FileUtils.rm(test_result_filename) if File.exist?(test_result_filename)
     FileUtils.cp(cost_result_json_path, test_result_filename)
     puts "Saved cost results here #{test_result_filename}"
 
@@ -348,5 +341,3 @@ class BtapResults_Test < Minitest::Test
     end
   end
 end
-
-

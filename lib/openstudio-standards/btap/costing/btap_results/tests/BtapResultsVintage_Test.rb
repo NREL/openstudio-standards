@@ -1,13 +1,6 @@
-#require '/usr/local/openstudio-2.8.1/Ruby/openstudio'
-require 'openstudio-standards'
-require 'openstudio/ruleset/ShowRunnerOutput'
+require_relative '../../../../../openstudio-standards.rb'
 require 'minitest/autorun'
 require 'optparse'
-begin
-  require 'openstudio_measure_tester/test_helper'
-rescue LoadError
-  puts 'OpenStudio Measure Tester Gem not installed -- will not be able to aggregate and dashboard the results of tests'
-end
 require 'fileutils'
 require 'minitest/unit'
 require 'optparse'
@@ -152,7 +145,7 @@ class BTAPResults_Test < Minitest::Test
                                                      baseline_system_zones_map_option:)
 
     test_dir = "#{File.dirname(__FILE__)}/output"
-    if !Dir.exists?(test_dir)
+    if !Dir.exist?(test_dir)
       Dir.mkdir(test_dir)
     end
 
@@ -163,7 +156,7 @@ class BTAPResults_Test < Minitest::Test
       model_name = "#{building_type}-#{template}-DefaultFuel-#{File.basename(epw_file, '.epw')}"  #NOTE: "primary_heating_fuel" has been set to "DefaultFuel" instead of 'FuelOilNo2' and its associated "model_name" has been changed in a way to use an expected result file that already exits on github.
       puts model_name
       run_dir = "#{test_dir}/#{model_name}"
-      if !Dir.exists?(run_dir)
+      if !Dir.exist?(run_dir)
         Dir.mkdir(run_dir)
       end
       #create standard model
@@ -259,7 +252,7 @@ class BTAPResults_Test < Minitest::Test
     else
       model_name = @test_file
       run_dir = "#{test_dir}/#{model_name[0..-5]}"
-      if !Dir.exists?(run_dir)
+      if !Dir.exist?(run_dir)
         Dir.mkdir(run_dir)
       end
       top_dir_element = /btap_costing/ =~ File.expand_path(File.dirname( __FILE__))
@@ -296,8 +289,8 @@ class BTAPResults_Test < Minitest::Test
     regression_files_folder = "#{File.dirname(__FILE__)}/regression_files"
     expected_result_filename = "#{regression_files_folder}/#{model_name}_expected_result.cost.json"
     test_result_filename = "#{regression_files_folder}/#{model_name}_test_result.cost.json"
-    FileUtils.rm(test_result_filename) if File.exists?(test_result_filename)
-    if File.exists?(expected_result_filename)
+    FileUtils.rm(test_result_filename) if File.exist?(test_result_filename)
+    if File.exist?(expected_result_filename)
       unless FileUtils.compare_file(cost_result_json_path, expected_result_filename)
         FileUtils.cp(cost_result_json_path, test_result_filename)
         assert(false, "Regression test for #{model_name} produces differences. Examine expected and test result differences in the #{File.dirname(__FILE__)}/regression_files folder ")
@@ -337,4 +330,3 @@ class BTAPResults_Test < Minitest::Test
     end
   end
 end
-
