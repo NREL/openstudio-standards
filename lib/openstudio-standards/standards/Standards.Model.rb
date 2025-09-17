@@ -555,7 +555,7 @@ class Standard
           # the PRM-RM; Note that the PRM-RM only suggest to increase
           # air zone air flow, but the zone sizing factor in EnergyPlus
           # increase both air flow and load.
-          umlh = OpenstudioStandards::SqlFile.model_get_annual_occupied_unmet_hours(proposed_model)
+          umlh = OpenstudioStandards::SqlFile.model_get_annual_occupied_unmet_hours(model)
           if umlh > 300
             model.getThermalZones.each do |thermal_zone|
               # Cooling adjustments
