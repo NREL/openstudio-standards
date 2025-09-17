@@ -224,10 +224,10 @@ module OpenstudioStandards
 
         if coil_heating.to_CoilHeatingDXSingleSpeed.is_initialized
           coil_heating = coil_heating.to_CoilHeatingDXSingleSpeed.get
-          capacity_w = OpenstudioStandards::HVAC.coil_heating_dx_single_speed_get_capacity(coil_heating, multiplier: multiplier)
+          capacity_w = OpenstudioStandards::HVAC.coil_heating_dx_single_speed_get_capacity(coil_heating)
         elsif coil_heating.to_CoilHeatingWaterToAirHeatPumpEquationFit.is_initialized
           coil_heating = coil_heating.to_CoilHeatingWaterToAirHeatPumpEquationFit.get
-          capacity_w = OpenstudioStandards::HVAC.coil_heating_water_to_air_heat_pump_equation_fit_get_capacity(coil_heating, multiplier: multiplier)
+          capacity_w = OpenstudioStandards::HVAC.coil_heating_water_to_air_heat_pump_equation_fit_get_capacity(coil_heating)
         else
           # If the coil is not a supported coil type, we cannot determine the capacity
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.HVAC.coil', "For #{coil_heating.name}, the coil is not a supported coil type and cannot determine capacity.")
