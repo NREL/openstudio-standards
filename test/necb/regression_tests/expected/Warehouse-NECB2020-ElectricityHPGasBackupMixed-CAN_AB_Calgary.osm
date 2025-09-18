@@ -1,5 +1,71 @@
 OS:AdditionalProperties,
   {00000000-0000-0000-0001-000000000001},  !- Handle
+  {00000000-0000-0000-0029-000000000001},  !- Object Name
+  Ref OA per area,                         !- Feature Name 1
+  Double,                                  !- Feature Data Type 1
+  0.059999999999999998,                    !- Feature Value 1
+  Ref OA per person,                       !- Feature Name 2
+  Double,                                  !- Feature Data Type 2
+  5,                                       !- Feature Value 2
+  Ref OA ach,                              !- Feature Name 3
+  Double,                                  !- Feature Data Type 3
+  0,                                       !- Feature Value 3
+  Ref occupancy per 1000ft2,               !- Feature Name 4
+  Double,                                  !- Feature Data Type 4
+  5,                                       !- Feature Value 4
+  Ref standard,                            !- Feature Name 5
+  String,                                  !- Feature Data Type 5
+  ASHRAE 62.1-2016 Occupancy,              !- Feature Value 5
+  Ref space type,                          !- Feature Name 6
+  String,                                  !- Feature Data Type 6
+  Office space;                            !- Feature Value 6
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000002},  !- Handle
+  {00000000-0000-0000-0029-000000000002},  !- Object Name
+  Ref OA per area,                         !- Feature Name 1
+  Double,                                  !- Feature Data Type 1
+  0.059999999999999998,                    !- Feature Value 1
+  Ref OA per person,                       !- Feature Name 2
+  Double,                                  !- Feature Data Type 2
+  10,                                      !- Feature Value 2
+  Ref OA ach,                              !- Feature Name 3
+  Double,                                  !- Feature Data Type 3
+  0,                                       !- Feature Value 3
+  Ref occupancy per 1000ft2,               !- Feature Name 4
+  Double,                                  !- Feature Data Type 4
+  0,                                       !- Feature Value 4
+  Ref standard,                            !- Feature Name 5
+  String,                                  !- Feature Data Type 5
+  ASHRAE 62.1-2016 Occupancy,              !- Feature Value 5
+  Ref space type,                          !- Feature Name 6
+  String,                                  !- Feature Data Type 6
+  Warehouses;                              !- Feature Value 6
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000003},  !- Handle
+  {00000000-0000-0000-0029-000000000003},  !- Object Name
+  Ref OA per area,                         !- Feature Name 1
+  Double,                                  !- Feature Data Type 1
+  0.059999999999999998,                    !- Feature Value 1
+  Ref OA per person,                       !- Feature Name 2
+  Double,                                  !- Feature Data Type 2
+  10,                                      !- Feature Value 2
+  Ref OA ach,                              !- Feature Name 3
+  Double,                                  !- Feature Data Type 3
+  0,                                       !- Feature Value 3
+  Ref occupancy per 1000ft2,               !- Feature Name 4
+  Double,                                  !- Feature Data Type 4
+  0,                                       !- Feature Value 4
+  Ref standard,                            !- Feature Name 5
+  String,                                  !- Feature Data Type 5
+  ASHRAE 62.1-2016 Occupancy,              !- Feature Value 5
+  Ref space type,                          !- Feature Name 6
+  String,                                  !- Feature Data Type 6
+  Warehouses;                              !- Feature Value 6
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000004},  !- Handle
   {00000000-0000-0000-0059-000000000019},  !- Object Name
   max_occ_in_spaces,                       !- Feature Name 1
   Double,                                  !- Feature Data Type 1
@@ -15,7 +81,7 @@ OS:AdditionalProperties,
   2024-01-01 01:00:00 UTC;                 !- Feature Value 4
 
 OS:AdditionalProperties,
-  {00000000-0000-0000-0001-000000000002},  !- Handle
+  {00000000-0000-0000-0001-000000000005},  !- Handle
   {00000000-0000-0000-0059-000000000021},  !- Object Name
   max_occ_in_spaces,                       !- Feature Name 1
   Double,                                  !- Feature Data Type 1
@@ -31,7 +97,7 @@ OS:AdditionalProperties,
   2024-01-01 01:00:00 UTC;                 !- Feature Value 4
 
 OS:AdditionalProperties,
-  {00000000-0000-0000-0001-000000000003},  !- Handle
+  {00000000-0000-0000-0001-000000000006},  !- Handle
   {00000000-0000-0000-0059-000000000020},  !- Object Name
   max_occ_in_spaces,                       !- Feature Name 1
   Double,                                  !- Feature Data Type 1
@@ -406,7 +472,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
 
 OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0013-000000000001},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 1 212 Clg kBtu/hr 3.2COPH, !- Name
+  CoilHeatingDXSingleSpeed_ashp 1 212 Htg kBtu/hr 3.2COPH, !- Name
   {00000000-0000-0000-0056-000000000001},  !- Availability Schedule Name
   62162.2124271435,                        !- Rated Total Heating Capacity {W}
   3.49885353090701,                        !- Rated COP {W/W}
@@ -433,7 +499,7 @@ OS:Coil:Heating:DX:SingleSpeed,
 
 OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0013-000000000002},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 2 398 Clg kBtu/hr 3.2COPH, !- Name
+  CoilHeatingDXSingleSpeed_ashp 2 398 Htg kBtu/hr 3.2COPH, !- Name
   {00000000-0000-0000-0056-000000000001},  !- Availability Schedule Name
   116524.995609652,                        !- Rated Total Heating Capacity {W}
   3.58670325998503,                        !- Rated COP {W/W}
@@ -460,10 +526,10 @@ OS:Coil:Heating:DX:SingleSpeed,
 
 OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0013-000000000003},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 33 Clg kBtu/hr 3.3COPH, !- Name
+  CoilHeatingDXSingleSpeed_ashp 33 Htg kBtu/hr 7.4HSPF, !- Name
   {00000000-0000-0000-0056-000000000001},  !- Availability Schedule Name
   9602.22870759226,                        !- Rated Total Heating Capacity {W}
-  3.52060201786561,                        !- Rated COP {W/W}
+  3.658264,                                !- Rated COP {W/W}
   Autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -2508,41 +2574,41 @@ OS:EnergyManagementSystem:Actuator,
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0033-000000000001},  !- Handle
   ems_sys_4_mixed_shr_none_sc_ashp_sh_ashp_c_g_ssf_cv_zh_b_e_zc_none_srf_none__1_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {1456abce-e925-4b27-b9f3-c03dc520792f}<23.9 && {1456abce-e925-4b27-b9f3-c03dc520792f}>1.7, !- Program Line 1
-  SET {b60ba8ac-17f9-41d5-8254-40fb390e3a79} = 29.4, !- Program Line 2
-  SET {36dda466-8ee3-4e4c-af75-9e3c5af9c0fa} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {1456abce-e925-4b27-b9f3-c03dc520792f}<23.9 && {1456abce-e925-4b27-b9f3-c03dc520792f}>1.7, !- Program Line 4
-  SET {b60ba8ac-17f9-41d5-8254-40fb390e3a79} = 29.4, !- Program Line 5
-  SET {36dda466-8ee3-4e4c-af75-9e3c5af9c0fa} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {1456abce-e925-4b27-b9f3-c03dc520792f}<23.9 && {1456abce-e925-4b27-b9f3-c03dc520792f}>1.7, !- Program Line 7
-  SET {b60ba8ac-17f9-41d5-8254-40fb390e3a79} = 29.4, !- Program Line 8
-  SET {36dda466-8ee3-4e4c-af75-9e3c5af9c0fa} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {1456abce-e925-4b27-b9f3-c03dc520792f}<23.9 && {1456abce-e925-4b27-b9f3-c03dc520792f}>1.7, !- Program Line 10
-  SET {b60ba8ac-17f9-41d5-8254-40fb390e3a79} = 29.4, !- Program Line 11
-  SET {36dda466-8ee3-4e4c-af75-9e3c5af9c0fa} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {4aa3688b-d050-4e8a-8f5e-ec750dc11652}<23.9 && {4aa3688b-d050-4e8a-8f5e-ec750dc11652}>1.7, !- Program Line 1
+  SET {7d615813-aaff-425d-9232-2b58129e1316} = 29.4, !- Program Line 2
+  SET {196c7cba-6798-4c6f-ad0b-d2f968d8f1b3} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {4aa3688b-d050-4e8a-8f5e-ec750dc11652}<23.9 && {4aa3688b-d050-4e8a-8f5e-ec750dc11652}>1.7, !- Program Line 4
+  SET {7d615813-aaff-425d-9232-2b58129e1316} = 29.4, !- Program Line 5
+  SET {196c7cba-6798-4c6f-ad0b-d2f968d8f1b3} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {4aa3688b-d050-4e8a-8f5e-ec750dc11652}<23.9 && {4aa3688b-d050-4e8a-8f5e-ec750dc11652}>1.7, !- Program Line 7
+  SET {7d615813-aaff-425d-9232-2b58129e1316} = 29.4, !- Program Line 8
+  SET {196c7cba-6798-4c6f-ad0b-d2f968d8f1b3} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {4aa3688b-d050-4e8a-8f5e-ec750dc11652}<23.9 && {4aa3688b-d050-4e8a-8f5e-ec750dc11652}>1.7, !- Program Line 10
+  SET {7d615813-aaff-425d-9232-2b58129e1316} = 29.4, !- Program Line 11
+  SET {196c7cba-6798-4c6f-ad0b-d2f968d8f1b3} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {b60ba8ac-17f9-41d5-8254-40fb390e3a79} = NULL, !- Program Line 14
-  SET {36dda466-8ee3-4e4c-af75-9e3c5af9c0fa} = NULL, !- Program Line 15
+  SET {7d615813-aaff-425d-9232-2b58129e1316} = NULL, !- Program Line 14
+  SET {196c7cba-6798-4c6f-ad0b-d2f968d8f1b3} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0033-000000000002},  !- Handle
   ems_sys_4_mixed_shr_none_sc_ashp_sh_ashp_c_g_ssf_cv_zh_b_e_zc_none_srf_none__OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {58ec080e-5429-4b4f-a19d-cd809322c185}<23.9 && {58ec080e-5429-4b4f-a19d-cd809322c185}>1.7, !- Program Line 1
-  SET {0fcbdf08-89bf-4385-a6c7-1d281450651c} = 29.4, !- Program Line 2
-  SET {6f9fe55d-c4eb-45c1-8841-9f45ffcb3a84} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {58ec080e-5429-4b4f-a19d-cd809322c185}<23.9 && {58ec080e-5429-4b4f-a19d-cd809322c185}>1.7, !- Program Line 4
-  SET {0fcbdf08-89bf-4385-a6c7-1d281450651c} = 29.4, !- Program Line 5
-  SET {6f9fe55d-c4eb-45c1-8841-9f45ffcb3a84} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {58ec080e-5429-4b4f-a19d-cd809322c185}<23.9 && {58ec080e-5429-4b4f-a19d-cd809322c185}>1.7, !- Program Line 7
-  SET {0fcbdf08-89bf-4385-a6c7-1d281450651c} = 29.4, !- Program Line 8
-  SET {6f9fe55d-c4eb-45c1-8841-9f45ffcb3a84} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {58ec080e-5429-4b4f-a19d-cd809322c185}<23.9 && {58ec080e-5429-4b4f-a19d-cd809322c185}>1.7, !- Program Line 10
-  SET {0fcbdf08-89bf-4385-a6c7-1d281450651c} = 29.4, !- Program Line 11
-  SET {6f9fe55d-c4eb-45c1-8841-9f45ffcb3a84} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {5843dfa8-fb54-4a82-b463-e12d54355283}<23.9 && {5843dfa8-fb54-4a82-b463-e12d54355283}>1.7, !- Program Line 1
+  SET {52a1af46-5220-42fd-b213-c5bd3915078b} = 29.4, !- Program Line 2
+  SET {d8db4a79-be5b-41c9-a96f-f5a1d586b3ac} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {5843dfa8-fb54-4a82-b463-e12d54355283}<23.9 && {5843dfa8-fb54-4a82-b463-e12d54355283}>1.7, !- Program Line 4
+  SET {52a1af46-5220-42fd-b213-c5bd3915078b} = 29.4, !- Program Line 5
+  SET {d8db4a79-be5b-41c9-a96f-f5a1d586b3ac} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {5843dfa8-fb54-4a82-b463-e12d54355283}<23.9 && {5843dfa8-fb54-4a82-b463-e12d54355283}>1.7, !- Program Line 7
+  SET {52a1af46-5220-42fd-b213-c5bd3915078b} = 29.4, !- Program Line 8
+  SET {d8db4a79-be5b-41c9-a96f-f5a1d586b3ac} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {5843dfa8-fb54-4a82-b463-e12d54355283}<23.9 && {5843dfa8-fb54-4a82-b463-e12d54355283}>1.7, !- Program Line 10
+  SET {52a1af46-5220-42fd-b213-c5bd3915078b} = 29.4, !- Program Line 11
+  SET {d8db4a79-be5b-41c9-a96f-f5a1d586b3ac} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {0fcbdf08-89bf-4385-a6c7-1d281450651c} = NULL, !- Program Line 14
-  SET {6f9fe55d-c4eb-45c1-8841-9f45ffcb3a84} = NULL, !- Program Line 15
+  SET {52a1af46-5220-42fd-b213-c5bd3915078b} = NULL, !- Program Line 14
+  SET {d8db4a79-be5b-41c9-a96f-f5a1d586b3ac} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:ProgramCallingManager,
@@ -3412,19 +3478,19 @@ OS:Node,
 
 OS:Node,
   {00000000-0000-0000-0047-000000000021},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 1 212 Clg kBtu/hr 3.2COPH Outlet Air Node, !- Name
+  CoilHeatingDXSingleSpeed_ashp 1 212 Htg kBtu/hr 3.2COPH Outlet Air Node, !- Name
   {00000000-0000-0000-0015-000000000038},  !- Inlet Port
   {00000000-0000-0000-0015-000000000039};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0047-000000000022},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 2 398 Clg kBtu/hr 3.2COPH Outlet Air Node, !- Name
+  CoilHeatingDXSingleSpeed_ashp 2 398 Htg kBtu/hr 3.2COPH Outlet Air Node, !- Name
   {00000000-0000-0000-0015-000000000060},  !- Inlet Port
   {00000000-0000-0000-0015-000000000061};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0047-000000000023},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 33 Clg kBtu/hr 3.3COPH Outlet Air Node, !- Name
+  CoilHeatingDXSingleSpeed_ashp 33 Htg kBtu/hr 7.4HSPF Outlet Air Node, !- Name
   {00000000-0000-0000-0015-000000000016},  !- Inlet Port
   {00000000-0000-0000-0015-000000000017};  !- Outlet Port
 
@@ -3798,7 +3864,7 @@ OS:PlantLoop,
   ,                                        !- Primary Plant Equipment Operation Scheme
   {00000000-0000-0000-0047-000000000028},  !- Loop Temperature Setpoint Node Name
   60,                                      !- Maximum Loop Temperature {C}
-  51.66667,                                !- Minimum Loop Temperature {C}
+  51.6666666666667,                        !- Minimum Loop Temperature {C}
   ,                                        !- Maximum Loop Flow Rate {m3/s}
   ,                                        !- Minimum Loop Flow Rate {m3/s}
   Autocalculate,                           !- Plant Loop Volume {m3}
@@ -7543,7 +7609,7 @@ OS:WaterHeater:Sizing,
   {00000000-0000-0000-0092-000000000001},  !- WaterHeater Name
   PeakDraw,                                !- Design Mode
   0.538503,                                !- Time Storage Can Meet Peak Draw {hr}
-  0,                                       !- Time for Tank Recovery {hr}
+  1,                                       !- Time for Tank Recovery {hr}
   1;                                       !- Nominal Tank Volume for Autosizing Plant Connections {m3}
 
 OS:WaterUse:Connections,

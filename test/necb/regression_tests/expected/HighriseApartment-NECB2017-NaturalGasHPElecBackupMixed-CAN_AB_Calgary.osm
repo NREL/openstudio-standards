@@ -1734,7 +1734,7 @@ OS:Coil:Heating:DX:SingleSpeed,
   CoilHeatingDXSingleSpeed_ashp 1 59 Htg kBtu/hr 14SEER, !- Name
   {00000000-0000-0000-0064-000000000001},  !- Availability Schedule Name
   17430.584378852,                         !- Rated Total Heating Capacity {W}
-  3.31948741567128,                        !- Rated COP {W/W}
+  3.8248,                                  !- Rated COP {W/W}
   Autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -14723,21 +14723,21 @@ OS:EnergyManagementSystem:Actuator,
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0036-000000000001},  !- Handle
   ems_sys_1_mixed_shr_none_sc_ashp_sh_ashp_c_e_ssf_cv_zh_b_hw_zc_none_srf_none__OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {d5a07be2-b4bf-406b-a9d2-7dfb6d99d055}<23.9 && {d5a07be2-b4bf-406b-a9d2-7dfb6d99d055}>1.7, !- Program Line 1
-  SET {d16715c3-b387-467c-bd1c-74120a67271d} = 29.4, !- Program Line 2
-  SET {ad49f93a-3354-4beb-a840-11b44593c1f7} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {d5a07be2-b4bf-406b-a9d2-7dfb6d99d055}<23.9 && {d5a07be2-b4bf-406b-a9d2-7dfb6d99d055}>1.7, !- Program Line 4
-  SET {d16715c3-b387-467c-bd1c-74120a67271d} = 29.4, !- Program Line 5
-  SET {ad49f93a-3354-4beb-a840-11b44593c1f7} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {d5a07be2-b4bf-406b-a9d2-7dfb6d99d055}<23.9 && {d5a07be2-b4bf-406b-a9d2-7dfb6d99d055}>1.7, !- Program Line 7
-  SET {d16715c3-b387-467c-bd1c-74120a67271d} = 29.4, !- Program Line 8
-  SET {ad49f93a-3354-4beb-a840-11b44593c1f7} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {d5a07be2-b4bf-406b-a9d2-7dfb6d99d055}<23.9 && {d5a07be2-b4bf-406b-a9d2-7dfb6d99d055}>1.7, !- Program Line 10
-  SET {d16715c3-b387-467c-bd1c-74120a67271d} = 29.4, !- Program Line 11
-  SET {ad49f93a-3354-4beb-a840-11b44593c1f7} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {a912b871-ae0d-4fbc-b28f-7251ed61a52e}<23.9 && {a912b871-ae0d-4fbc-b28f-7251ed61a52e}>1.7, !- Program Line 1
+  SET {22d1a297-6434-4726-87fa-f9f55c58449c} = 29.4, !- Program Line 2
+  SET {e3b66f70-722a-429a-a62f-550fe1ec9dc8} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {a912b871-ae0d-4fbc-b28f-7251ed61a52e}<23.9 && {a912b871-ae0d-4fbc-b28f-7251ed61a52e}>1.7, !- Program Line 4
+  SET {22d1a297-6434-4726-87fa-f9f55c58449c} = 29.4, !- Program Line 5
+  SET {e3b66f70-722a-429a-a62f-550fe1ec9dc8} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {a912b871-ae0d-4fbc-b28f-7251ed61a52e}<23.9 && {a912b871-ae0d-4fbc-b28f-7251ed61a52e}>1.7, !- Program Line 7
+  SET {22d1a297-6434-4726-87fa-f9f55c58449c} = 29.4, !- Program Line 8
+  SET {e3b66f70-722a-429a-a62f-550fe1ec9dc8} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {a912b871-ae0d-4fbc-b28f-7251ed61a52e}<23.9 && {a912b871-ae0d-4fbc-b28f-7251ed61a52e}>1.7, !- Program Line 10
+  SET {22d1a297-6434-4726-87fa-f9f55c58449c} = 29.4, !- Program Line 11
+  SET {e3b66f70-722a-429a-a62f-550fe1ec9dc8} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {d16715c3-b387-467c-bd1c-74120a67271d} = NULL, !- Program Line 14
-  SET {ad49f93a-3354-4beb-a840-11b44593c1f7} = NULL, !- Program Line 15
+  SET {22d1a297-6434-4726-87fa-f9f55c58449c} = NULL, !- Program Line 14
+  SET {e3b66f70-722a-429a-a62f-550fe1ec9dc8} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:ProgramCallingManager,
@@ -20062,7 +20062,7 @@ OS:PlantLoop,
   ,                                        !- Primary Plant Equipment Operation Scheme
   {00000000-0000-0000-0052-000000000678},  !- Loop Temperature Setpoint Node Name
   60,                                      !- Maximum Loop Temperature {C}
-  51.66667,                                !- Minimum Loop Temperature {C}
+  51.6666666666667,                        !- Minimum Loop Temperature {C}
   ,                                        !- Maximum Loop Flow Rate {m3/s}
   ,                                        !- Minimum Loop Flow Rate {m3/s}
   Autocalculate,                           !- Plant Loop Volume {m3}
@@ -48930,7 +48930,7 @@ OS:WaterHeater:Sizing,
   {00000000-0000-0000-0103-000000000001},  !- WaterHeater Name
   PeakDraw,                                !- Design Mode
   0.538503,                                !- Time Storage Can Meet Peak Draw {hr}
-  0,                                       !- Time for Tank Recovery {hr}
+  0.5,                                     !- Time for Tank Recovery {hr}
   1;                                       !- Nominal Tank Volume for Autosizing Plant Connections {m3}
 
 OS:WaterUse:Connections,

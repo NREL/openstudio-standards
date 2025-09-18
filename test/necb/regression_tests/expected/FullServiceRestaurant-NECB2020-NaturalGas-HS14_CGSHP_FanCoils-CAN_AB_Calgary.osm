@@ -2928,7 +2928,7 @@ OS:DistrictCooling,
   DistrictCooling GLHX,                    !- Name
   {00000000-0000-0000-0016-000000000186},  !- Chilled Water Inlet Node Name
   {00000000-0000-0000-0016-000000000187},  !- Chilled Water Outlet Node Name
-  18078.6829759377,                        !- Nominal Capacity {W}
+  18078.2896017494,                        !- Nominal Capacity {W}
   {00000000-0000-0000-0064-000000000002};  !- Capacity Fraction Schedule
 
 OS:DistrictHeating:Water,
@@ -2936,7 +2936,7 @@ OS:DistrictHeating:Water,
   DistrictHeating GLHX,                    !- Name
   {00000000-0000-0000-0016-000000000177},  !- Hot Water Inlet Node Name
   {00000000-0000-0000-0016-000000000178},  !- Hot Water Outlet Node Name
-  18675.2483167543,                        !- Nominal Capacity {W}
+  18675.2445870796,                        !- Nominal Capacity {W}
   {00000000-0000-0000-0064-000000000002};  !- Capacity Fraction Schedule
 
 OS:ElectricEquipment,
@@ -4530,7 +4530,7 @@ OS:PlantLoop,
   ,                                        !- Primary Plant Equipment Operation Scheme
   {00000000-0000-0000-0051-000000000065},  !- Loop Temperature Setpoint Node Name
   60,                                      !- Maximum Loop Temperature {C}
-  51.66667,                                !- Minimum Loop Temperature {C}
+  51.6666666666667,                        !- Minimum Loop Temperature {C}
   ,                                        !- Maximum Loop Flow Rate {m3/s}
   ,                                        !- Minimum Loop Flow Rate {m3/s}
   Autocalculate,                           !- Plant Loop Volume {m3}
@@ -8467,7 +8467,7 @@ OS:WaterHeater:Sizing,
   {00000000-0000-0000-0101-000000000001},  !- WaterHeater Name
   PeakDraw,                                !- Design Mode
   0.538503,                                !- Time Storage Can Meet Peak Draw {hr}
-  0,                                       !- Time for Tank Recovery {hr}
+  0.5,                                     !- Time for Tank Recovery {hr}
   1;                                       !- Nominal Tank Volume for Autosizing Plant Connections {m3}
 
 OS:WaterUse:Connections,

@@ -22320,7 +22320,7 @@ OS:PlantLoop,
   ,                                        !- Primary Plant Equipment Operation Scheme
   {00000000-0000-0000-0050-000000000425},  !- Loop Temperature Setpoint Node Name
   60,                                      !- Maximum Loop Temperature {C}
-  51.66667,                                !- Minimum Loop Temperature {C}
+  51.6666666666667,                        !- Minimum Loop Temperature {C}
   ,                                        !- Maximum Loop Flow Rate {m3/s}
   ,                                        !- Minimum Loop Flow Rate {m3/s}
   Autocalculate,                           !- Plant Loop Volume {m3}
@@ -27918,7 +27918,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0063-000000000174},  !- Handle
   Schedule Day 5,                          !- Name
-  {00000000-0000-0000-0066-000000000008},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0066-000000000009},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -27996,7 +27996,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0063-000000000175},  !- Handle
   Schedule Day 6,                          !- Name
-  {00000000-0000-0000-0066-000000000008},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0066-000000000009},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
   0,                                       !- Minute 1
@@ -28005,7 +28005,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0063-000000000176},  !- Handle
   Schedule Day 7,                          !- Name
-  {00000000-0000-0000-0066-000000000008},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0066-000000000009},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
   0,                                       !- Minute 1
@@ -28215,7 +28215,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0063-000000000184},  !- Handle
   satCW Temp 1,                            !- Name
-  {00000000-0000-0000-0066-000000000008},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0066-000000000009},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -28683,7 +28683,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0063-000000000190},  !- Handle
   sunCW Temp 1,                            !- Name
-  {00000000-0000-0000-0066-000000000008},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0066-000000000009},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -29388,7 +29388,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0063-000000000220},  !- Handle
   wkdCW Temp 1,                            !- Name
-  {00000000-0000-0000-0066-000000000008},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0066-000000000009},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -32258,7 +32258,7 @@ OS:Schedule:Ruleset,
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0065-000000000003},  !- Handle
   CW Temp,                                 !- Name
-  {00000000-0000-0000-0066-000000000008},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0066-000000000009},  !- Schedule Type Limits Name
   {00000000-0000-0000-0063-000000000174};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
@@ -32530,13 +32530,13 @@ OS:Schedule:Ruleset,
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0065-000000000048},  !- Handle
   Schedule Ruleset 1,                      !- Name
-  {00000000-0000-0000-0066-000000000008},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0066-000000000009},  !- Schedule Type Limits Name
   {00000000-0000-0000-0063-000000000175};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0065-000000000049},  !- Handle
   Schedule Ruleset 2,                      !- Name
-  {00000000-0000-0000-0066-000000000008},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0066-000000000009},  !- Schedule Type Limits Name
   {00000000-0000-0000-0063-000000000176};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
@@ -51675,7 +51675,7 @@ OS:WaterHeater:Sizing,
   {00000000-0000-0000-0098-000000000001},  !- WaterHeater Name
   PeakDraw,                                !- Design Mode
   0.538503,                                !- Time Storage Can Meet Peak Draw {hr}
-  0,                                       !- Time for Tank Recovery {hr}
+  1,                                       !- Time for Tank Recovery {hr}
   1;                                       !- Nominal Tank Volume for Autosizing Plant Connections {m3}
 
 OS:WaterUse:Connections,
