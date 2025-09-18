@@ -550,7 +550,7 @@ class NECB2011 < Standard
   def clean_and_scale_model(model:, rotation_degrees: nil, scale_x: nil, scale_y: nil, scale_z: nil)
     # clean model..
     BTAP::Resources::Envelope::remove_all_envelope_information(model)
-    model = remove_all_hvac(model)
+    model = OpenstudioStandards::HVAC.remove_all_hvac(model)
     model.getThermalZones.sort.each { |zone| zone.setUseIdealAirLoads(true) }
     model.getZoneHVACPackagedTerminalAirConditioners.each(&:remove)
     model.getCoilCoolingDXSingleSpeeds.each(&:remove)
@@ -709,9 +709,8 @@ class NECB2011 < Standard
     end
 
     # Rename air loop and plant loop nodes to accommodate coming OpenStudio version
-    rename_air_loop_nodes(model)
-    rename_plant_loop_nodes(model)
-
+    OpenstudioStandards::HVAC.rename_air_loop_nodes(model)
+    OpenstudioStandards::HVAC.rename_plant_loop_nodes(model)
   end
 
   def apply_loads(model:,

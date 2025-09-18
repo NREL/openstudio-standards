@@ -2108,10 +2108,10 @@ OS:Curve:Biquadratic,
   0,                                       !- Coefficient4 y
   0,                                       !- Coefficient5 y**2
   0,                                       !- Coefficient6 x*y
-  12.77778,                                !- Minimum Value of x
-  23.88889,                                !- Maximum Value of x
-  21.11111,                                !- Minimum Value of y
-  46.11111,                                !- Maximum Value of y
+  10,                                      !- Minimum Value of x
+  30,                                      !- Maximum Value of x
+  -20,                                     !- Minimum Value of y
+  20,                                      !- Maximum Value of y
   0,                                       !- Minimum Curve Output
   1;                                       !- Maximum Curve Output
 
@@ -4150,7 +4150,7 @@ OS:PlantLoop,
   ,                                        !- Primary Plant Equipment Operation Scheme
   {00000000-0000-0000-0049-000000000034},  !- Loop Temperature Setpoint Node Name
   60,                                      !- Maximum Loop Temperature {C}
-  51.66667,                                !- Minimum Loop Temperature {C}
+  51.6666666666667,                        !- Minimum Loop Temperature {C}
   ,                                        !- Maximum Loop Flow Rate {m3/s}
   ,                                        !- Minimum Loop Flow Rate {m3/s}
   Autocalculate,                           !- Plant Loop Volume {m3}
@@ -7646,7 +7646,7 @@ OS:WaterHeater:Sizing,
   {00000000-0000-0000-0097-000000000001},  !- WaterHeater Name
   PeakDraw,                                !- Design Mode
   0.538503,                                !- Time Storage Can Meet Peak Draw {hr}
-  0,                                       !- Time for Tank Recovery {hr}
+  0.5,                                     !- Time for Tank Recovery {hr}
   1;                                       !- Nominal Tank Volume for Autosizing Plant Connections {m3}
 
 OS:WaterUse:Connections,
