@@ -1,5 +1,49 @@
 OS:AdditionalProperties,
   {00000000-0000-0000-0001-000000000001},  !- Handle
+  {00000000-0000-0000-0031-000000000002},  !- Object Name
+  Ref OA per area,                         !- Feature Name 1
+  Double,                                  !- Feature Data Type 1
+  0.17999999999999999,                     !- Feature Value 1
+  Ref OA per person,                       !- Feature Name 2
+  Double,                                  !- Feature Data Type 2
+  7.5,                                     !- Feature Value 2
+  Ref OA ach,                              !- Feature Name 3
+  Double,                                  !- Feature Data Type 3
+  0,                                       !- Feature Value 3
+  Ref occupancy per 1000ft2,               !- Feature Name 4
+  Double,                                  !- Feature Data Type 4
+  70,                                      !- Feature Value 4
+  Ref standard,                            !- Feature Name 5
+  String,                                  !- Feature Data Type 5
+  ASHRAE 62.1-2016 Occupancy,              !- Feature Value 5
+  Ref space type,                          !- Feature Name 6
+  String,                                  !- Feature Data Type 6
+  Restaurant dinng rooms;                  !- Feature Value 6
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000002},  !- Handle
+  {00000000-0000-0000-0031-000000000003},  !- Object Name
+  Ref OA per area,                         !- Feature Name 1
+  Double,                                  !- Feature Data Type 1
+  0.12,                                    !- Feature Value 1
+  Ref OA per person,                       !- Feature Name 2
+  Double,                                  !- Feature Data Type 2
+  7.5,                                     !- Feature Value 2
+  Ref OA ach,                              !- Feature Name 3
+  Double,                                  !- Feature Data Type 3
+  0,                                       !- Feature Value 3
+  Ref occupancy per 1000ft2,               !- Feature Name 4
+  Double,                                  !- Feature Data Type 4
+  20,                                      !- Feature Value 4
+  Ref standard,                            !- Feature Name 5
+  String,                                  !- Feature Data Type 5
+  ASHRAE 62.1-2016 Occupancy,              !- Feature Value 5
+  Ref space type,                          !- Feature Name 6
+  String,                                  !- Feature Data Type 6
+  Kitchen (cooking);                       !- Feature Value 6
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000003},  !- Handle
   {00000000-0000-0000-0060-000000000023},  !- Object Name
   max_occ_in_spaces,                       !- Feature Name 1
   Double,                                  !- Feature Data Type 1
@@ -15,7 +59,7 @@ OS:AdditionalProperties,
   2024-01-01 01:00:00 UTC;                 !- Feature Value 4
 
 OS:AdditionalProperties,
-  {00000000-0000-0000-0001-000000000002},  !- Handle
+  {00000000-0000-0000-0001-000000000004},  !- Handle
   {00000000-0000-0000-0060-000000000022},  !- Object Name
   max_occ_in_spaces,                       !- Feature Name 1
   Double,                                  !- Feature Data Type 1
@@ -3470,7 +3514,7 @@ OS:PlantLoop,
   ,                                        !- Primary Plant Equipment Operation Scheme
   {00000000-0000-0000-0046-000000000026},  !- Loop Temperature Setpoint Node Name
   60,                                      !- Maximum Loop Temperature {C}
-  51.66667,                                !- Minimum Loop Temperature {C}
+  51.6666666666667,                        !- Minimum Loop Temperature {C}
   ,                                        !- Maximum Loop Flow Rate {m3/s}
   ,                                        !- Minimum Loop Flow Rate {m3/s}
   Autocalculate,                           !- Plant Loop Volume {m3}
@@ -7213,9 +7257,9 @@ OS:WaterHeater:Mixed,
   {00000000-0000-0000-0060-000000000020},  !- Ambient Temperature Schedule Name
   ,                                        !- Ambient Temperature Thermal Zone Name
   ,                                        !- Ambient Temperature Outdoor Air Node Name
-  4.97773345277744,                        !- Off Cycle Loss Coefficient to Ambient Temperature {W/K}
+  5.23054671566737,                        !- Off Cycle Loss Coefficient to Ambient Temperature {W/K}
   ,                                        !- Off Cycle Loss Fraction to Thermal Zone
-  4.97773345277744,                        !- On Cycle Loss Coefficient to Ambient Temperature {W/K}
+  5.23054671566737,                        !- On Cycle Loss Coefficient to Ambient Temperature {W/K}
   ,                                        !- On Cycle Loss Fraction to Thermal Zone
   ,                                        !- Peak Use Flow Rate {m3/s}
   ,                                        !- Use Flow Rate Fraction Schedule Name
@@ -7238,7 +7282,7 @@ OS:WaterHeater:Sizing,
   {00000000-0000-0000-0093-000000000001},  !- WaterHeater Name
   PeakDraw,                                !- Design Mode
   0.538503,                                !- Time Storage Can Meet Peak Draw {hr}
-  0,                                       !- Time for Tank Recovery {hr}
+  0.5,                                     !- Time for Tank Recovery {hr}
   1;                                       !- Nominal Tank Volume for Autosizing Plant Connections {m3}
 
 OS:WaterUse:Connections,

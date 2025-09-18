@@ -6,12 +6,12 @@
     "primary_heating_fuel": "NaturalGas",
     "doas_type": "one_sys_per_bldg",
     "airloop - 0": "sys_1|doas|shr>none|sc>dx|sh>c-hw|ssf>cv|zh>b-hw|zc>ptac|srf>none|",
-    "airloop - 1": "sys_3|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none|",
+    "airloop - 1": "sys_3|mixed|shr>erv|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none|",
     "airloop - 2": "sys_3|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| 1",
     "airloop - 3": "sys_3|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| 2",
     "airloop - 4": "sys_4|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none|",
     "airloop - 5": "sys_4|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| 1",
-    "airloop - 6": "sys_6|mixed|shr>none|sh>c-hw|sc>c-chw|ssf>vv|zh>b-hw|zc>none|srf>vv|",
+    "airloop - 6": "sys_6|mixed|shr>erv|sh>c-hw|sc>c-chw|ssf>vv|zh>b-hw|zc>none|srf>vv|",
     "number_of_airloops": 7.0
   }
 ]

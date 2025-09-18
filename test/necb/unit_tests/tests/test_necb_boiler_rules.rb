@@ -515,7 +515,7 @@ class NECB_HVAC_Boiler_Tests < Minitest::Test
 
     # Define the test name. 
     name = "#{vintage}_sys1_Boiler-#{fuel_type}_cap-#{boiler_cap.to_int}W_MAU-#{mau_type}_MauCoil-#{mau_heating_coil_type}_Baseboard-#{baseboard_type}_efficiency-#{boiler_name}"
-    name_short = "#{vintage}_sys1"
+    name_short = "#{vintage}_sys1-#{boiler_name}"
     output_folder = method_output_folder("#{test_name}/#{name_short}")
     logger.info "Started individual test: #{name}"
     results = Hash.new

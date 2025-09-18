@@ -58,12 +58,12 @@
     "airloop - 50": "sys_1|doas|shr>none|sc>dx|sh>c-hw|ssf>cv|zh>b-hw|zc>ptac|srf>none| 7",
     "airloop - 51": "sys_1|doas|shr>none|sc>dx|sh>c-hw|ssf>cv|zh>b-hw|zc>ptac|srf>none| 8",
     "airloop - 52": "sys_1|doas|shr>none|sc>dx|sh>c-hw|ssf>cv|zh>b-hw|zc>ptac|srf>none| 9",
-    "airloop - 53": "sys_3|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none|",
+    "airloop - 53": "sys_3|mixed|shr>erv|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none|",
     "airloop - 54": "sys_3|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| 1",
     "airloop - 55": "sys_3|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| 2",
     "airloop - 56": "sys_4|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none|",
     "airloop - 57": "sys_4|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| 1",
-    "airloop - 58": "sys_6|mixed|shr>none|sh>c-hw|sc>c-chw|ssf>vv|zh>b-hw|zc>none|srf>vv|",
+    "airloop - 58": "sys_6|mixed|shr>erv|sh>c-hw|sc>c-chw|ssf>vv|zh>b-hw|zc>none|srf>vv|",
     "number_of_airloops": 59.0
   }
 ]

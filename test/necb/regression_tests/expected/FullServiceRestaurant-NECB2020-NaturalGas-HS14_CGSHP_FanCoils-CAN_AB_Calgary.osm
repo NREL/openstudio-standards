@@ -1,5 +1,49 @@
 OS:AdditionalProperties,
   {00000000-0000-0000-0001-000000000001},  !- Handle
+  {00000000-0000-0000-0033-000000000002},  !- Object Name
+  Ref OA per area,                         !- Feature Name 1
+  Double,                                  !- Feature Data Type 1
+  0.17999999999999999,                     !- Feature Value 1
+  Ref OA per person,                       !- Feature Name 2
+  Double,                                  !- Feature Data Type 2
+  7.5,                                     !- Feature Value 2
+  Ref OA ach,                              !- Feature Name 3
+  Double,                                  !- Feature Data Type 3
+  0,                                       !- Feature Value 3
+  Ref occupancy per 1000ft2,               !- Feature Name 4
+  Double,                                  !- Feature Data Type 4
+  70,                                      !- Feature Value 4
+  Ref standard,                            !- Feature Name 5
+  String,                                  !- Feature Data Type 5
+  ASHRAE 62.1-2016 Occupancy,              !- Feature Value 5
+  Ref space type,                          !- Feature Name 6
+  String,                                  !- Feature Data Type 6
+  Restaurant dinng rooms;                  !- Feature Value 6
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000002},  !- Handle
+  {00000000-0000-0000-0033-000000000003},  !- Object Name
+  Ref OA per area,                         !- Feature Name 1
+  Double,                                  !- Feature Data Type 1
+  0.12,                                    !- Feature Value 1
+  Ref OA per person,                       !- Feature Name 2
+  Double,                                  !- Feature Data Type 2
+  7.5,                                     !- Feature Value 2
+  Ref OA ach,                              !- Feature Name 3
+  Double,                                  !- Feature Data Type 3
+  0,                                       !- Feature Value 3
+  Ref occupancy per 1000ft2,               !- Feature Name 4
+  Double,                                  !- Feature Data Type 4
+  20,                                      !- Feature Value 4
+  Ref standard,                            !- Feature Name 5
+  String,                                  !- Feature Data Type 5
+  ASHRAE 62.1-2016 Occupancy,              !- Feature Value 5
+  Ref space type,                          !- Feature Name 6
+  String,                                  !- Feature Data Type 6
+  Kitchen (cooking);                       !- Feature Value 6
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000003},  !- Handle
   {00000000-0000-0000-0067-000000000021},  !- Object Name
   max_occ_in_spaces,                       !- Feature Name 1
   Double,                                  !- Feature Data Type 1
@@ -15,7 +59,7 @@ OS:AdditionalProperties,
   2024-01-01 01:00:00 UTC;                 !- Feature Value 4
 
 OS:AdditionalProperties,
-  {00000000-0000-0000-0001-000000000002},  !- Handle
+  {00000000-0000-0000-0001-000000000004},  !- Handle
   {00000000-0000-0000-0067-000000000020},  !- Object Name
   max_occ_in_spaces,                       !- Feature Name 1
   Double,                                  !- Feature Data Type 1
@@ -31,7 +75,7 @@ OS:AdditionalProperties,
   2024-01-01 01:00:00 UTC;                 !- Feature Value 4
 
 OS:AdditionalProperties,
-  {00000000-0000-0000-0001-000000000003},  !- Handle
+  {00000000-0000-0000-0001-000000000005},  !- Handle
   {00000000-0000-0000-0012-000000000002};  !- Object Name
 
 OS:AirLoopHVAC,
@@ -2884,7 +2928,7 @@ OS:DistrictCooling,
   DistrictCooling GLHX,                    !- Name
   {00000000-0000-0000-0016-000000000186},  !- Chilled Water Inlet Node Name
   {00000000-0000-0000-0016-000000000187},  !- Chilled Water Outlet Node Name
-  18078.6829759377,                        !- Nominal Capacity {W}
+  18078.2896017494,                        !- Nominal Capacity {W}
   {00000000-0000-0000-0064-000000000002};  !- Capacity Fraction Schedule
 
 OS:DistrictHeating:Water,
@@ -2892,7 +2936,7 @@ OS:DistrictHeating:Water,
   DistrictHeating GLHX,                    !- Name
   {00000000-0000-0000-0016-000000000177},  !- Hot Water Inlet Node Name
   {00000000-0000-0000-0016-000000000178},  !- Hot Water Outlet Node Name
-  18675.2483167543,                        !- Nominal Capacity {W}
+  18675.2445870796,                        !- Nominal Capacity {W}
   {00000000-0000-0000-0064-000000000002};  !- Capacity Fraction Schedule
 
 OS:ElectricEquipment,
@@ -4486,7 +4530,7 @@ OS:PlantLoop,
   ,                                        !- Primary Plant Equipment Operation Scheme
   {00000000-0000-0000-0051-000000000065},  !- Loop Temperature Setpoint Node Name
   60,                                      !- Maximum Loop Temperature {C}
-  51.66667,                                !- Minimum Loop Temperature {C}
+  51.6666666666667,                        !- Minimum Loop Temperature {C}
   ,                                        !- Maximum Loop Flow Rate {m3/s}
   ,                                        !- Minimum Loop Flow Rate {m3/s}
   Autocalculate,                           !- Plant Loop Volume {m3}
@@ -5737,7 +5781,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0065-000000000043},  !- Handle
   Schedule Day 5,                          !- Name
-  {00000000-0000-0000-0068-000000000005},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0068-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   2,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -5752,7 +5796,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0065-000000000044},  !- Handle
   Schedule Day 6,                          !- Name
-  {00000000-0000-0000-0068-000000000005},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0068-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -5773,7 +5817,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0065-000000000045},  !- Handle
   Schedule Day 7,                          !- Name
-  {00000000-0000-0000-0068-000000000005},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0068-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   2,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -5788,7 +5832,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0065-000000000046},  !- Handle
   Schedule Day 8,                          !- Name
-  {00000000-0000-0000-0068-000000000005},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0068-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -5836,7 +5880,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0065-000000000050},  !- Handle
   sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Occ Sch Default, !- Name
-  {00000000-0000-0000-0068-000000000005},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0068-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -5851,7 +5895,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0065-000000000051},  !- Handle
   sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Occ Sch Summer Design Day, !- Name
-  {00000000-0000-0000-0068-000000000005},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0068-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
   0,                                       !- Minute 1
@@ -5860,7 +5904,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0065-000000000052},  !- Handle
   sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Occ Sch Winter Design Day, !- Name
-  {00000000-0000-0000-0068-000000000005},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0068-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
   0,                                       !- Minute 1
@@ -5869,7 +5913,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0065-000000000053},  !- Handle
   sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Occ Sch Default, !- Name
-  {00000000-0000-0000-0068-000000000005},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0068-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -5884,7 +5928,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0065-000000000054},  !- Handle
   sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Occ Sch Summer Design Day, !- Name
-  {00000000-0000-0000-0068-000000000005},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0068-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
   0,                                       !- Minute 1
@@ -5893,7 +5937,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0065-000000000055},  !- Handle
   sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Occ Sch Winter Design Day, !- Name
-  {00000000-0000-0000-0068-000000000005},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0068-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
   0,                                       !- Minute 1
@@ -6512,7 +6556,7 @@ OS:Schedule:Ruleset,
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0067-000000000020},  !- Handle
   sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| 1 Occ Sch, !- Name
-  {00000000-0000-0000-0068-000000000005},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0068-000000000004},  !- Schedule Type Limits Name
   {00000000-0000-0000-0065-000000000050},  !- Default Day Schedule Name
   {00000000-0000-0000-0065-000000000051},  !- Summer Design Day Schedule Name
   {00000000-0000-0000-0065-000000000052};  !- Winter Design Day Schedule Name
@@ -6520,7 +6564,7 @@ OS:Schedule:Ruleset,
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0067-000000000021},  !- Handle
   sys_1|doas|shr>none|sh>none|ssf>cv|zh>fancoil_4pipe|zc>fancoil_4pipe|srf>none| Occ Sch, !- Name
-  {00000000-0000-0000-0068-000000000005},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0068-000000000004},  !- Schedule Type Limits Name
   {00000000-0000-0000-0065-000000000053},  !- Default Day Schedule Name
   {00000000-0000-0000-0065-000000000054},  !- Summer Design Day Schedule Name
   {00000000-0000-0000-0065-000000000055};  !- Winter Design Day Schedule Name
@@ -8398,9 +8442,9 @@ OS:WaterHeater:Mixed,
   {00000000-0000-0000-0067-000000000018},  !- Ambient Temperature Schedule Name
   ,                                        !- Ambient Temperature Thermal Zone Name
   ,                                        !- Ambient Temperature Outdoor Air Node Name
-  4.97773345277744,                        !- Off Cycle Loss Coefficient to Ambient Temperature {W/K}
+  5.23054671566737,                        !- Off Cycle Loss Coefficient to Ambient Temperature {W/K}
   ,                                        !- Off Cycle Loss Fraction to Thermal Zone
-  4.97773345277744,                        !- On Cycle Loss Coefficient to Ambient Temperature {W/K}
+  5.23054671566737,                        !- On Cycle Loss Coefficient to Ambient Temperature {W/K}
   ,                                        !- On Cycle Loss Fraction to Thermal Zone
   ,                                        !- Peak Use Flow Rate {m3/s}
   ,                                        !- Use Flow Rate Fraction Schedule Name
@@ -8423,7 +8467,7 @@ OS:WaterHeater:Sizing,
   {00000000-0000-0000-0101-000000000001},  !- WaterHeater Name
   PeakDraw,                                !- Design Mode
   0.538503,                                !- Time Storage Can Meet Peak Draw {hr}
-  0,                                       !- Time for Tank Recovery {hr}
+  0.5,                                     !- Time for Tank Recovery {hr}
   1;                                       !- Nominal Tank Volume for Autosizing Plant Connections {m3}
 
 OS:WaterUse:Connections,

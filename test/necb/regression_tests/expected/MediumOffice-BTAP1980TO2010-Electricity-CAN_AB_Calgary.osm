@@ -1,5 +1,27 @@
 OS:AdditionalProperties,
   {00000000-0000-0000-0001-000000000001},  !- Handle
+  {00000000-0000-0000-0031-000000000002},  !- Object Name
+  Ref OA per area,                         !- Feature Name 1
+  Double,                                  !- Feature Data Type 1
+  0,                                       !- Feature Value 1
+  Ref OA per person,                       !- Feature Name 2
+  Double,                                  !- Feature Data Type 2
+  20,                                      !- Feature Value 2
+  Ref OA ach,                              !- Feature Name 3
+  Double,                                  !- Feature Data Type 3
+  0,                                       !- Feature Value 3
+  Ref occupancy per 1000ft2,               !- Feature Name 4
+  Double,                                  !- Feature Data Type 4
+  5,                                       !- Feature Value 4
+  Ref standard,                            !- Feature Name 5
+  String,                                  !- Feature Data Type 5
+  ASHRAE 62.1-2010 Occupancy (See NECB2011 ASHRAE Space Types), !- Feature Value 5
+  Ref space type,                          !- Feature Name 6
+  String,                                  !- Feature Data Type 6
+  Offices-Office space;                    !- Feature Value 6
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000002},  !- Handle
   {00000000-0000-0000-0063-000000000023},  !- Object Name
   max_occ_in_spaces,                       !- Feature Name 1
   Double,                                  !- Feature Data Type 1
@@ -15,7 +37,7 @@ OS:AdditionalProperties,
   2024-01-01 01:00:00 UTC;                 !- Feature Value 4
 
 OS:AdditionalProperties,
-  {00000000-0000-0000-0001-000000000002},  !- Handle
+  {00000000-0000-0000-0001-000000000003},  !- Handle
   {00000000-0000-0000-0063-000000000021},  !- Object Name
   max_occ_in_spaces,                       !- Feature Name 1
   Double,                                  !- Feature Data Type 1
@@ -31,7 +53,7 @@ OS:AdditionalProperties,
   2024-01-01 01:00:00 UTC;                 !- Feature Value 4
 
 OS:AdditionalProperties,
-  {00000000-0000-0000-0001-000000000003},  !- Handle
+  {00000000-0000-0000-0001-000000000004},  !- Handle
   {00000000-0000-0000-0063-000000000022},  !- Object Name
   max_occ_in_spaces,                       !- Feature Name 1
   Double,                                  !- Feature Data Type 1
@@ -47,11 +69,11 @@ OS:AdditionalProperties,
   2024-01-01 01:00:00 UTC;                 !- Feature Value 4
 
 OS:AdditionalProperties,
-  {00000000-0000-0000-0001-000000000004},  !- Handle
+  {00000000-0000-0000-0001-000000000005},  !- Handle
   {00000000-0000-0000-0011-000000000001};  !- Object Name
 
 OS:AdditionalProperties,
-  {00000000-0000-0000-0001-000000000005},  !- Handle
+  {00000000-0000-0000-0001-000000000006},  !- Handle
   {00000000-0000-0000-0011-000000000002};  !- Object Name
 
 OS:AirLoopHVAC,
@@ -4142,41 +4164,41 @@ OS:EnergyManagementSystem:Actuator,
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0035-000000000001},  !- Handle
   ems_sys_6_mixed_shr_none_sh_c_e_sc_c_chw_ssf_vv_zh_b_e_zc_none_srf_vv__1_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {8ed4f5b8-72cb-43f0-9545-2175cfeb941a}<23.9 && {8ed4f5b8-72cb-43f0-9545-2175cfeb941a}>1.7, !- Program Line 1
-  SET {d09e5b67-1006-4134-9d86-896cb2ed6708} = 29.4, !- Program Line 2
-  SET {e7355923-f52a-4f1a-aadb-0dc320d87fc1} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {8ed4f5b8-72cb-43f0-9545-2175cfeb941a}<23.9 && {8ed4f5b8-72cb-43f0-9545-2175cfeb941a}>1.7, !- Program Line 4
-  SET {d09e5b67-1006-4134-9d86-896cb2ed6708} = 29.4, !- Program Line 5
-  SET {e7355923-f52a-4f1a-aadb-0dc320d87fc1} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {8ed4f5b8-72cb-43f0-9545-2175cfeb941a}<23.9 && {8ed4f5b8-72cb-43f0-9545-2175cfeb941a}>1.7, !- Program Line 7
-  SET {d09e5b67-1006-4134-9d86-896cb2ed6708} = 29.4, !- Program Line 8
-  SET {e7355923-f52a-4f1a-aadb-0dc320d87fc1} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {8ed4f5b8-72cb-43f0-9545-2175cfeb941a}<23.9 && {8ed4f5b8-72cb-43f0-9545-2175cfeb941a}>1.7, !- Program Line 10
-  SET {d09e5b67-1006-4134-9d86-896cb2ed6708} = 29.4, !- Program Line 11
-  SET {e7355923-f52a-4f1a-aadb-0dc320d87fc1} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {e0d25eeb-e71a-4674-9def-a10d952f8f8e}<23.9 && {e0d25eeb-e71a-4674-9def-a10d952f8f8e}>1.7, !- Program Line 1
+  SET {1622f3a7-913a-4c18-a124-d0ac29dd24b2} = 29.4, !- Program Line 2
+  SET {19b98939-b9f0-4e27-becd-2ce6922af785} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {e0d25eeb-e71a-4674-9def-a10d952f8f8e}<23.9 && {e0d25eeb-e71a-4674-9def-a10d952f8f8e}>1.7, !- Program Line 4
+  SET {1622f3a7-913a-4c18-a124-d0ac29dd24b2} = 29.4, !- Program Line 5
+  SET {19b98939-b9f0-4e27-becd-2ce6922af785} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {e0d25eeb-e71a-4674-9def-a10d952f8f8e}<23.9 && {e0d25eeb-e71a-4674-9def-a10d952f8f8e}>1.7, !- Program Line 7
+  SET {1622f3a7-913a-4c18-a124-d0ac29dd24b2} = 29.4, !- Program Line 8
+  SET {19b98939-b9f0-4e27-becd-2ce6922af785} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {e0d25eeb-e71a-4674-9def-a10d952f8f8e}<23.9 && {e0d25eeb-e71a-4674-9def-a10d952f8f8e}>1.7, !- Program Line 10
+  SET {1622f3a7-913a-4c18-a124-d0ac29dd24b2} = 29.4, !- Program Line 11
+  SET {19b98939-b9f0-4e27-becd-2ce6922af785} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {d09e5b67-1006-4134-9d86-896cb2ed6708} = NULL, !- Program Line 14
-  SET {e7355923-f52a-4f1a-aadb-0dc320d87fc1} = NULL, !- Program Line 15
+  SET {1622f3a7-913a-4c18-a124-d0ac29dd24b2} = NULL, !- Program Line 14
+  SET {19b98939-b9f0-4e27-becd-2ce6922af785} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0035-000000000002},  !- Handle
   ems_sys_6_mixed_shr_none_sh_c_e_sc_c_chw_ssf_vv_zh_b_e_zc_none_srf_vv__2_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {c146c301-8cd8-4963-9a8f-e2afba90f51c}<23.9 && {c146c301-8cd8-4963-9a8f-e2afba90f51c}>1.7, !- Program Line 1
-  SET {f218b4c2-423f-494e-9e70-cc366131a9b2} = 29.4, !- Program Line 2
-  SET {705a1638-8df2-4063-b7e9-04969304a3e0} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {c146c301-8cd8-4963-9a8f-e2afba90f51c}<23.9 && {c146c301-8cd8-4963-9a8f-e2afba90f51c}>1.7, !- Program Line 4
-  SET {f218b4c2-423f-494e-9e70-cc366131a9b2} = 29.4, !- Program Line 5
-  SET {705a1638-8df2-4063-b7e9-04969304a3e0} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {c146c301-8cd8-4963-9a8f-e2afba90f51c}<23.9 && {c146c301-8cd8-4963-9a8f-e2afba90f51c}>1.7, !- Program Line 7
-  SET {f218b4c2-423f-494e-9e70-cc366131a9b2} = 29.4, !- Program Line 8
-  SET {705a1638-8df2-4063-b7e9-04969304a3e0} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {c146c301-8cd8-4963-9a8f-e2afba90f51c}<23.9 && {c146c301-8cd8-4963-9a8f-e2afba90f51c}>1.7, !- Program Line 10
-  SET {f218b4c2-423f-494e-9e70-cc366131a9b2} = 29.4, !- Program Line 11
-  SET {705a1638-8df2-4063-b7e9-04969304a3e0} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {b1ab64ad-7ea1-4ea9-a9ee-746529f623e2}<23.9 && {b1ab64ad-7ea1-4ea9-a9ee-746529f623e2}>1.7, !- Program Line 1
+  SET {65504b07-5a32-43bb-84e1-5f618d1fe81d} = 29.4, !- Program Line 2
+  SET {53ff0833-efd7-4d14-a2de-a035af0d6035} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {b1ab64ad-7ea1-4ea9-a9ee-746529f623e2}<23.9 && {b1ab64ad-7ea1-4ea9-a9ee-746529f623e2}>1.7, !- Program Line 4
+  SET {65504b07-5a32-43bb-84e1-5f618d1fe81d} = 29.4, !- Program Line 5
+  SET {53ff0833-efd7-4d14-a2de-a035af0d6035} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {b1ab64ad-7ea1-4ea9-a9ee-746529f623e2}<23.9 && {b1ab64ad-7ea1-4ea9-a9ee-746529f623e2}>1.7, !- Program Line 7
+  SET {65504b07-5a32-43bb-84e1-5f618d1fe81d} = 29.4, !- Program Line 8
+  SET {53ff0833-efd7-4d14-a2de-a035af0d6035} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {b1ab64ad-7ea1-4ea9-a9ee-746529f623e2}<23.9 && {b1ab64ad-7ea1-4ea9-a9ee-746529f623e2}>1.7, !- Program Line 10
+  SET {65504b07-5a32-43bb-84e1-5f618d1fe81d} = 29.4, !- Program Line 11
+  SET {53ff0833-efd7-4d14-a2de-a035af0d6035} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {f218b4c2-423f-494e-9e70-cc366131a9b2} = NULL, !- Program Line 14
-  SET {705a1638-8df2-4063-b7e9-04969304a3e0} = NULL, !- Program Line 15
+  SET {65504b07-5a32-43bb-84e1-5f618d1fe81d} = NULL, !- Program Line 14
+  SET {53ff0833-efd7-4d14-a2de-a035af0d6035} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:ProgramCallingManager,
@@ -6004,7 +6026,7 @@ OS:PlantLoop,
   ,                                        !- Primary Plant Equipment Operation Scheme
   {00000000-0000-0000-0049-000000000098},  !- Loop Temperature Setpoint Node Name
   60,                                      !- Maximum Loop Temperature {C}
-  51.66667,                                !- Minimum Loop Temperature {C}
+  51.6666666666667,                        !- Minimum Loop Temperature {C}
   ,                                        !- Maximum Loop Flow Rate {m3/s}
   ,                                        !- Minimum Loop Flow Rate {m3/s}
   Autocalculate,                           !- Plant Loop Volume {m3}
@@ -14451,7 +14473,7 @@ OS:WaterHeater:Sizing,
   {00000000-0000-0000-0094-000000000001},  !- WaterHeater Name
   PeakDraw,                                !- Design Mode
   0.538503,                                !- Time Storage Can Meet Peak Draw {hr}
-  0,                                       !- Time for Tank Recovery {hr}
+  1,                                       !- Time for Tank Recovery {hr}
   1;                                       !- Nominal Tank Volume for Autosizing Plant Connections {m3}
 
 OS:WaterUse:Connections,
