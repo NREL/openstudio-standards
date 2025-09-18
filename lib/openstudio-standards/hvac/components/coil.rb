@@ -228,6 +228,12 @@ module OpenstudioStandards
         elsif coil_heating.to_CoilHeatingWaterToAirHeatPumpEquationFit.is_initialized
           coil_heating = coil_heating.to_CoilHeatingWaterToAirHeatPumpEquationFit.get
           capacity_w = OpenstudioStandards::HVAC.coil_heating_water_to_air_heat_pump_equation_fit_get_capacity(coil_heating)
+        elsif coil_heating.to_CoilHeatingGas.is_initialized
+          coil_heating = coil_heating.to_CoilHeatingGas.get
+          capacity_w = OpenstudioStandards::HVAC.coil_heating_gas_get_capacity(coil_heating)
+        elsif coil_heating.to_CoilHeatingGasMultiStage.is_initialized
+          coil_heating = coil_heating.to_CoilHeatingGasMultiStage.get
+          capacity_w = OpenstudioStandards::HVAC.coil_heating_gas_multi_stage_get_capacity(coil_heating)
         else
           # If the coil is not a supported coil type, we cannot determine the capacity
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.HVAC.coil', "For #{coil_heating.name}, the coil is not a supported coil type and cannot determine capacity.")
@@ -237,8 +243,10 @@ module OpenstudioStandards
         # return nil if no capacity is available
         if capacity_w.nil?
           OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.HVAC.coil', "For #{coil_heating.name} capacity is not available.")
-          return capacity_w
+          return nil
         end
+
+        return capacity_w
       end
 
       multiplier = 1.0
