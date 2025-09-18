@@ -103,8 +103,19 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
             coil.setRatedAirFlowRate(flow_rate)
           end
 
-          # Run sizing.
+          # Check heating coil before sizing
+          model.getCoilHeatingDXSingleSpeeds.each do |htg_coil|
+            puts "Heating coil '#{htg_coil.name}' before 'run_sizing: Is autosized?: '#{htg_coil.isRatedTotalHeatingCapacityAutosized}'. Is an autosized value available?: '#{htg_coil.autosizedRatedTotalHeatingCapacity.is_initialized}'. Is a fixed rated capacity available?: '#{htg_coil.ratedTotalHeatingCapacity.is_initialized}'"
+          end
+
+          # Run sizing
           run_sizing(model: model, template: template, save_model_versions: false, output_dir: output_folder, necb_ref_hp: true) if PERFORM_STANDARDS
+
+          # Check heating coil after sizing
+          # If ratedTotalHeatingCapacity is false, the test will fail later at htg_coil_rated_cap = htg_coil.ratedTotalHeatingCapacity.get
+          model.getCoilHeatingDXSingleSpeeds.each do |htg_coil|
+            puts "Heating coil '#{htg_coil.name}' after 'run_sizing: Is autosized?: '#{htg_coil.isRatedTotalHeatingCapacityAutosized}'. Is an autosized value available?: '#{htg_coil.autosizedRatedTotalHeatingCapacity.is_initialized}'. Is a fixed rated capacity available?: '#{htg_coil.ratedTotalHeatingCapacity.is_initialized}'"
+          end
 
           # Non-sys6 uses AirLoopHVACUnitaryHeatPumpAirToAirs
           unless sys_number == 'sys6'
@@ -150,11 +161,9 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
               isn't 50% of the rated cooling capacity (#{clg_coil_rated_cap}) at -8.3C in #{name} ")
             end
           else
-
             # sys6 and sys1 uses contain dx coils directly within air loops.
             model.getAirLoopHVACs.each do |airloop|
-
-              # Get heat pump coils.
+              # Get heat pump coils
               found_dx_htg = false
               found_dx_clg = false
               htg_coil = ""
@@ -167,7 +176,6 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
                   found_dx_clg = true
                   clg_coil = supply_component.to_CoilCoolingDXSingleSpeed.get
                 end
-
               end
               #check if both DX coils exist
               assert(found_dx_htg, "test_ref_heatpump_heating_capacity: Could not find CoilHeatingDXSingleSpeed for #{name}")

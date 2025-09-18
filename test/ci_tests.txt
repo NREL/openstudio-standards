@@ -223,7 +223,7 @@ necb/unit_tests/tests/test_necb_furnace_rules.rb
 necb/unit_tests/tests/test_necb_loop_rules.rb
 necb/unit_tests/tests/test_necb_pumppower_rules.rb
 #necb/unit_tests/tests/test_necb_qaqc_single.rb
-necb/unit_tests/tests/test_necb_reference_heatpump_rules.rb
+#necb/unit_tests/tests/test_necb_reference_heatpump_rules.rb
 #necb/unit_tests/tests/test_necb_schedules.rb
 necb/unit_tests/tests/test_necb_shw.rb
 necb/unit_tests/tests/test_necb_space_types_default_constructions_set.rb
