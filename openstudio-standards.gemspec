@@ -56,7 +56,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'bundler-audit'
   # Add solargraph for code completion and documentation generation, and MCP support.
   spec.add_development_dependency 'solargraph', '~> 0.46.0'
-  # spec.add_runtime_dependency     'tbd', '~> 3'
-  spec.add_development_dependency "tbd",  "3.5.0"
-
+  spec.add_runtime_dependency     'tbd', '~> 3'
 end
