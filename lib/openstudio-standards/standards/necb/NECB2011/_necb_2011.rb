@@ -16,42 +16,31 @@ class NECB2011 < Standard
   attr_accessor :space_multiplier_map
   attr_accessor :fuel_type_set
 
-  # This is a helper method to convert arguments to float.
-  #   If variable undefined set to the default
-  #   If already a numeric then return it
-  #   If variable is a string then convert to a float, using the default if 'NECB_Default'
-  #   If that all fails then return the default.
+  # This is a helper method to convert arguments that may support 'NECB_Default, and nils to convert to float'
   def convert_arg_to_f(variable:, default:)
-    return default if variable.nil?
     return variable if variable.kind_of?(Numeric)
-    if variable.is_a? String
-      return default if variable.to_s.downcase == 'necb_default'
-      variable = variable.strip
-      return variable.to_f
-    end
-    return default
+    return default if variable.nil? || (variable.to_s == 'NECB_Default')
+    return unless variable.kind_of?(String)
+
+    variable = variable.strip
+    return variable.to_f
   end
 
-  # This method converts arguments to bool.  
-  #   If variable undefined set to the default
-  #   If already a bool then return it
-  #   If variable is a string then convert to a bool, using the default if 'NECB_Default'
-  #   If that all fails then return the default.
+  # This method converts arguments to bool.  Anything other than a bool false or string 'false' is converted
+  # to a bool true.  Bool false and case insesitive string false are turned into bool false.
   def convert_arg_to_bool(variable:, default:)
     return default if variable.nil?
-    return variable if variable.is_a?(TrueClass) || variable.is_a?(FalseClass)
     if variable.is_a? String
-      return default if variable.to_s.downcase == 'necb_default'
-      return false if variable.to_s.downcase == 'false'
       return true if variable.to_s.downcase == 'true'
+      return false if variable.to_s.downcase == 'false'
+      return default
     end
+    return variable if variable.is_a?(TrueClass) || variable.is_a?(FalseClass)
     return default
   end
 
-  # This method checks if a variable is a string.  
-  #   If variable undefined set to the default
-  #   If variable is a string then return it, using the default if 'NECB_Default'
-  #   If that all fails then return the default.
+  # This method checks if a variable is a string.  If it is anything but a string it returns the default.  If it is a
+  # string set to "NECB_Default" it return the default.  Otherwise it returns the string set to it.
   def convert_arg_to_string(variable:, default:)
     return default if variable.nil?
     if variable.is_a? String
@@ -1174,8 +1163,6 @@ class NECB2011 < Standard
                              floorU: nil,
                              roofU: nil)
     necb_hdd = true unless [true, false].include?(necb_hdd)
-    return true unless option.respond_to?(:to_sym)
-    return true if option.to_s.downcase == 'none'
 
     hdd    = get_necb_hdd18(model: model, necb_hdd: necb_hdd)
     wallU  = wallU  ? wallU  : max_u_necb("wall", "outdoors", hdd)
@@ -1189,6 +1176,8 @@ class NECB2011 < Standard
     argh[:roofs    ] = { uo: roofU  }
 
     case option.downcase
+    when 'none'
+      return true
     when 'uprate'
       argh[:walls  ][:ut] = wallU
       argh[:floors ][:ut] = floorU
