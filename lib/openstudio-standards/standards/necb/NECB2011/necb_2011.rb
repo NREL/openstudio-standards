@@ -1163,6 +1163,8 @@ class NECB2011 < Standard
                              floorU: nil,
                              roofU: nil)
     necb_hdd = true unless [true, false].include?(necb_hdd)
+    return true unless option.respond_to?(:to_sym)
+    return true if option.to_s.downcase == 'none'
 
     hdd    = get_necb_hdd18(model: model, necb_hdd: necb_hdd)
     wallU  = wallU  ? wallU  : max_u_necb("wall", "outdoors", hdd)
@@ -1176,8 +1178,6 @@ class NECB2011 < Standard
     argh[:roofs    ] = { uo: roofU  }
 
     case option.downcase
-    when 'none'
-      return true
     when 'uprate'
       argh[:walls  ][:ut] = wallU
       argh[:floors ][:ut] = floorU
