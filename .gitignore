@@ -51,7 +51,6 @@ lib/openstudio-standards/btap/costing/btap_results/tests/output/
 /data/costing/rs_means_auth
 /tmp/
 *.xlsx
-.ruby-version
 !Scorecard*.xlsx
 *.DS_Store
 /data/standards/openstudio_standards_duplicates_log.csv

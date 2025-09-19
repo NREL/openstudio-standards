@@ -17,7 +17,6 @@
 # *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 # **********************************************************************/
 
-require 'tbd'
 
 module BTAP
   module Geometry
@@ -490,6 +489,7 @@ module BTAP
         return array
       end
 
+
       def self.filter_spaces_by_space_types(model, spaces_array, spacetype_array)
         spaces_array = BTAP::Common::validate_array(model, spaces_array, "Space")
         spacetype_array = BTAP::Common::validate_array(model, spacetype_array, "SpaceType")
@@ -499,26 +499,6 @@ module BTAP
           returnarray << spacetype_array.include?(space.spaceType())
         end
         return returnarray
-      end
-
-      ##
-      # Fetch a space's full height.
-      #
-      # @param space [OpenStudio::Model::Space] a space
-      #
-      # @return [Float] full height of space (0 if invalid input)
-      def self.space_height(space = nil)
-        TBD.spaceHeight(space)
-      end
-
-      ##
-      # Fetch a space's width.
-      #
-      # @param space [OpenStudio::Model::Space] a space
-      #
-      # @return [Float] width of a space (0 if invalid input)
-      def self.space_width(space = nil)
-        TBD.spaceWidth(space)
       end
     end
 
