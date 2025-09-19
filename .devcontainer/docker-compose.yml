@@ -1,0 +1,9 @@
+version: '3.8'
+services:
+  osstd:
+    platform: linux/amd64   # ensure this works on both amd64 and apple silicon
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    volumes:
+      - ..:/usr/src/osstd
