@@ -23,7 +23,7 @@
 			]
 		}
 	},
-    // This is set as a env variable in the container, but it is also used to set the default shell in the container, just in case.
+    // This is set as a env variable in the container, but it is also used to set the default shell in the container, just in case. 
     "runArgs": [
         "--env", "LANG=en_US.UTF-8"
     ],

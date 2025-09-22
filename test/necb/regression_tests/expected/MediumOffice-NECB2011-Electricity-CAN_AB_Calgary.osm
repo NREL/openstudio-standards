@@ -1,6 +1,6 @@
 OS:AdditionalProperties,
   {00000000-0000-0000-0001-000000000001},  !- Handle
-  {00000000-0000-0000-0063-000000000027},  !- Object Name
+  {00000000-0000-0000-0063-000000000026},  !- Object Name
   max_occ_in_spaces,                       !- Feature Name 1
   Double,                                  !- Feature Data Type 1
   83.123094119094475,                      !- Feature Value 1
@@ -16,7 +16,7 @@ OS:AdditionalProperties,
 
 OS:AdditionalProperties,
   {00000000-0000-0000-0001-000000000002},  !- Handle
-  {00000000-0000-0000-0063-000000000025},  !- Object Name
+  {00000000-0000-0000-0063-000000000024},  !- Object Name
   max_occ_in_spaces,                       !- Feature Name 1
   Double,                                  !- Feature Data Type 1
   83.123094119094475,                      !- Feature Value 1
@@ -32,7 +32,7 @@ OS:AdditionalProperties,
 
 OS:AdditionalProperties,
   {00000000-0000-0000-0001-000000000003},  !- Handle
-  {00000000-0000-0000-0063-000000000026},  !- Object Name
+  {00000000-0000-0000-0063-000000000025},  !- Object Name
   max_occ_in_spaces,                       !- Feature Name 1
   Double,                                  !- Feature Data Type 1
   83.123094119094475,                      !- Feature Value 1
@@ -58,7 +58,7 @@ OS:AirLoopHVAC,
   {00000000-0000-0000-0002-000000000001},  !- Handle
   sys_6|mixed|shr>none|sh>c-e|sc>c-chw|ssf>vv|zh>b-e|zc>none|srf>vv| 1, !- Name
   ,                                        !- Controller List Name
-  {00000000-0000-0000-0063-000000000025},  !- Availability Schedule
+  {00000000-0000-0000-0063-000000000024},  !- Availability Schedule
   {00000000-0000-0000-0008-000000000001},  !- Availability Manager List Name
   autosize,                                !- Design Supply Air Flow Rate {m3/s}
   1,                                       !- Design Return Air Flow Fraction of Supply Air Flow
@@ -80,7 +80,7 @@ OS:AirLoopHVAC,
   {00000000-0000-0000-0002-000000000002},  !- Handle
   sys_6|mixed|shr>none|sh>c-e|sc>c-chw|ssf>vv|zh>b-e|zc>none|srf>vv| 2, !- Name
   ,                                        !- Controller List Name
-  {00000000-0000-0000-0063-000000000026},  !- Availability Schedule
+  {00000000-0000-0000-0063-000000000025},  !- Availability Schedule
   {00000000-0000-0000-0008-000000000002},  !- Availability Manager List Name
   autosize,                                !- Design Supply Air Flow Rate {m3/s}
   1,                                       !- Design Return Air Flow Fraction of Supply Air Flow
@@ -102,7 +102,7 @@ OS:AirLoopHVAC,
   {00000000-0000-0000-0002-000000000003},  !- Handle
   sys_6|mixed|shr>none|sh>c-e|sc>c-chw|ssf>vv|zh>b-e|zc>none|srf>vv|, !- Name
   ,                                        !- Controller List Name
-  {00000000-0000-0000-0063-000000000027},  !- Availability Schedule
+  {00000000-0000-0000-0063-000000000026},  !- Availability Schedule
   {00000000-0000-0000-0008-000000000003},  !- Availability Manager List Name
   autosize,                                !- Design Supply Air Flow Rate {m3/s}
   1,                                       !- Design Return Air Flow Fraction of Supply Air Flow
@@ -647,7 +647,7 @@ OS:BuildingStory,
 OS:Chiller:Electric:EIR,
   {00000000-0000-0000-0011-000000000001},  !- Handle
   Primary Chiller WaterCooled Rotary Screw 71tons 0.8kW/ton, !- Name
-  248661.151059467,                        !- Reference Capacity {W}
+  248682.118667497,                        !- Reference Capacity {W}
   4.50320102432778,                        !- Reference COP {W/W}
   ,                                        !- Reference Leaving Chilled Water Temperature {C}
   ,                                        !- Reference Entering Condenser Fluid Temperature {C}
@@ -672,14 +672,20 @@ OS:Chiller:Electric:EIR,
   Autosize,                                !- Design Heat Recovery Water Flow Rate {m3/s}
   ,                                        !- Heat Recovery Inlet Node Name
   ,                                        !- Heat Recovery Outlet Node Name
-  1,                                       !- Sizing Factor
-  0,                                       !- Basin Heater Capacity {W/K}
+  ,                                        !- Sizing Factor
+  ,                                        !- Basin Heater Capacity {W/K}
   10,                                      !- Basin Heater Setpoint Temperature {C}
   ,                                        !- Basin Heater Operating Schedule Name
   1,                                       !- Condenser Heat Recovery Relative Capacity Fraction
   ,                                        !- Heat Recovery Inlet High Temperature Limit Schedule Name
   ,                                        !- Heat Recovery Leaving Temperature Setpoint Node Name
-  General;                                 !- End-Use Subcategory
+  General,                                 !- End-Use Subcategory
+  ConstantFlow,                            !- Condenser Flow Control
+  ,                                        !- Condenser Loop Flow Rate Fraction Function of Loop Part Load Ratio Curve Name
+  ,                                        !- Temperature Difference Across Condenser Schedule Name
+  0.2,                                     !- Condenser Minimum Flow Fraction
+  ,                                        !- Thermosiphon Capacity Fraction Curve Name
+  0;                                       !- Thermosiphon Minimum Temperature Difference
 
 OS:Chiller:Electric:EIR,
   {00000000-0000-0000-0011-000000000002},  !- Handle
@@ -709,14 +715,20 @@ OS:Chiller:Electric:EIR,
   Autosize,                                !- Design Heat Recovery Water Flow Rate {m3/s}
   ,                                        !- Heat Recovery Inlet Node Name
   ,                                        !- Heat Recovery Outlet Node Name
-  1,                                       !- Sizing Factor
-  0,                                       !- Basin Heater Capacity {W/K}
+  ,                                        !- Sizing Factor
+  ,                                        !- Basin Heater Capacity {W/K}
   10,                                      !- Basin Heater Setpoint Temperature {C}
   ,                                        !- Basin Heater Operating Schedule Name
   1,                                       !- Condenser Heat Recovery Relative Capacity Fraction
   ,                                        !- Heat Recovery Inlet High Temperature Limit Schedule Name
   ,                                        !- Heat Recovery Leaving Temperature Setpoint Node Name
-  General;                                 !- End-Use Subcategory
+  General,                                 !- End-Use Subcategory
+  ConstantFlow,                            !- Condenser Flow Control
+  ,                                        !- Condenser Loop Flow Rate Fraction Function of Loop Part Load Ratio Curve Name
+  ,                                        !- Temperature Difference Across Condenser Schedule Name
+  0.2,                                     !- Condenser Minimum Flow Fraction
+  ,                                        !- Thermosiphon Capacity Fraction Curve Name
+  0;                                       !- Thermosiphon Minimum Temperature Difference
 
 OS:ClimateZones,
   {00000000-0000-0000-0012-000000000001},  !- Handle
@@ -793,7 +805,7 @@ OS:Coil:Heating:Electric,
   Coil Heating Electric 10,                !- Name
   {00000000-0000-0000-0060-000000000001},  !- Availability Schedule Name
   ,                                        !- Efficiency
-  11197.9591369629,                        !- Nominal Capacity {W}
+  11204.4479370117,                        !- Nominal Capacity {W}
   ,                                        !- Air Inlet Node Name
   ;                                        !- Air Outlet Node Name
 
@@ -802,7 +814,7 @@ OS:Coil:Heating:Electric,
   Coil Heating Electric 11,                !- Name
   {00000000-0000-0000-0060-000000000001},  !- Availability Schedule Name
   ,                                        !- Efficiency
-  6543.26219558716,                        !- Nominal Capacity {W}
+  6549.01134967804,                        !- Nominal Capacity {W}
   ,                                        !- Air Inlet Node Name
   ;                                        !- Air Outlet Node Name
 
@@ -811,7 +823,7 @@ OS:Coil:Heating:Electric,
   Coil Heating Electric 12,                !- Name
   {00000000-0000-0000-0060-000000000001},  !- Availability Schedule Name
   ,                                        !- Efficiency
-  12108.2193374634,                        !- Nominal Capacity {W}
+  12112.2413635254,                        !- Nominal Capacity {W}
   ,                                        !- Air Inlet Node Name
   ;                                        !- Air Outlet Node Name
 
@@ -829,7 +841,7 @@ OS:Coil:Heating:Electric,
   Coil Heating Electric 14,                !- Name
   {00000000-0000-0000-0060-000000000001},  !- Availability Schedule Name
   ,                                        !- Efficiency
-  24091.289806366,                         !- Nominal Capacity {W}
+  24121.8232154846,                        !- Nominal Capacity {W}
   ,                                        !- Air Inlet Node Name
   ;                                        !- Air Outlet Node Name
 
@@ -838,7 +850,7 @@ OS:Coil:Heating:Electric,
   Coil Heating Electric 15,                !- Name
   {00000000-0000-0000-0060-000000000001},  !- Availability Schedule Name
   ,                                        !- Efficiency
-  14241.6543960571,                        !- Nominal Capacity {W}
+  14251.122379303,                         !- Nominal Capacity {W}
   ,                                        !- Air Inlet Node Name
   ;                                        !- Air Outlet Node Name
 
@@ -847,7 +859,7 @@ OS:Coil:Heating:Electric,
   Coil Heating Electric 16,                !- Name
   {00000000-0000-0000-0060-000000000001},  !- Availability Schedule Name
   ,                                        !- Efficiency
-  11677.5599956512,                        !- Nominal Capacity {W}
+  11686.0250473022,                        !- Nominal Capacity {W}
   ,                                        !- Air Inlet Node Name
   ;                                        !- Air Outlet Node Name
 
@@ -856,7 +868,7 @@ OS:Coil:Heating:Electric,
   Coil Heating Electric 17,                !- Name
   {00000000-0000-0000-0060-000000000001},  !- Availability Schedule Name
   ,                                        !- Efficiency
-  7499.4943857193,                         !- Nominal Capacity {W}
+  7507.24167823792,                        !- Nominal Capacity {W}
   ,                                        !- Air Inlet Node Name
   ;                                        !- Air Outlet Node Name
 
@@ -865,7 +877,7 @@ OS:Coil:Heating:Electric,
   Coil Heating Electric 18,                !- Name
   {00000000-0000-0000-0060-000000000001},  !- Availability Schedule Name
   ,                                        !- Efficiency
-  12827.5813579559,                        !- Nominal Capacity {W}
+  12832.8084468842,                        !- Nominal Capacity {W}
   ,                                        !- Air Inlet Node Name
   ;                                        !- Air Outlet Node Name
 
@@ -874,7 +886,7 @@ OS:Coil:Heating:Electric,
   Coil Heating Electric 2,                 !- Name
   {00000000-0000-0000-0060-000000000001},  !- Availability Schedule Name
   ,                                        !- Efficiency
-  14499.383354187,                         !- Nominal Capacity {W}
+  14505.7910442352,                        !- Nominal Capacity {W}
   ,                                        !- Air Inlet Node Name
   ;                                        !- Air Outlet Node Name
 
@@ -883,7 +895,7 @@ OS:Coil:Heating:Electric,
   Coil Heating Electric 3,                 !- Name
   {00000000-0000-0000-0060-000000000001},  !- Availability Schedule Name
   ,                                        !- Efficiency
-  11646.1575508118,                        !- Nominal Capacity {W}
+  11648.1003284454,                        !- Nominal Capacity {W}
   ,                                        !- Air Inlet Node Name
   ;                                        !- Air Outlet Node Name
 
@@ -892,7 +904,7 @@ OS:Coil:Heating:Electric,
   Coil Heating Electric 4,                 !- Name
   {00000000-0000-0000-0060-000000000001},  !- Availability Schedule Name
   ,                                        !- Efficiency
-  10310.8687162399,                        !- Nominal Capacity {W}
+  10312.3190402985,                        !- Nominal Capacity {W}
   ,                                        !- Air Inlet Node Name
   ;                                        !- Air Outlet Node Name
 
@@ -901,7 +913,7 @@ OS:Coil:Heating:Electric,
   Coil Heating Electric 5,                 !- Name
   {00000000-0000-0000-0060-000000000001},  !- Availability Schedule Name
   ,                                        !- Efficiency
-  5860.14540195465,                        !- Nominal Capacity {W}
+  5764.09442424774,                        !- Nominal Capacity {W}
   ,                                        !- Air Inlet Node Name
   ;                                        !- Air Outlet Node Name
 
@@ -910,7 +922,7 @@ OS:Coil:Heating:Electric,
   Coil Heating Electric 6,                 !- Name
   {00000000-0000-0000-0060-000000000001},  !- Availability Schedule Name
   ,                                        !- Efficiency
-  11752.9098987579,                        !- Nominal Capacity {W}
+  11754.1574478149,                        !- Nominal Capacity {W}
   ,                                        !- Air Inlet Node Name
   ;                                        !- Air Outlet Node Name
 
@@ -928,7 +940,7 @@ OS:Coil:Heating:Electric,
   Coil Heating Electric 8,                 !- Name
   {00000000-0000-0000-0060-000000000001},  !- Availability Schedule Name
   ,                                        !- Efficiency
-  20076.7271518707,                        !- Nominal Capacity {W}
+  20098.5071182251,                        !- Nominal Capacity {W}
   ,                                        !- Air Inlet Node Name
   ;                                        !- Air Outlet Node Name
 
@@ -937,7 +949,7 @@ OS:Coil:Heating:Electric,
   Coil Heating Electric 9,                 !- Name
   {00000000-0000-0000-0060-000000000001},  !- Availability Schedule Name
   ,                                        !- Efficiency
-  13291.9927597046,                        !- Nominal Capacity {W}
+  13299.0377426147,                        !- Nominal Capacity {W}
   ,                                        !- Air Inlet Node Name
   ;                                        !- Air Outlet Node Name
 
@@ -3656,15 +3668,15 @@ OS:Controller:OutdoorAir,
   ,                                        !- Economizer Minimum Limit Dry-Bulb Temperature {C}
   NoLockout,                               !- Lockout Type
   FixedMinimum,                            !- Minimum Limit Type
-  {00000000-0000-0000-0063-000000000027},  !- Minimum Outdoor Air Schedule Name
+  {00000000-0000-0000-0063-000000000026},  !- Minimum Outdoor Air Schedule Name
   ,                                        !- Minimum Fraction of Outdoor Air Schedule Name
   ,                                        !- Maximum Fraction of Outdoor Air Schedule Name
   {00000000-0000-0000-0019-000000000001},  !- Controller Mechanical Ventilation
   ,                                        !- Time of Day Economizer Control Schedule Name
   No,                                      !- High Humidity Control
   ,                                        !- Humidistat Control Zone Name
-  ,                                        !- High Humidity Outdoor Air Flow Ratio
-  ,                                        !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
+  1,                                       !- High Humidity Outdoor Air Flow Ratio
+  Yes,                                     !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
   BypassWhenWithinEconomizerLimits,        !- Heat Recovery Bypass Control Type
   InterlockedWithMechanicalCooling;        !- Economizer Operation Staging
 
@@ -3686,15 +3698,15 @@ OS:Controller:OutdoorAir,
   ,                                        !- Economizer Minimum Limit Dry-Bulb Temperature {C}
   NoLockout,                               !- Lockout Type
   FixedMinimum,                            !- Minimum Limit Type
-  {00000000-0000-0000-0063-000000000025},  !- Minimum Outdoor Air Schedule Name
+  {00000000-0000-0000-0063-000000000024},  !- Minimum Outdoor Air Schedule Name
   ,                                        !- Minimum Fraction of Outdoor Air Schedule Name
   ,                                        !- Maximum Fraction of Outdoor Air Schedule Name
   {00000000-0000-0000-0019-000000000002},  !- Controller Mechanical Ventilation
   ,                                        !- Time of Day Economizer Control Schedule Name
   No,                                      !- High Humidity Control
   ,                                        !- Humidistat Control Zone Name
-  ,                                        !- High Humidity Outdoor Air Flow Ratio
-  ,                                        !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
+  1,                                       !- High Humidity Outdoor Air Flow Ratio
+  Yes,                                     !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
   BypassWhenWithinEconomizerLimits,        !- Heat Recovery Bypass Control Type
   InterlockedWithMechanicalCooling;        !- Economizer Operation Staging
 
@@ -3716,15 +3728,15 @@ OS:Controller:OutdoorAir,
   ,                                        !- Economizer Minimum Limit Dry-Bulb Temperature {C}
   NoLockout,                               !- Lockout Type
   FixedMinimum,                            !- Minimum Limit Type
-  {00000000-0000-0000-0063-000000000026},  !- Minimum Outdoor Air Schedule Name
+  {00000000-0000-0000-0063-000000000025},  !- Minimum Outdoor Air Schedule Name
   ,                                        !- Minimum Fraction of Outdoor Air Schedule Name
   ,                                        !- Maximum Fraction of Outdoor Air Schedule Name
   {00000000-0000-0000-0019-000000000003},  !- Controller Mechanical Ventilation
   ,                                        !- Time of Day Economizer Control Schedule Name
   No,                                      !- High Humidity Control
   ,                                        !- Humidistat Control Zone Name
-  ,                                        !- High Humidity Outdoor Air Flow Ratio
-  ,                                        !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
+  1,                                       !- High Humidity Outdoor Air Flow Ratio
+  Yes,                                     !- Control High Indoor Humidity Based on Outdoor Humidity Ratio
   BypassWhenWithinEconomizerLimits,        !- Heat Recovery Bypass Control Type
   InterlockedWithMechanicalCooling;        !- Economizer Operation Staging
 
@@ -4004,7 +4016,7 @@ OS:DefaultScheduleSet,
   ,                                        !- Electric Equipment Schedule Name
   ,                                        !- Gas Equipment Schedule Name
   ,                                        !- Hot Water Equipment Schedule Name
-  {00000000-0000-0000-0063-000000000002},  !- Infiltration Schedule Name
+  ,                                        !- Infiltration Schedule Name
   ,                                        !- Steam Equipment Schedule Name
   ;                                        !- Other Equipment Schedule Name
 
@@ -4012,13 +4024,13 @@ OS:DefaultScheduleSet,
   {00000000-0000-0000-0028-000000000002},  !- Handle
   Space Function Office - open plan Schedule Set, !- Name
   ,                                        !- Hours of Operation Schedule Name
-  {00000000-0000-0000-0063-000000000012},  !- Number of People Schedule Name
-  {00000000-0000-0000-0063-000000000016},  !- People Activity Level Schedule Name
-  {00000000-0000-0000-0063-000000000011},  !- Lighting Schedule Name
-  {00000000-0000-0000-0063-000000000010},  !- Electric Equipment Schedule Name
+  {00000000-0000-0000-0063-000000000011},  !- Number of People Schedule Name
+  {00000000-0000-0000-0063-000000000015},  !- People Activity Level Schedule Name
+  {00000000-0000-0000-0063-000000000010},  !- Lighting Schedule Name
+  {00000000-0000-0000-0063-000000000009},  !- Electric Equipment Schedule Name
   ,                                        !- Gas Equipment Schedule Name
   ,                                        !- Hot Water Equipment Schedule Name
-  {00000000-0000-0000-0063-000000000002},  !- Infiltration Schedule Name
+  ,                                        !- Infiltration Schedule Name
   ,                                        !- Steam Equipment Schedule Name
   ;                                        !- Other Equipment Schedule Name
 
@@ -4135,7 +4147,7 @@ OS:ElectricEquipment:Definition,
 OS:EnergyManagementSystem:Actuator,
   {00000000-0000-0000-0034-000000000001},  !- Handle
   ems_sys_6_mixed_shr_none_sh_c_e_sc_c_chw_ssf_vv_zh_b_e_zc_none_srf_vv__1_ClgSch0, !- Name
-  {00000000-0000-0000-0063-000000000014},  !- Actuated Component Name
+  {00000000-0000-0000-0063-000000000013},  !- Actuated Component Name
   Schedule:Year,                           !- Actuated Component Type
   Schedule Value,                          !- Actuated Component Control Type
   ;                                        !- Zone or Space Name
@@ -4143,7 +4155,7 @@ OS:EnergyManagementSystem:Actuator,
 OS:EnergyManagementSystem:Actuator,
   {00000000-0000-0000-0034-000000000002},  !- Handle
   ems_sys_6_mixed_shr_none_sh_c_e_sc_c_chw_ssf_vv_zh_b_e_zc_none_srf_vv__1_HtgSch0, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Actuated Component Name
+  {00000000-0000-0000-0063-000000000014},  !- Actuated Component Name
   Schedule:Year,                           !- Actuated Component Type
   Schedule Value,                          !- Actuated Component Control Type
   ;                                        !- Zone or Space Name
@@ -4151,7 +4163,7 @@ OS:EnergyManagementSystem:Actuator,
 OS:EnergyManagementSystem:Actuator,
   {00000000-0000-0000-0034-000000000003},  !- Handle
   ems_sys_6_mixed_shr_none_sh_c_e_sc_c_chw_ssf_vv_zh_b_e_zc_none_srf_vv__2_ClgSch0, !- Name
-  {00000000-0000-0000-0063-000000000014},  !- Actuated Component Name
+  {00000000-0000-0000-0063-000000000013},  !- Actuated Component Name
   Schedule:Year,                           !- Actuated Component Type
   Schedule Value,                          !- Actuated Component Control Type
   ;                                        !- Zone or Space Name
@@ -4159,7 +4171,7 @@ OS:EnergyManagementSystem:Actuator,
 OS:EnergyManagementSystem:Actuator,
   {00000000-0000-0000-0034-000000000004},  !- Handle
   ems_sys_6_mixed_shr_none_sh_c_e_sc_c_chw_ssf_vv_zh_b_e_zc_none_srf_vv__2_HtgSch0, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Actuated Component Name
+  {00000000-0000-0000-0063-000000000014},  !- Actuated Component Name
   Schedule:Year,                           !- Actuated Component Type
   Schedule Value,                          !- Actuated Component Control Type
   ;                                        !- Zone or Space Name
@@ -4167,7 +4179,7 @@ OS:EnergyManagementSystem:Actuator,
 OS:EnergyManagementSystem:Actuator,
   {00000000-0000-0000-0034-000000000005},  !- Handle
   ems_sys_6_mixed_shr_none_sh_c_e_sc_c_chw_ssf_vv_zh_b_e_zc_none_srf_vv__ClgSch0, !- Name
-  {00000000-0000-0000-0063-000000000014},  !- Actuated Component Name
+  {00000000-0000-0000-0063-000000000013},  !- Actuated Component Name
   Schedule:Year,                           !- Actuated Component Type
   Schedule Value,                          !- Actuated Component Control Type
   ;                                        !- Zone or Space Name
@@ -4175,7 +4187,7 @@ OS:EnergyManagementSystem:Actuator,
 OS:EnergyManagementSystem:Actuator,
   {00000000-0000-0000-0034-000000000006},  !- Handle
   ems_sys_6_mixed_shr_none_sh_c_e_sc_c_chw_ssf_vv_zh_b_e_zc_none_srf_vv__HtgSch0, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Actuated Component Name
+  {00000000-0000-0000-0063-000000000014},  !- Actuated Component Name
   Schedule:Year,                           !- Actuated Component Type
   Schedule Value,                          !- Actuated Component Control Type
   ;                                        !- Zone or Space Name
@@ -4183,61 +4195,61 @@ OS:EnergyManagementSystem:Actuator,
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0035-000000000001},  !- Handle
   ems_sys_6_mixed_shr_none_sh_c_e_sc_c_chw_ssf_vv_zh_b_e_zc_none_srf_vv__1_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {b6ef6d6b-7168-4354-aacb-a9921e6ac6f7}<23.9 && {b6ef6d6b-7168-4354-aacb-a9921e6ac6f7}>1.7, !- Program Line 1
-  SET {b12cb4ef-9474-4e92-9422-1cf9b91d4551} = 29.4, !- Program Line 2
-  SET {333547a9-991f-49e0-8e8c-f8b563a7a1a8} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {b6ef6d6b-7168-4354-aacb-a9921e6ac6f7}<23.9 && {b6ef6d6b-7168-4354-aacb-a9921e6ac6f7}>1.7, !- Program Line 4
-  SET {b12cb4ef-9474-4e92-9422-1cf9b91d4551} = 29.4, !- Program Line 5
-  SET {333547a9-991f-49e0-8e8c-f8b563a7a1a8} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {b6ef6d6b-7168-4354-aacb-a9921e6ac6f7}<23.9 && {b6ef6d6b-7168-4354-aacb-a9921e6ac6f7}>1.7, !- Program Line 7
-  SET {b12cb4ef-9474-4e92-9422-1cf9b91d4551} = 29.4, !- Program Line 8
-  SET {333547a9-991f-49e0-8e8c-f8b563a7a1a8} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {b6ef6d6b-7168-4354-aacb-a9921e6ac6f7}<23.9 && {b6ef6d6b-7168-4354-aacb-a9921e6ac6f7}>1.7, !- Program Line 10
-  SET {b12cb4ef-9474-4e92-9422-1cf9b91d4551} = 29.4, !- Program Line 11
-  SET {333547a9-991f-49e0-8e8c-f8b563a7a1a8} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {dac788d2-74be-4253-9173-4acbc6cf3140}<23.9 && {dac788d2-74be-4253-9173-4acbc6cf3140}>1.7, !- Program Line 1
+  SET {4bc25466-eafc-4d1d-862a-0469c2acda44} = 29.4, !- Program Line 2
+  SET {d79f0a6a-4454-40c2-9a72-7df47fa8c6a9} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {dac788d2-74be-4253-9173-4acbc6cf3140}<23.9 && {dac788d2-74be-4253-9173-4acbc6cf3140}>1.7, !- Program Line 4
+  SET {4bc25466-eafc-4d1d-862a-0469c2acda44} = 29.4, !- Program Line 5
+  SET {d79f0a6a-4454-40c2-9a72-7df47fa8c6a9} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {dac788d2-74be-4253-9173-4acbc6cf3140}<23.9 && {dac788d2-74be-4253-9173-4acbc6cf3140}>1.7, !- Program Line 7
+  SET {4bc25466-eafc-4d1d-862a-0469c2acda44} = 29.4, !- Program Line 8
+  SET {d79f0a6a-4454-40c2-9a72-7df47fa8c6a9} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {dac788d2-74be-4253-9173-4acbc6cf3140}<23.9 && {dac788d2-74be-4253-9173-4acbc6cf3140}>1.7, !- Program Line 10
+  SET {4bc25466-eafc-4d1d-862a-0469c2acda44} = 29.4, !- Program Line 11
+  SET {d79f0a6a-4454-40c2-9a72-7df47fa8c6a9} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {b12cb4ef-9474-4e92-9422-1cf9b91d4551} = NULL, !- Program Line 14
-  SET {333547a9-991f-49e0-8e8c-f8b563a7a1a8} = NULL, !- Program Line 15
+  SET {4bc25466-eafc-4d1d-862a-0469c2acda44} = NULL, !- Program Line 14
+  SET {d79f0a6a-4454-40c2-9a72-7df47fa8c6a9} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0035-000000000002},  !- Handle
   ems_sys_6_mixed_shr_none_sh_c_e_sc_c_chw_ssf_vv_zh_b_e_zc_none_srf_vv__2_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {a67bac6d-275a-4083-9047-bd800a65cf3b}<23.9 && {a67bac6d-275a-4083-9047-bd800a65cf3b}>1.7, !- Program Line 1
-  SET {9e309137-843f-488c-80bf-8808f737fc5d} = 29.4, !- Program Line 2
-  SET {c5b94068-7615-4668-b47d-2d9059923367} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {a67bac6d-275a-4083-9047-bd800a65cf3b}<23.9 && {a67bac6d-275a-4083-9047-bd800a65cf3b}>1.7, !- Program Line 4
-  SET {9e309137-843f-488c-80bf-8808f737fc5d} = 29.4, !- Program Line 5
-  SET {c5b94068-7615-4668-b47d-2d9059923367} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {a67bac6d-275a-4083-9047-bd800a65cf3b}<23.9 && {a67bac6d-275a-4083-9047-bd800a65cf3b}>1.7, !- Program Line 7
-  SET {9e309137-843f-488c-80bf-8808f737fc5d} = 29.4, !- Program Line 8
-  SET {c5b94068-7615-4668-b47d-2d9059923367} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {a67bac6d-275a-4083-9047-bd800a65cf3b}<23.9 && {a67bac6d-275a-4083-9047-bd800a65cf3b}>1.7, !- Program Line 10
-  SET {9e309137-843f-488c-80bf-8808f737fc5d} = 29.4, !- Program Line 11
-  SET {c5b94068-7615-4668-b47d-2d9059923367} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {61064639-2a44-4de2-b659-fbd308305967}<23.9 && {61064639-2a44-4de2-b659-fbd308305967}>1.7, !- Program Line 1
+  SET {db32e3a8-3bef-4803-9aec-941f2e965f8b} = 29.4, !- Program Line 2
+  SET {1b2c2332-bafc-48de-8a56-ff871a325065} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {61064639-2a44-4de2-b659-fbd308305967}<23.9 && {61064639-2a44-4de2-b659-fbd308305967}>1.7, !- Program Line 4
+  SET {db32e3a8-3bef-4803-9aec-941f2e965f8b} = 29.4, !- Program Line 5
+  SET {1b2c2332-bafc-48de-8a56-ff871a325065} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {61064639-2a44-4de2-b659-fbd308305967}<23.9 && {61064639-2a44-4de2-b659-fbd308305967}>1.7, !- Program Line 7
+  SET {db32e3a8-3bef-4803-9aec-941f2e965f8b} = 29.4, !- Program Line 8
+  SET {1b2c2332-bafc-48de-8a56-ff871a325065} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {61064639-2a44-4de2-b659-fbd308305967}<23.9 && {61064639-2a44-4de2-b659-fbd308305967}>1.7, !- Program Line 10
+  SET {db32e3a8-3bef-4803-9aec-941f2e965f8b} = 29.4, !- Program Line 11
+  SET {1b2c2332-bafc-48de-8a56-ff871a325065} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {9e309137-843f-488c-80bf-8808f737fc5d} = NULL, !- Program Line 14
-  SET {c5b94068-7615-4668-b47d-2d9059923367} = NULL, !- Program Line 15
+  SET {db32e3a8-3bef-4803-9aec-941f2e965f8b} = NULL, !- Program Line 14
+  SET {1b2c2332-bafc-48de-8a56-ff871a325065} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0035-000000000003},  !- Handle
   ems_sys_6_mixed_shr_none_sh_c_e_sc_c_chw_ssf_vv_zh_b_e_zc_none_srf_vv__OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {2d5055eb-e4c6-48cd-8a1c-110ca4112648}<23.9 && {2d5055eb-e4c6-48cd-8a1c-110ca4112648}>1.7, !- Program Line 1
-  SET {7d9529ca-17a8-41bc-bd05-6de5960a8eb4} = 29.4, !- Program Line 2
-  SET {d983c791-5d18-4b25-8abe-19e03b36ae2b} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {2d5055eb-e4c6-48cd-8a1c-110ca4112648}<23.9 && {2d5055eb-e4c6-48cd-8a1c-110ca4112648}>1.7, !- Program Line 4
-  SET {7d9529ca-17a8-41bc-bd05-6de5960a8eb4} = 29.4, !- Program Line 5
-  SET {d983c791-5d18-4b25-8abe-19e03b36ae2b} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {2d5055eb-e4c6-48cd-8a1c-110ca4112648}<23.9 && {2d5055eb-e4c6-48cd-8a1c-110ca4112648}>1.7, !- Program Line 7
-  SET {7d9529ca-17a8-41bc-bd05-6de5960a8eb4} = 29.4, !- Program Line 8
-  SET {d983c791-5d18-4b25-8abe-19e03b36ae2b} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {2d5055eb-e4c6-48cd-8a1c-110ca4112648}<23.9 && {2d5055eb-e4c6-48cd-8a1c-110ca4112648}>1.7, !- Program Line 10
-  SET {7d9529ca-17a8-41bc-bd05-6de5960a8eb4} = 29.4, !- Program Line 11
-  SET {d983c791-5d18-4b25-8abe-19e03b36ae2b} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {4a2bb966-b5ea-4c83-b0d2-7b58cf06e39e}<23.9 && {4a2bb966-b5ea-4c83-b0d2-7b58cf06e39e}>1.7, !- Program Line 1
+  SET {f61b425c-6697-4517-a0b5-040240dbf972} = 29.4, !- Program Line 2
+  SET {7ce5cf12-59ee-4171-8c84-5d66ee7a45e1} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {4a2bb966-b5ea-4c83-b0d2-7b58cf06e39e}<23.9 && {4a2bb966-b5ea-4c83-b0d2-7b58cf06e39e}>1.7, !- Program Line 4
+  SET {f61b425c-6697-4517-a0b5-040240dbf972} = 29.4, !- Program Line 5
+  SET {7ce5cf12-59ee-4171-8c84-5d66ee7a45e1} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {4a2bb966-b5ea-4c83-b0d2-7b58cf06e39e}<23.9 && {4a2bb966-b5ea-4c83-b0d2-7b58cf06e39e}>1.7, !- Program Line 7
+  SET {f61b425c-6697-4517-a0b5-040240dbf972} = 29.4, !- Program Line 8
+  SET {7ce5cf12-59ee-4171-8c84-5d66ee7a45e1} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {4a2bb966-b5ea-4c83-b0d2-7b58cf06e39e}<23.9 && {4a2bb966-b5ea-4c83-b0d2-7b58cf06e39e}>1.7, !- Program Line 10
+  SET {f61b425c-6697-4517-a0b5-040240dbf972} = 29.4, !- Program Line 11
+  SET {7ce5cf12-59ee-4171-8c84-5d66ee7a45e1} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {7d9529ca-17a8-41bc-bd05-6de5960a8eb4} = NULL, !- Program Line 14
-  SET {d983c791-5d18-4b25-8abe-19e03b36ae2b} = NULL, !- Program Line 15
+  SET {f61b425c-6697-4517-a0b5-040240dbf972} = NULL, !- Program Line 14
+  SET {7ce5cf12-59ee-4171-8c84-5d66ee7a45e1} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:ProgramCallingManager,
@@ -5932,8 +5944,8 @@ OS:People,
   ,                                        !- Number of People Schedule Name
   ,                                        !- Activity Level Schedule Name
   ,                                        !- Surface Name/Angle Factor List Name
-  {00000000-0000-0000-0063-000000000024},  !- Work Efficiency Schedule Name
-  {00000000-0000-0000-0063-000000000005},  !- Clothing Insulation Schedule Name
+  {00000000-0000-0000-0063-000000000023},  !- Work Efficiency Schedule Name
+  {00000000-0000-0000-0063-000000000004},  !- Clothing Insulation Schedule Name
   {00000000-0000-0000-0063-000000000001},  !- Air Velocity Schedule Name
   1;                                       !- Multiplier
 
@@ -6077,7 +6089,7 @@ OS:PlantLoop,
   ,                                        !- Primary Plant Equipment Operation Scheme
   {00000000-0000-0000-0049-000000000098},  !- Loop Temperature Setpoint Node Name
   60,                                      !- Maximum Loop Temperature {C}
-  10,                                      !- Minimum Loop Temperature {C}
+  51.6666666666667,                        !- Minimum Loop Temperature {C}
   ,                                        !- Maximum Loop Flow Rate {m3/s}
   ,                                        !- Minimum Loop Flow Rate {m3/s}
   Autocalculate,                           !- Plant Loop Volume {m3}
@@ -6677,15 +6689,6 @@ OS:Schedule:Day,
 
 OS:Schedule:Day,
   {00000000-0000-0000-0061-000000000002},  !- Handle
-  Always On Default,                       !- Name
-  {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
-  No,                                      !- Interpolate to Timestep
-  24,                                      !- Hour 1
-  0,                                       !- Minute 1
-  1;                                       !- Value Until Time 1
-
-OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000003},  !- Handle
   Clothing Schedule Default Winter Clothes, !- Name
   {00000000-0000-0000-0064-000000000003},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -6694,7 +6697,7 @@ OS:Schedule:Day,
   1;                                       !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000004},  !- Handle
+  {00000000-0000-0000-0061-000000000003},  !- Handle
   Clothing Schedule Summer Clothes,        !- Name
   {00000000-0000-0000-0064-000000000003},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -6703,7 +6706,7 @@ OS:Schedule:Day,
   0.5;                                     !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000005},  !- Handle
+  {00000000-0000-0000-0061-000000000004},  !- Handle
   Economizer Max OA Fraction 100 pct Default, !- Name
   ,                                        !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -6712,7 +6715,7 @@ OS:Schedule:Day,
   1;                                       !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000006},  !- Handle
+  {00000000-0000-0000-0061-000000000005},  !- Handle
   Fraction Latent - 0.05 Default,          !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -6721,7 +6724,7 @@ OS:Schedule:Day,
   0.05;                                    !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000007},  !- Handle
+  {00000000-0000-0000-0061-000000000006},  !- Handle
   Fraction Sensible - 0.2 Default,         !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -6730,7 +6733,7 @@ OS:Schedule:Day,
   0.2;                                     !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000008},  !- Handle
+  {00000000-0000-0000-0061-000000000007},  !- Handle
   Mixed Water At Faucet Temp - 140F Default, !- Name
   {00000000-0000-0000-0064-000000000008},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -6739,7 +6742,7 @@ OS:Schedule:Day,
   60;                                      !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000009},  !- Handle
+  {00000000-0000-0000-0061-000000000008},  !- Handle
   NECB-A-Electric-Equipment Default,       !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   No,                                      !- Interpolate to Timestep
@@ -6766,7 +6769,7 @@ OS:Schedule:Day,
   0.2;                                     !- Value Until Time 7
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000010},  !- Handle
+  {00000000-0000-0000-0061-000000000009},  !- Handle
   NECB-A-Electric-Equipment Default|Wkdy Day, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   No,                                      !- Interpolate to Timestep
@@ -6793,7 +6796,7 @@ OS:Schedule:Day,
   0.2;                                     !- Value Until Time 7
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000011},  !- Handle
+  {00000000-0000-0000-0061-000000000010},  !- Handle
   NECB-A-Electric-Equipment Sat Day,       !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   No,                                      !- Interpolate to Timestep
@@ -6802,7 +6805,7 @@ OS:Schedule:Day,
   0.2;                                     !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000012},  !- Handle
+  {00000000-0000-0000-0061-000000000011},  !- Handle
   NECB-A-Electric-Equipment Sun|Hol Day,   !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   No,                                      !- Interpolate to Timestep
@@ -6811,7 +6814,7 @@ OS:Schedule:Day,
   0.2;                                     !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000013},  !- Handle
+  {00000000-0000-0000-0061-000000000012},  !- Handle
   NECB-A-Lighting Default,                 !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   No,                                      !- Interpolate to Timestep
@@ -6844,7 +6847,7 @@ OS:Schedule:Day,
   0.05;                                    !- Value Until Time 9
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000014},  !- Handle
+  {00000000-0000-0000-0061-000000000013},  !- Handle
   NECB-A-Lighting Default|Wkdy Day,        !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   No,                                      !- Interpolate to Timestep
@@ -6877,7 +6880,7 @@ OS:Schedule:Day,
   0.05;                                    !- Value Until Time 9
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000015},  !- Handle
+  {00000000-0000-0000-0061-000000000014},  !- Handle
   NECB-A-Lighting Sat Day,                 !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   No,                                      !- Interpolate to Timestep
@@ -6886,7 +6889,7 @@ OS:Schedule:Day,
   0.05;                                    !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000016},  !- Handle
+  {00000000-0000-0000-0061-000000000015},  !- Handle
   NECB-A-Lighting Sun|Hol Day,             !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   No,                                      !- Interpolate to Timestep
@@ -6895,7 +6898,7 @@ OS:Schedule:Day,
   0.05;                                    !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000017},  !- Handle
+  {00000000-0000-0000-0061-000000000016},  !- Handle
   NECB-A-Occupancy Default,                !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   No,                                      !- Interpolate to Timestep
@@ -6931,7 +6934,7 @@ OS:Schedule:Day,
   0;                                       !- Value Until Time 10
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000018},  !- Handle
+  {00000000-0000-0000-0061-000000000017},  !- Handle
   NECB-A-Occupancy Default|Wkdy Day,       !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   No,                                      !- Interpolate to Timestep
@@ -6967,7 +6970,7 @@ OS:Schedule:Day,
   0;                                       !- Value Until Time 10
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000019},  !- Handle
+  {00000000-0000-0000-0061-000000000018},  !- Handle
   NECB-A-Occupancy Sat Day,                !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   No,                                      !- Interpolate to Timestep
@@ -6976,7 +6979,7 @@ OS:Schedule:Day,
   0;                                       !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000020},  !- Handle
+  {00000000-0000-0000-0061-000000000019},  !- Handle
   NECB-A-Occupancy Sun|Hol Day,            !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   No,                                      !- Interpolate to Timestep
@@ -6985,7 +6988,7 @@ OS:Schedule:Day,
   0;                                       !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000021},  !- Handle
+  {00000000-0000-0000-0061-000000000020},  !- Handle
   NECB-A-Service Water Heating Default,    !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   No,                                      !- Interpolate to Timestep
@@ -7018,7 +7021,7 @@ OS:Schedule:Day,
   0.05;                                    !- Value Until Time 9
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000022},  !- Handle
+  {00000000-0000-0000-0061-000000000021},  !- Handle
   NECB-A-Service Water Heating Default|Wkdy Day, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   No,                                      !- Interpolate to Timestep
@@ -7051,7 +7054,7 @@ OS:Schedule:Day,
   0.05;                                    !- Value Until Time 9
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000023},  !- Handle
+  {00000000-0000-0000-0061-000000000022},  !- Handle
   NECB-A-Service Water Heating Sat Day,    !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   No,                                      !- Interpolate to Timestep
@@ -7060,7 +7063,7 @@ OS:Schedule:Day,
   0.05;                                    !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000024},  !- Handle
+  {00000000-0000-0000-0061-000000000023},  !- Handle
   NECB-A-Service Water Heating Sun|Hol Day, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   No,                                      !- Interpolate to Timestep
@@ -7069,7 +7072,7 @@ OS:Schedule:Day,
   0.05;                                    !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000025},  !- Handle
+  {00000000-0000-0000-0061-000000000024},  !- Handle
   NECB-A-Thermostat Setpoint-Cooling Default, !- Name
   {00000000-0000-0000-0064-000000000008},  !- Schedule Type Limits Name
   No,                                      !- Interpolate to Timestep
@@ -7084,7 +7087,7 @@ OS:Schedule:Day,
   35;                                      !- Value Until Time 3
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000026},  !- Handle
+  {00000000-0000-0000-0061-000000000025},  !- Handle
   NECB-A-Thermostat Setpoint-Cooling Default|Wkdy Day, !- Name
   {00000000-0000-0000-0064-000000000008},  !- Schedule Type Limits Name
   No,                                      !- Interpolate to Timestep
@@ -7099,7 +7102,7 @@ OS:Schedule:Day,
   35;                                      !- Value Until Time 3
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000027},  !- Handle
+  {00000000-0000-0000-0061-000000000026},  !- Handle
   NECB-A-Thermostat Setpoint-Cooling Sat Day, !- Name
   {00000000-0000-0000-0064-000000000008},  !- Schedule Type Limits Name
   No,                                      !- Interpolate to Timestep
@@ -7108,7 +7111,7 @@ OS:Schedule:Day,
   35;                                      !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000028},  !- Handle
+  {00000000-0000-0000-0061-000000000027},  !- Handle
   NECB-A-Thermostat Setpoint-Cooling Sun|Hol Day, !- Name
   {00000000-0000-0000-0064-000000000008},  !- Schedule Type Limits Name
   No,                                      !- Interpolate to Timestep
@@ -7117,7 +7120,7 @@ OS:Schedule:Day,
   35;                                      !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000029},  !- Handle
+  {00000000-0000-0000-0061-000000000028},  !- Handle
   NECB-A-Thermostat Setpoint-Heating Default, !- Name
   {00000000-0000-0000-0064-000000000008},  !- Schedule Type Limits Name
   No,                                      !- Interpolate to Timestep
@@ -7135,7 +7138,7 @@ OS:Schedule:Day,
   18;                                      !- Value Until Time 4
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000030},  !- Handle
+  {00000000-0000-0000-0061-000000000029},  !- Handle
   NECB-A-Thermostat Setpoint-Heating Default|Wkdy Day, !- Name
   {00000000-0000-0000-0064-000000000008},  !- Schedule Type Limits Name
   No,                                      !- Interpolate to Timestep
@@ -7153,7 +7156,7 @@ OS:Schedule:Day,
   18;                                      !- Value Until Time 4
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000031},  !- Handle
+  {00000000-0000-0000-0061-000000000030},  !- Handle
   NECB-A-Thermostat Setpoint-Heating Sat Day, !- Name
   {00000000-0000-0000-0064-000000000008},  !- Schedule Type Limits Name
   No,                                      !- Interpolate to Timestep
@@ -7162,7 +7165,7 @@ OS:Schedule:Day,
   18;                                      !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000032},  !- Handle
+  {00000000-0000-0000-0061-000000000031},  !- Handle
   NECB-A-Thermostat Setpoint-Heating Sun|Hol Day, !- Name
   {00000000-0000-0000-0064-000000000008},  !- Schedule Type Limits Name
   No,                                      !- Interpolate to Timestep
@@ -7171,7 +7174,7 @@ OS:Schedule:Day,
   18;                                      !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000033},  !- Handle
+  {00000000-0000-0000-0061-000000000032},  !- Handle
   NECB-Activity Default,                   !- Name
   {00000000-0000-0000-0064-000000000001},  !- Schedule Type Limits Name
   No,                                      !- Interpolate to Timestep
@@ -7180,7 +7183,7 @@ OS:Schedule:Day,
   130;                                     !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000034},  !- Handle
+  {00000000-0000-0000-0061-000000000033},  !- Handle
   NECB-Activity Summer Design Day,         !- Name
   {00000000-0000-0000-0064-000000000001},  !- Schedule Type Limits Name
   No,                                      !- Interpolate to Timestep
@@ -7189,7 +7192,7 @@ OS:Schedule:Day,
   130;                                     !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000035},  !- Handle
+  {00000000-0000-0000-0061-000000000034},  !- Handle
   NECB-Activity Winter Design Day,         !- Name
   {00000000-0000-0000-0064-000000000001},  !- Schedule Type Limits Name
   No,                                      !- Interpolate to Timestep
@@ -7198,7 +7201,7 @@ OS:Schedule:Day,
   130;                                     !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000036},  !- Handle
+  {00000000-0000-0000-0061-000000000035},  !- Handle
   Schedule Day 1,                          !- Name
   ,                                        !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -7207,7 +7210,7 @@ OS:Schedule:Day,
   0;                                       !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000037},  !- Handle
+  {00000000-0000-0000-0061-000000000036},  !- Handle
   Schedule Day 10,                         !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -7216,7 +7219,7 @@ OS:Schedule:Day,
   0;                                       !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000038},  !- Handle
+  {00000000-0000-0000-0061-000000000037},  !- Handle
   Schedule Day 11,                         !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -7225,7 +7228,7 @@ OS:Schedule:Day,
   0;                                       !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000039},  !- Handle
+  {00000000-0000-0000-0061-000000000038},  !- Handle
   Schedule Day 12,                         !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -7234,7 +7237,7 @@ OS:Schedule:Day,
   0;                                       !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000040},  !- Handle
+  {00000000-0000-0000-0061-000000000039},  !- Handle
   Schedule Day 2,                          !- Name
   ,                                        !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -7243,7 +7246,7 @@ OS:Schedule:Day,
   0;                                       !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000041},  !- Handle
+  {00000000-0000-0000-0061-000000000040},  !- Handle
   Schedule Day 3,                          !- Name
   {00000000-0000-0000-0064-000000000006},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -7321,7 +7324,7 @@ OS:Schedule:Day,
   7;                                       !- Value Until Time 24
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000042},  !- Handle
+  {00000000-0000-0000-0061-000000000041},  !- Handle
   Schedule Day 4,                          !- Name
   {00000000-0000-0000-0064-000000000007},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -7399,7 +7402,7 @@ OS:Schedule:Day,
   29;                                      !- Value Until Time 24
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000043},  !- Handle
+  {00000000-0000-0000-0061-000000000042},  !- Handle
   Schedule Day 5,                          !- Name
   {00000000-0000-0000-0064-000000000007},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -7408,7 +7411,7 @@ OS:Schedule:Day,
   22;                                      !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000044},  !- Handle
+  {00000000-0000-0000-0061-000000000043},  !- Handle
   Schedule Day 6,                          !- Name
   {00000000-0000-0000-0064-000000000007},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -7417,7 +7420,7 @@ OS:Schedule:Day,
   60;                                      !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000045},  !- Handle
+  {00000000-0000-0000-0061-000000000044},  !- Handle
   Schedule Day 7,                          !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -7426,7 +7429,7 @@ OS:Schedule:Day,
   0;                                       !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000046},  !- Handle
+  {00000000-0000-0000-0061-000000000045},  !- Handle
   Schedule Day 8,                          !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -7435,7 +7438,7 @@ OS:Schedule:Day,
   0;                                       !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000047},  !- Handle
+  {00000000-0000-0000-0061-000000000046},  !- Handle
   Schedule Day 9,                          !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -7444,7 +7447,7 @@ OS:Schedule:Day,
   0;                                       !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000048},  !- Handle
+  {00000000-0000-0000-0061-000000000047},  !- Handle
   Service Water Loop Temp - 140F Default,  !- Name
   {00000000-0000-0000-0064-000000000008},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -7453,7 +7456,7 @@ OS:Schedule:Day,
   60;                                      !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000049},  !- Handle
+  {00000000-0000-0000-0061-000000000048},  !- Handle
   Supply Air Temp Default 1,               !- Name
   {00000000-0000-0000-0064-000000000007},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -7462,7 +7465,7 @@ OS:Schedule:Day,
   13;                                      !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000050},  !- Handle
+  {00000000-0000-0000-0061-000000000049},  !- Handle
   Supply Air Temp Default 2,               !- Name
   {00000000-0000-0000-0064-000000000007},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -7471,7 +7474,7 @@ OS:Schedule:Day,
   13;                                      !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000051},  !- Handle
+  {00000000-0000-0000-0061-000000000050},  !- Handle
   Supply Air Temp Default,                 !- Name
   {00000000-0000-0000-0064-000000000007},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -7480,7 +7483,7 @@ OS:Schedule:Day,
   13;                                      !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000052},  !- Handle
+  {00000000-0000-0000-0061-000000000051},  !- Handle
   Water Heater Ambient Temp Schedule 71.6F Default, !- Name
   {00000000-0000-0000-0064-000000000008},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -7489,7 +7492,7 @@ OS:Schedule:Day,
   22.0000000000001;                        !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000053},  !- Handle
+  {00000000-0000-0000-0061-000000000052},  !- Handle
   Work Efficiency Schedule Default,        !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -7498,7 +7501,7 @@ OS:Schedule:Day,
   0;                                       !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000054},  !- Handle
+  {00000000-0000-0000-0061-000000000053},  !- Handle
   satCHW Temp 1,                           !- Name
   {00000000-0000-0000-0064-000000000006},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -7576,7 +7579,7 @@ OS:Schedule:Day,
   7;                                       !- Value Until Time 24
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000055},  !- Handle
+  {00000000-0000-0000-0061-000000000054},  !- Handle
   satCHW Temp,                             !- Name
   {00000000-0000-0000-0064-000000000006},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -7654,7 +7657,7 @@ OS:Schedule:Day,
   7;                                       !- Value Until Time 24
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000056},  !- Handle
+  {00000000-0000-0000-0061-000000000055},  !- Handle
   satCW Temp 1,                            !- Name
   {00000000-0000-0000-0064-000000000007},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -7732,7 +7735,7 @@ OS:Schedule:Day,
   29;                                      !- Value Until Time 24
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000057},  !- Handle
+  {00000000-0000-0000-0061-000000000056},  !- Handle
   satCW Temp,                              !- Name
   {00000000-0000-0000-0064-000000000007},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -7810,7 +7813,7 @@ OS:Schedule:Day,
   29;                                      !- Value Until Time 24
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000058},  !- Handle
+  {00000000-0000-0000-0061-000000000057},  !- Handle
   sunCHW Temp 1,                           !- Name
   {00000000-0000-0000-0064-000000000006},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -7888,7 +7891,7 @@ OS:Schedule:Day,
   7;                                       !- Value Until Time 24
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000059},  !- Handle
+  {00000000-0000-0000-0061-000000000058},  !- Handle
   sunCHW Temp,                             !- Name
   {00000000-0000-0000-0064-000000000006},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -7966,7 +7969,7 @@ OS:Schedule:Day,
   7;                                       !- Value Until Time 24
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000060},  !- Handle
+  {00000000-0000-0000-0061-000000000059},  !- Handle
   sunCW Temp 1,                            !- Name
   {00000000-0000-0000-0064-000000000007},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -8044,7 +8047,7 @@ OS:Schedule:Day,
   29;                                      !- Value Until Time 24
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000061},  !- Handle
+  {00000000-0000-0000-0061-000000000060},  !- Handle
   sunCW Temp,                              !- Name
   {00000000-0000-0000-0064-000000000007},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -8122,7 +8125,7 @@ OS:Schedule:Day,
   29;                                      !- Value Until Time 24
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000062},  !- Handle
+  {00000000-0000-0000-0061-000000000061},  !- Handle
   sys_6|mixed|shr>none|sh>c-e|sc>c-chw|ssf>vv|zh>b-e|zc>none|srf>vv| 1 Occ Sch Default, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -8137,7 +8140,7 @@ OS:Schedule:Day,
   0;                                       !- Value Until Time 3
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000063},  !- Handle
+  {00000000-0000-0000-0061-000000000062},  !- Handle
   sys_6|mixed|shr>none|sh>c-e|sc>c-chw|ssf>vv|zh>b-e|zc>none|srf>vv| 1 Occ Sch Summer Design Day, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -8146,7 +8149,7 @@ OS:Schedule:Day,
   1;                                       !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000064},  !- Handle
+  {00000000-0000-0000-0061-000000000063},  !- Handle
   sys_6|mixed|shr>none|sh>c-e|sc>c-chw|ssf>vv|zh>b-e|zc>none|srf>vv| 1 Occ Sch Winter Design Day, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -8155,7 +8158,7 @@ OS:Schedule:Day,
   1;                                       !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000065},  !- Handle
+  {00000000-0000-0000-0061-000000000064},  !- Handle
   sys_6|mixed|shr>none|sh>c-e|sc>c-chw|ssf>vv|zh>b-e|zc>none|srf>vv| 2 Occ Sch Default, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -8170,7 +8173,7 @@ OS:Schedule:Day,
   0;                                       !- Value Until Time 3
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000066},  !- Handle
+  {00000000-0000-0000-0061-000000000065},  !- Handle
   sys_6|mixed|shr>none|sh>c-e|sc>c-chw|ssf>vv|zh>b-e|zc>none|srf>vv| 2 Occ Sch Summer Design Day, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -8179,7 +8182,7 @@ OS:Schedule:Day,
   1;                                       !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000067},  !- Handle
+  {00000000-0000-0000-0061-000000000066},  !- Handle
   sys_6|mixed|shr>none|sh>c-e|sc>c-chw|ssf>vv|zh>b-e|zc>none|srf>vv| 2 Occ Sch Winter Design Day, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -8188,7 +8191,7 @@ OS:Schedule:Day,
   1;                                       !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000068},  !- Handle
+  {00000000-0000-0000-0061-000000000067},  !- Handle
   sys_6|mixed|shr>none|sh>c-e|sc>c-chw|ssf>vv|zh>b-e|zc>none|srf>vv| Occ Sch Default, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -8203,7 +8206,7 @@ OS:Schedule:Day,
   0;                                       !- Value Until Time 3
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000069},  !- Handle
+  {00000000-0000-0000-0061-000000000068},  !- Handle
   sys_6|mixed|shr>none|sh>c-e|sc>c-chw|ssf>vv|zh>b-e|zc>none|srf>vv| Occ Sch Summer Design Day, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -8212,7 +8215,7 @@ OS:Schedule:Day,
   1;                                       !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000070},  !- Handle
+  {00000000-0000-0000-0061-000000000069},  !- Handle
   sys_6|mixed|shr>none|sh>c-e|sc>c-chw|ssf>vv|zh>b-e|zc>none|srf>vv| Occ Sch Winter Design Day, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -8221,7 +8224,7 @@ OS:Schedule:Day,
   1;                                       !- Value Until Time 1
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000071},  !- Handle
+  {00000000-0000-0000-0061-000000000070},  !- Handle
   wkdCHW Temp 1,                           !- Name
   {00000000-0000-0000-0064-000000000006},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -8299,7 +8302,7 @@ OS:Schedule:Day,
   7;                                       !- Value Until Time 24
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000072},  !- Handle
+  {00000000-0000-0000-0061-000000000071},  !- Handle
   wkdCHW Temp,                             !- Name
   {00000000-0000-0000-0064-000000000006},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -8377,7 +8380,7 @@ OS:Schedule:Day,
   7;                                       !- Value Until Time 24
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000073},  !- Handle
+  {00000000-0000-0000-0061-000000000072},  !- Handle
   wkdCW Temp 1,                            !- Name
   {00000000-0000-0000-0064-000000000007},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -8455,7 +8458,7 @@ OS:Schedule:Day,
   29;                                      !- Value Until Time 24
 
 OS:Schedule:Day,
-  {00000000-0000-0000-0061-000000000074},  !- Handle
+  {00000000-0000-0000-0061-000000000073},  !- Handle
   wkdCW Temp,                              !- Name
   {00000000-0000-0000-0064-000000000007},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
@@ -8535,9 +8538,9 @@ OS:Schedule:Day,
 OS:Schedule:Rule,
   {00000000-0000-0000-0062-000000000001},  !- Handle
   Schedule Rule 1,                         !- Name
-  {00000000-0000-0000-0063-000000000005},  !- Schedule Ruleset Name
+  {00000000-0000-0000-0063-000000000004},  !- Schedule Ruleset Name
   0,                                       !- Rule Order
-  {00000000-0000-0000-0061-000000000004},  !- Day Schedule Name
+  {00000000-0000-0000-0061-000000000003},  !- Day Schedule Name
   ,                                        !- Apply Sunday
   ,                                        !- Apply Monday
   ,                                        !- Apply Tuesday
@@ -8554,9 +8557,9 @@ OS:Schedule:Rule,
 OS:Schedule:Rule,
   {00000000-0000-0000-0062-000000000002},  !- Handle
   Schedule Rule 10,                        !- Name
-  {00000000-0000-0000-0063-000000000010},  !- Schedule Ruleset Name
+  {00000000-0000-0000-0063-000000000009},  !- Schedule Ruleset Name
   0,                                       !- Rule Order
-  {00000000-0000-0000-0061-000000000012},  !- Day Schedule Name
+  {00000000-0000-0000-0061-000000000011},  !- Day Schedule Name
   Yes,                                     !- Apply Sunday
   ,                                        !- Apply Monday
   ,                                        !- Apply Tuesday
@@ -8573,9 +8576,9 @@ OS:Schedule:Rule,
 OS:Schedule:Rule,
   {00000000-0000-0000-0062-000000000003},  !- Handle
   Schedule Rule 11,                        !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Schedule Ruleset Name
+  {00000000-0000-0000-0063-000000000014},  !- Schedule Ruleset Name
   2,                                       !- Rule Order
-  {00000000-0000-0000-0061-000000000030},  !- Day Schedule Name
+  {00000000-0000-0000-0061-000000000029},  !- Day Schedule Name
   ,                                        !- Apply Sunday
   Yes,                                     !- Apply Monday
   Yes,                                     !- Apply Tuesday
@@ -8592,9 +8595,9 @@ OS:Schedule:Rule,
 OS:Schedule:Rule,
   {00000000-0000-0000-0062-000000000004},  !- Handle
   Schedule Rule 12,                        !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Schedule Ruleset Name
+  {00000000-0000-0000-0063-000000000014},  !- Schedule Ruleset Name
   1,                                       !- Rule Order
-  {00000000-0000-0000-0061-000000000031},  !- Day Schedule Name
+  {00000000-0000-0000-0061-000000000030},  !- Day Schedule Name
   ,                                        !- Apply Sunday
   ,                                        !- Apply Monday
   ,                                        !- Apply Tuesday
@@ -8611,9 +8614,9 @@ OS:Schedule:Rule,
 OS:Schedule:Rule,
   {00000000-0000-0000-0062-000000000005},  !- Handle
   Schedule Rule 13,                        !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Schedule Ruleset Name
+  {00000000-0000-0000-0063-000000000014},  !- Schedule Ruleset Name
   0,                                       !- Rule Order
-  {00000000-0000-0000-0061-000000000032},  !- Day Schedule Name
+  {00000000-0000-0000-0061-000000000031},  !- Day Schedule Name
   Yes,                                     !- Apply Sunday
   ,                                        !- Apply Monday
   ,                                        !- Apply Tuesday
@@ -8630,9 +8633,9 @@ OS:Schedule:Rule,
 OS:Schedule:Rule,
   {00000000-0000-0000-0062-000000000006},  !- Handle
   Schedule Rule 14,                        !- Name
-  {00000000-0000-0000-0063-000000000014},  !- Schedule Ruleset Name
+  {00000000-0000-0000-0063-000000000013},  !- Schedule Ruleset Name
   2,                                       !- Rule Order
-  {00000000-0000-0000-0061-000000000026},  !- Day Schedule Name
+  {00000000-0000-0000-0061-000000000025},  !- Day Schedule Name
   ,                                        !- Apply Sunday
   Yes,                                     !- Apply Monday
   Yes,                                     !- Apply Tuesday
@@ -8649,9 +8652,9 @@ OS:Schedule:Rule,
 OS:Schedule:Rule,
   {00000000-0000-0000-0062-000000000007},  !- Handle
   Schedule Rule 15,                        !- Name
-  {00000000-0000-0000-0063-000000000014},  !- Schedule Ruleset Name
+  {00000000-0000-0000-0063-000000000013},  !- Schedule Ruleset Name
   1,                                       !- Rule Order
-  {00000000-0000-0000-0061-000000000027},  !- Day Schedule Name
+  {00000000-0000-0000-0061-000000000026},  !- Day Schedule Name
   ,                                        !- Apply Sunday
   ,                                        !- Apply Monday
   ,                                        !- Apply Tuesday
@@ -8668,9 +8671,9 @@ OS:Schedule:Rule,
 OS:Schedule:Rule,
   {00000000-0000-0000-0062-000000000008},  !- Handle
   Schedule Rule 16,                        !- Name
-  {00000000-0000-0000-0063-000000000014},  !- Schedule Ruleset Name
+  {00000000-0000-0000-0063-000000000013},  !- Schedule Ruleset Name
   0,                                       !- Rule Order
-  {00000000-0000-0000-0061-000000000028},  !- Day Schedule Name
+  {00000000-0000-0000-0061-000000000027},  !- Day Schedule Name
   Yes,                                     !- Apply Sunday
   ,                                        !- Apply Monday
   ,                                        !- Apply Tuesday
@@ -8687,9 +8690,9 @@ OS:Schedule:Rule,
 OS:Schedule:Rule,
   {00000000-0000-0000-0062-000000000009},  !- Handle
   Schedule Rule 17,                        !- Name
-  {00000000-0000-0000-0063-000000000013},  !- Schedule Ruleset Name
+  {00000000-0000-0000-0063-000000000012},  !- Schedule Ruleset Name
   2,                                       !- Rule Order
-  {00000000-0000-0000-0061-000000000022},  !- Day Schedule Name
+  {00000000-0000-0000-0061-000000000021},  !- Day Schedule Name
   ,                                        !- Apply Sunday
   Yes,                                     !- Apply Monday
   Yes,                                     !- Apply Tuesday
@@ -8706,9 +8709,9 @@ OS:Schedule:Rule,
 OS:Schedule:Rule,
   {00000000-0000-0000-0062-000000000010},  !- Handle
   Schedule Rule 18,                        !- Name
-  {00000000-0000-0000-0063-000000000013},  !- Schedule Ruleset Name
+  {00000000-0000-0000-0063-000000000012},  !- Schedule Ruleset Name
   1,                                       !- Rule Order
-  {00000000-0000-0000-0061-000000000023},  !- Day Schedule Name
+  {00000000-0000-0000-0061-000000000022},  !- Day Schedule Name
   ,                                        !- Apply Sunday
   ,                                        !- Apply Monday
   ,                                        !- Apply Tuesday
@@ -8725,9 +8728,9 @@ OS:Schedule:Rule,
 OS:Schedule:Rule,
   {00000000-0000-0000-0062-000000000011},  !- Handle
   Schedule Rule 19,                        !- Name
-  {00000000-0000-0000-0063-000000000013},  !- Schedule Ruleset Name
+  {00000000-0000-0000-0063-000000000012},  !- Schedule Ruleset Name
   0,                                       !- Rule Order
-  {00000000-0000-0000-0061-000000000024},  !- Day Schedule Name
+  {00000000-0000-0000-0061-000000000023},  !- Day Schedule Name
   Yes,                                     !- Apply Sunday
   ,                                        !- Apply Monday
   ,                                        !- Apply Tuesday
@@ -8744,9 +8747,9 @@ OS:Schedule:Rule,
 OS:Schedule:Rule,
   {00000000-0000-0000-0062-000000000012},  !- Handle
   Schedule Rule 2,                         !- Name
-  {00000000-0000-0000-0063-000000000012},  !- Schedule Ruleset Name
+  {00000000-0000-0000-0063-000000000011},  !- Schedule Ruleset Name
   2,                                       !- Rule Order
-  {00000000-0000-0000-0061-000000000018},  !- Day Schedule Name
+  {00000000-0000-0000-0061-000000000017},  !- Day Schedule Name
   ,                                        !- Apply Sunday
   Yes,                                     !- Apply Monday
   Yes,                                     !- Apply Tuesday
@@ -8763,9 +8766,9 @@ OS:Schedule:Rule,
 OS:Schedule:Rule,
   {00000000-0000-0000-0062-000000000013},  !- Handle
   Schedule Rule 20,                        !- Name
-  {00000000-0000-0000-0063-000000000027},  !- Schedule Ruleset Name
+  {00000000-0000-0000-0063-000000000026},  !- Schedule Ruleset Name
   1,                                       !- Rule Order
-  {00000000-0000-0000-0061-000000000045},  !- Day Schedule Name
+  {00000000-0000-0000-0061-000000000044},  !- Day Schedule Name
   ,                                        !- Apply Sunday
   ,                                        !- Apply Monday
   ,                                        !- Apply Tuesday
@@ -8782,9 +8785,9 @@ OS:Schedule:Rule,
 OS:Schedule:Rule,
   {00000000-0000-0000-0062-000000000014},  !- Handle
   Schedule Rule 21,                        !- Name
-  {00000000-0000-0000-0063-000000000027},  !- Schedule Ruleset Name
+  {00000000-0000-0000-0063-000000000026},  !- Schedule Ruleset Name
   0,                                       !- Rule Order
-  {00000000-0000-0000-0061-000000000046},  !- Day Schedule Name
+  {00000000-0000-0000-0061-000000000045},  !- Day Schedule Name
   Yes,                                     !- Apply Sunday
   ,                                        !- Apply Monday
   ,                                        !- Apply Tuesday
@@ -8801,9 +8804,9 @@ OS:Schedule:Rule,
 OS:Schedule:Rule,
   {00000000-0000-0000-0062-000000000015},  !- Handle
   Schedule Rule 22,                        !- Name
-  {00000000-0000-0000-0063-000000000025},  !- Schedule Ruleset Name
+  {00000000-0000-0000-0063-000000000024},  !- Schedule Ruleset Name
   1,                                       !- Rule Order
-  {00000000-0000-0000-0061-000000000047},  !- Day Schedule Name
+  {00000000-0000-0000-0061-000000000046},  !- Day Schedule Name
   ,                                        !- Apply Sunday
   ,                                        !- Apply Monday
   ,                                        !- Apply Tuesday
@@ -8820,9 +8823,9 @@ OS:Schedule:Rule,
 OS:Schedule:Rule,
   {00000000-0000-0000-0062-000000000016},  !- Handle
   Schedule Rule 23,                        !- Name
-  {00000000-0000-0000-0063-000000000025},  !- Schedule Ruleset Name
+  {00000000-0000-0000-0063-000000000024},  !- Schedule Ruleset Name
   0,                                       !- Rule Order
-  {00000000-0000-0000-0061-000000000037},  !- Day Schedule Name
+  {00000000-0000-0000-0061-000000000036},  !- Day Schedule Name
   Yes,                                     !- Apply Sunday
   ,                                        !- Apply Monday
   ,                                        !- Apply Tuesday
@@ -8839,9 +8842,9 @@ OS:Schedule:Rule,
 OS:Schedule:Rule,
   {00000000-0000-0000-0062-000000000017},  !- Handle
   Schedule Rule 24,                        !- Name
-  {00000000-0000-0000-0063-000000000026},  !- Schedule Ruleset Name
+  {00000000-0000-0000-0063-000000000025},  !- Schedule Ruleset Name
   1,                                       !- Rule Order
-  {00000000-0000-0000-0061-000000000038},  !- Day Schedule Name
+  {00000000-0000-0000-0061-000000000037},  !- Day Schedule Name
   ,                                        !- Apply Sunday
   ,                                        !- Apply Monday
   ,                                        !- Apply Tuesday
@@ -8858,9 +8861,9 @@ OS:Schedule:Rule,
 OS:Schedule:Rule,
   {00000000-0000-0000-0062-000000000018},  !- Handle
   Schedule Rule 25,                        !- Name
-  {00000000-0000-0000-0063-000000000026},  !- Schedule Ruleset Name
+  {00000000-0000-0000-0063-000000000025},  !- Schedule Ruleset Name
   0,                                       !- Rule Order
-  {00000000-0000-0000-0061-000000000039},  !- Day Schedule Name
+  {00000000-0000-0000-0061-000000000038},  !- Day Schedule Name
   Yes,                                     !- Apply Sunday
   ,                                        !- Apply Monday
   ,                                        !- Apply Tuesday
@@ -8877,9 +8880,9 @@ OS:Schedule:Rule,
 OS:Schedule:Rule,
   {00000000-0000-0000-0062-000000000019},  !- Handle
   Schedule Rule 3,                         !- Name
-  {00000000-0000-0000-0063-000000000012},  !- Schedule Ruleset Name
+  {00000000-0000-0000-0063-000000000011},  !- Schedule Ruleset Name
   1,                                       !- Rule Order
-  {00000000-0000-0000-0061-000000000019},  !- Day Schedule Name
+  {00000000-0000-0000-0061-000000000018},  !- Day Schedule Name
   ,                                        !- Apply Sunday
   ,                                        !- Apply Monday
   ,                                        !- Apply Tuesday
@@ -8896,9 +8899,9 @@ OS:Schedule:Rule,
 OS:Schedule:Rule,
   {00000000-0000-0000-0062-000000000020},  !- Handle
   Schedule Rule 4,                         !- Name
-  {00000000-0000-0000-0063-000000000012},  !- Schedule Ruleset Name
+  {00000000-0000-0000-0063-000000000011},  !- Schedule Ruleset Name
   0,                                       !- Rule Order
-  {00000000-0000-0000-0061-000000000020},  !- Day Schedule Name
+  {00000000-0000-0000-0061-000000000019},  !- Day Schedule Name
   Yes,                                     !- Apply Sunday
   ,                                        !- Apply Monday
   ,                                        !- Apply Tuesday
@@ -8915,9 +8918,9 @@ OS:Schedule:Rule,
 OS:Schedule:Rule,
   {00000000-0000-0000-0062-000000000021},  !- Handle
   Schedule Rule 5,                         !- Name
-  {00000000-0000-0000-0063-000000000011},  !- Schedule Ruleset Name
+  {00000000-0000-0000-0063-000000000010},  !- Schedule Ruleset Name
   2,                                       !- Rule Order
-  {00000000-0000-0000-0061-000000000014},  !- Day Schedule Name
+  {00000000-0000-0000-0061-000000000013},  !- Day Schedule Name
   ,                                        !- Apply Sunday
   Yes,                                     !- Apply Monday
   Yes,                                     !- Apply Tuesday
@@ -8934,9 +8937,9 @@ OS:Schedule:Rule,
 OS:Schedule:Rule,
   {00000000-0000-0000-0062-000000000022},  !- Handle
   Schedule Rule 6,                         !- Name
-  {00000000-0000-0000-0063-000000000011},  !- Schedule Ruleset Name
+  {00000000-0000-0000-0063-000000000010},  !- Schedule Ruleset Name
   1,                                       !- Rule Order
-  {00000000-0000-0000-0061-000000000015},  !- Day Schedule Name
+  {00000000-0000-0000-0061-000000000014},  !- Day Schedule Name
   ,                                        !- Apply Sunday
   ,                                        !- Apply Monday
   ,                                        !- Apply Tuesday
@@ -8953,9 +8956,9 @@ OS:Schedule:Rule,
 OS:Schedule:Rule,
   {00000000-0000-0000-0062-000000000023},  !- Handle
   Schedule Rule 7,                         !- Name
-  {00000000-0000-0000-0063-000000000011},  !- Schedule Ruleset Name
+  {00000000-0000-0000-0063-000000000010},  !- Schedule Ruleset Name
   0,                                       !- Rule Order
-  {00000000-0000-0000-0061-000000000016},  !- Day Schedule Name
+  {00000000-0000-0000-0061-000000000015},  !- Day Schedule Name
   Yes,                                     !- Apply Sunday
   ,                                        !- Apply Monday
   ,                                        !- Apply Tuesday
@@ -8972,9 +8975,9 @@ OS:Schedule:Rule,
 OS:Schedule:Rule,
   {00000000-0000-0000-0062-000000000024},  !- Handle
   Schedule Rule 8,                         !- Name
-  {00000000-0000-0000-0063-000000000010},  !- Schedule Ruleset Name
+  {00000000-0000-0000-0063-000000000009},  !- Schedule Ruleset Name
   2,                                       !- Rule Order
-  {00000000-0000-0000-0061-000000000010},  !- Day Schedule Name
+  {00000000-0000-0000-0061-000000000009},  !- Day Schedule Name
   ,                                        !- Apply Sunday
   Yes,                                     !- Apply Monday
   Yes,                                     !- Apply Tuesday
@@ -8991,9 +8994,9 @@ OS:Schedule:Rule,
 OS:Schedule:Rule,
   {00000000-0000-0000-0062-000000000025},  !- Handle
   Schedule Rule 9,                         !- Name
-  {00000000-0000-0000-0063-000000000010},  !- Schedule Ruleset Name
+  {00000000-0000-0000-0063-000000000009},  !- Schedule Ruleset Name
   1,                                       !- Rule Order
-  {00000000-0000-0000-0061-000000000011},  !- Day Schedule Name
+  {00000000-0000-0000-0061-000000000010},  !- Day Schedule Name
   ,                                        !- Apply Sunday
   ,                                        !- Apply Monday
   ,                                        !- Apply Tuesday
@@ -9010,9 +9013,9 @@ OS:Schedule:Rule,
 OS:Schedule:Rule,
   {00000000-0000-0000-0062-000000000026},  !- Handle
   satCHW Temprule,                         !- Name
-  {00000000-0000-0000-0063-000000000003},  !- Schedule Ruleset Name
+  {00000000-0000-0000-0063-000000000002},  !- Schedule Ruleset Name
   1,                                       !- Rule Order
-  {00000000-0000-0000-0061-000000000054},  !- Day Schedule Name
+  {00000000-0000-0000-0061-000000000053},  !- Day Schedule Name
   No,                                      !- Apply Sunday
   No,                                      !- Apply Monday
   No,                                      !- Apply Tuesday
@@ -9029,9 +9032,9 @@ OS:Schedule:Rule,
 OS:Schedule:Rule,
   {00000000-0000-0000-0062-000000000027},  !- Handle
   satCW Temprule,                          !- Name
-  {00000000-0000-0000-0063-000000000004},  !- Schedule Ruleset Name
+  {00000000-0000-0000-0063-000000000003},  !- Schedule Ruleset Name
   1,                                       !- Rule Order
-  {00000000-0000-0000-0061-000000000056},  !- Day Schedule Name
+  {00000000-0000-0000-0061-000000000055},  !- Day Schedule Name
   No,                                      !- Apply Sunday
   No,                                      !- Apply Monday
   No,                                      !- Apply Tuesday
@@ -9048,9 +9051,9 @@ OS:Schedule:Rule,
 OS:Schedule:Rule,
   {00000000-0000-0000-0062-000000000028},  !- Handle
   sunCHW Temprule,                         !- Name
-  {00000000-0000-0000-0063-000000000003},  !- Schedule Ruleset Name
+  {00000000-0000-0000-0063-000000000002},  !- Schedule Ruleset Name
   0,                                       !- Rule Order
-  {00000000-0000-0000-0061-000000000058},  !- Day Schedule Name
+  {00000000-0000-0000-0061-000000000057},  !- Day Schedule Name
   Yes,                                     !- Apply Sunday
   No,                                      !- Apply Monday
   No,                                      !- Apply Tuesday
@@ -9067,9 +9070,9 @@ OS:Schedule:Rule,
 OS:Schedule:Rule,
   {00000000-0000-0000-0062-000000000029},  !- Handle
   sunCW Temprule,                          !- Name
-  {00000000-0000-0000-0063-000000000004},  !- Schedule Ruleset Name
+  {00000000-0000-0000-0063-000000000003},  !- Schedule Ruleset Name
   0,                                       !- Rule Order
-  {00000000-0000-0000-0061-000000000060},  !- Day Schedule Name
+  {00000000-0000-0000-0061-000000000059},  !- Day Schedule Name
   Yes,                                     !- Apply Sunday
   No,                                      !- Apply Monday
   No,                                      !- Apply Tuesday
@@ -9086,9 +9089,9 @@ OS:Schedule:Rule,
 OS:Schedule:Rule,
   {00000000-0000-0000-0062-000000000030},  !- Handle
   wkdCHW Temp rule,                        !- Name
-  {00000000-0000-0000-0063-000000000003},  !- Schedule Ruleset Name
+  {00000000-0000-0000-0063-000000000002},  !- Schedule Ruleset Name
   2,                                       !- Rule Order
-  {00000000-0000-0000-0061-000000000071},  !- Day Schedule Name
+  {00000000-0000-0000-0061-000000000070},  !- Day Schedule Name
   No,                                      !- Apply Sunday
   Yes,                                     !- Apply Monday
   Yes,                                     !- Apply Tuesday
@@ -9105,9 +9108,9 @@ OS:Schedule:Rule,
 OS:Schedule:Rule,
   {00000000-0000-0000-0062-000000000031},  !- Handle
   wkdCW Temp rule,                         !- Name
-  {00000000-0000-0000-0063-000000000004},  !- Schedule Ruleset Name
+  {00000000-0000-0000-0063-000000000003},  !- Schedule Ruleset Name
   2,                                       !- Rule Order
-  {00000000-0000-0000-0061-000000000073},  !- Day Schedule Name
+  {00000000-0000-0000-0061-000000000072},  !- Day Schedule Name
   No,                                      !- Apply Sunday
   Yes,                                     !- Apply Monday
   Yes,                                     !- Apply Tuesday
@@ -9129,167 +9132,161 @@ OS:Schedule:Ruleset,
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0063-000000000002},  !- Handle
-  Always On,                               !- Name
-  {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
-  {00000000-0000-0000-0061-000000000002};  !- Default Day Schedule Name
+  CHW Temp,                                !- Name
+  {00000000-0000-0000-0064-000000000006},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0061-000000000040};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0063-000000000003},  !- Handle
-  CHW Temp,                                !- Name
-  {00000000-0000-0000-0064-000000000006},  !- Schedule Type Limits Name
+  CW Temp,                                 !- Name
+  {00000000-0000-0000-0064-000000000007},  !- Schedule Type Limits Name
   {00000000-0000-0000-0061-000000000041};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0063-000000000004},  !- Handle
-  CW Temp,                                 !- Name
-  {00000000-0000-0000-0064-000000000007},  !- Schedule Type Limits Name
-  {00000000-0000-0000-0061-000000000042};  !- Default Day Schedule Name
+  Clothing Schedule,                       !- Name
+  {00000000-0000-0000-0064-000000000003},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0061-000000000002};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0063-000000000005},  !- Handle
-  Clothing Schedule,                       !- Name
-  {00000000-0000-0000-0064-000000000003},  !- Schedule Type Limits Name
-  {00000000-0000-0000-0061-000000000003};  !- Default Day Schedule Name
+  Economizer Max OA Fraction 100 pct,      !- Name
+  ,                                        !- Schedule Type Limits Name
+  {00000000-0000-0000-0061-000000000004};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0063-000000000006},  !- Handle
-  Economizer Max OA Fraction 100 pct,      !- Name
-  ,                                        !- Schedule Type Limits Name
+  Fraction Latent - 0.05,                  !- Name
+  {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   {00000000-0000-0000-0061-000000000005};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0063-000000000007},  !- Handle
-  Fraction Latent - 0.05,                  !- Name
+  Fraction Sensible - 0.2,                 !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   {00000000-0000-0000-0061-000000000006};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0063-000000000008},  !- Handle
-  Fraction Sensible - 0.2,                 !- Name
-  {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
+  Mixed Water At Faucet Temp - 140F,       !- Name
+  {00000000-0000-0000-0064-000000000008},  !- Schedule Type Limits Name
   {00000000-0000-0000-0061-000000000007};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0063-000000000009},  !- Handle
-  Mixed Water At Faucet Temp - 140F,       !- Name
-  {00000000-0000-0000-0064-000000000008},  !- Schedule Type Limits Name
+  NECB-A-Electric-Equipment,               !- Name
+  {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   {00000000-0000-0000-0061-000000000008};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0063-000000000010},  !- Handle
-  NECB-A-Electric-Equipment,               !- Name
+  NECB-A-Lighting,                         !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
-  {00000000-0000-0000-0061-000000000009};  !- Default Day Schedule Name
+  {00000000-0000-0000-0061-000000000012};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0063-000000000011},  !- Handle
-  NECB-A-Lighting,                         !- Name
+  NECB-A-Occupancy,                        !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
-  {00000000-0000-0000-0061-000000000013};  !- Default Day Schedule Name
+  {00000000-0000-0000-0061-000000000016};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0063-000000000012},  !- Handle
-  NECB-A-Occupancy,                        !- Name
+  NECB-A-Service Water Heating,            !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
-  {00000000-0000-0000-0061-000000000017};  !- Default Day Schedule Name
+  {00000000-0000-0000-0061-000000000020};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0063-000000000013},  !- Handle
-  NECB-A-Service Water Heating,            !- Name
-  {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
-  {00000000-0000-0000-0061-000000000021};  !- Default Day Schedule Name
+  NECB-A-Thermostat Setpoint-Cooling,      !- Name
+  {00000000-0000-0000-0064-000000000008},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0061-000000000024};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0063-000000000014},  !- Handle
-  NECB-A-Thermostat Setpoint-Cooling,      !- Name
+  NECB-A-Thermostat Setpoint-Heating,      !- Name
   {00000000-0000-0000-0064-000000000008},  !- Schedule Type Limits Name
-  {00000000-0000-0000-0061-000000000025};  !- Default Day Schedule Name
+  {00000000-0000-0000-0061-000000000028};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0063-000000000015},  !- Handle
-  NECB-A-Thermostat Setpoint-Heating,      !- Name
-  {00000000-0000-0000-0064-000000000008},  !- Schedule Type Limits Name
-  {00000000-0000-0000-0061-000000000029};  !- Default Day Schedule Name
+  NECB-Activity,                           !- Name
+  {00000000-0000-0000-0064-000000000001},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0061-000000000032},  !- Default Day Schedule Name
+  {00000000-0000-0000-0061-000000000033},  !- Summer Design Day Schedule Name
+  {00000000-0000-0000-0061-000000000034};  !- Winter Design Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0063-000000000016},  !- Handle
-  NECB-Activity,                           !- Name
-  {00000000-0000-0000-0064-000000000001},  !- Schedule Type Limits Name
-  {00000000-0000-0000-0061-000000000033},  !- Default Day Schedule Name
-  {00000000-0000-0000-0061-000000000034},  !- Summer Design Day Schedule Name
-  {00000000-0000-0000-0061-000000000035};  !- Winter Design Day Schedule Name
+  Schedule Ruleset 1,                      !- Name
+  {00000000-0000-0000-0064-000000000007},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0061-000000000042};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0063-000000000017},  !- Handle
-  Schedule Ruleset 1,                      !- Name
+  Schedule Ruleset 2,                      !- Name
   {00000000-0000-0000-0064-000000000007},  !- Schedule Type Limits Name
   {00000000-0000-0000-0061-000000000043};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0063-000000000018},  !- Handle
-  Schedule Ruleset 2,                      !- Name
-  {00000000-0000-0000-0064-000000000007},  !- Schedule Type Limits Name
-  {00000000-0000-0000-0061-000000000044};  !- Default Day Schedule Name
+  Service Water Loop Temp - 140F,          !- Name
+  {00000000-0000-0000-0064-000000000008},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0061-000000000047};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0063-000000000019},  !- Handle
-  Service Water Loop Temp - 140F,          !- Name
-  {00000000-0000-0000-0064-000000000008},  !- Schedule Type Limits Name
+  Supply Air Temp 1,                       !- Name
+  {00000000-0000-0000-0064-000000000007},  !- Schedule Type Limits Name
   {00000000-0000-0000-0061-000000000048};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0063-000000000020},  !- Handle
-  Supply Air Temp 1,                       !- Name
+  Supply Air Temp 2,                       !- Name
   {00000000-0000-0000-0064-000000000007},  !- Schedule Type Limits Name
   {00000000-0000-0000-0061-000000000049};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0063-000000000021},  !- Handle
-  Supply Air Temp 2,                       !- Name
+  Supply Air Temp,                         !- Name
   {00000000-0000-0000-0064-000000000007},  !- Schedule Type Limits Name
   {00000000-0000-0000-0061-000000000050};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0063-000000000022},  !- Handle
-  Supply Air Temp,                         !- Name
-  {00000000-0000-0000-0064-000000000007},  !- Schedule Type Limits Name
+  Water Heater Ambient Temp Schedule 71.6F, !- Name
+  {00000000-0000-0000-0064-000000000008},  !- Schedule Type Limits Name
   {00000000-0000-0000-0061-000000000051};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0063-000000000023},  !- Handle
-  Water Heater Ambient Temp Schedule 71.6F, !- Name
-  {00000000-0000-0000-0064-000000000008},  !- Schedule Type Limits Name
+  Work Efficiency Schedule,                !- Name
+  {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
   {00000000-0000-0000-0061-000000000052};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0063-000000000024},  !- Handle
-  Work Efficiency Schedule,                !- Name
+  sys_6|mixed|shr>none|sh>c-e|sc>c-chw|ssf>vv|zh>b-e|zc>none|srf>vv| 1 Occ Sch, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
-  {00000000-0000-0000-0061-000000000053};  !- Default Day Schedule Name
+  {00000000-0000-0000-0061-000000000061},  !- Default Day Schedule Name
+  {00000000-0000-0000-0061-000000000062},  !- Summer Design Day Schedule Name
+  {00000000-0000-0000-0061-000000000063};  !- Winter Design Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0063-000000000025},  !- Handle
-  sys_6|mixed|shr>none|sh>c-e|sc>c-chw|ssf>vv|zh>b-e|zc>none|srf>vv| 1 Occ Sch, !- Name
+  sys_6|mixed|shr>none|sh>c-e|sc>c-chw|ssf>vv|zh>b-e|zc>none|srf>vv| 2 Occ Sch, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
-  {00000000-0000-0000-0061-000000000062},  !- Default Day Schedule Name
-  {00000000-0000-0000-0061-000000000063},  !- Summer Design Day Schedule Name
-  {00000000-0000-0000-0061-000000000064};  !- Winter Design Day Schedule Name
+  {00000000-0000-0000-0061-000000000064},  !- Default Day Schedule Name
+  {00000000-0000-0000-0061-000000000065},  !- Summer Design Day Schedule Name
+  {00000000-0000-0000-0061-000000000066};  !- Winter Design Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0063-000000000026},  !- Handle
-  sys_6|mixed|shr>none|sh>c-e|sc>c-chw|ssf>vv|zh>b-e|zc>none|srf>vv| 2 Occ Sch, !- Name
-  {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
-  {00000000-0000-0000-0061-000000000065},  !- Default Day Schedule Name
-  {00000000-0000-0000-0061-000000000066},  !- Summer Design Day Schedule Name
-  {00000000-0000-0000-0061-000000000067};  !- Winter Design Day Schedule Name
-
-OS:Schedule:Ruleset,
-  {00000000-0000-0000-0063-000000000027},  !- Handle
   sys_6|mixed|shr>none|sh>c-e|sc>c-chw|ssf>vv|zh>b-e|zc>none|srf>vv| Occ Sch, !- Name
   {00000000-0000-0000-0064-000000000004},  !- Schedule Type Limits Name
-  {00000000-0000-0000-0061-000000000068},  !- Default Day Schedule Name
-  {00000000-0000-0000-0061-000000000069},  !- Summer Design Day Schedule Name
-  {00000000-0000-0000-0061-000000000070};  !- Winter Design Day Schedule Name
+  {00000000-0000-0000-0061-000000000067},  !- Default Day Schedule Name
+  {00000000-0000-0000-0061-000000000068},  !- Summer Design Day Schedule Name
+  {00000000-0000-0000-0061-000000000069};  !- Winter Design Day Schedule Name
 
 OS:ScheduleTypeLimits,
   {00000000-0000-0000-0064-000000000001},  !- Handle
@@ -9366,42 +9363,42 @@ OS:SetpointManager:Scheduled,
   {00000000-0000-0000-0065-000000000001},  !- Handle
   Service hot water setpoint manager,      !- Name
   Temperature,                             !- Control Variable
-  {00000000-0000-0000-0063-000000000019},  !- Schedule Name
+  {00000000-0000-0000-0063-000000000018},  !- Schedule Name
   {00000000-0000-0000-0049-000000000098};  !- Setpoint Node or NodeList Name
 
 OS:SetpointManager:Scheduled,
   {00000000-0000-0000-0065-000000000002},  !- Handle
   Setpoint Manager Scheduled 1,            !- Name
   Temperature,                             !- Control Variable
-  {00000000-0000-0000-0063-000000000003},  !- Schedule Name
+  {00000000-0000-0000-0063-000000000002},  !- Schedule Name
   {00000000-0000-0000-0049-000000000069};  !- Setpoint Node or NodeList Name
 
 OS:SetpointManager:Scheduled,
   {00000000-0000-0000-0065-000000000003},  !- Handle
   Setpoint Manager Scheduled 2,            !- Name
   Temperature,                             !- Control Variable
-  {00000000-0000-0000-0063-000000000004},  !- Schedule Name
+  {00000000-0000-0000-0063-000000000003},  !- Schedule Name
   {00000000-0000-0000-0049-000000000085};  !- Setpoint Node or NodeList Name
 
 OS:SetpointManager:Scheduled,
   {00000000-0000-0000-0065-000000000004},  !- Handle
   Setpoint Manager Scheduled 3,            !- Name
   Temperature,                             !- Control Variable
-  {00000000-0000-0000-0063-000000000022},  !- Schedule Name
+  {00000000-0000-0000-0063-000000000021},  !- Schedule Name
   {00000000-0000-0000-0049-000000000168};  !- Setpoint Node or NodeList Name
 
 OS:SetpointManager:Scheduled,
   {00000000-0000-0000-0065-000000000005},  !- Handle
   Setpoint Manager Scheduled 4,            !- Name
   Temperature,                             !- Control Variable
-  {00000000-0000-0000-0063-000000000020},  !- Schedule Name
+  {00000000-0000-0000-0063-000000000019},  !- Schedule Name
   {00000000-0000-0000-0049-000000000154};  !- Setpoint Node or NodeList Name
 
 OS:SetpointManager:Scheduled,
   {00000000-0000-0000-0065-000000000006},  !- Handle
   Setpoint Manager Scheduled 5,            !- Name
   Temperature,                             !- Control Variable
-  {00000000-0000-0000-0063-000000000021},  !- Schedule Name
+  {00000000-0000-0000-0063-000000000020},  !- Schedule Name
   {00000000-0000-0000-0049-000000000161};  !- Setpoint Node or NodeList Name
 
 OS:ShadowCalculation,
@@ -9699,7 +9696,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0077-000000000002},  !- Handle
@@ -9734,7 +9738,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0077-000000000003},  !- Handle
@@ -9769,7 +9780,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0077-000000000004},  !- Handle
@@ -9804,7 +9822,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0077-000000000005},  !- Handle
@@ -9839,7 +9864,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0077-000000000006},  !- Handle
@@ -9874,7 +9906,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0077-000000000007},  !- Handle
@@ -9909,7 +9948,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0077-000000000008},  !- Handle
@@ -9944,7 +9990,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0077-000000000009},  !- Handle
@@ -9979,7 +10032,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0077-000000000010},  !- Handle
@@ -10014,7 +10074,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0077-000000000011},  !- Handle
@@ -10049,7 +10116,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0077-000000000012},  !- Handle
@@ -10084,7 +10158,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0077-000000000013},  !- Handle
@@ -10119,7 +10200,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0077-000000000014},  !- Handle
@@ -10154,7 +10242,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0077-000000000015},  !- Handle
@@ -10189,7 +10284,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0077-000000000016},  !- Handle
@@ -10224,7 +10326,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0077-000000000017},  !- Handle
@@ -10259,7 +10368,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:Sizing:Zone,
   {00000000-0000-0000-0077-000000000018},  !- Handle
@@ -10294,7 +10410,14 @@ OS:Sizing:Zone,
   0.005,                                   !- Zone Cooling Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
   HumidityRatioDifference,                 !- Zone Latent Heating Design Supply Air Humidity Ratio Input Method
   ,                                        !- Zone Humidification Design Supply Air Humidity Ratio {kgWater/kgDryAir}
-  0.005;                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  0.005,                                   !- Zone Humidification Design Supply Air Humidity Ratio Difference {kgWater/kgDryAir}
+  ,                                        !- Zone Humidistat Dehumidification Set Point Schedule Name
+  ,                                        !- Zone Humidistat Humidification Set Point Schedule Name
+  ,                                        !- Design Zone Air Distribution Effectiveness in Cooling Mode
+  ,                                        !- Design Zone Air Distribution Effectiveness in Heating Mode
+  ,                                        !- Design Zone Secondary Recirculation Fraction {dimensionless}
+  ,                                        !- Design Minimum Zone Ventilation Efficiency {dimensionless}
+  Coincident;                              !- Sizing Option
 
 OS:SizingPeriod:DesignDay,
   {00000000-0000-0000-0078-000000000001},  !- Handle
@@ -14121,278 +14244,278 @@ OS:ThermostatSetpoint:DualSetpoint,
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000011},  !- Handle
   Space Function Office - open plan Thermostat 1, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000012},  !- Handle
   Space Function Office - open plan Thermostat 10, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000013},  !- Handle
   Space Function Office - open plan Thermostat 11, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000014},  !- Handle
   Space Function Office - open plan Thermostat 12, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000015},  !- Handle
   Space Function Office - open plan Thermostat 13, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000016},  !- Handle
   Space Function Office - open plan Thermostat 14, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000017},  !- Handle
   Space Function Office - open plan Thermostat 15, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000018},  !- Handle
   Space Function Office - open plan Thermostat 16, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000019},  !- Handle
   Space Function Office - open plan Thermostat 17, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000020},  !- Handle
   Space Function Office - open plan Thermostat 18, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000021},  !- Handle
   Space Function Office - open plan Thermostat 19, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000022},  !- Handle
   Space Function Office - open plan Thermostat 2, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000023},  !- Handle
   Space Function Office - open plan Thermostat 20, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000024},  !- Handle
   Space Function Office - open plan Thermostat 21, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000025},  !- Handle
   Space Function Office - open plan Thermostat 22, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000026},  !- Handle
   Space Function Office - open plan Thermostat 23, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000027},  !- Handle
   Space Function Office - open plan Thermostat 24, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000028},  !- Handle
   Space Function Office - open plan Thermostat 25, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000029},  !- Handle
   Space Function Office - open plan Thermostat 26, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000030},  !- Handle
   Space Function Office - open plan Thermostat 27, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000031},  !- Handle
   Space Function Office - open plan Thermostat 28, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000032},  !- Handle
   Space Function Office - open plan Thermostat 29, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000033},  !- Handle
   Space Function Office - open plan Thermostat 3, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000034},  !- Handle
   Space Function Office - open plan Thermostat 30, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000035},  !- Handle
   Space Function Office - open plan Thermostat 31, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000036},  !- Handle
   Space Function Office - open plan Thermostat 32, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000037},  !- Handle
   Space Function Office - open plan Thermostat 33, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000038},  !- Handle
   Space Function Office - open plan Thermostat 34, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000039},  !- Handle
   Space Function Office - open plan Thermostat 35, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000040},  !- Handle
   Space Function Office - open plan Thermostat 36, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000041},  !- Handle
   Space Function Office - open plan Thermostat 37, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000042},  !- Handle
   Space Function Office - open plan Thermostat 38, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000043},  !- Handle
   Space Function Office - open plan Thermostat 39, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000044},  !- Handle
   Space Function Office - open plan Thermostat 4, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000045},  !- Handle
   Space Function Office - open plan Thermostat 40, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000046},  !- Handle
   Space Function Office - open plan Thermostat 41, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000047},  !- Handle
   Space Function Office - open plan Thermostat 42, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000048},  !- Handle
   Space Function Office - open plan Thermostat 43, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000049},  !- Handle
   Space Function Office - open plan Thermostat 44, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000050},  !- Handle
   Space Function Office - open plan Thermostat 45, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000051},  !- Handle
   Space Function Office - open plan Thermostat 5, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000052},  !- Handle
   Space Function Office - open plan Thermostat 6, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000053},  !- Handle
   Space Function Office - open plan Thermostat 7, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000054},  !- Handle
   Space Function Office - open plan Thermostat 8, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000055},  !- Handle
   Space Function Office - open plan Thermostat 9, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:ThermostatSetpoint:DualSetpoint,
   {00000000-0000-0000-0090-000000000056},  !- Handle
   Space Function Office - open plan Thermostat, !- Name
-  {00000000-0000-0000-0063-000000000015},  !- Heating Setpoint Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000014};  !- Cooling Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000014},  !- Heating Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000013};  !- Cooling Setpoint Temperature Schedule Name
 
 OS:Timestep,
   {00000000-0000-0000-0091-000000000001},  !- Handle
@@ -14400,13 +14523,13 @@ OS:Timestep,
 
 OS:Version,
   {00000000-0000-0000-0092-000000000001},  !- Handle
-  3.7.0;                                   !- Version Identifier
+  3.9.0;                                   !- Version Identifier
 
 OS:WaterHeater:Mixed,
   {00000000-0000-0000-0093-000000000001},  !- Handle
   126gal Electricity Water Heater - 85kBtu/hr 1 Therm Eff, !- Name
   0.477586657140061,                       !- Tank Volume {m3}
-  {00000000-0000-0000-0063-000000000019},  !- Setpoint Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000018},  !- Setpoint Temperature Schedule Name
   2,                                       !- Deadband Temperature Difference {deltaC}
   60,                                      !- Maximum Temperature Limit {C}
   Cycle,                                   !- Heater Control Type
@@ -14424,7 +14547,7 @@ OS:WaterHeater:Mixed,
   Electricity,                             !- On Cycle Parasitic Fuel Type
   0,                                       !- On Cycle Parasitic Heat Fraction to Tank
   Schedule,                                !- Ambient Temperature Indicator
-  {00000000-0000-0000-0063-000000000023},  !- Ambient Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000022},  !- Ambient Temperature Schedule Name
   ,                                        !- Ambient Temperature Thermal Zone Name
   ,                                        !- Ambient Temperature Outdoor Air Node Name
   3.11340391204849,                        !- Off Cycle Loss Coefficient to Ambient Temperature {W/K}
@@ -14452,7 +14575,7 @@ OS:WaterHeater:Sizing,
   {00000000-0000-0000-0093-000000000001},  !- WaterHeater Name
   PeakDraw,                                !- Design Mode
   0.538503,                                !- Time Storage Can Meet Peak Draw {hr}
-  0,                                       !- Time for Tank Recovery {hr}
+  1,                                       !- Time for Tank Recovery {hr}
   1;                                       !- Nominal Tank Volume for Autosizing Plant Connections {m3}
 
 OS:WaterUse:Connections,
@@ -14670,240 +14793,240 @@ OS:WaterUse:Equipment,
   Core_bottom Service Water Use 0.38gpm 140F, !- Name
   {00000000-0000-0000-0097-000000000001},  !- Water Use Equipment Definition Name
   {00000000-0000-0000-0079-000000000001},  !- Space Name
-  {00000000-0000-0000-0063-000000000013};  !- Flow Rate Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000012};  !- Flow Rate Fraction Schedule Name
 
 OS:WaterUse:Equipment,
   {00000000-0000-0000-0096-000000000002},  !- Handle
   Core_mid Service Water Use 0.38gpm 140F, !- Name
   {00000000-0000-0000-0097-000000000002},  !- Water Use Equipment Definition Name
   {00000000-0000-0000-0079-000000000002},  !- Space Name
-  {00000000-0000-0000-0063-000000000013};  !- Flow Rate Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000012};  !- Flow Rate Fraction Schedule Name
 
 OS:WaterUse:Equipment,
   {00000000-0000-0000-0096-000000000003},  !- Handle
   Core_top Service Water Use 0.38gpm 140F, !- Name
   {00000000-0000-0000-0097-000000000003},  !- Water Use Equipment Definition Name
   {00000000-0000-0000-0079-000000000003},  !- Space Name
-  {00000000-0000-0000-0063-000000000013};  !- Flow Rate Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000012};  !- Flow Rate Fraction Schedule Name
 
 OS:WaterUse:Equipment,
   {00000000-0000-0000-0096-000000000004},  !- Handle
   Perimeter_bot_ZN_1 Service Water Use 0.08gpm 140F, !- Name
   {00000000-0000-0000-0097-000000000004},  !- Water Use Equipment Definition Name
   {00000000-0000-0000-0079-000000000006},  !- Space Name
-  {00000000-0000-0000-0063-000000000013};  !- Flow Rate Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000012};  !- Flow Rate Fraction Schedule Name
 
 OS:WaterUse:Equipment,
   {00000000-0000-0000-0096-000000000005},  !- Handle
   Perimeter_bot_ZN_2 Service Water Use 0.05gpm 140F, !- Name
   {00000000-0000-0000-0097-000000000005},  !- Water Use Equipment Definition Name
   {00000000-0000-0000-0079-000000000007},  !- Space Name
-  {00000000-0000-0000-0063-000000000013};  !- Flow Rate Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000012};  !- Flow Rate Fraction Schedule Name
 
 OS:WaterUse:Equipment,
   {00000000-0000-0000-0096-000000000006},  !- Handle
   Perimeter_bot_ZN_3 Service Water Use 0.08gpm 140F, !- Name
   {00000000-0000-0000-0097-000000000006},  !- Water Use Equipment Definition Name
   {00000000-0000-0000-0079-000000000008},  !- Space Name
-  {00000000-0000-0000-0063-000000000013};  !- Flow Rate Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000012};  !- Flow Rate Fraction Schedule Name
 
 OS:WaterUse:Equipment,
   {00000000-0000-0000-0096-000000000007},  !- Handle
   Perimeter_bot_ZN_4 Service Water Use 0.05gpm 140F, !- Name
   {00000000-0000-0000-0097-000000000007},  !- Water Use Equipment Definition Name
   {00000000-0000-0000-0079-000000000009},  !- Space Name
-  {00000000-0000-0000-0063-000000000013};  !- Flow Rate Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000012};  !- Flow Rate Fraction Schedule Name
 
 OS:WaterUse:Equipment,
   {00000000-0000-0000-0096-000000000008},  !- Handle
   Perimeter_mid_ZN_1 Service Water Use 0.08gpm 140F, !- Name
   {00000000-0000-0000-0097-000000000008},  !- Water Use Equipment Definition Name
   {00000000-0000-0000-0079-000000000010},  !- Space Name
-  {00000000-0000-0000-0063-000000000013};  !- Flow Rate Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000012};  !- Flow Rate Fraction Schedule Name
 
 OS:WaterUse:Equipment,
   {00000000-0000-0000-0096-000000000009},  !- Handle
   Perimeter_mid_ZN_2 Service Water Use 0.05gpm 140F, !- Name
   {00000000-0000-0000-0097-000000000009},  !- Water Use Equipment Definition Name
   {00000000-0000-0000-0079-000000000011},  !- Space Name
-  {00000000-0000-0000-0063-000000000013};  !- Flow Rate Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000012};  !- Flow Rate Fraction Schedule Name
 
 OS:WaterUse:Equipment,
   {00000000-0000-0000-0096-000000000010},  !- Handle
   Perimeter_mid_ZN_3 Service Water Use 0.08gpm 140F, !- Name
   {00000000-0000-0000-0097-000000000010},  !- Water Use Equipment Definition Name
   {00000000-0000-0000-0079-000000000012},  !- Space Name
-  {00000000-0000-0000-0063-000000000013};  !- Flow Rate Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000012};  !- Flow Rate Fraction Schedule Name
 
 OS:WaterUse:Equipment,
   {00000000-0000-0000-0096-000000000011},  !- Handle
   Perimeter_mid_ZN_4 Service Water Use 0.05gpm 140F, !- Name
   {00000000-0000-0000-0097-000000000011},  !- Water Use Equipment Definition Name
   {00000000-0000-0000-0079-000000000013},  !- Space Name
-  {00000000-0000-0000-0063-000000000013};  !- Flow Rate Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000012};  !- Flow Rate Fraction Schedule Name
 
 OS:WaterUse:Equipment,
   {00000000-0000-0000-0096-000000000012},  !- Handle
   Perimeter_top_ZN_1 Service Water Use 0.08gpm 140F, !- Name
   {00000000-0000-0000-0097-000000000012},  !- Water Use Equipment Definition Name
   {00000000-0000-0000-0079-000000000014},  !- Space Name
-  {00000000-0000-0000-0063-000000000013};  !- Flow Rate Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000012};  !- Flow Rate Fraction Schedule Name
 
 OS:WaterUse:Equipment,
   {00000000-0000-0000-0096-000000000013},  !- Handle
   Perimeter_top_ZN_2 Service Water Use 0.05gpm 140F, !- Name
   {00000000-0000-0000-0097-000000000013},  !- Water Use Equipment Definition Name
   {00000000-0000-0000-0079-000000000015},  !- Space Name
-  {00000000-0000-0000-0063-000000000013};  !- Flow Rate Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000012};  !- Flow Rate Fraction Schedule Name
 
 OS:WaterUse:Equipment,
   {00000000-0000-0000-0096-000000000014},  !- Handle
   Perimeter_top_ZN_3 Service Water Use 0.08gpm 140F, !- Name
   {00000000-0000-0000-0097-000000000014},  !- Water Use Equipment Definition Name
   {00000000-0000-0000-0079-000000000016},  !- Space Name
-  {00000000-0000-0000-0063-000000000013};  !- Flow Rate Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000012};  !- Flow Rate Fraction Schedule Name
 
 OS:WaterUse:Equipment,
   {00000000-0000-0000-0096-000000000015},  !- Handle
   Perimeter_top_ZN_4 Service Water Use 0.05gpm 140F, !- Name
   {00000000-0000-0000-0097-000000000015},  !- Water Use Equipment Definition Name
   {00000000-0000-0000-0079-000000000017},  !- Space Name
-  {00000000-0000-0000-0063-000000000013};  !- Flow Rate Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000012};  !- Flow Rate Fraction Schedule Name
 
 OS:WaterUse:Equipment:Definition,
   {00000000-0000-0000-0097-000000000001},  !- Handle
   Core_bottom 0.38gpm 140F,                !- Name
   ,                                        !- End-Use Subcategory
   2.38082560431289e-05,                    !- Peak Flow Rate {m3/s}
-  {00000000-0000-0000-0063-000000000009},  !- Target Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000008},  !- Sensible Fraction Schedule Name
-  {00000000-0000-0000-0063-000000000007};  !- Latent Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000008},  !- Target Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000007},  !- Sensible Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000006};  !- Latent Fraction Schedule Name
 
 OS:WaterUse:Equipment:Definition,
   {00000000-0000-0000-0097-000000000002},  !- Handle
   Core_mid 0.38gpm 140F,                   !- Name
   ,                                        !- End-Use Subcategory
   2.38082560431289e-05,                    !- Peak Flow Rate {m3/s}
-  {00000000-0000-0000-0063-000000000009},  !- Target Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000008},  !- Sensible Fraction Schedule Name
-  {00000000-0000-0000-0063-000000000007};  !- Latent Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000008},  !- Target Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000007},  !- Sensible Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000006};  !- Latent Fraction Schedule Name
 
 OS:WaterUse:Equipment:Definition,
   {00000000-0000-0000-0097-000000000003},  !- Handle
   Core_top 0.38gpm 140F,                   !- Name
   ,                                        !- End-Use Subcategory
   2.38082560431289e-05,                    !- Peak Flow Rate {m3/s}
-  {00000000-0000-0000-0063-000000000009},  !- Target Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000008},  !- Sensible Fraction Schedule Name
-  {00000000-0000-0000-0063-000000000007};  !- Latent Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000008},  !- Target Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000007},  !- Sensible Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000006};  !- Latent Fraction Schedule Name
 
 OS:WaterUse:Equipment:Definition,
   {00000000-0000-0000-0097-000000000004},  !- Handle
   Perimeter_bot_zn_1 0.08gpm 140F,         !- Name
   ,                                        !- End-Use Subcategory
   5.01898931813348e-06,                    !- Peak Flow Rate {m3/s}
-  {00000000-0000-0000-0063-000000000009},  !- Target Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000008},  !- Sensible Fraction Schedule Name
-  {00000000-0000-0000-0063-000000000007};  !- Latent Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000008},  !- Target Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000007},  !- Sensible Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000006};  !- Latent Fraction Schedule Name
 
 OS:WaterUse:Equipment:Definition,
   {00000000-0000-0000-0097-000000000005},  !- Handle
   Perimeter_bot_zn_2 0.05gpm 140F,         !- Name
   ,                                        !- End-Use Subcategory
   3.17743540551091e-06,                    !- Peak Flow Rate {m3/s}
-  {00000000-0000-0000-0063-000000000009},  !- Target Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000008},  !- Sensible Fraction Schedule Name
-  {00000000-0000-0000-0063-000000000007};  !- Latent Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000008},  !- Target Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000007},  !- Sensible Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000006};  !- Latent Fraction Schedule Name
 
 OS:WaterUse:Equipment:Definition,
   {00000000-0000-0000-0097-000000000006},  !- Handle
   Perimeter_bot_zn_3 0.08gpm 140F,         !- Name
   ,                                        !- End-Use Subcategory
   5.01898931813348e-06,                    !- Peak Flow Rate {m3/s}
-  {00000000-0000-0000-0063-000000000009},  !- Target Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000008},  !- Sensible Fraction Schedule Name
-  {00000000-0000-0000-0063-000000000007};  !- Latent Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000008},  !- Target Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000007},  !- Sensible Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000006};  !- Latent Fraction Schedule Name
 
 OS:WaterUse:Equipment:Definition,
   {00000000-0000-0000-0097-000000000007},  !- Handle
   Perimeter_bot_zn_4 0.05gpm 140F,         !- Name
   ,                                        !- End-Use Subcategory
   3.17722698075488e-06,                    !- Peak Flow Rate {m3/s}
-  {00000000-0000-0000-0063-000000000009},  !- Target Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000008},  !- Sensible Fraction Schedule Name
-  {00000000-0000-0000-0063-000000000007};  !- Latent Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000008},  !- Target Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000007},  !- Sensible Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000006};  !- Latent Fraction Schedule Name
 
 OS:WaterUse:Equipment:Definition,
   {00000000-0000-0000-0097-000000000008},  !- Handle
   Perimeter_mid_zn_1 0.08gpm 140F,         !- Name
   ,                                        !- End-Use Subcategory
   5.01898931813348e-06,                    !- Peak Flow Rate {m3/s}
-  {00000000-0000-0000-0063-000000000009},  !- Target Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000008},  !- Sensible Fraction Schedule Name
-  {00000000-0000-0000-0063-000000000007};  !- Latent Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000008},  !- Target Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000007},  !- Sensible Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000006};  !- Latent Fraction Schedule Name
 
 OS:WaterUse:Equipment:Definition,
   {00000000-0000-0000-0097-000000000009},  !- Handle
   Perimeter_mid_zn_2 0.05gpm 140F,         !- Name
   ,                                        !- End-Use Subcategory
   3.17743540551091e-06,                    !- Peak Flow Rate {m3/s}
-  {00000000-0000-0000-0063-000000000009},  !- Target Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000008},  !- Sensible Fraction Schedule Name
-  {00000000-0000-0000-0063-000000000007};  !- Latent Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000008},  !- Target Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000007},  !- Sensible Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000006};  !- Latent Fraction Schedule Name
 
 OS:WaterUse:Equipment:Definition,
   {00000000-0000-0000-0097-000000000010},  !- Handle
   Perimeter_mid_zn_3 0.08gpm 140F,         !- Name
   ,                                        !- End-Use Subcategory
   5.01898931813348e-06,                    !- Peak Flow Rate {m3/s}
-  {00000000-0000-0000-0063-000000000009},  !- Target Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000008},  !- Sensible Fraction Schedule Name
-  {00000000-0000-0000-0063-000000000007};  !- Latent Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000008},  !- Target Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000007},  !- Sensible Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000006};  !- Latent Fraction Schedule Name
 
 OS:WaterUse:Equipment:Definition,
   {00000000-0000-0000-0097-000000000011},  !- Handle
   Perimeter_mid_zn_4 0.05gpm 140F,         !- Name
   ,                                        !- End-Use Subcategory
   3.17722698075488e-06,                    !- Peak Flow Rate {m3/s}
-  {00000000-0000-0000-0063-000000000009},  !- Target Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000008},  !- Sensible Fraction Schedule Name
-  {00000000-0000-0000-0063-000000000007};  !- Latent Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000008},  !- Target Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000007},  !- Sensible Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000006};  !- Latent Fraction Schedule Name
 
 OS:WaterUse:Equipment:Definition,
   {00000000-0000-0000-0097-000000000012},  !- Handle
   Perimeter_top_zn_1 0.08gpm 140F,         !- Name
   ,                                        !- End-Use Subcategory
   5.01898931813348e-06,                    !- Peak Flow Rate {m3/s}
-  {00000000-0000-0000-0063-000000000009},  !- Target Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000008},  !- Sensible Fraction Schedule Name
-  {00000000-0000-0000-0063-000000000007};  !- Latent Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000008},  !- Target Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000007},  !- Sensible Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000006};  !- Latent Fraction Schedule Name
 
 OS:WaterUse:Equipment:Definition,
   {00000000-0000-0000-0097-000000000013},  !- Handle
   Perimeter_top_zn_2 0.05gpm 140F,         !- Name
   ,                                        !- End-Use Subcategory
   3.17743540551091e-06,                    !- Peak Flow Rate {m3/s}
-  {00000000-0000-0000-0063-000000000009},  !- Target Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000008},  !- Sensible Fraction Schedule Name
-  {00000000-0000-0000-0063-000000000007};  !- Latent Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000008},  !- Target Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000007},  !- Sensible Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000006};  !- Latent Fraction Schedule Name
 
 OS:WaterUse:Equipment:Definition,
   {00000000-0000-0000-0097-000000000014},  !- Handle
   Perimeter_top_zn_3 0.08gpm 140F,         !- Name
   ,                                        !- End-Use Subcategory
   5.01898931813348e-06,                    !- Peak Flow Rate {m3/s}
-  {00000000-0000-0000-0063-000000000009},  !- Target Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000008},  !- Sensible Fraction Schedule Name
-  {00000000-0000-0000-0063-000000000007};  !- Latent Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000008},  !- Target Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000007},  !- Sensible Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000006};  !- Latent Fraction Schedule Name
 
 OS:WaterUse:Equipment:Definition,
   {00000000-0000-0000-0097-000000000015},  !- Handle
   Perimeter_top_zn_4 0.05gpm 140F,         !- Name
   ,                                        !- End-Use Subcategory
   3.17722698075488e-06,                    !- Peak Flow Rate {m3/s}
-  {00000000-0000-0000-0063-000000000009},  !- Target Temperature Schedule Name
-  {00000000-0000-0000-0063-000000000008},  !- Sensible Fraction Schedule Name
-  {00000000-0000-0000-0063-000000000007};  !- Latent Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000008},  !- Target Temperature Schedule Name
+  {00000000-0000-0000-0063-000000000007},  !- Sensible Fraction Schedule Name
+  {00000000-0000-0000-0063-000000000006};  !- Latent Fraction Schedule Name
 
 OS:WeatherFile,
   {00000000-0000-0000-0098-000000000001},  !- Handle

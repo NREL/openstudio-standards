@@ -52,19 +52,19 @@ if [ "$(curl -k -o /dev/null -s -w "%{http_code}" "https://intranet.nrcan.gc.ca/
     echo 'export REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt' >> /home/vscode/.bashrc
     echo 'export AWS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt' >> /home/vscode/.bashrc
     export NODE_EXTRA_CA_CERTS=/etc/ssl/certs/ca-certificates.crt
-
+    
     # IMPORTANT: Reload certificate store and update environment
     sudo update-ca-certificates >/dev/null 2>&1
     export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
     export REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
     export AWS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
-
+    
     echo "✅ NRCAN certificates installed and environment updated"
     NRCAN_NETWORK=true
 else
     echo "🌐 Standard network detected - using default certificates"
     NRCAN_NETWORK=false
-
+    
     # Set SSL environment variables for systems that have certificates installed
     if [ -f "/etc/ssl/certs/ca-certificates.crt" ]; then
         echo "🔐 SSL certificates detected - configuring environment..."
@@ -90,7 +90,7 @@ if [ "$INSTALL_CLAUDE" = true ]; then
         curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash - >/dev/null 2>&1
     fi
     sudo apt-get install -y nodejs python3-pip >/dev/null 2>&1
-
+    
     # Ensure pip/uv is available for the current user
     if command -v pip3 >/dev/null 2>&1; then
         pip3 install uv >/dev/null 2>&1
@@ -100,7 +100,7 @@ if [ "$INSTALL_CLAUDE" = true ]; then
         echo "⚠️  No pip found, trying python -m pip to install uv..."
         python3 -m pip install uv >/dev/null 2>&1 || python -m pip install uv >/dev/null 2>&1
     fi
-
+    
     sudo apt-get update >/dev/null 2>&1
     echo "✅ Node.js and tools installed"
 fi
@@ -121,11 +121,11 @@ if [ -n "$PYTHON_CMD" ]; then
     $PYTHON_CMD -m venv ./.venv
     PYTHON_VENV_CREATED=true
     echo "   ✅ Python virtual environment created"
-
+    
     # Install Python packages from requirements.txt if it exists
     if [ -f "requirements.txt" ]; then
         echo "   📦 Installing Python packages from requirements.txt..."
-
+        
         # Check for pip in the virtual environment first, then fall back to system pip
         PIP_CMD=""
         if [ -f "./.venv/bin/pip" ]; then
@@ -140,7 +140,7 @@ if [ -n "$PYTHON_CMD" ]; then
             echo "   ⚠️  No pip found, trying to install packages with python -m pip..."
             PIP_CMD="$PYTHON_CMD -m pip"
         fi
-
+        
         echo "   📍 Using pip command: $PIP_CMD"
         $PIP_CMD install -r requirements.txt
         echo "   ✅ Python packages installed"
@@ -175,7 +175,7 @@ AWS_MOUNTED=false
 if [ -d "/home/vscode/.aws" ] && [ "$(ls -A /home/vscode/.aws 2>/dev/null)" ]; then
     echo "✅ AWS credentials found and mounted from host"
     AWS_MOUNTED=true
-
+    
     # Test if AWS credentials actually work
     if aws sts get-caller-identity >/dev/null 2>&1; then
         echo "   ✅ AWS credentials are valid and working"
@@ -219,7 +219,7 @@ EOF
 if [ "$INSTALL_CLAUDE" = true ]; then
     echo "   🤖 Installing Claude..."
     sudo NODE_EXTRA_CA_CERTS=/etc/ssl/certs/ca-certificates.crt npm install -g @anthropic-ai/claude-code >/dev/null 2>&1
-
+    
     echo "   🔗 Configuring Claude to use standalone MCP servers..."
     # Configure Claude to use the same Serena MCP server (ignore if already exists)
     if claude mcp add serena -- uv tool run --python 3.12 --from git+https://github.com/oraios/serena serena start-mcp-server --context ide-assistant --project "$(pwd)" 2>/dev/null; then
@@ -233,7 +233,7 @@ fi
 # Add AWS MCP server to both VS Code and Claude if AWS credentials are available
 if [ "$AWS_MOUNTED" = true ]; then
     echo "☁️ Setting up AWS MCP server..."
-
+    
     # Add AWS server to VS Code configuration
     echo "   📝 Adding AWS MCP server to VS Code configuration..."
     # Update the VS Code mcp.json to include AWS server
@@ -259,7 +259,7 @@ if [ "$AWS_MOUNTED" = true ]; then
 }
 EOF
     echo "   ✅ AWS MCP server added to VS Code configuration"
-
+    
     # Add AWS server to Claude if Claude is installed
     if [ "$INSTALL_CLAUDE" = true ]; then
         echo "   🔗 Adding AWS MCP server to Claude configuration..."
@@ -273,7 +273,7 @@ EOF
             echo "   ℹ️  AWS MCP server already exists in Claude configuration"
         fi
     fi
-
+    
     echo "   🎯 AWS MCP server configured for both VS Code and Claude"
 else
     echo "ℹ️  AWS credentials not found, skipping AWS MCP server setup"
