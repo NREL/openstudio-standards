@@ -155,7 +155,7 @@ class NECB2011 < Standard
     @activity = nil
     @structure = nil
     @osut = {gra0: 0, graX: 0, status: 0, logs: []} # "gra": "gross roof area"
-    
+
     # puts "loaded these tables..."
     # puts @standards_data.keys.size
     # raise("tables not all loaded in parent #{}") if @standards_data.keys.size < 24
@@ -218,7 +218,7 @@ class NECB2011 < Standard
   # This method is a wrapper to create the 16 archetypes easily. # 55 args
   def model_create_prototype_model(template:,
                                    building_type:,
-                                   construction_opt:'',
+                                   construction_opt: '',
                                    epw_file:,
                                    custom_weather_folder: nil,
                                    debug: false,
@@ -281,8 +281,8 @@ class NECB2011 < Standard
                                    output_meters: nil,
                                    airloop_economizer_type: nil,
                                    baseline_system_zones_map_option: nil,
-                                   tbd_option: nil,
-                                   tbd_interpolate: 'none',
+                                   tbd_option: 'none',
+                                   tbd_interpolate: true,
                                    necb_hdd: true,
                                    boiler_fuel: nil,
                                    boiler_cap_ratio: nil,
@@ -377,7 +377,7 @@ class NECB2011 < Standard
   def model_apply_standard(model:,
                            construction_opt: '',
                            tbd_option: 'none',
-                           tbd_interpolate: false,
+                           tbd_interpolate: true,
                            epw_file:,
                            custom_weather_folder: nil,
                            btap_weather: true,
@@ -461,6 +461,8 @@ class NECB2011 < Standard
     srr_opt = convert_arg_to_string(variable: srr_opt, default: '')
     construction_opt = convert_arg_to_string(variable: construction_opt, default: '')
     massive = construction_opt == 'structure'
+    tbd_option = convert_arg_to_string(variable: tbd_option, default: 'none')
+    tbd_interpolate = convert_arg_to_bool(variable: tbd_interpolate, default: true)
     necb_hdd = convert_arg_to_bool(variable: necb_hdd, default: true)
     boiler_fuel = convert_arg_to_string(variable: boiler_fuel, default: nil)
     boiler_cap_ratio = convert_arg_to_string(variable: boiler_cap_ratio, default: nil)

@@ -44,6 +44,8 @@ class NECB_HVAC_System_4_Test_NG_G_HW < Minitest::Test
     name = "system_4_Boiler-#{boiler_fueltype}_HeatingCoilType#-#{heating_coil}_BaseboardType-#{baseboard_type}"
     puts "***************************************#{name}*******************************************************\n"
     model = standard.load_building_type_from_library(building_type: 'SmallOffice')
+    standard.assign_building_activity(model: model)
+    standard.assign_building_structure(model: model, activity: @activity)
     standard.apply_weather_data(model: model, epw_file: weather_file)
     standard.apply_loads(model: model)
     standard.apply_envelope(model: model)
