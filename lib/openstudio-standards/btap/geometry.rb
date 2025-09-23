@@ -502,23 +502,61 @@ module BTAP
       end
 
       ##
-      # Fetch a space's full height.
+      # Fetch a space's full height, maybe stored as an AdditionalProperty -
+      # search for AdditionalProperty feature "space_height".
       #
       # @param space [OpenStudio::Model::Space] a space
       #
       # @return [Float] full height of space (0 if invalid input)
       def self.space_height(space = nil)
-        TBD.spaceHeight(space)
+        hgt = 0.00
+        tag = "space_height"
+        return hgt unless space.is_a?(OpenStudio::Model::Space)
+
+        if space.additionalProperties.hasFeature(tag)
+          if space.additionalProperties.getFeatureAsDouble(tag).empty?
+            space.additionalProperties.resetFeature(tag)
+            hgt = TBD.spaceHeight(space)
+            space.additionalProperties.setFeature(tag, hgt)
+            return hgt
+          else
+            return space.additionalProperties.getFeatureAsDouble(tag).get
+          end
+        end
+
+        hgt = TBD.spaceHeight(space)
+        space.additionalProperties.setFeature(tag, hgt)
+
+        hgt
       end
 
       ##
-      # Fetch a space's width.
+      # Fetch a space's width, maybe stored as an AdditionalProperty -
+      # search for AdditionalProperty feature "space_width".
       #
       # @param space [OpenStudio::Model::Space] a space
       #
       # @return [Float] width of a space (0 if invalid input)
       def self.space_width(space = nil)
-        TBD.spaceWidth(space)
+        wdt = 0.00
+        tag = "space_width"
+        return wdt unless space.is_a?(OpenStudio::Model::Space)
+
+        if space.additionalProperties.hasFeature(tag)
+          if space.additionalProperties.getFeatureAsDouble(tag).empty?
+            space.additionalProperties.resetFeature(tag)
+            wdt = TBD.spaceWidth(space)
+            space.additionalProperties.setFeature(tag, wdt)
+            return wdt
+          else
+            return space.additionalProperties.getFeatureAsDouble(tag).get
+          end
+        end
+
+        wdt = TBD.spaceWidth(space)
+        space.additionalProperties.setFeature(tag, wdt)
+
+        wdt
       end
     end
 
