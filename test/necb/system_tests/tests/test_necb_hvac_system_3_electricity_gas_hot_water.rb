@@ -46,8 +46,7 @@ class NECB_HVAC_System_3_Test_E_G_HW < Minitest::Test
     model = standard.load_building_type_from_library(building_type: 'SmallOffice')
 
     standard.assign_building_activity(model: model)
-    standard.assign_building_structure(model: model, activity: @activity)
-
+    standard.assign_building_structure(model: model, activity: @activity, massive: false)
     standard.apply_weather_data(model: model, epw_file: weather_file)
     standard.apply_loads(model: model)
     standard.apply_envelope(model: model)

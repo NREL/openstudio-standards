@@ -73,7 +73,7 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
             model = standard.load_building_type_from_library(building_type: 'SmallOffice')
 
             standard.assign_building_activity(model: model)
-            standard.assign_building_structure(model: model, activity: @activity)
+            standard.assign_building_structure(model: model, activity: @activity, massive: false)
             standard.apply_weather_data(model: model, epw_file: 'CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
             standard.apply_loads(model: model)
             standard.apply_envelope(model: model)
@@ -270,7 +270,7 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
             model = standard.load_building_type_from_library(building_type: 'SmallOffice')
 
             standard.assign_building_activity(model: model)
-            standard.assign_building_structure(model: model, activity: @activity)
+            standard.assign_building_structure(model: model, activity: @activity, massive: false)
             standard.apply_weather_data(model: model, epw_file: 'CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
             standard.apply_loads(model: model)
             standard.apply_envelope(model: model)
@@ -383,7 +383,7 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
             model = standard.load_building_type_from_library(building_type: 'SmallOffice')
 
             standard.assign_building_activity(model: model)
-            standard.assign_building_structure(model: model, activity: @activity)
+            standard.assign_building_structure(model: model, activity: @activity, massive: false)
             standard.apply_weather_data(model: model, epw_file: 'CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
             standard.apply_loads(model: model)
             standard.apply_envelope(model: model)
@@ -826,7 +826,7 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
           model = standard.load_building_type_from_library(building_type: 'SmallOffice')
 
           standard.assign_building_activity(model: model)
-          standard.assign_building_structure(model: model, activity: @activity)
+          standard.assign_building_structure(model: model, activity: @activity, massive: false)
           standard.apply_weather_data(model: model, epw_file: 'CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
           standard.apply_loads(model: model)
           standard.apply_envelope(model: model)
@@ -924,7 +924,7 @@ def test_ref_heatpump_heating_low_temp
           model = standard.load_building_type_from_library(building_type: 'SmallOffice')
 
           standard.assign_building_activity(model: model)
-          standard.assign_building_structure(model: model, activity: @activity)
+          standard.assign_building_structure(model: model, activity: @activity, massive: false)
           standard.apply_weather_data(model: model, epw_file: 'CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
           standard.apply_loads(model: model)
           standard.apply_envelope(model: model)
