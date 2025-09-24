@@ -162,6 +162,7 @@ class BTAPDatapoint
                                        skylight_solar_trans: @options[:skylight_solar_trans],
                                        fdwr_set: @options[:fdwr_set],
                                        srr_set: @options[:srr_set],
+                                       srr_opt: @options[:srr_opt],
                                        rotation_degrees: @options[:rotation_degrees],
                                        scale_x: @options[:scale_x],
                                        scale_y: @options[:scale_y],
