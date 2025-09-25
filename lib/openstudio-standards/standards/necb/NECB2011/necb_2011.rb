@@ -489,7 +489,7 @@ class NECB2011 < Standard
     output_meters = check_output_meters(output_meters: output_meters) if oerd_utility_pricing
 
     assign_building_activity(model: model)
-    assign_building_structure(model: model, activity: @activity)
+    assign_building_structure(model: model, activity: @activity, massive: massive)
     apply_loads(model: model,
                 lights_type: lights_type,
                 lights_scale: lights_scale,
@@ -1132,10 +1132,11 @@ class NECB2011 < Standard
   #
   # @param model [OpenStudio::Model::Model] a model
   # @param activity [BTAP::Activity] a BTAP building ACTIVITY object
+  # @param massive [Boolean] whether requesting internal mass generation
   #
   # @return [BTAP::Structure] a BTAP building STRUCTURE (see logs if failed)
-  def assign_building_structure(model: nil, activity: nil)
-    @structure = BTAP::Structure.new(model, activity)
+  def assign_building_structure(model: nil, activity: nil, massive: true)
+    @structure = BTAP::Structure.new(model, activity, massive)
   end
 
   ##
