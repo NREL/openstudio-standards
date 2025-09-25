@@ -25,10 +25,10 @@ class NECB_Activity_Tests < Minitest::Test
 
     # Range of NECB templates.
     @templates = [
-      # "NECB2011",
+      "NECB2011",
       "NECB2015",
-      # "NECB2017",
-      # "NECB2020"
+      "NECB2017",
+      "NECB2020"
     ]
 
     @epws = ["CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw"]
@@ -46,8 +46,8 @@ class NECB_Activity_Tests < Minitest::Test
       'LowRiseApartment',
       'MediumOffice',
       'MidriseApartment',
-      # 'NorthernEducation',  # *
-      # 'NorthernHealthCare', # *
+      ## 'NorthernEducation',  # *
+      ## 'NorthernHealthCare', # *
       'Outpatient',
       'PrimarySchool',
       'QuickServiceRestaurant',
@@ -179,6 +179,13 @@ class NECB_Activity_Tests < Minitest::Test
             @test_passed = false
           else
             fdback << "#{cas} : #{a.activity} (#{a.category}) : #{load}"
+          end
+
+          a.activities.each do |space, params|
+            next unless params.key?(:keyword)
+            next unless BTAP::Activity.ancillary?(params[:keyword])
+
+            fdback << "   ANCILLARY: #{space.nameString} (#{params[:keyword]})"
           end
 
           a.feedback[:logs].each { |log| puts log }

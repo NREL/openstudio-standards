@@ -50,7 +50,7 @@ module BTAP
     # which in turn sets building-wide 'structural' options, e.g. wood-framed
     # (small-scale) vs reinforced concrete flat slab & post-beam (mid- & large-
     # scale) "housing". See lib/openstudio-standards/btap/structure.rb.
-    @@data = {bldg: {}, space: {}}
+    @@data = {bldg: {}, space: {}, ancillaries: []}
 
     # Hard setting path for both files (temporary @todo).
     @@data[:bldg ][:file      ] = File.join(__dir__, "NECB_building_types.csv")
@@ -61,6 +61,59 @@ module BTAP
     @@data[:space][:activity  ] = {}
     @@data[:bldg ][:activities] = []
     @@data[:bldg ][:categories] = []
+
+    # Key notes, common to NECB editions.
+    #
+    #   Note to NECB Table 8.4.4.7.-A: (2) Small individual spaces in the
+    #   proposed building that are located among larger spaces of another space
+    #   type shall be considered ANCILLARY to that larger space: for example, a
+    #   conference room serving office spaces would be grouped with the office
+    #   spaces as one space type.
+    #
+    #   A-8.4.3.2.(1): Tables [...] contain default values of operating
+    #   schedules of building parameters for simulation purposes. These
+    #   schedules MAY be used with Table A-8.4.3.2.(2)-B IF more accurate
+    #   information IS NOT AVAILABLE.
+    #
+    #   A-8.4.3.2.(2): Tables [...] contain representative internal and service
+    #   water heating loads, operating schedules, and illuminance levels to be
+    #   used as modeling GUIDANCE when actual values are not known.
+    #
+    #   Note to Table A-8.4.3.3.(2)B. (1): An asterisk (*) in this column
+    #   indicates that there is no recommended default schedule for the space
+    #   type listed. In general, such space types will be simulated using a
+    #   schedule that is similar to the ADJACENT spaces served: e.g. a corridor
+    #   space serving an adjacent office space will be simulated using a
+    #   schedule that is similar to that of the office space.
+    #
+    # This last note refers to the following NECB 'ancillary' spacetypes:
+    #
+    #                                                 2011  2015  2017  2020
+    @@data[:ancillaries] << "atrium::common"     #       C     *     *     *
+    @@data[:ancillaries] << "audience::common"   #             *     *     *
+    @@data[:ancillaries] << "computer::common"   #             *     *     *
+    @@data[:ancillaries] << "corridor::common"   #       *     *     *     *
+    @@data[:ancillaries] << "mechanical::common" #       *     *     *     *
+    @@data[:ancillaries] << "locker::common"     #       *     *     *     *
+    @@data[:ancillaries] << "seating::common"    #             *     *     *
+    @@data[:ancillaries] << "stairway::common"   #       *     *     *     *
+    @@data[:ancillaries] << "storage::common"    #       *     *     *     *
+    @@data[:ancillaries] << "washroom::common"   #       *     *     *     *
+
+    # NECB2011 recommends schedule set "C" for atria, while all other NECB
+    # editions point to Note (1) of Table A-8.4.3.3.(2)B (on schedule set
+    # inheritance). BTAP can either continue to reference schedule set C for
+    # NECB 2011 atria, or instead rely on Appendix Note A-8.4.3.2.(1) (on the
+    # conditional use of default schedules). For instance, BTAP could simply
+    # apply the same policy as the other NECB editions.
+    #
+    # With respect to other NECB editions, NECB2011 also has a few missing
+    # entries: There is neither GENERAL 'seating' (e.g. a waiting area) nor
+    # GENERAL 'audience seating' types: 'seating' is either building-SPECIFIC
+    # (e.g. transportation facility) or SPECIFIC 'audience seating' (e.g.
+    # theatre, convention centre). And there is no entry for computer or server
+    # rooms. Within the scope of BTAP::Activity, missing space types inherit
+    # fallbacks (e.g. audience seating, office).
 
     # Parse building type data on file.
     if File.exist?(@@data[:bldg][:file])
@@ -128,12 +181,12 @@ module BTAP
       # 108 unique rows, 4 columns per row, e.g.:
       #                   COL1     COL2         COL3                COL4
       #  _____________________ ________ ____________ ___________________
-      #          "units::care,    unit, residential, units::residential"
-      #  "exhibit::convention, exhibit,      museum,                   "
+      #           units::care,    unit, residential, units::residential
+      #   exhibit::convention, exhibit,      museum,
       #
       #   COL1: BTAP space ACTIVITY    e.g. "units::care"
       #   COL2: selected sub-string(s) e.g. "unit"
-      #   COL3: rejected sub-string    e.g. "residential"
+      #   COL3: rejected sub-string(s) e.g. "residential"
       #   COL4: fallback (if missing)  e.g. "units::residential"
       #
       # First, BTAP space 'activity' entries are namespaced, e.g.:
@@ -177,6 +230,22 @@ module BTAP
       @@data[:space][:table] = table
     else
       # raise?
+    end
+
+    ##
+    # Validates whether an activity is 'ancillary' to other(s).
+    #
+    # @param activity [:to_sym] a BTAP::Activity item, e.g. "corridor::common"
+    #
+    # @return [Boolean] whether activity is ancillary.
+    def ancillary?(activity = "")
+      return false unless activity.respond_to?(:to_sym)
+
+      activity = activity.to_s.strip.downcase
+      return false unless @@data[:space][:activity].include?(activity)
+      return false unless @@data[:ancillaries].include?(activity)
+
+      true
     end
 
     ##
@@ -342,6 +411,7 @@ module BTAP
         entry[:m2       ] = space.floorArea
         entry[:spacetype] = spacetype
         entry[:standards] = standards
+        entry[:keyword  ] = candidate
         entry[:activity ] = data[:space][:activity][candidate][:activity]
         entry[:bldgtype ] = data[:space][:activity][candidate][:bldgtype]
 
