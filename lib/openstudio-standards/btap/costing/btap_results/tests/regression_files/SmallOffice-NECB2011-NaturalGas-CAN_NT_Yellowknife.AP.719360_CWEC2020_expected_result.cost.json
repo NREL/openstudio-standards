@@ -2,18 +2,18 @@
   "city": "YELLOWKNIFE",
   "province_state": "NWT",
   "envelope": {
-    "exterior_wall_cost": 141671.4,
+    "exterior_wall_cost": 201935.06,
     "exterior_wall_area_m2": 225.2,
-    "exterior_wall_cost_per_m2": 629.09,
-    "exterior_roof_cost": 283643.76,
+    "exterior_wall_cost_per_m2": 896.69,
+    "exterior_roof_cost": 373443.54,
     "exterior_roof_area_m2": 598.76,
-    "exterior_roof_cost_per_m2": 473.72,
-    "exterior_floor_cost": 35845.64,
+    "exterior_roof_cost_per_m2": 623.69,
+    "exterior_floor_cost": 45397.88,
     "exterior_floor_area_m2": 56.82,
-    "exterior_floor_cost_per_m2": 630.86,
-    "exterior_fixed_window_cost": 52770.66,
+    "exterior_floor_cost_per_m2": 798.98,
+    "exterior_fixed_window_cost": 95382.9,
     "exterior_fixed_window_area_m2": 56.3,
-    "exterior_fixed_window_cost_per_m2": 937.31,
+    "exterior_fixed_window_cost_per_m2": 1694.19,
     "exterior_operable_window_cost": 0.0,
     "exterior_operable_window_area_m2": 0.0,
     "exterior_operable_window_cost_per_m2": 0.0,
@@ -41,52 +41,52 @@
     "ground_contact_roof_cost": 0.0,
     "ground_contact_roof_area_m2": 0.0,
     "ground_contact_roof_cost_per_m2": 0.0,
-    "ground_contact_floor_cost": 102903.74,
+    "ground_contact_floor_cost": 220283.55,
     "ground_contact_floor_area_m2": 511.16,
-    "ground_contact_floor_cost_per_m2": 201.31,
+    "ground_contact_floor_cost_per_m2": 430.95,
     "construction_costs": [
       {
         "name": "BTAP-ExteriorRoof-IEAD-4",
         "conductance": 0.142,
         "area": 598.76,
-        "cost": 283643.76,
-        "cost_per_area": 473.72,
+        "cost": 373443.54,
+        "cost_per_area": 623.69,
         "note": "Surf #1: OK / 2: OK / 3: OK / 4: OK"
       },
       {
         "name": "BTAP-ExteriorFloor-SteelFramed-1",
         "conductance": 0.142,
         "area": 56.82,
-        "cost": 35845.64,
-        "cost_per_area": 630.86,
+        "cost": 45397.88,
+        "cost_per_area": 798.98,
         "note": "Surf #1: RSI out of the range (7.04). Range for BTAP-ExteriorFloor-SteelFramed-1 is 4.41-7.04.Using extrapolation up to +/-30% of library boundaries.  / 2: RSI out of the range (7.04). Range for BTAP-ExteriorFloor-SteelFramed-1 is 4.41-7.04.Using extrapolation up to +/-30% of library boundaries.  / 3: RSI out of the range (7.04). Range for BTAP-ExteriorFloor-SteelFramed-1 is 4.41-7.04.Using extrapolation up to +/-30% of library boundaries.  / 4: RSI out of the range (7.04). Range for BTAP-ExteriorFloor-SteelFramed-1 is 4.41-7.04.Using extrapolation up to +/-30% of library boundaries. "
       },
       {
         "name": "BTAP-GroundContactFloor-Unheated-1",
         "conductance": 0.379,
         "area": 511.16,
-        "cost": 102903.74,
-        "cost_per_area": 201.31,
+        "cost": 220283.55,
+        "cost_per_area": 430.95,
         "note": "Surf #1: OK / 1: OK / 1: OK / 1: OK / 1: OK"
       },
       {
         "name": "BTAP-ExteriorWall-WoodFramed-5",
         "conductance": 0.183,
         "area": 225.2,
-        "cost": 141671.4,
-        "cost_per_area": 629.09,
+        "cost": 201935.06,
+        "cost_per_area": 896.69,
         "note": "Surf #1: RSI out of the range (5.46). Range for BTAP-ExteriorWall-WoodFramed-5 is 3.18-5.46.Using extrapolation up to +/-30% of library boundaries.  / 1: RSI out of the range (5.46). Range for BTAP-ExteriorWall-WoodFramed-5 is 3.18-5.46.Using extrapolation up to +/-30% of library boundaries.  / 1: RSI out of the range (5.46). Range for BTAP-ExteriorWall-WoodFramed-5 is 3.18-5.46.Using extrapolation up to +/-30% of library boundaries.  / 1: RSI out of the range (5.46). Range for BTAP-ExteriorWall-WoodFramed-5 is 3.18-5.46.Using extrapolation up to +/-30% of library boundaries. "
       },
       {
         "name": "BTAP-ExteriorWindow-FixedWindow-6",
         "conductance": 1.6,
         "area": 56.3,
-        "cost": 52770.66,
-        "cost_per_area": 937.31,
+        "cost": 95382.9,
+        "cost_per_area": 1694.19,
         "note": "Surf #1: OK / 1: OK / 1: OK / 1: OK"
       }
     ],
-    "total_envelope_cost": 616835.2
+    "total_envelope_cost": 936442.89
   },
   "lighting": {
     "daylighting_sensor_control": [
@@ -101,7 +101,7 @@
         "skylights_daylighted_area": 0.0,
         "skylights_number_fixtures": 0,
         "skylights_number_sensors": 0,
-        "daylighting_sensor_control_cost_for_this_zone": 1379.7655584062766
+        "daylighting_sensor_control_cost_for_this_zone": 1096.6096
       },
       {
         "zone": "ALL_ST=Office - enclosed_FL=Building Story 1_SCH=A 2",
@@ -114,7 +114,7 @@
         "skylights_daylighted_area": 0.0,
         "skylights_number_fixtures": 0,
         "skylights_number_sensors": 0,
-        "daylighting_sensor_control_cost_for_this_zone": 1379.7655584062766
+        "daylighting_sensor_control_cost_for_this_zone": 1096.6096
       },
       {
         "zone": "ALL_ST=Office - enclosed_FL=Building Story 1_SCH=A 3",
@@ -127,7 +127,7 @@
         "skylights_daylighted_area": 0.0,
         "skylights_number_fixtures": 0,
         "skylights_number_sensors": 0,
-        "daylighting_sensor_control_cost_for_this_zone": 1379.7655584062766
+        "daylighting_sensor_control_cost_for_this_zone": 1096.6096
       },
       {
         "zone": "ALL_ST=Office - enclosed_FL=Building Story 1_SCH=A 4",
@@ -140,7 +140,7 @@
         "skylights_daylighted_area": 0.0,
         "skylights_number_fixtures": 0,
         "skylights_number_sensors": 0,
-        "daylighting_sensor_control_cost_for_this_zone": 1379.7655584062766
+        "daylighting_sensor_control_cost_for_this_zone": 1096.6096
       }
     ],
     "led_lighting": [],
@@ -160,8 +160,8 @@
         "fixture_type": "7",
         "fixture_description": "High Bay (10 ft above work plane) Fluorescent Lighting 1.5 W/ft2 (16 W/m2), 103FC, 7 Fixtures per 1000 ft2",
         "floor_area_ft2": 5502.1,
-        "cost": 109770.34,
-        "cost_per_ft2": 19.95,
+        "cost": 160011.41,
+        "cost_per_ft2": 29.08,
         "spaces": [
           "Core_ZN",
           "Perimeter_ZN_3",
@@ -197,8 +197,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting 1.5 W/ft2 (16 W/m2), 103FC, 7 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 1610.9,
-        "cost": 32138.72,
-        "cost_per_ft2": 19.95,
+        "cost": 46848.37,
+        "cost_per_ft2": 29.08,
         "note": ""
       },
       {
@@ -211,8 +211,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting 1.5 W/ft2 (16 W/m2), 103FC, 7 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 1221.2,
-        "cost": 24363.23,
-        "cost_per_ft2": 19.95,
+        "cost": 35514.1,
+        "cost_per_ft2": 29.08,
         "note": ""
       },
       {
@@ -225,8 +225,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting 1.5 W/ft2 (16 W/m2), 103FC, 7 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 724.4,
-        "cost": 14452.58,
-        "cost_per_ft2": 19.95,
+        "cost": 21067.42,
+        "cost_per_ft2": 29.08,
         "note": ""
       },
       {
@@ -239,8 +239,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting 1.5 W/ft2 (16 W/m2), 103FC, 7 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 724.4,
-        "cost": 14452.58,
-        "cost_per_ft2": 19.95,
+        "cost": 21067.42,
+        "cost_per_ft2": 29.08,
         "note": ""
       },
       {
@@ -253,12 +253,12 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting 1.5 W/ft2 (16 W/m2), 103FC, 7 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 1221.2,
-        "cost": 24363.23,
-        "cost_per_ft2": 19.95,
+        "cost": 35514.1,
+        "cost_per_ft2": 29.08,
         "note": ""
       }
     ],
-    "total_lighting_cost": 115289.39
+    "total_lighting_cost": 164397.85
   },
   "heating_and_cooling": {
     "plant_equipment": [
@@ -268,13 +268,13 @@
         "ht_roof_ft": 14.6,
         "longest_distance_to_ext_ft": 45.4,
         "wiring_and_gas_connections_distance_ft": 45.4,
-        "equipment_cost": 12523,
-        "flue_cost": 1933,
-        "wiring_and_gas_connections_cost": 4057,
-        "pump_cost": 13648,
-        "piping_to_pump_cost": 1281,
-        "header_distribution_cost": 4437,
-        "total_cost": 37880
+        "equipment_cost": 12831,
+        "flue_cost": 1558,
+        "wiring_and_gas_connections_cost": 2334,
+        "pump_cost": 13754,
+        "piping_to_pump_cost": 2364,
+        "header_distribution_cost": 7373,
+        "total_cost": 40213
       },
       {
         "type": "chillers",
@@ -311,13 +311,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 5.6,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 5600,
+        "heat_cost": 4134,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
         "wiring_cost": 0,
         "num_units": 2,
-        "cummultive_zonal_cost": 5600
+        "cummultive_zonal_cost": 4134
       },
       {
         "systype": "HW",
@@ -326,13 +326,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 7.5,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 8018,
+        "heat_cost": 6090,
         "cool_cost": 0,
         "heatcool_cost": 0,
-        "piping_cost": 5735,
+        "piping_cost": 8316,
         "wiring_cost": 0,
         "num_units": 3,
-        "cummultive_zonal_cost": 19352
+        "cummultive_zonal_cost": 18540
       },
       {
         "systype": "HW",
@@ -341,13 +341,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 4.8,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 5090,
+        "heat_cost": 3986,
         "cool_cost": 0,
         "heatcool_cost": 0,
-        "piping_cost": 3823,
+        "piping_cost": 5544,
         "wiring_cost": 0,
         "num_units": 2,
-        "cummultive_zonal_cost": 28266
+        "cummultive_zonal_cost": 28071
       },
       {
         "systype": "HW",
@@ -356,13 +356,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 4.8,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 5090,
+        "heat_cost": 3986,
         "cool_cost": 0,
         "heatcool_cost": 0,
-        "piping_cost": 3823,
+        "piping_cost": 5544,
         "wiring_cost": 0,
         "num_units": 2,
-        "cummultive_zonal_cost": 37179
+        "cummultive_zonal_cost": 37601
       },
       {
         "systype": "HW",
@@ -371,13 +371,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 7.5,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 8018,
+        "heat_cost": 6090,
         "cool_cost": 0,
         "heatcool_cost": 0,
-        "piping_cost": 5735,
+        "piping_cost": 8316,
         "wiring_cost": 0,
         "num_units": 3,
-        "cummultive_zonal_cost": 50931
+        "cummultive_zonal_cost": 52007
       }
     ]
   },
@@ -386,7 +386,7 @@
     "shw_ht_roof": 14.6,
     "shw_longest_distance_to_ext_ft": 45.4,
     "shw_utility_distance_ft": 45.4,
-    "shw_tanks": 8296.06,
+    "shw_tanks": 12548.88,
     "shw_num_of_modeled_tanks": 1,
     "num_elec_tanks": 0,
     "num_hphw_tanks": 0,
@@ -395,12 +395,12 @@
     "shw_num_reg_eff_oil_tanks": 0,
     "shw_num_high_eff_oil_tanks": 0,
     "shw_num_of_costed_tanks": 1.0,
-    "shw_flues": 1933.37,
-    "shw_utilties": 4056.94,
-    "shw_pumps": 901.77,
+    "shw_flues": 1558.2,
+    "shw_utilties": 2334.06,
+    "shw_pumps": 1052.66,
     "shw_num_of_pumps": 1,
-    "shw_piping": 1281.18,
-    "shw_total": 16469.33
+    "shw_piping": 2363.54,
+    "shw_total": 19857.35
   },
   "ventilation": {
     "system_1": [],
@@ -412,8 +412,8 @@
         "airloop_flow_m3_per_s": 0.223,
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 1000,
-        "base_ahu_cost": 73053.44,
-        "revised_base_ahu_cost": 16312.83,
+        "base_ahu_cost": 78020.52,
+        "revised_base_ahu_cost": 17421.98,
         "hrv": {},
         "equipment_info": [
           {
@@ -421,14 +421,14 @@
             "heating_fuel": "none",
             "cooling_type": "DX",
             "total_modeled_capacity_kw": 3.696,
-            "cost": 16066.88
+            "cost": 13492.96
           },
           {
             "eq_category": "Coil_Heating_Gas",
             "heating_fuel": "Gas",
             "cooling_type": "none",
             "total_modeled_capacity_kw": 13.353,
-            "cost": 555.61
+            "cost": 1680.78
           }
         ],
         "reheat_recool": []
@@ -439,8 +439,8 @@
         "airloop_flow_m3_per_s": 0.3,
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 1000,
-        "base_ahu_cost": 73053.44,
-        "revised_base_ahu_cost": 21883.94,
+        "base_ahu_cost": 78020.52,
+        "revised_base_ahu_cost": 23371.88,
         "hrv": {},
         "equipment_info": [
           {
@@ -448,14 +448,14 @@
             "heating_fuel": "none",
             "cooling_type": "DX",
             "total_modeled_capacity_kw": 4.959,
-            "cost": 16947.3
+            "cost": 20777.44
           },
           {
             "eq_category": "Coil_Heating_Gas",
             "heating_fuel": "Gas",
             "cooling_type": "none",
             "total_modeled_capacity_kw": 13.364,
-            "cost": 555.61
+            "cost": 1680.78
           }
         ],
         "reheat_recool": []
@@ -466,8 +466,8 @@
         "airloop_flow_m3_per_s": 0.192,
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 1000,
-        "base_ahu_cost": 73053.44,
-        "revised_base_ahu_cost": 14032.79,
+        "base_ahu_cost": 78020.52,
+        "revised_base_ahu_cost": 14986.91,
         "hrv": {},
         "equipment_info": [
           {
@@ -475,14 +475,14 @@
             "heating_fuel": "none",
             "cooling_type": "DX",
             "total_modeled_capacity_kw": 3.18,
-            "cost": 16066.88
+            "cost": 13492.96
           },
           {
             "eq_category": "Coil_Heating_Gas",
             "heating_fuel": "Gas",
             "cooling_type": "none",
             "total_modeled_capacity_kw": 8.287,
-            "cost": 3712.21
+            "cost": 1524.73
           }
         ],
         "reheat_recool": []
@@ -493,8 +493,8 @@
         "airloop_flow_m3_per_s": 0.195,
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 1000,
-        "base_ahu_cost": 73053.44,
-        "revised_base_ahu_cost": 14242.38,
+        "base_ahu_cost": 78020.52,
+        "revised_base_ahu_cost": 15210.76,
         "hrv": {},
         "equipment_info": [
           {
@@ -502,14 +502,14 @@
             "heating_fuel": "none",
             "cooling_type": "DX",
             "total_modeled_capacity_kw": 3.227,
-            "cost": 16066.88
+            "cost": 13492.96
           },
           {
             "eq_category": "Coil_Heating_Gas",
             "heating_fuel": "Gas",
             "cooling_type": "none",
             "total_modeled_capacity_kw": 8.358,
-            "cost": 3712.21
+            "cost": 1524.73
           }
         ],
         "reheat_recool": []
@@ -520,8 +520,8 @@
         "airloop_flow_m3_per_s": 0.299,
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 1000,
-        "base_ahu_cost": 73053.44,
-        "revised_base_ahu_cost": 21818.0,
+        "base_ahu_cost": 78020.52,
+        "revised_base_ahu_cost": 23301.46,
         "hrv": {},
         "equipment_info": [
           {
@@ -529,14 +529,14 @@
             "heating_fuel": "none",
             "cooling_type": "DX",
             "total_modeled_capacity_kw": 4.944,
-            "cost": 16947.3
+            "cost": 20777.44
           },
           {
             "eq_category": "Coil_Heating_Gas",
             "heating_fuel": "Gas",
             "cooling_type": "none",
             "total_modeled_capacity_kw": 13.342,
-            "cost": 555.61
+            "cost": 1680.78
           }
         ],
         "reheat_recool": []
@@ -551,14 +551,14 @@
       "HW_Line_m": 0.0,
       "CHW_Line_m": 0.0,
       "Elec_Line_m": 178.5,
-      "Total_cost": 15770.44
+      "Total_cost": 8930.68
     },
     "trunk_duct": [
       {
         "DuctSize_in": 14,
         "DuctLength_m": 1.4,
         "NumberRuns": 2,
-        "DuctCost": 323.76
+        "DuctCost": 913.89
       }
     ],
     "floor_trunk_ducts": [
@@ -570,7 +570,7 @@
           "SupplyDuctLength_m": 27.7,
           "ReturnDuctSize_in": 18.31,
           "ReturnDuctLength_m": 27.7,
-          "TotalDuctCost": 13585.9,
+          "TotalDuctCost": 28564.94,
           "Multiplier": 1.0
         }
       ]
@@ -590,7 +590,7 @@
               "duct_insulation_ft2": 144,
               "flex_duct_sz_in": 6,
               "flex_duct_length_ft": 32,
-              "cost": 5521.38
+              "cost": 10672.9
             },
             {
               "ThermalZone": "ALL_ST=Office - enclosed_FL=Building Story 1_SCH=A",
@@ -602,7 +602,7 @@
               "duct_insulation_ft2": 144,
               "flex_duct_sz_in": 6,
               "flex_duct_length_ft": 32,
-              "cost": 5521.38
+              "cost": 10672.9
             },
             {
               "ThermalZone": "ALL_ST=Office - enclosed_FL=Building Story 1_SCH=A 1",
@@ -614,7 +614,7 @@
               "duct_insulation_ft2": 196,
               "flex_duct_sz_in": 6,
               "flex_duct_length_ft": 32,
-              "cost": 9210.65
+              "cost": 4856.72
             },
             {
               "ThermalZone": "ALL_ST=Office - enclosed_FL=Building Story 1_SCH=A 1",
@@ -626,7 +626,7 @@
               "duct_insulation_ft2": 196,
               "flex_duct_sz_in": 6,
               "flex_duct_length_ft": 32,
-              "cost": 9210.65
+              "cost": 4856.72
             },
             {
               "ThermalZone": "ALL_ST=Office - enclosed_FL=Building Story 1_SCH=A 2",
@@ -638,7 +638,7 @@
               "duct_insulation_ft2": 144,
               "flex_duct_sz_in": 6,
               "flex_duct_length_ft": 32,
-              "cost": 5521.38
+              "cost": 10672.9
             },
             {
               "ThermalZone": "ALL_ST=Office - enclosed_FL=Building Story 1_SCH=A 2",
@@ -650,7 +650,7 @@
               "duct_insulation_ft2": 144,
               "flex_duct_sz_in": 6,
               "flex_duct_length_ft": 32,
-              "cost": 5521.38
+              "cost": 10672.9
             },
             {
               "ThermalZone": "ALL_ST=Office - enclosed_FL=Building Story 1_SCH=A 3",
@@ -662,7 +662,7 @@
               "duct_insulation_ft2": 144,
               "flex_duct_sz_in": 6,
               "flex_duct_length_ft": 32,
-              "cost": 5521.38
+              "cost": 10672.9
             },
             {
               "ThermalZone": "ALL_ST=Office - enclosed_FL=Building Story 1_SCH=A 3",
@@ -674,7 +674,7 @@
               "duct_insulation_ft2": 144,
               "flex_duct_sz_in": 6,
               "flex_duct_length_ft": 32,
-              "cost": 5521.38
+              "cost": 10672.9
             },
             {
               "ThermalZone": "ALL_ST=Office - enclosed_FL=Building Story 1_SCH=A 4",
@@ -686,7 +686,7 @@
               "duct_insulation_ft2": 196,
               "flex_duct_sz_in": 6,
               "flex_duct_length_ft": 32,
-              "cost": 9210.65
+              "cost": 4856.72
             },
             {
               "ThermalZone": "ALL_ST=Office - enclosed_FL=Building Story 1_SCH=A 4",
@@ -698,7 +698,7 @@
               "duct_insulation_ft2": 196,
               "flex_duct_sz_in": 6,
               "flex_duct_length_ft": 32,
-              "cost": 9210.65
+              "cost": 4856.72
             }
           ]
         }
@@ -718,13 +718,13 @@
     "pv": []
   },
   "totals": {
-    "envelope": 616835,
+    "envelope": 936443,
     "thermal_bridging": 0,
-    "lighting": 115289,
-    "heating_and_cooling": 88811,
-    "shw": 16469,
-    "ventilation": 279127,
+    "lighting": 164398,
+    "heating_and_cooling": 92221,
+    "shw": 19857,
+    "ventilation": 306292,
     "renewables": 0,
-    "grand_total": 1116532
+    "grand_total": 1519211
   }
 }
