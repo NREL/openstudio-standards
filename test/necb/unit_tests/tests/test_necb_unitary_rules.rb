@@ -180,14 +180,14 @@ class NECB_HVAC_Unitary_Tests < Minitest::Test
       if cap < 19 then
         if vintage == 'BTAPPRE1980' || vintage == 'BTAP1980TO2010' then
           metric = 'EER'
-          value = standard.cop_no_fan_to_eer(rated_cop).signif(3)
+          value = OpenstudioStandards::HVAC.cop_no_fan_to_eer(rated_cop).signif(3)
         else
           metric = 'SEER'
-          value = standard.cop_no_fan_to_seer(rated_cop).signif(3)
+          value = OpenstudioStandards::HVAC.cop_no_fan_to_seer(rated_cop).signif(3)
         end
       else
         metric = 'EER'
-        value = standard.cop_no_fan_to_eer(rated_cop).signif(3)
+        value = OpenstudioStandards::HVAC.cop_no_fan_to_eer(rated_cop).signif(3)
       end
       results_coil << {
         name: "#{dx_unit_name}",

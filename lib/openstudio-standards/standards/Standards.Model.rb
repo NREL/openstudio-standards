@@ -774,10 +774,10 @@ class Standard
       end
 
       # This is only used for the stable baseline (2016 and later)
-if !applicable_zones.nil? && !applicable_zones.include?(zone)
-          # This zone is not part of the current hvac_building_type
-          next
-        end
+      if !applicable_zones.nil? && !applicable_zones.include?(zone)
+        # This zone is not part of the current hvac_building_type
+        next
+      end
 
       # Skip unconditioned zones
       heated = OpenstudioStandards::ThermalZone.thermal_zone_heated?(zone)

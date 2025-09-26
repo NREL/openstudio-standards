@@ -254,11 +254,11 @@ OS:Coil:Cooling:DX:SingleSpeed,
 
 OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0012-000000000002},  !- Handle
-  CoilCoolingDXSingleSpeed_ashp 149kBtu/hr 10.6EER, !- Name
+  CoilCoolingDXSingleSpeed_ashp 149kBtu/hr 10.4EER, !- Name
   {00000000-0000-0000-0054-000000000001},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.66653789071086,                        !- Rated COP {W/W}
+  3.59993082930808,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -289,10 +289,10 @@ OS:Coil:Cooling:DX:SingleSpeed,
 
 OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0013-000000000001},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 1 14 Clg kBtu/hr 3.1COPH, !- Name
+  CoilHeatingDXSingleSpeed_ashp 1 19 Clg kBtu/hr 3.1COPH, !- Name
   {00000000-0000-0000-0054-000000000001},  !- Availability Schedule Name
-  4015.19992175564,                        !- Rated Total Heating Capacity {W}
-  3.29848575765946,                        !- Rated COP {W/W}
+  Autosize,                                !- Rated Total Heating Capacity {W}
+  3.30087719980075,                        !- Rated COP {W/W}
   Autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -316,10 +316,10 @@ OS:Coil:Heating:DX:SingleSpeed,
 
 OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0013-000000000002},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 108 Clg kBtu/hr 3.3COPH, !- Name
+  CoilHeatingDXSingleSpeed_ashp 149 Clg kBtu/hr 3.2COPH, !- Name
   {00000000-0000-0000-0054-000000000001},  !- Availability Schedule Name
-  31703.6797287828,                        !- Rated Total Heating Capacity {W}
-  3.55743386439487,                        !- Rated COP {W/W}
+  Autosize,                                !- Rated Total Heating Capacity {W}
+  3.46912458047456,                        !- Rated COP {W/W}
   Autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -2579,19 +2579,19 @@ OS:Node,
 
 OS:Node,
   {00000000-0000-0000-0043-000000000015},  !- Handle
-  CoilCoolingDXSingleSpeed_ashp 149kBtu/hr 10.6EER Outlet Air Node, !- Name
+  CoilCoolingDXSingleSpeed_ashp 149kBtu/hr 10.4EER Outlet Air Node, !- Name
   {00000000-0000-0000-0015-000000000015},  !- Inlet Port
   {00000000-0000-0000-0015-000000000016};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0043-000000000016},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 1 14 Clg kBtu/hr 3.1COPH Outlet Air Node, !- Name
+  CoilHeatingDXSingleSpeed_ashp 1 19 Clg kBtu/hr 3.1COPH Outlet Air Node, !- Name
   {00000000-0000-0000-0015-000000000035},  !- Inlet Port
   {00000000-0000-0000-0015-000000000036};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0043-000000000017},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 108 Clg kBtu/hr 3.3COPH Outlet Air Node, !- Name
+  CoilHeatingDXSingleSpeed_ashp 149 Clg kBtu/hr 3.2COPH Outlet Air Node, !- Name
   {00000000-0000-0000-0015-000000000013},  !- Inlet Port
   {00000000-0000-0000-0015-000000000014};  !- Outlet Port
 
@@ -2898,7 +2898,7 @@ OS:PlantLoop,
   ,                                        !- Primary Plant Equipment Operation Scheme
   {00000000-0000-0000-0043-000000000026},  !- Loop Temperature Setpoint Node Name
   60,                                      !- Maximum Loop Temperature {C}
-  51.66667,                                !- Minimum Loop Temperature {C}
+  51.6666666666667,                        !- Minimum Loop Temperature {C}
   ,                                        !- Maximum Loop Flow Rate {m3/s}
   ,                                        !- Minimum Loop Flow Rate {m3/s}
   Autocalculate,                           !- Plant Loop Volume {m3}
@@ -6620,7 +6620,7 @@ OS:WaterHeater:Sizing,
   {00000000-0000-0000-0091-000000000001},  !- WaterHeater Name
   PeakDraw,                                !- Design Mode
   0.538503,                                !- Time Storage Can Meet Peak Draw {hr}
-  0,                                       !- Time for Tank Recovery {hr}
+  1,                                       !- Time for Tank Recovery {hr}
   1;                                       !- Nominal Tank Volume for Autosizing Plant Connections {m3}
 
 OS:WaterUse:Connections,

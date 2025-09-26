@@ -2332,7 +2332,7 @@ OS:Controller:WaterCoil,
   ,                                        !- Actuator Variable
   ,                                        !- Sensor Node Name
   ,                                        !- Actuator Node Name
-  0.0001,                                  !- Controller Convergence Tolerance {deltaC}
+  ,                                        !- Controller Convergence Tolerance {deltaC}
   ,                                        !- Maximum Actuated Flow {m3/s}
   ;                                        !- Minimum Actuated Flow {m3/s}
 
@@ -2345,7 +2345,7 @@ OS:Controller:WaterCoil,
   ,                                        !- Actuator Variable
   ,                                        !- Sensor Node Name
   ,                                        !- Actuator Node Name
-  0.0001,                                  !- Controller Convergence Tolerance {deltaC}
+  ,                                        !- Controller Convergence Tolerance {deltaC}
   ,                                        !- Maximum Actuated Flow {m3/s}
   ;                                        !- Minimum Actuated Flow {m3/s}
 
@@ -2828,7 +2828,7 @@ OS:DistrictCooling,
   DistrictCooling GLHX,                    !- Name
   {00000000-0000-0000-0016-000000000190},  !- Chilled Water Inlet Node Name
   {00000000-0000-0000-0016-000000000191},  !- Chilled Water Outlet Node Name
-  32339.0946245687,                        !- Nominal Capacity {W}
+  32339.0959231855,                        !- Nominal Capacity {W}
   {00000000-0000-0000-0063-000000000002};  !- Capacity Fraction Schedule
 
 OS:DistrictHeating:Water,
@@ -2836,7 +2836,7 @@ OS:DistrictHeating:Water,
   DistrictHeating GLHX,                    !- Name
   {00000000-0000-0000-0016-000000000181},  !- Hot Water Inlet Node Name
   {00000000-0000-0000-0016-000000000182},  !- Hot Water Outlet Node Name
-  34564.9171833238,                        !- Nominal Capacity {W}
+  34564.9171833602,                        !- Nominal Capacity {W}
   {00000000-0000-0000-0063-000000000002};  !- Capacity Fraction Schedule
 
 OS:ElectricEquipment,
@@ -4314,7 +4314,7 @@ OS:PlantLoop,
   ,                                        !- Primary Plant Equipment Operation Scheme
   {00000000-0000-0000-0050-000000000065},  !- Loop Temperature Setpoint Node Name
   60,                                      !- Maximum Loop Temperature {C}
-  51.66667,                                !- Minimum Loop Temperature {C}
+  51.6666666666667,                        !- Minimum Loop Temperature {C}
   ,                                        !- Maximum Loop Flow Rate {m3/s}
   ,                                        !- Minimum Loop Flow Rate {m3/s}
   Autocalculate,                           !- Plant Loop Volume {m3}
@@ -7779,7 +7779,7 @@ OS:WaterHeater:Sizing,
   {00000000-0000-0000-0097-000000000001},  !- WaterHeater Name
   PeakDraw,                                !- Design Mode
   0.538503,                                !- Time Storage Can Meet Peak Draw {hr}
-  0,                                       !- Time for Tank Recovery {hr}
+  0.5,                                     !- Time for Tank Recovery {hr}
   1;                                       !- Nominal Tank Volume for Autosizing Plant Connections {m3}
 
 OS:WaterUse:Connections,
