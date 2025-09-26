@@ -11,9 +11,9 @@
     "exterior_floor_cost": 0.0,
     "exterior_floor_area_m2": 0.0,
     "exterior_floor_cost_per_m2": 0.0,
-    "exterior_fixed_window_cost": 217279.63,
+    "exterior_fixed_window_cost": 344028.38,
     "exterior_fixed_window_area_m2": 1150.45,
-    "exterior_fixed_window_cost_per_m2": 188.86,
+    "exterior_fixed_window_cost_per_m2": 299.04,
     "exterior_operable_window_cost": 0.0,
     "exterior_operable_window_area_m2": 0.0,
     "exterior_operable_window_cost_per_m2": 0.0,
@@ -65,8 +65,8 @@
         "name": "undefined space type_2.95",
         "conductance": 2.95,
         "area": 1150.45,
-        "cost": 217279.63,
-        "cost_per_area": 188.86,
+        "cost": 344028.38,
+        "cost_per_area": 299.04,
         "note": "Surf #1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 2: No cost found for this! So Cost is set to 0.0!"
       },
       {
@@ -78,7 +78,7 @@
         "note": "Surf #1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0! / 1: No cost found for this! So Cost is set to 0.0!"
       }
     ],
-    "total_envelope_cost": 217280.02
+    "total_envelope_cost": 344028.29
   },
   "lighting": {
     "daylighting_sensor_control": [],
@@ -88,8 +88,8 @@
         "fixture_type": "6",
         "fixture_description": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "floor_area_ft2": 75992.0,
-        "cost": 467320.8,
-        "cost_per_ft2": 6.15,
+        "cost": 721797.6,
+        "cost_per_ft2": 9.5,
         "spaces": [
           "T SE Apartment",
           "T NE Apartment",
@@ -178,8 +178,8 @@
         "fixture_type": "7",
         "fixture_description": "High Bay (10 ft above work plane) Fluorescent Lighting 1.5 W/ft2 (16 W/m2), 103FC, 7 Fixtures per 1000 ft2",
         "floor_area_ft2": 8359.0,
-        "cost": 166770.4,
-        "cost_per_ft2": 19.95,
+        "cost": 243100.0,
+        "cost_per_ft2": 29.08,
         "spaces": [
           "T Corridor",
           "G Corridor",
@@ -206,8 +206,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -220,8 +220,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -234,8 +234,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -248,8 +248,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -262,8 +262,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -276,8 +276,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -290,8 +290,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -304,8 +304,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -318,8 +318,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -332,8 +332,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -346,8 +346,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -360,8 +360,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -374,8 +374,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -388,8 +388,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -402,8 +402,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -416,8 +416,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -430,8 +430,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -444,8 +444,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -458,8 +458,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -472,8 +472,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -486,8 +486,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -500,8 +500,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -514,8 +514,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -528,8 +528,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -542,8 +542,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -556,8 +556,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -570,8 +570,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -584,8 +584,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -598,8 +598,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -612,8 +612,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -626,8 +626,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -640,8 +640,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -654,8 +654,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -668,8 +668,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -682,8 +682,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -696,8 +696,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -710,8 +710,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -724,8 +724,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -738,8 +738,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -752,8 +752,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -766,8 +766,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -780,8 +780,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -794,8 +794,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -808,8 +808,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -822,8 +822,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -836,8 +836,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -850,8 +850,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -864,8 +864,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -878,8 +878,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -892,8 +892,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -906,8 +906,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -920,8 +920,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -934,8 +934,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -948,8 +948,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -962,8 +962,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -976,8 +976,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -990,8 +990,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -1004,8 +1004,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -1018,8 +1018,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -1032,8 +1032,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -1046,8 +1046,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -1060,8 +1060,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -1074,8 +1074,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -1088,8 +1088,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -1102,8 +1102,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -1116,8 +1116,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -1130,8 +1130,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -1144,8 +1144,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -1158,8 +1158,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -1172,8 +1172,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -1186,8 +1186,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -1200,8 +1200,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -1214,8 +1214,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -1228,8 +1228,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -1242,8 +1242,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -1256,8 +1256,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -1270,8 +1270,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -1284,8 +1284,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -1298,8 +1298,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -1312,8 +1312,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting .5 W/ft2 (5.4 W/m2), 29FC, 2 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 949.9,
-        "cost": 5841.51,
-        "cost_per_ft2": 6.15,
+        "cost": 9022.47,
+        "cost_per_ft2": 9.5,
         "note": ""
       },
       {
@@ -1326,8 +1326,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting 1.5 W/ft2 (16 W/m2), 103FC, 7 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 835.9,
-        "cost": 16677.04,
-        "cost_per_ft2": 19.95,
+        "cost": 24310.0,
+        "cost_per_ft2": 29.08,
         "note": ""
       },
       {
@@ -1340,8 +1340,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting 1.5 W/ft2 (16 W/m2), 103FC, 7 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 835.9,
-        "cost": 16677.04,
-        "cost_per_ft2": 19.95,
+        "cost": 24310.0,
+        "cost_per_ft2": 29.08,
         "note": ""
       },
       {
@@ -1354,8 +1354,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting 1.5 W/ft2 (16 W/m2), 103FC, 7 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 835.9,
-        "cost": 16677.04,
-        "cost_per_ft2": 19.95,
+        "cost": 24310.0,
+        "cost_per_ft2": 29.08,
         "note": ""
       },
       {
@@ -1368,8 +1368,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting 1.5 W/ft2 (16 W/m2), 103FC, 7 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 835.9,
-        "cost": 16677.04,
-        "cost_per_ft2": 19.95,
+        "cost": 24310.0,
+        "cost_per_ft2": 29.08,
         "note": ""
       },
       {
@@ -1382,8 +1382,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting 1.5 W/ft2 (16 W/m2), 103FC, 7 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 835.9,
-        "cost": 16677.04,
-        "cost_per_ft2": 19.95,
+        "cost": 24310.0,
+        "cost_per_ft2": 29.08,
         "note": ""
       },
       {
@@ -1396,8 +1396,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting 1.5 W/ft2 (16 W/m2), 103FC, 7 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 835.9,
-        "cost": 16677.04,
-        "cost_per_ft2": 19.95,
+        "cost": 24310.0,
+        "cost_per_ft2": 29.08,
         "note": ""
       },
       {
@@ -1410,8 +1410,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting 1.5 W/ft2 (16 W/m2), 103FC, 7 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 835.9,
-        "cost": 16677.04,
-        "cost_per_ft2": 19.95,
+        "cost": 24310.0,
+        "cost_per_ft2": 29.08,
         "note": ""
       },
       {
@@ -1424,8 +1424,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting 1.5 W/ft2 (16 W/m2), 103FC, 7 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 835.9,
-        "cost": 16677.04,
-        "cost_per_ft2": 19.95,
+        "cost": 24310.0,
+        "cost_per_ft2": 29.08,
         "note": ""
       },
       {
@@ -1438,8 +1438,8 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting 1.5 W/ft2 (16 W/m2), 103FC, 7 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 835.9,
-        "cost": 16677.04,
-        "cost_per_ft2": 19.95,
+        "cost": 24310.0,
+        "cost_per_ft2": 29.08,
         "note": ""
       },
       {
@@ -1452,12 +1452,12 @@
         "fixture_desciption": "High Bay (10 ft above work plane) Fluorescent Lighting 1.5 W/ft2 (16 W/m2), 103FC, 7 Fixtures per 1000 ft2",
         "height_avg_ft": 10.0,
         "floor_area_ft2": 835.9,
-        "cost": 16677.04,
-        "cost_per_ft2": 19.95,
+        "cost": 24310.0,
+        "cost_per_ft2": 29.08,
         "note": ""
       }
     ],
-    "total_lighting_cost": 634091.02
+    "total_lighting_cost": 964897.84
   },
   "heating_and_cooling": {
     "plant_equipment": [
@@ -1511,12 +1511,12 @@
         "heat_capacity(kW)": 10.4,
         "cool_capacity(kW)": 6.8,
         "heat_cost": 0,
-        "cool_cost": 7531,
+        "cool_cost": 18097,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 9027
+        "cummultive_zonal_cost": 19678
       },
       {
         "systype": "BB",
@@ -1525,13 +1525,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 10.4,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 6085,
+        "heat_cost": 7077,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 12,
-        "cummultive_zonal_cost": 16608
+        "cummultive_zonal_cost": 28336
       },
       {
         "systype": "PTAC",
@@ -1541,12 +1541,12 @@
         "heat_capacity(kW)": 10.5,
         "cool_capacity(kW)": 6.9,
         "heat_cost": 0,
-        "cool_cost": 7531,
+        "cool_cost": 18097,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 25634
+        "cummultive_zonal_cost": 48014
       },
       {
         "systype": "BB",
@@ -1555,13 +1555,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 10.5,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 6085,
+        "heat_cost": 7077,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 12,
-        "cummultive_zonal_cost": 33215
+        "cummultive_zonal_cost": 56672
       },
       {
         "systype": "PTAC",
@@ -1571,12 +1571,12 @@
         "heat_capacity(kW)": 8.2,
         "cool_capacity(kW)": 5.4,
         "heat_cost": 0,
-        "cool_cost": 7531,
+        "cool_cost": 18097,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 41648
+        "cummultive_zonal_cost": 75723
       },
       {
         "systype": "BB",
@@ -1585,13 +1585,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 8.2,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 4564,
+        "heat_cost": 5308,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 9,
-        "cummultive_zonal_cost": 47114
+        "cummultive_zonal_cost": 81984
       },
       {
         "systype": "PTAC",
@@ -1601,12 +1601,12 @@
         "heat_capacity(kW)": 8.2,
         "cool_capacity(kW)": 5.4,
         "heat_cost": 0,
-        "cool_cost": 7531,
+        "cool_cost": 18097,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 55548
+        "cummultive_zonal_cost": 101035
       },
       {
         "systype": "BB",
@@ -1615,13 +1615,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 8.2,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 4564,
+        "heat_cost": 5308,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 9,
-        "cummultive_zonal_cost": 61014
+        "cummultive_zonal_cost": 107296
       },
       {
         "systype": "PTAC",
@@ -1631,12 +1631,12 @@
         "heat_capacity(kW)": 10.5,
         "cool_capacity(kW)": 6.9,
         "heat_cost": 0,
-        "cool_cost": 7531,
+        "cool_cost": 18097,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 70040
+        "cummultive_zonal_cost": 126974
       },
       {
         "systype": "BB",
@@ -1645,13 +1645,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 10.5,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 6085,
+        "heat_cost": 7077,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 12,
-        "cummultive_zonal_cost": 77621
+        "cummultive_zonal_cost": 135632
       },
       {
         "systype": "PTAC",
@@ -1661,12 +1661,12 @@
         "heat_capacity(kW)": 10.5,
         "cool_capacity(kW)": 6.9,
         "heat_cost": 0,
-        "cool_cost": 7531,
+        "cool_cost": 18097,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 86648
+        "cummultive_zonal_cost": 155310
       },
       {
         "systype": "BB",
@@ -1675,13 +1675,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 10.4,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 6085,
+        "heat_cost": 7077,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 12,
-        "cummultive_zonal_cost": 94229
+        "cummultive_zonal_cost": 163969
       },
       {
         "systype": "PTAC",
@@ -1691,12 +1691,12 @@
         "heat_capacity(kW)": 8.3,
         "cool_capacity(kW)": 5.5,
         "heat_cost": 0,
-        "cool_cost": 7531,
+        "cool_cost": 18097,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 102662
+        "cummultive_zonal_cost": 183019
       },
       {
         "systype": "BB",
@@ -1705,13 +1705,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 8.3,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 4564,
+        "heat_cost": 5308,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 9,
-        "cummultive_zonal_cost": 108128
+        "cummultive_zonal_cost": 189281
       },
       {
         "systype": "PTAC",
@@ -1721,12 +1721,12 @@
         "heat_capacity(kW)": 8.3,
         "cool_capacity(kW)": 5.5,
         "heat_cost": 0,
-        "cool_cost": 7531,
+        "cool_cost": 18097,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 116561
+        "cummultive_zonal_cost": 208331
       },
       {
         "systype": "BB",
@@ -1735,13 +1735,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 8.3,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 4564,
+        "heat_cost": 5308,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 9,
-        "cummultive_zonal_cost": 122027
+        "cummultive_zonal_cost": 214593
       },
       {
         "systype": "PTAC",
@@ -1751,12 +1751,12 @@
         "heat_capacity(kW)": 5.9,
         "cool_capacity(kW)": 3.9,
         "heat_cost": 0,
-        "cool_cost": 922,
+        "cool_cost": 5286,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 124445
+        "cummultive_zonal_cost": 221460
       },
       {
         "systype": "BB",
@@ -1765,13 +1765,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 5.9,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 3550,
+        "heat_cost": 4128,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 7,
-        "cummultive_zonal_cost": 129490
+        "cummultive_zonal_cost": 227170
       },
       {
         "systype": "PTAC",
@@ -1781,12 +1781,12 @@
         "heat_capacity(kW)": 5.9,
         "cool_capacity(kW)": 3.9,
         "heat_cost": 0,
-        "cool_cost": 922,
+        "cool_cost": 5286,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 131909
+        "cummultive_zonal_cost": 234038
       },
       {
         "systype": "BB",
@@ -1795,13 +1795,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 5.9,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 3550,
+        "heat_cost": 4128,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 7,
-        "cummultive_zonal_cost": 136954
+        "cummultive_zonal_cost": 239747
       },
       {
         "systype": "PTAC",
@@ -1811,12 +1811,12 @@
         "heat_capacity(kW)": 3.9,
         "cool_capacity(kW)": 2.5,
         "heat_cost": 0,
-        "cool_cost": 5831,
+        "cool_cost": 770,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 143687
+        "cummultive_zonal_cost": 241471
       },
       {
         "systype": "BB",
@@ -1825,13 +1825,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.9,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2535,
+        "heat_cost": 2949,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 5,
-        "cummultive_zonal_cost": 147124
+        "cummultive_zonal_cost": 245373
       },
       {
         "systype": "PTAC",
@@ -1841,12 +1841,12 @@
         "heat_capacity(kW)": 3.9,
         "cool_capacity(kW)": 2.6,
         "heat_cost": 0,
-        "cool_cost": 5831,
+        "cool_cost": 770,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 153857
+        "cummultive_zonal_cost": 247097
       },
       {
         "systype": "BB",
@@ -1855,13 +1855,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.9,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2535,
+        "heat_cost": 2949,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 5,
-        "cummultive_zonal_cost": 157295
+        "cummultive_zonal_cost": 251000
       },
       {
         "systype": "PTAC",
@@ -1871,12 +1871,12 @@
         "heat_capacity(kW)": 5.8,
         "cool_capacity(kW)": 3.8,
         "heat_cost": 0,
-        "cool_cost": 922,
+        "cool_cost": 5286,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 159713
+        "cummultive_zonal_cost": 257867
       },
       {
         "systype": "BB",
@@ -1885,13 +1885,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 5.8,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 3550,
+        "heat_cost": 4128,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 7,
-        "cummultive_zonal_cost": 164758
+        "cummultive_zonal_cost": 263577
       },
       {
         "systype": "PTAC",
@@ -1901,12 +1901,12 @@
         "heat_capacity(kW)": 3.9,
         "cool_capacity(kW)": 2.6,
         "heat_cost": 0,
-        "cool_cost": 5831,
+        "cool_cost": 770,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 171491
+        "cummultive_zonal_cost": 265301
       },
       {
         "systype": "BB",
@@ -1915,13 +1915,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.9,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2535,
+        "heat_cost": 2949,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 5,
-        "cummultive_zonal_cost": 174929
+        "cummultive_zonal_cost": 269203
       },
       {
         "systype": "PTAC",
@@ -1931,12 +1931,12 @@
         "heat_capacity(kW)": 3.9,
         "cool_capacity(kW)": 2.5,
         "heat_cost": 0,
-        "cool_cost": 5831,
+        "cool_cost": 770,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 181661
+        "cummultive_zonal_cost": 270927
       },
       {
         "systype": "BB",
@@ -1945,13 +1945,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.9,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2535,
+        "heat_cost": 2949,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 5,
-        "cummultive_zonal_cost": 185099
+        "cummultive_zonal_cost": 274829
       },
       {
         "systype": "PTAC",
@@ -1961,12 +1961,12 @@
         "heat_capacity(kW)": 5.9,
         "cool_capacity(kW)": 3.9,
         "heat_cost": 0,
-        "cool_cost": 922,
+        "cool_cost": 5286,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 187517
+        "cummultive_zonal_cost": 281697
       },
       {
         "systype": "BB",
@@ -1975,13 +1975,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 5.9,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 3550,
+        "heat_cost": 4128,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 7,
-        "cummultive_zonal_cost": 192562
+        "cummultive_zonal_cost": 287407
       },
       {
         "systype": "PTAC",
@@ -1991,12 +1991,12 @@
         "heat_capacity(kW)": 3.7,
         "cool_capacity(kW)": 2.4,
         "heat_cost": 0,
-        "cool_cost": 5831,
+        "cool_cost": 770,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 199295
+        "cummultive_zonal_cost": 289130
       },
       {
         "systype": "BB",
@@ -2005,13 +2005,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.7,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2028,
+        "heat_cost": 2359,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 4,
-        "cummultive_zonal_cost": 202226
+        "cummultive_zonal_cost": 292443
       },
       {
         "systype": "PTAC",
@@ -2021,12 +2021,12 @@
         "heat_capacity(kW)": 5.6,
         "cool_capacity(kW)": 3.7,
         "heat_cost": 0,
-        "cool_cost": 922,
+        "cool_cost": 5286,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 204644
+        "cummultive_zonal_cost": 299311
       },
       {
         "systype": "BB",
@@ -2035,13 +2035,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 5.6,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 3042,
+        "heat_cost": 3538,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 6,
-        "cummultive_zonal_cost": 209182
+        "cummultive_zonal_cost": 304431
       },
       {
         "systype": "PTAC",
@@ -2051,12 +2051,12 @@
         "heat_capacity(kW)": 5.6,
         "cool_capacity(kW)": 3.7,
         "heat_cost": 0,
-        "cool_cost": 922,
+        "cool_cost": 5286,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 211600
+        "cummultive_zonal_cost": 311298
       },
       {
         "systype": "BB",
@@ -2065,13 +2065,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 5.6,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 3046,
+        "heat_cost": 3542,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 6.006337211731283,
-        "cummultive_zonal_cost": 216142
+        "cummultive_zonal_cost": 316422
       },
       {
         "systype": "PTAC",
@@ -2081,12 +2081,12 @@
         "heat_capacity(kW)": 3.7,
         "cool_capacity(kW)": 2.4,
         "heat_cost": 0,
-        "cool_cost": 5831,
+        "cool_cost": 770,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 222875
+        "cummultive_zonal_cost": 318146
       },
       {
         "systype": "BB",
@@ -2095,13 +2095,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.7,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2028,
+        "heat_cost": 2359,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 4,
-        "cummultive_zonal_cost": 225805
+        "cummultive_zonal_cost": 321458
       },
       {
         "systype": "PTAC",
@@ -2111,12 +2111,12 @@
         "heat_capacity(kW)": 5.7,
         "cool_capacity(kW)": 3.7,
         "heat_cost": 0,
-        "cool_cost": 922,
+        "cool_cost": 5286,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 228223
+        "cummultive_zonal_cost": 328326
       },
       {
         "systype": "BB",
@@ -2125,13 +2125,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 5.7,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 3066,
+        "heat_cost": 3566,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 6.046947067179144,
-        "cummultive_zonal_cost": 232785
+        "cummultive_zonal_cost": 333473
       },
       {
         "systype": "PTAC",
@@ -2141,12 +2141,12 @@
         "heat_capacity(kW)": 5.6,
         "cool_capacity(kW)": 3.7,
         "heat_cost": 0,
-        "cool_cost": 922,
+        "cool_cost": 5286,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 235203
+        "cummultive_zonal_cost": 340341
       },
       {
         "systype": "BB",
@@ -2155,13 +2155,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 5.6,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 3042,
+        "heat_cost": 3538,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 6,
-        "cummultive_zonal_cost": 239741
+        "cummultive_zonal_cost": 345461
       },
       {
         "systype": "PTAC",
@@ -2171,12 +2171,12 @@
         "heat_capacity(kW)": 3.6,
         "cool_capacity(kW)": 2.4,
         "heat_cost": 0,
-        "cool_cost": 5831,
+        "cool_cost": 770,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 246474
+        "cummultive_zonal_cost": 347185
       },
       {
         "systype": "BB",
@@ -2185,13 +2185,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.6,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2028,
+        "heat_cost": 2359,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 4,
-        "cummultive_zonal_cost": 249405
+        "cummultive_zonal_cost": 350497
       },
       {
         "systype": "PTAC",
@@ -2201,12 +2201,12 @@
         "heat_capacity(kW)": 3.6,
         "cool_capacity(kW)": 2.4,
         "heat_cost": 0,
-        "cool_cost": 5831,
+        "cool_cost": 770,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 256138
+        "cummultive_zonal_cost": 352221
       },
       {
         "systype": "BB",
@@ -2215,13 +2215,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.6,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2028,
+        "heat_cost": 2359,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 4,
-        "cummultive_zonal_cost": 259068
+        "cummultive_zonal_cost": 355534
       },
       {
         "systype": "PTAC",
@@ -2231,12 +2231,12 @@
         "heat_capacity(kW)": 5.8,
         "cool_capacity(kW)": 3.8,
         "heat_cost": 0,
-        "cool_cost": 922,
+        "cool_cost": 5286,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 261486
+        "cummultive_zonal_cost": 362402
       },
       {
         "systype": "BB",
@@ -2245,13 +2245,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 5.8,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 3550,
+        "heat_cost": 4128,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 7,
-        "cummultive_zonal_cost": 266532
+        "cummultive_zonal_cost": 368111
       },
       {
         "systype": "PTAC",
@@ -2261,12 +2261,12 @@
         "heat_capacity(kW)": 3.7,
         "cool_capacity(kW)": 2.5,
         "heat_cost": 0,
-        "cool_cost": 5831,
+        "cool_cost": 770,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 273265
+        "cummultive_zonal_cost": 369835
       },
       {
         "systype": "BB",
@@ -2275,13 +2275,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.7,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2028,
+        "heat_cost": 2359,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 4,
-        "cummultive_zonal_cost": 276195
+        "cummultive_zonal_cost": 373148
       },
       {
         "systype": "PTAC",
@@ -2291,12 +2291,12 @@
         "heat_capacity(kW)": 5.8,
         "cool_capacity(kW)": 3.8,
         "heat_cost": 0,
-        "cool_cost": 922,
+        "cool_cost": 5286,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 278613
+        "cummultive_zonal_cost": 380015
       },
       {
         "systype": "BB",
@@ -2305,13 +2305,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 5.8,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 3550,
+        "heat_cost": 4128,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 7,
-        "cummultive_zonal_cost": 283658
+        "cummultive_zonal_cost": 385725
       },
       {
         "systype": "PTAC",
@@ -2321,12 +2321,12 @@
         "heat_capacity(kW)": 5.9,
         "cool_capacity(kW)": 3.9,
         "heat_cost": 0,
-        "cool_cost": 922,
+        "cool_cost": 5286,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 286077
+        "cummultive_zonal_cost": 392593
       },
       {
         "systype": "BB",
@@ -2335,13 +2335,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 5.9,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 3550,
+        "heat_cost": 4128,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 7,
-        "cummultive_zonal_cost": 291122
+        "cummultive_zonal_cost": 398302
       },
       {
         "systype": "PTAC",
@@ -2351,12 +2351,12 @@
         "heat_capacity(kW)": 5.8,
         "cool_capacity(kW)": 3.8,
         "heat_cost": 0,
-        "cool_cost": 922,
+        "cool_cost": 5286,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 293540
+        "cummultive_zonal_cost": 405170
       },
       {
         "systype": "BB",
@@ -2365,13 +2365,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 5.8,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 3550,
+        "heat_cost": 4128,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 7,
-        "cummultive_zonal_cost": 298585
+        "cummultive_zonal_cost": 410879
       },
       {
         "systype": "PTAC",
@@ -2381,12 +2381,12 @@
         "heat_capacity(kW)": 3.8,
         "cool_capacity(kW)": 2.5,
         "heat_cost": 0,
-        "cool_cost": 5831,
+        "cool_cost": 770,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 305318
+        "cummultive_zonal_cost": 412603
       },
       {
         "systype": "BB",
@@ -2395,13 +2395,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.8,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2062,
+        "heat_cost": 2398,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 4.066283265792112,
-        "cummultive_zonal_cost": 308282
+        "cummultive_zonal_cost": 415955
       },
       {
         "systype": "PTAC",
@@ -2411,12 +2411,12 @@
         "heat_capacity(kW)": 3.8,
         "cool_capacity(kW)": 2.5,
         "heat_cost": 0,
-        "cool_cost": 5831,
+        "cool_cost": 770,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 315015
+        "cummultive_zonal_cost": 417679
       },
       {
         "systype": "BB",
@@ -2425,13 +2425,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.8,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2061,
+        "heat_cost": 2397,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 4.0648306943516035,
-        "cummultive_zonal_cost": 317978
+        "cummultive_zonal_cost": 421030
       },
       {
         "systype": "PTAC",
@@ -2441,12 +2441,12 @@
         "heat_capacity(kW)": 3.7,
         "cool_capacity(kW)": 2.5,
         "heat_cost": 0,
-        "cool_cost": 5831,
+        "cool_cost": 770,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 324711
+        "cummultive_zonal_cost": 422754
       },
       {
         "systype": "BB",
@@ -2455,13 +2455,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.7,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2028,
+        "heat_cost": 2359,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 4,
-        "cummultive_zonal_cost": 327642
+        "cummultive_zonal_cost": 426066
       },
       {
         "systype": "PTAC",
@@ -2471,12 +2471,12 @@
         "heat_capacity(kW)": 6.0,
         "cool_capacity(kW)": 4.0,
         "heat_cost": 0,
-        "cool_cost": 922,
+        "cool_cost": 5286,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 330060
+        "cummultive_zonal_cost": 432934
       },
       {
         "systype": "BB",
@@ -2485,13 +2485,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 6.0,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 3550,
+        "heat_cost": 4128,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 7,
-        "cummultive_zonal_cost": 335105
+        "cummultive_zonal_cost": 438643
       },
       {
         "systype": "PTAC",
@@ -2501,12 +2501,12 @@
         "heat_capacity(kW)": 3.9,
         "cool_capacity(kW)": 2.6,
         "heat_cost": 0,
-        "cool_cost": 5831,
+        "cool_cost": 770,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 341838
+        "cummultive_zonal_cost": 440367
       },
       {
         "systype": "BB",
@@ -2515,13 +2515,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.9,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2535,
+        "heat_cost": 2949,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 5,
-        "cummultive_zonal_cost": 345276
+        "cummultive_zonal_cost": 444270
       },
       {
         "systype": "PTAC",
@@ -2531,12 +2531,12 @@
         "heat_capacity(kW)": 3.9,
         "cool_capacity(kW)": 2.6,
         "heat_cost": 0,
-        "cool_cost": 5831,
+        "cool_cost": 770,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 352009
+        "cummultive_zonal_cost": 445994
       },
       {
         "systype": "BB",
@@ -2545,13 +2545,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.9,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2535,
+        "heat_cost": 2949,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 5,
-        "cummultive_zonal_cost": 355446
+        "cummultive_zonal_cost": 449896
       },
       {
         "systype": "PTAC",
@@ -2561,12 +2561,12 @@
         "heat_capacity(kW)": 6.0,
         "cool_capacity(kW)": 3.9,
         "heat_cost": 0,
-        "cool_cost": 922,
+        "cool_cost": 5286,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 357864
+        "cummultive_zonal_cost": 456764
       },
       {
         "systype": "BB",
@@ -2575,13 +2575,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 6.0,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 3550,
+        "heat_cost": 4128,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 7,
-        "cummultive_zonal_cost": 362910
+        "cummultive_zonal_cost": 462473
       },
       {
         "systype": "PTAC",
@@ -2591,12 +2591,12 @@
         "heat_capacity(kW)": 3.9,
         "cool_capacity(kW)": 2.6,
         "heat_cost": 0,
-        "cool_cost": 5831,
+        "cool_cost": 770,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 369642
+        "cummultive_zonal_cost": 464197
       },
       {
         "systype": "BB",
@@ -2605,13 +2605,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.9,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2535,
+        "heat_cost": 2949,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 5,
-        "cummultive_zonal_cost": 373080
+        "cummultive_zonal_cost": 468100
       },
       {
         "systype": "PTAC",
@@ -2621,12 +2621,12 @@
         "heat_capacity(kW)": 6.0,
         "cool_capacity(kW)": 3.9,
         "heat_cost": 0,
-        "cool_cost": 922,
+        "cool_cost": 5286,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 375498
+        "cummultive_zonal_cost": 474967
       },
       {
         "systype": "BB",
@@ -2635,13 +2635,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 6.0,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 3550,
+        "heat_cost": 4128,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 7,
-        "cummultive_zonal_cost": 380543
+        "cummultive_zonal_cost": 480677
       },
       {
         "systype": "PTAC",
@@ -2651,12 +2651,12 @@
         "heat_capacity(kW)": 3.9,
         "cool_capacity(kW)": 2.6,
         "heat_cost": 0,
-        "cool_cost": 5831,
+        "cool_cost": 770,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 387276
+        "cummultive_zonal_cost": 482401
       },
       {
         "systype": "BB",
@@ -2665,13 +2665,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.9,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2535,
+        "heat_cost": 2949,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 5,
-        "cummultive_zonal_cost": 390714
+        "cummultive_zonal_cost": 486303
       },
       {
         "systype": "PTAC",
@@ -2681,12 +2681,12 @@
         "heat_capacity(kW)": 6.1,
         "cool_capacity(kW)": 4.0,
         "heat_cost": 0,
-        "cool_cost": 922,
+        "cool_cost": 5286,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 393132
+        "cummultive_zonal_cost": 493171
       },
       {
         "systype": "BB",
@@ -2695,13 +2695,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 6.1,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 3550,
+        "heat_cost": 4128,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 7,
-        "cummultive_zonal_cost": 398177
+        "cummultive_zonal_cost": 498880
       },
       {
         "systype": "PTAC",
@@ -2711,12 +2711,12 @@
         "heat_capacity(kW)": 3.9,
         "cool_capacity(kW)": 2.6,
         "heat_cost": 0,
-        "cool_cost": 5831,
+        "cool_cost": 770,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 404910
+        "cummultive_zonal_cost": 500604
       },
       {
         "systype": "BB",
@@ -2725,13 +2725,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.9,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2535,
+        "heat_cost": 2949,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 5,
-        "cummultive_zonal_cost": 408348
+        "cummultive_zonal_cost": 504506
       },
       {
         "systype": "PTAC",
@@ -2741,12 +2741,12 @@
         "heat_capacity(kW)": 6.1,
         "cool_capacity(kW)": 4.0,
         "heat_cost": 0,
-        "cool_cost": 922,
+        "cool_cost": 5286,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 410766
+        "cummultive_zonal_cost": 511374
       },
       {
         "systype": "BB",
@@ -2755,13 +2755,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 6.1,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 3550,
+        "heat_cost": 4128,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 7,
-        "cummultive_zonal_cost": 415811
+        "cummultive_zonal_cost": 517084
       },
       {
         "systype": "PTAC",
@@ -2771,12 +2771,12 @@
         "heat_capacity(kW)": 3.9,
         "cool_capacity(kW)": 2.6,
         "heat_cost": 0,
-        "cool_cost": 5831,
+        "cool_cost": 770,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 422544
+        "cummultive_zonal_cost": 518807
       },
       {
         "systype": "BB",
@@ -2785,13 +2785,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.9,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2535,
+        "heat_cost": 2949,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 5,
-        "cummultive_zonal_cost": 425982
+        "cummultive_zonal_cost": 522710
       },
       {
         "systype": "PTAC",
@@ -2801,12 +2801,12 @@
         "heat_capacity(kW)": 6.2,
         "cool_capacity(kW)": 4.1,
         "heat_cost": 0,
-        "cool_cost": 922,
+        "cool_cost": 5286,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 428400
+        "cummultive_zonal_cost": 529578
       },
       {
         "systype": "BB",
@@ -2815,13 +2815,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 6.2,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 3550,
+        "heat_cost": 4128,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 7,
-        "cummultive_zonal_cost": 433445
+        "cummultive_zonal_cost": 535287
       },
       {
         "systype": "PTAC",
@@ -2831,12 +2831,12 @@
         "heat_capacity(kW)": 4.0,
         "cool_capacity(kW)": 2.6,
         "heat_cost": 0,
-        "cool_cost": 2445,
+        "cool_cost": 7192,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 436792
+        "cummultive_zonal_cost": 543433
       },
       {
         "systype": "BB",
@@ -2845,13 +2845,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 4.0,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2535,
+        "heat_cost": 2949,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 5,
-        "cummultive_zonal_cost": 440230
+        "cummultive_zonal_cost": 547336
       },
       {
         "systype": "PTAC",
@@ -2861,12 +2861,12 @@
         "heat_capacity(kW)": 6.2,
         "cool_capacity(kW)": 4.1,
         "heat_cost": 0,
-        "cool_cost": 922,
+        "cool_cost": 5286,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 442648
+        "cummultive_zonal_cost": 554204
       },
       {
         "systype": "BB",
@@ -2875,13 +2875,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 6.2,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 3550,
+        "heat_cost": 4128,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 7,
-        "cummultive_zonal_cost": 447693
+        "cummultive_zonal_cost": 559913
       },
       {
         "systype": "PTAC",
@@ -2891,12 +2891,12 @@
         "heat_capacity(kW)": 6.1,
         "cool_capacity(kW)": 4.0,
         "heat_cost": 0,
-        "cool_cost": 922,
+        "cool_cost": 5286,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 450112
+        "cummultive_zonal_cost": 566781
       },
       {
         "systype": "BB",
@@ -2905,13 +2905,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 6.1,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 3550,
+        "heat_cost": 4128,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 7,
-        "cummultive_zonal_cost": 455157
+        "cummultive_zonal_cost": 572490
       },
       {
         "systype": "PTAC",
@@ -2921,12 +2921,12 @@
         "heat_capacity(kW)": 4.0,
         "cool_capacity(kW)": 2.6,
         "heat_cost": 0,
-        "cool_cost": 2445,
+        "cool_cost": 7192,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 458504
+        "cummultive_zonal_cost": 580637
       },
       {
         "systype": "BB",
@@ -2935,13 +2935,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 4.0,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2535,
+        "heat_cost": 2949,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 5,
-        "cummultive_zonal_cost": 461942
+        "cummultive_zonal_cost": 584539
       },
       {
         "systype": "PTAC",
@@ -2951,12 +2951,12 @@
         "heat_capacity(kW)": 6.3,
         "cool_capacity(kW)": 4.2,
         "heat_cost": 0,
-        "cool_cost": 922,
+        "cool_cost": 5286,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 464360
+        "cummultive_zonal_cost": 591407
       },
       {
         "systype": "BB",
@@ -2965,13 +2965,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 6.3,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 3550,
+        "heat_cost": 4128,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 7,
-        "cummultive_zonal_cost": 469405
+        "cummultive_zonal_cost": 597116
       },
       {
         "systype": "PTAC",
@@ -2981,12 +2981,12 @@
         "heat_capacity(kW)": 4.1,
         "cool_capacity(kW)": 2.7,
         "heat_cost": 0,
-        "cool_cost": 2445,
+        "cool_cost": 7192,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 472753
+        "cummultive_zonal_cost": 605263
       },
       {
         "systype": "BB",
@@ -2995,13 +2995,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 4.1,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2535,
+        "heat_cost": 2949,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 5,
-        "cummultive_zonal_cost": 476190
+        "cummultive_zonal_cost": 609165
       },
       {
         "systype": "PTAC",
@@ -3011,12 +3011,12 @@
         "heat_capacity(kW)": 6.3,
         "cool_capacity(kW)": 4.1,
         "heat_cost": 0,
-        "cool_cost": 922,
+        "cool_cost": 5286,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 478608
+        "cummultive_zonal_cost": 616033
       },
       {
         "systype": "BB",
@@ -3025,13 +3025,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 6.3,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 3550,
+        "heat_cost": 4128,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 7,
-        "cummultive_zonal_cost": 483654
+        "cummultive_zonal_cost": 621742
       },
       {
         "systype": "PTAC",
@@ -3041,12 +3041,12 @@
         "heat_capacity(kW)": 4.1,
         "cool_capacity(kW)": 2.7,
         "heat_cost": 0,
-        "cool_cost": 2445,
+        "cool_cost": 7192,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 487001
+        "cummultive_zonal_cost": 629889
       },
       {
         "systype": "BB",
@@ -3055,13 +3055,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 4.1,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2535,
+        "heat_cost": 2949,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 5,
-        "cummultive_zonal_cost": 490439
+        "cummultive_zonal_cost": 633791
       },
       {
         "systype": "PTAC",
@@ -3071,12 +3071,12 @@
         "heat_capacity(kW)": 6.2,
         "cool_capacity(kW)": 4.1,
         "heat_cost": 0,
-        "cool_cost": 922,
+        "cool_cost": 5286,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 492857
+        "cummultive_zonal_cost": 640659
       },
       {
         "systype": "BB",
@@ -3085,13 +3085,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 6.2,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 3550,
+        "heat_cost": 4128,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 7,
-        "cummultive_zonal_cost": 497902
+        "cummultive_zonal_cost": 646368
       },
       {
         "systype": "PTAC",
@@ -3101,12 +3101,12 @@
         "heat_capacity(kW)": 6.3,
         "cool_capacity(kW)": 4.1,
         "heat_cost": 0,
-        "cool_cost": 922,
+        "cool_cost": 5286,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 500320
+        "cummultive_zonal_cost": 653236
       },
       {
         "systype": "BB",
@@ -3115,13 +3115,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 6.3,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 3550,
+        "heat_cost": 4128,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 7,
-        "cummultive_zonal_cost": 505366
+        "cummultive_zonal_cost": 658945
       },
       {
         "systype": "PTAC",
@@ -3131,12 +3131,12 @@
         "heat_capacity(kW)": 4.0,
         "cool_capacity(kW)": 2.6,
         "heat_cost": 0,
-        "cool_cost": 2445,
+        "cool_cost": 7192,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 508713
+        "cummultive_zonal_cost": 667092
       },
       {
         "systype": "BB",
@@ -3145,13 +3145,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 4.0,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2535,
+        "heat_cost": 2949,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 5,
-        "cummultive_zonal_cost": 512151
+        "cummultive_zonal_cost": 670994
       },
       {
         "systype": "PTAC",
@@ -3161,12 +3161,12 @@
         "heat_capacity(kW)": 4.0,
         "cool_capacity(kW)": 2.6,
         "heat_cost": 0,
-        "cool_cost": 2445,
+        "cool_cost": 7192,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 515498
+        "cummultive_zonal_cost": 679140
       },
       {
         "systype": "BB",
@@ -3175,13 +3175,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 4.0,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2535,
+        "heat_cost": 2949,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 5,
-        "cummultive_zonal_cost": 518936
+        "cummultive_zonal_cost": 683043
       },
       {
         "systype": "PTAC",
@@ -3191,12 +3191,12 @@
         "heat_capacity(kW)": 6.4,
         "cool_capacity(kW)": 4.2,
         "heat_cost": 0,
-        "cool_cost": 922,
+        "cool_cost": 5286,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 521354
+        "cummultive_zonal_cost": 689911
       },
       {
         "systype": "BB",
@@ -3205,13 +3205,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 6.4,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 3550,
+        "heat_cost": 4128,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 7,
-        "cummultive_zonal_cost": 526399
+        "cummultive_zonal_cost": 695620
       },
       {
         "systype": "PTAC",
@@ -3221,12 +3221,12 @@
         "heat_capacity(kW)": 6.4,
         "cool_capacity(kW)": 4.2,
         "heat_cost": 0,
-        "cool_cost": 922,
+        "cool_cost": 5286,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 528817
+        "cummultive_zonal_cost": 702488
       },
       {
         "systype": "BB",
@@ -3235,13 +3235,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 6.4,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 3550,
+        "heat_cost": 4128,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 7,
-        "cummultive_zonal_cost": 533862
+        "cummultive_zonal_cost": 708197
       },
       {
         "systype": "PTAC",
@@ -3251,12 +3251,12 @@
         "heat_capacity(kW)": 6.3,
         "cool_capacity(kW)": 4.2,
         "heat_cost": 0,
-        "cool_cost": 922,
+        "cool_cost": 5286,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 536281
+        "cummultive_zonal_cost": 715065
       },
       {
         "systype": "BB",
@@ -3265,13 +3265,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 6.3,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 3550,
+        "heat_cost": 4128,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 7,
-        "cummultive_zonal_cost": 541326
+        "cummultive_zonal_cost": 720775
       },
       {
         "systype": "PTAC",
@@ -3281,12 +3281,12 @@
         "heat_capacity(kW)": 4.1,
         "cool_capacity(kW)": 2.7,
         "heat_cost": 0,
-        "cool_cost": 2445,
+        "cool_cost": 7192,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 544673
+        "cummultive_zonal_cost": 728921
       },
       {
         "systype": "BB",
@@ -3295,13 +3295,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 4.1,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2535,
+        "heat_cost": 2949,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 5,
-        "cummultive_zonal_cost": 548111
+        "cummultive_zonal_cost": 732823
       },
       {
         "systype": "PTAC",
@@ -3311,12 +3311,12 @@
         "heat_capacity(kW)": 6.4,
         "cool_capacity(kW)": 4.2,
         "heat_cost": 0,
-        "cool_cost": 922,
+        "cool_cost": 5286,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 550529
+        "cummultive_zonal_cost": 739691
       },
       {
         "systype": "BB",
@@ -3325,13 +3325,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 6.4,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 3550,
+        "heat_cost": 4128,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 7,
-        "cummultive_zonal_cost": 555574
+        "cummultive_zonal_cost": 745401
       },
       {
         "systype": "PTAC",
@@ -3341,12 +3341,12 @@
         "heat_capacity(kW)": 4.1,
         "cool_capacity(kW)": 2.7,
         "heat_cost": 0,
-        "cool_cost": 2445,
+        "cool_cost": 7192,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 558922
+        "cummultive_zonal_cost": 753547
       },
       {
         "systype": "BB",
@@ -3355,13 +3355,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 4.1,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2535,
+        "heat_cost": 2949,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 5,
-        "cummultive_zonal_cost": 562359
+        "cummultive_zonal_cost": 757449
       },
       {
         "systype": "PTAC",
@@ -3371,12 +3371,12 @@
         "heat_capacity(kW)": 4.1,
         "cool_capacity(kW)": 2.7,
         "heat_cost": 0,
-        "cool_cost": 2445,
+        "cool_cost": 7192,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 565707
+        "cummultive_zonal_cost": 765595
       },
       {
         "systype": "BB",
@@ -3385,13 +3385,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 4.1,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2535,
+        "heat_cost": 2949,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 5,
-        "cummultive_zonal_cost": 569144
+        "cummultive_zonal_cost": 769498
       },
       {
         "systype": "PTAC",
@@ -3401,12 +3401,12 @@
         "heat_capacity(kW)": 4.1,
         "cool_capacity(kW)": 2.7,
         "heat_cost": 0,
-        "cool_cost": 2445,
+        "cool_cost": 7192,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 572492
+        "cummultive_zonal_cost": 777644
       },
       {
         "systype": "BB",
@@ -3415,13 +3415,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 4.1,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2535,
+        "heat_cost": 2949,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 5,
-        "cummultive_zonal_cost": 575929
+        "cummultive_zonal_cost": 781547
       },
       {
         "systype": "PTAC",
@@ -3431,12 +3431,12 @@
         "heat_capacity(kW)": 4.2,
         "cool_capacity(kW)": 2.7,
         "heat_cost": 0,
-        "cool_cost": 2445,
+        "cool_cost": 7192,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 579277
+        "cummultive_zonal_cost": 789693
       },
       {
         "systype": "BB",
@@ -3445,13 +3445,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 4.2,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2535,
+        "heat_cost": 2949,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 5,
-        "cummultive_zonal_cost": 582714
+        "cummultive_zonal_cost": 793595
       },
       {
         "systype": "PTAC",
@@ -3461,12 +3461,12 @@
         "heat_capacity(kW)": 6.6,
         "cool_capacity(kW)": 4.3,
         "heat_cost": 0,
-        "cool_cost": 922,
+        "cool_cost": 5286,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 585133
+        "cummultive_zonal_cost": 800463
       },
       {
         "systype": "BB",
@@ -3475,13 +3475,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 6.6,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 3557,
+        "heat_cost": 4136,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 7.01402855531417,
-        "cummultive_zonal_cost": 590185
+        "cummultive_zonal_cost": 806181
       },
       {
         "systype": "PTAC",
@@ -3491,12 +3491,12 @@
         "heat_capacity(kW)": 4.2,
         "cool_capacity(kW)": 2.7,
         "heat_cost": 0,
-        "cool_cost": 2445,
+        "cool_cost": 7192,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 593532
+        "cummultive_zonal_cost": 814327
       },
       {
         "systype": "BB",
@@ -3505,13 +3505,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 4.2,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2535,
+        "heat_cost": 2949,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 5,
-        "cummultive_zonal_cost": 596970
+        "cummultive_zonal_cost": 818230
       },
       {
         "systype": "PTAC",
@@ -3521,12 +3521,12 @@
         "heat_capacity(kW)": 6.5,
         "cool_capacity(kW)": 4.3,
         "heat_cost": 0,
-        "cool_cost": 922,
+        "cool_cost": 5286,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 599388
+        "cummultive_zonal_cost": 825097
       },
       {
         "systype": "BB",
@@ -3535,13 +3535,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 6.5,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 3550,
+        "heat_cost": 4128,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 7,
-        "cummultive_zonal_cost": 604433
+        "cummultive_zonal_cost": 830807
       },
       {
         "systype": "PTAC",
@@ -3551,12 +3551,12 @@
         "heat_capacity(kW)": 4.2,
         "cool_capacity(kW)": 2.8,
         "heat_cost": 0,
-        "cool_cost": 2445,
+        "cool_cost": 7192,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 607781
+        "cummultive_zonal_cost": 838953
       },
       {
         "systype": "BB",
@@ -3565,13 +3565,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 4.2,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2535,
+        "heat_cost": 2949,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 5,
-        "cummultive_zonal_cost": 611218
+        "cummultive_zonal_cost": 842856
       },
       {
         "systype": "PTAC",
@@ -3581,12 +3581,12 @@
         "heat_capacity(kW)": 6.4,
         "cool_capacity(kW)": 4.2,
         "heat_cost": 0,
-        "cool_cost": 922,
+        "cool_cost": 5286,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 613637
+        "cummultive_zonal_cost": 849723
       },
       {
         "systype": "BB",
@@ -3595,13 +3595,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 6.4,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 3550,
+        "heat_cost": 4128,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 7,
-        "cummultive_zonal_cost": 618682
+        "cummultive_zonal_cost": 855433
       },
       {
         "systype": "PTAC",
@@ -3611,12 +3611,12 @@
         "heat_capacity(kW)": 6.5,
         "cool_capacity(kW)": 4.3,
         "heat_cost": 0,
-        "cool_cost": 922,
+        "cool_cost": 5286,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 621100
+        "cummultive_zonal_cost": 862301
       },
       {
         "systype": "BB",
@@ -3625,13 +3625,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 6.5,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 3550,
+        "heat_cost": 4128,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 7,
-        "cummultive_zonal_cost": 626145
+        "cummultive_zonal_cost": 868010
       },
       {
         "systype": "PTAC",
@@ -3641,12 +3641,12 @@
         "heat_capacity(kW)": 4.2,
         "cool_capacity(kW)": 2.8,
         "heat_cost": 0,
-        "cool_cost": 2445,
+        "cool_cost": 7192,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 629493
+        "cummultive_zonal_cost": 876156
       },
       {
         "systype": "BB",
@@ -3655,13 +3655,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 4.2,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2535,
+        "heat_cost": 2949,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 5,
-        "cummultive_zonal_cost": 632930
+        "cummultive_zonal_cost": 880059
       },
       {
         "systype": "PTAC",
@@ -3671,12 +3671,12 @@
         "heat_capacity(kW)": 4.6,
         "cool_capacity(kW)": 3.0,
         "heat_cost": 0,
-        "cool_cost": 2445,
+        "cool_cost": 7192,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 636278
+        "cummultive_zonal_cost": 888205
       },
       {
         "systype": "BB",
@@ -3685,13 +3685,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 4.6,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2535,
+        "heat_cost": 2949,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 5,
-        "cummultive_zonal_cost": 639715
+        "cummultive_zonal_cost": 892108
       },
       {
         "systype": "PTAC",
@@ -3701,12 +3701,12 @@
         "heat_capacity(kW)": 4.5,
         "cool_capacity(kW)": 2.9,
         "heat_cost": 0,
-        "cool_cost": 2445,
+        "cool_cost": 7192,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 643063
+        "cummultive_zonal_cost": 900254
       },
       {
         "systype": "BB",
@@ -3715,13 +3715,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 4.5,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2535,
+        "heat_cost": 2949,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 5,
-        "cummultive_zonal_cost": 646500
+        "cummultive_zonal_cost": 904156
       },
       {
         "systype": "PTAC",
@@ -3731,12 +3731,12 @@
         "heat_capacity(kW)": 4.6,
         "cool_capacity(kW)": 3.0,
         "heat_cost": 0,
-        "cool_cost": 2445,
+        "cool_cost": 7192,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 649848
+        "cummultive_zonal_cost": 912302
       },
       {
         "systype": "BB",
@@ -3745,13 +3745,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 4.6,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2535,
+        "heat_cost": 2949,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 5,
-        "cummultive_zonal_cost": 653285
+        "cummultive_zonal_cost": 916205
       },
       {
         "systype": "PTAC",
@@ -3761,12 +3761,12 @@
         "heat_capacity(kW)": 4.5,
         "cool_capacity(kW)": 2.9,
         "heat_cost": 0,
-        "cool_cost": 2445,
+        "cool_cost": 7192,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 656633
+        "cummultive_zonal_cost": 924351
       },
       {
         "systype": "BB",
@@ -3775,13 +3775,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 4.5,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2535,
+        "heat_cost": 2949,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 902,
+        "wiring_cost": 954,
         "num_units": 5,
-        "cummultive_zonal_cost": 660071
+        "cummultive_zonal_cost": 928254
       },
       {
         "systype": "PTAC",
@@ -3791,12 +3791,12 @@
         "heat_capacity(kW)": 6.8,
         "cool_capacity(kW)": 4.5,
         "heat_cost": 0,
-        "cool_cost": 7683,
+        "cool_cost": 20866,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 669250
+        "cummultive_zonal_cost": 950701
       },
       {
         "systype": "BB",
@@ -3805,13 +3805,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 6.8,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 4057,
+        "heat_cost": 4718,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 8,
-        "cummultive_zonal_cost": 674802
+        "cummultive_zonal_cost": 957000
       },
       {
         "systype": "PTAC",
@@ -3821,12 +3821,12 @@
         "heat_capacity(kW)": 6.8,
         "cool_capacity(kW)": 4.4,
         "heat_cost": 0,
-        "cool_cost": 7683,
+        "cool_cost": 20866,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 683981
+        "cummultive_zonal_cost": 979447
       },
       {
         "systype": "BB",
@@ -3835,13 +3835,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 6.8,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 4057,
+        "heat_cost": 4718,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 8,
-        "cummultive_zonal_cost": 689533
+        "cummultive_zonal_cost": 985746
       },
       {
         "systype": "PTAC",
@@ -3851,12 +3851,12 @@
         "heat_capacity(kW)": 6.9,
         "cool_capacity(kW)": 4.5,
         "heat_cost": 0,
-        "cool_cost": 7683,
+        "cool_cost": 20866,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 698712
+        "cummultive_zonal_cost": 1008193
       },
       {
         "systype": "BB",
@@ -3865,13 +3865,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 6.9,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 4057,
+        "heat_cost": 4718,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 8,
-        "cummultive_zonal_cost": 704265
+        "cummultive_zonal_cost": 1014492
       },
       {
         "systype": "PTAC",
@@ -3881,12 +3881,12 @@
         "heat_capacity(kW)": 6.8,
         "cool_capacity(kW)": 4.5,
         "heat_cost": 0,
-        "cool_cost": 7683,
+        "cool_cost": 20866,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 1.0,
-        "cummultive_zonal_cost": 713444
+        "cummultive_zonal_cost": 1036939
       },
       {
         "systype": "BB",
@@ -3895,13 +3895,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 6.8,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 4057,
+        "heat_cost": 4718,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 1496,
+        "wiring_cost": 1581,
         "num_units": 8,
-        "cummultive_zonal_cost": 718996
+        "cummultive_zonal_cost": 1043238
       },
       {
         "systype": "BB",
@@ -3910,13 +3910,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 7.5,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 4088,
+        "heat_cost": 4754,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 261,
+        "wiring_cost": 276,
         "num_units": 8.061611693683155,
-        "cummultive_zonal_cost": 723345
+        "cummultive_zonal_cost": 1048269
       },
       {
         "systype": null,
@@ -3931,7 +3931,7 @@
         "piping_cost": 0,
         "wiring_cost": 0,
         "num_units": null,
-        "cummultive_zonal_cost": 723345
+        "cummultive_zonal_cost": 1048269
       },
       {
         "systype": "BB",
@@ -3940,13 +3940,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 4.0,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2535,
+        "heat_cost": 2949,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 261,
+        "wiring_cost": 276,
         "num_units": 5,
-        "cummultive_zonal_cost": 726142
+        "cummultive_zonal_cost": 1051494
       },
       {
         "systype": null,
@@ -3961,7 +3961,7 @@
         "piping_cost": 0,
         "wiring_cost": 0,
         "num_units": null,
-        "cummultive_zonal_cost": 726142
+        "cummultive_zonal_cost": 1051494
       },
       {
         "systype": "BB",
@@ -3970,13 +3970,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.3,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2028,
+        "heat_cost": 2359,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 261,
+        "wiring_cost": 276,
         "num_units": 4,
-        "cummultive_zonal_cost": 728431
+        "cummultive_zonal_cost": 1054129
       },
       {
         "systype": null,
@@ -3991,7 +3991,7 @@
         "piping_cost": 0,
         "wiring_cost": 0,
         "num_units": null,
-        "cummultive_zonal_cost": 728431
+        "cummultive_zonal_cost": 1054129
       },
       {
         "systype": "BB",
@@ -4000,13 +4000,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.3,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2028,
+        "heat_cost": 2359,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 261,
+        "wiring_cost": 276,
         "num_units": 4,
-        "cummultive_zonal_cost": 730720
+        "cummultive_zonal_cost": 1056764
       },
       {
         "systype": null,
@@ -4021,7 +4021,7 @@
         "piping_cost": 0,
         "wiring_cost": 0,
         "num_units": null,
-        "cummultive_zonal_cost": 730720
+        "cummultive_zonal_cost": 1056764
       },
       {
         "systype": "BB",
@@ -4030,13 +4030,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.4,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2028,
+        "heat_cost": 2359,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 261,
+        "wiring_cost": 276,
         "num_units": 4,
-        "cummultive_zonal_cost": 733010
+        "cummultive_zonal_cost": 1059399
       },
       {
         "systype": null,
@@ -4051,7 +4051,7 @@
         "piping_cost": 0,
         "wiring_cost": 0,
         "num_units": null,
-        "cummultive_zonal_cost": 733010
+        "cummultive_zonal_cost": 1059399
       },
       {
         "systype": "BB",
@@ -4060,13 +4060,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.4,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2028,
+        "heat_cost": 2359,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 261,
+        "wiring_cost": 276,
         "num_units": 4,
-        "cummultive_zonal_cost": 735299
+        "cummultive_zonal_cost": 1062034
       },
       {
         "systype": null,
@@ -4081,7 +4081,7 @@
         "piping_cost": 0,
         "wiring_cost": 0,
         "num_units": null,
-        "cummultive_zonal_cost": 735299
+        "cummultive_zonal_cost": 1062034
       },
       {
         "systype": "BB",
@@ -4090,13 +4090,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.4,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2028,
+        "heat_cost": 2359,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 261,
+        "wiring_cost": 276,
         "num_units": 4,
-        "cummultive_zonal_cost": 737589
+        "cummultive_zonal_cost": 1064669
       },
       {
         "systype": null,
@@ -4111,7 +4111,7 @@
         "piping_cost": 0,
         "wiring_cost": 0,
         "num_units": null,
-        "cummultive_zonal_cost": 737589
+        "cummultive_zonal_cost": 1064669
       },
       {
         "systype": "BB",
@@ -4120,13 +4120,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.4,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2028,
+        "heat_cost": 2359,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 261,
+        "wiring_cost": 276,
         "num_units": 4,
-        "cummultive_zonal_cost": 739878
+        "cummultive_zonal_cost": 1067304
       },
       {
         "systype": null,
@@ -4141,7 +4141,7 @@
         "piping_cost": 0,
         "wiring_cost": 0,
         "num_units": null,
-        "cummultive_zonal_cost": 739878
+        "cummultive_zonal_cost": 1067304
       },
       {
         "systype": "BB",
@@ -4150,13 +4150,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.5,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2028,
+        "heat_cost": 2359,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 261,
+        "wiring_cost": 276,
         "num_units": 4,
-        "cummultive_zonal_cost": 742168
+        "cummultive_zonal_cost": 1069939
       },
       {
         "systype": null,
@@ -4171,7 +4171,7 @@
         "piping_cost": 0,
         "wiring_cost": 0,
         "num_units": null,
-        "cummultive_zonal_cost": 742168
+        "cummultive_zonal_cost": 1069939
       },
       {
         "systype": "BB",
@@ -4180,13 +4180,13 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 3.8,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 2049,
+        "heat_cost": 2383,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
-        "wiring_cost": 261,
+        "wiring_cost": 276,
         "num_units": 4.039964906417112,
-        "cummultive_zonal_cost": 744477
+        "cummultive_zonal_cost": 1072598
       },
       {
         "systype": null,
@@ -4201,7 +4201,7 @@
         "piping_cost": 0,
         "wiring_cost": 0,
         "num_units": null,
-        "cummultive_zonal_cost": 744477
+        "cummultive_zonal_cost": 1072598
       }
     ]
   },
@@ -4210,7 +4210,7 @@
     "shw_ht_roof": 100.0,
     "shw_longest_distance_to_ext_ft": 77.5,
     "shw_utility_distance_ft": 77.5,
-    "shw_tanks": 252899.25,
+    "shw_tanks": 132791.1,
     "shw_num_of_modeled_tanks": 1,
     "num_elec_tanks": 1.0,
     "num_hphw_tanks": 0,
@@ -4220,11 +4220,11 @@
     "shw_num_high_eff_oil_tanks": 0,
     "shw_num_of_costed_tanks": 1.0,
     "shw_flues": 0.0,
-    "shw_utilties": 1749.38,
-    "shw_pumps": 10814.4,
+    "shw_utilties": 1964.2,
+    "shw_pumps": 10277.62,
     "shw_num_of_pumps": 1,
-    "shw_piping": 1281.18,
-    "shw_total": 266744.21
+    "shw_piping": 2363.54,
+    "shw_total": 147396.47
   },
   "ventilation": {
     "system_1": [
@@ -4234,8 +4234,8 @@
         "airloop_flow_m3_per_s": 2.152,
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 2500,
-        "base_ahu_cost": 47085.29,
-        "revised_base_ahu_cost": 40528.3,
+        "base_ahu_cost": 27811.58,
+        "revised_base_ahu_cost": 23938.61,
         "hrv": {},
         "equipment_info": [
           {
@@ -4243,14 +4243,14 @@
             "heating_fuel": "none",
             "cooling_type": "DX",
             "total_modeled_capacity_kw": 35.621,
-            "cost": 51558.53
+            "cost": 60853.05
           },
           {
             "eq_category": "Coil_Heating_Electric",
             "heating_fuel": "elec",
             "cooling_type": "none",
             "total_modeled_capacity_kw": 210.92,
-            "cost": 95759.71
+            "cost": 37291.82
           }
         ],
         "reheat_recool": []
@@ -4261,8 +4261,8 @@
         "airloop_flow_m3_per_s": 0.197,
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 1000,
-        "base_ahu_cost": 66426.11,
-        "revised_base_ahu_cost": 13102.71,
+        "base_ahu_cost": 99659.08,
+        "revised_base_ahu_cost": 19658.0,
         "hrv": {},
         "equipment_info": [
           {
@@ -4270,14 +4270,14 @@
             "heating_fuel": "none",
             "cooling_type": "DX",
             "total_modeled_capacity_kw": 3.265,
-            "cost": 16066.88
+            "cost": 13492.96
           },
           {
             "eq_category": "Coil_Heating_Electric",
             "heating_fuel": "elec",
             "cooling_type": "none",
             "total_modeled_capacity_kw": 19.334,
-            "cost": 2353.53
+            "cost": 13746.7
           }
         ],
         "reheat_recool": []
@@ -4294,14 +4294,14 @@
       "HW_Line_m": 0.0,
       "CHW_Line_m": 0.0,
       "Elec_Line_m": 165.6,
-      "Total_cost": 3932.21
+      "Total_cost": 4156.96
     },
     "trunk_duct": [
       {
         "DuctSize_in": 18,
         "DuctLength_m": 27.4,
         "NumberRuns": 1,
-        "DuctCost": 2474.91
+        "DuctCost": 15270.43
       }
     ],
     "floor_trunk_ducts": [
@@ -4313,7 +4313,7 @@
           "SupplyDuctLength_m": 47.3,
           "ReturnDuctSize_in": 0,
           "ReturnDuctLength_m": 0,
-          "TotalDuctCost": 7241.98,
+          "TotalDuctCost": 14687.84,
           "Multiplier": 1.0
         },
         {
@@ -4323,7 +4323,7 @@
           "SupplyDuctLength_m": 47.3,
           "ReturnDuctSize_in": 0,
           "ReturnDuctLength_m": 0,
-          "TotalDuctCost": 7241.98,
+          "TotalDuctCost": 14687.84,
           "Multiplier": 1.0
         },
         {
@@ -4333,7 +4333,7 @@
           "SupplyDuctLength_m": 47.3,
           "ReturnDuctSize_in": 0,
           "ReturnDuctLength_m": 0,
-          "TotalDuctCost": 7241.98,
+          "TotalDuctCost": 14687.84,
           "Multiplier": 1.0
         },
         {
@@ -4343,7 +4343,7 @@
           "SupplyDuctLength_m": 47.3,
           "ReturnDuctSize_in": 0,
           "ReturnDuctLength_m": 0,
-          "TotalDuctCost": 7241.98,
+          "TotalDuctCost": 14687.84,
           "Multiplier": 1.0
         },
         {
@@ -4353,7 +4353,7 @@
           "SupplyDuctLength_m": 47.3,
           "ReturnDuctSize_in": 0,
           "ReturnDuctLength_m": 0,
-          "TotalDuctCost": 7241.98,
+          "TotalDuctCost": 14687.84,
           "Multiplier": 1.0
         },
         {
@@ -4363,7 +4363,7 @@
           "SupplyDuctLength_m": 47.3,
           "ReturnDuctSize_in": 0,
           "ReturnDuctLength_m": 0,
-          "TotalDuctCost": 7241.98,
+          "TotalDuctCost": 14687.84,
           "Multiplier": 1.0
         },
         {
@@ -4373,7 +4373,7 @@
           "SupplyDuctLength_m": 47.3,
           "ReturnDuctSize_in": 0,
           "ReturnDuctLength_m": 0,
-          "TotalDuctCost": 7241.98,
+          "TotalDuctCost": 14687.84,
           "Multiplier": 1.0
         },
         {
@@ -4383,7 +4383,7 @@
           "SupplyDuctLength_m": 47.3,
           "ReturnDuctSize_in": 0,
           "ReturnDuctLength_m": 0,
-          "TotalDuctCost": 7241.98,
+          "TotalDuctCost": 14687.84,
           "Multiplier": 1.0
         },
         {
@@ -4393,7 +4393,7 @@
           "SupplyDuctLength_m": 47.3,
           "ReturnDuctSize_in": 0,
           "ReturnDuctLength_m": 0,
-          "TotalDuctCost": 7241.98,
+          "TotalDuctCost": 14687.84,
           "Multiplier": 1.0
         },
         {
@@ -4403,7 +4403,7 @@
           "SupplyDuctLength_m": 47.3,
           "ReturnDuctSize_in": 0,
           "ReturnDuctLength_m": 0,
-          "TotalDuctCost": 7241.98,
+          "TotalDuctCost": 14687.84,
           "Multiplier": 1.0
         }
       ]
@@ -4423,7 +4423,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 10_SCHG 1",
@@ -4435,7 +4435,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 10_SCHG 2",
@@ -4447,7 +4447,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 10_SCHG 3",
@@ -4459,7 +4459,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 10_SCHG 4",
@@ -4471,7 +4471,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 10_SCHG 5",
@@ -4483,7 +4483,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 10_SCHG 6",
@@ -4495,7 +4495,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 10_SCHG 7",
@@ -4507,7 +4507,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "WILD_ST=Corr. < 2.4m wide-sch-G_FL=Building Story 10_SCH=G",
@@ -4519,7 +4519,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             }
           ]
         },
@@ -4536,7 +4536,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 1_SCHG 1",
@@ -4548,7 +4548,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 1_SCHG 2",
@@ -4560,7 +4560,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 1_SCHG 3",
@@ -4572,7 +4572,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 1_SCHG 4",
@@ -4584,7 +4584,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 1_SCHG 5",
@@ -4596,7 +4596,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 1_SCHG 6",
@@ -4608,7 +4608,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 1_SCHG 7",
@@ -4620,7 +4620,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "WILD_ST=Corr. < 2.4m wide-sch-G_FL=Building Story 1_SCH=G",
@@ -4632,7 +4632,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             }
           ]
         },
@@ -4649,7 +4649,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 2_SCHG 1",
@@ -4661,7 +4661,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 2_SCHG 2",
@@ -4673,7 +4673,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 2_SCHG 3",
@@ -4685,7 +4685,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 2_SCHG 4",
@@ -4697,7 +4697,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 2_SCHG 5",
@@ -4709,7 +4709,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 2_SCHG 6",
@@ -4721,7 +4721,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 2_SCHG 7",
@@ -4733,7 +4733,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "WILD_ST=Corr. < 2.4m wide-sch-G_FL=Building Story 2_SCH=G",
@@ -4745,7 +4745,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             }
           ]
         },
@@ -4762,7 +4762,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 3_SCHG 1",
@@ -4774,7 +4774,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 3_SCHG 2",
@@ -4786,7 +4786,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 3_SCHG 3",
@@ -4798,7 +4798,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 3_SCHG 4",
@@ -4810,7 +4810,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 3_SCHG 5",
@@ -4822,7 +4822,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 3_SCHG 6",
@@ -4834,7 +4834,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 3_SCHG 7",
@@ -4846,7 +4846,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "WILD_ST=Corr. < 2.4m wide-sch-G_FL=Building Story 3_SCH=G",
@@ -4858,7 +4858,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             }
           ]
         },
@@ -4875,7 +4875,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 4_SCHG 1",
@@ -4887,7 +4887,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 4_SCHG 2",
@@ -4899,7 +4899,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 4_SCHG 3",
@@ -4911,7 +4911,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 4_SCHG 4",
@@ -4923,7 +4923,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 4_SCHG 5",
@@ -4935,7 +4935,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 4_SCHG 6",
@@ -4947,7 +4947,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 4_SCHG 7",
@@ -4959,7 +4959,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "WILD_ST=Corr. < 2.4m wide-sch-G_FL=Building Story 4_SCH=G",
@@ -4971,7 +4971,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             }
           ]
         },
@@ -4988,7 +4988,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 5_SCHG 1",
@@ -5000,7 +5000,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 5_SCHG 2",
@@ -5012,7 +5012,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 5_SCHG 3",
@@ -5024,7 +5024,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 5_SCHG 4",
@@ -5036,7 +5036,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 5_SCHG 5",
@@ -5048,7 +5048,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 5_SCHG 6",
@@ -5060,7 +5060,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 5_SCHG 7",
@@ -5072,7 +5072,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "WILD_ST=Corr. < 2.4m wide-sch-G_FL=Building Story 5_SCH=G",
@@ -5084,7 +5084,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             }
           ]
         },
@@ -5101,7 +5101,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 6_SCHG 1",
@@ -5113,7 +5113,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 6_SCHG 2",
@@ -5125,7 +5125,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 6_SCHG 3",
@@ -5137,7 +5137,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 6_SCHG 4",
@@ -5149,7 +5149,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 6_SCHG 5",
@@ -5161,7 +5161,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 6_SCHG 6",
@@ -5173,7 +5173,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 6_SCHG 7",
@@ -5185,7 +5185,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "WILD_ST=Corr. < 2.4m wide-sch-G_FL=Building Story 6_SCH=G",
@@ -5197,7 +5197,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             }
           ]
         },
@@ -5214,7 +5214,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 7_SCHG 1",
@@ -5226,7 +5226,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 7_SCHG 2",
@@ -5238,7 +5238,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 7_SCHG 3",
@@ -5250,7 +5250,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 7_SCHG 4",
@@ -5262,7 +5262,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 7_SCHG 5",
@@ -5274,7 +5274,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 7_SCHG 6",
@@ -5286,7 +5286,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 7_SCHG 7",
@@ -5298,7 +5298,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "WILD_ST=Corr. < 2.4m wide-sch-G_FL=Building Story 7_SCH=G",
@@ -5310,7 +5310,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             }
           ]
         },
@@ -5327,7 +5327,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 8_SCHG 1",
@@ -5339,7 +5339,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 8_SCHG 2",
@@ -5351,7 +5351,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 8_SCHG 3",
@@ -5363,7 +5363,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 8_SCHG 4",
@@ -5375,7 +5375,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 8_SCHG 5",
@@ -5387,7 +5387,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 8_SCHG 6",
@@ -5399,7 +5399,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 8_SCHG 7",
@@ -5411,7 +5411,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "WILD_ST=Corr. < 2.4m wide-sch-G_FL=Building Story 8_SCH=G",
@@ -5423,7 +5423,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             }
           ]
         },
@@ -5440,7 +5440,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 9_SCHG 1",
@@ -5452,7 +5452,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 9_SCHG 2",
@@ -5464,7 +5464,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 9_SCHG 3",
@@ -5476,7 +5476,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 9_SCHG 4",
@@ -5488,7 +5488,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 9_SCHG 5",
@@ -5500,7 +5500,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 9_SCHG 6",
@@ -5512,7 +5512,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "DU_BT=Space Function_ST=Dwelling Unit(s)_FL=Building Story 9_SCHG 7",
@@ -5524,7 +5524,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             },
             {
               "ThermalZone": "WILD_ST=Corr. < 2.4m wide-sch-G_FL=Building Story 9_SCH=G",
@@ -5536,7 +5536,7 @@
               "duct_insulation_ft2": 40,
               "flex_duct_sz_in": 4,
               "flex_duct_length_ft": 16,
-              "cost": 1881.07
+              "cost": 3222.84
             }
           ]
         }
@@ -5592,13 +5592,13 @@
     "pv": []
   },
   "totals": {
-    "envelope": 217280,
+    "envelope": 344028,
     "thermal_bridging": 0,
-    "lighting": 634091,
-    "heating_and_cooling": 744477,
-    "shw": 266744,
-    "ventilation": 467493,
+    "lighting": 964898,
+    "heating_and_cooling": 1072598,
+    "shw": 147396,
+    "ventilation": 625342,
     "renewables": 0,
-    "grand_total": 2330086
+    "grand_total": 3154262
   }
 }
