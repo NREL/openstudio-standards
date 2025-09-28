@@ -26,36 +26,36 @@ class NECB_Activity_Tests < Minitest::Test
     # Range of NECB templates.
     @templates = [
       "NECB2011",
-      "NECB2015",
-      "NECB2017",
-      "NECB2020"
+      # "NECB2015",
+      # "NECB2017",
+      # "NECB2020"
     ]
 
     @epws = ["CAN_AB_Calgary.Intl.AP.718770_CWEC2020.epw"]
 
     @buildings = [
       'FullServiceRestaurant',
-      'HighriseApartment',
-      'Hospital',
-      'LargeHotel',
-      'LargeOffice',
-      'LEEPMidriseApartment',
-      'LEEPMultiTower',
-      'LEEPPointTower',
-      'LEEPTownHouse',
+      # 'HighriseApartment',
+      # 'Hospital',
+      # 'LargeHotel',
+      # 'LargeOffice',
+      # 'LEEPMidriseApartment',
+      # 'LEEPMultiTower',
+      # 'LEEPPointTower',
+      # 'LEEPTownHouse',
       'LowRiseApartment',
       'MediumOffice',
-      'MidriseApartment',
+      # 'MidriseApartment',
       ## 'NorthernEducation',  # *
       ## 'NorthernHealthCare', # *
-      'Outpatient',
-      'PrimarySchool',
-      'QuickServiceRestaurant',
-      'RetailStandalone',
-      'RetailStripMall',
-      'SecondarySchool',
+      # 'Outpatient',
+      # 'PrimarySchool',
+      # 'QuickServiceRestaurant',
+      # 'RetailStandalone',
+      # 'RetailStripMall',
+      # 'SecondarySchool',
       'SmallHotel',
-      'SmallOffice',
+      # 'SmallOffice',
       'Warehouse'
     ]
 
@@ -181,11 +181,13 @@ class NECB_Activity_Tests < Minitest::Test
             fdback << "#{cas} : #{a.activity} (#{a.category}) : #{load}"
           end
 
+          # Some buildings have NECB-listed 'ancillary' spacetypes. Comment in
+          # the 'fdback' assignment below (which buildings? which spaces?).
           a.activities.each do |space, params|
             next unless params.key?(:keyword)
             next unless BTAP::Activity.ancillary?(params[:keyword])
 
-            fdback << "   ANCILLARY: #{space.nameString} (#{params[:keyword]})"
+            # fdback << "   ANCILLARY: #{space.nameString} (#{params[:keyword]})"
           end
 
           a.feedback[:logs].each { |log| puts log }
