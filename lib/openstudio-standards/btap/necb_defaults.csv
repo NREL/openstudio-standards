@@ -6,7 +6,7 @@ algorithm_type,string,nil,osm_batch,,
 analysis_id,string,c3ae0124-f685-46a1-8798-433713d702fc,,,
 analysis_name,string,test_analysis_para,,,deprecated?
 baseline_system_zones_map_option,string,one_sys_per_bldg,one_sys_per_dwelling_unit,,
-boiler_cap_ratio,float,nil,0-0,,
+boiler_cap_ratio,string,nil,0-0,,
 boiler_eff,string/hash,nil,NECB 85% Efficient Condensing Boiler/NECB 88% Efficient Condensing Boiler/NECB 91% Efficient Condensing Boiler/NECB 94% Efficient Condensing Boiler/Viessmann Vitocrossal 300 CT3-17 96.2% Efficient Condensing Gas Boiler,,HVAC_SYSTEMS.RB
 boiler_fuel,string,nil,Electricity/NaturalGas/Propane/PropaneGas/FuelOilNo1/FuelOilNo2/FuelOil#1/FuelOil#2/Coal/Diesel/Gasoline/OtherFuel1/DistrictHeating/DistrictHeatingWater/DistrictHeatingSteam/HeatPump,,PROTOTYPE_HVAC_SYSTEMS.RB_HVAC_SYSTEM_6.RB
 btap_weather,boolean,false,,,necb_2011.rb

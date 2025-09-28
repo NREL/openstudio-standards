@@ -47,17 +47,16 @@ module BTAP
     # numeric range, as well as a comment section. This hints at a data
     # dictionary (similar to EnergyPlus' IDD file), but it is not meant to be.
     # It is really up to individual BTAP developers to decide on how to proceed.
-    @@data = { file: File.join(__dir__, "necb_defaults.csv") }
+    @@data = { param: {}, file: File.join(__dir__, "necb_defaults.csv") }
 
     if File.exist?(@@data[:file])
       table = CSV.open(@@data[:file], headers: true).read
-      #  6 columns:
-      #  PARAMETER  variable name                required
-      #  CLASS      object class                 optional
-      #  DEFAULT    default value                required
-      #  VARIANTS   admissible variants          optional
-      #  RANGE      admissible range if numeric  optional
-      #  COMMENT    support text                 optional
+      #  6 columns: PARAMETER  variable name                required
+      #             CLASS      object class                 optional
+      #             DEFAULT    default value                required
+      #             VARIANTS   admissible variants          optional
+      #             RANGE      admissible range if numeric  optional
+      #             COMMENT    support text                 optional
       #
       #  examples (spaces added for clarity):
       #
@@ -82,7 +81,7 @@ module BTAP
       # as reflected in the examples above. If DEFAULT is set to 'nil', then the
       # the variable is actually nilled, and no other validation is applied.
       #
-      # If CLASS is left blank, it is also set to nil - deactivating any
+      # If CLASS is left blank, it remains an empty string - deactivating any
       # subsequent validation. CLASS can also hold more than one class. In the
       # case of boiler_eff for instance, CLASS is set as 'string/hash' - this
       # indicates to users what is admissible.
@@ -113,7 +112,114 @@ module BTAP
       # in necb_2011.rb) or online README files. Anything that may help a user
       # get a better sense of a PARAMETER's use, scope, model limitations, etc.
 
-      puts table
+      # Default data on file is stored in a hash of hashes, with each PARAMETER
+      # as key to an individual hash (once converted as a symbol).
+      table.each do |row|
+        next unless row[0].respond_to?(:to_sym)
+
+        key = row[0].downcase.to_sym
+
+        @@data[:param][key]            = {}
+        @@data[:param][key][:class   ] = row[1].to_s.split("/")
+        @@data[:param][key][:default ] = row[2].to_s
+        @@data[:param][key][:variants] = row[3].to_s.split("/")
+        @@data[:param][key][:range   ] = row[4].to_s.split("/")
+        @@data[:param][key][:comment ] = row[5].to_s
+      end
+
+      # Overwrite values if required.
+      @@data[:param].each do |k, v|
+        next unless v[:class].size == 1
+
+        v[:class] = v[:class].first.downcase
+        next if v[:class].empty?
+
+        if v[:class] == "boolean"
+          v[:default ] = v[:default].downcase
+          v[:class   ] = v[:default] == "true" ? TrueClass : FalseClass
+          v[:default ] = v[:default] == "true" ? true : false
+          v[:variants] = []
+          v[:range   ] = []
+        elsif v[:default].downcase == "nil"
+          v[:default ] = nil
+        end
+
+        if v[:class] == "integer"
+          unless v[:default].nil?
+            val = Integer(v[:default], exception: false)
+            # raise "#{k}" if val.nil?
+            v[:default] = val unless val.nil?
+          end
+
+          var = []
+
+          v[:variants].each do |variant|
+            val = Integer(variant, exception: false)
+            # raise "#{k}" if val.nil?
+            var << val unless val.nil?
+          end
+
+          v[:variants] = var
+          v[:range   ] = v[:range][0..1] if v[:range].size > 2
+
+          rg = []
+
+          v[:range].each do |rang|
+            val = Integer(rang, exception: false)
+            # raise "#{k}" if val.nil?
+            rg << val unless val.nil?
+          end
+
+          v[:range] = rg
+
+          if v[:range].size == 1
+            first = v[:range].first
+            v[:default] = [v[:default], first].min unless v[:default].nil?
+          elsif v[:range].size == 2
+            first = v[:range].first
+            last  = v[:range].last
+            v[:default] = v[:default].clamp(first, last) unless v[:default].nil?
+          end
+        elsif v[:class] == "float"
+          unless v[:default].nil?
+            val = Float(v[:default], exception: false)
+            # raise "#{k}" if val.nil?
+            v[:default] = val unless val.nil?
+          end
+
+          var = []
+
+          v[:variants].each do |variant|
+            val = Float(variant, exception: false)
+            # raise "#{k}" if val.nil?
+            var << val unless val.nil?
+          end
+
+          v[:variants] = var
+          v[:range   ] = v[:range][0..1] if v[:range].size > 2
+
+          rg = []
+
+          v[:range].each do |rang|
+            val = Integer(rang, exception: false)
+            # raise "#{k}" if val.nil?
+            rg << val unless val.nil?
+          end
+
+          v[:range] = rg
+
+          if v[:range].size == 1
+            first = v[:range].first
+            v[:default] = [v[:default], first].min unless v[:default].nil?
+          elsif v[:range].size == 2
+            first = v[:range].first
+            last  = v[:range].last
+            v[:default] = v[:default].clamp(first, last) unless v[:default].nil?
+          end
+        end
+      end
+
+      puts "done!"
     end
 
     ##
