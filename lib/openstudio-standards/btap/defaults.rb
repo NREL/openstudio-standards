@@ -47,7 +47,8 @@ module BTAP
     # numeric range, as well as a comment section. This hints at some sort of
     # data dictionary (similar to EnergyPlus' IDD file), but it is not meant to
     # be. It's up to individual BTAP developers to decide on how to proceed.
-    @@data = { param: {}, file: File.join(__dir__, "necb_defaults.csv") }
+    file   = File.join(__dir__, "necb_defaults.csv")
+    @@data = { param: {}, argh: {}, file: file }
 
     if File.exist?(@@data[:file])
       table = CSV.open(@@data[:file], headers: true).read
@@ -205,6 +206,10 @@ module BTAP
         end
       end
 
+      # Prep more consise argument hash.
+      @@data[:param].each { |k,v| @@data[:argh][k] = v[:default].freeze }
+
+      # Freeze.
       @@data[:param].values.each do |v|
         v[:default ].freeze
         v[:class   ].freeze
@@ -212,6 +217,8 @@ module BTAP
         v[:range   ].freeze
         v[:comment ].freeze
       end
+
+      @@data[:argh].values.freeze
     end
 
     ##
@@ -309,7 +316,11 @@ module BTAP
   class Defaults
     extend DefaultData
 
+    # Complete BTAP/NECB default parameters and attributes
     attr_reader :param
+
+    # Concise BTAP/NECB core arguments.
+    attr_reader :argh
 
     ##
     # Initialize BTAP Default parameters.
@@ -319,12 +330,13 @@ module BTAP
       mth = "BTAP::Defaults::#{__callee__}"
 
       @param = data[:param]
+      @argh  = data[:argh]
     end
   end
 end
 
 # dfts = BTAP::Defaults.new
-
+#
 # puts
 # puts dfts.param[:nv_opening_fraction][:default].nil?      # true
 # puts dfts.param[:nv_opening_fraction][:class]             # float
@@ -364,6 +376,12 @@ end
 # puts dfts.voided?({})                                     # true
 # puts dfts.voided?("void")                                 # true
 # puts dfts.voided?("none")                                 # true
+#
+# puts
+# dfts.argh.each do |k,v|
+#   puts "#{k}: #{v}" unless v.nil?
+#   puts "#{k}: nil"      if v.nil?
+# end
 #
 # puts
 # puts "done!"
