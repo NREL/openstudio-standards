@@ -7014,7 +7014,7 @@ OS:Controller:WaterCoil,
   ,                                        !- Actuator Variable
   ,                                        !- Sensor Node Name
   ,                                        !- Actuator Node Name
-  0.0001,                                  !- Controller Convergence Tolerance {deltaC}
+  ,                                        !- Controller Convergence Tolerance {deltaC}
   ,                                        !- Maximum Actuated Flow {m3/s}
   ;                                        !- Minimum Actuated Flow {m3/s}
 
@@ -7027,7 +7027,7 @@ OS:Controller:WaterCoil,
   ,                                        !- Actuator Variable
   ,                                        !- Sensor Node Name
   ,                                        !- Actuator Node Name
-  0.0001,                                  !- Controller Convergence Tolerance {deltaC}
+  ,                                        !- Controller Convergence Tolerance {deltaC}
   ,                                        !- Maximum Actuated Flow {m3/s}
   ;                                        !- Minimum Actuated Flow {m3/s}
 
@@ -7040,7 +7040,7 @@ OS:Controller:WaterCoil,
   ,                                        !- Actuator Variable
   ,                                        !- Sensor Node Name
   ,                                        !- Actuator Node Name
-  0.0001,                                  !- Controller Convergence Tolerance {deltaC}
+  ,                                        !- Controller Convergence Tolerance {deltaC}
   ,                                        !- Maximum Actuated Flow {m3/s}
   ;                                        !- Minimum Actuated Flow {m3/s}
 
@@ -7053,7 +7053,7 @@ OS:Controller:WaterCoil,
   ,                                        !- Actuator Variable
   ,                                        !- Sensor Node Name
   ,                                        !- Actuator Node Name
-  0.0001,                                  !- Controller Convergence Tolerance {deltaC}
+  ,                                        !- Controller Convergence Tolerance {deltaC}
   ,                                        !- Maximum Actuated Flow {m3/s}
   ;                                        !- Minimum Actuated Flow {m3/s}
 
@@ -7079,7 +7079,7 @@ OS:Controller:WaterCoil,
   ,                                        !- Actuator Variable
   ,                                        !- Sensor Node Name
   ,                                        !- Actuator Node Name
-  0.0001,                                  !- Controller Convergence Tolerance {deltaC}
+  ,                                        !- Controller Convergence Tolerance {deltaC}
   ,                                        !- Maximum Actuated Flow {m3/s}
   ;                                        !- Minimum Actuated Flow {m3/s}
 
@@ -7092,7 +7092,7 @@ OS:Controller:WaterCoil,
   ,                                        !- Actuator Variable
   ,                                        !- Sensor Node Name
   ,                                        !- Actuator Node Name
-  0.0001,                                  !- Controller Convergence Tolerance {deltaC}
+  ,                                        !- Controller Convergence Tolerance {deltaC}
   ,                                        !- Maximum Actuated Flow {m3/s}
   ;                                        !- Minimum Actuated Flow {m3/s}
 
@@ -7105,7 +7105,7 @@ OS:Controller:WaterCoil,
   ,                                        !- Actuator Variable
   ,                                        !- Sensor Node Name
   ,                                        !- Actuator Node Name
-  0.0001,                                  !- Controller Convergence Tolerance {deltaC}
+  ,                                        !- Controller Convergence Tolerance {deltaC}
   ,                                        !- Maximum Actuated Flow {m3/s}
   ;                                        !- Minimum Actuated Flow {m3/s}
 
@@ -7118,7 +7118,7 @@ OS:Controller:WaterCoil,
   ,                                        !- Actuator Variable
   ,                                        !- Sensor Node Name
   ,                                        !- Actuator Node Name
-  0.0001,                                  !- Controller Convergence Tolerance {deltaC}
+  ,                                        !- Controller Convergence Tolerance {deltaC}
   ,                                        !- Maximum Actuated Flow {m3/s}
   ;                                        !- Minimum Actuated Flow {m3/s}
 
@@ -7131,7 +7131,7 @@ OS:Controller:WaterCoil,
   ,                                        !- Actuator Variable
   ,                                        !- Sensor Node Name
   ,                                        !- Actuator Node Name
-  0.0001,                                  !- Controller Convergence Tolerance {deltaC}
+  ,                                        !- Controller Convergence Tolerance {deltaC}
   ,                                        !- Maximum Actuated Flow {m3/s}
   ;                                        !- Minimum Actuated Flow {m3/s}
 
@@ -7144,7 +7144,7 @@ OS:Controller:WaterCoil,
   ,                                        !- Actuator Variable
   ,                                        !- Sensor Node Name
   ,                                        !- Actuator Node Name
-  0.0001,                                  !- Controller Convergence Tolerance {deltaC}
+  ,                                        !- Controller Convergence Tolerance {deltaC}
   ,                                        !- Maximum Actuated Flow {m3/s}
   ;                                        !- Minimum Actuated Flow {m3/s}
 
@@ -7170,7 +7170,7 @@ OS:Controller:WaterCoil,
   ,                                        !- Actuator Variable
   ,                                        !- Sensor Node Name
   ,                                        !- Actuator Node Name
-  0.0001,                                  !- Controller Convergence Tolerance {deltaC}
+  ,                                        !- Controller Convergence Tolerance {deltaC}
   ,                                        !- Maximum Actuated Flow {m3/s}
   ;                                        !- Minimum Actuated Flow {m3/s}
 
@@ -7196,7 +7196,7 @@ OS:Controller:WaterCoil,
   ,                                        !- Actuator Variable
   ,                                        !- Sensor Node Name
   ,                                        !- Actuator Node Name
-  0.0001,                                  !- Controller Convergence Tolerance {deltaC}
+  ,                                        !- Controller Convergence Tolerance {deltaC}
   ,                                        !- Maximum Actuated Flow {m3/s}
   ;                                        !- Minimum Actuated Flow {m3/s}
 
@@ -7209,7 +7209,7 @@ OS:Controller:WaterCoil,
   ,                                        !- Actuator Variable
   ,                                        !- Sensor Node Name
   ,                                        !- Actuator Node Name
-  0.0001,                                  !- Controller Convergence Tolerance {deltaC}
+  ,                                        !- Controller Convergence Tolerance {deltaC}
   ,                                        !- Maximum Actuated Flow {m3/s}
   ;                                        !- Minimum Actuated Flow {m3/s}
 
@@ -7222,7 +7222,7 @@ OS:Controller:WaterCoil,
   ,                                        !- Actuator Variable
   ,                                        !- Sensor Node Name
   ,                                        !- Actuator Node Name
-  0.0001,                                  !- Controller Convergence Tolerance {deltaC}
+  ,                                        !- Controller Convergence Tolerance {deltaC}
   ,                                        !- Maximum Actuated Flow {m3/s}
   ;                                        !- Minimum Actuated Flow {m3/s}
 
@@ -7235,7 +7235,7 @@ OS:Controller:WaterCoil,
   ,                                        !- Actuator Variable
   ,                                        !- Sensor Node Name
   ,                                        !- Actuator Node Name
-  0.0001,                                  !- Controller Convergence Tolerance {deltaC}
+  ,                                        !- Controller Convergence Tolerance {deltaC}
   ,                                        !- Maximum Actuated Flow {m3/s}
   ;                                        !- Minimum Actuated Flow {m3/s}
 
@@ -7248,7 +7248,7 @@ OS:Controller:WaterCoil,
   ,                                        !- Actuator Variable
   ,                                        !- Sensor Node Name
   ,                                        !- Actuator Node Name
-  0.0001,                                  !- Controller Convergence Tolerance {deltaC}
+  ,                                        !- Controller Convergence Tolerance {deltaC}
   ,                                        !- Maximum Actuated Flow {m3/s}
   ;                                        !- Minimum Actuated Flow {m3/s}
 
@@ -7261,7 +7261,7 @@ OS:Controller:WaterCoil,
   ,                                        !- Actuator Variable
   ,                                        !- Sensor Node Name
   ,                                        !- Actuator Node Name
-  0.0001,                                  !- Controller Convergence Tolerance {deltaC}
+  ,                                        !- Controller Convergence Tolerance {deltaC}
   ,                                        !- Maximum Actuated Flow {m3/s}
   ;                                        !- Minimum Actuated Flow {m3/s}
 
@@ -7274,7 +7274,7 @@ OS:Controller:WaterCoil,
   ,                                        !- Actuator Variable
   ,                                        !- Sensor Node Name
   ,                                        !- Actuator Node Name
-  0.0001,                                  !- Controller Convergence Tolerance {deltaC}
+  ,                                        !- Controller Convergence Tolerance {deltaC}
   ,                                        !- Maximum Actuated Flow {m3/s}
   ;                                        !- Minimum Actuated Flow {m3/s}
 
@@ -7287,7 +7287,7 @@ OS:Controller:WaterCoil,
   ,                                        !- Actuator Variable
   ,                                        !- Sensor Node Name
   ,                                        !- Actuator Node Name
-  0.0001,                                  !- Controller Convergence Tolerance {deltaC}
+  ,                                        !- Controller Convergence Tolerance {deltaC}
   ,                                        !- Maximum Actuated Flow {m3/s}
   ;                                        !- Minimum Actuated Flow {m3/s}
 
@@ -7313,7 +7313,7 @@ OS:Controller:WaterCoil,
   ,                                        !- Actuator Variable
   ,                                        !- Sensor Node Name
   ,                                        !- Actuator Node Name
-  0.0001,                                  !- Controller Convergence Tolerance {deltaC}
+  ,                                        !- Controller Convergence Tolerance {deltaC}
   ,                                        !- Maximum Actuated Flow {m3/s}
   ;                                        !- Minimum Actuated Flow {m3/s}
 
@@ -7326,7 +7326,7 @@ OS:Controller:WaterCoil,
   ,                                        !- Actuator Variable
   ,                                        !- Sensor Node Name
   ,                                        !- Actuator Node Name
-  0.0001,                                  !- Controller Convergence Tolerance {deltaC}
+  ,                                        !- Controller Convergence Tolerance {deltaC}
   ,                                        !- Maximum Actuated Flow {m3/s}
   ;                                        !- Minimum Actuated Flow {m3/s}
 
@@ -7339,7 +7339,7 @@ OS:Controller:WaterCoil,
   ,                                        !- Actuator Variable
   ,                                        !- Sensor Node Name
   ,                                        !- Actuator Node Name
-  0.0001,                                  !- Controller Convergence Tolerance {deltaC}
+  ,                                        !- Controller Convergence Tolerance {deltaC}
   ,                                        !- Maximum Actuated Flow {m3/s}
   ;                                        !- Minimum Actuated Flow {m3/s}
 
@@ -7352,7 +7352,7 @@ OS:Controller:WaterCoil,
   ,                                        !- Actuator Variable
   ,                                        !- Sensor Node Name
   ,                                        !- Actuator Node Name
-  0.0001,                                  !- Controller Convergence Tolerance {deltaC}
+  ,                                        !- Controller Convergence Tolerance {deltaC}
   ,                                        !- Maximum Actuated Flow {m3/s}
   ;                                        !- Minimum Actuated Flow {m3/s}
 
@@ -7962,61 +7962,61 @@ OS:EnergyManagementSystem:Actuator,
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0039-000000000001},  !- Handle
   ems_sys_6_mixed_shr_none_sh_c_hw_sc_c_chw_ssf_vv_zh_b_hw_zc_none_srf_vv__1_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {dc087ba9-3298-470a-910b-b5f0c382b9ad}<23.9 && {dc087ba9-3298-470a-910b-b5f0c382b9ad}>1.7, !- Program Line 1
-  SET {e983d9f8-1977-4f0a-9ebf-57abc5c816e0} = 29.4, !- Program Line 2
-  SET {7596cbb7-a766-4027-a4be-84c3f6f8ba26} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {dc087ba9-3298-470a-910b-b5f0c382b9ad}<23.9 && {dc087ba9-3298-470a-910b-b5f0c382b9ad}>1.7, !- Program Line 4
-  SET {e983d9f8-1977-4f0a-9ebf-57abc5c816e0} = 29.4, !- Program Line 5
-  SET {7596cbb7-a766-4027-a4be-84c3f6f8ba26} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {dc087ba9-3298-470a-910b-b5f0c382b9ad}<23.9 && {dc087ba9-3298-470a-910b-b5f0c382b9ad}>1.7, !- Program Line 7
-  SET {e983d9f8-1977-4f0a-9ebf-57abc5c816e0} = 29.4, !- Program Line 8
-  SET {7596cbb7-a766-4027-a4be-84c3f6f8ba26} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {dc087ba9-3298-470a-910b-b5f0c382b9ad}<23.9 && {dc087ba9-3298-470a-910b-b5f0c382b9ad}>1.7, !- Program Line 10
-  SET {e983d9f8-1977-4f0a-9ebf-57abc5c816e0} = 29.4, !- Program Line 11
-  SET {7596cbb7-a766-4027-a4be-84c3f6f8ba26} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {8401f92f-bf10-407f-a7c2-a27ae1eb74bf}<23.9 && {8401f92f-bf10-407f-a7c2-a27ae1eb74bf}>1.7, !- Program Line 1
+  SET {b0159292-1c8b-44d3-b248-e4b6cbf26852} = 29.4, !- Program Line 2
+  SET {a7e47dfb-04d3-4433-8c9a-fd5ed8272a98} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {8401f92f-bf10-407f-a7c2-a27ae1eb74bf}<23.9 && {8401f92f-bf10-407f-a7c2-a27ae1eb74bf}>1.7, !- Program Line 4
+  SET {b0159292-1c8b-44d3-b248-e4b6cbf26852} = 29.4, !- Program Line 5
+  SET {a7e47dfb-04d3-4433-8c9a-fd5ed8272a98} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {8401f92f-bf10-407f-a7c2-a27ae1eb74bf}<23.9 && {8401f92f-bf10-407f-a7c2-a27ae1eb74bf}>1.7, !- Program Line 7
+  SET {b0159292-1c8b-44d3-b248-e4b6cbf26852} = 29.4, !- Program Line 8
+  SET {a7e47dfb-04d3-4433-8c9a-fd5ed8272a98} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {8401f92f-bf10-407f-a7c2-a27ae1eb74bf}<23.9 && {8401f92f-bf10-407f-a7c2-a27ae1eb74bf}>1.7, !- Program Line 10
+  SET {b0159292-1c8b-44d3-b248-e4b6cbf26852} = 29.4, !- Program Line 11
+  SET {a7e47dfb-04d3-4433-8c9a-fd5ed8272a98} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {e983d9f8-1977-4f0a-9ebf-57abc5c816e0} = NULL, !- Program Line 14
-  SET {7596cbb7-a766-4027-a4be-84c3f6f8ba26} = NULL, !- Program Line 15
+  SET {b0159292-1c8b-44d3-b248-e4b6cbf26852} = NULL, !- Program Line 14
+  SET {a7e47dfb-04d3-4433-8c9a-fd5ed8272a98} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0039-000000000002},  !- Handle
   ems_sys_6_mixed_shr_none_sh_c_hw_sc_c_chw_ssf_vv_zh_b_hw_zc_none_srf_vv__2_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {bf6af28a-edb3-422e-aff0-75621a09243b}<23.9 && {bf6af28a-edb3-422e-aff0-75621a09243b}>1.7, !- Program Line 1
-  SET {f9cf83ee-094c-4447-9eea-cd965bbc29c7} = 29.4, !- Program Line 2
-  SET {771465d3-f1c5-463b-9dc7-998b6af378be} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {bf6af28a-edb3-422e-aff0-75621a09243b}<23.9 && {bf6af28a-edb3-422e-aff0-75621a09243b}>1.7, !- Program Line 4
-  SET {f9cf83ee-094c-4447-9eea-cd965bbc29c7} = 29.4, !- Program Line 5
-  SET {771465d3-f1c5-463b-9dc7-998b6af378be} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {bf6af28a-edb3-422e-aff0-75621a09243b}<23.9 && {bf6af28a-edb3-422e-aff0-75621a09243b}>1.7, !- Program Line 7
-  SET {f9cf83ee-094c-4447-9eea-cd965bbc29c7} = 29.4, !- Program Line 8
-  SET {771465d3-f1c5-463b-9dc7-998b6af378be} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {bf6af28a-edb3-422e-aff0-75621a09243b}<23.9 && {bf6af28a-edb3-422e-aff0-75621a09243b}>1.7, !- Program Line 10
-  SET {f9cf83ee-094c-4447-9eea-cd965bbc29c7} = 29.4, !- Program Line 11
-  SET {771465d3-f1c5-463b-9dc7-998b6af378be} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {159e25bc-bd04-49e0-8fce-9af75168bffd}<23.9 && {159e25bc-bd04-49e0-8fce-9af75168bffd}>1.7, !- Program Line 1
+  SET {6a93e324-1fd5-45fe-9452-bfef1604e816} = 29.4, !- Program Line 2
+  SET {29773404-43ee-4ef5-9fb9-33b91810904c} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {159e25bc-bd04-49e0-8fce-9af75168bffd}<23.9 && {159e25bc-bd04-49e0-8fce-9af75168bffd}>1.7, !- Program Line 4
+  SET {6a93e324-1fd5-45fe-9452-bfef1604e816} = 29.4, !- Program Line 5
+  SET {29773404-43ee-4ef5-9fb9-33b91810904c} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {159e25bc-bd04-49e0-8fce-9af75168bffd}<23.9 && {159e25bc-bd04-49e0-8fce-9af75168bffd}>1.7, !- Program Line 7
+  SET {6a93e324-1fd5-45fe-9452-bfef1604e816} = 29.4, !- Program Line 8
+  SET {29773404-43ee-4ef5-9fb9-33b91810904c} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {159e25bc-bd04-49e0-8fce-9af75168bffd}<23.9 && {159e25bc-bd04-49e0-8fce-9af75168bffd}>1.7, !- Program Line 10
+  SET {6a93e324-1fd5-45fe-9452-bfef1604e816} = 29.4, !- Program Line 11
+  SET {29773404-43ee-4ef5-9fb9-33b91810904c} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {f9cf83ee-094c-4447-9eea-cd965bbc29c7} = NULL, !- Program Line 14
-  SET {771465d3-f1c5-463b-9dc7-998b6af378be} = NULL, !- Program Line 15
+  SET {6a93e324-1fd5-45fe-9452-bfef1604e816} = NULL, !- Program Line 14
+  SET {29773404-43ee-4ef5-9fb9-33b91810904c} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0039-000000000003},  !- Handle
   ems_sys_6_mixed_shr_none_sh_c_hw_sc_c_chw_ssf_vv_zh_b_hw_zc_none_srf_vv__3_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {dbc03974-e38f-4f68-a0d0-ae528071051b}<23.9 && {dbc03974-e38f-4f68-a0d0-ae528071051b}>1.7, !- Program Line 1
-  SET {55b633e6-e81b-4b98-8443-207659e97b32} = 29.4, !- Program Line 2
-  SET {c8fa00b9-b195-427b-a290-af9bd5407341} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {dbc03974-e38f-4f68-a0d0-ae528071051b}<23.9 && {dbc03974-e38f-4f68-a0d0-ae528071051b}>1.7, !- Program Line 4
-  SET {55b633e6-e81b-4b98-8443-207659e97b32} = 29.4, !- Program Line 5
-  SET {c8fa00b9-b195-427b-a290-af9bd5407341} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {dbc03974-e38f-4f68-a0d0-ae528071051b}<23.9 && {dbc03974-e38f-4f68-a0d0-ae528071051b}>1.7, !- Program Line 7
-  SET {55b633e6-e81b-4b98-8443-207659e97b32} = 29.4, !- Program Line 8
-  SET {c8fa00b9-b195-427b-a290-af9bd5407341} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {dbc03974-e38f-4f68-a0d0-ae528071051b}<23.9 && {dbc03974-e38f-4f68-a0d0-ae528071051b}>1.7, !- Program Line 10
-  SET {55b633e6-e81b-4b98-8443-207659e97b32} = 29.4, !- Program Line 11
-  SET {c8fa00b9-b195-427b-a290-af9bd5407341} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {d0ae0f2d-416b-4563-8a47-2444ac959290}<23.9 && {d0ae0f2d-416b-4563-8a47-2444ac959290}>1.7, !- Program Line 1
+  SET {62089f67-57ba-4930-87d0-f9ef4f2ae552} = 29.4, !- Program Line 2
+  SET {e697a664-65aa-49dd-9d31-7b8be8901248} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {d0ae0f2d-416b-4563-8a47-2444ac959290}<23.9 && {d0ae0f2d-416b-4563-8a47-2444ac959290}>1.7, !- Program Line 4
+  SET {62089f67-57ba-4930-87d0-f9ef4f2ae552} = 29.4, !- Program Line 5
+  SET {e697a664-65aa-49dd-9d31-7b8be8901248} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {d0ae0f2d-416b-4563-8a47-2444ac959290}<23.9 && {d0ae0f2d-416b-4563-8a47-2444ac959290}>1.7, !- Program Line 7
+  SET {62089f67-57ba-4930-87d0-f9ef4f2ae552} = 29.4, !- Program Line 8
+  SET {e697a664-65aa-49dd-9d31-7b8be8901248} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {d0ae0f2d-416b-4563-8a47-2444ac959290}<23.9 && {d0ae0f2d-416b-4563-8a47-2444ac959290}>1.7, !- Program Line 10
+  SET {62089f67-57ba-4930-87d0-f9ef4f2ae552} = 29.4, !- Program Line 11
+  SET {e697a664-65aa-49dd-9d31-7b8be8901248} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {55b633e6-e81b-4b98-8443-207659e97b32} = NULL, !- Program Line 14
-  SET {c8fa00b9-b195-427b-a290-af9bd5407341} = NULL, !- Program Line 15
+  SET {62089f67-57ba-4930-87d0-f9ef4f2ae552} = NULL, !- Program Line 14
+  SET {e697a664-65aa-49dd-9d31-7b8be8901248} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:ProgramCallingManager,
@@ -11192,7 +11192,7 @@ OS:PlantLoop,
   ,                                        !- Primary Plant Equipment Operation Scheme
   {00000000-0000-0000-0053-000000000220},  !- Loop Temperature Setpoint Node Name
   60,                                      !- Maximum Loop Temperature {C}
-  51.66667,                                !- Minimum Loop Temperature {C}
+  51.6666666666667,                        !- Minimum Loop Temperature {C}
   ,                                        !- Maximum Loop Flow Rate {m3/s}
   ,                                        !- Minimum Loop Flow Rate {m3/s}
   Autocalculate,                           !- Plant Loop Volume {m3}
@@ -12701,7 +12701,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0064-000000000049},  !- Handle
   Schedule Day 4,                          !- Name
-  {00000000-0000-0000-0067-000000000006},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0067-000000000007},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -12779,7 +12779,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0064-000000000050},  !- Handle
   Schedule Day 5,                          !- Name
-  {00000000-0000-0000-0067-000000000006},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0067-000000000007},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
   0,                                       !- Minute 1
@@ -12788,7 +12788,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0064-000000000051},  !- Handle
   Schedule Day 6,                          !- Name
-  {00000000-0000-0000-0067-000000000006},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0067-000000000007},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
   0,                                       !- Minute 1
@@ -12833,7 +12833,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0064-000000000056},  !- Handle
   Supply Air Temp Default 1,               !- Name
-  {00000000-0000-0000-0067-000000000006},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0067-000000000007},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
   0,                                       !- Minute 1
@@ -12842,7 +12842,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0064-000000000057},  !- Handle
   Supply Air Temp Default 2,               !- Name
-  {00000000-0000-0000-0067-000000000006},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0067-000000000007},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
   0,                                       !- Minute 1
@@ -12851,7 +12851,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0064-000000000058},  !- Handle
   Supply Air Temp Default 3,               !- Name
-  {00000000-0000-0000-0067-000000000006},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0067-000000000007},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
   0,                                       !- Minute 1
@@ -12860,7 +12860,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0064-000000000059},  !- Handle
   Supply Air Temp Default,                 !- Name
-  {00000000-0000-0000-0067-000000000006},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0067-000000000007},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   24,                                      !- Hour 1
   0,                                       !- Minute 1
@@ -13043,7 +13043,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0064-000000000064},  !- Handle
   satCW Temp 1,                            !- Name
-  {00000000-0000-0000-0067-000000000006},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0067-000000000007},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -13355,7 +13355,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0064-000000000068},  !- Handle
   sunCW Temp 1,                            !- Name
-  {00000000-0000-0000-0067-000000000006},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0067-000000000007},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -13832,7 +13832,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0064-000000000087},  !- Handle
   wkdCW Temp 1,                            !- Name
-  {00000000-0000-0000-0067-000000000006},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0067-000000000007},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -14722,7 +14722,7 @@ OS:Schedule:Ruleset,
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0066-000000000003},  !- Handle
   CW Temp,                                 !- Name
-  {00000000-0000-0000-0067-000000000006},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0067-000000000007},  !- Schedule Type Limits Name
   {00000000-0000-0000-0064-000000000049};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
@@ -14808,13 +14808,13 @@ OS:Schedule:Ruleset,
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0066-000000000017},  !- Handle
   Schedule Ruleset 1,                      !- Name
-  {00000000-0000-0000-0067-000000000006},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0067-000000000007},  !- Schedule Type Limits Name
   {00000000-0000-0000-0064-000000000050};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0066-000000000018},  !- Handle
   Schedule Ruleset 2,                      !- Name
-  {00000000-0000-0000-0067-000000000006},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0067-000000000007},  !- Schedule Type Limits Name
   {00000000-0000-0000-0064-000000000051};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
@@ -14826,25 +14826,25 @@ OS:Schedule:Ruleset,
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0066-000000000020},  !- Handle
   Supply Air Temp 1,                       !- Name
-  {00000000-0000-0000-0067-000000000006},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0067-000000000007},  !- Schedule Type Limits Name
   {00000000-0000-0000-0064-000000000056};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0066-000000000021},  !- Handle
   Supply Air Temp 2,                       !- Name
-  {00000000-0000-0000-0067-000000000006},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0067-000000000007},  !- Schedule Type Limits Name
   {00000000-0000-0000-0064-000000000057};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0066-000000000022},  !- Handle
   Supply Air Temp 3,                       !- Name
-  {00000000-0000-0000-0067-000000000006},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0067-000000000007},  !- Schedule Type Limits Name
   {00000000-0000-0000-0064-000000000058};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0066-000000000023},  !- Handle
   Supply Air Temp,                         !- Name
-  {00000000-0000-0000-0067-000000000006},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0067-000000000007},  !- Schedule Type Limits Name
   {00000000-0000-0000-0064-000000000059};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
@@ -22161,7 +22161,7 @@ OS:WaterHeater:Sizing,
   {00000000-0000-0000-0100-000000000001},  !- WaterHeater Name
   PeakDraw,                                !- Design Mode
   0.538503,                                !- Time Storage Can Meet Peak Draw {hr}
-  0,                                       !- Time for Tank Recovery {hr}
+  0.5,                                     !- Time for Tank Recovery {hr}
   1;                                       !- Nominal Tank Volume for Autosizing Plant Connections {m3}
 
 OS:WaterUse:Connections,
