@@ -24,7 +24,7 @@ module BTAP
     ##
     # @author: Denis Bourgeois
     #
-    # Centralizes declaration/definition of common BTAP/NECB parameters, e.g.
+    # Centralizes declarations/definitions of common BTAP/NECB parameters, e.g.
     # BTAP CLI run options, NECB's model_apply_standard. For now, this is in
     # CSV format: could instead be JSON or YAML (ideally requiring a schema).
     #
@@ -44,52 +44,51 @@ module BTAP
     #
     # The file also provides BTAP developers a means to optionally circumscribe
     # parameter attributes, such as defining its class, admissible variants or
-    # numeric range, as well as a comment section. This hints at a data
-    # dictionary (similar to EnergyPlus' IDD file), but it is not meant to be.
-    # It is really up to individual BTAP developers to decide on how to proceed.
+    # numeric range, as well as a comment section. This hints at some sort of
+    # data dictionary (similar to EnergyPlus' IDD file), but it is not meant to
+    # be. It's up to individual BTAP developers to decide on how to proceed.
     @@data = { param: {}, file: File.join(__dir__, "necb_defaults.csv") }
 
     if File.exist?(@@data[:file])
       table = CSV.open(@@data[:file], headers: true).read
-      #  6 columns: PARAMETER  variable name                required
-      #             CLASS      object class                 optional
-      #             DEFAULT    default value                required
-      #             VARIANTS   admissible variants          optional
-      #             RANGE      admissible range if numeric  optional
-      #             COMMENT    support text                 optional
+      #  5 columns: PARAMETER      variable name                required
+      #             DEFAULT        default value                required
+      #             CLASS          object class                 optional
+      #             VARIANTS-RANGE admissible variants or range optional
+      #             COMMENT        support text                 optional
       #
       #  examples (spaces added for clarity):
       #
-      #   PARAMETER            CLASS        DEFAULT  VARIANTS, RANGE & COMMENT
-      #   ____________________ ____________ ________ ___________________________
-      #   btap_weather,        boolean,       false, ,,see necb_2011.rb
-      #   daylighting_type,    string,          nil, add_daylighting_controls,,
-      #   fdwr_set,            float,           nil, ,,
-      #   boiler_cap_ratio,    float,           nil, 0/1,,
-      #   boiler_eff,          string/hash,     nil, ,,see hvac_systems.rb
-      #   nv_opening_fraction, float,           nil, , 0/1,
-      #   s3_bucket,           string, 834599497928, ,,
+      #  PARAMETER            DEFAULT       CLASS       VARIANTS-RANGE/COMMENT
+      #  ____________________ _____________ ___________ ________________________
+      #  btap_weather,        false,        boolean,    ,see necb_2011.rb
+      #  daylighting_type,    nil,          string,     ,add_daylighting_controls
+      #  fdwr_set,            nil,          float
+      #  boiler_cap_ratio,    nil,          float,      0/1
+      #  boiler_eff,          nil,          string/hash,,see hvac_systems.rb
+      #  nv_opening_fraction, nil,          float,      0/1
+      #  s3_bucket,           834599497928, string
       #
-      # All items in the CSV file are parsed and stored as strings, by default.
+      # All items in the CSV file are parsed and stored as strings by default.
       # If CLASS is 'boolean', then either DEFAULT 'true' or 'false' is
       # converted as either boolean. If a PARAMETER holds a CLASS specification,
       # e.g. 'string' for 's3_bucket', then the DEFAULT '834599497928' is
-      # maintained as a string. If CLASS is instead a numeric (e.g. float or
+      # maintained as a string. If CLASS is instead numeric (e.g. float or
       # integer), then the DEFAULT is converted accordingly.
       #
-      # In model_apply_standard, the vast majority of its arguments are nilled,
+      # In 'model_apply_standard', the vast majority of its arguments are nilled,
       # as reflected in the examples above. If DEFAULT is set to 'nil', then the
-      # the variable is actually nilled, and no other validation is applied.
+      # the variable is actually nilled.
       #
       # If CLASS is left blank, it remains an empty string - deactivating any
       # subsequent validation. CLASS can also hold more than one class. In the
-      # case of boiler_eff for instance, CLASS is set as 'string/hash' - this
-      # indicates to users what is admissible.
+      # case of 'boiler_eff' for instance, CLASS is set as 'string/hash' - this
+      # cancels any other validation, yet indicates what is admissible.
       #
-      # VARIANTS may help BTAP developers and users to further circumscribe how
+      # VARIANTS helps BTAP developers and users to further circumscribe how
       # a PARAMETER may be set. For instance, only 'add_daylighting_controls' is
-      # an admissible VARIANT for 'daylighting_type' (nilled by default). In
-      # other cases, the size of admissible VARIANTS may be too great or complex
+      # an admissible VARIANT for 'daylighting_type' (nilled by default). Yet in
+      # many cases, the size of admissible VARIANTS may be too great or complex
       # to handle via this mecanism, e.g. all possible EPW files. Other examples
       # include admissible heating fuels or admissible 'boiler_eff' strings:
       #
@@ -99,32 +98,37 @@ module BTAP
       # - NECB 94% Efficient Condensing Boiler
       # - Viessmann Vitocrossal 300 CT3-17 96.2% Efficient Condensing Gas Boiler
       #
-      # These are currently held as admissible VARIANTS in the CSV file, simply
-      # to demonstrate that the solution works as is. If this were to become the
-      # main BTAP approach, a more suitable format (like JSON or YAML) may be
-      # better suited for complex information like hashes.
+      # Some of these examples are currently held as admissible VARIANTS in the
+      # draft CSV file for now, simply to demonstrate that the solution works as
+      # is. If this were to become the main BTAP approach, a more suitable
+      # format (like JSON or YAML) may be better suited for complex information
+      # like hashes, references to specific files (e.g. admissible fuel types),
+      # references to folders (e.g. EPW files),etc.
       #
       # RANGE is similar to VARIANTS, yet applies only to numeric PARAMETERS,
-      # e.g. COP, efficiencies, U-factors. It's up to individual BTAP developers
-      # to provide/use this feature.
+      # e.g. COP, efficiencies, U-factors. If a single digit is provided, it is
+      # considered as a minimum (e.g. '0' means only positive values). If two
+      # digits are provided, they're considered minimum & maximum (e.g. '0/1'
+      # for 'boiler_cap_ratio' == any real number  between 0.0 and 1.0). Same
+      # CSV column: either used to list VARIANTS or a numerical RANGE.
       #
       # COMMENTS may also point users to inline comments (e.g. see Line ~378
-      # in necb_2011.rb) or online README files. Anything that may help a user
+      # in necb_2011.rb), online README files, etc. Anything that may help users
       # get a better sense of a PARAMETER's use, scope, model limitations, etc.
 
-      # Default data on file is stored in a hash of hashes, with each PARAMETER
-      # as key to an individual hash (once converted as a symbol).
+      # Default data on file is stored as a hash of hashes, with each PARAMETER
+      # as key to an individual hash entry (once converted as a symbol).
       table.each do |row|
         next unless row[0].respond_to?(:to_sym)
 
         key = row[0].downcase.to_sym
 
         @@data[:param][key]            = {}
-        @@data[:param][key][:class   ] = row[1].to_s.split("/")
-        @@data[:param][key][:default ] = row[2].to_s
+        @@data[:param][key][:default ] = row[1].to_s
+        @@data[:param][key][:class   ] = row[2].to_s.split("/")
         @@data[:param][key][:variants] = row[3].to_s.split("/")
-        @@data[:param][key][:range   ] = row[4].to_s.split("/")
-        @@data[:param][key][:comment ] = row[5].to_s
+        @@data[:param][key][:range   ] = row[3].to_s.split("/")
+        @@data[:param][key][:comment ] = row[4].to_s
       end
 
       # Overwrite values if required.
@@ -144,22 +148,25 @@ module BTAP
           v[:default ] = nil
         end
 
-        if v[:class] == "integer"
+        if v[:class] == "string"
+          v[:range] = []
+        elsif v[:class] == "integer"
           unless v[:default].nil?
             val = Integer(v[:default], exception: false)
             # raise "#{k}" if val.nil?
             v[:default] = val unless val.nil?
           end
 
-          var = []
+          # var = []
 
-          v[:variants].each do |variant|
-            val = Integer(variant, exception: false)
-            # raise "#{k}" if val.nil?
-            var << val unless val.nil?
-          end
-
-          v[:variants] = var
+          # v[:variants].each do |variant|
+          #   val = Integer(variant, exception: false)
+          #   # raise "#{k}" if val.nil?
+          #   var << val unless val.nil?
+          # end
+          #
+          # v[:variants] = var
+          v[:variants] = []
           v[:range   ] = v[:range][0..1] if v[:range].size > 2
 
           rg = []
@@ -187,21 +194,22 @@ module BTAP
             v[:default] = val unless val.nil?
           end
 
-          var = []
+          # var = []
 
-          v[:variants].each do |variant|
-            val = Float(variant, exception: false)
-            # raise "#{k}" if val.nil?
-            var << val unless val.nil?
-          end
-
-          v[:variants] = var
+          # v[:variants].each do |variant|
+          #   val = Float(variant, exception: false)
+          #   # raise "#{k}" if val.nil?
+          #   var << val unless val.nil?
+          # end
+          #
+          # v[:variants] = var
+          v[:variants] = []
           v[:range   ] = v[:range][0..1] if v[:range].size > 2
 
           rg = []
 
           v[:range].each do |rang|
-            val = Integer(rang, exception: false)
+            val = Float(rang, exception: false)
             # raise "#{k}" if val.nil?
             rg << val unless val.nil?
           end
@@ -219,6 +227,27 @@ module BTAP
         end
       end
 
+      puts
+      puts @@data[:param][:nv_opening_fraction][:default].nil?    # true
+      puts @@data[:param][:nv_opening_fraction][:class]           # float
+      puts @@data[:param][:nv_opening_fraction][:variants].empty? # true
+      puts @@data[:param][:nv_opening_fraction][:range].class     # Array
+      puts @@data[:param][:nv_opening_fraction][:range].size      # 2
+      puts @@data[:param][:nv_opening_fraction][:range][0].class  # float
+      puts @@data[:param][:nv_opening_fraction][:range][1].class  # float
+      puts @@data[:param][:nv_opening_fraction][:range][0]        # 0.0
+      puts @@data[:param][:nv_opening_fraction][:range][1]        # 1.0
+      puts @@data[:param][:nv_opening_fraction][:comment].empty?  # true
+
+      puts
+      puts @@data[:param][:npv_end_year][:default].class          # integer
+      puts @@data[:param][:npv_end_year][:default]                # 2022
+      puts @@data[:param][:npv_end_year][:variants].empty?        # true
+      puts @@data[:param][:npv_end_year][:range].class            # Array
+      puts @@data[:param][:npv_end_year][:range].empty?           # true
+      puts @@data[:param][:npv_end_year][:comment].empty?         # true
+
+      puts
       puts "done!"
     end
 
@@ -245,9 +274,10 @@ end
 #
 # A handful of parameters are unsued, mispelled (i.e. not caught), etc., e.g.:
 #
-#   analysis_name,string,test_analysis_para,,,deprecated?
+#   analysis_name,test_analysis_para,string,,deprecated?
+#   compute_environment,local,string,,deprecated?
 #
-# ... is specified in both:
+# ... are specified in both:
 #     - utilities/btap_cli/tests/run_options.yml
 #     - utilities/btap_cli/tests/run_options.yml
 #
@@ -259,9 +289,9 @@ end
 #     return if dcv_type == 'NECB_Defualt'
 #
 # The intention is to clearly bail out of the method if set to NECB_Default, yet
-# the exit condition is ignored given the typo. Luckily, it looks like the
-# subsequent sections of the same method appear sufficiently robust to handle
-# the typo, but that's something to fix (@todo).
+# the exit condition is ignored given the typo. Luckily, the subsequent sections
+# of the same method appear sufficiently robust to handle the typo, but that's
+# something to fix (@todo).
 #
 # BTAP/NECB documentation also suggests the following admissible VARIANTS:
 #   - No_DCV
