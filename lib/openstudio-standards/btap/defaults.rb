@@ -132,7 +132,7 @@ module BTAP
       end
 
       # Overwrite values if required.
-      @@data[:param].each do |k, v|
+      @@data[:param].values.each do |v|
         next unless v[:class].size == 1
 
         v[:class] = v[:class].first.downcase
@@ -153,19 +153,9 @@ module BTAP
         elsif v[:class] == "integer"
           unless v[:default].nil?
             val = Integer(v[:default], exception: false)
-            # raise "#{k}" if val.nil?
             v[:default] = val unless val.nil?
           end
 
-          # var = []
-
-          # v[:variants].each do |variant|
-          #   val = Integer(variant, exception: false)
-          #   # raise "#{k}" if val.nil?
-          #   var << val unless val.nil?
-          # end
-          #
-          # v[:variants] = var
           v[:variants] = []
           v[:range   ] = v[:range][0..1] if v[:range].size > 2
 
@@ -173,7 +163,6 @@ module BTAP
 
           v[:range].each do |rang|
             val = Integer(rang, exception: false)
-            # raise "#{k}" if val.nil?
             rg << val unless val.nil?
           end
 
@@ -190,19 +179,9 @@ module BTAP
         elsif v[:class] == "float"
           unless v[:default].nil?
             val = Float(v[:default], exception: false)
-            # raise "#{k}" if val.nil?
             v[:default] = val unless val.nil?
           end
 
-          # var = []
-
-          # v[:variants].each do |variant|
-          #   val = Float(variant, exception: false)
-          #   # raise "#{k}" if val.nil?
-          #   var << val unless val.nil?
-          # end
-          #
-          # v[:variants] = var
           v[:variants] = []
           v[:range   ] = v[:range][0..1] if v[:range].size > 2
 
@@ -210,7 +189,6 @@ module BTAP
 
           v[:range].each do |rang|
             val = Float(rang, exception: false)
-            # raise "#{k}" if val.nil?
             rg << val unless val.nil?
           end
 
@@ -227,28 +205,92 @@ module BTAP
         end
       end
 
-      puts
-      puts @@data[:param][:nv_opening_fraction][:default].nil?    # true
-      puts @@data[:param][:nv_opening_fraction][:class]           # float
-      puts @@data[:param][:nv_opening_fraction][:variants].empty? # true
-      puts @@data[:param][:nv_opening_fraction][:range].class     # Array
-      puts @@data[:param][:nv_opening_fraction][:range].size      # 2
-      puts @@data[:param][:nv_opening_fraction][:range][0].class  # float
-      puts @@data[:param][:nv_opening_fraction][:range][1].class  # float
-      puts @@data[:param][:nv_opening_fraction][:range][0]        # 0.0
-      puts @@data[:param][:nv_opening_fraction][:range][1]        # 1.0
-      puts @@data[:param][:nv_opening_fraction][:comment].empty?  # true
+      @@data[:param].values.each do |v|
+        v[:default ].freeze
+        v[:class   ].freeze
+        v[:variants].freeze
+        v[:range   ].freeze
+        v[:comment ].freeze
+      end
+    end
 
-      puts
-      puts @@data[:param][:npv_end_year][:default].class          # integer
-      puts @@data[:param][:npv_end_year][:default]                # 2022
-      puts @@data[:param][:npv_end_year][:variants].empty?        # true
-      puts @@data[:param][:npv_end_year][:range].class            # Array
-      puts @@data[:param][:npv_end_year][:range].empty?           # true
-      puts @@data[:param][:npv_end_year][:comment].empty?         # true
+    ##
+    # Returns the assigned default value for a BTAP/NECB core parameter.
+    #
+    # @param parameter [#to_sym] BTAP/NECB core parameter
+    #
+    # @return [] the assigned default value on file (nil if invalid or missing)
+    def default(parameter = nil)
+      mth = "BTAP::Defaults::#{__callee__}"
+      return nil unless parameter.respond_to?(:to_sym)
 
-      puts
-      puts "done!"
+      parameter = parameter.to_sym
+      return nil unless @@data[:param].include?(parameter)
+
+      @@data[:param][parameter][:default]
+    end
+
+    ##
+    # Validates whether a parameter variant is admissible.
+    #
+    # @param parameter [#to_sym] BTAP/NECB core parameter
+    # @param variant [#to_sym] potential variant
+    #
+    # @return [Boolean] true if admissible (false if missing or invalid)
+    def admissible?(parameter = nil, variant = nil)
+      mth = "BTAP::Defaults::#{__callee__}"
+      return false unless variant.respond_to?(:to_s)
+      return false     if variant.to_s.empty?
+      return false unless parameter.respond_to?(:to_sym)
+
+      parameter = parameter.to_sym
+      return false unless @@data[:param].include?(parameter)
+
+      classe   = @@data[:param][parameter][:class]
+      default  = @@data[:param][parameter][:default]
+      variants = @@data[:param][parameter][:variants]
+      range    = @@data[:param][parameter][:range]
+
+      if classe == "boolean"
+        return variant == false if default == true
+        return variant == true  if default == false
+      elsif classe == "string"
+        return false unless variant.respond_to?(:to_sym)
+
+        variants.each do |var|
+          return true if var.downcase == variant.to_s.downcase
+        end
+
+        return false
+      end
+
+      if ["integer", "float"].include?(classe)
+        return false unless variant.is_a?(Numeric)
+
+        range = range
+        return false if variant < range.first
+        return false if variant > range.last && range.size == 2
+      end
+
+      true
+    end
+
+    ##
+    # Validates whether a parameter is voided. Any of the following are
+    # considered voided: parameter is nilled, false, empty, "void" or "none".
+    #
+    # @param parameter [#to_sym] any parameter
+    #
+    # @return [Boolean] whether a parameter is considered voided
+    def voided?(parameter = nil)
+      return true     if parameter.nil?
+      return true     if parameter == false
+      return true     if parameter.respond_to?(:empty?) && parameter.empty?
+      return true unless parameter.respond_to?(:to_s)
+      return true     if parameter.to_s.downcase == "void"
+      return true     if parameter.to_s.downcase == "none"
+
+      false
     end
 
     ##
@@ -264,10 +306,67 @@ module BTAP
     end
   end
 
-  module Defaults
+  class Defaults
     extend DefaultData
+
+    attr_reader :param
+
+    ##
+    # Initialize BTAP Default parameters.
+    #
+    # @param model [OpenStudio::Model::Model] a model
+    def initialize
+      mth = "BTAP::Defaults::#{__callee__}"
+
+      @param = data[:param]
+    end
   end
 end
+
+# dfts = BTAP::Defaults.new
+
+# puts
+# puts dfts.param[:nv_opening_fraction][:default].nil?      # true
+# puts dfts.param[:nv_opening_fraction][:class]             # float
+# puts dfts.param[:nv_opening_fraction][:variants].empty?   # true
+# puts dfts.param[:nv_opening_fraction][:range].class       # Array
+# puts dfts.param[:nv_opening_fraction][:range].size        # 2
+# puts dfts.param[:nv_opening_fraction][:range].first.class # Float
+# puts dfts.param[:nv_opening_fraction][:range].last.class  # Float
+# puts dfts.param[:nv_opening_fraction][:range].first       # 0.0
+# puts dfts.param[:nv_opening_fraction][:range].last        # 1.0
+# puts dfts.param[:nv_opening_fraction][:comment].empty?    # true
+#
+# puts
+# puts dfts.param[:npv_end_year][:default].class            # Integer
+# puts dfts.param[:npv_end_year][:default]                  # 2041
+# puts dfts.default("npv_end_year")                         # 2041
+# puts dfts.default(:npv_end_year)                          # 2041
+# puts dfts.param[:npv_end_year][:variants].empty?          # true
+# puts dfts.param[:npv_end_year][:range].class              # Array
+# puts dfts.param[:npv_end_year][:range].empty?             # true
+# puts dfts.param[:npv_end_year][:comment].empty?           # true
+#
+# puts
+# puts dfts.admissible?(:chiller_type, "Rotary Screw")      # true
+# puts dfts.admissible?(:chiller_type, "Heat Pump")         # false
+# puts dfts.admissible?(:nv_opening_fraction,0)             # true
+# puts dfts.admissible?(:nv_opening_fraction,1)             # true
+# puts dfts.admissible?(:nv_opening_fraction,-1)            # false
+# puts dfts.admissible?(:nv_opening_fraction,10)            # false
+#
+# puts
+# puts dfts.voided?(nil)                                    # true
+# puts dfts.voided?(false)                                  # true
+# puts dfts.voided?(true)                                   # false
+# puts dfts.voided?("")                                     # true
+# puts dfts.voided?([])                                     # true
+# puts dfts.voided?({})                                     # true
+# puts dfts.voided?("void")                                 # true
+# puts dfts.voided?("none")                                 # true
+#
+# puts
+# puts "done!"
 
 # --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- #
 # NOTES:

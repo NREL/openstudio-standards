@@ -51,8 +51,8 @@ necb_reference_hp,true,boolean
 necb_reference_hp_supp_fuel,none,string,boiler_fuel
 npv_discount_rate,0.03,float
 npv_discount_rate_carbon,0.03,float
-npv_end_year,2022,integer
-npv_start_year,2041,integer
+npv_end_year,2041,integer
+npv_start_year,2022,integer
 nv_delta_temp_in_out,nil,float
 nv_opening_fraction,nil,float,0/1
 nv_temp_out_min,nil,float
