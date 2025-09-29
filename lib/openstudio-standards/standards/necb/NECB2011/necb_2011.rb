@@ -224,7 +224,7 @@ class NECB2011 < Standard
                                    boiler_fuel: nil,
                                    building_type:,
                                    chiller_type: nil,
-                                   construction_opt: 'NECB_Default',
+                                   construction_opt: '',
                                    custom_weather_folder: nil,
                                    daylighting_type: 'NECB_Default',
                                    dcv_type: 'NECB_Default',
@@ -284,10 +284,10 @@ class NECB2011 < Standard
                                    srr_opt: '',
                                    srr_set: -1.0,
                                    swh_fuel: nil,
-                                   tbd_interpolate: 'NECB_Default',
-                                   tbd_option: 'NECB_Default',
+                                   tbd_interpolate: true,
+                                   tbd_option: 'none',
                                    template:,
-                                   unitary_cop: nil,
+                                   unitary_cop: nil
                                    )
     model = load_building_type_from_library(building_type: building_type)
     return model_apply_standard(model: model,
@@ -384,7 +384,7 @@ class NECB2011 < Standard
                            boiler_fuel: nil,
                            btap_weather: true,
                            chiller_type: nil,
-                           construction_opt: 'NECB_Default',
+                           construction_opt: '',
                            custom_weather_folder: nil,
                            daylighting_type: 'NECB_Default',
                            dcv_type: 'NECB_Default',
@@ -442,11 +442,11 @@ class NECB2011 < Standard
                            sizing_run_dir: Dir.pwd,
                            skylight_cond: nil,
                            skylight_solar_trans: nil,
-                           srr_opt: 'NECB_Default',
+                           srr_opt: '',
                            srr_set: nil,
                            swh_fuel: nil,
-                           tbd_interpolate: 'NECB_Default',
-                           tbd_option: 'NECB_Default',
+                           tbd_interpolate: true,
+                           tbd_option: 'none',
                            unitary_cop: nil)
 
     apply_weather_data(model: model,
