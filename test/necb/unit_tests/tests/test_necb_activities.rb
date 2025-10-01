@@ -52,7 +52,7 @@ class NECB_Activity_Tests < Minitest::Test
       'PrimarySchool',
       'QuickServiceRestaurant',
       'RetailStandalone',
-      'RetailStripMall',
+      'RetailStripmall',
       'SecondarySchool',
       'SmallHotel',
       'SmallOffice',
