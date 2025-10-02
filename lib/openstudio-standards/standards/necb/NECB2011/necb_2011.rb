@@ -6,8 +6,11 @@ class NECB2011 < Standard
 
   @template = new.class.name
   register_standard(@template)
-  attr_reader :tbd
   attr_reader :template
+  attr_reader :tbd
+  attr_reader :osut
+  attr_reader :activity
+  attr_reader :structure
   attr_accessor :standards_data
   attr_accessor :space_type_map
   attr_accessor :space_multiplier_map
@@ -149,6 +152,10 @@ class NECB2011 < Standard
     @standards_data = load_standards_database_new
     corrupt_standards_database
     @tbd = nil
+    @activity = nil
+    @structure = nil
+    @osut = {gra0: 0, graX: 0, status: 0, logs: []} # "gra": "gross roof area"
+
     # puts "loaded these tables..."
     # puts @standards_data.keys.size
     # raise("tables not all loaded in parent #{}") if @standards_data.keys.size < 24
@@ -211,6 +218,7 @@ class NECB2011 < Standard
   # This method is a wrapper to create the 16 archetypes easily. # 55 args
   def model_create_prototype_model(template:,
                                    building_type:,
+                                   construction_opt: '',
                                    epw_file:,
                                    custom_weather_folder: nil,
                                    debug: false,
@@ -250,6 +258,7 @@ class NECB2011 < Standard
                                    rotation_degrees: nil,
                                    fdwr_set: -1.0,
                                    srr_set: -1.0,
+                                   srr_opt: '',
                                    nv_type: nil,
                                    nv_opening_fraction: nil,
                                    nv_temp_out_min: nil,
@@ -272,8 +281,8 @@ class NECB2011 < Standard
                                    output_meters: nil,
                                    airloop_economizer_type: nil,
                                    baseline_system_zones_map_option: nil,
-                                   tbd_option: nil,
-                                   tbd_interpolate: false,
+                                   tbd_option: 'none',
+                                   tbd_interpolate: true,
                                    necb_hdd: true,
                                    boiler_fuel: nil,
                                    boiler_cap_ratio: nil,
@@ -281,6 +290,7 @@ class NECB2011 < Standard
                                    oerd_utility_pricing: nil)
     model = load_building_type_from_library(building_type: building_type)
     return model_apply_standard(model: model,
+                                construction_opt: construction_opt,
                                 tbd_option: tbd_option,
                                 tbd_interpolate: tbd_interpolate,
                                 epw_file: epw_file,
@@ -321,6 +331,7 @@ class NECB2011 < Standard
                                 rotation_degrees: rotation_degrees,
                                 fdwr_set: fdwr_set,
                                 srr_set: srr_set,
+                                srr_opt: srr_opt,
                                 nv_type: nv_type, # Two options: (1) nil/none/false/'NECB_Default', (2) 'add_nv'
                                 nv_opening_fraction: nv_opening_fraction, # options: (1) nil/none/false (2) 'NECB_Default' (i.e. 0.1), (3) opening fraction of windows, which can be a float number between 0.0 and 1.0
                                 nv_temp_out_min: nv_temp_out_min, # options: (1) nil/none/false(2) 'NECB_Default' (i.e. 13.0 based on inputs from Michel Tardif re a real school in QC), (3) minimum outdoor air temperature (in Celsius) below which natural ventilation is shut down
@@ -364,8 +375,9 @@ class NECB2011 < Standard
   # Created this method so that additional methods can be addded for bulding the prototype model in later
   # code versions without modifying the build_protoype_model method or copying it wholesale for a few changes.
   def model_apply_standard(model:,
-                           tbd_option: nil,
-                           tbd_interpolate: nil,
+                           construction_opt: '',
+                           tbd_option: 'none',
+                           tbd_interpolate: true,
                            epw_file:,
                            custom_weather_folder: nil,
                            btap_weather: true,
@@ -406,6 +418,7 @@ class NECB2011 < Standard
                            skylight_solar_trans: nil,
                            fdwr_set: nil,
                            srr_set: nil,
+                           srr_opt: '',
                            rotation_degrees: nil,
                            scale_x: nil,
                            scale_y: nil,
@@ -445,6 +458,11 @@ class NECB2011 < Standard
     clean_and_scale_model(model: model, rotation_degrees: rotation_degrees, scale_x: scale_x, scale_y: scale_y, scale_z: scale_z)
     fdwr_set = convert_arg_to_f(variable: fdwr_set, default: -1)
     srr_set = convert_arg_to_f(variable: srr_set, default: -1)
+    srr_opt = convert_arg_to_string(variable: srr_opt, default: '')
+    construction_opt = convert_arg_to_string(variable: construction_opt, default: '')
+    massive = construction_opt == 'structure'
+    tbd_option = convert_arg_to_string(variable: tbd_option, default: 'none')
+    tbd_interpolate = convert_arg_to_bool(variable: tbd_interpolate, default: true)
     necb_hdd = convert_arg_to_bool(variable: necb_hdd, default: true)
     boiler_fuel = convert_arg_to_string(variable: boiler_fuel, default: nil)
     boiler_cap_ratio = convert_arg_to_string(variable: boiler_cap_ratio, default: nil)
@@ -472,6 +490,8 @@ class NECB2011 < Standard
 
     output_meters = check_output_meters(output_meters: output_meters) if oerd_utility_pricing
 
+    assign_building_activity(model: model)
+    assign_building_structure(model: model, activity: @activity, massive: massive)
     apply_loads(model: model,
                 lights_type: lights_type,
                 lights_scale: lights_scale,
@@ -479,6 +499,9 @@ class NECB2011 < Standard
                 electrical_loads_scale: electrical_loads_scale,
                 oa_scale: oa_scale)
     apply_envelope(model: model,
+                   construction_opt: construction_opt,
+                   bldg_category: @activity.category,
+                   bldg_structure: @structure.structure,
                    ext_wall_cond: ext_wall_cond,
                    ext_floor_cond: ext_floor_cond,
                    ext_roof_cond: ext_roof_cond,
@@ -498,18 +521,21 @@ class NECB2011 < Standard
     apply_fdwr_srr_daylighting(model: model,
                                fdwr_set: fdwr_set,
                                srr_set: srr_set,
+                               srr_opt: srr_opt,
                                necb_hdd: necb_hdd)
     apply_thermal_bridging(model: model,
-                           tbd_option: tbd_option,
-                           tbd_interpolate: tbd_interpolate,
-                           wall_U: ext_wall_cond,
-                           floor_U: ext_floor_cond,
-                           roof_U: ext_roof_cond)
+                           necb_hdd: necb_hdd,
+                           structure: @structure,
+                           option: tbd_option,
+                           interpolate: tbd_interpolate,
+                           wallU: ext_wall_cond,
+                           floorU: ext_floor_cond,
+                           roofU: ext_roof_cond)
     apply_auto_zoning(model: model,
                       sizing_run_dir: sizing_run_dir,
                       lights_type: lights_type,
                       lights_scale: lights_scale)
-    apply_kiva_foundation(model)
+    apply_kiva_foundation(model, massive)
     apply_systems_and_efficiencies(model: model,
                                    sizing_run_dir: sizing_run_dir,
                                    hvac_system_primary: hvac_system_primary,
@@ -759,6 +785,9 @@ class NECB2011 < Standard
   end
 
   def apply_envelope(model:,
+                     construction_opt: '',
+                     bldg_category: '',
+                     bldg_structure: '',
                      ext_wall_cond: nil,
                      ext_floor_cond: nil,
                      ext_roof_cond: nil,
@@ -782,29 +811,61 @@ class NECB2011 < Standard
     ecm.scale_infiltration_loads(model: model, scale: infiltration_scale)
     model.getInsideSurfaceConvectionAlgorithm.setAlgorithm('TARP')
     model.getOutsideSurfaceConvectionAlgorithm.setAlgorithm('TARP')
-    model_add_constructions(model)
-    apply_standard_construction_properties(model: model,
-                                           ext_wall_cond: ext_wall_cond,
-                                           ext_floor_cond: ext_floor_cond,
-                                           ext_roof_cond: ext_roof_cond,
-                                           ground_wall_cond: ground_wall_cond,
-                                           ground_floor_cond: ground_floor_cond,
-                                           ground_roof_cond: ground_roof_cond,
-                                           door_construction_cond: door_construction_cond,
-                                           fixed_window_cond: fixed_window_cond,
-                                           glass_door_cond: glass_door_cond,
-                                           overhead_door_cond: overhead_door_cond,
-                                           skylight_cond: skylight_cond,
-                                           glass_door_solar_trans: glass_door_solar_trans,
-                                           fixed_wind_solar_trans: fixed_wind_solar_trans,
-                                           skylight_solar_trans: skylight_solar_trans,
-                                           necb_hdd: necb_hdd)
+
+    construction_opt = '' unless construction_opt.respond_to?(:to_sym)
+    bldg_structure   = '' unless bldg_structure.respond_to?(:to_sym)
+    construction_opt = construction_opt.to_s.downcase
+    bldg_structure   = bldg_structure.to_s.downcase.to_sym
+    bldg_structures  = @structure.data[:structure].keys
+
+    if construction_opt == 'structure' && bldg_structures.include?(bldg_structure)
+      argh            = {}
+      argh[:eWallU  ] = ext_wall_cond          if ext_wall_cond
+      argh[:eFloorU ] = ext_floor_cond         if ext_floor_cond
+      argh[:eRoofU  ] = ext_roof_cond          if ext_roof_cond
+      argh[:gWallU  ] = ground_wall_cond       if ground_wall_cond
+      argh[:gFloorU ] = ground_floor_cond      if ground_floor_cond
+      argh[:gRoofU  ] = ground_roof_cond       if ground_roof_cond
+      argh[:doorU   ] = door_construction_cond if door_construction_cond
+      argh[:fenU    ] = fixed_window_cond      if fixed_window_cond
+      argh[:skyU    ] = skylight_solar_trans   if skylight_solar_trans
+      argh[:doorSHGC] = glass_door_solar_trans if glass_door_solar_trans
+      argh[:fenSHGC ] = fixed_wind_solar_trans if fixed_wind_solar_trans
+      argh[:skySHGC ] = skylight_solar_trans   if skylight_solar_trans
+
+      assign_contruction_to_adiabatic_surfaces(model)
+      ok = add_construction_sets(model, necb_hdd, argh)
+
+      raise('NECB2011: Failed to assign default construction sets') unless ok
+    else
+      model_add_constructions(model)
+      apply_standard_construction_properties(model: model,
+                                             ext_wall_cond: ext_wall_cond,
+                                             ext_floor_cond: ext_floor_cond,
+                                             ext_roof_cond: ext_roof_cond,
+                                             ground_wall_cond: ground_wall_cond,
+                                             ground_floor_cond: ground_floor_cond,
+                                             ground_roof_cond: ground_roof_cond,
+                                             door_construction_cond: door_construction_cond,
+                                             fixed_window_cond: fixed_window_cond,
+                                             glass_door_cond: glass_door_cond,
+                                             overhead_door_cond: overhead_door_cond,
+                                             skylight_cond: skylight_cond,
+                                             glass_door_solar_trans: glass_door_solar_trans,
+                                             fixed_wind_solar_trans: fixed_wind_solar_trans,
+                                             skylight_solar_trans: skylight_solar_trans,
+                                             necb_hdd: necb_hdd)
+    end
+
     model_create_thermal_zones(model, @space_multiplier_map)
   end
 
-  # apply the Kiva foundation model to floors and walls with ground boundary condition
+  # Apply Kiva foundation model to floors/walls with ground boundary condition.
   # created by: Kamel Haddad (kamel.haddad@nrcan-rncan.gc.ca)
-  def apply_kiva_foundation(model)
+  # 'massive' edit: denis@rd2.ca
+  #
+  # @param massive [Boolean] whether opaque materials are standard (not massless)
+  def apply_kiva_foundation(model, massive = false)
     # define a Kiva model for the whole bldg that's used for the first floor in contact with ground in each zone
     bldg_kiva_model = OpenStudio::Model::FoundationKiva.new(model)
     bldg_kiva_model.setName("Bldg Kiva Foundation")
@@ -832,10 +893,21 @@ class NECB2011 < Standard
             kiva_model.setWallDepthBelowSlab(0.0)
             zone_kiva_models << kiva_model
           end
-          # Kiva model only works with standard materials. Replace constructions massless materials with standard ones.
-          replace_massless_material_with_std_material(model,gfloor)
-          gfloor.setOutsideBoundaryCondition('Foundation')
-          gfloor.setAdjacentFoundation(zone_kiva_models.last)
+          # Kiva model only works with standard materials. Replace constructions
+          # massless materials with standard ones.
+          # Kiva model only works with standard materials. Replace constructions
+          # massless materials with standard ones. Skip check if 'massive'.
+          if massive
+            c = gfloor.construction.get.to_LayeredConstruction.get
+            gfloor.setOutsideBoundaryCondition('Foundation')
+            gfloor.setAdjacentFoundation(zone_kiva_models.last)
+            gfloor.setConstruction(c)
+          else
+            replace_massless_material_with_std_material(model,gfloor)
+            gfloor.setOutsideBoundaryCondition('Foundation')
+            gfloor.setAdjacentFoundation(zone_kiva_models.last)
+          end
+
           # Set the exposed perimeter for space floors in contact with the ground.
           floor_exp_per = 0.0
           if !space_ground_walls.empty?
@@ -848,9 +920,16 @@ class NECB2011 < Standard
           # contact with the space floor in contact with ground 'gfloor'
           space_ground_walls.each do |gwall|
             if surfaces_are_in_contact?(gfloor,gwall)
-              replace_massless_material_with_std_material(model,gwall)
-              gwall.setOutsideBoundaryCondition('Foundation')
-              gwall.setAdjacentFoundation(zone_kiva_models.last)
+              if massive
+                c = gwall.construction.get.to_LayeredConstruction.get
+                gwall.setOutsideBoundaryCondition('Foundation')
+                gwall.setAdjacentFoundation(zone_kiva_models.last)
+                gwall.setConstruction(c)
+              else
+                replace_massless_material_with_std_material(model,gwall)
+                gwall.setOutsideBoundaryCondition('Foundation')
+                gwall.setAdjacentFoundation(zone_kiva_models.last)
+              end
             end
           end
         end
@@ -1021,84 +1100,99 @@ class NECB2011 < Standard
   end
 
   # Thermal zones need to be set to determine conditioned spaces when applying fdwr and srr limits.
-  #     # fdwr_set/srr_set settings:
-  #     # 0-1:  Remove all windows/skylights and add windows/skylights to match this fdwr/srr
-  #     # -1:  Remove all windows/skylights and add windows/skylights to match max fdwr/srr from NECB
-  #     # -2:  Do not apply any fdwr/srr changes, leave windows/skylights alone (also works for fdwr/srr > 1)
-  #     # -3:  Use old method which reduces existing window/skylight size (if necessary) to meet maximum NECB fdwr/srr
-  #     # limit
-  #     # <-3.1:  Remove all the windows/skylights
-  #     # > 1:  Do nothing
-  def apply_fdwr_srr_daylighting(model:, fdwr_set: -1.0, srr_set: -1.0, necb_hdd: true)
+  #
+  # fdwr_set/srr_set settings:
+  #   0-1:  Remove all windows/skylights and add windows/skylights to match this fdwr/srr
+  #    -1:  Remove all windows/skylights and add windows/skylights to match max fdwr/srr from NECB
+  #    -2:  Do not apply any fdwr/srr changes, leave windows/skylights alone (also works for fdwr/srr > 1)
+  #    -3:  Use old method which reduces existing window/skylight size (if necessary) to meet maximum NECB fdwr/srr limit
+  # <-3.1:  Remove all the windows/skylights
+  #   > 1:  Do nothing
+  #
+  # By default, :srr_opt is an empty string (" "). If set to "osut", SRR is
+  # instead met using OSut's 'addSkylights' (:srr_set numeric values may apply).
+  def apply_fdwr_srr_daylighting(model:, fdwr_set: -1.0, srr_set: -1.0, necb_hdd: true, srr_opt: '')
     fdwr_set = -1.0 if (fdwr_set == 'NECB_default') || fdwr_set.nil?
     srr_set = -1.0 if (srr_set == 'NECB_default') || srr_set.nil?
     fdwr_set = fdwr_set.to_f
     srr_set = srr_set.to_f
     apply_standard_window_to_wall_ratio(model: model, fdwr_set: fdwr_set, necb_hdd: necb_hdd)
-    apply_standard_skylight_to_roof_ratio(model: model, srr_set: srr_set)
+    apply_standard_skylight_to_roof_ratio(model: model, srr_set: srr_set, srr_opt: srr_opt)
     # model_add_daylighting_controls(model) # to be removed after refactor.
   end
 
-  ##
-  # Optionally uprates, then derates, envelope surfaces due to MAJOR thermal
-  # bridges (e.g. roof parapets, corners, fenestration perimeters). See
-  # lib/openstudio-standards/btap/bridging.rb, which relies on the Thermal
-  # Bridging & Derating (TBD) gem.
+  # Initiates a BTAP building ACTIVITY.
   #
-  # @param model [OpenStudio::Model::Model] an OpenStudio model
-  # @param tbd_option [String] BTAP/TBD option
+  # @param model [OpenStudio::Model::Model] a model
   #
-  # @return [Boolean] true if successful, e.g. no errors, compliant if uprated
+  # @return [BTAP::Activity] a BTAP building ACTIVITY (see logs if failed)
+  def assign_building_activity(model: nil)
+    @activity = BTAP::Activity.new(model)
+  end
+
+  # Initiates a BTAP building STRUCTURE.
+  #
+  # @param model [OpenStudio::Model::Model] a model
+  # @param activity [BTAP::Activity] a BTAP building ACTIVITY object
+  # @param massive [Boolean] whether requesting internal mass generation
+  #
+  # @return [BTAP::Structure] a BTAP building STRUCTURE (see logs if failed)
+  def assign_building_structure(model: nil, activity: nil, massive: true)
+    @structure = BTAP::Structure.new(model, activity, massive)
+  end
 
   ##
-  # (Optionally) uprates, then derates, envelope surface constructions due to
+  # (Optionally) uprates - then derates - envelope surface constructions due to
   # MAJOR thermal bridges (e.g. roof parapets, corners, fenestration
   # perimeters). See lib/openstudio-standards/btap/bridging.rb, which relies on
   # the Thermal Bridging & Derating (TBD) gem.
   #
   # @param model [OpenStudio::Model::Model] an OpenStudio model
-  # @param tbd_option [String] BTAP/TBD option
-  # @param tbd_interpolate [Boolean] true if TBD interpolates between costed Uo
-  # @param wall_U [Double] wall conductance in W/m2.K (nil by default)
-  # @param floor_U [Double] floor conductance in W/m2.K (nil by default)
-  # @param roof_U [Double] roof conductance in W/m2.K (nil by default)
+  # @param necb_hdd [Boolean] whether to rely on BTAP to set HDD (vs stat file)
+  # @param structure [BTAP::Structure] BTAP Structure object
+  # @param option [#to_sym] BTAP/TBD option e.g. "uprate"
+  # @param interpolate [Boolean] true if TBD interpolates among Uo (uprating)
+  # @param wallU [Numeric] optional wall Ut in W/m2.K if uprating
+  # @param floorU [Numeric] optional floor Ut in W/m2.K if uprating
+  # @param roofU [Numeric] optional roof Ut in W/m2.K if uprating
   #
   # @return [Boolean] true if successful, e.g. no errors, compliant if uprated
   def apply_thermal_bridging(model: nil,
-                             tbd_option: 'none',
-                             tbd_interpolate: false,
-                             wall_U: nil,
-                             floor_U: nil,
-                             roof_U: nil)
-    return false unless model.is_a?(OpenStudio::Model::Model)
-    return false unless tbd_option.respond_to?(:to_s)
+                             necb_hdd: true,
+                             structure: nil,
+                             option: 'none',
+                             interpolate: false,
+                             wallU: nil,
+                             floorU: nil,
+                             roofU: nil)
+    necb_hdd = true unless [true, false].include?(necb_hdd)
+    return true unless option.respond_to?(:to_sym)
+    return true if option.to_s.downcase == 'none'
 
-    tbd_option = tbd_option.to_s
-    # 4x options:
-    #  - 'none' (TBD is ignored)
-    #  - derate using 'bad' PSI factors (BTAP-costed)
-    #  - derate using 'good' PSI factors (BTAP-costed)
-    #  - 'uprate' (then derate), i.e. iterative process (BTAP-costed)
-    ok = tbd_option == 'bad' || tbd_option == 'good' || tbd_option == 'uprate'
-    return true  if tbd_option == 'none'
-    return false unless ok
+    hdd    = get_necb_hdd18(model: model, necb_hdd: necb_hdd)
+    wallU  = wallU  ? wallU  : max_u_necb("wall", "outdoors", hdd)
+    floorU = floorU ? floorU : max_u_necb("floor", "outdoors", hdd)
+    roofU  = roofU  ? roofU  : max_u_necb("roofceiling", "outdoors", hdd)
 
-    argh = {} # BTAP/TBD arguments
-    ok = tbd_interpolate == true || tbd_interpolate == false
-    argh[:interpolate] = tbd_interpolate if ok
-    argh[:interpolate] = false       unless ok
+    argh             = {}
+    argh[:structure] = structure
+    argh[:walls    ] = { uo: wallU  }
+    argh[:floors   ] = { uo: floorU }
+    argh[:roofs    ] = { uo: roofU  }
 
-    argh[:walls ] = { uo: wall_U  }
-    argh[:floors] = { uo: floor_U }
-    argh[:roofs ] = { uo: roof_U  }
-
-    if tbd_option == 'uprate'
-      argh[:walls  ][:ut] = wall_U
-      argh[:floors ][:ut] = floor_U
-      argh[:roofs  ][:ut] = roof_U
-    elsif tbd_option == 'good'
+    case option.downcase
+    when 'uprate'
+      argh[:walls  ][:ut] = wallU
+      argh[:floors ][:ut] = floorU
+      argh[:roofs  ][:ut] = roofU
+    when 'good'
       argh[:quality] = :good
-    end    # default == :bad
+    else
+      argh[:quality] = :bad
+    end
+
+    argh[:interpolate] = interpolate
+    argh[:interpolate] = false unless [true, false].include?(interpolate)
 
     @tbd = BTAP::Bridging.new(model, argh)
 
