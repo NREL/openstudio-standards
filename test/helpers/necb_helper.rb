@@ -48,7 +48,7 @@ module NecbHelper
 
   # Hold an array of the instantiated standards (to save recreating them all the time).
   @@standards = []
-  
+
   # Default to treu for PERFORM_STANDARDS in testing.
   PERFORM_STANDARDS = true
 
@@ -77,8 +77,8 @@ module NecbHelper
 
     # Based on NECB 2011 names?
 	  @SpaceTypes = ["Dwelling Unit(s)", "Office - enclosed", "Office - open plan", "Retail - mall concourse", "Retail - sales", "Warehouse - fine", "Warehouse - med/blk"]
-    @AllSpaceTypes = ["Audience - auditorium", "Classroom/lecture/training", "Conf./meet./multi-purpose", "Corr. < 2.4m wide-sch-G", "Corr. >= 2.4m wide-sch-D", "Corr. >= 2.4m wide-sch-E", "Corr. >= 2.4m wide-sch-F", "Dining - bar lounge/leisure", "Dining - family space", "Dwelling Unit(s)", "Electrical/Mechanical-sch-A", "Electrical/Mechanical-sch-D", "Electrical/Mechanical-sch-E", "Electrical/Mechanical-sch-F", "Electrical/Mechanical-sch-H", "Food preparation", "Gym - fitness", "Gym - play", "Hospital - emergency", "Hospital - exam", "Hospital - laundry/washing", "Hospital - lounge/recreation", "Hospital - nurses station", "Hospital - operating room", "Hospital - patient room", "Hospital - physical therapy", "Hospital - radiology/imaging", "Hospital - recovery", "Hospital corr. >= 2.4m-sch-B", "Hospital corr. >= 2.4m-sch-H", "Hotel/Motel - dining", "Hotel/Motel - lobby", "Hotel/Motel - rooms", "Hway lodging - rooms", "Lab - research", "Library - reading", "Lobby - elevator", "Lobby - other", "Locker room-sch-H", "Lounge/recreation", "Office - enclosed", "Office - open plan", "Retail - mall concourse", "Retail - sales", "Stairway-sch-F", "Stairway-sch-H", "Storage area - occsens", "Storage area", "Warehouse - fine", "Warehouse - med/blk", "Washroom-sch-D", "Washroom-sch-F", "Washroom-sch-H"]   
-    
+    @AllSpaceTypes = ["Audience - auditorium", "Classroom/lecture/training", "Conf./meet./multi-purpose", "Corr. < 2.4m wide-sch-G", "Corr. >= 2.4m wide-sch-D", "Corr. >= 2.4m wide-sch-E", "Corr. >= 2.4m wide-sch-F", "Dining - bar lounge/leisure", "Dining - family space", "Dwelling Unit(s)", "Electrical/Mechanical-sch-A", "Electrical/Mechanical-sch-D", "Electrical/Mechanical-sch-E", "Electrical/Mechanical-sch-F", "Electrical/Mechanical-sch-H", "Food preparation", "Gym - fitness", "Gym - play", "Hospital - emergency", "Hospital - exam", "Hospital - laundry/washing", "Hospital - lounge/recreation", "Hospital - nurses station", "Hospital - operating room", "Hospital - patient room", "Hospital - physical therapy", "Hospital - radiology/imaging", "Hospital - recovery", "Hospital corr. >= 2.4m-sch-B", "Hospital corr. >= 2.4m-sch-H", "Hotel/Motel - dining", "Hotel/Motel - lobby", "Hotel/Motel - rooms", "Hway lodging - rooms", "Lab - research", "Library - reading", "Lobby - elevator", "Lobby - other", "Locker room-sch-H", "Lounge/recreation", "Office - enclosed", "Office - open plan", "Retail - mall concourse", "Retail - sales", "Stairway-sch-F", "Stairway-sch-H", "Storage area - occsens", "Storage area", "Warehouse - fine", "Warehouse - med/blk", "Washroom-sch-D", "Washroom-sch-F", "Washroom-sch-H"]
+
     @AllBuildings = [
       "FullServiceRestaurant",
       "LargeHotel",
@@ -106,7 +106,7 @@ module NecbHelper
 
   # Create a simple geometry for use in tests.
   def make_test_geometry
-    
+
     # Create new model for testing.
     model = OpenStudio::Model::Model.new
 
@@ -128,7 +128,7 @@ module NecbHelper
   #  see test/necb/unit_tests/tests/test_necb_boiler_rules.rb for examples.
   # @return a nested json containing the test case descriptions and placeholders for results.
   # @note Expects the last two entries in the hash to be TestCase and TestPars.
-  # Also expects :TestMethod and :SaveIntermediateModels (rule is if in CamelCase then 
+  # Also expects :TestMethod and :SaveIntermediateModels (rule is if in CamelCase then
   # expected here or in the in the do_* method)
   def make_test_cases_json(test_cases_loop_hash)
     expected_results_template = Hash.new
@@ -169,10 +169,10 @@ module NecbHelper
     logger.debug "\nMerged hash:\n#{JSON.pretty_generate(test_cases_hash)}"
     return test_cases_hash
   end
-  
+
   # Method used to recursively parse the expected json to figure out the test cases and then run them
   # (adapted template design pattern).
-  # The test_pars hash is used by the recursion to remember what condition is being tested in a nested hash. It already 
+  # The test_pars hash is used by the recursion to remember what condition is being tested in a nested hash. It already
   # contains some of the test parameters.
   # Will call the method 'do_test_...' to do the work. This method is called from 'test_...'
   # VarType and Reference are reserved keys that are ignored here.
@@ -181,7 +181,7 @@ module NecbHelper
     logger.debug "Test pars #{test_pars}"
 
     # Find the test cases. Do this with recursion but remember where we are in a new hash passed to the do_test method.
-    # The nested hash is has essentially a set of loops (vintages, weather files, fuel types etc). As the recursion 
+    # The nested hash is has essentially a set of loops (vintages, weather files, fuel types etc). As the recursion
     # descends down through these keep track of which one is the current 'var_type'.
     # While doing this build up the test_results hash.
     var_type = test_cases[:VarType].to_s
@@ -192,7 +192,7 @@ module NecbHelper
     if var_type == "TestCase"
       test_cases.each do |key, value|
         next if key == :VarType # Skip to next. This is less expensive than using the except method chained before the each.
-        next if key == :Reference # Skip to next. 
+        next if key == :Reference # Skip to next.
         logger.info  "Initiating test case #{key}"
         logger.debug  "Test case: #{test_pars}"
         logger.debug  "Current test: #{value}"
@@ -262,7 +262,7 @@ module NecbHelper
     # Save model before sizing.
     BTAP::FileIO.save_osm(model, "#{output_dir}/pre-sizing.osm") if save_model_versions
 
-    # Perform first sizing run. 
+    # Perform first sizing run.
     # (If test models updated could use: standard.apply_standard_efficiencies(model: model, sizing_run_dir: sizing_folder, necb_reference_hp: necb_ref_hp))
     sizing_folder = "#{output_dir}/Testing"
     standard = get_standard(template)
@@ -283,7 +283,7 @@ module NecbHelper
     # Save model after sizing.
     BTAP::FileIO.save_osm(model, "#{output_dir}/post-sizing.osm") if save_model_versions
   end
-  
+
   # @note Helper method to return the part load curve data.
   # @param curve [OS::ChillerElectricEIR.<curve>] an openstudio curve.
   # @return the efficiency curve name [String], curve type [String] and the curve coefficients [Hash] (curve type dependent).
@@ -420,9 +420,9 @@ module NecbHelper
       # Close files before assert.
       fe.close
       ft.close
-      expected_results_file_path=Pathname.new(expected_results).cleanpath
-      test_results_file_path=Pathname.new(test_results).cleanpath
-      comp_files_str="  Compare #{expected_results_file_path} with #{test_results_file_path}. File contents differ!"
+      expected_results_file_path = Pathname.new(expected_results_file).cleanpath
+      test_results_file_path = Pathname.new(test_results_file).cleanpath
+      comp_files_str = "Compare #{expected_results_file_path} with #{test_results_file_path}. File contents differ!"
       assert(same, "#{msg} #{self.class.ancestors[0]}.\n#{comp_files_str}\n#{comp_lines_str}")
     end
   end

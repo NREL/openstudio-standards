@@ -81,6 +81,8 @@ class NECB_Daylighting_Sensor_Control_Tests < Minitest::Test
                   model = standard.load_building_type_from_library(building_type: building_type)
 
                   # this runs the step in the model.
+                  standard.assign_building_activity(model: model)
+                  standard.assign_building_structure(model: model, activity: @activity, massive: false)
                   standard.apply_weather_data(model: model, epw_file: epw_file)
                   standard.apply_loads(model: model, lights_type: lighting_type, lights_scale: 1.0)
                   standard.apply_envelope(model: model)

@@ -24,12 +24,11 @@ class BTAPPRE1980
 
   # Reduces the SRR to the values specified by the PRM. SRR reduction
   # will be done by shrinking vertices toward the centroid.
-  #
   def apply_standard_skylight_to_roof_ratio(model:, srr_set: -1.0, srr_opt: '')
     # If srr_set is between 1.0 and 1.2 set it to the maximum allowed by the NECB.  If srr_set is between 0.0 and 1.0
     # apply whatever was passed.  If srr_set >= 1.2 then set the existing srr of the building to be the necb maximum
     # only if the the srr exceeds this maximum (otherwise leave it to be whatever was modeled).
-    #
+
     # srr_set settings:
     #   0-1:  Remove all skylights and add skylights to match this srr
     #    -1:  Remove all skylights and add skylights to match max srr from NECB

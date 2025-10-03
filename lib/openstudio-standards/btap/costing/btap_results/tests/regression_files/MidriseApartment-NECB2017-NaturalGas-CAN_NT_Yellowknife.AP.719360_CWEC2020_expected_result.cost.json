@@ -977,7 +977,7 @@
         "zone_number": 14,
         "zone_name": "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 2_SCHG 5",
         "zone_multiple": 2,
-        "heat_capacity(kW)": 3.7,
+        "heat_capacity(kW)": 3.8,
         "cool_capacity(kW)": 7.5,
         "heat_cost": 0,
         "cool_cost": 1845,
@@ -992,7 +992,7 @@
         "zone_number": 14,
         "zone_name": "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 2_SCHG 5",
         "zone_multiple": 2,
-        "heat_capacity(kW)": 3.7,
+        "heat_capacity(kW)": 3.8,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 4325,
         "cool_cost": 0,
@@ -1037,7 +1037,7 @@
         "zone_number": 16,
         "zone_name": "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 2_SCHG 7",
         "zone_multiple": 2,
-        "heat_capacity(kW)": 3.7,
+        "heat_capacity(kW)": 3.8,
         "cool_capacity(kW)": 7.4,
         "heat_cost": 0,
         "cool_cost": 1845,
@@ -1052,7 +1052,7 @@
         "zone_number": 16,
         "zone_name": "DU_BT=Space Function_ST=Dwelling units general_FL=Building Story 2_SCHG 7",
         "zone_multiple": 2,
-        "heat_capacity(kW)": 3.7,
+        "heat_capacity(kW)": 3.8,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 4325,
         "cool_cost": 0,
@@ -1322,7 +1322,7 @@
         "zone_number": 26,
         "zone_name": "WILD_ST=Corridor/Transition area other-sch-G_FL=Building Story 2_SCH=G",
         "zone_multiple": 2,
-        "heat_capacity(kW)": 5.3,
+        "heat_capacity(kW)": 5.4,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 5345,
         "cool_cost": 0,
@@ -1413,7 +1413,7 @@
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 1000,
         "base_ahu_cost": 52301.32,
-        "revised_base_ahu_cost": 29087.71,
+        "revised_base_ahu_cost": 29104.54,
         "hrv": {
           "hrv_type": "HeatExchanger_AirToAir_SensibleAndLatent",
           "hrv_name": "sys_4|mixed|shr>none|sc>dx|sh>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| ERV",
@@ -1427,14 +1427,14 @@
             "eq_category": "Coil_Cooling_DX_SingleSpeed",
             "heating_fuel": "none",
             "cooling_type": "DX",
-            "total_modeled_capacity_kw": 9.206,
+            "total_modeled_capacity_kw": 9.212,
             "cost": 28255.29
           },
           {
             "eq_category": "Coil_Heating_Gas",
             "heating_fuel": "Gas",
             "cooling_type": "none",
-            "total_modeled_capacity_kw": 19.633,
+            "total_modeled_capacity_kw": 19.653,
             "cost": 4349.98
           }
         ],
@@ -2108,8 +2108,8 @@
     "lighting": 253638,
     "heating_and_cooling": 545278,
     "shw": 54043,
-    "ventilation": 390250,
+    "ventilation": 390266,
     "renewables": 0,
-    "grand_total": 2882180
+    "grand_total": 2882196
   }
 }

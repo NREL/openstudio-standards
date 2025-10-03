@@ -228,12 +228,12 @@
         "zone_multiple": 1,
         "heat_capacity(kW)": 5.6,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 3054,
+        "heat_cost": 3055,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
         "wiring_cost": 1733,
-        "num_units": 6.0233236547459885,
+        "num_units": 6.023908547794117,
         "cummultive_zonal_cost": 10070
       }
     ]
@@ -270,7 +270,7 @@
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 1000,
         "base_ahu_cost": 66951.57,
-        "revised_base_ahu_cost": 17113.38,
+        "revised_base_ahu_cost": 17111.17,
         "hrv": {
           "hrv_type": "HeatExchanger_AirToAir_SensibleAndLatent",
           "hrv_name": "sys_3|mixed|shr>none|sc>dx|sh>c-e|ssf>cv|zh>b-e|zc>none|srf>none| ERV",
@@ -291,7 +291,7 @@
             "eq_category": "Coil_Heating_Electric",
             "heating_fuel": "elec",
             "cooling_type": "none",
-            "total_modeled_capacity_kw": 19.311,
+            "total_modeled_capacity_kw": 19.31,
             "cost": 2353.53
           }
         ],
@@ -441,8 +441,8 @@
     "lighting": 49895,
     "heating_and_cooling": 10070,
     "shw": 36150,
-    "ventilation": 389208,
+    "ventilation": 389206,
     "renewables": 0,
-    "grand_total": 793091
+    "grand_total": 793089
   }
 }

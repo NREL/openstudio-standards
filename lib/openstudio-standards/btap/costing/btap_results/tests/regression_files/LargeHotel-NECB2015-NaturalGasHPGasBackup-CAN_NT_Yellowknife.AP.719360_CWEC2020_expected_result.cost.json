@@ -1275,7 +1275,7 @@
         "zone_number": 4,
         "zone_name": "ALL_ST=Laundry/Washing area_FL=Building Story 2_SCH=C",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 3.3,
+        "heat_capacity(kW)": 3.2,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 3183,
         "cool_cost": 0,
@@ -1305,7 +1305,7 @@
         "zone_number": 6,
         "zone_name": "ALL_ST=Retail facility mall concourse_FL=Building Story 2_SCH=C",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 8.9,
+        "heat_capacity(kW)": 8.8,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 8783,
         "cool_cost": 0,
@@ -1350,15 +1350,15 @@
         "zone_number": 9,
         "zone_name": "ALL_ST=Storage room < 5 m2-sch-A_FL=Building Story 1_SCH=A",
         "zone_multiple": 1,
-        "heat_capacity(kW)": 31.6,
+        "heat_capacity(kW)": 29.9,
         "cool_capacity(kW)": 0.0,
-        "heat_cost": 30295,
+        "heat_cost": 28133,
         "cool_cost": 0,
         "heatcool_cost": 0,
         "piping_cost": 0,
         "wiring_cost": 0,
-        "num_units": 10,
-        "cummultive_zonal_cost": 186955
+        "num_units": 9,
+        "cummultive_zonal_cost": 184792
       },
       {
         "systype": "HW",
@@ -1373,7 +1373,7 @@
         "piping_cost": 3537,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 193164
+        "cummultive_zonal_cost": 191002
       },
       {
         "systype": "HW",
@@ -1388,7 +1388,7 @@
         "piping_cost": 4353,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 204127
+        "cummultive_zonal_cost": 201965
       },
       {
         "systype": "HW",
@@ -1403,7 +1403,7 @@
         "piping_cost": 4353,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 215090
+        "cummultive_zonal_cost": 212928
       },
       {
         "systype": "HW",
@@ -1418,7 +1418,7 @@
         "piping_cost": 4353,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 226053
+        "cummultive_zonal_cost": 223891
       },
       {
         "systype": "HW",
@@ -1433,7 +1433,7 @@
         "piping_cost": 15602,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 251325
+        "cummultive_zonal_cost": 249162
       },
       {
         "systype": "HW",
@@ -1448,7 +1448,7 @@
         "piping_cost": 15602,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 276596
+        "cummultive_zonal_cost": 274434
       },
       {
         "systype": "HW",
@@ -1463,7 +1463,7 @@
         "piping_cost": 4353,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 287559
+        "cummultive_zonal_cost": 285397
       },
       {
         "systype": "HW",
@@ -1478,7 +1478,7 @@
         "piping_cost": 4353,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 298522
+        "cummultive_zonal_cost": 296360
       },
       {
         "systype": "HW",
@@ -1493,7 +1493,7 @@
         "piping_cost": 4353,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 309485
+        "cummultive_zonal_cost": 307323
       },
       {
         "systype": "HW",
@@ -1508,7 +1508,7 @@
         "piping_cost": 4353,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 320448
+        "cummultive_zonal_cost": 318286
       },
       {
         "systype": "HW",
@@ -1523,7 +1523,7 @@
         "piping_cost": 15600,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 345718
+        "cummultive_zonal_cost": 343556
       },
       {
         "systype": "HW",
@@ -1538,7 +1538,7 @@
         "piping_cost": 4353,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 356681
+        "cummultive_zonal_cost": 354519
       },
       {
         "systype": "HW",
@@ -1553,7 +1553,7 @@
         "piping_cost": 4354,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 367646
+        "cummultive_zonal_cost": 365483
       },
       {
         "systype": "HW",
@@ -1568,7 +1568,7 @@
         "piping_cost": 4353,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 378608
+        "cummultive_zonal_cost": 376446
       },
       {
         "systype": "HW",
@@ -1583,7 +1583,7 @@
         "piping_cost": 4353,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 389571
+        "cummultive_zonal_cost": 387409
       },
       {
         "systype": "HW",
@@ -1598,7 +1598,7 @@
         "piping_cost": 4354,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 400536
+        "cummultive_zonal_cost": 398373
       },
       {
         "systype": "HW",
@@ -1613,7 +1613,7 @@
         "piping_cost": 4354,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 411500
+        "cummultive_zonal_cost": 409337
       },
       {
         "systype": "HW",
@@ -1628,7 +1628,7 @@
         "piping_cost": 4353,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 422463
+        "cummultive_zonal_cost": 420300
       },
       {
         "systype": "HW",
@@ -1643,7 +1643,7 @@
         "piping_cost": 4354,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 433427
+        "cummultive_zonal_cost": 431264
       },
       {
         "systype": "HW",
@@ -1658,7 +1658,7 @@
         "piping_cost": 4354,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 444391
+        "cummultive_zonal_cost": 442228
       },
       {
         "systype": "HW",
@@ -1673,7 +1673,7 @@
         "piping_cost": 4354,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 455355
+        "cummultive_zonal_cost": 453192
       },
       {
         "systype": "HW",
@@ -1688,7 +1688,7 @@
         "piping_cost": 4354,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 466319
+        "cummultive_zonal_cost": 464157
       },
       {
         "systype": "HW",
@@ -1703,7 +1703,7 @@
         "piping_cost": 4353,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 477282
+        "cummultive_zonal_cost": 475120
       },
       {
         "systype": "HW",
@@ -1718,7 +1718,7 @@
         "piping_cost": 4354,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 488246
+        "cummultive_zonal_cost": 486084
       },
       {
         "systype": "HW",
@@ -1733,7 +1733,7 @@
         "piping_cost": 15600,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 513517
+        "cummultive_zonal_cost": 511354
       },
       {
         "systype": "HW",
@@ -1748,7 +1748,7 @@
         "piping_cost": 4346,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 524472
+        "cummultive_zonal_cost": 522310
       },
       {
         "systype": "HW",
@@ -1763,7 +1763,7 @@
         "piping_cost": 4354,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 535436
+        "cummultive_zonal_cost": 533274
       },
       {
         "systype": "HW",
@@ -1778,7 +1778,7 @@
         "piping_cost": 4354,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 546401
+        "cummultive_zonal_cost": 544238
       },
       {
         "systype": "HW",
@@ -1793,7 +1793,7 @@
         "piping_cost": 4354,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 557365
+        "cummultive_zonal_cost": 555202
       },
       {
         "systype": "HW",
@@ -1808,7 +1808,7 @@
         "piping_cost": 4354,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 568329
+        "cummultive_zonal_cost": 566166
       },
       {
         "systype": "HW",
@@ -1823,7 +1823,7 @@
         "piping_cost": 4354,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 579293
+        "cummultive_zonal_cost": 577130
       },
       {
         "systype": "HW",
@@ -1838,7 +1838,7 @@
         "piping_cost": 4353,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 590256
+        "cummultive_zonal_cost": 588093
       },
       {
         "systype": "HW",
@@ -1853,7 +1853,7 @@
         "piping_cost": 4354,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 601220
+        "cummultive_zonal_cost": 599057
       },
       {
         "systype": "HW",
@@ -1868,7 +1868,7 @@
         "piping_cost": 4353,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 612183
+        "cummultive_zonal_cost": 610020
       },
       {
         "systype": "HW",
@@ -1883,7 +1883,7 @@
         "piping_cost": 4354,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 623147
+        "cummultive_zonal_cost": 620985
       },
       {
         "systype": "HW",
@@ -1898,7 +1898,7 @@
         "piping_cost": 4353,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 634110
+        "cummultive_zonal_cost": 631947
       },
       {
         "systype": "HW",
@@ -1913,7 +1913,7 @@
         "piping_cost": 4354,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 645074
+        "cummultive_zonal_cost": 642912
       },
       {
         "systype": "HW",
@@ -1928,7 +1928,7 @@
         "piping_cost": 4354,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 656038
+        "cummultive_zonal_cost": 653876
       },
       {
         "systype": "HW",
@@ -1943,7 +1943,7 @@
         "piping_cost": 4353,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 667001
+        "cummultive_zonal_cost": 664839
       },
       {
         "systype": "HW",
@@ -1958,7 +1958,7 @@
         "piping_cost": 4366,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 677977
+        "cummultive_zonal_cost": 675815
       },
       {
         "systype": "HW",
@@ -1973,7 +1973,7 @@
         "piping_cost": 4354,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 688941
+        "cummultive_zonal_cost": 686779
       },
       {
         "systype": "HW",
@@ -1988,7 +1988,7 @@
         "piping_cost": 4353,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 699904
+        "cummultive_zonal_cost": 697742
       },
       {
         "systype": "HW",
@@ -2003,7 +2003,7 @@
         "piping_cost": 4353,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 710867
+        "cummultive_zonal_cost": 708705
       },
       {
         "systype": "HW",
@@ -2018,7 +2018,7 @@
         "piping_cost": 1994,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 715024
+        "cummultive_zonal_cost": 712862
       },
       {
         "systype": "HW",
@@ -2033,7 +2033,7 @@
         "piping_cost": 1996,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 719182
+        "cummultive_zonal_cost": 717020
       },
       {
         "systype": "HW",
@@ -2048,7 +2048,7 @@
         "piping_cost": 1996,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 723340
+        "cummultive_zonal_cost": 721178
       },
       {
         "systype": "HW",
@@ -2063,7 +2063,7 @@
         "piping_cost": 1996,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 727498
+        "cummultive_zonal_cost": 725336
       },
       {
         "systype": "HW",
@@ -2078,7 +2078,7 @@
         "piping_cost": 1996,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 731656
+        "cummultive_zonal_cost": 729494
       },
       {
         "systype": "HW",
@@ -2093,7 +2093,7 @@
         "piping_cost": 1996,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 735814
+        "cummultive_zonal_cost": 733652
       },
       {
         "systype": "HW",
@@ -2108,7 +2108,7 @@
         "piping_cost": 1996,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 740227
+        "cummultive_zonal_cost": 738065
       },
       {
         "systype": "HW",
@@ -2123,7 +2123,7 @@
         "piping_cost": 1996,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 744386
+        "cummultive_zonal_cost": 742223
       },
       {
         "systype": "HW",
@@ -2138,7 +2138,7 @@
         "piping_cost": 3900,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 751213
+        "cummultive_zonal_cost": 749051
       },
       {
         "systype": "HW",
@@ -2153,7 +2153,7 @@
         "piping_cost": 3900,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 758041
+        "cummultive_zonal_cost": 755879
       },
       {
         "systype": "HW",
@@ -2168,14 +2168,14 @@
         "piping_cost": 1996,
         "wiring_cost": 0,
         "num_units": 1,
-        "cummultive_zonal_cost": 762199
+        "cummultive_zonal_cost": 760037
       },
       {
         "systype": "HW",
         "zone_number": 64,
         "zone_name": "WILD_ST=Corridor/Transition area other-sch-E_FL=Building Story 3_SCH=F",
         "zone_multiple": 4,
-        "heat_capacity(kW)": 42.4,
+        "heat_capacity(kW)": 42.5,
         "cool_capacity(kW)": 0.0,
         "heat_cost": 43780,
         "cool_cost": 0,
@@ -2183,7 +2183,7 @@
         "piping_cost": 18865,
         "wiring_cost": 0,
         "num_units": 4,
-        "cummultive_zonal_cost": 824845
+        "cummultive_zonal_cost": 822682
       },
       {
         "systype": "HW",
@@ -2198,7 +2198,7 @@
         "piping_cost": 8345,
         "wiring_cost": 0,
         "num_units": 11,
-        "cummultive_zonal_cost": 867942
+        "cummultive_zonal_cost": 865780
       },
       {
         "systype": "HW",
@@ -2213,7 +2213,7 @@
         "piping_cost": 6131,
         "wiring_cost": 0,
         "num_units": 2,
-        "cummultive_zonal_cost": 879674
+        "cummultive_zonal_cost": 877511
       }
     ]
   },
@@ -2243,11 +2243,11 @@
       {
         "sys_type": 1,
         "name": "sys_1|mixed|shr>erv|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-hw|zc>none|srf>none|",
-        "airloop_flow_m3_per_s": 11.947,
+        "airloop_flow_m3_per_s": 11.953,
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 12000,
         "base_ahu_cost": 77341.9,
-        "revised_base_ahu_cost": 76997.36,
+        "revised_base_ahu_cost": 77038.27,
         "hrv": {
           "hrv_type": "HeatExchanger_AirToAir_SensibleAndLatent",
           "hrv_name": "sys_1|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| ERV",
@@ -2261,7 +2261,7 @@
             "eq_category": "Coil_Heating_DX_SingleSpeed",
             "heating_fuel": "HP",
             "cooling_type": "HP",
-            "total_modeled_capacity_kw": 197.758,
+            "total_modeled_capacity_kw": 197.863,
             "cost": 446351.63
           }
         ],
@@ -3013,25 +3013,25 @@
       {
         "sys_type": 1,
         "name": "sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-hw|zc>none|srf>none|",
-        "airloop_flow_m3_per_s": 1.616,
+        "airloop_flow_m3_per_s": 1.613,
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 2500,
         "base_ahu_cost": 53187.15,
-        "revised_base_ahu_cost": 34382.28,
+        "revised_base_ahu_cost": 34325.41,
         "hrv": {},
         "equipment_info": [
           {
             "eq_category": "Coil_Heating_DX_SingleSpeed",
             "heating_fuel": "HP",
             "cooling_type": "HP",
-            "total_modeled_capacity_kw": 27.087,
+            "total_modeled_capacity_kw": 27.042,
             "cost": 63764.52
           },
           {
             "eq_category": "Coil_Heating_Gas",
             "heating_fuel": "Gas",
             "cooling_type": "none",
-            "total_modeled_capacity_kw": 155.779,
+            "total_modeled_capacity_kw": 155.713,
             "cost": 40817.66
           }
         ],
@@ -3040,25 +3040,25 @@
       {
         "sys_type": 1,
         "name": "sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| 1",
-        "airloop_flow_m3_per_s": 3.374,
+        "airloop_flow_m3_per_s": 3.378,
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 4000,
         "base_ahu_cost": 59384.96,
-        "revised_base_ahu_cost": 50091.74,
+        "revised_base_ahu_cost": 50146.93,
         "hrv": {},
         "equipment_info": [
           {
             "eq_category": "Coil_Heating_DX_SingleSpeed",
             "heating_fuel": "HP",
             "cooling_type": "HP",
-            "total_modeled_capacity_kw": 55.852,
+            "total_modeled_capacity_kw": 55.914,
             "cost": 127529.04
           },
           {
             "eq_category": "Coil_Heating_Gas",
             "heating_fuel": "Gas",
             "cooling_type": "none",
-            "total_modeled_capacity_kw": 123.804,
+            "total_modeled_capacity_kw": 123.898,
             "cost": 40817.66
           }
         ],
@@ -3101,21 +3101,21 @@
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 1000,
         "base_ahu_cost": 73053.44,
-        "revised_base_ahu_cost": 24192.52,
+        "revised_base_ahu_cost": 24215.3,
         "hrv": {},
         "equipment_info": [
           {
             "eq_category": "Coil_Heating_DX_SingleSpeed",
             "heating_fuel": "HP",
             "cooling_type": "HP",
-            "total_modeled_capacity_kw": 5.482,
+            "total_modeled_capacity_kw": 5.487,
             "cost": 10671.15
           },
           {
             "eq_category": "Coil_Heating_Gas",
             "heating_fuel": "Gas",
             "cooling_type": "none",
-            "total_modeled_capacity_kw": 15.959,
+            "total_modeled_capacity_kw": 15.967,
             "cost": 555.61
           }
         ],
@@ -3124,25 +3124,25 @@
       {
         "sys_type": 3,
         "name": "sys_3|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-hw|zc>none|srf>none| 2",
-        "airloop_flow_m3_per_s": 0.847,
+        "airloop_flow_m3_per_s": 0.829,
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 1000,
         "base_ahu_cost": 73053.44,
-        "revised_base_ahu_cost": 61872.79,
+        "revised_base_ahu_cost": 60571.63,
         "hrv": {},
         "equipment_info": [
           {
             "eq_category": "Coil_Heating_DX_SingleSpeed",
             "heating_fuel": "HP",
             "cooling_type": "HP",
-            "total_modeled_capacity_kw": 14.02,
+            "total_modeled_capacity_kw": 13.725,
             "cost": 31882.26
           },
           {
             "eq_category": "Coil_Heating_Gas",
             "heating_fuel": "Gas",
             "cooling_type": "none",
-            "total_modeled_capacity_kw": 33.707,
+            "total_modeled_capacity_kw": 33.234,
             "cost": 1468.23
           }
         ],
@@ -3159,14 +3159,14 @@
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 5000,
         "base_ahu_cost": 145462.65,
-        "revised_base_ahu_cost": 126052.41,
+        "revised_base_ahu_cost": 126058.29,
         "hrv": {},
         "equipment_info": [
           {
             "eq_category": "Coil_Heating_DX_SingleSpeed",
             "heating_fuel": "HP",
             "cooling_type": "HP",
-            "total_modeled_capacity_kw": 71.973,
+            "total_modeled_capacity_kw": 71.976,
             "cost": 159411.3
           }
         ],
@@ -3251,7 +3251,7 @@
         {
           "Floor": "Building Story 3",
           "Predominant_space_type": "Corridor/Transition area other-sch-F",
-          "SupplyDuctSize_in": 28.64,
+          "SupplyDuctSize_in": 28.66,
           "SupplyDuctLength_m": 87.0,
           "ReturnDuctSize_in": 0,
           "ReturnDuctLength_m": 0,
@@ -3261,9 +3261,9 @@
         {
           "Floor": "Building Story 4",
           "Predominant_space_type": "Corridor/Transition area other-sch-F",
-          "SupplyDuctSize_in": 49.52,
+          "SupplyDuctSize_in": 49.47,
           "SupplyDuctLength_m": 87.0,
-          "ReturnDuctSize_in": 39.29,
+          "ReturnDuctSize_in": 39.23,
           "ReturnDuctLength_m": 87.0,
           "TotalDuctCost": 126595.47,
           "Multiplier": 1.0
@@ -3271,7 +3271,7 @@
         {
           "Floor": "Building Story 2",
           "Predominant_space_type": "Lobby - hotel",
-          "SupplyDuctSize_in": 37.22,
+          "SupplyDuctSize_in": 37.21,
           "SupplyDuctLength_m": 78.2,
           "ReturnDuctSize_in": 35.98,
           "ReturnDuctLength_m": 78.2,
@@ -3467,7 +3467,7 @@
               "ThermalZone": "DU_BT=Space Function_ST=Guest room_FL=Building Story 3_SCHF 21",
               "ducting_direction": "Supply",
               "tz_mult": 4.0,
-              "airflow_m3ps": 0.036,
+              "airflow_m3ps": 0.037,
               "num_diff": 2,
               "ducting_lbs": 55,
               "duct_insulation_ft2": 40,
@@ -3587,7 +3587,7 @@
               "ThermalZone": "DU_BT=Space Function_ST=Guest room_FL=Building Story 3_SCHF 30",
               "ducting_direction": "Supply",
               "tz_mult": 4.0,
-              "airflow_m3ps": 0.036,
+              "airflow_m3ps": 0.037,
               "num_diff": 2,
               "ducting_lbs": 55,
               "duct_insulation_ft2": 40,
@@ -3803,7 +3803,7 @@
               "ThermalZone": "WILD_ST=Corridor/Transition area other-sch-E_FL=Building Story 3_SCH=F",
               "ducting_direction": "Supply",
               "tz_mult": 4.0,
-              "airflow_m3ps": 0.421,
+              "airflow_m3ps": 0.422,
               "num_diff": 5,
               "ducting_lbs": 290,
               "duct_insulation_ft2": 224,
@@ -4000,7 +4000,7 @@
               "ThermalZone": "ALL_ST=Food preparation area_FL=Building Story 4_SCH=B",
               "ducting_direction": "Supply",
               "tz_mult": 1.0,
-              "airflow_m3ps": 0.847,
+              "airflow_m3ps": 0.829,
               "num_diff": 8,
               "ducting_lbs": 795,
               "duct_insulation_ft2": 528,
@@ -4012,7 +4012,7 @@
               "ThermalZone": "ALL_ST=Food preparation area_FL=Building Story 4_SCH=B",
               "ducting_direction": "Return",
               "tz_mult": 1.0,
-              "airflow_m3ps": 0.847,
+              "airflow_m3ps": 0.829,
               "num_diff": 8,
               "ducting_lbs": 795,
               "duct_insulation_ft2": 528,
@@ -4065,7 +4065,7 @@
               "ThermalZone": "ALL_ST=Storage room < 5 m2-sch-A_FL=Building Story 2_SCH=A",
               "ducting_direction": "Supply",
               "tz_mult": 1.0,
-              "airflow_m3ps": 0.108,
+              "airflow_m3ps": 0.106,
               "num_diff": 3,
               "ducting_lbs": 125,
               "duct_insulation_ft2": 96,
@@ -4635,10 +4635,10 @@
     "envelope": 5310749,
     "thermal_bridging": 0,
     "lighting": 1764068,
-    "heating_and_cooling": 1018803,
+    "heating_and_cooling": 1016641,
     "shw": 128951,
-    "ventilation": 3313839,
+    "ventilation": 3312606,
     "renewables": 0,
-    "grand_total": 11536411
+    "grand_total": 11533015
   }
 }

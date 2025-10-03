@@ -173,8 +173,8 @@ namespace :data do
     export_spreadsheet_to_json(spreadsheet_titles)
   end
 
-  desc 'BTAP Costing: Reload CSV data into costing_database.json and validate the costing database'
-  task 'update:costing' do
+  desc 'BTAP Costing: Validate the costing database'
+  task 'validate_costing' do
     require_relative './lib/openstudio-standards/btap/costing/btap_costing'
     data = BTAPCosting.new
     data.validate_database

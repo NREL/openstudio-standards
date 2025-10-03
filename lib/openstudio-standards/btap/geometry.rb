@@ -1,5 +1,5 @@
 # *********************************************************************
-# *  Copyright (c) 2008-2015, Natural Resources Canada
+# *  Copyright (c) 2008-2025, Natural Resources Canada
 # *  All rights reserved.
 # *
 # *  This library is free software; you can redistribute it and/or
@@ -206,8 +206,7 @@ module BTAP
       return model
     end
 
-    def self.rotate_building(model: , degrees: nil)
-
+    def self.rotate_building(model:, degrees: nil)
       # report as not applicable if effective relative rotation is 0
       if degrees == 0 || degrees.nil?
         puts ('The requested rotation was 0 or nil degrees. The model was not rotated.')
@@ -562,7 +561,6 @@ module BTAP
 
     #This Module contains methods that create, modify and query Thermal zone objects.
     module Zones
-
       # This method will filter an array of zones that have an external wall
       # passed floors. Note: if you wish to avoid to create an array of spaces,
       # simply put the space variable in [] brackets
@@ -581,7 +579,6 @@ module BTAP
         end
         return array
       end
-
 
       # This method will filter an array of zones that have no external wall
       # passed floors. Note: if you wish to avoid to create an array of spaces,

@@ -132,7 +132,7 @@ module BTAP
         @@data[:param][key][:comment ] = row[4].to_s
       end
 
-      # Overwrite values if required.
+      # Convert values if required.
       @@data[:param].values.each do |v|
         next unless v[:class].size == 1
 
@@ -209,7 +209,7 @@ module BTAP
       # Prep more consise argument hash.
       @@data[:param].each { |k,v| @@data[:argh][k] = v[:default].freeze }
 
-      # Freeze.
+      # Freeze attributes on file.
       @@data[:param].values.each do |v|
         v[:default ].freeze
         v[:class   ].freeze
@@ -217,8 +217,20 @@ module BTAP
         v[:range   ].freeze
         v[:comment ].freeze
       end
+    end
 
-      @@data[:argh].values.freeze
+    ##
+    # Validates whether a parameter is indeed defaulted, and stored on file.
+    #
+    # @param parameter [#to_sym] a potential BTAP/NECB parameter
+    #
+    # @return [Boolean] whether a paremeter is indeed BTAP/NECB defaulted
+    def defaulted?(parameter = nil)
+      return false unless parameter.respond_to?(:to_sym)
+
+      parameter = parameter.to_sym
+
+      @@data[:param].include?(parameter)
     end
 
     ##
@@ -228,7 +240,6 @@ module BTAP
     #
     # @return [] the assigned default value on file (nil if invalid or missing)
     def default(parameter = nil)
-      mth = "BTAP::Defaults::#{__callee__}"
       return nil unless parameter.respond_to?(:to_sym)
 
       parameter = parameter.to_sym
@@ -245,7 +256,6 @@ module BTAP
     #
     # @return [Boolean] true if admissible (false if missing or invalid)
     def admissible?(parameter = nil, variant = nil)
-      mth = "BTAP::Defaults::#{__callee__}"
       return false unless variant.respond_to?(:to_s)
       return false     if variant.to_s.empty?
       return false unless parameter.respond_to?(:to_sym)
@@ -320,7 +330,7 @@ module BTAP
     attr_reader :param
 
     # Concise BTAP/NECB core arguments.
-    attr_reader :argh
+    attr_accessor :argh
 
     ##
     # Initialize BTAP Default parameters.

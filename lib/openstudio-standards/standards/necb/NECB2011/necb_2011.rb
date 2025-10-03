@@ -6,11 +6,11 @@ class NECB2011 < Standard
 
   @template = new.class.name
   register_standard(@template)
+  attr_reader :template
   attr_reader :tbd
   attr_reader :osut
   attr_reader :activity
   attr_reader :structure
-  attr_reader :template
   attr_accessor :standards_data
   attr_accessor :space_type_map
   attr_accessor :space_multiplier_map
@@ -40,7 +40,7 @@ class NECB2011 < Standard
   end
 
   # This method checks if a variable is a string.  If it is anything but a string it returns the default.  If it is a
-  # string set to "NECB_Default" it return the default.  Otherwise it returns the string set to it.
+  # string set to "NECB_Default" it return the default.  Otherwise it returns the strirng set to it.
   def convert_arg_to_string(variable:, default:)
     return default if variable.nil?
     if variable.is_a? String
@@ -216,150 +216,149 @@ class NECB2011 < Standard
   end
 
   # This method is a wrapper to create the 16 archetypes easily. # 55 args
-  def model_create_prototype_model(airloop_economizer_type: nil,
-                                   airloop_fancoils_heating: nil,
-                                   baseline_system_zones_map_option: nil,
-                                   boiler_cap_ratio: nil,
-                                   boiler_eff: nil,
-                                   boiler_fuel: nil,
+  def model_create_prototype_model(template:,
                                    building_type:,
-                                   chiller_type: nil,
                                    construction_opt: '',
+                                   epw_file:,
                                    custom_weather_folder: nil,
-                                   daylighting_type: 'NECB_Default',
-                                   dcv_type: 'NECB_Default',
                                    debug: false,
-                                   door_construction_cond: nil,
+                                   sizing_run_dir: Dir.pwd,
+                                   hvac_system_primary: nil,
+                                   hvac_system_dwelling_units: nil,
+                                   hvac_system_washrooms: nil,
+                                   hvac_system_corridor: nil,
+                                   hvac_system_storage: nil,
+                                   primary_heating_fuel: 'Electricity',
+                                   swh_fuel: nil,
+                                   dcv_type: 'NECB_Default',
+                                   lights_type: 'NECB_Default',
+                                   lights_scale: 1.0,
+                                   daylighting_type: 'NECB_Default',
                                    ecm_system_name: 'NECB_Default',
                                    ecm_system_zones_map_option: 'NECB_Default',
-                                   electrical_loads_scale: nil,
-                                   epw_file:,
                                    erv_package: 'NECB_Default',
+                                   boiler_eff: nil,
+                                   unitary_cop: nil,
+                                   furnace_eff: nil,
+                                   shw_eff: nil,
+                                   ext_wall_cond: nil,
                                    ext_floor_cond: nil,
                                    ext_roof_cond: nil,
-                                   ext_wall_cond: nil,
-                                   fdwr_set: -1.0,
-                                   fixed_wind_solar_trans: nil,
-                                   fixed_window_cond: nil,
-                                   furnace_eff: nil,
-                                   glass_door_cond: nil,
-                                   glass_door_solar_trans: nil,
+                                   ground_wall_cond: nil,
                                    ground_floor_cond: nil,
                                    ground_roof_cond: nil,
-                                   ground_wall_cond: nil,
-                                   hvac_system_corridor: nil,
-                                   hvac_system_dwelling_units: nil,
-                                   hvac_system_primary: nil,
-                                   hvac_system_storage: nil,
-                                   hvac_system_washrooms: nil,
-                                   infiltration_scale: nil,
-                                   lights_scale: 1.0,
-                                   lights_type: 'NECB_Default',
-                                   necb_hdd: true,
-                                   nv_delta_temp_in_out: nil,
+                                   door_construction_cond: nil,
+                                   fixed_window_cond: nil,
+                                   glass_door_cond: nil,
+                                   overhead_door_cond: nil,
+                                   skylight_cond: nil,
+                                   glass_door_solar_trans: nil,
+                                   fixed_wind_solar_trans: nil,
+                                   skylight_solar_trans: nil,
+                                   rotation_degrees: nil,
+                                   fdwr_set: -1.0,
+                                   srr_set: -1.0,
+                                   srr_opt: '',
+                                   nv_type: nil,
                                    nv_opening_fraction: nil,
                                    nv_temp_out_min: nil,
-                                   nv_type: nil,
-                                   oa_scale: nil,
-                                   occupancy_loads_scale: nil,
-                                   oerd_utility_pricing: nil,
-                                   output_meters: nil,
-                                   output_variables: nil,
-                                   overhead_door_cond: nil,
-                                   primary_heating_fuel: 'Electricity',
-                                   pv_ground_azimuth_angle: nil,
-                                   pv_ground_module_description: nil,
-                                   pv_ground_tilt_angle: nil,
-                                   pv_ground_total_area_pv_panels_m2: nil,
-                                   pv_ground_type: nil,
-                                   rotation_degrees: nil,
+                                   nv_delta_temp_in_out: nil,
                                    scale_x: nil,
                                    scale_y: nil,
                                    scale_z: nil,
-                                   shw_eff: nil,
+                                   pv_ground_type: nil,
+                                   pv_ground_total_area_pv_panels_m2: nil,
+                                   pv_ground_tilt_angle: nil,
+                                   pv_ground_azimuth_angle: nil,
+                                   pv_ground_module_description: nil,
+                                   chiller_type: nil,
+                                   occupancy_loads_scale: nil,
+                                   electrical_loads_scale: nil,
+                                   oa_scale: nil,
+                                   infiltration_scale: nil,
+                                   output_variables: nil,
                                    shw_scale: nil,
-                                   sizing_run_dir: Dir.pwd,
-                                   skylight_cond: nil,
-                                   skylight_solar_trans: nil,
-                                   srr_opt: '',
-                                   srr_set: -1.0,
-                                   swh_fuel: nil,
-                                   tbd_interpolate: true,
+                                   output_meters: nil,
+                                   airloop_economizer_type: nil,
+                                   baseline_system_zones_map_option: nil,
                                    tbd_option: 'none',
-                                   template:,
-                                   unitary_cop: nil
-                                   )
+                                   tbd_interpolate: true,
+                                   necb_hdd: true,
+                                   boiler_fuel: nil,
+                                   boiler_cap_ratio: nil,
+                                   airloop_fancoils_heating: nil,
+                                   oerd_utility_pricing: nil)
     model = load_building_type_from_library(building_type: building_type)
     return model_apply_standard(model: model,
-                                airloop_economizer_type: airloop_economizer_type, # (1) 'NECB_Default'/nil/' (2) 'DifferentialEnthalpy' (3) 'DifferentialTemperature'
-                                airloop_fancoils_heating: airloop_fancoils_heating,
-                                baseline_system_zones_map_option: baseline_system_zones_map_option,  # Three options: (1) 'NECB_Default'/'none'/nil (i.e. 'one_sys_per_bldg'), (2) 'one_sys_per_dwelling_unit', (3) 'one_sys_per_bldg'
-                                boiler_cap_ratio: boiler_cap_ratio,
-                                boiler_eff: boiler_eff,
-                                boiler_fuel: boiler_fuel,
-                                chiller_type: chiller_type, # Options: (1) 'NECB_Default'/nil/'none'/false (i.e. do nothing), (2) e.g. 'VSD'
                                 construction_opt: construction_opt,
+                                tbd_option: tbd_option,
+                                tbd_interpolate: tbd_interpolate,
+                                epw_file: epw_file,
                                 custom_weather_folder: custom_weather_folder,
-                                daylighting_type: daylighting_type, # Two options: (1) nil/none/false/'NECB_Default' (Option #1 puts daylighting sensors in the spaces as per NECB requirements; so some spaces may not have sensors), (2) 'add_daylighting_controls' (Option #2 puts daylighting sensors in all spaces regardless of NECB requirements)
+                                sizing_run_dir: sizing_run_dir,
+                                hvac_system_primary: nil,
+                                hvac_system_dwelling_units: nil,
+                                hvac_system_washrooms: nil,
+                                hvac_system_corridor: nil,
+                                hvac_system_storage: nil,
+                                primary_heating_fuel: primary_heating_fuel,
+                                swh_fuel: swh_fuel,
                                 dcv_type: dcv_type, # Four options: (1) 'NECB_Default', (2) 'No_DCV', (3) 'Occupancy_based_DCV' , (4) 'CO2_based_DCV'
-                                door_construction_cond: door_construction_cond,
+                                lights_type: lights_type, # Two options: (1) 'NECB_Default', (2) 'LED'
+                                lights_scale: lights_scale,
+                                daylighting_type: daylighting_type, # Two options: (1) nil/none/false/'NECB_Default' (Option #1 puts daylighting sensors in the spaces as per NECB requirements; so some spaces may not have sensors), (2) 'add_daylighting_controls' (Option #2 puts daylighting sensors in all spaces regardless of NECB requirements)
                                 ecm_system_name: ecm_system_name,
                                 ecm_system_zones_map_option: ecm_system_zones_map_option, # (1) 'NECB_Default' (2) 'one_sys_per_floor' (3) 'one_sys_per_bldg'
-                                electrical_loads_scale: electrical_loads_scale,
-                                epw_file: epw_file,
                                 erv_package: erv_package,
+                                boiler_eff: boiler_eff,
+                                unitary_cop: unitary_cop,
+                                furnace_eff: furnace_eff,
+                                shw_eff: shw_eff,
+                                ext_wall_cond: ext_wall_cond,
                                 ext_floor_cond: ext_floor_cond,
                                 ext_roof_cond: ext_roof_cond,
-                                ext_wall_cond: ext_wall_cond,
-                                fdwr_set: fdwr_set,
-                                fixed_wind_solar_trans: fixed_wind_solar_trans,
-                                fixed_window_cond: fixed_window_cond,
-                                furnace_eff: furnace_eff,
-                                glass_door_cond: glass_door_cond,
-                                glass_door_solar_trans: glass_door_solar_trans,
+                                ground_wall_cond: ground_wall_cond,
                                 ground_floor_cond: ground_floor_cond,
                                 ground_roof_cond: ground_roof_cond,
-                                ground_wall_cond: ground_wall_cond,
-                                hvac_system_corridor: nil,
-                                hvac_system_dwelling_units: nil,
-                                hvac_system_primary: nil,
-                                hvac_system_storage: nil,
-                                hvac_system_washrooms: nil,
-                                infiltration_scale: infiltration_scale,
-                                lights_scale: lights_scale,
-                                lights_type: lights_type, # Two options: (1) 'NECB_Default', (2) 'LED'
-                                necb_hdd: necb_hdd,
-                                nv_delta_temp_in_out: nv_delta_temp_in_out, # options: (1) nil/none/false (2) 'NECB_Default' (i.e. 1.0 based on inputs from Michel Tardif re a real school in QC), (3) temperature difference (in Celsius) between the indoor and outdoor air temperatures below which ventilation is shut down
+                                door_construction_cond: door_construction_cond,
+                                fixed_window_cond: fixed_window_cond,
+                                glass_door_cond: glass_door_cond,
+                                overhead_door_cond: overhead_door_cond,
+                                skylight_cond: skylight_cond,
+                                glass_door_solar_trans: glass_door_solar_trans,
+                                fixed_wind_solar_trans: fixed_wind_solar_trans,
+                                skylight_solar_trans: skylight_solar_trans,
+                                rotation_degrees: rotation_degrees,
+                                fdwr_set: fdwr_set,
+                                srr_set: srr_set,
+                                srr_opt: srr_opt,
+                                nv_type: nv_type, # Two options: (1) nil/none/false/'NECB_Default', (2) 'add_nv'
                                 nv_opening_fraction: nv_opening_fraction, # options: (1) nil/none/false (2) 'NECB_Default' (i.e. 0.1), (3) opening fraction of windows, which can be a float number between 0.0 and 1.0
                                 nv_temp_out_min: nv_temp_out_min, # options: (1) nil/none/false(2) 'NECB_Default' (i.e. 13.0 based on inputs from Michel Tardif re a real school in QC), (3) minimum outdoor air temperature (in Celsius) below which natural ventilation is shut down
-                                nv_type: nv_type, # Two options: (1) nil/none/false/'NECB_Default', (2) 'add_nv'
-                                oa_scale: oa_scale,
-                                occupancy_loads_scale: occupancy_loads_scale,
-                                oerd_utility_pricing: oerd_utility_pricing,
-                                output_meters: output_meters,
-                                output_variables: output_variables,
-                                overhead_door_cond: overhead_door_cond,
-                                primary_heating_fuel: primary_heating_fuel,
-                                pv_ground_azimuth_angle: pv_ground_azimuth_angle, # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. south), (3) azimuth angle value (e.g. 90)
-                                pv_ground_module_description: pv_ground_module_description, # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. Standard), (3) other options ('Standard', 'Premium', ThinFilm')
-                                pv_ground_tilt_angle: pv_ground_tilt_angle, # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. latitude), (3) tilt angle value (e.g. 20)
-                                pv_ground_total_area_pv_panels_m2: pv_ground_total_area_pv_panels_m2, # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. building footprint), (3) area value (e.g. 50)
-                                pv_ground_type: pv_ground_type, # Two options: (1) nil/none/false/'NECB_Default', (2) 'add_pv_ground'
-                                rotation_degrees: rotation_degrees,
+                                nv_delta_temp_in_out: nv_delta_temp_in_out, # options: (1) nil/none/false (2) 'NECB_Default' (i.e. 1.0 based on inputs from Michel Tardif re a real school in QC), (3) temperature difference (in Celsius) between the indoor and outdoor air temperatures below which ventilation is shut down
                                 scale_x: scale_x,
                                 scale_y: scale_y,
                                 scale_z: scale_z,
-                                shw_eff: shw_eff,
+                                pv_ground_type: pv_ground_type, # Two options: (1) nil/none/false/'NECB_Default', (2) 'add_pv_ground'
+                                pv_ground_total_area_pv_panels_m2: pv_ground_total_area_pv_panels_m2, # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. building footprint), (3) area value (e.g. 50)
+                                pv_ground_tilt_angle: pv_ground_tilt_angle, # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. latitude), (3) tilt angle value (e.g. 20)
+                                pv_ground_azimuth_angle: pv_ground_azimuth_angle, # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. south), (3) azimuth angle value (e.g. 90)
+                                pv_ground_module_description: pv_ground_module_description, # Options: (1) nil/none/false, (2) 'NECB_Default' (i.e. Standard), (3) other options ('Standard', 'Premium', ThinFilm')
+                                occupancy_loads_scale: occupancy_loads_scale,
+                                electrical_loads_scale: electrical_loads_scale,
+                                oa_scale: oa_scale,
+                                infiltration_scale: infiltration_scale,
+                                chiller_type: chiller_type, # Options: (1) 'NECB_Default'/nil/'none'/false (i.e. do nothing), (2) e.g. 'VSD'
+                                output_variables: output_variables,
                                 shw_scale: shw_scale,  # Options: (1) 'NECB_Default'/nil/'none'/false (i.e. do nothing), (2) a float number larger than 0.0
-                                sizing_run_dir: sizing_run_dir,
-                                skylight_cond: skylight_cond,
-                                skylight_solar_trans: skylight_solar_trans,
-                                srr_opt: srr_opt,
-                                srr_set: srr_set,
-                                tbd_interpolate: tbd_interpolate,
-                                tbd_option: tbd_option,
-                                swh_fuel: swh_fuel,
-                                unitary_cop: unitary_cop
+                                output_meters: output_meters,
+                                airloop_economizer_type: airloop_economizer_type, # (1) 'NECB_Default'/nil/' (2) 'DifferentialEnthalpy' (3) 'DifferentialTemperature'
+                                baseline_system_zones_map_option: baseline_system_zones_map_option,  # Three options: (1) 'NECB_Default'/'none'/nil (i.e. 'one_sys_per_bldg'), (2) 'one_sys_per_dwelling_unit', (3) 'one_sys_per_bldg'
+                                necb_hdd: necb_hdd,
+                                boiler_fuel: boiler_fuel,
+                                boiler_cap_ratio: boiler_cap_ratio,
+                                airloop_fancoils_heating: airloop_fancoils_heating,
+                                oerd_utility_pricing: oerd_utility_pricing
                                 )
   end
 
@@ -376,78 +375,78 @@ class NECB2011 < Standard
   # Created this method so that additional methods can be addded for bulding the prototype model in later
   # code versions without modifying the build_protoype_model method or copying it wholesale for a few changes.
   def model_apply_standard(model:,
-                           airloop_economizer_type: nil,
-                           airloop_fancoils_heating: nil,
-                           baseline_system_zones_map_option: nil,
-                           boiler_cap_ratio: nil,
-                           boiler_eff: nil,
-                           boiler_fuel: nil,
-                           btap_weather: true,
-                           chiller_type: nil,
                            construction_opt: '',
-                           custom_weather_folder: nil,
-                           daylighting_type: 'NECB_Default',
-                           dcv_type: 'NECB_Default',
-                           door_construction_cond: nil,
-                           ecm_system_name: 'NECB_Default',
-                           ecm_system_zones_map_option: 'NECB_Default',
-                           electrical_loads_scale: nil,
+                           tbd_option: 'none',
+                           tbd_interpolate: true,
                            epw_file:,
-                           erv_package: 'NECB_Default',
-                           ext_floor_cond: nil,
-                           ext_roof_cond: nil,
-                           ext_wall_cond: nil,
-                           fdwr_set: nil,
-                           fixed_wind_solar_trans: nil,
-                           fixed_window_cond: nil,
-                           furnace_eff: nil,
-                           glass_door_cond: nil,
-                           glass_door_solar_trans: nil,
-                           ground_floor_cond: nil,
-                           ground_roof_cond: nil,
-                           ground_wall_cond: nil,
-                           hvac_system_corridor: 'NECB_Default',
-                           hvac_system_dwelling_units: 'NECB_Default',
-                           hvac_system_primary: 'NECB_Default',
-                           hvac_system_storage: 'NECB_Default',
-                           hvac_system_washrooms: 'NECB_Default',
-                           infiltration_scale: nil,
-                           lights_type: 'NECB_Default',
-                           lights_scale: 'NECB_Default',
-                           necb_hdd: true,
+                           custom_weather_folder: nil,
+                           btap_weather: true,
+                           sizing_run_dir: Dir.pwd,
                            necb_reference_hp: false,
                            necb_reference_hp_supp_fuel: 'DefaultFuel',
-                           nv_delta_temp_in_out: nil,
-                           nv_opening_fraction: nil,
-                           nv_temp_out_min: nil,
-                           nv_type: nil,
-                           oa_scale: nil,
-                           occupancy_loads_scale: nil,
-                           oerd_utility_pricing: nil,
-                           output_meters: nil,
-                           output_variables: nil,
-                           overhead_door_cond: nil,
+                           hvac_system_primary: 'NECB_Default',
+                           hvac_system_dwelling_units: 'NECB_Default',
+                           hvac_system_washrooms: 'NECB_Default',
+                           hvac_system_corridor: 'NECB_Default',
+                           hvac_system_storage: 'NECB_Default',
                            primary_heating_fuel: 'Electricity',
-                           pv_ground_azimuth_angle: nil,
-                           pv_ground_module_description: nil,
-                           pv_ground_tilt_angle: nil,
-                           pv_ground_total_area_pv_panels_m2: nil,
-                           pv_ground_type: nil,
+                           swh_fuel: nil,
+                           dcv_type: 'NECB_Default',
+                           lights_type: 'NECB_Default',
+                           lights_scale: 'NECB_Default',
+                           daylighting_type: 'NECB_Default',
+                           ecm_system_name: 'NECB_Default',
+                           ecm_system_zones_map_option: 'NECB_Default',
+                           erv_package: 'NECB_Default',
+                           boiler_eff: nil,
+                           furnace_eff: nil,
+                           unitary_cop: nil,
+                           shw_eff: nil,
+                           ext_wall_cond: nil,
+                           ext_floor_cond: nil,
+                           ext_roof_cond: nil,
+                           ground_wall_cond: nil,
+                           ground_floor_cond: nil,
+                           ground_roof_cond: nil,
+                           door_construction_cond: nil,
+                           fixed_window_cond: nil,
+                           glass_door_cond: nil,
+                           overhead_door_cond: nil,
+                           skylight_cond: nil,
+                           glass_door_solar_trans: nil,
+                           fixed_wind_solar_trans: nil,
+                           skylight_solar_trans: nil,
+                           fdwr_set: nil,
+                           srr_set: nil,
+                           srr_opt: '',
                            rotation_degrees: nil,
                            scale_x: nil,
                            scale_y: nil,
                            scale_z: nil,
-                           shw_eff: nil,
+                           nv_type: nil,
+                           nv_opening_fraction: nil,
+                           nv_temp_out_min: nil,
+                           nv_delta_temp_in_out: nil,
+                           pv_ground_type: nil,
+                           pv_ground_total_area_pv_panels_m2: nil,
+                           pv_ground_tilt_angle: nil,
+                           pv_ground_azimuth_angle: nil,
+                           pv_ground_module_description: nil,
+                           chiller_type: nil,
+                           occupancy_loads_scale: nil,
+                           electrical_loads_scale: nil,
+                           oa_scale: nil,
+                           infiltration_scale: nil,
+                           output_variables: nil,
                            shw_scale: nil,
-                           sizing_run_dir: Dir.pwd,
-                           skylight_cond: nil,
-                           skylight_solar_trans: nil,
-                           srr_opt: '',
-                           srr_set: nil,
-                           swh_fuel: nil,
-                           tbd_interpolate: true,
-                           tbd_option: 'none',
-                           unitary_cop: nil)
+                           output_meters: nil,
+                           airloop_economizer_type: nil,
+                           baseline_system_zones_map_option: nil,
+                           necb_hdd: true,
+                           boiler_fuel: nil,
+                           boiler_cap_ratio: nil,
+                           airloop_fancoils_heating: nil,
+                           oerd_utility_pricing: nil)
 
     apply_weather_data(model: model,
                        epw_file: epw_file,
@@ -462,6 +461,8 @@ class NECB2011 < Standard
     srr_opt = convert_arg_to_string(variable: srr_opt, default: '')
     construction_opt = convert_arg_to_string(variable: construction_opt, default: '')
     massive = construction_opt == 'structure'
+    tbd_option = convert_arg_to_string(variable: tbd_option, default: 'none')
+    tbd_interpolate = convert_arg_to_bool(variable: tbd_interpolate, default: true)
     necb_hdd = convert_arg_to_bool(variable: necb_hdd, default: true)
     boiler_fuel = convert_arg_to_string(variable: boiler_fuel, default: nil)
     boiler_cap_ratio = convert_arg_to_string(variable: boiler_cap_ratio, default: nil)
@@ -859,7 +860,7 @@ class NECB2011 < Standard
     model_create_thermal_zones(model, @space_multiplier_map)
   end
 
-  # Apply the Kiva foundation model to floors and walls with ground boundary condition
+  # Apply Kiva foundation model to floors/walls with ground boundary condition.
   # created by: Kamel Haddad (kamel.haddad@nrcan-rncan.gc.ca)
   # 'massive' edit: denis@rd2.ca
   #
@@ -892,6 +893,8 @@ class NECB2011 < Standard
             kiva_model.setWallDepthBelowSlab(0.0)
             zone_kiva_models << kiva_model
           end
+          # Kiva model only works with standard materials. Replace constructions
+          # massless materials with standard ones.
           # Kiva model only works with standard materials. Replace constructions
           # massless materials with standard ones. Skip check if 'massive'.
           if massive
@@ -1118,7 +1121,6 @@ class NECB2011 < Standard
     # model_add_daylighting_controls(model) # to be removed after refactor.
   end
 
-  ##
   # Initiates a BTAP building ACTIVITY.
   #
   # @param model [OpenStudio::Model::Model] a model
@@ -1128,7 +1130,6 @@ class NECB2011 < Standard
     @activity = BTAP::Activity.new(model)
   end
 
-  ##
   # Initiates a BTAP building STRUCTURE.
   #
   # @param model [OpenStudio::Model::Model] a model

@@ -1,5 +1,4 @@
-require 'openstudio'
-require 'openstudio-standards'
+require_relative '../../../../lib/openstudio-standards.rb'
 
 class BTAPWorkflow
   attr_accessor :workflow
@@ -153,7 +152,3 @@ class BTAPWorkflow
     return true
   end
 end
-
-
-
-

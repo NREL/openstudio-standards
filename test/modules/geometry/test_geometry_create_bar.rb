@@ -79,6 +79,20 @@ class TestGeometryCreateBar < Minitest::Test
     model.save("#{__dir__}/output/test_create_bar_from_building_type_ratios_warehouse.osm", true)
   end
 
+  def test_create_bar_from_building_type_ratios_supermarket
+    model = OpenStudio::Model::Model.new
+
+    args = {}
+    args['total_bldg_floor_area'] = 37500.0
+    args['bldg_type_a'] = 'SuperMarket'
+    args['ns_to_ew_ratio'] = 2.0
+    args['num_stories_above_grade'] = 1.0
+    args['template'] = 'ComStock DOE Ref Pre-1980'
+    result = @geo.create_bar_from_building_type_ratios(model, args)
+    assert(result)
+    model.save("#{__dir__}/output/test_create_bar_from_building_type_ratios_supermarket.osm", true)
+  end
+
   def test_create_bar_from_building_type_ratios_doe_deer_mix
     model = OpenStudio::Model::Model.new
 
@@ -115,6 +129,20 @@ class TestGeometryCreateBar < Minitest::Test
     assert(result)
 
     args[:bar_division_method] = 'Single Space Type - Core and Perimeter'
+    result = @geo.create_bar_from_building_type_ratios(model, args)
+    assert(result)
+  end
+
+  def test_create_bar_from_building_type_ratios_low_aspect_ratio
+    model = OpenStudio::Model::Model.new
+
+    args = {}
+    args['total_bldg_floor_area'] = 100000.0
+    args['bldg_type_a'] = 'SecondarySchool'
+    args['num_stories_above_grade'] = 6.0
+    args['bar_division_method'] = 'Multiple Space Types - Individual Stories Sliced'
+    args['ns_to_ew_ratio'] = 0.2
+    args['perim_mult'] = 1.0
     result = @geo.create_bar_from_building_type_ratios(model, args)
     assert(result)
   end

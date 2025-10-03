@@ -270,7 +270,7 @@
         "num_rooftop_units": 1,
         "ind_ahu_max_airflow_l_per_s": 1000,
         "base_ahu_cost": 73053.44,
-        "revised_base_ahu_cost": 19682.55,
+        "revised_base_ahu_cost": 19682.89,
         "hrv": {},
         "equipment_info": [
           {

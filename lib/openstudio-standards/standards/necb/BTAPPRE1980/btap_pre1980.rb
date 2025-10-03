@@ -73,10 +73,10 @@ class BTAPPRE1980 < NECB2011
   end
 
   def apply_standard_efficiencies(model:, sizing_run_dir:, dcv_type: 'NECB_Default', necb_reference_hp:false)
-    raise('validation of model failed.') unless validate_initial_model(model)
+    # Do a sizing run
+    try_sizing_run(model: model, sizing_run_dir: sizing_run_dir, sizing_run_subdir: 'plant_loops')
 
     climate_zone = 'NECB HDD Method'
-    raise("sizing run 1 failed! check #{sizing_run_dir}") if model_run_sizing_run(model, "#{sizing_run_dir}/plant_loops") == false
 
     # This is needed for NECB2011 as a workaround for sizing the reheat boxes
     model.getAirTerminalSingleDuctVAVReheats.each { |iobj| air_terminal_single_duct_vav_reheat_set_heating_cap(iobj) }

@@ -162,6 +162,7 @@ class BTAPDatapoint
                                        skylight_solar_trans: @options[:skylight_solar_trans],
                                        fdwr_set: @options[:fdwr_set],
                                        srr_set: @options[:srr_set],
+                                       srr_opt: @options[:srr_opt],
                                        rotation_degrees: @options[:rotation_degrees],
                                        scale_x: @options[:scale_x],
                                        scale_y: @options[:scale_y],
@@ -185,7 +186,9 @@ class BTAPDatapoint
                                        airloop_economizer_type: @options[:airloop_economizer_type],
                                        shw_scale: @options[:shw_scale],
                                        baseline_system_zones_map_option: @options[:baseline_system_zones_map_option],
+                                       construction_opt: @options[:construction_option],
                                        tbd_option: @options[:tbd_option],
+                                       tbd_interpolate: @options[:tbd_interpolate],
                                        necb_hdd: @options[:necb_hdd],
                                        boiler_fuel: @options[:boiler_fuel],
                                        boiler_cap_ratio: @options[:boiler_cap_ratio],
@@ -249,8 +252,8 @@ class BTAPDatapoint
         @cost_result = nil
         if @options[:enable_costing]
           # Perform costing
-          costs_path = File.join(input_folder_cache, 'costs.csv')
-          local_cost_factors_path = File.join(input_folder_cache, 'local_cost_factors.csv')
+          costs_path = File.absolute_path(File.join(__dir__, '..','..','..','btap','costing','common_resources', 'costs.csv'))
+          local_cost_factors_path = File.absolute_path(File.join(__dir__, '..','..','..','btap','costing','common_resources', 'costs_local_factors.csv'))
           costing = BTAPCosting.new(costs_csv: costs_path, factors_csv: local_cost_factors_path)
           costing.load_database
 

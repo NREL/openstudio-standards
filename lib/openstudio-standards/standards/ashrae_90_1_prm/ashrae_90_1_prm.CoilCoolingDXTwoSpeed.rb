@@ -51,22 +51,24 @@ class ASHRAE901PRM < Standard
 
     # Lookup efficiencies depending on whether it is a unitary AC or a heat pump
     ac_props = nil
-    ac_props = if sys_type == 'PSZ_HP' || sys_type == 'PTHP'
-                 model_find_object(standards_data['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
-               else
-                 model_find_object(standards_data['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
-               end
+    if sys_type == 'PSZ_HP' || sys_type == 'PTHP'
+      ac_props = model_find_object(standards_data['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
+      eff_key = 'copnfcooling'
+    else
+      ac_props = model_find_object(standards_data['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
+      eff_key = 'minimum_coefficient_of_performance_no_fan_cooling'
+    end
 
     # Get the minimum efficiency standards
     cop = nil
 
     # Check to make sure properties were found
     if ac_props.nil?
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXTwoSpeed', "For #{coil_cooling_dx_two_speed.name}, cannot find efficiency info using #{search_criteria}, cannot apply efficiency standard.")
+      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilCoolingDXTwoSpeed', "For #{coil_cooling_dx_two_speed.name}, cannot find efficiency info using #{search_criteria} and capacity #{capacity_btu_per_hr} btu/hr, cannot apply efficiency standard.")
       return cop # value of nil
     end
 
-    cop = ac_props['copnfcooling']
+    cop = ac_props[eff_key]
     new_comp_name = "#{coil_cooling_dx_two_speed.name} #{capacity_btu_per_hr.round}Btu/hr #{cop}COP"
 
     # Rename
