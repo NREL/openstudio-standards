@@ -7,19 +7,27 @@ class BTAPCarbon
     @carbon_report    = {}
 
     # Build the carbon database.
-    data = CSV.read(@cp.carbon_data_path)
+    # [@cp.carbon_opaque_path, @cp.carbon_glazing_path].each do |path|
+    path = @cp.carbon_opaque_path
+      data = CSV.read(path)
 
-    1.upto data.length - 1 do |i|
-      row   = data[i]
-      index = row.each
-      item  = Hash.new
+      1.upto data.length - 1 do |i|
+        row   = data[i]
+        index = row.each
+        item  = Hash.new
 
-      item["materials_opaque_id"] = index.next
-      item["OC23"]                = index.next
-      item["quantity"]            = index.next.to_f
-      item["unit"]                = index.next
+        item["materials_opaque_id"]                     = index.next
+        item["description"]                             = index.next
+        item["type"]                                    = index.next
+        item["quantity"]                                = index.next.to_f
+        item["per m2"]                                  = index.next.to_f
+        item["Product Category"]                        = index.next
+        item["Embodied Carbon (A1-A5)"]                 = index.next.to_f
+        item["Embodied Carbon (A-C)"]                   = index.next.to_f
+        item["Environmental Product Declaration (EPD)"] = index.next
 
-      @carbon_database << item
+        @carbon_database << item
+      # end
     end
   end
 
@@ -82,13 +90,11 @@ def carbon_from_construction(construction)
     end
 
     if material_carbon.nil?
+      # require '/home/osdev/script/my_debug.rb'; require 'irb'; IRB.start_session(binding); exit
       raise("Error: Could not find material with ID #{material_id} in the carbon database.")
     end
-
-    emissions = 0.0 #TODO: this will be added once the API is made available
-
     # Convert the units according to the carbon database and multiply by the expected emissions.
-    total_emissions += material_carbon["quantity"] / material_costing["quantity"].to_f # * emissions
+    total_emissions += material_carbon["quantity"] / material_costing["quantity"].to_f # * material_carbon["Embodied Carbon (A-C)"]
   end
 
   return total_emissions
