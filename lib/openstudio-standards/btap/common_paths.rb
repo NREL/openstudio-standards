@@ -24,11 +24,9 @@ class CommonPaths
   attr_accessor :costs_path
   attr_accessor :costs_local_factors_path
 
-  # Costing database location
-  attr_reader :costing_database_path
-
   # Embodied carbon data
-  attr_reader :carbon_data_path
+  attr_reader :carbon_opaque_path
+  attr_reader :carbon_glazing_path
 
   # Other
   attr_reader :error_log
@@ -71,9 +69,8 @@ class CommonPaths
     @costs_path                   = "#{dir_database}/costs.csv"
     @costs_local_factors_path     = "#{dir_database}/costs_local_factors.csv"
 
-    @costing_database_path        = "#{__dir__}/costing_database.json"
-
-    @carbon_data_path             = "#{dir_database}/carbon_data.csv"
+    @carbon_data_path             = "#{dir_database}/carbon_opaque.csv"
+    @carbon_data_path             = "#{dir_database}/carbon_glazing.csv"
 
     @error_log                    = "#{__dir__}/errors.json"
     @cost_output_file             = "#{__dir__}/cost_output.json"
