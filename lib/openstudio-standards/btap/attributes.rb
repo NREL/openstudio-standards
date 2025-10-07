@@ -135,10 +135,23 @@ module BTAP
 
           @surface_types.each do |surface_type|
             space.surfaces_hash[surface_type].each do |surface|
+
+              # Search for a matching opaque or glazing construction and append the type to the hash.
               construction_hash = @costing_database["raw"]["constructions_opaque"].find { |construction|
                 construction["construction_type_name"] == construction_set[surface_type]
               }
-              surface.instance_variable_set(:@construction_hash, construction_hash)
+              if not construction_hash.nil?
+                construction_hash["type"] = "opaque"
+                surface.instance_variable_set(:@construction_hash, construction_hash)
+              else
+                construction_hash = @costing_database["raw"]["constructions_glazing"].find { |construction|
+                  construction["construction_type_name"] == construction_set[surface_type]
+                }
+                if not construction_hash.nil?
+                  construction_hash["type"] = "glazing"
+                  surface.instance_variable_set(:@construction_hash, construction_hash)
+                end
+              end
             end
           end
         end
