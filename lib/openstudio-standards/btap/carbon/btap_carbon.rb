@@ -5,6 +5,38 @@ class BTAPCarbon
     @cp               = CommonPaths.instance
     @attributes       = attributes
     @carbon_report    = {}
+    @frame_m_to_kg    = {
+      "Vinyl Clad Wood" => {
+        "OperableWindow" => {
+          "Double Pane" => 3.062240537,
+          "Triple Pane" => 3.980912698
+        },
+        "FixedWindow" => {
+          "Double Pane" => 1.837344322,
+          "Triple Pane" => 2.204813187
+        }
+      },
+      "PVC" => {
+        "OperableWindow" => {
+          "Double Pane" => 3.563888889,
+          "Triple Pane" => 4.633055556
+        },
+        "FixedWindow" => {
+          "Double Pane" => 2.138333333,
+          "Triple Pane" => 2.566
+        }
+      },
+      "Aluminum" => {
+        "OperableWindow" => {
+          "Double Pane" => 1.026756778,
+          "Triple Pane" => 1.334783811
+        },
+        "FixedWindow" => {
+          "Double Pane" => 0.616054067,
+          "Triple Pane" => 0.73926488
+        }
+      }
+    }
 
     # Build the carbon database.
     carbon_opaque = CSV.read(@cp.carbon_opaque_path)
@@ -38,15 +70,16 @@ class BTAPCarbon
 
       item["materials_glazing_id"]    = index.next
       item["description"]             = index.next
-      item["type"]                    = index.next
-      item["material_type"]           = index.next.to_f
       item["per m2"]                  = index.next.to_f
       item["Embodied Carbon (A1-A5)"] = index.next.to_f
       item["Embodied Carbon (A-C)"]   = index.next.to_f
+      item["Environmental Product Declaration (EPD)"] = index.next
 
       @carbon_database["glazing"] << item
     end
   end
+
+  carbon_frame = 
 
   def audit_embodied_carbon
     total_emissions = 0
@@ -74,7 +107,7 @@ class BTAPCarbon
             emissions = carbon_from_construction(surface.construction_hash)
             construction = surface.construction_hash
             material_descriptions = construction["type"] == "opaque" ? construction["material_desciptions"] : construction["component"]
-            csv_report << [surface.name.to_s, construction["description"], material_descriptions, construction["type"], emissions * surfArea, surfArea]
+            csv_report << [surface.nameString, construction["description"], material_descriptions, construction["type"], emissions * surfArea, surfArea]
           end
 
           # Calculate the carbon emissions
