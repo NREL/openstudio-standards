@@ -1595,7 +1595,7 @@ module BTAP
       def self.getSurfacePerimeterFromVertices(vertices:)
         perimeter = 0.0
         return 0.0 if vertices.size < 2
-        vertices.each_index - 1 do |i|
+        (vertices.size - 1).times do |i|
           perimeter += (vertices[i] - vertices[(i + 1) % vertices.size]).length
         end
         return perimeter
