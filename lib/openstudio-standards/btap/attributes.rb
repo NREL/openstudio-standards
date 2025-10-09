@@ -65,8 +65,8 @@ module BTAP
         "GroundContactFloor"
       ]
 
-      @zones    = [] 
-      @spaces   = [] 
+      @zones  = [] 
+      @spaces = [] 
 
       self.compile
     end
