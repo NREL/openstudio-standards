@@ -120,7 +120,7 @@ class BTAPCarbon
             # TODO: undefined space type
             emissions = 0.0
           else
-            emissions = carbon_from_construction(surface, surface_area)
+            emissions = get_carbon_emissions(surface.construction_hash, surface, surface_area)
             construction = surface.construction_hash
             material_descriptions = construction["type"] == "opaque" ? construction["material_desciptions"] : construction["component"]
             csv_report << [surface.nameString, construction["description"], material_descriptions, construction["type"], emissions * surface_area, surface_area]
@@ -138,72 +138,72 @@ class BTAPCarbon
     @carbon_report["total"] = total_emissions
     return @carbon_report
   end
-end
 
-# TODO: Constructions should be cached since they don't need to be repeatedly calculated.
-# Retrieve the carbon emissions given a construction.
-def carbon_from_construction(surface, surface_area)
-  total_emissions  = 0.0
-  materials_file   = "materials_#{surface.construction_hash["type"]}"
-  id_column        = materials_file + "_id"
-  id_layers_column = "material_#{surface.construction_hash["type"]}_id_layers"
+  # Retrieve the carbon emissions given a surface, its construction, and its area.
+  def get_carbon_emissions(construction, surface, surface_area)
+    total_emissions  = 0.0
+    materials_file   = "materials_#{construction["type"]}"
+    id_column        = materials_file + "_id"
+    id_layers_column = "material_#{construction["type"]}_id_layers"
 
-  surface.construction_hash[id_layers_column].split(',').each do |material_id|
 
-    # Locate the material entry in the carbon database
-    material_carbon = @carbon_database[surface.construction_hash["type"]].find do |row| 
-      row[id_column] == material_id
-    end
+    construction[id_layers_column].split(',').each do |material_id|
 
-    if material_carbon.nil?
-      raise("Error: Could not find material with ID #{material_id} in the carbon database.")
-    end
-
-    # If the material is glazing, the frame must be calculated by retrieving the perimeter of the window
-    # and converting according to the correct attributes of the window.
-    if surface.construction_hash["type"] == "glazing"
-
-      material_frame = @carbon_database["frame"].find do |row|
+      # Locate the material entry in the carbon database
+      material_carbon = @carbon_database[construction["type"]].find do |row| 
         row[id_column] == material_id
       end
 
-      # Get the materials_glazing entry from the costing database to access the number of panes the window has.
-      material_costing = @costing_database["raw"][materials_file].find do |row|
-        row[id_column] == material_id
+      if material_carbon.nil?
+        raise("Error: Could not find material with ID #{material_id} in the carbon database.")
       end
 
-      if material_costing.nil?
-        raise("Error: Could not find material with ID #{material_id} in the costing database.")
-      end
+      # If the material is glazing, the frame must be calculated by retrieving the perimeter of the window
+      # and converting according to the correct attributes of the window.
+      if construction["type"] == "glazing"
 
-      # Try to get the correct frame material.
-      frame_material = nil
-      construction_component   = surface.construction_hash["component"].downcase
-      construction_description = surface.construction_hash["description"].downcase
-      ["vinyl-wood", "plastic", "aluminum"].each do |material|
-        if material in construction_component
-          frame_material = material
-          break
-        elsif material in construction_description
-          frame_material = material
-          break
+        material_frame = @carbon_database["frame"].find do |row|
+          row[id_column] == material_id
         end
-      end
 
-      if frame_material.nil?
-        raise("Error: Could not find frame material for glazing ID #{material_id} in constructions_glazing.csv.")
-      end
+        # Get the materials_glazing entry from the costing database to access the number of panes the window has.
+        material_costing = @costing_database["raw"][materials_file].find do |row|
+          row[id_column] == material_id
+        end
 
-      # Get the conversion factor for the window frame and add it to the total emissions.
-      fenestration_type = surface.construction_hash["fenestration_type"]
-      fenestration_number_of_panes = material_costing["fenestration_number_of_panes"]
-      conversion_factor = @frame_m_to_kg[frame_material][fenestration_type][fenestration_number_of_panes] 
-      total_emissions += material_frame["Embodied Carbon (A-C)"] * \
-                         BTAP::Geometry::Surfaces.getSurfacePerimeterFromVertices(vertices: surface.vertices) * \
-                         conversion_factor
+        if material_costing.nil?
+          raise("Error: Could not find material with ID #{material_id} in the costing database.")
+        end
+
+        # Try to get the correct frame material.
+        frame_material = nil
+        construction_component   = construction["component"].downcase
+        construction_description = construction["description"].downcase
+        ["vinyl-wood", "plastic", "aluminum"].each do |material|
+          if material in construction_component
+            frame_material = material
+            break
+          elsif material in construction_description
+            frame_material = material
+            break
+          end
+        end
+
+        if frame_material.nil?
+          raise("Error: Could not find frame material for glazing ID #{material_id} in constructions_glazing.csv.")
+        end
+
+        # Get the conversion factor for the window frame and add it to the total emissions.
+        fenestration_type = construction["fenestration_type"]
+        fenestration_number_of_panes = material_costing["fenestration_number_of_panes"]
+        conversion_factor = @frame_m_to_kg[frame_material][fenestration_type][fenestration_number_of_panes] 
+        total_emissions += material_frame["Embodied Carbon (A-C)"] * \
+                           BTAP::Geometry::Surfaces.getSurfacePerimeterFromVertices(vertices: surface.vertices) * \
+                           conversion_factor
+      end
+      total_emissions += material_carbon["Embodied Carbon (A-C)"] * surface_area
     end
-    total_emissions += material_carbon["Embodied Carbon (A-C)"] * surface_area
-  end
 
-  return total_emissions
+    return total_emissions
+  end
 end
