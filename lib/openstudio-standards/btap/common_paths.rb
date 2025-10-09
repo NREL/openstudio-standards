@@ -27,6 +27,7 @@ class CommonPaths
   # Embodied carbon data
   attr_reader :carbon_opaque_path
   attr_reader :carbon_glazing_path
+  attr_reader :carbon_frame_path
 
   # Other
   attr_reader :error_log
@@ -69,11 +70,12 @@ class CommonPaths
     @costs_path               = "#{dir_database}/costs.csv"
     @costs_local_factors_path = "#{dir_database}/costs_local_factors.csv"
 
-    @carbon_opaque_path       = "#{dir_database}/carbon_opaque.csv"
-    @carbon_glazing_path      = "#{dir_database}/carbon_glazing.csv"
+    @carbon_opaque_path  = "#{dir_database}/carbon_opaque.csv"
+    @carbon_glazing_path = "#{dir_database}/carbon_glazing.csv"
+    @carbon_frame_path   = "#{dir_database}/carbon_frame.csv"
 
-    @error_log                = "#{__dir__}/errors.json"
-    @cost_output_file         = "#{__dir__}/cost_output.json"
-    @mech_sizing_data_file    = "#{__dir__}/costing/mech_sizing.json"
+    @error_log             = "#{__dir__}/errors.json"
+    @cost_output_file      = "#{__dir__}/cost_output.json"
+    @mech_sizing_data_file = "#{__dir__}/costing/mech_sizing.json"
   end
 end
