@@ -20,7 +20,7 @@ module BTAP
     end
 
     def <<(space)
-      @spaces_sorted
+      @spaces_sorted << space
     end
   end
 
