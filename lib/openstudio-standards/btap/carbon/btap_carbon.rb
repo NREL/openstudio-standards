@@ -6,7 +6,7 @@ class BTAPCarbon
     @attributes       = attributes
     @carbon_report    = {}
     @frame_m_to_kg    = {
-      "Vinyl Clad Wood" => {
+      "vinyl-wood" => {
         "OperableWindow" => {
           "Double Pane" => 3.062240537,
           "Triple Pane" => 3.980912698
@@ -16,7 +16,7 @@ class BTAPCarbon
           "Triple Pane" => 2.204813187
         }
       },
-      "PVC" => {
+      "plastic" => {
         "OperableWindow" => {
           "Double Pane" => 3.563888889,
           "Triple Pane" => 4.633055556
@@ -26,7 +26,7 @@ class BTAPCarbon
           "Triple Pane" => 2.566
         }
       },
-      "Aluminum" => {
+      "aluminum" => {
         "OperableWindow" => {
           "Double Pane" => 1.026756778,
           "Triple Pane" => 1.334783811
@@ -77,9 +77,25 @@ class BTAPCarbon
 
       @carbon_database["glazing"] << item
     end
-  end
 
-  carbon_frame = 
+    carbon_frame = CSV.read(@cp.carbon_frame_path)
+    @carbon_database["frame"] = Array.new
+
+    1.upto carbon_frame.length - 1 do |i|
+      row   = carbon_frame[i]
+      index = row.each
+      item  = Hash.new
+
+      item["materials_glazing_id"]    = index.next
+      item["description"]             = index.next
+      item["per m2"]                  = index.next.to_f
+      item["Embodied Carbon (A1-A5)"] = index.next.to_f
+      item["Embodied Carbon (A-C)"]   = index.next.to_f
+      item["Environmental Product Declaration (EPD)"] = index.next
+
+      @carbon_database["frame"] << item
+    end
+  end
 
   def audit_embodied_carbon
     total_emissions = 0
@@ -95,24 +111,24 @@ class BTAPCarbon
     @attributes.spaces.each do |space|
       @attributes.surface_types.each do |surface_type|
         space.surfaces_hash[surface_type].each do |surface|
-          surfArea = surface.netArea * space.thermalZone.get.multiplier
+          surface_area = surface.netArea * space.thermalZone.get.multiplier
           @carbon_report["#{surface_type.underscore}_area_m2"] = \
-            (@carbon_report["#{surface_type.underscore}_area_m2"] + surfArea).round(2)
+            (@carbon_report["#{surface_type.underscore}_area_m2"] + surface_area).round(2)
 
           # Get the carbon emissions for each material in the space.
           if surface.construction_hash.nil?
             # TODO: undefined space type
             emissions = 0.0
           else
-            emissions = carbon_from_construction(surface.construction_hash)
+            emissions = carbon_from_construction(surface, surface_area)
             construction = surface.construction_hash
             material_descriptions = construction["type"] == "opaque" ? construction["material_desciptions"] : construction["component"]
-            csv_report << [surface.nameString, construction["description"], material_descriptions, construction["type"], emissions * surfArea, surfArea]
+            csv_report << [surface.nameString, construction["description"], material_descriptions, construction["type"], emissions * surface_area, surface_area]
           end
 
           # Calculate the carbon emissions
           @carbon_report["#{surface_type.underscore}_carbon"] = \
-            (@carbon_report["#{surface_type.underscore}_carbon"] + emissions * surfArea).round(2)
+            (@carbon_report["#{surface_type.underscore}_carbon"] + emissions).round(2)
           
           total_emissions += @carbon_report["#{surface_type.underscore}_carbon"]
         end
@@ -126,25 +142,16 @@ end
 
 # TODO: Constructions should be cached since they don't need to be repeatedly calculated.
 # Retrieve the carbon emissions given a construction.
-def carbon_from_construction(construction)
+def carbon_from_construction(surface, surface_area)
   total_emissions  = 0.0
-  materials_file   = "materials_#{construction["type"]}"
+  materials_file   = "materials_#{surface.construction_hash["type"]}"
   id_column        = materials_file + "_id"
-  id_layers_column = "material_#{construction["type"]}_id_layers"
+  id_layers_column = "material_#{surface.construction_hash["type"]}_id_layers"
 
-  construction[id_layers_column].split(',').each do |material_id|
-
-    # Locate the material entry in the costing database
-    material_costing = @costing_database["raw"][materials_file].find do |row| 
-      row[id_column] == material_id
-    end
-
-    if material_costing.nil?
-      raise("Error: Could not find material with ID #{material_id} in the costing database.")
-    end
+  surface.construction_hash[id_layers_column].split(',').each do |material_id|
 
     # Locate the material entry in the carbon database
-    material_carbon = @carbon_database[construction["type"]].find do |row| 
+    material_carbon = @carbon_database[surface.construction_hash["type"]].find do |row| 
       row[id_column] == material_id
     end
 
@@ -152,9 +159,50 @@ def carbon_from_construction(construction)
       raise("Error: Could not find material with ID #{material_id} in the carbon database.")
     end
 
-    # TODO: How should this be calculated?
-    # Convert the units according to the carbon database and multiply by the expected emissions.
-    total_emissions += material_carbon["Embodied Carbon (A-C)"]
+    # If the material is glazing, the frame must be calculated by retrieving the perimeter of the window
+    # and converting according to the correct attributes of the window.
+    if surface.construction_hash["type"] == "glazing"
+
+      material_frame = @carbon_database["frame"].find do |row|
+        row[id_column] == material_id
+      end
+
+      # Get the materials_glazing entry from the costing database to access the number of panes the window has.
+      material_costing = @costing_database["raw"][materials_file].find do |row|
+        row[id_column] == material_id
+      end
+
+      if material_costing.nil?
+        raise("Error: Could not find material with ID #{material_id} in the costing database.")
+      end
+
+      # Try to get the correct frame material.
+      frame_material = nil
+      construction_component   = surface.construction_hash["component"].downcase
+      construction_description = surface.construction_hash["description"].downcase
+      ["vinyl-wood", "plastic", "aluminum"].each do |material|
+        if material in construction_component
+          frame_material = material
+          break
+        elsif material in construction_description
+          frame_material = material
+          break
+        end
+      end
+
+      if frame_material.nil?
+        raise("Error: Could not find frame material for glazing ID #{material_id} in constructions_glazing.csv.")
+      end
+
+      # Get the conversion factor for the window frame and add it to the total emissions.
+      fenestration_type = surface.construction_hash["fenestration_type"]
+      fenestration_number_of_panes = material_costing["fenestration_number_of_panes"]
+      conversion_factor = @frame_m_to_kg[frame_material][fenestration_type][fenestration_number_of_panes] 
+      total_emissions += material_frame["Embodied Carbon (A-C)"] * \
+                         BTAP::Geometry::Surfaces.getSurfacePerimeterFromVertices(vertices: surface.vertices) * \
+                         conversion_factor
+    end
+    total_emissions += material_carbon["Embodied Carbon (A-C)"] * surface_area
   end
 
   return total_emissions
