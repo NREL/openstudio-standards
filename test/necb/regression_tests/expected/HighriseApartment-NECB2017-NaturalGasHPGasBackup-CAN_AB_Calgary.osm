@@ -16231,21 +16231,21 @@ OS:EnergyManagementSystem:Actuator,
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0036-000000000001},  !- Handle
   ems_sys_1_mixed_shr_none_sc_ashp_sh_ashp_c_g_ssf_cv_zh_b_hw_zc_none_srf_none__OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {67588f6e-5dec-4cf0-8c3c-4668447ad44a}<23.9 && {67588f6e-5dec-4cf0-8c3c-4668447ad44a}>1.7, !- Program Line 1
-  SET {9821edd1-828d-4d11-be5f-4241972ddd8b} = 29.4, !- Program Line 2
-  SET {2449a427-4f04-4398-909b-e3ffc3fe53aa} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {67588f6e-5dec-4cf0-8c3c-4668447ad44a}<23.9 && {67588f6e-5dec-4cf0-8c3c-4668447ad44a}>1.7, !- Program Line 4
-  SET {9821edd1-828d-4d11-be5f-4241972ddd8b} = 29.4, !- Program Line 5
-  SET {2449a427-4f04-4398-909b-e3ffc3fe53aa} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {67588f6e-5dec-4cf0-8c3c-4668447ad44a}<23.9 && {67588f6e-5dec-4cf0-8c3c-4668447ad44a}>1.7, !- Program Line 7
-  SET {9821edd1-828d-4d11-be5f-4241972ddd8b} = 29.4, !- Program Line 8
-  SET {2449a427-4f04-4398-909b-e3ffc3fe53aa} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {67588f6e-5dec-4cf0-8c3c-4668447ad44a}<23.9 && {67588f6e-5dec-4cf0-8c3c-4668447ad44a}>1.7, !- Program Line 10
-  SET {9821edd1-828d-4d11-be5f-4241972ddd8b} = 29.4, !- Program Line 11
-  SET {2449a427-4f04-4398-909b-e3ffc3fe53aa} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {e801816a-7e70-4741-b4d9-5e51fb2d89d7}<23.9 && {e801816a-7e70-4741-b4d9-5e51fb2d89d7}>1.7, !- Program Line 1
+  SET {2ba663df-d6e6-4f20-a06d-4a055e510dbe} = 29.4, !- Program Line 2
+  SET {dd5a94c6-7478-4dfd-973a-082f0243d54e} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {e801816a-7e70-4741-b4d9-5e51fb2d89d7}<23.9 && {e801816a-7e70-4741-b4d9-5e51fb2d89d7}>1.7, !- Program Line 4
+  SET {2ba663df-d6e6-4f20-a06d-4a055e510dbe} = 29.4, !- Program Line 5
+  SET {dd5a94c6-7478-4dfd-973a-082f0243d54e} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {e801816a-7e70-4741-b4d9-5e51fb2d89d7}<23.9 && {e801816a-7e70-4741-b4d9-5e51fb2d89d7}>1.7, !- Program Line 7
+  SET {2ba663df-d6e6-4f20-a06d-4a055e510dbe} = 29.4, !- Program Line 8
+  SET {dd5a94c6-7478-4dfd-973a-082f0243d54e} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {e801816a-7e70-4741-b4d9-5e51fb2d89d7}<23.9 && {e801816a-7e70-4741-b4d9-5e51fb2d89d7}>1.7, !- Program Line 10
+  SET {2ba663df-d6e6-4f20-a06d-4a055e510dbe} = 29.4, !- Program Line 11
+  SET {dd5a94c6-7478-4dfd-973a-082f0243d54e} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {9821edd1-828d-4d11-be5f-4241972ddd8b} = NULL, !- Program Line 14
-  SET {2449a427-4f04-4398-909b-e3ffc3fe53aa} = NULL, !- Program Line 15
+  SET {2ba663df-d6e6-4f20-a06d-4a055e510dbe} = NULL, !- Program Line 14
+  SET {dd5a94c6-7478-4dfd-973a-082f0243d54e} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:ProgramCallingManager,
@@ -29003,7 +29003,7 @@ OS:SetpointManager:SingleZone:Reheat,
 
 OS:SetpointManager:Warmest,
   {00000000-0000-0000-0075-000000000001},  !- Handle
-  Setpoint Manager Warmest 1,              !- Name
+  SAT Warmest Reset Heatpump,              !- Name
   Temperature,                             !- Control Variable
   13,                                      !- Minimum Setpoint Temperature {C}
   20,                                      !- Maximum Setpoint Temperature {C}
