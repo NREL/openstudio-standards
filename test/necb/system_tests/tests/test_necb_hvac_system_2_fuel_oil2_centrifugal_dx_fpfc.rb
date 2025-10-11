@@ -24,7 +24,7 @@ require_relative '../../../helpers/create_doe_prototype_helper'
 # Hopefully this makes is easier to debug the HVAC stuff!
 
 
-class NECB_HVAC_System_2_Test_FO2_C_DX_FPFC < Minitest::Test
+class NECB_HVAC_System_2_Test < Minitest::Test
 
 
   #System #2
@@ -34,7 +34,7 @@ class NECB_HVAC_System_2_Test_FO2_C_DX_FPFC < Minitest::Test
     template_osm_file = "#{__dir__}/../resources/5ZoneNoHVAC.osm"
     system_name = 'system_2'
     vintage = 'NECB2011'
-    boiler_fueltype = ' FuelOilNo2'
+    boiler_fueltype = ' FuelOil#2'
     chiller_type = 'Centrifugal'
     mua_cooling_type = 'DX'
     fan_coil_type = 'FPFC'
@@ -45,9 +45,6 @@ class NECB_HVAC_System_2_Test_FO2_C_DX_FPFC < Minitest::Test
     # FileUtils.rm_rf(output_folder)
     FileUtils::mkdir_p(output_folder)
     standard = Standard.build(vintage)
-    primary_heating_fuel = "FuelOilNo2"
-    standard.fuel_type_set = SystemFuels.new()
-    standard.fuel_type_set.set_defaults(standards_data: standard.standards_data, primary_heating_fuel: primary_heating_fuel)
     name = "sys2_Boiler-#{boiler_fueltype}_Chiller-#{chiller_type}_MuACoolingType-#{mua_cooling_type}"
     puts "***************************************#{name}*******************************************************\n"
     model = BTAP::FileIO::load_osm(template_osm_file)
