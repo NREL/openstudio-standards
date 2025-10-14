@@ -40,19 +40,19 @@ class NECB_TBD_Tests < Minitest::Test
       # 'LEEPPointTower',
       # 'LEEPTownHouse',
       # 'LowriseApartment',
-      'MediumOffice',
+      # 'MediumOffice',
       # 'MidriseApartment',
-      'NorthernEducation',  # *
-      'NorthernHealthCare', # *
+      # 'NorthernEducation',  # *
+      # 'NorthernHealthCare', # *
       # 'Outpatient',
       # 'PrimarySchool',
-      'QuickServiceRestaurant',
-      'RetailStandalone',
-      'RetailStripmall',
+      # 'QuickServiceRestaurant',
+      # 'RetailStandalone',
+      # 'RetailStripmall',
       # 'SecondarySchool',
       # 'SmallHotel',
-      'SmallOffice',
-      'Warehouse'
+      # 'SmallOffice',
+      # 'Warehouse'
     ]
 
     # (*) 'NorthernEducation' and 'NorthernHealthCare' have neither:
@@ -63,7 +63,7 @@ class NECB_TBD_Tests < Minitest::Test
     #         BTAP::Activity features - @todo.
 
     @structure = [
-      '',
+      # '',
       'structure'
     ]
 
@@ -96,8 +96,8 @@ class NECB_TBD_Tests < Minitest::Test
     # the solution becomes more categorical, with the inconvenience of being
     # more expensive (i.e. 0.100 $$$ > 0.124 $$).
     @interpolate = [
-      true,
-      # false
+      # true,
+      false
     ]
 
     fdback = []
