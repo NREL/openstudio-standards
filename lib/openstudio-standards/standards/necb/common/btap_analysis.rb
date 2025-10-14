@@ -47,13 +47,13 @@ end
 
 # For a no-simulation run, the SQL file, template, and datapoint ID must be provided.
 class BTAPNoSimAnalysis < BTAPAnalysis
-  def initialize(model_path:, sql_file_path:, output_folder:, template:, datapoint_id:)
+  def initialize(model_path:, sql_file_path:, output_folder:, template:, datapoint_id:, analysis_id: SecureRandom.uuid)
     super(output_folder: output_folder, template: template)
     @model        = BTAP::FileIO.load_osm(model_path)
     @template     = template
     @standard     = Standard.build(template)
     @datapoint_id = datapoint_id
-    @analysis_id  = SecureRandom.uuid
+    @analysis_id  = analysis_id
     @attributes   = BTAP::Attributes.new(@model, @standard)
     @model.setSqlFile(OpenStudio::SqlFile.new(sql_file_path))
     @qaqc = BTAPDatapoint.build_qaqc(@model, @standard, @datapoint_id, @analysis_id)             
