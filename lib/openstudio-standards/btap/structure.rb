@@ -201,8 +201,8 @@ module BTAP
     #  "recreation"  gymnastics, ice arena, indoor soccer/pool
     #      "robust"  penitentiary, parking garage (i.e. heavyduty, resistant)
     #
-    # Each CATEGORY holds "small"-scale and "large"-scale STRUCTURE options by
-    # defaults, depending on the characteristics of the building.
+    # Each CATEGORY holds "small"-scale and "large"-scale STRUCTURE options,
+    # depending on building characteristics.
     @@data[:category]               = {}
     @@data[:category]["housing"   ] = {small: :wood    , large: :concrete}
     @@data[:category]["lodging"   ] = {small: :wood    , large: :concrete}
