@@ -6,11 +6,11 @@ class NECB2011 < Standard
 
   @template = new.class.name
   register_standard(@template)
+  attr_reader :template
   attr_reader :tbd
   attr_reader :osut
   attr_reader :activity
   attr_reader :structure
-  attr_reader :template
   attr_accessor :standards_data
   attr_accessor :space_type_map
   attr_accessor :space_multiplier_map
@@ -229,7 +229,7 @@ class NECB2011 < Standard
   # This method is a wrapper to create the 16 archetypes easily. # 55 args
   def model_create_prototype_model(template:,
                                    building_type:,
-                                   construction_opt:'',
+                                   construction_opt: '',
                                    epw_file:,
                                    custom_weather_folder: nil,
                                    debug: false,
@@ -293,7 +293,7 @@ class NECB2011 < Standard
                                    airloop_economizer_type: nil,
                                    baseline_system_zones_map_option: nil,
                                    tbd_option: 'none',
-                                   tbd_interpolate: false,
+                                   tbd_interpolate: true,
                                    necb_hdd: true,
                                    boiler_fuel: nil,
                                    boiler_cap_ratio: nil,
@@ -388,7 +388,7 @@ class NECB2011 < Standard
   def model_apply_standard(model:,
                            construction_opt: '',
                            tbd_option: 'none',
-                           tbd_interpolate: false,
+                           tbd_interpolate: true,
                            epw_file:,
                            custom_weather_folder: nil,
                            btap_weather: true,
@@ -472,6 +472,8 @@ class NECB2011 < Standard
     srr_opt = convert_arg_to_string(variable: srr_opt, default: '')
     construction_opt = convert_arg_to_string(variable: construction_opt, default: '')
     massive = construction_opt == 'structure'
+    tbd_option = convert_arg_to_string(variable: tbd_option, default: 'none')
+    tbd_interpolate = convert_arg_to_bool(variable: tbd_interpolate, default: true)
     necb_hdd = convert_arg_to_bool(variable: necb_hdd, default: true)
     boiler_fuel = convert_arg_to_string(variable: boiler_fuel, default: nil)
     boiler_cap_ratio = convert_arg_to_string(variable: boiler_cap_ratio, default: nil)
@@ -500,7 +502,7 @@ class NECB2011 < Standard
     output_meters = check_output_meters(output_meters: output_meters) if oerd_utility_pricing
 
     assign_building_activity(model: model)
-    assign_building_structure(model: model, activity: @activity)
+    assign_building_structure(model: model, activity: @activity, massive: massive)
     apply_loads(model: model,
                 lights_type: lights_type,
                 lights_scale: lights_scale,
@@ -869,7 +871,7 @@ class NECB2011 < Standard
     model_create_thermal_zones(model, @space_multiplier_map)
   end
 
-  # Apply the Kiva foundation model to floors and walls with ground boundary condition
+  # Apply Kiva foundation model to floors/walls with ground boundary condition.
   # created by: Kamel Haddad (kamel.haddad@nrcan-rncan.gc.ca)
   # 'massive' edit: denis@rd2.ca
   #
@@ -902,6 +904,8 @@ class NECB2011 < Standard
             kiva_model.setWallDepthBelowSlab(0.0)
             zone_kiva_models << kiva_model
           end
+          # Kiva model only works with standard materials. Replace constructions
+          # massless materials with standard ones.
           # Kiva model only works with standard materials. Replace constructions
           # massless materials with standard ones. Skip check if 'massive'.
           if massive
@@ -1128,7 +1132,6 @@ class NECB2011 < Standard
     # model_add_daylighting_controls(model) # to be removed after refactor.
   end
 
-  ##
   # Initiates a BTAP building ACTIVITY.
   #
   # @param model [OpenStudio::Model::Model] a model
@@ -1138,15 +1141,15 @@ class NECB2011 < Standard
     @activity = BTAP::Activity.new(model)
   end
 
-  ##
   # Initiates a BTAP building STRUCTURE.
   #
   # @param model [OpenStudio::Model::Model] a model
   # @param activity [BTAP::Activity] a BTAP building ACTIVITY object
+  # @param massive [Boolean] whether requesting internal mass generation
   #
   # @return [BTAP::Structure] a BTAP building STRUCTURE (see logs if failed)
-  def assign_building_structure(model: nil, activity: nil)
-    @structure = BTAP::Structure.new(model, activity)
+  def assign_building_structure(model: nil, activity: nil, massive: true)
+    @structure = BTAP::Structure.new(model, activity, massive)
   end
 
   ##

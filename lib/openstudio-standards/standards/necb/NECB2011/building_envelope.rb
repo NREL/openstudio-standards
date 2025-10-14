@@ -974,6 +974,7 @@ class NECB2011
   #
   # 90.1-2007, 90.1-2010, 90.1-2013
   # @return [Boolean] returns true if successful, false if not
+
   def apply_standard_construction_properties(model:,
                                              runner: nil,
                                              # ext surfaces
@@ -1144,7 +1145,6 @@ class NECB2011
   # to this space type, overriding the whole-building construction set.
   #
   # @param model [OpenStudio::Model::Model] OpenStudio model object
-  #
   # @return [Boolean] returns true if successful, false if not
   def model_add_constructions(model)
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Started applying constructions')

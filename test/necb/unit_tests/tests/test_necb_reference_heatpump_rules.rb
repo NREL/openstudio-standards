@@ -71,6 +71,9 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
                 new_auto_zoner: false)
           elsif sys_number == 'sys4'
             model = standard.load_building_type_from_library(building_type: 'SmallOffice')
+
+            standard.assign_building_activity(model: model)
+            standard.assign_building_structure(model: model, activity: @activity, massive: false)
             standard.apply_weather_data(model: model, epw_file: 'CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
             standard.assign_building_activity(model: model)
             standard.assign_building_structure(model: model, activity: @activity)
@@ -272,6 +275,9 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
                 new_auto_zoner: false)
           elsif sys_number == 'sys4'
             model = standard.load_building_type_from_library(building_type: 'SmallOffice')
+
+            standard.assign_building_activity(model: model)
+            standard.assign_building_structure(model: model, activity: @activity, massive: false)
             standard.apply_weather_data(model: model, epw_file: 'CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
             standard.assign_building_activity(model: model) 
             standard.assign_building_structure(model: model, activity: @activity)
@@ -386,6 +392,9 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
                 new_auto_zoner: false)
           elsif sys_number == 'sys4'
             model = standard.load_building_type_from_library(building_type: 'SmallOffice')
+
+            standard.assign_building_activity(model: model)
+            standard.assign_building_structure(model: model, activity: @activity, massive: false)
             standard.apply_weather_data(model: model, epw_file: 'CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
             standard.assign_building_activity(model: model)
             standard.assign_building_structure(model: model, activity: @activity)
