@@ -2253,10 +2253,10 @@ OS:Curve:Biquadratic,
   0,                                       !- Coefficient4 y
   0,                                       !- Coefficient5 y**2
   0,                                       !- Coefficient6 x*y
-  12.77778,                                !- Minimum Value of x
-  23.88889,                                !- Maximum Value of x
-  21.11111,                                !- Minimum Value of y
-  46.11111,                                !- Maximum Value of y
+  10,                                      !- Minimum Value of x
+  30,                                      !- Maximum Value of x
+  -20,                                     !- Minimum Value of y
+  20,                                      !- Maximum Value of y
   0,                                       !- Minimum Curve Output
   1;                                       !- Maximum Curve Output
 
@@ -4220,7 +4220,7 @@ OS:PlantLoop,
   ,                                        !- Primary Plant Equipment Operation Scheme
   {00000000-0000-0000-0054-000000000047},  !- Loop Temperature Setpoint Node Name
   60,                                      !- Maximum Loop Temperature {C}
-  51.66667,                                !- Minimum Loop Temperature {C}
+  51.6666666666667,                        !- Minimum Loop Temperature {C}
   ,                                        !- Maximum Loop Flow Rate {m3/s}
   ,                                        !- Minimum Loop Flow Rate {m3/s}
   Autocalculate,                           !- Plant Loop Volume {m3}
@@ -4491,13 +4491,13 @@ OS:Schedule:Constant,
   {00000000-0000-0000-0066-000000000003},  !- Handle
   Schedule Constant 1,                     !- Name
   {00000000-0000-0000-0070-000000000007},  !- Schedule Type Limits Name
-  50;                                      !- Value
+  60;                                      !- Value
 
 OS:Schedule:Constant,
   {00000000-0000-0000-0066-000000000004},  !- Handle
   Schedule Constant 2,                     !- Name
   {00000000-0000-0000-0070-000000000007},  !- Schedule Type Limits Name
-  50;                                      !- Value
+  60;                                      !- Value
 
 OS:Schedule:Constant,
   {00000000-0000-0000-0066-000000000005},  !- Handle
@@ -6474,7 +6474,7 @@ OS:Sizing:Plant,
   {00000000-0000-0000-0083-000000000002},  !- Handle
   {00000000-0000-0000-0060-000000000002},  !- Plant or Condenser Loop Name
   Heating,                                 !- Loop Type
-  50,                                      !- Design Loop Exit Temperature {C}
+  60,                                      !- Design Loop Exit Temperature {C}
   5,                                       !- Loop Design Temperature Difference {deltaC}
   NonCoincident,                           !- Sizing Option
   1,                                       !- Zone Timesteps in Averaging Window
@@ -8087,7 +8087,7 @@ OS:WaterHeater:Sizing,
   {00000000-0000-0000-0103-000000000001},  !- WaterHeater Name
   PeakDraw,                                !- Design Mode
   0.538503,                                !- Time Storage Can Meet Peak Draw {hr}
-  0,                                       !- Time for Tank Recovery {hr}
+  0.5,                                     !- Time for Tank Recovery {hr}
   1;                                       !- Nominal Tank Volume for Autosizing Plant Connections {m3}
 
 OS:WaterUse:Connections,

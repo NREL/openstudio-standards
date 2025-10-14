@@ -36,7 +36,7 @@ OS:AirConditioner:VariableRefrigerantFlow,
   {00000000-0000-0000-0063-000000000002},  !- Availability Schedule
   50349.938167354,                         !- Gross Rated Total Cooling Capacity {W}
   4.28,                                    !- Gross Rated Cooling COP {W/W}
-  -5,                                      !- Minimum Outdoor Temperature in Cooling Mode {C}
+  -10,                                     !- Minimum Outdoor Temperature in Cooling Mode {C}
   43,                                      !- Maximum Outdoor Temperature in Cooling Mode {C}
   {00000000-0000-0000-0029-000000000028},  !- Cooling Capacity Ratio Modifier Function of Low Temperature Curve Name
   {00000000-0000-0000-0030-000000000016},  !- Cooling Capacity Ratio Boundary Curve Name
@@ -4199,7 +4199,7 @@ OS:PlantLoop,
   ,                                        !- Primary Plant Equipment Operation Scheme
   {00000000-0000-0000-0051-000000000034},  !- Loop Temperature Setpoint Node Name
   60,                                      !- Maximum Loop Temperature {C}
-  51.66667,                                !- Minimum Loop Temperature {C}
+  51.6666666666667,                        !- Minimum Loop Temperature {C}
   ,                                        !- Maximum Loop Flow Rate {m3/s}
   ,                                        !- Minimum Loop Flow Rate {m3/s}
   Autocalculate,                           !- Plant Loop Volume {m3}
@@ -7785,7 +7785,7 @@ OS:WaterHeater:Sizing,
   {00000000-0000-0000-0099-000000000001},  !- WaterHeater Name
   PeakDraw,                                !- Design Mode
   0.538503,                                !- Time Storage Can Meet Peak Draw {hr}
-  0,                                       !- Time for Tank Recovery {hr}
+  0.5,                                     !- Time for Tank Recovery {hr}
   1;                                       !- Nominal Tank Volume for Autosizing Plant Connections {m3}
 
 OS:WaterUse:Connections,

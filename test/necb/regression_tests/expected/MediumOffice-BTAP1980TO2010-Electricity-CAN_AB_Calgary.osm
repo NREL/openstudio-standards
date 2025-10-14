@@ -4142,41 +4142,41 @@ OS:EnergyManagementSystem:Actuator,
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0035-000000000001},  !- Handle
   ems_sys_6_mixed_shr_none_sh_c_e_sc_c_chw_ssf_vv_zh_b_e_zc_none_srf_vv__1_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {f7c5e122-8862-4b53-8b0a-dda8d8eb71fc}<23.9 && {f7c5e122-8862-4b53-8b0a-dda8d8eb71fc}>1.7, !- Program Line 1
-  SET {55f609ca-3804-483f-80ba-0f0465f7f4bc} = 29.4, !- Program Line 2
-  SET {ba9a7fb0-5b99-475b-afee-26d038185c01} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {f7c5e122-8862-4b53-8b0a-dda8d8eb71fc}<23.9 && {f7c5e122-8862-4b53-8b0a-dda8d8eb71fc}>1.7, !- Program Line 4
-  SET {55f609ca-3804-483f-80ba-0f0465f7f4bc} = 29.4, !- Program Line 5
-  SET {ba9a7fb0-5b99-475b-afee-26d038185c01} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {f7c5e122-8862-4b53-8b0a-dda8d8eb71fc}<23.9 && {f7c5e122-8862-4b53-8b0a-dda8d8eb71fc}>1.7, !- Program Line 7
-  SET {55f609ca-3804-483f-80ba-0f0465f7f4bc} = 29.4, !- Program Line 8
-  SET {ba9a7fb0-5b99-475b-afee-26d038185c01} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {f7c5e122-8862-4b53-8b0a-dda8d8eb71fc}<23.9 && {f7c5e122-8862-4b53-8b0a-dda8d8eb71fc}>1.7, !- Program Line 10
-  SET {55f609ca-3804-483f-80ba-0f0465f7f4bc} = 29.4, !- Program Line 11
-  SET {ba9a7fb0-5b99-475b-afee-26d038185c01} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {0ecb35e4-51e5-4491-93bd-465ac2b68100}<23.9 && {0ecb35e4-51e5-4491-93bd-465ac2b68100}>1.7, !- Program Line 1
+  SET {50336ff0-7385-4b52-9033-fa2f3507e7a4} = 29.4, !- Program Line 2
+  SET {6897da9c-0981-43b9-990e-9c2b7ab5a299} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {0ecb35e4-51e5-4491-93bd-465ac2b68100}<23.9 && {0ecb35e4-51e5-4491-93bd-465ac2b68100}>1.7, !- Program Line 4
+  SET {50336ff0-7385-4b52-9033-fa2f3507e7a4} = 29.4, !- Program Line 5
+  SET {6897da9c-0981-43b9-990e-9c2b7ab5a299} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {0ecb35e4-51e5-4491-93bd-465ac2b68100}<23.9 && {0ecb35e4-51e5-4491-93bd-465ac2b68100}>1.7, !- Program Line 7
+  SET {50336ff0-7385-4b52-9033-fa2f3507e7a4} = 29.4, !- Program Line 8
+  SET {6897da9c-0981-43b9-990e-9c2b7ab5a299} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {0ecb35e4-51e5-4491-93bd-465ac2b68100}<23.9 && {0ecb35e4-51e5-4491-93bd-465ac2b68100}>1.7, !- Program Line 10
+  SET {50336ff0-7385-4b52-9033-fa2f3507e7a4} = 29.4, !- Program Line 11
+  SET {6897da9c-0981-43b9-990e-9c2b7ab5a299} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {55f609ca-3804-483f-80ba-0f0465f7f4bc} = NULL, !- Program Line 14
-  SET {ba9a7fb0-5b99-475b-afee-26d038185c01} = NULL, !- Program Line 15
+  SET {50336ff0-7385-4b52-9033-fa2f3507e7a4} = NULL, !- Program Line 14
+  SET {6897da9c-0981-43b9-990e-9c2b7ab5a299} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0035-000000000002},  !- Handle
   ems_sys_6_mixed_shr_none_sh_c_e_sc_c_chw_ssf_vv_zh_b_e_zc_none_srf_vv__2_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {ae207be7-6ba0-4e7f-87f6-1e03892a1b59}<23.9 && {ae207be7-6ba0-4e7f-87f6-1e03892a1b59}>1.7, !- Program Line 1
-  SET {5d6d71d3-8af9-48e4-909f-20ece49c6209} = 29.4, !- Program Line 2
-  SET {9c3e1779-e0a7-41d7-9ee5-0d7bdeea70fe} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {ae207be7-6ba0-4e7f-87f6-1e03892a1b59}<23.9 && {ae207be7-6ba0-4e7f-87f6-1e03892a1b59}>1.7, !- Program Line 4
-  SET {5d6d71d3-8af9-48e4-909f-20ece49c6209} = 29.4, !- Program Line 5
-  SET {9c3e1779-e0a7-41d7-9ee5-0d7bdeea70fe} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {ae207be7-6ba0-4e7f-87f6-1e03892a1b59}<23.9 && {ae207be7-6ba0-4e7f-87f6-1e03892a1b59}>1.7, !- Program Line 7
-  SET {5d6d71d3-8af9-48e4-909f-20ece49c6209} = 29.4, !- Program Line 8
-  SET {9c3e1779-e0a7-41d7-9ee5-0d7bdeea70fe} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {ae207be7-6ba0-4e7f-87f6-1e03892a1b59}<23.9 && {ae207be7-6ba0-4e7f-87f6-1e03892a1b59}>1.7, !- Program Line 10
-  SET {5d6d71d3-8af9-48e4-909f-20ece49c6209} = 29.4, !- Program Line 11
-  SET {9c3e1779-e0a7-41d7-9ee5-0d7bdeea70fe} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {69b80aa7-9bd7-42a7-b272-e8a268f7b923}<23.9 && {69b80aa7-9bd7-42a7-b272-e8a268f7b923}>1.7, !- Program Line 1
+  SET {d668d458-2c0e-4edb-9f48-cef4d69e6174} = 29.4, !- Program Line 2
+  SET {0b3863a0-40cd-4bc2-ab46-ba750a449748} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {69b80aa7-9bd7-42a7-b272-e8a268f7b923}<23.9 && {69b80aa7-9bd7-42a7-b272-e8a268f7b923}>1.7, !- Program Line 4
+  SET {d668d458-2c0e-4edb-9f48-cef4d69e6174} = 29.4, !- Program Line 5
+  SET {0b3863a0-40cd-4bc2-ab46-ba750a449748} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {69b80aa7-9bd7-42a7-b272-e8a268f7b923}<23.9 && {69b80aa7-9bd7-42a7-b272-e8a268f7b923}>1.7, !- Program Line 7
+  SET {d668d458-2c0e-4edb-9f48-cef4d69e6174} = 29.4, !- Program Line 8
+  SET {0b3863a0-40cd-4bc2-ab46-ba750a449748} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {69b80aa7-9bd7-42a7-b272-e8a268f7b923}<23.9 && {69b80aa7-9bd7-42a7-b272-e8a268f7b923}>1.7, !- Program Line 10
+  SET {d668d458-2c0e-4edb-9f48-cef4d69e6174} = 29.4, !- Program Line 11
+  SET {0b3863a0-40cd-4bc2-ab46-ba750a449748} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {5d6d71d3-8af9-48e4-909f-20ece49c6209} = NULL, !- Program Line 14
-  SET {9c3e1779-e0a7-41d7-9ee5-0d7bdeea70fe} = NULL, !- Program Line 15
+  SET {d668d458-2c0e-4edb-9f48-cef4d69e6174} = NULL, !- Program Line 14
+  SET {0b3863a0-40cd-4bc2-ab46-ba750a449748} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:ProgramCallingManager,
@@ -6004,7 +6004,7 @@ OS:PlantLoop,
   ,                                        !- Primary Plant Equipment Operation Scheme
   {00000000-0000-0000-0049-000000000098},  !- Loop Temperature Setpoint Node Name
   60,                                      !- Maximum Loop Temperature {C}
-  51.66667,                                !- Minimum Loop Temperature {C}
+  51.6666666666667,                        !- Minimum Loop Temperature {C}
   ,                                        !- Maximum Loop Flow Rate {m3/s}
   ,                                        !- Minimum Loop Flow Rate {m3/s}
   Autocalculate,                           !- Plant Loop Volume {m3}
@@ -7163,7 +7163,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0061-000000000040},  !- Handle
   Schedule Day 3,                          !- Name
-  {00000000-0000-0000-0064-000000000008},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0064-000000000006},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -7391,7 +7391,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0061-000000000050},  !- Handle
   satCHW Temp 1,                           !- Name
-  {00000000-0000-0000-0064-000000000008},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0064-000000000006},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -7703,7 +7703,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0061-000000000054},  !- Handle
   sunCHW Temp 1,                           !- Name
-  {00000000-0000-0000-0064-000000000008},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0064-000000000006},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -8114,7 +8114,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0061-000000000067},  !- Handle
   wkdCHW Temp 1,                           !- Name
-  {00000000-0000-0000-0064-000000000008},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0064-000000000006},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -9021,7 +9021,7 @@ OS:Schedule:Ruleset,
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0063-000000000002},  !- Handle
   CHW Temp,                                !- Name
-  {00000000-0000-0000-0064-000000000008},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0064-000000000006},  !- Schedule Type Limits Name
   {00000000-0000-0000-0061-000000000040};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,
@@ -14451,7 +14451,7 @@ OS:WaterHeater:Sizing,
   {00000000-0000-0000-0094-000000000001},  !- WaterHeater Name
   PeakDraw,                                !- Design Mode
   0.538503,                                !- Time Storage Can Meet Peak Draw {hr}
-  0,                                       !- Time for Tank Recovery {hr}
+  1,                                       !- Time for Tank Recovery {hr}
   1;                                       !- Nominal Tank Volume for Autosizing Plant Connections {m3}
 
 OS:WaterUse:Connections,
@@ -15067,12 +15067,12 @@ OS:ZoneHVAC:EquipmentList,
   ALL_ST=Office - open plan_FL=Building Story 1_SCH=A 1 Zone HVAC Equipment List, !- Name
   {00000000-0000-0000-0090-000000000004},  !- Thermal Zone
   ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0006-000000000009},  !- Zone Equipment 1
+  {00000000-0000-0000-0102-000000000009},  !- Zone Equipment 1
   1,                                       !- Zone Equipment Cooling Sequence 1
   1,                                       !- Zone Equipment Heating or No-Load Sequence 1
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
   ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
-  {00000000-0000-0000-0102-000000000009},  !- Zone Equipment 2
+  {00000000-0000-0000-0006-000000000009},  !- Zone Equipment 2
   2,                                       !- Zone Equipment Cooling Sequence 2
   2,                                       !- Zone Equipment Heating or No-Load Sequence 2
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
@@ -15083,12 +15083,12 @@ OS:ZoneHVAC:EquipmentList,
   ALL_ST=Office - open plan_FL=Building Story 1_SCH=A 2 Zone HVAC Equipment List, !- Name
   {00000000-0000-0000-0090-000000000005},  !- Thermal Zone
   ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0006-000000000008},  !- Zone Equipment 1
+  {00000000-0000-0000-0102-000000000008},  !- Zone Equipment 1
   1,                                       !- Zone Equipment Cooling Sequence 1
   1,                                       !- Zone Equipment Heating or No-Load Sequence 1
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
   ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
-  {00000000-0000-0000-0102-000000000008},  !- Zone Equipment 2
+  {00000000-0000-0000-0006-000000000008},  !- Zone Equipment 2
   2,                                       !- Zone Equipment Cooling Sequence 2
   2,                                       !- Zone Equipment Heating or No-Load Sequence 2
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
@@ -15099,12 +15099,12 @@ OS:ZoneHVAC:EquipmentList,
   ALL_ST=Office - open plan_FL=Building Story 1_SCH=A 3 Zone HVAC Equipment List, !- Name
   {00000000-0000-0000-0090-000000000006},  !- Thermal Zone
   ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0006-000000000010},  !- Zone Equipment 1
+  {00000000-0000-0000-0102-000000000010},  !- Zone Equipment 1
   1,                                       !- Zone Equipment Cooling Sequence 1
   1,                                       !- Zone Equipment Heating or No-Load Sequence 1
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
   ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
-  {00000000-0000-0000-0102-000000000010},  !- Zone Equipment 2
+  {00000000-0000-0000-0006-000000000010},  !- Zone Equipment 2
   2,                                       !- Zone Equipment Cooling Sequence 2
   2,                                       !- Zone Equipment Heating or No-Load Sequence 2
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
@@ -15115,12 +15115,12 @@ OS:ZoneHVAC:EquipmentList,
   ALL_ST=Office - open plan_FL=Building Story 1_SCH=A 4 Zone HVAC Equipment List, !- Name
   {00000000-0000-0000-0090-000000000007},  !- Thermal Zone
   ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0006-000000000011},  !- Zone Equipment 1
+  {00000000-0000-0000-0102-000000000011},  !- Zone Equipment 1
   1,                                       !- Zone Equipment Cooling Sequence 1
   1,                                       !- Zone Equipment Heating or No-Load Sequence 1
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
   ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
-  {00000000-0000-0000-0102-000000000011},  !- Zone Equipment 2
+  {00000000-0000-0000-0006-000000000011},  !- Zone Equipment 2
   2,                                       !- Zone Equipment Cooling Sequence 2
   2,                                       !- Zone Equipment Heating or No-Load Sequence 2
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
@@ -15131,12 +15131,12 @@ OS:ZoneHVAC:EquipmentList,
   ALL_ST=Office - open plan_FL=Building Story 1_SCH=A Zone HVAC Equipment List, !- Name
   {00000000-0000-0000-0090-000000000008},  !- Thermal Zone
   ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0006-000000000001},  !- Zone Equipment 1
+  {00000000-0000-0000-0102-000000000001},  !- Zone Equipment 1
   1,                                       !- Zone Equipment Cooling Sequence 1
   1,                                       !- Zone Equipment Heating or No-Load Sequence 1
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
   ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
-  {00000000-0000-0000-0102-000000000001},  !- Zone Equipment 2
+  {00000000-0000-0000-0006-000000000001},  !- Zone Equipment 2
   2,                                       !- Zone Equipment Cooling Sequence 2
   2,                                       !- Zone Equipment Heating or No-Load Sequence 2
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
@@ -15147,12 +15147,12 @@ OS:ZoneHVAC:EquipmentList,
   ALL_ST=Office - open plan_FL=Building Story 2_SCH=A 1 Zone HVAC Equipment List, !- Name
   {00000000-0000-0000-0090-000000000009},  !- Thermal Zone
   ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0006-000000000002},  !- Zone Equipment 1
+  {00000000-0000-0000-0102-000000000002},  !- Zone Equipment 1
   1,                                       !- Zone Equipment Cooling Sequence 1
   1,                                       !- Zone Equipment Heating or No-Load Sequence 1
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
   ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
-  {00000000-0000-0000-0102-000000000002},  !- Zone Equipment 2
+  {00000000-0000-0000-0006-000000000002},  !- Zone Equipment 2
   2,                                       !- Zone Equipment Cooling Sequence 2
   2,                                       !- Zone Equipment Heating or No-Load Sequence 2
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
@@ -15163,12 +15163,12 @@ OS:ZoneHVAC:EquipmentList,
   ALL_ST=Office - open plan_FL=Building Story 2_SCH=A 2 Zone HVAC Equipment List, !- Name
   {00000000-0000-0000-0090-000000000010},  !- Thermal Zone
   ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0006-000000000015},  !- Zone Equipment 1
+  {00000000-0000-0000-0102-000000000015},  !- Zone Equipment 1
   1,                                       !- Zone Equipment Cooling Sequence 1
   1,                                       !- Zone Equipment Heating or No-Load Sequence 1
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
   ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
-  {00000000-0000-0000-0102-000000000015},  !- Zone Equipment 2
+  {00000000-0000-0000-0006-000000000015},  !- Zone Equipment 2
   2,                                       !- Zone Equipment Cooling Sequence 2
   2,                                       !- Zone Equipment Heating or No-Load Sequence 2
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
@@ -15179,12 +15179,12 @@ OS:ZoneHVAC:EquipmentList,
   ALL_ST=Office - open plan_FL=Building Story 2_SCH=A 3 Zone HVAC Equipment List, !- Name
   {00000000-0000-0000-0090-000000000011},  !- Thermal Zone
   ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0006-000000000013},  !- Zone Equipment 1
+  {00000000-0000-0000-0102-000000000013},  !- Zone Equipment 1
   1,                                       !- Zone Equipment Cooling Sequence 1
   1,                                       !- Zone Equipment Heating or No-Load Sequence 1
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
   ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
-  {00000000-0000-0000-0102-000000000013},  !- Zone Equipment 2
+  {00000000-0000-0000-0006-000000000013},  !- Zone Equipment 2
   2,                                       !- Zone Equipment Cooling Sequence 2
   2,                                       !- Zone Equipment Heating or No-Load Sequence 2
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
@@ -15195,12 +15195,12 @@ OS:ZoneHVAC:EquipmentList,
   ALL_ST=Office - open plan_FL=Building Story 2_SCH=A 4 Zone HVAC Equipment List, !- Name
   {00000000-0000-0000-0090-000000000012},  !- Thermal Zone
   ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0006-000000000014},  !- Zone Equipment 1
+  {00000000-0000-0000-0102-000000000014},  !- Zone Equipment 1
   1,                                       !- Zone Equipment Cooling Sequence 1
   1,                                       !- Zone Equipment Heating or No-Load Sequence 1
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
   ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
-  {00000000-0000-0000-0102-000000000014},  !- Zone Equipment 2
+  {00000000-0000-0000-0006-000000000014},  !- Zone Equipment 2
   2,                                       !- Zone Equipment Cooling Sequence 2
   2,                                       !- Zone Equipment Heating or No-Load Sequence 2
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
@@ -15211,12 +15211,12 @@ OS:ZoneHVAC:EquipmentList,
   ALL_ST=Office - open plan_FL=Building Story 2_SCH=A Zone HVAC Equipment List, !- Name
   {00000000-0000-0000-0090-000000000013},  !- Thermal Zone
   ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0006-000000000012},  !- Zone Equipment 1
+  {00000000-0000-0000-0102-000000000012},  !- Zone Equipment 1
   1,                                       !- Zone Equipment Cooling Sequence 1
   1,                                       !- Zone Equipment Heating or No-Load Sequence 1
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
   ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
-  {00000000-0000-0000-0102-000000000012},  !- Zone Equipment 2
+  {00000000-0000-0000-0006-000000000012},  !- Zone Equipment 2
   2,                                       !- Zone Equipment Cooling Sequence 2
   2,                                       !- Zone Equipment Heating or No-Load Sequence 2
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
@@ -15227,12 +15227,12 @@ OS:ZoneHVAC:EquipmentList,
   ALL_ST=Office - open plan_FL=Building Story 3_SCH=A 1 Zone HVAC Equipment List, !- Name
   {00000000-0000-0000-0090-000000000014},  !- Thermal Zone
   ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0006-000000000005},  !- Zone Equipment 1
+  {00000000-0000-0000-0102-000000000005},  !- Zone Equipment 1
   1,                                       !- Zone Equipment Cooling Sequence 1
   1,                                       !- Zone Equipment Heating or No-Load Sequence 1
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
   ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
-  {00000000-0000-0000-0102-000000000005},  !- Zone Equipment 2
+  {00000000-0000-0000-0006-000000000005},  !- Zone Equipment 2
   2,                                       !- Zone Equipment Cooling Sequence 2
   2,                                       !- Zone Equipment Heating or No-Load Sequence 2
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
@@ -15243,12 +15243,12 @@ OS:ZoneHVAC:EquipmentList,
   ALL_ST=Office - open plan_FL=Building Story 3_SCH=A 2 Zone HVAC Equipment List, !- Name
   {00000000-0000-0000-0090-000000000015},  !- Thermal Zone
   ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0006-000000000003},  !- Zone Equipment 1
+  {00000000-0000-0000-0102-000000000003},  !- Zone Equipment 1
   1,                                       !- Zone Equipment Cooling Sequence 1
   1,                                       !- Zone Equipment Heating or No-Load Sequence 1
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
   ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
-  {00000000-0000-0000-0102-000000000003},  !- Zone Equipment 2
+  {00000000-0000-0000-0006-000000000003},  !- Zone Equipment 2
   2,                                       !- Zone Equipment Cooling Sequence 2
   2,                                       !- Zone Equipment Heating or No-Load Sequence 2
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
@@ -15259,12 +15259,12 @@ OS:ZoneHVAC:EquipmentList,
   ALL_ST=Office - open plan_FL=Building Story 3_SCH=A 3 Zone HVAC Equipment List, !- Name
   {00000000-0000-0000-0090-000000000016},  !- Thermal Zone
   ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0006-000000000006},  !- Zone Equipment 1
+  {00000000-0000-0000-0102-000000000006},  !- Zone Equipment 1
   1,                                       !- Zone Equipment Cooling Sequence 1
   1,                                       !- Zone Equipment Heating or No-Load Sequence 1
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
   ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
-  {00000000-0000-0000-0102-000000000006},  !- Zone Equipment 2
+  {00000000-0000-0000-0006-000000000006},  !- Zone Equipment 2
   2,                                       !- Zone Equipment Cooling Sequence 2
   2,                                       !- Zone Equipment Heating or No-Load Sequence 2
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
@@ -15275,12 +15275,12 @@ OS:ZoneHVAC:EquipmentList,
   ALL_ST=Office - open plan_FL=Building Story 3_SCH=A 4 Zone HVAC Equipment List, !- Name
   {00000000-0000-0000-0090-000000000017},  !- Thermal Zone
   ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0006-000000000007},  !- Zone Equipment 1
+  {00000000-0000-0000-0102-000000000007},  !- Zone Equipment 1
   1,                                       !- Zone Equipment Cooling Sequence 1
   1,                                       !- Zone Equipment Heating or No-Load Sequence 1
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
   ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
-  {00000000-0000-0000-0102-000000000007},  !- Zone Equipment 2
+  {00000000-0000-0000-0006-000000000007},  !- Zone Equipment 2
   2,                                       !- Zone Equipment Cooling Sequence 2
   2,                                       !- Zone Equipment Heating or No-Load Sequence 2
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
@@ -15291,12 +15291,12 @@ OS:ZoneHVAC:EquipmentList,
   ALL_ST=Office - open plan_FL=Building Story 3_SCH=A Zone HVAC Equipment List, !- Name
   {00000000-0000-0000-0090-000000000018},  !- Thermal Zone
   ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0006-000000000004},  !- Zone Equipment 1
+  {00000000-0000-0000-0102-000000000004},  !- Zone Equipment 1
   1,                                       !- Zone Equipment Cooling Sequence 1
   1,                                       !- Zone Equipment Heating or No-Load Sequence 1
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
   ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
-  {00000000-0000-0000-0102-000000000004},  !- Zone Equipment 2
+  {00000000-0000-0000-0006-000000000004},  !- Zone Equipment 2
   2,                                       !- Zone Equipment Cooling Sequence 2
   2,                                       !- Zone Equipment Heating or No-Load Sequence 2
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2

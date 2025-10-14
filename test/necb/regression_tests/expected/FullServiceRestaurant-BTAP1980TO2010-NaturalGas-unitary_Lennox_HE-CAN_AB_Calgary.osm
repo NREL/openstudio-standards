@@ -100,40 +100,40 @@ OS:AirLoopHVAC:ZoneMixer,
   {00000000-0000-0000-0004-000000000001},  !- Handle
   Air Loop HVAC Zone Mixer 1,              !- Name
   {00000000-0000-0000-0016-000000000034},  !- Outlet Node Name
-  {00000000-0000-0000-0016-000000000049};  !- Inlet Node Name 1
+  {00000000-0000-0000-0016-000000000052};  !- Inlet Node Name 1
 
 OS:AirLoopHVAC:ZoneMixer,
   {00000000-0000-0000-0004-000000000002},  !- Handle
   Air Loop HVAC Zone Mixer 2,              !- Name
   {00000000-0000-0000-0016-000000000061},  !- Outlet Node Name
-  {00000000-0000-0000-0016-000000000076};  !- Inlet Node Name 1
+  {00000000-0000-0000-0016-000000000080};  !- Inlet Node Name 1
 
 OS:AirLoopHVAC:ZoneSplitter,
   {00000000-0000-0000-0005-000000000001},  !- Handle
   Air Loop HVAC Zone Splitter 1,           !- Name
   {00000000-0000-0000-0016-000000000033},  !- Inlet Node Name
-  {00000000-0000-0000-0016-000000000050};  !- Outlet Node Name 1
+  {00000000-0000-0000-0016-000000000053};  !- Outlet Node Name 1
 
 OS:AirLoopHVAC:ZoneSplitter,
   {00000000-0000-0000-0005-000000000002},  !- Handle
   Air Loop HVAC Zone Splitter 2,           !- Name
   {00000000-0000-0000-0016-000000000060},  !- Inlet Node Name
-  {00000000-0000-0000-0016-000000000077};  !- Outlet Node Name 1
+  {00000000-0000-0000-0016-000000000081};  !- Outlet Node Name 1
 
 OS:AirTerminal:SingleDuct:ConstantVolume:NoReheat,
   {00000000-0000-0000-0006-000000000001},  !- Handle
   Air Terminal Single Duct Constant Volume No Reheat 1, !- Name
   {00000000-0000-0000-0055-000000000001},  !- Availability Schedule Name
-  {00000000-0000-0000-0016-000000000051},  !- Air Inlet Node Name
-  {00000000-0000-0000-0016-000000000052},  !- Air Outlet Node Name
+  {00000000-0000-0000-0016-000000000054},  !- Air Inlet Node Name
+  {00000000-0000-0000-0016-000000000055},  !- Air Outlet Node Name
   AutoSize;                                !- Maximum Air Flow Rate {m3/s}
 
 OS:AirTerminal:SingleDuct:ConstantVolume:NoReheat,
   {00000000-0000-0000-0006-000000000002},  !- Handle
   Air Terminal Single Duct Constant Volume No Reheat 2, !- Name
   {00000000-0000-0000-0055-000000000001},  !- Availability Schedule Name
-  {00000000-0000-0000-0016-000000000078},  !- Air Inlet Node Name
-  {00000000-0000-0000-0016-000000000079},  !- Air Outlet Node Name
+  {00000000-0000-0000-0016-000000000082},  !- Air Inlet Node Name
+  {00000000-0000-0000-0016-000000000083},  !- Air Outlet Node Name
   AutoSize;                                !- Maximum Air Flow Rate {m3/s}
 
 OS:AvailabilityManager:NightCycle,
@@ -369,8 +369,8 @@ OS:Coil:Heating:Water:Baseboard,
   ,                                        !- U-Factor Times Area Value {W/K}
   ,                                        !- Maximum Water Flow Rate {m3/s}
   ,                                        !- Convergence Tolerance
-  {00000000-0000-0000-0016-000000000053},  !- Water Inlet Node Name
-  {00000000-0000-0000-0016-000000000054};  !- Water Outlet Node Name
+  {00000000-0000-0000-0016-000000000047},  !- Water Inlet Node Name
+  {00000000-0000-0000-0016-000000000048};  !- Water Outlet Node Name
 
 OS:Coil:Heating:Water:Baseboard,
   {00000000-0000-0000-0015-000000000002},  !- Handle
@@ -382,8 +382,8 @@ OS:Coil:Heating:Water:Baseboard,
   ,                                        !- U-Factor Times Area Value {W/K}
   ,                                        !- Maximum Water Flow Rate {m3/s}
   ,                                        !- Convergence Tolerance
-  {00000000-0000-0000-0016-000000000081},  !- Water Inlet Node Name
-  {00000000-0000-0000-0016-000000000082};  !- Water Outlet Node Name
+  {00000000-0000-0000-0016-000000000075},  !- Water Inlet Node Name
+  {00000000-0000-0000-0016-000000000076};  !- Water Outlet Node Name
 
 OS:Connection,
   {00000000-0000-0000-0016-000000000001},  !- Handle
@@ -709,66 +709,66 @@ OS:Connection,
 
 OS:Connection,
   {00000000-0000-0000-0016-000000000047},  !- Handle
-  {00000000-0000-0000-0043-000000000009},  !- Source Object
-  3,                                       !- Outlet Port
-  {00000000-0000-0000-0050-000000000004},  !- Target Object
-  2;                                       !- Inlet Port
-
-OS:Connection,
-  {00000000-0000-0000-0016-000000000048},  !- Handle
-  {00000000-0000-0000-0050-000000000006},  !- Source Object
-  2,                                       !- Outlet Port
-  {00000000-0000-0000-0043-000000000004},  !- Target Object
-  2;                                       !- Inlet Port
-
-OS:Connection,
-  {00000000-0000-0000-0016-000000000049},  !- Handle
-  {00000000-0000-0000-0043-000000000004},  !- Source Object
-  3,                                       !- Outlet Port
-  {00000000-0000-0000-0004-000000000001},  !- Target Object
-  3;                                       !- Inlet Port
-
-OS:Connection,
-  {00000000-0000-0000-0016-000000000050},  !- Handle
-  {00000000-0000-0000-0005-000000000001},  !- Source Object
-  3,                                       !- Outlet Port
-  {00000000-0000-0000-0043-000000000008},  !- Target Object
-  2;                                       !- Inlet Port
-
-OS:Connection,
-  {00000000-0000-0000-0016-000000000051},  !- Handle
-  {00000000-0000-0000-0043-000000000008},  !- Source Object
-  3,                                       !- Outlet Port
-  {00000000-0000-0000-0006-000000000001},  !- Target Object
-  3;                                       !- Inlet Port
-
-OS:Connection,
-  {00000000-0000-0000-0016-000000000052},  !- Handle
-  {00000000-0000-0000-0006-000000000001},  !- Source Object
-  4,                                       !- Outlet Port
-  {00000000-0000-0000-0043-000000000009},  !- Target Object
-  2;                                       !- Inlet Port
-
-OS:Connection,
-  {00000000-0000-0000-0016-000000000053},  !- Handle
   {00000000-0000-0000-0043-000000000014},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0015-000000000001},  !- Target Object
   9;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0016-000000000054},  !- Handle
+  {00000000-0000-0000-0016-000000000048},  !- Handle
   {00000000-0000-0000-0015-000000000001},  !- Source Object
   10,                                      !- Outlet Port
   {00000000-0000-0000-0043-000000000015},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0016-000000000055},  !- Handle
+  {00000000-0000-0000-0016-000000000049},  !- Handle
   {00000000-0000-0000-0043-000000000015},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0017-000000000002},  !- Target Object
   3;                                       !- Inlet Port
+
+OS:Connection,
+  {00000000-0000-0000-0016-000000000050},  !- Handle
+  {00000000-0000-0000-0043-000000000009},  !- Source Object
+  3,                                       !- Outlet Port
+  {00000000-0000-0000-0050-000000000004},  !- Target Object
+  2;                                       !- Inlet Port
+
+OS:Connection,
+  {00000000-0000-0000-0016-000000000051},  !- Handle
+  {00000000-0000-0000-0050-000000000006},  !- Source Object
+  2,                                       !- Outlet Port
+  {00000000-0000-0000-0043-000000000004},  !- Target Object
+  2;                                       !- Inlet Port
+
+OS:Connection,
+  {00000000-0000-0000-0016-000000000052},  !- Handle
+  {00000000-0000-0000-0043-000000000004},  !- Source Object
+  3,                                       !- Outlet Port
+  {00000000-0000-0000-0004-000000000001},  !- Target Object
+  3;                                       !- Inlet Port
+
+OS:Connection,
+  {00000000-0000-0000-0016-000000000053},  !- Handle
+  {00000000-0000-0000-0005-000000000001},  !- Source Object
+  3,                                       !- Outlet Port
+  {00000000-0000-0000-0043-000000000008},  !- Target Object
+  2;                                       !- Inlet Port
+
+OS:Connection,
+  {00000000-0000-0000-0016-000000000054},  !- Handle
+  {00000000-0000-0000-0043-000000000008},  !- Source Object
+  3,                                       !- Outlet Port
+  {00000000-0000-0000-0006-000000000001},  !- Target Object
+  3;                                       !- Inlet Port
+
+OS:Connection,
+  {00000000-0000-0000-0016-000000000055},  !- Handle
+  {00000000-0000-0000-0006-000000000001},  !- Source Object
+  4,                                       !- Outlet Port
+  {00000000-0000-0000-0043-000000000009},  !- Target Object
+  2;                                       !- Inlet Port
 
 OS:Connection,
   {00000000-0000-0000-0016-000000000056},  !- Handle
@@ -898,73 +898,73 @@ OS:Connection,
 
 OS:Connection,
   {00000000-0000-0000-0016-000000000074},  !- Handle
-  {00000000-0000-0000-0043-000000000011},  !- Source Object
-  3,                                       !- Outlet Port
-  {00000000-0000-0000-0050-000000000007},  !- Target Object
-  2;                                       !- Inlet Port
-
-OS:Connection,
-  {00000000-0000-0000-0016-000000000075},  !- Handle
-  {00000000-0000-0000-0050-000000000009},  !- Source Object
-  2,                                       !- Outlet Port
-  {00000000-0000-0000-0043-000000000006},  !- Target Object
-  2;                                       !- Inlet Port
-
-OS:Connection,
-  {00000000-0000-0000-0016-000000000076},  !- Handle
-  {00000000-0000-0000-0043-000000000006},  !- Source Object
-  3,                                       !- Outlet Port
-  {00000000-0000-0000-0004-000000000002},  !- Target Object
-  3;                                       !- Inlet Port
-
-OS:Connection,
-  {00000000-0000-0000-0016-000000000077},  !- Handle
-  {00000000-0000-0000-0005-000000000002},  !- Source Object
-  3,                                       !- Outlet Port
-  {00000000-0000-0000-0043-000000000010},  !- Target Object
-  2;                                       !- Inlet Port
-
-OS:Connection,
-  {00000000-0000-0000-0016-000000000078},  !- Handle
-  {00000000-0000-0000-0043-000000000010},  !- Source Object
-  3,                                       !- Outlet Port
-  {00000000-0000-0000-0006-000000000002},  !- Target Object
-  3;                                       !- Inlet Port
-
-OS:Connection,
-  {00000000-0000-0000-0016-000000000079},  !- Handle
-  {00000000-0000-0000-0006-000000000002},  !- Source Object
-  4,                                       !- Outlet Port
-  {00000000-0000-0000-0043-000000000011},  !- Target Object
-  2;                                       !- Inlet Port
-
-OS:Connection,
-  {00000000-0000-0000-0016-000000000080},  !- Handle
   {00000000-0000-0000-0018-000000000002},  !- Source Object
   4,                                       !- Outlet Port
   {00000000-0000-0000-0043-000000000016},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0016-000000000081},  !- Handle
+  {00000000-0000-0000-0016-000000000075},  !- Handle
   {00000000-0000-0000-0043-000000000016},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0015-000000000002},  !- Target Object
   9;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0016-000000000082},  !- Handle
+  {00000000-0000-0000-0016-000000000076},  !- Handle
   {00000000-0000-0000-0015-000000000002},  !- Source Object
   10,                                      !- Outlet Port
   {00000000-0000-0000-0043-000000000017},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
-  {00000000-0000-0000-0016-000000000083},  !- Handle
+  {00000000-0000-0000-0016-000000000077},  !- Handle
   {00000000-0000-0000-0043-000000000017},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0017-000000000002},  !- Target Object
   4;                                       !- Inlet Port
+
+OS:Connection,
+  {00000000-0000-0000-0016-000000000078},  !- Handle
+  {00000000-0000-0000-0043-000000000011},  !- Source Object
+  3,                                       !- Outlet Port
+  {00000000-0000-0000-0050-000000000007},  !- Target Object
+  2;                                       !- Inlet Port
+
+OS:Connection,
+  {00000000-0000-0000-0016-000000000079},  !- Handle
+  {00000000-0000-0000-0050-000000000009},  !- Source Object
+  2,                                       !- Outlet Port
+  {00000000-0000-0000-0043-000000000006},  !- Target Object
+  2;                                       !- Inlet Port
+
+OS:Connection,
+  {00000000-0000-0000-0016-000000000080},  !- Handle
+  {00000000-0000-0000-0043-000000000006},  !- Source Object
+  3,                                       !- Outlet Port
+  {00000000-0000-0000-0004-000000000002},  !- Target Object
+  3;                                       !- Inlet Port
+
+OS:Connection,
+  {00000000-0000-0000-0016-000000000081},  !- Handle
+  {00000000-0000-0000-0005-000000000002},  !- Source Object
+  3,                                       !- Outlet Port
+  {00000000-0000-0000-0043-000000000010},  !- Target Object
+  2;                                       !- Inlet Port
+
+OS:Connection,
+  {00000000-0000-0000-0016-000000000082},  !- Handle
+  {00000000-0000-0000-0043-000000000010},  !- Source Object
+  3,                                       !- Outlet Port
+  {00000000-0000-0000-0006-000000000002},  !- Target Object
+  3;                                       !- Inlet Port
+
+OS:Connection,
+  {00000000-0000-0000-0016-000000000083},  !- Handle
+  {00000000-0000-0000-0006-000000000002},  !- Source Object
+  4,                                       !- Outlet Port
+  {00000000-0000-0000-0043-000000000011},  !- Target Object
+  2;                                       !- Inlet Port
 
 OS:Connection,
   {00000000-0000-0000-0016-000000000084},  !- Handle
@@ -1216,8 +1216,8 @@ OS:Connector:Mixer,
   {00000000-0000-0000-0017-000000000002},  !- Handle
   Connector Mixer 2,                       !- Name
   {00000000-0000-0000-0016-000000000010},  !- Outlet Branch Name
-  {00000000-0000-0000-0016-000000000055},  !- Inlet Branch Name 1
-  {00000000-0000-0000-0016-000000000083};  !- Inlet Branch Name 2
+  {00000000-0000-0000-0016-000000000049},  !- Inlet Branch Name 1
+  {00000000-0000-0000-0016-000000000077};  !- Inlet Branch Name 2
 
 OS:Connector:Mixer,
   {00000000-0000-0000-0017-000000000003},  !- Handle
@@ -1247,7 +1247,7 @@ OS:Connector:Splitter,
   Connector Splitter 2,                    !- Name
   {00000000-0000-0000-0016-000000000008},  !- Inlet Branch Name
   {00000000-0000-0000-0016-000000000009},  !- Outlet Branch Name 1
-  {00000000-0000-0000-0016-000000000080};  !- Outlet Branch Name 2
+  {00000000-0000-0000-0016-000000000074};  !- Outlet Branch Name 2
 
 OS:Connector:Splitter,
   {00000000-0000-0000-0018-000000000003},  !- Handle
@@ -2594,8 +2594,8 @@ OS:Node,
 OS:Node,
   {00000000-0000-0000-0043-000000000004},  !- Handle
   ALL_ST=Dining - family space_FL=Building Story 1_SCH=B Return Air Node, !- Name
-  {00000000-0000-0000-0016-000000000048},  !- Inlet Port
-  {00000000-0000-0000-0016-000000000049};  !- Outlet Port
+  {00000000-0000-0000-0016-000000000051},  !- Inlet Port
+  {00000000-0000-0000-0016-000000000052};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0043-000000000005},  !- Handle
@@ -2606,8 +2606,8 @@ OS:Node,
 OS:Node,
   {00000000-0000-0000-0043-000000000006},  !- Handle
   ALL_ST=Food preparation_FL=Building Story 1_SCH=B Return Air Node, !- Name
-  {00000000-0000-0000-0016-000000000075},  !- Inlet Port
-  {00000000-0000-0000-0016-000000000076};  !- Outlet Port
+  {00000000-0000-0000-0016-000000000079},  !- Inlet Port
+  {00000000-0000-0000-0016-000000000080};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0043-000000000007},  !- Handle
@@ -2618,26 +2618,26 @@ OS:Node,
 OS:Node,
   {00000000-0000-0000-0043-000000000008},  !- Handle
   Air Terminal Single Duct Constant Volume No Reheat 1 Inlet Air Node, !- Name
-  {00000000-0000-0000-0016-000000000050},  !- Inlet Port
-  {00000000-0000-0000-0016-000000000051};  !- Outlet Port
+  {00000000-0000-0000-0016-000000000053},  !- Inlet Port
+  {00000000-0000-0000-0016-000000000054};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0043-000000000009},  !- Handle
   Air Terminal Single Duct Constant Volume No Reheat 1 Outlet Air Node, !- Name
-  {00000000-0000-0000-0016-000000000052},  !- Inlet Port
-  {00000000-0000-0000-0016-000000000047};  !- Outlet Port
+  {00000000-0000-0000-0016-000000000055},  !- Inlet Port
+  {00000000-0000-0000-0016-000000000050};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0043-000000000010},  !- Handle
   Air Terminal Single Duct Constant Volume No Reheat 2 Inlet Air Node, !- Name
-  {00000000-0000-0000-0016-000000000077},  !- Inlet Port
-  {00000000-0000-0000-0016-000000000078};  !- Outlet Port
+  {00000000-0000-0000-0016-000000000081},  !- Inlet Port
+  {00000000-0000-0000-0016-000000000082};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0043-000000000011},  !- Handle
   Air Terminal Single Duct Constant Volume No Reheat 2 Outlet Air Node, !- Name
-  {00000000-0000-0000-0016-000000000079},  !- Inlet Port
-  {00000000-0000-0000-0016-000000000074};  !- Outlet Port
+  {00000000-0000-0000-0016-000000000083},  !- Inlet Port
+  {00000000-0000-0000-0016-000000000078};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0043-000000000012},  !- Handle
@@ -2655,25 +2655,25 @@ OS:Node,
   {00000000-0000-0000-0043-000000000014},  !- Handle
   Coil Heating Water Baseboard 1 Inlet Water Node, !- Name
   {00000000-0000-0000-0016-000000000009},  !- Inlet Port
-  {00000000-0000-0000-0016-000000000053};  !- Outlet Port
+  {00000000-0000-0000-0016-000000000047};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0043-000000000015},  !- Handle
   Coil Heating Water Baseboard 1 Outlet Water Node, !- Name
-  {00000000-0000-0000-0016-000000000054},  !- Inlet Port
-  {00000000-0000-0000-0016-000000000055};  !- Outlet Port
+  {00000000-0000-0000-0016-000000000048},  !- Inlet Port
+  {00000000-0000-0000-0016-000000000049};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0043-000000000016},  !- Handle
   Coil Heating Water Baseboard 2 Inlet Water Node, !- Name
-  {00000000-0000-0000-0016-000000000080},  !- Inlet Port
-  {00000000-0000-0000-0016-000000000081};  !- Outlet Port
+  {00000000-0000-0000-0016-000000000074},  !- Inlet Port
+  {00000000-0000-0000-0016-000000000075};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0043-000000000017},  !- Handle
   Coil Heating Water Baseboard 2 Outlet Water Node, !- Name
-  {00000000-0000-0000-0016-000000000082},  !- Inlet Port
-  {00000000-0000-0000-0016-000000000083};  !- Outlet Port
+  {00000000-0000-0000-0016-000000000076},  !- Inlet Port
+  {00000000-0000-0000-0016-000000000077};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0043-000000000018},  !- Handle
@@ -3098,7 +3098,7 @@ OS:PlantLoop,
   ,                                        !- Primary Plant Equipment Operation Scheme
   {00000000-0000-0000-0043-000000000032},  !- Loop Temperature Setpoint Node Name
   60,                                      !- Maximum Loop Temperature {C}
-  51.66667,                                !- Minimum Loop Temperature {C}
+  51.6666666666667,                        !- Minimum Loop Temperature {C}
   ,                                        !- Maximum Loop Flow Rate {m3/s}
   ,                                        !- Minimum Loop Flow Rate {m3/s}
   Autocalculate,                           !- Plant Loop Volume {m3}
@@ -3138,7 +3138,7 @@ OS:PortList,
 OS:PortList,
   {00000000-0000-0000-0050-000000000004},  !- Handle
   {00000000-0000-0000-0086-000000000002},  !- HVAC Component
-  {00000000-0000-0000-0016-000000000047};  !- Port 1
+  {00000000-0000-0000-0016-000000000050};  !- Port 1
 
 OS:PortList,
   {00000000-0000-0000-0050-000000000005},  !- Handle
@@ -3147,12 +3147,12 @@ OS:PortList,
 OS:PortList,
   {00000000-0000-0000-0050-000000000006},  !- Handle
   {00000000-0000-0000-0086-000000000002},  !- HVAC Component
-  {00000000-0000-0000-0016-000000000048};  !- Port 1
+  {00000000-0000-0000-0016-000000000051};  !- Port 1
 
 OS:PortList,
   {00000000-0000-0000-0050-000000000007},  !- Handle
   {00000000-0000-0000-0086-000000000003},  !- HVAC Component
-  {00000000-0000-0000-0016-000000000074};  !- Port 1
+  {00000000-0000-0000-0016-000000000078};  !- Port 1
 
 OS:PortList,
   {00000000-0000-0000-0050-000000000008},  !- Handle
@@ -3161,7 +3161,7 @@ OS:PortList,
 OS:PortList,
   {00000000-0000-0000-0050-000000000009},  !- Handle
   {00000000-0000-0000-0086-000000000003},  !- HVAC Component
-  {00000000-0000-0000-0016-000000000075};  !- Port 1
+  {00000000-0000-0000-0016-000000000079};  !- Port 1
 
 OS:Pump:ConstantSpeed,
   {00000000-0000-0000-0051-000000000001},  !- Handle
@@ -6406,7 +6406,7 @@ OS:WaterHeater:Sizing,
   {00000000-0000-0000-0090-000000000001},  !- WaterHeater Name
   PeakDraw,                                !- Design Mode
   0.538503,                                !- Time Storage Can Meet Peak Draw {hr}
-  0,                                       !- Time for Tank Recovery {hr}
+  0.5,                                     !- Time for Tank Recovery {hr}
   1;                                       !- Nominal Tank Volume for Autosizing Plant Connections {m3}
 
 OS:WaterUse:Connections,
@@ -6527,12 +6527,12 @@ OS:ZoneHVAC:EquipmentList,
   ALL_ST=Dining - family space_FL=Building Story 1_SCH=B Zone HVAC Equipment List, !- Name
   {00000000-0000-0000-0086-000000000002},  !- Thermal Zone
   ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0006-000000000001},  !- Zone Equipment 1
+  {00000000-0000-0000-0098-000000000001},  !- Zone Equipment 1
   1,                                       !- Zone Equipment Cooling Sequence 1
   1,                                       !- Zone Equipment Heating or No-Load Sequence 1
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
   ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
-  {00000000-0000-0000-0098-000000000001},  !- Zone Equipment 2
+  {00000000-0000-0000-0006-000000000001},  !- Zone Equipment 2
   2,                                       !- Zone Equipment Cooling Sequence 2
   2,                                       !- Zone Equipment Heating or No-Load Sequence 2
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2
@@ -6543,12 +6543,12 @@ OS:ZoneHVAC:EquipmentList,
   ALL_ST=Food preparation_FL=Building Story 1_SCH=B Zone HVAC Equipment List, !- Name
   {00000000-0000-0000-0086-000000000003},  !- Thermal Zone
   ,                                        !- Load Distribution Scheme
-  {00000000-0000-0000-0006-000000000002},  !- Zone Equipment 1
+  {00000000-0000-0000-0098-000000000002},  !- Zone Equipment 1
   1,                                       !- Zone Equipment Cooling Sequence 1
   1,                                       !- Zone Equipment Heating or No-Load Sequence 1
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 1
   ,                                        !- Zone Equipment Sequential Heating Fraction Schedule Name 1
-  {00000000-0000-0000-0098-000000000002},  !- Zone Equipment 2
+  {00000000-0000-0000-0006-000000000002},  !- Zone Equipment 2
   2,                                       !- Zone Equipment Cooling Sequence 2
   2,                                       !- Zone Equipment Heating or No-Load Sequence 2
   ,                                        !- Zone Equipment Sequential Cooling Fraction Schedule Name 2

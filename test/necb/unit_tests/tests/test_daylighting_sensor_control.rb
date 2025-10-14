@@ -18,7 +18,7 @@ class NECB_Daylighting_Sensor_Control_Tests < Minitest::Test
     # File paths.
     @output_folder = File.join(__dir__, 'output/test_daylight_sensor')
     @expected_results_file = File.join(__dir__, '../expected_results/daylighting_expected_results.json')
-    @test_results_file = File.join(__dir__, '../expected_results/daylighting_test_results.json')
+    @test_results_file = File.join(__dir__, '../expected_results/daylighting-test_results.json')
 
     # Initial test condition
     @test_passed = true
