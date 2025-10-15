@@ -1,4 +1,5 @@
 require_relative '../../../../../openstudio-standards.rb'
+require_relative './BtapResults_test_helper'
 require 'minitest/autorun'
 require 'optparse'
 require 'fileutils'
@@ -302,7 +303,8 @@ class BTAPResults_Test < Minitest::Test
                                                    pv_ground_module_description: pv_ground_module_description,
                                                    ecm_system_zones_map_option: ecm_system_zones_map_option,
                                                    shw_scale: shw_scale,
-                                                   baseline_system_zones_map_option: baseline_system_zones_map_option)
+                                                   baseline_system_zones_map_option: baseline_system_zones_map_option,
+                                                   cached: true)
 
 
   end
@@ -359,120 +361,131 @@ class BTAPResults_Test < Minitest::Test
                                                      pv_ground_module_description: nil,
                                                      ecm_system_zones_map_option: nil,
                                                      shw_scale: nil,
-                                                     baseline_system_zones_map_option:)
+                                                     baseline_system_zones_map_option:,
+                                                     cached: true)
 
+    helper = BTAPResultsHelper.new(__FILE__)
+    model_name = "#{building_type}-#{template}-DefaultFuel-#{File.basename(epw_file, '.epw')}"  #NOTE: "primary_heating_fuel" has been set to "DefaultFuel" instead of 'FuelOilNo2' and its associated "model_name" has been changed in a way to use an expected result file that already exits on github.
     test_dir = "#{File.dirname(__FILE__)}/output"
-    if !Dir.exist?(test_dir)
-      Dir.mkdir(test_dir)
-    end
-
-    standard = Standard.build("#{template}")
-
-    if @test_file.nil?
-      # model_name = "#{building_type}-#{template}-#{File.basename(epw_file, '.epw')}"
-      model_name = "#{building_type}-#{template}-DefaultFuel-#{File.basename(epw_file, '.epw')}"  #NOTE: "primary_heating_fuel" has been set to "DefaultFuel" instead of 'FuelOilNo2' and its associated "model_name" has been changed in a way to use an expected result file that already exits on github.
-      puts model_name
-      run_dir = "#{test_dir}/#{model_name}"
-      if !Dir.exist?(run_dir)
-        Dir.mkdir(run_dir)
+    run_dir = "#{test_dir}/#{model_name}"
+    if !cached
+      if !Dir.exist?(test_dir)
+        Dir.mkdir(test_dir)
       end
-      #create standard model
-      model = standard.load_building_type_from_library(building_type: building_type)
-      standard.model_apply_standard(
-        model: model,
-        epw_file: epw_file,
-        sizing_run_dir: run_dir,
-        primary_heating_fuel: primary_heating_fuel,
-        dcv_type: dcv_type,
-        lights_type: lights_type,
-        lights_scale: lights_scale,
-        daylighting_type: daylighting_type,
-        ecm_system_name: ecm_system_name,
-        ecm_system_zones_map_option: ecm_system_zones_map_option,
-        erv_package: erv_package,
-        boiler_eff: boiler_eff,
-        unitary_cop: unitary_cop,
-        furnace_eff: furnace_eff,
-        shw_eff: shw_eff,
-        ext_wall_cond: ext_wall_cond,
-        ext_floor_cond: ext_floor_cond,
-        ext_roof_cond: ext_roof_cond,
-        ground_wall_cond: ground_wall_cond,
-        ground_floor_cond: ground_floor_cond,
-        ground_roof_cond: ground_roof_cond,
-        door_construction_cond: door_construction_cond,
-        fixed_window_cond: fixed_window_cond,
-        glass_door_cond: glass_door_cond,
-        overhead_door_cond: overhead_door_cond,
-        skylight_cond: skylight_cond,
-        glass_door_solar_trans: glass_door_solar_trans,
-        fixed_wind_solar_trans: fixed_window_solar_trans,
-        skylight_solar_trans: skylight_solar_trans,
-        rotation_degrees: rotation_degrees,
-        fdwr_set: fdwr_set,
-        srr_set: srr_set,
-        nv_type: nv_type,
-        nv_opening_fraction: nv_opening_fraction,
-        nv_temp_out_min: nv_temp_out_min,
-        nv_delta_temp_in_out: nv_delta_temp_in_out,
-        scale_x: scale_x,
-        scale_y: scale_y,
-        scale_z: scale_z,
-        pv_ground_type: pv_ground_type,
-        pv_ground_total_area_pv_panels_m2: pv_ground_total_area_pv_panels_m2,
-        pv_ground_tilt_angle: pv_ground_tilt_angle,
-        pv_ground_azimuth_angle: pv_ground_azimuth_angle,
-        pv_ground_module_description: pv_ground_module_description,
-        chiller_type: chiller_type,
-        occupancy_loads_scale: occupancy_loads_scale,
-        electrical_loads_scale: electrical_loads_scale,
-        oa_scale: oa_scale,
-        infiltration_scale: infiltration_scale,
-        output_variables: nil,
-        shw_scale: shw_scale,
-        output_meters: nil,
-        airloop_economizer_type: airloop_economizer_type,
-        baseline_system_zones_map_option: baseline_system_zones_map_option)
-    elsif !@test_output.nil?
-      model_name = @test_file
-      top_dir_element = /btap_costing/ =~ File.expand_path(File.dirname( __FILE__))
-      top_dir_name = File.expand_path(File.dirname(__FILE__))[0..(top_dir_element - 1)]
-      run_dir = top_dir_name + 'btap_costing/' + @test_output
-      in_file = top_dir_name + 'btap_costing' + @test_fold + @test_file
-      model = BTAP::FileIO.load_osm(in_file)
-      BTAP::Environment::WeatherFile.new(epw_file).set_weather_file(model)
+
+      standard = Standard.build("#{template}")
+
+      if @test_file.nil?
+        # model_name = "#{building_type}-#{template}-#{File.basename(epw_file, '.epw')}"
+        model_name = "#{building_type}-#{template}-DefaultFuel-#{File.basename(epw_file, '.epw')}"  #NOTE: "primary_heating_fuel" has been set to "DefaultFuel" instead of 'FuelOilNo2' and its associated "model_name" has been changed in a way to use an expected result file that already exits on github.
+        puts model_name
+        run_dir = "#{test_dir}/#{model_name}"
+        if !Dir.exist?(run_dir)
+          Dir.mkdir(run_dir)
+        end
+        #create standard model
+        model = standard.load_building_type_from_library(building_type: building_type)
+        standard.model_apply_standard(
+          model: model,
+          epw_file: epw_file,
+          sizing_run_dir: run_dir,
+          primary_heating_fuel: primary_heating_fuel,
+          dcv_type: dcv_type,
+          lights_type: lights_type,
+          lights_scale: lights_scale,
+          daylighting_type: daylighting_type,
+          ecm_system_name: ecm_system_name,
+          ecm_system_zones_map_option: ecm_system_zones_map_option,
+          erv_package: erv_package,
+          boiler_eff: boiler_eff,
+          unitary_cop: unitary_cop,
+          furnace_eff: furnace_eff,
+          shw_eff: shw_eff,
+          ext_wall_cond: ext_wall_cond,
+          ext_floor_cond: ext_floor_cond,
+          ext_roof_cond: ext_roof_cond,
+          ground_wall_cond: ground_wall_cond,
+          ground_floor_cond: ground_floor_cond,
+          ground_roof_cond: ground_roof_cond,
+          door_construction_cond: door_construction_cond,
+          fixed_window_cond: fixed_window_cond,
+          glass_door_cond: glass_door_cond,
+          overhead_door_cond: overhead_door_cond,
+          skylight_cond: skylight_cond,
+          glass_door_solar_trans: glass_door_solar_trans,
+          fixed_wind_solar_trans: fixed_window_solar_trans,
+          skylight_solar_trans: skylight_solar_trans,
+          rotation_degrees: rotation_degrees,
+          fdwr_set: fdwr_set,
+          srr_set: srr_set,
+          nv_type: nv_type,
+          nv_opening_fraction: nv_opening_fraction,
+          nv_temp_out_min: nv_temp_out_min,
+          nv_delta_temp_in_out: nv_delta_temp_in_out,
+          scale_x: scale_x,
+          scale_y: scale_y,
+          scale_z: scale_z,
+          pv_ground_type: pv_ground_type,
+          pv_ground_total_area_pv_panels_m2: pv_ground_total_area_pv_panels_m2,
+          pv_ground_tilt_angle: pv_ground_tilt_angle,
+          pv_ground_azimuth_angle: pv_ground_azimuth_angle,
+          pv_ground_module_description: pv_ground_module_description,
+          chiller_type: chiller_type,
+          occupancy_loads_scale: occupancy_loads_scale,
+          electrical_loads_scale: electrical_loads_scale,
+          oa_scale: oa_scale,
+          infiltration_scale: infiltration_scale,
+          output_variables: nil,
+          shw_scale: shw_scale,
+          output_meters: nil,
+          airloop_economizer_type: airloop_economizer_type,
+          baseline_system_zones_map_option: baseline_system_zones_map_option)
+      elsif !@test_output.nil?
+        model_name = @test_file
+        top_dir_element = /btap_costing/ =~ File.expand_path(File.dirname( __FILE__))
+        top_dir_name = File.expand_path(File.dirname(__FILE__))[0..(top_dir_element - 1)]
+        run_dir = top_dir_name + 'btap_costing/' + @test_output
+        in_file = top_dir_name + 'btap_costing' + @test_fold + @test_file
+        model = BTAP::FileIO.load_osm(in_file)
+        BTAP::Environment::WeatherFile.new(epw_file).set_weather_file(model)
+      else
+        model_name = @test_file
+        run_dir = "#{test_dir}/#{model_name[0..-5]}"
+        if !Dir.exist?(run_dir)
+          Dir.mkdir(run_dir)
+        end
+        top_dir_element = /btap_costing/ =~ File.expand_path(File.dirname( __FILE__))
+        top_dir_name = File.expand_path(File.dirname(__FILE__))[0..(top_dir_element - 1)]
+        in_file = top_dir_name + 'btap_costing' + @test_fold + @test_file
+        model = BTAP::FileIO.load_osm(in_file)
+        BTAP::Environment::WeatherFile.new(epw_file).set_weather_file(model)
+      end
+
+      if @test_output.nil?
+        #run model
+        standard.model_run_simulation_and_log_errors(model, run_dir)
+      end
+
+      model_out_path = "#{run_dir}/final.osm"
+      sql_path = "#{run_dir}/run/eplusout.sql"
+      #create osm file to use mimic PAT/OS server called final
+      model.save(model_out_path, true)
+      helper.cache_osm_and_sql(model_path: model_out_path, sql_path: sql_path)
+      post_analysis = BTAPDatapointAnalysis.new(
+        model: model, 
+        output_folder: run_dir, 
+        template: template,
+        standard: standard,
+        qaqc: nil)
     else
-      model_name = @test_file
-      run_dir = "#{test_dir}/#{model_name[0..-5]}"
-      if !Dir.exist?(run_dir)
-        Dir.mkdir(run_dir)
-      end
-      top_dir_element = /btap_costing/ =~ File.expand_path(File.dirname( __FILE__))
-      top_dir_name = File.expand_path(File.dirname(__FILE__))[0..(top_dir_element - 1)]
-      in_file = top_dir_name + 'btap_costing' + @test_fold + @test_file
-      model = BTAP::FileIO.load_osm(in_file)
-      BTAP::Environment::WeatherFile.new(epw_file).set_weather_file(model)
+      # Run the test with cached attributes
+      post_analysis = helper.get_analysis(output_folder: run_dir, template: template)
     end
 
-    if @test_output.nil?
-      #run model
-      standard.model_run_simulation_and_log_errors(model, run_dir)
-    end
-
-    # mimic the process of running this measure in OS App or PAT
-    model_out_path = "#{run_dir}/final.osm"
+    cost_result = post_analysis.run_costing
+    cost_result["openstudio-version"] = OpenstudioStandards::VERSION
     cost_result_json_path = "#{run_dir}/cost_results.json"
     cost_list_json_path = "#{run_dir}/btap_items.json"
-
-    #create osm file to use mimic PAT/OS server called final
-    model.save(model_out_path, true)
-
-    costing = BTAPCosting.new()
-
-    cost_result, _ = costing.cost_audit_all(model: model,
-                                         prototype_creator: standard,
-                                         template_type: template
-    )
 
     File.open(cost_result_json_path, 'w') {|f| f.write(JSON.pretty_generate(cost_result, :allow_nan => true))}
 
