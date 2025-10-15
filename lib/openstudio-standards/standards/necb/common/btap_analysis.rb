@@ -22,7 +22,10 @@ class BTAPAnalysis
       prototype_creator: @standard, 
       template_type: @template)
 
-    @qaqc[:costing_information] = cost_result
+    if not @qaqc.nil?
+      @qaqc[:costing_information] = cost_result
+    end
+
     File.open(File.join(@output_folder, 'cost_results.json'), 'w') do |f| 
       f.write(JSON.pretty_generate(cost_result, allow_nan: true))
     end
@@ -35,7 +38,10 @@ class BTAPAnalysis
     carbon = BTAPCarbon.new(@attributes)
     carbon_result = carbon.audit_embodied_carbon
 
-    @qaqc[:carbon_information] = carbon_result
+    if not @qaqc.nil?
+      @qaqc[:carbon_information] = carbon_result
+    end
+    
     File.open(File.join(@output_folder, 'carbon_results.json'), 'w') do |f| 
       f.write(JSON.pretty_generate(carbon_result, allow_nan: true))
     end
