@@ -3418,21 +3418,21 @@ OS:EnergyManagementSystem:Actuator,
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0034-000000000001},  !- Handle
   ems_sys_3_mixed_shr_none_sc_ashp_sh_ashp_c_e_ssf_cv_zh_b_e_zc_none_srf_none__3_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {928e17d7-6eff-4751-9e47-496a35405367}<23.9 && {928e17d7-6eff-4751-9e47-496a35405367}>1.7, !- Program Line 1
-  SET {86d7c2d6-8dc6-4138-be03-dd78d2fdf124} = 29.4, !- Program Line 2
-  SET {e213bc74-3a4a-469e-ab40-d5eea3a43286} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {928e17d7-6eff-4751-9e47-496a35405367}<23.9 && {928e17d7-6eff-4751-9e47-496a35405367}>1.7, !- Program Line 4
-  SET {86d7c2d6-8dc6-4138-be03-dd78d2fdf124} = 29.4, !- Program Line 5
-  SET {e213bc74-3a4a-469e-ab40-d5eea3a43286} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {928e17d7-6eff-4751-9e47-496a35405367}<23.9 && {928e17d7-6eff-4751-9e47-496a35405367}>1.7, !- Program Line 7
-  SET {86d7c2d6-8dc6-4138-be03-dd78d2fdf124} = 29.4, !- Program Line 8
-  SET {e213bc74-3a4a-469e-ab40-d5eea3a43286} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {928e17d7-6eff-4751-9e47-496a35405367}<23.9 && {928e17d7-6eff-4751-9e47-496a35405367}>1.7, !- Program Line 10
-  SET {86d7c2d6-8dc6-4138-be03-dd78d2fdf124} = 29.4, !- Program Line 11
-  SET {e213bc74-3a4a-469e-ab40-d5eea3a43286} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {a3f3d89e-4cee-461c-b6fd-6fd7505c548e}<23.9 && {a3f3d89e-4cee-461c-b6fd-6fd7505c548e}>1.7, !- Program Line 1
+  SET {9c785b87-83c6-4630-8d38-a994b385e0ff} = 29.4, !- Program Line 2
+  SET {6d6953a7-aa65-4512-acc8-30f514845a7e} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {a3f3d89e-4cee-461c-b6fd-6fd7505c548e}<23.9 && {a3f3d89e-4cee-461c-b6fd-6fd7505c548e}>1.7, !- Program Line 4
+  SET {9c785b87-83c6-4630-8d38-a994b385e0ff} = 29.4, !- Program Line 5
+  SET {6d6953a7-aa65-4512-acc8-30f514845a7e} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {a3f3d89e-4cee-461c-b6fd-6fd7505c548e}<23.9 && {a3f3d89e-4cee-461c-b6fd-6fd7505c548e}>1.7, !- Program Line 7
+  SET {9c785b87-83c6-4630-8d38-a994b385e0ff} = 29.4, !- Program Line 8
+  SET {6d6953a7-aa65-4512-acc8-30f514845a7e} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {a3f3d89e-4cee-461c-b6fd-6fd7505c548e}<23.9 && {a3f3d89e-4cee-461c-b6fd-6fd7505c548e}>1.7, !- Program Line 10
+  SET {9c785b87-83c6-4630-8d38-a994b385e0ff} = 29.4, !- Program Line 11
+  SET {6d6953a7-aa65-4512-acc8-30f514845a7e} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {86d7c2d6-8dc6-4138-be03-dd78d2fdf124} = NULL, !- Program Line 14
-  SET {e213bc74-3a4a-469e-ab40-d5eea3a43286} = NULL, !- Program Line 15
+  SET {9c785b87-83c6-4630-8d38-a994b385e0ff} = NULL, !- Program Line 14
+  SET {6d6953a7-aa65-4512-acc8-30f514845a7e} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:ProgramCallingManager,
@@ -4763,7 +4763,7 @@ OS:PlantLoop,
   ,                                        !- Primary Plant Equipment Operation Scheme
   {00000000-0000-0000-0047-000000000048},  !- Loop Temperature Setpoint Node Name
   60,                                      !- Maximum Loop Temperature {C}
-  51.6666666666667,                        !- Minimum Loop Temperature {C}
+  10,                                      !- Minimum Loop Temperature {C}
   ,                                        !- Maximum Loop Flow Rate {m3/s}
   ,                                        !- Minimum Loop Flow Rate {m3/s}
   Autocalculate,                           !- Plant Loop Volume {m3}
@@ -10081,7 +10081,7 @@ OS:WaterHeater:Sizing,
   {00000000-0000-0000-0092-000000000001},  !- WaterHeater Name
   PeakDraw,                                !- Design Mode
   0.538503,                                !- Time Storage Can Meet Peak Draw {hr}
-  1,                                       !- Time for Tank Recovery {hr}
+  0,                                       !- Time for Tank Recovery {hr}
   1;                                       !- Nominal Tank Volume for Autosizing Plant Connections {m3}
 
 OS:WaterUse:Connections,
