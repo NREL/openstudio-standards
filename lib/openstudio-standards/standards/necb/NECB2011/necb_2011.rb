@@ -448,6 +448,7 @@ class NECB2011 < Standard
                            airloop_fancoils_heating: nil,
                            oerd_utility_pricing: nil)
 
+    raise("Intentional break for electricly heated buildings. ") if primary_heating_fuel == 'Electricity'
     apply_weather_data(model: model,
                        epw_file: epw_file,
                        custom_weather_folder: custom_weather_folder,
