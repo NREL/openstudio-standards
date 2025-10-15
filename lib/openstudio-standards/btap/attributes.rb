@@ -133,6 +133,10 @@ module BTAP
 
           space.instance_variable_set(:@surfaces_hash, surfaces_hash)
 
+          if construction_set.nil?
+            next
+          end
+
           @surface_types.each do |surface_type|
             space.surfaces_hash[surface_type].each do |surface|
 
