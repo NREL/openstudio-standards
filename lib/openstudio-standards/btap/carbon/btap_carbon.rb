@@ -1,5 +1,5 @@
 class BTAPCarbon
-  def initialize(attributes)
+  def initialize(attributes:)
     @carbon_database  = {}
     @costing_database = CostingDatabase.instance
     @cp               = CommonPaths.instance

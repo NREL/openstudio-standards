@@ -25,6 +25,7 @@ module BTAP
   end
 
   class OpenStudio::Model::Space
+    attr_reader :construction_set
     attr_reader :surfaces_hash
   end
 
@@ -47,7 +48,7 @@ module BTAP
       @prototype_creator = prototype_creator
       @costing_database  = CostingDatabase.instance
 
-      # Surfaces considered for envelope costing and carbon
+      # Surfaces considered for envelope costing and carbon.
       @surface_types = [ 
         "ExteriorWall",
         "ExteriorRoof",

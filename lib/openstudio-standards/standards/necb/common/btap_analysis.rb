@@ -15,7 +15,7 @@ class BTAPAnalysis
   end
 
   def run_costing(costs_csv: @cp.costs_path, factors_csv: @cp.costs_local_factors_path)
-    costing = BTAPCosting.new(costs_csv: costs_csv, factors_csv: factors_csv)
+    costing = BTAPCosting.new(costs_csv: costs_csv, factors_csv: factors_csv, attributes: @attributes)
 
     cost_result, btap_items = costing.cost_audit_all(
       model: @model, 
@@ -35,7 +35,7 @@ class BTAPAnalysis
   end
 
   def run_carbon
-    carbon = BTAPCarbon.new(@attributes)
+    carbon = BTAPCarbon.new(attributes: @attributes)
     carbon_result = carbon.audit_embodied_carbon
 
     if not @qaqc.nil?
