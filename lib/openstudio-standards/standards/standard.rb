@@ -4,6 +4,7 @@
 # by a subclass, the implementation in the subclass is used.
 # @abstract
 class Standard
+  require_relative 'standards_data_wrapper'
   attr_reader :standards_data
   attr_reader :template
 
@@ -43,6 +44,31 @@ class Standard
   # set up template class variable.
   def initialize
     super()
+  end
+
+  # Ensure callers always get a wrapped, concise object for standards_data to avoid huge inspect dumps
+  def standards_data
+    if instance_variable_get(:@standards_data).is_a?(StandardsDataWrapper)
+      instance_variable_get(:@standards_data)
+    else
+      StandardsDataWrapper.new(instance_variable_get(:@standards_data) || {})
+    end
+  end
+
+  protected
+
+  # Allow subclasses to set the raw standards data (they may still set @standards_data directly).
+  def standards_data=(data)
+    instance_variable_set(:@standards_data, data)
+  end
+
+  # Provide a compact inspect so exceptions don't print the full object graph
+  def inspect
+    "#<Standard template=#{template.inspect}>"
+  end
+
+  def to_s
+    inspect
   end
 
   # Get the name of the building type used in lookups
@@ -130,6 +156,8 @@ class Standard
     if @standards_data.keys.empty?
       OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.standard', "OpenStudio Standards JSON data was not loaded correctly for #{template}.")
     end
-    return @standards_data
+
+    # Wrap the loaded data to avoid huge inspect dumps in test failures or exceptions
+    return StandardsDataWrapper.new(@standards_data)
   end
 end
