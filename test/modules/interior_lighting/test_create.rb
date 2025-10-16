@@ -2,7 +2,6 @@ require_relative '../../helpers/minitest_helper'
 
 class TestInteriorLightingCreate < Minitest::Test
   def setup
-    @create = OpenstudioStandards::CreateTypical
     @int = OpenstudioStandards::InteriorLighting
   end
 
@@ -30,39 +29,11 @@ class TestInteriorLightingCreate < Minitest::Test
     model = std.safe_load_model("#{__dir__}/../../../data/geometry/ASHRAEPrimarySchool.osm")
     OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
 
-    # assign lighting space types
-    model.getSpaceTypes.each do |space_type|
-      case space_type.standardsSpaceType.get.to_s
-      when 'Office'
-        lighting_space_type = 'office_enclosed_lighting'
-      when 'Lobby'
-        lighting_space_type = 'lobby_lighting'
-      when 'Gym'
-        lighting_space_type = 'playing_area_lighting'
-      when 'Mechanical'
-        lighting_space_type = 'electrical_mechanical_lighting'
-      when 'Cafeteria'
-        lighting_space_type = 'dining_cafeteria_fast_food_general_lighting'
-      when 'Kitchen'
-        lighting_space_type = 'food_preparation_lighting'
-      when 'Restroom'
-        lighting_space_type = 'restroom_lighting'
-      when 'Corridor'
-        lighting_space_type = 'corridor_lighting'
-      when 'Classroom'
-        lighting_space_type = 'classroom_lecture_training_lighting'
-      when 'ComputerRoom'
-        lighting_space_type = 'workshop_lighting'
-      when 'Library'
-        lighting_space_type = 'library_reading_area_lighting'
-      end
-      space_type.additionalProperties.setFeature('lighting_space_type', lighting_space_type)
-    end
-
+    # set lighting space types
+    std.prototype_space_type_map(model, set_additional_properties: true)
     result = @int.create_typical_interior_lighting(model, lighting_generation: 'gen4_led')
     assert(11, result.size)
     space_type = model.getSpaceTypeByName('PrimarySchool Cafeteria').get
-
     space_type_floor_area = space_type.floorArea
     space_type_number_of_people = space_type.getNumberOfPeople(space_type_floor_area)
     ending_space_type_lighting_power = space_type.getLightingPower(space_type_floor_area, space_type_number_of_people)
