@@ -121,7 +121,7 @@ class BTAPResults_Test < Minitest::Test
                                                    building_type: building_type,
                                                    lights_type: lights_type,
                                                    lights_scale: lights_scale,
-                                                   cached: true)
+                                                   cached: BTAPResultsHelper.cached)
 
 
   end

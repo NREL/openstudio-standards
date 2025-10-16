@@ -126,7 +126,7 @@ class BTAPResults_Test < Minitest::Test
                                                    nv_opening_fraction: nv_opening_fraction,
                                                    nv_temp_out_min: nv_temp_out_min,
                                                    nv_delta_temp_in_out: nv_delta_temp_in_out,
-                                                   cached: true)
+                                                   cached: BTAPResultsHelper.cached)
 
 
   end

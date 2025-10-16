@@ -5,6 +5,7 @@ require 'open3'
 require 'minitest/autorun'
 require 'json'
 require_relative './parallel_tests'
+require_relative './btap_results/tests/BtapResults_test_helper' # Required for the cached switch
 TestListFile = File.join(File.dirname(__FILE__), 'test_list.txt')
 
 class RunAllTests < Minitest::Test

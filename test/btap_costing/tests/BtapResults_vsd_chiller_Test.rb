@@ -117,7 +117,7 @@ class BTAPResults_Test < Minitest::Test
                                                    template: template,
                                                    building_type: building_type,
                                                    chiller_type: chiller_type,
-                                                   cached: true)
+                                                   cached: BTAPResultsHelper.cached)
 
 
   end

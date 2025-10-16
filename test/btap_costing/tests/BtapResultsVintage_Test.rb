@@ -130,7 +130,7 @@ class BTAPResults_Test < Minitest::Test
                                                    lights_type: lights_type,
                                                    lights_scale: lights_scale,
                                                    baseline_system_zones_map_option: baseline_system_zones_map_option,
-                                                   cached: true)
+                                                   cached: BTAPResultsHelper.cached)
 
 
   end

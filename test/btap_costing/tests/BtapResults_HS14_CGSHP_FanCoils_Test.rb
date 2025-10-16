@@ -120,7 +120,7 @@ class BTAPResults_HS14_Test < Minitest::Test
                                                    building_type: building_type,
                                                    primary_heating_fuel: primary_heating_fuel,
                                                    ecm_system_name: ecm_system_name,
-                                                   cached: true)
+                                                   cached: BTAPResultsHelper.cached)
 
 
   end

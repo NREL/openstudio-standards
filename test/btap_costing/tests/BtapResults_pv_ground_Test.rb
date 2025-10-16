@@ -125,7 +125,7 @@ class BTAPResults_Test < Minitest::Test
                                                    pv_ground_tilt_angle: pv_ground_tilt_angle,
                                                    pv_ground_azimuth_angle: pv_ground_azimuth_angle,
                                                    pv_ground_module_description: pv_ground_module_description,
-                                                   cached: true)
+                                                   cached: BTAPResultsHelper.cached)
 
 
   end

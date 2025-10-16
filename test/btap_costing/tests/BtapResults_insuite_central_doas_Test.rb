@@ -118,7 +118,7 @@ class BTAPResults_Test < Minitest::Test
                                                    template: template,
                                                    building_type: building_type,
                                                    baseline_system_zones_map_option: baseline_system_zones_map_option,
-                                                   cached: true)
+                                                   cached: BTAPResultsHelper.cached)
 
 
   end

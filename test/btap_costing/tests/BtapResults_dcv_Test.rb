@@ -119,7 +119,7 @@ class BTAPResults_Test < Minitest::Test
                                                    template: template,
                                                    building_type: building_type,
                                                    dcv_type: dcv_type,
-                                                   cached: true)
+                                                   cached: BTAPResultsHelper.cached)
 
 
   end

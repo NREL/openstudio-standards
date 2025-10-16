@@ -169,7 +169,7 @@ class BTAPResults_Test < Minitest::Test
                                                    furnace_eff: furnace_eff,
                                                    unitary_cop: unitary_cop,
                                                    shw_eff: shw_eff,
-                                                   cached: true)
+                                                   cached: BTAPResultsHelper.cached)
 
 
   end

@@ -304,7 +304,7 @@ class BTAPResults_Test < Minitest::Test
                                                    ecm_system_zones_map_option: ecm_system_zones_map_option,
                                                    shw_scale: shw_scale,
                                                    baseline_system_zones_map_option: baseline_system_zones_map_option,
-                                                   cached: true)
+                                                   cached: BTAPResultsHelper.cached)
 
 
   end
