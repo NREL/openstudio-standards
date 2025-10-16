@@ -98,8 +98,6 @@ class BTAPCarbon
   end
 
   def audit_embodied_carbon
-    total_emissions = 0
-
     @attributes.surface_types.each do |surface_type|
       @carbon_report["#{surface_type.underscore}_area_m2"] = 0.0
       @carbon_report["#{surface_type.underscore}_carbon"] = 0.0
@@ -128,12 +126,15 @@ class BTAPCarbon
           # Calculate the carbon emissions
           @carbon_report["#{surface_type.underscore}_carbon"] = \
             (@carbon_report["#{surface_type.underscore}_carbon"] + emissions).round(2)
-          
-          total_emissions += @carbon_report["#{surface_type.underscore}_carbon"]
         end
       end
     end
     csv_report.close
+    # Get the total emissions from all the surface types.
+    total_emissions = 0
+    @attributes.surface_types.each do |surface_type|
+      total_emissions += @carbon_report["#{surface_type.underscore}_carbon"]
+    end
     @carbon_report["total"] = total_emissions
     return @carbon_report
   end
