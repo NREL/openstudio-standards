@@ -26,6 +26,10 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/infiltration/infiltration'
   require_relative 'openstudio-standards/infiltration/nist_infiltration'
 
+  # Interior Lighting Module
+  require_relative 'openstudio-standards/interior_lighting/create_lights'
+  require_relative 'openstudio-standards/interior_lighting/create_typical_interior_lighting'
+
   # Daylighting Module
   require_relative 'openstudio-standards/daylighting/space'
 
