@@ -136,7 +136,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   LargeDataCenterHighITE,                 !- Standards Building Type
-  datacenter/low ite;      !- Standards Space Type
+  datacenter/high ite;      !- Standards Space Type
 
 OS:ThermalZone,
   {46a2286d-ca49-4b83-8152-08512e95caf2}, !- Handle

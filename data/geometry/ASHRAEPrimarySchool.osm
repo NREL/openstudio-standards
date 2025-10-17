@@ -6896,7 +6896,7 @@ OS:SpaceType,
   {5523923f-6128-48f7-b361-279399792ff5}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   PrimarySchool,                          !- Standards Building Type
-  datacenter/low ite;      !- Standards Space Type
+  classroom/lecture/training;      !- Standards Space Type
 
 OS:Rendering:Color,
   {5523923f-6128-48f7-b361-279399792ff5}, !- Handle

@@ -26085,7 +26085,7 @@ OS:SpaceType,
   {7c5445bf-2701-417f-a75b-fd2c3782f7f8}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Courthouse,                             !- Standards Building Type
-  lounge/breakroom;      !- Standards Space Type
+  lobby;      !- Standards Space Type
 
 OS:Rendering:Color,
   {7c5445bf-2701-417f-a75b-fd2c3782f7f8}, !- Handle
@@ -26119,7 +26119,7 @@ OS:SpaceType,
   {afd56ee2-d95b-48dc-bb6b-7ba0710ae462}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Courthouse,                             !- Standards Building Type
-  lobby;      !- Standards Space Type
+  shaft;      !- Standards Space Type
 
 OS:Rendering:Color,
   {afd56ee2-d95b-48dc-bb6b-7ba0710ae462}, !- Handle
@@ -26187,7 +26187,7 @@ OS:SpaceType,
   {12a096b5-c1e9-4e3d-9a1c-c10e0500a9b8}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Courthouse,                             !- Standards Building Type
-  retail;      !- Standards Space Type
+  conference/meeting/multipurpose;      !- Standards Space Type
 
 OS:Rendering:Color,
   {12a096b5-c1e9-4e3d-9a1c-c10e0500a9b8}, !- Handle

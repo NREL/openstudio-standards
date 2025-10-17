@@ -14612,7 +14612,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   College,                                !- Standards Building Type
-  lobby;      !- Standards Space Type
+  shaft;      !- Standards Space Type
 
 OS:Rendering:Color,
   {eb36a302-13c5-40d5-83b1-f582d55ea6ec}, !- Handle
@@ -20323,7 +20323,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   College,                                !- Standards Building Type
-  lobby;      !- Standards Space Type
+  classroom/lecture/training;      !- Standards Space Type
 
 OS:Rendering:Color,
   {555e9fcd-367f-4c24-a355-b4c26ca8b615}, !- Handle

@@ -13690,7 +13690,7 @@ OS:SpaceType,
   {27d027f7-2a45-4c89-a187-5aae2be88f12}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SecondarySchool,                        !- Standards Building Type
-  datacenter/low ite;      !- Standards Space Type
+  classroom/lecture/training;      !- Standards Space Type
 
 OS:Rendering:Color,
   {27d027f7-2a45-4c89-a187-5aae2be88f12}, !- Handle
