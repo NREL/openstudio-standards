@@ -2027,7 +2027,7 @@ OS:SpaceType,
   {1ae07daf-5bd4-486f-9e1c-6802de433785}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SuperMarket,                            !- Standards Building Type
-  Sales;                                  !- Standards Space Type
+  retail;      !- Standards Space Type
 
 OS:Rendering:Color,
   {ecb548af-f353-4b26-b9c6-a1416bd565d2}, !- Handle
@@ -2044,7 +2044,7 @@ OS:SpaceType,
   {84fe7a3a-9487-439f-aceb-8a7d41ad4bbf}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SuperMarket,                            !- Standards Building Type
-  Produce;                                !- Standards Space Type
+  retail;      !- Standards Space Type
 
 OS:Rendering:Color,
   {651fc774-28aa-4409-84d3-4126e05a54b2}, !- Handle
@@ -2061,7 +2061,7 @@ OS:SpaceType,
   {57ec9698-3b85-45db-89ef-8db7f5fcb2e4}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SuperMarket,                            !- Standards Building Type
-  Deli;                                   !- Standards Space Type
+  retail;      !- Standards Space Type
 
 OS:Rendering:Color,
   {a9042189-0934-4921-90cb-c9afb666da7b}, !- Handle
@@ -2078,7 +2078,7 @@ OS:SpaceType,
   {3fd7f60b-3ccb-41e9-9060-c4037f8c5f99}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SuperMarket,                            !- Standards Building Type
-  Bakery;                                 !- Standards Space Type
+  food preparation;      !- Standards Space Type
 
 OS:Rendering:Color,
   {367065fb-924a-430d-a63d-7e3f0a5eb592}, !- Handle
@@ -2095,7 +2095,7 @@ OS:SpaceType,
   {84362cb1-33b5-40b1-a2d9-2703bd689c96}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SuperMarket,                            !- Standards Building Type
-  Office;                                 !- Standards Space Type
+  office;      !- Standards Space Type
 
 OS:Rendering:Color,
   {e70e0639-d8d4-4133-98da-44f850867be3}, !- Handle
@@ -2112,7 +2112,7 @@ OS:SpaceType,
   {56e5e7ff-0674-4534-843c-922f050bc52d}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SuperMarket,                            !- Standards Building Type
-  Meeting;                                !- Standards Space Type
+  conference/meeting/multipurpose;      !- Standards Space Type
 
 OS:Rendering:Color,
   {5fafb310-7e4d-4286-9d88-cdea90ef634b}, !- Handle
@@ -2129,7 +2129,7 @@ OS:SpaceType,
   {b83e4b82-c5dc-421b-91d9-914e46793fc4}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SuperMarket,                            !- Standards Building Type
-  Dining;                                 !- Standards Space Type
+  dining;      !- Standards Space Type
 
 OS:Rendering:Color,
   {0f4147c6-ed90-44e8-8d5e-91e4623ca5ee}, !- Handle
@@ -2146,7 +2146,7 @@ OS:SpaceType,
   {704b3fcf-2856-4ed1-9db6-679aae8ce02e}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SuperMarket,                            !- Standards Building Type
-  Restroom;                               !- Standards Space Type
+  restroom;      !- Standards Space Type
 
 OS:Rendering:Color,
   {39ca94d3-8ecc-4d0c-9f9d-527e72ad1f56}, !- Handle
@@ -2163,7 +2163,7 @@ OS:SpaceType,
   {ef6da368-3d45-4fbb-aea3-44e65e161773}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SuperMarket,                            !- Standards Building Type
-  Elec/MechRoom;                          !- Standards Space Type
+  electrical/mechanical;      !- Standards Space Type
 
 OS:Rendering:Color,
   {3355683a-baf8-41e8-bf16-16e57def1fb4}, !- Handle
@@ -2180,7 +2180,7 @@ OS:SpaceType,
   {e929e980-8d62-4a6f-90ff-c2aff3c89dfc}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SuperMarket,                            !- Standards Building Type
-  Corridor;                               !- Standards Space Type
+  corridor;      !- Standards Space Type
 
 OS:Rendering:Color,
   {fc78297d-857b-4de7-98fe-949d2cecc4b3}, !- Handle
@@ -2197,7 +2197,7 @@ OS:SpaceType,
   {122525b6-6325-4b96-90a2-f916ee284ba1}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SuperMarket,                            !- Standards Building Type
-  Vestibule;                              !- Standards Space Type
+  lobby;      !- Standards Space Type
 
 OS:Rendering:Color,
   {56d89051-dd95-408e-8e83-2729dc3e14e7}, !- Handle
@@ -2214,7 +2214,7 @@ OS:SpaceType,
   {4eeb8088-1858-4a87-bffe-930a4088ba20}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   SuperMarket,                            !- Standards Building Type
-  DryStorage;                             !- Standards Space Type
+  storage;      !- Standards Space Type
 
 OS:Rendering:Color,
   {08a9d0dd-c052-4893-a56a-b95ee0e4c5f6}, !- Handle

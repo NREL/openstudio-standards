@@ -21438,7 +21438,7 @@ OS:SpaceType,
   {507a5052-c6fa-4e80-96ea-d8413460cc49}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   HighriseApartment,                      !- Standards Building Type
-  Office;                                 !- Standards Space Type
+  office;      !- Standards Space Type
 
 OS:Rendering:Color,
   {507a5052-c6fa-4e80-96ea-d8413460cc49}, !- Handle
@@ -21455,7 +21455,7 @@ OS:SpaceType,
   {de34b478-3803-4e06-a6b0-94fb668f99b0}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   HighriseApartment,                      !- Standards Building Type
-  Corridor;                               !- Standards Space Type
+  corridor;      !- Standards Space Type
 
 OS:Rendering:Color,
   {de34b478-3803-4e06-a6b0-94fb668f99b0}, !- Handle
@@ -21472,7 +21472,7 @@ OS:SpaceType,
   {3a0f162a-46fe-45d9-8a9b-011bcdf88e16}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   HighriseApartment,                      !- Standards Building Type
-  Corridor_topfloor;                      !- Standards Space Type
+  corridor;      !- Standards Space Type
 
 OS:Rendering:Color,
   {3a0f162a-46fe-45d9-8a9b-011bcdf88e16}, !- Handle
@@ -21489,7 +21489,7 @@ OS:SpaceType,
   {69c18cae-9d2f-4864-9c57-e3dd9c93faac}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   HighriseApartment,                      !- Standards Building Type
-  Apartment;                              !- Standards Space Type
+  dwelling unit;      !- Standards Space Type
 
 OS:Rendering:Color,
   {69c18cae-9d2f-4864-9c57-e3dd9c93faac}, !- Handle
@@ -21506,7 +21506,7 @@ OS:SpaceType,
   {13d8edca-f17b-4a9f-8402-de08ca4175c3}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   HighriseApartment,                      !- Standards Building Type
-  Apartment_topfloor_WE;                  !- Standards Space Type
+  dwelling unit;      !- Standards Space Type
 
 OS:Rendering:Color,
   {13d8edca-f17b-4a9f-8402-de08ca4175c3}, !- Handle
@@ -21523,7 +21523,7 @@ OS:SpaceType,
   {4b81ad58-3059-4888-a5f0-4667974bbc33}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   HighriseApartment,                      !- Standards Building Type
-  Apartment_topfloor_NS;                  !- Standards Space Type
+  dwelling unit;      !- Standards Space Type
 
 OS:Rendering:Color,
   {4b81ad58-3059-4888-a5f0-4667974bbc33}, !- Handle

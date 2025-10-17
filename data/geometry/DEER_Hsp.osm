@@ -6100,7 +6100,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hsp,                                    !- Standards Building Type
-  Dining;                                 !- Standards Space Type
+  dining;      !- Standards Space Type
 
 OS:SpaceType,
   {67cdaa04-0ed8-45fc-9d5b-aede2c022071}, !- Handle
@@ -6110,7 +6110,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hsp,                                    !- Standards Building Type
-  HspSurgOutptLab;                        !- Standards Space Type
+  laboratory;      !- Standards Space Type
 
 OS:SpaceType,
   {d3a57413-9b87-4ba2-bac9-69a2b24870a0}, !- Handle
@@ -6120,7 +6120,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hsp,                                    !- Standards Building Type
-  Kitchen;                                !- Standards Space Type
+  food preparation;      !- Standards Space Type
 
 OS:SpaceType,
   {1333d8da-fb3b-450d-9a6a-ad18628ede63}, !- Handle
@@ -6130,7 +6130,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   Hsp,                                    !- Standards Building Type
-  OfficeGeneral;                          !- Standards Space Type
+  office;      !- Standards Space Type
 
 OS:SpaceType,
   {3e66655b-37dc-4d90-8ef3-e740531a40f8}, !- Handle
@@ -10168,7 +10168,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Building Type
-  Plenum;                                 !- Standards Space Type
+  plenum;      !- Standards Space Type
 
 OS:Surface,
   {cfa35c8e-ca3f-4bce-9353-45fd36cc990d}, !- Handle

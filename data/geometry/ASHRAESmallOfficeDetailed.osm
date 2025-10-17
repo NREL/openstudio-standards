@@ -4371,7 +4371,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  SmallOffice - Attic;                    !- Standards Space Type
+  attic;      !- Standards Space Type
 
 OS:Rendering:Color,
   {0e2c7c7b-5d29-4b67-8b76-6e000891c8e2}, !- Handle
@@ -4389,7 +4389,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  SmallOffice - OpenOffice;               !- Standards Space Type
+  office;      !- Standards Space Type
 
 OS:Rendering:Color,
   {6da57b8c-46fd-4274-b97f-db06a942dfd8}, !- Handle
@@ -4407,7 +4407,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  SmallOffice - ClosedOffice;             !- Standards Space Type
+  office;      !- Standards Space Type
 
 OS:Rendering:Color,
   {58ddad7a-f214-4f61-9550-8655e973894a}, !- Handle
@@ -4439,7 +4439,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  SmallOffice - Storage;                  !- Standards Space Type
+  storage;      !- Standards Space Type
 
 OS:Rendering:Color,
   {dc376b19-b9ed-4763-82e3-b08274971093}, !- Handle
@@ -4457,7 +4457,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  SmallOffice - Corridor;                 !- Standards Space Type
+  corridor;      !- Standards Space Type
 
 OS:Rendering:Color,
   {2b050801-386a-4014-bcfb-1c0716e4f9a4}, !- Handle
@@ -4475,7 +4475,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  SmallOffice - Restroom;                 !- Standards Space Type
+  restroom;      !- Standards Space Type
 
 OS:Rendering:Color,
   {f7e3d7f9-cc2c-421f-b786-ddb373f1e608}, !- Handle
@@ -4493,7 +4493,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  SmallOffice - Lobby;                    !- Standards Space Type
+  lobby;      !- Standards Space Type
 
 OS:Rendering:Color,
   {b8ce435c-7c1d-4617-874e-e45d9dba881a}, !- Handle
@@ -4511,7 +4511,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  SmallOffice - Conference;               !- Standards Space Type
+  conference/meeting/multipurpose;      !- Standards Space Type
 
 OS:Rendering:Color,
   {a33fce9b-9840-4251-8e37-99b269931de4}, !- Handle
@@ -4529,7 +4529,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  SmallOffice - Elec/MechRoom;            !- Standards Space Type
+  electrical/mechanical;      !- Standards Space Type
 
 OS:Rendering:Color,
   {2f523f3e-fb20-40d6-bc4a-14b65d9eb47b}, !- Handle
@@ -4547,7 +4547,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   Office,                                 !- Standards Building Type
-  SmallOffice - Stair;                    !- Standards Space Type
+  stairwell;      !- Standards Space Type
 
 OS:Rendering:Color,
   {414e245c-ae4b-4d32-a008-f307b1a150c1}, !- Handle

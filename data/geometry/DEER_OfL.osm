@@ -3826,7 +3826,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   OfL,                                    !- Standards Building Type
-  LobbyWaiting;                           !- Standards Space Type
+  lobby;      !- Standards Space Type
 
 OS:SpaceType,
   {5ee851b4-f2ae-4075-a7e1-6fa593c0b3ba}, !- Handle
@@ -3846,7 +3846,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   OfL,                                    !- Standards Building Type
-  OfficeOpen;                             !- Standards Space Type
+  office;      !- Standards Space Type
 
 OS:SpaceType,
   {f35b22f1-af66-4882-99e4-271aef07eaa2}, !- Handle
@@ -3856,7 +3856,7 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   OfL,                                    !- Standards Building Type
-  OfficeSmall;                            !- Standards Space Type
+  office;      !- Standards Space Type
 
 OS:ThermalZone,
   {17dd05f8-8bf8-481c-9e27-6cc23e9e4f82}, !- Handle
@@ -6326,5 +6326,5 @@ OS:SpaceType,
   ,                                       !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Building Type
-  Plenum;                                 !- Standards Space Type
+  plenum;      !- Standards Space Type
 

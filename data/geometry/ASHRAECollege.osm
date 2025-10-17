@@ -14475,7 +14475,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   College,                                !- Standards Building Type
-  College - Classroom;                    !- Standards Space Type
+  classroom/lecture/training;      !- Standards Space Type
 
 OS:Rendering:Color,
   {d59683ef-a55e-492d-ad1f-524cc6cccb62}, !- Handle
@@ -14493,7 +14493,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   College,                                !- Standards Building Type
-  College - Media Center;                 !- Standards Space Type
+  computer room;      !- Standards Space Type
 
 OS:Rendering:Color,
   {f4b1d35f-0a69-404e-9919-2dc91e2cc5b5}, !- Handle
@@ -14511,7 +14511,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   College,                                !- Standards Building Type
-  College - Lounge;                       !- Standards Space Type
+  lounge/breakroom;      !- Standards Space Type
 
 OS:Rendering:Color,
   {49796b7b-227c-416b-8d2b-f52a8a21299f}, !- Handle
@@ -14529,7 +14529,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   College,                                !- Standards Building Type
-  College - Entrance Lobby;               !- Standards Space Type
+  lobby;      !- Standards Space Type
 
 OS:Rendering:Color,
   {cc03a111-314c-40e2-89f2-27cbd7f5878a}, !- Handle
@@ -14547,7 +14547,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   College,                                !- Standards Building Type
-  College - Office;                       !- Standards Space Type
+  office;      !- Standards Space Type
 
 OS:Rendering:Color,
   {26acb4e8-d146-4584-808e-ab344c900c35}, !- Handle
@@ -14565,7 +14565,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   College,                                !- Standards Building Type
-  College - Conference;                   !- Standards Space Type
+  conference/meeting/multipurpose;      !- Standards Space Type
 
 OS:Rendering:Color,
   {2dd1b0a4-442a-40c2-a7ae-ef4655136e77}, !- Handle
@@ -14583,7 +14583,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   College,                                !- Standards Building Type
-  College - Restroom;                     !- Standards Space Type
+  restroom;      !- Standards Space Type
 
 OS:Rendering:Color,
   {5ad3a6cc-27d9-495a-ba21-51fcf7b2a5cb}, !- Handle
@@ -14601,7 +14601,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   College,                                !- Standards Building Type
-  College - Corridor;                     !- Standards Space Type
+  corridor;      !- Standards Space Type
 
 OS:SpaceType,
   {6e5c5762-d2d0-48e1-b3f0-dc85148ed47b}, !- Handle
@@ -14612,7 +14612,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   College,                                !- Standards Building Type
-  College - Elevator Shaft;               !- Standards Space Type
+  shaft;      !- Standards Space Type
 
 OS:Rendering:Color,
   {eb36a302-13c5-40d5-83b1-f582d55ea6ec}, !- Handle
@@ -14630,7 +14630,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   College,                                !- Standards Building Type
-  College - Utility;                      !- Standards Space Type
+  electrical/mechanical;      !- Standards Space Type
 
 OS:Rendering:Color,
   {1a8bed03-a9f5-4b60-a98a-15f2d0bd0286}, !- Handle
@@ -14655,7 +14655,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   College,                                !- Standards Building Type
-  College - Storage;                      !- Standards Space Type
+  storage;      !- Standards Space Type
 
 OS:Rendering:Color,
   {55dd2b53-9c5d-4a36-bb21-e820ce98d5dd}, !- Handle
@@ -14673,7 +14673,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   College,                                !- Standards Building Type
-  College - Stairs;                       !- Standards Space Type
+  stairwell;      !- Standards Space Type
 
 OS:Rendering:Color,
   {f9c8f680-6a37-4e65-b914-85ad743a9af4}, !- Handle
@@ -14698,7 +14698,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   College,                                !- Standards Building Type
-  College - Laboratory;                   !- Standards Space Type
+  laboratory;      !- Standards Space Type
 
 OS:Rendering:Color,
   {1936b8fb-e8b6-4076-a39c-d72b5ead0ecb}, !- Handle
@@ -19961,7 +19961,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   College,                                !- Standards Building Type
-  College - Art Classroom;                !- Standards Space Type
+  classroom/lecture/training;      !- Standards Space Type
 
 OS:Rendering:Color,
   {bfb98788-0227-4b23-93e3-e9fb6304e7d1}, !- Handle
@@ -20323,7 +20323,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   College,                                !- Standards Building Type
-  College - Lecture Hall;                 !- Standards Space Type
+  classroom/lecture/training;      !- Standards Space Type
 
 OS:Rendering:Color,
   {555e9fcd-367f-4c24-a355-b4c26ca8b615}, !- Handle

@@ -662,7 +662,7 @@ OS:SpaceType,
   {994c42ae-65a6-4582-836e-6df2b0f626ab}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   QuickServiceRestaurant,                 !- Standards Building Type
-  Dining;                                 !- Standards Space Type
+  dining;      !- Standards Space Type
 
 OS:Rendering:Color,
   {994c42ae-65a6-4582-836e-6df2b0f626ab}, !- Handle
@@ -679,7 +679,7 @@ OS:SpaceType,
   {059a561a-51d8-4576-9a70-8a20249a6886}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   QuickServiceRestaurant,                 !- Standards Building Type
-  Kitchen;                                !- Standards Space Type
+  food preparation;      !- Standards Space Type
 
 OS:Rendering:Color,
   {059a561a-51d8-4576-9a70-8a20249a6886}, !- Handle
