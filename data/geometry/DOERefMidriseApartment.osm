@@ -6450,7 +6450,7 @@ OS:SpaceType,
   {2cb76859-269e-48d8-9938-995154c7a449}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   MidriseApartment,                       !- Standards Building Type
-  multifamily;      !- Standards Space Type
+  dwelling unit;      !- Standards Space Type
 
 OS:Rendering:Color,
   {2cb76859-269e-48d8-9938-995154c7a449}, !- Handle

@@ -53672,7 +53672,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   HighriseApartment,                      !- Standards Building Type
-  multifamily;      !- Standards Space Type
+  dwelling unit;      !- Standards Space Type
 
 OS:Rendering:Color,
   {3ecee402-6715-4f2a-847c-63bf638b72a3}, !- Handle
@@ -53690,7 +53690,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   HighriseApartment,                      !- Standards Building Type
-  multifamily;      !- Standards Space Type
+  dwelling unit;      !- Standards Space Type
 
 OS:Rendering:Color,
   {69411813-fc1f-4c31-8b9b-680b77598148}, !- Handle
@@ -53708,7 +53708,7 @@ OS:SpaceType,
   ,                                       !- Design Specification Outdoor Air Object Name
   ,                                       !- Standards Template
   HighriseApartment,                      !- Standards Building Type
-  multifamily;      !- Standards Space Type
+  dwelling unit;      !- Standards Space Type
 
 OS:Rendering:Color,
   {66536b4a-3c8e-4bb4-a5f3-55d8b91b7a49}, !- Handle

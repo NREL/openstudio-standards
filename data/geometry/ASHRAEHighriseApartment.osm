@@ -21489,7 +21489,7 @@ OS:SpaceType,
   {69c18cae-9d2f-4864-9c57-e3dd9c93faac}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   HighriseApartment,                      !- Standards Building Type
-  multifamily;      !- Standards Space Type
+  dwelling unit;      !- Standards Space Type
 
 OS:Rendering:Color,
   {69c18cae-9d2f-4864-9c57-e3dd9c93faac}, !- Handle
@@ -21506,7 +21506,7 @@ OS:SpaceType,
   {13d8edca-f17b-4a9f-8402-de08ca4175c3}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   HighriseApartment,                      !- Standards Building Type
-  multifamily;      !- Standards Space Type
+  dwelling unit;      !- Standards Space Type
 
 OS:Rendering:Color,
   {13d8edca-f17b-4a9f-8402-de08ca4175c3}, !- Handle
@@ -21523,7 +21523,7 @@ OS:SpaceType,
   {4b81ad58-3059-4888-a5f0-4667974bbc33}, !- Group Rendering Name
   ,                                       !- Design Specification Outdoor Air Object Name
   HighriseApartment,                      !- Standards Building Type
-  multifamily;      !- Standards Space Type
+  dwelling unit;      !- Standards Space Type
 
 OS:Rendering:Color,
   {4b81ad58-3059-4888-a5f0-4667974bbc33}, !- Handle
