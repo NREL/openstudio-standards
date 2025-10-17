@@ -86,14 +86,17 @@ class Btap_results_helper
     model.save(model_out_path, true)
 
     # Do costing.
-    costing = BTAPCosting.new(costs_csv: cp.costs_path, factors_csv: cp.costs_local_factors_path)
+    post_analysis = BTAPDatapointAnalysis.new(
+      model: model, 
+      output_folder: run_dir, 
+      template: template,
+      standard: standard,
+      qaqc: nil)
 
-    cost_result, _ = costing.cost_audit_all(model: model, prototype_creator: standard, template_type: template)
-    cost_result_json_path = File.join(run_dir, '/cost_results.json')
-    File.open(cost_result_json_path, 'w') { |f| f.write(JSON.pretty_generate(cost_result, allow_nan: true)) }
-    puts "Wrote File cost_results.json in #{Dir.pwd} "
+    post_analysis.run_costing
 
     # Check Cost file exists
+    cost_result_json_path = File.join(run_dir, '/cost_results.json')
     raise("Could not find costing json at this path:#{cost_result_json_path}") unless File.exist?(cost_result_json_path)
 
     # Check Cost results are the same.
