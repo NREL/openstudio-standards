@@ -41,7 +41,7 @@ module OpenstudioStandards
         standards_building_type = space_type.standardsBuildingType.get
 
         # load typical water use equipment data
-        data = JSON.parse(File.read("#{__dir__}/data/typical_water_use_equipment.json"), symbolize_names: true)
+        data = JSON.parse(File.read("#{File.dirname(__FILE__)}/data/typical_water_use_equipment.json"), symbolize_names: true)
         space_type_properties = data[:space_types].select { |hash| (hash[:space_type] == standards_space_type) && (hash[:building_type] == standards_building_type) }
 
         # skip spaces with no equipment defined
@@ -62,10 +62,10 @@ module OpenstudioStandards
         water_use_equipment.each do |w|
           # get water use equipment properties
           water_use_name = w[:equipment_name]
-          peak_flow_rate_gal_per_hr = w[:peak_flow_rate].to_f
-          peak_flow_rate_gal_per_hr_per_ft2 = w[:peak_flow_rate_per_area].to_f
+          peak_flow_rate_gal_per_hr = w[:peak_flow_rate_gph].to_f
+          peak_flow_rate_gal_per_hr_per_ft2 = w[:peak_flow_rate_gph_per_floor_area_ft2].to_f
           loop_type = w[:loop_type]
-          temperature = w[:temperature]
+          temperature = w[:mixed_water_temperature_f]
           flow_rate_schedule = w[:flow_rate_schedule]
           sensible_fraction = w[:sensible_fraction]
           latent_fraction = w[:latent_fraction]
@@ -73,7 +73,7 @@ module OpenstudioStandards
           # derived from equipment properties
           is_booster = water_use_name && water_use_name.downcase.include?('booster')
           water_use_name = water_use_name ? "#{space.name} #{water_use_name}" : "#{space.name} Water Use"
-          service_water_temperature_c = OpenStudio.convert(temperature, 'F', 'C').get
+          mixed_water_temperature_c = OpenStudio.convert(temperature, 'F', 'C').get
 
           # @todo replace this line once model_add_schedule is refactored to not require a standard
           flow_rate_schedule = std.model_add_schedule(model, flow_rate_schedule)
@@ -114,7 +114,7 @@ module OpenstudioStandards
                                                                                       name: water_use_name,
                                                                                       flow_rate: peak_flow_rate_m3_per_s,
                                                                                       flow_rate_fraction_schedule: flow_rate_schedule,
-                                                                                      water_use_temperature: service_water_temperature_c,
+                                                                                      water_use_temperature: mixed_water_temperature_c,
                                                                                       sensible_fraction: sensible_fraction,
                                                                                       latent_fraction: latent_fraction,
                                                                                       space: space)
@@ -145,13 +145,13 @@ module OpenstudioStandards
           # default to electricity for single units
           dedicated_water_heating_fuel = water_heating_fuel || 'Electricity'
 
-          # @todo add method to get service water temperature as max of space_water_use_equipment
-          service_water_temperature_c = OpenStudio.convert(140.0, 'F', 'C').get
+          # default to 140F
+          service_water_loop_temperature_c = OpenStudio.convert(140.0, 'F', 'C').get
 
           # add service water loop with water heater
           swh_loop = OpenstudioStandards::ServiceWaterHeating.create_service_water_heating_loop(model,
                                                                                                 system_name: "#{space.name} Service Water Loop",
-                                                                                                service_water_temperature: service_water_temperature_c,
+                                                                                                service_water_temperature: service_water_loop_temperature_c,
                                                                                                 service_water_pump_head: 0.01,
                                                                                                 service_water_pump_motor_efficiency: 1.0,
                                                                                                 water_heater_capacity: water_heater_capacity_w,
@@ -238,11 +238,11 @@ module OpenstudioStandards
                                                                                                                               supply_temperature: 180.0)
 
           # Note that booster water heaters are always assumed to be electric resistance
-          booster_water_temperature_c = OpenStudio.convert(180.0, 'F', 'C').get
+          booster_water_loop_temperature_c = OpenStudio.convert(180.0, 'F', 'C').get
           swh_booster_loop = OpenstudioStandards::ServiceWaterHeating.create_booster_water_heating_loop(model,
                                                                                                         system_name: 'Booster Water Loop',
                                                                                                         water_heater_capacity: booster_water_heater_sizing[:water_heater_capacity],
-                                                                                                        service_water_temperature: booster_water_temperature_c,
+                                                                                                        service_water_temperature: booster_water_loop_temperature_c,
                                                                                                         service_water_loop: shared_swh_loop)
 
           # Add loop to array

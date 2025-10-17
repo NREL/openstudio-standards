@@ -1,5 +1,6 @@
 require 'csv'
 require 'date'
+require 'parallel'
 
 class Standard
   attr_accessor :space_multiplier_map, :standards_data
@@ -66,8 +67,9 @@ class Standard
   # @param sizing_run_dir [String] the directory where the sizing runs will be performed
   # @param run_all_orients [Boolean] indicate weather a baseline model should be created for all 4 orientations: same as user model, +90 deg, +180 deg, +270 deg
   # @param debug [Boolean] If true, will report out more detailed debugging output
+  # @param use_parallel [Boolean] If true, when measure will run simulation for four orientations in parallel, else keep runinig one at a time.
   # @return [Boolean] returns true if successful, false if not
-  def model_create_prm_any_baseline_building(user_model, building_type, climate_zone, hvac_building_type = 'All others', wwr_building_type = 'All others', swh_building_type = 'All others', model_deep_copy = false, create_proposed_model = false, custom = nil, sizing_run_dir = Dir.pwd, run_all_orients = false, unmet_load_hours_check = true, debug = false)
+  def model_create_prm_any_baseline_building(user_model, building_type, climate_zone, hvac_building_type = 'All others', wwr_building_type = 'All others', swh_building_type = 'All others', model_deep_copy = false, create_proposed_model = false, custom = nil, sizing_run_dir = Dir.pwd, run_all_orients = false, unmet_load_hours_check = true, debug = false, use_parallel=false)
     # User data process
     # bldg_type_hvac_zone_hash could be an empty hash if all zones in the models are unconditioned
     # TODO - move this portion to the top of the function
@@ -155,8 +157,11 @@ class Standard
     # Need to run proposed model sizing simulation if no sql data is available
     degs_from_org = run_all_orientations(run_all_orients, user_model) ? [0, 90, 180, 270] : [0]
 
+    # loop method
+    each_method = use_parallel && degs_from_org.size > 1 ? ->(collection, &block) { Parallel.each(collection, in_process: 4, &block) } : ->(collection, &block) { collection.each(&block) }
+
     # Create baseline model for each orientation
-    degs_from_org.each do |degs|
+    each_method.call(degs_from_org) do |degs|
       # New baseline model:
       # Starting point is the original proposed model
       # Create a deep copy of the user model if requested
@@ -429,7 +434,7 @@ class Standard
       end
 
       # Run sizing run with the HVAC equipment
-      if model_run_sizing_run(model, "#{sizing_run_dir}/SR1") == false
+      if model_run_sizing_run(model, "#{sizing_run_dir}/SR1-#{degs}") == false
         return false
       end
 
@@ -471,7 +476,7 @@ class Standard
       end
 
       # Run sizing run with the new chillers, boilers, and cooling towers to determine capacities
-      if model_run_sizing_run(model, "#{sizing_run_dir}/SR2") == false
+      if model_run_sizing_run(model, "#{sizing_run_dir}/SR2-#{degs}") == false
         return false
       end
 
@@ -550,7 +555,7 @@ class Standard
           # the PRM-RM; Note that the PRM-RM only suggest to increase
           # air zone air flow, but the zone sizing factor in EnergyPlus
           # increase both air flow and load.
-          umlh = OpenstudioStandards::SqlFile.model_get_annual_occupied_unmet_hours(proposed_model)
+          umlh = OpenstudioStandards::SqlFile.model_get_annual_occupied_unmet_hours(model)
           if umlh > 300
             model.getThermalZones.each do |thermal_zone|
               # Cooling adjustments
@@ -769,10 +774,10 @@ class Standard
       end
 
       # This is only used for the stable baseline (2016 and later)
-if !applicable_zones.nil? && !applicable_zones.include?(zone)
-          # This zone is not part of the current hvac_building_type
-          next
-        end
+      if !applicable_zones.nil? && !applicable_zones.include?(zone)
+        # This zone is not part of the current hvac_building_type
+        next
+      end
 
       # Skip unconditioned zones
       heated = OpenstudioStandards::ThermalZone.thermal_zone_heated?(zone)
@@ -3049,11 +3054,24 @@ if !applicable_zones.nil? && !applicable_zones.include?(zone)
   # @return [OpenStudio::Model::Construction] construction object
   # @todo make return an OptionalConstruction
   def model_add_construction(model, construction_name, construction_props = nil, surface = nil)
+    intended_surface_type = construction_props&.[]('intended_surface_type') || ''
+
     # First check model and return construction if it already exists
     model.getConstructions.sort.each do |construction|
       if construction.name.get.to_s == construction_name
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.Model', "Already added construction: #{construction_name}")
-        return construction
+        valid = true
+        if !surface.nil?
+          if intended_surface_type == 'GroundContactFloor' && construction.iddObjectType.valueName != 'OS_Construction_FfactorGroundFloor'
+            valid = false
+          elsif intended_surface_type == 'GroundContactWall' && construction.iddObjectType.valueName != 'OS_Construction_CfactorUndergroundWall'
+            valid = false
+          end
+        end
+        if valid
+          return construction
+        end
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Already added construction: '#{construction_name}' but its type '#{construction.iddObjectType.valueName}' is not valid for the intended surface type '#{intended_surface_type}'. A new construction will be created.")
       end
     end
 
@@ -3071,12 +3089,31 @@ if !applicable_zones.nil? && !applicable_zones.include?(zone)
       return OpenStudio::Model::OptionalConstruction.new
     end
 
+    intended_surface_type = data["intended_surface_type"]
+    intended_surface_type ||= ''
+
     # Make a new construction and set the standards details
-    if data['intended_surface_type'] == 'GroundContactFloor' && !surface.nil?
-      construction = OpenStudio::Model::FFactorGroundFloorConstruction.new(model)
-    elsif data['intended_surface_type'] == 'GroundContactWall' && !surface.nil?
-      construction = OpenStudio::Model::CFactorUndergroundWallConstruction.new(model)
-    else
+    is_layered_construction = true
+
+    if intended_surface_type == 'GroundContactFloor' && !surface.nil?
+      if construction_props
+        construction = OpenStudio::Model::FFactorGroundFloorConstruction.new(model)
+        is_layered_construction = false
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Construction properties not specified for '#{construction_name}', cannot create F-Factor Ground Floor Construction.  A regular construction will be created instead, and Surface '#{surface.name}' will be set to use the 'Ground' outside boundary condition (previously '#{surface.outsideBoundaryCondition}').")
+        surface.setOutsideBoundaryCondition('Ground')
+      end
+    elsif intended_surface_type == 'GroundContactWall' && !surface.nil?
+      if construction_props
+        construction = OpenStudio::Model::CFactorUndergroundWallConstruction.new(model)
+        is_layered_construction = false
+      else
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Model', "Construction properties not specified for '#{construction_name}', cannot create C-Factor Underground Wall Construction.  A regular construction will be created instead, and Surface '#{surface.name}' will be set to use the 'Ground' outside boundary condition (previously '#{surface.outsideBoundaryCondition}').")
+        surface.setOutsideBoundaryCondition('Ground')
+      end
+    end
+
+    if is_layered_construction
       construction = OpenStudio::Model::Construction.new(model)
       # Add the material layers to the construction
       layers = OpenStudio::Model::MaterialVector.new
@@ -3091,8 +3128,6 @@ if !applicable_zones.nil? && !applicable_zones.include?(zone)
     construction.setName(construction_name)
     standards_info = construction.standardsInformation
 
-    intended_surface_type = data['intended_surface_type']
-    intended_surface_type ||= ''
     standards_info.setIntendedSurfaceType(intended_surface_type)
 
     standards_construction_type = data['standards_construction_type']
