@@ -16800,7 +16800,7 @@ OS:Controller:WaterCoil,
   ,                                        !- Actuator Variable
   ,                                        !- Sensor Node Name
   ,                                        !- Actuator Node Name
-  0.0001,                                  !- Controller Convergence Tolerance {deltaC}
+  ,                                        !- Controller Convergence Tolerance {deltaC}
   ,                                        !- Maximum Actuated Flow {m3/s}
   ;                                        !- Minimum Actuated Flow {m3/s}
 
@@ -16813,7 +16813,7 @@ OS:Controller:WaterCoil,
   ,                                        !- Actuator Variable
   ,                                        !- Sensor Node Name
   ,                                        !- Actuator Node Name
-  0.0001,                                  !- Controller Convergence Tolerance {deltaC}
+  ,                                        !- Controller Convergence Tolerance {deltaC}
   ,                                        !- Maximum Actuated Flow {m3/s}
   ;                                        !- Minimum Actuated Flow {m3/s}
 
@@ -16839,7 +16839,7 @@ OS:Controller:WaterCoil,
   ,                                        !- Actuator Variable
   ,                                        !- Sensor Node Name
   ,                                        !- Actuator Node Name
-  0.0001,                                  !- Controller Convergence Tolerance {deltaC}
+  ,                                        !- Controller Convergence Tolerance {deltaC}
   ,                                        !- Maximum Actuated Flow {m3/s}
   ;                                        !- Minimum Actuated Flow {m3/s}
 
@@ -16852,7 +16852,7 @@ OS:Controller:WaterCoil,
   ,                                        !- Actuator Variable
   ,                                        !- Sensor Node Name
   ,                                        !- Actuator Node Name
-  0.0001,                                  !- Controller Convergence Tolerance {deltaC}
+  ,                                        !- Controller Convergence Tolerance {deltaC}
   ,                                        !- Maximum Actuated Flow {m3/s}
   ;                                        !- Minimum Actuated Flow {m3/s}
 
@@ -16865,7 +16865,7 @@ OS:Controller:WaterCoil,
   ,                                        !- Actuator Variable
   ,                                        !- Sensor Node Name
   ,                                        !- Actuator Node Name
-  0.0001,                                  !- Controller Convergence Tolerance {deltaC}
+  ,                                        !- Controller Convergence Tolerance {deltaC}
   ,                                        !- Maximum Actuated Flow {m3/s}
   ;                                        !- Minimum Actuated Flow {m3/s}
 
@@ -16878,7 +16878,7 @@ OS:Controller:WaterCoil,
   ,                                        !- Actuator Variable
   ,                                        !- Sensor Node Name
   ,                                        !- Actuator Node Name
-  0.0001,                                  !- Controller Convergence Tolerance {deltaC}
+  ,                                        !- Controller Convergence Tolerance {deltaC}
   ,                                        !- Maximum Actuated Flow {m3/s}
   ;                                        !- Minimum Actuated Flow {m3/s}
 
@@ -16891,7 +16891,7 @@ OS:Controller:WaterCoil,
   ,                                        !- Actuator Variable
   ,                                        !- Sensor Node Name
   ,                                        !- Actuator Node Name
-  0.0001,                                  !- Controller Convergence Tolerance {deltaC}
+  ,                                        !- Controller Convergence Tolerance {deltaC}
   ,                                        !- Maximum Actuated Flow {m3/s}
   ;                                        !- Minimum Actuated Flow {m3/s}
 
@@ -35373,7 +35373,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0071-000000000169},  !- Handle
   Schedule Day 4,                          !- Name
-  {00000000-0000-0000-0074-000000000008},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0074-000000000010},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -35613,7 +35613,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0071-000000000179},  !- Handle
   satCHW Temp 1,                           !- Name
-  {00000000-0000-0000-0074-000000000008},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0074-000000000010},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -36081,7 +36081,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0071-000000000185},  !- Handle
   sunCHW Temp 1,                           !- Name
-  {00000000-0000-0000-0074-000000000008},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0074-000000000010},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -36741,7 +36741,7 @@ OS:Schedule:Day,
 OS:Schedule:Day,
   {00000000-0000-0000-0071-000000000209},  !- Handle
   wkdCHW Temp 1,                           !- Name
-  {00000000-0000-0000-0074-000000000008},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0074-000000000010},  !- Schedule Type Limits Name
   ,                                        !- Interpolate to Timestep
   1,                                       !- Hour 1
   0,                                       !- Minute 1
@@ -39685,7 +39685,7 @@ OS:Schedule:Ruleset,
 OS:Schedule:Ruleset,
   {00000000-0000-0000-0073-000000000002},  !- Handle
   CHW Temp,                                !- Name
-  {00000000-0000-0000-0074-000000000008},  !- Schedule Type Limits Name
+  {00000000-0000-0000-0074-000000000010},  !- Schedule Type Limits Name
   {00000000-0000-0000-0071-000000000169};  !- Default Day Schedule Name
 
 OS:Schedule:Ruleset,

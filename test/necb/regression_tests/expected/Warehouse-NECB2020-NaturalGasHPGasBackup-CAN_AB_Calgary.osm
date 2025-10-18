@@ -545,8 +545,8 @@ OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0014-000000000001},  !- Handle
   CoilHeatingDXSingleSpeed_ashp 1 212 Htg kBtu/hr 3.2COPH, !- Name
   {00000000-0000-0000-0059-000000000001},  !- Availability Schedule Name
-  62162.2124271435,                        !- Rated Total Heating Capacity {W}
-  3.49885353090701,                        !- Rated COP {W/W}
+  Autosize,                                !- Rated Total Heating Capacity {W}
+  3.53707148649274,                        !- Rated COP {W/W}
   Autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -572,8 +572,8 @@ OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0014-000000000002},  !- Handle
   CoilHeatingDXSingleSpeed_ashp 2 398 Htg kBtu/hr 3.2COPH, !- Name
   {00000000-0000-0000-0059-000000000001},  !- Availability Schedule Name
-  116524.995609652,                        !- Rated Total Heating Capacity {W}
-  3.58670325998503,                        !- Rated COP {W/W}
+  Autosize,                                !- Rated Total Heating Capacity {W}
+  3.65834400333947,                        !- Rated COP {W/W}
   Autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}

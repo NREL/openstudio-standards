@@ -919,11 +919,11 @@ OS:Coil:Cooling:DX:SingleSpeed,
 
 OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0014-000000000002},  !- Handle
-  CoilCoolingDXSingleSpeed_ashp 516kBtu/hr 10.0EER, !- Name
+  CoilCoolingDXSingleSpeed_ashp 516kBtu/hr 9.8EER, !- Name
   {00000000-0000-0000-0062-000000000001},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.46671670650253,                        !- Rated COP {W/W}
+  3.40010964509975,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -983,8 +983,8 @@ OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0015-000000000002},  !- Handle
   CoilHeatingDXSingleSpeed_ashp 374 Htg kBtu/hr 3.2COPH, !- Name
   {00000000-0000-0000-0062-000000000001},  !- Availability Schedule Name
-  109639.838676665,                        !- Rated Total Heating Capacity {W}
-  3.57557691332261,                        !- Rated COP {W/W}
+  Autosize,                                !- Rated Total Heating Capacity {W}
+  3.64298459270472,                        !- Rated COP {W/W}
   Autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -7402,7 +7402,7 @@ OS:Node,
 
 OS:Node,
   {00000000-0000-0000-0050-000000000113},  !- Handle
-  CoilCoolingDXSingleSpeed_ashp 516kBtu/hr 10.0EER Outlet Air Node, !- Name
+  CoilCoolingDXSingleSpeed_ashp 516kBtu/hr 9.8EER Outlet Air Node, !- Name
   {00000000-0000-0000-0018-000000000062},  !- Inlet Port
   {00000000-0000-0000-0018-000000000063};  !- Outlet Port
 

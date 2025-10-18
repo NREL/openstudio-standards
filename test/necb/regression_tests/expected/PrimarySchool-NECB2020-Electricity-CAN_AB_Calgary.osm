@@ -9264,22 +9264,22 @@ OS:ModelObjectList,
 OS:ModelObjectList,
   {00000000-0000-0000-0045-000000000057},  !- Handle
   Table Lookup 1 Independent Variable List 56, !- Name
-  {00000000-0000-0000-0088-000000000032};  !- Model Object 1
+  {00000000-0000-0000-0088-000000000036};  !- Model Object 1
 
 OS:ModelObjectList,
   {00000000-0000-0000-0045-000000000058},  !- Handle
   Table Lookup 1 Independent Variable List 57, !- Name
-  {00000000-0000-0000-0088-000000000030};  !- Model Object 1
+  {00000000-0000-0000-0088-000000000034};  !- Model Object 1
 
 OS:ModelObjectList,
   {00000000-0000-0000-0045-000000000059},  !- Handle
   Table Lookup 1 Independent Variable List 58, !- Name
-  {00000000-0000-0000-0088-000000000031};  !- Model Object 1
+  {00000000-0000-0000-0088-000000000035};  !- Model Object 1
 
 OS:ModelObjectList,
   {00000000-0000-0000-0045-000000000060},  !- Handle
   Table Lookup 1 Independent Variable List 59, !- Name
-  {00000000-0000-0000-0088-000000000029};  !- Model Object 1
+  {00000000-0000-0000-0088-000000000033};  !- Model Object 1
 
 OS:ModelObjectList,
   {00000000-0000-0000-0045-000000000061},  !- Handle
@@ -26137,7 +26137,7 @@ OS:Table:Lookup,
 OS:Table:Lookup,
   {00000000-0000-0000-0089-000000000029},  !- Handle
   sys_3|mixed|shr>none|sc>dx|sh>c-e|ssf>cv|zh>b-e|zc>none|srf>none| 8 ERV_LatCoolEff 1, !- Name
-  {00000000-0000-0000-0045-000000000060},  !- Independent Variable List Name
+  {00000000-0000-0000-0045-000000000072},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
   0,                                       !- Minimum Output {BasedOnField A5}
@@ -26152,7 +26152,7 @@ OS:Table:Lookup,
 OS:Table:Lookup,
   {00000000-0000-0000-0089-000000000030},  !- Handle
   sys_3|mixed|shr>none|sc>dx|sh>c-e|ssf>cv|zh>b-e|zc>none|srf>none| 8 ERV_LatHeatEff 1, !- Name
-  {00000000-0000-0000-0045-000000000058},  !- Independent Variable List Name
+  {00000000-0000-0000-0045-000000000070},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
   0,                                       !- Minimum Output {BasedOnField A5}
@@ -26167,7 +26167,7 @@ OS:Table:Lookup,
 OS:Table:Lookup,
   {00000000-0000-0000-0089-000000000031},  !- Handle
   sys_3|mixed|shr>none|sc>dx|sh>c-e|ssf>cv|zh>b-e|zc>none|srf>none| 8 ERV_SensCoolEff 1, !- Name
-  {00000000-0000-0000-0045-000000000059},  !- Independent Variable List Name
+  {00000000-0000-0000-0045-000000000071},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
   0,                                       !- Minimum Output {BasedOnField A5}
@@ -26182,7 +26182,7 @@ OS:Table:Lookup,
 OS:Table:Lookup,
   {00000000-0000-0000-0089-000000000032},  !- Handle
   sys_3|mixed|shr>none|sc>dx|sh>c-e|ssf>cv|zh>b-e|zc>none|srf>none| 8 ERV_SensHeatEff 1, !- Name
-  {00000000-0000-0000-0045-000000000057},  !- Independent Variable List Name
+  {00000000-0000-0000-0045-000000000069},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
   0,                                       !- Minimum Output {BasedOnField A5}

@@ -2401,7 +2401,7 @@ OS:Controller:WaterCoil,
   ,                                        !- Actuator Variable
   ,                                        !- Sensor Node Name
   ,                                        !- Actuator Node Name
-  0.0001,                                  !- Controller Convergence Tolerance {deltaC}
+  ,                                        !- Controller Convergence Tolerance {deltaC}
   ,                                        !- Maximum Actuated Flow {m3/s}
   ;                                        !- Minimum Actuated Flow {m3/s}
 
@@ -2414,7 +2414,7 @@ OS:Controller:WaterCoil,
   ,                                        !- Actuator Variable
   ,                                        !- Sensor Node Name
   ,                                        !- Actuator Node Name
-  0.0001,                                  !- Controller Convergence Tolerance {deltaC}
+  ,                                        !- Controller Convergence Tolerance {deltaC}
   ,                                        !- Maximum Actuated Flow {m3/s}
   ;                                        !- Minimum Actuated Flow {m3/s}
 
@@ -2887,7 +2887,7 @@ OS:DistrictCooling,
   DistrictCooling GLHX,                    !- Name
   {00000000-0000-0000-0016-000000000190},  !- Chilled Water Inlet Node Name
   {00000000-0000-0000-0016-000000000191},  !- Chilled Water Outlet Node Name
-  32339.0021198782,                        !- Nominal Capacity {W}
+  32339.0040830031,                        !- Nominal Capacity {W}
   {00000000-0000-0000-0063-000000000002};  !- Capacity Fraction Schedule
 
 OS:DistrictHeating:Water,
@@ -2895,7 +2895,7 @@ OS:DistrictHeating:Water,
   DistrictHeating GLHX,                    !- Name
   {00000000-0000-0000-0016-000000000181},  !- Hot Water Inlet Node Name
   {00000000-0000-0000-0016-000000000182},  !- Hot Water Outlet Node Name
-  34564.905847812,                         !- Nominal Capacity {W}
+  34564.9058478481,                        !- Nominal Capacity {W}
   {00000000-0000-0000-0063-000000000002};  !- Capacity Fraction Schedule
 
 OS:ElectricEquipment,

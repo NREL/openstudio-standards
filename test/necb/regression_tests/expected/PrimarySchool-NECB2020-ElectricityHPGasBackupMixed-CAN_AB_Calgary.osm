@@ -2044,8 +2044,8 @@ OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0013-000000000001},  !- Handle
   CoilHeatingDXSingleSpeed_ashp 1 117 Htg kBtu/hr 3.3COPH, !- Name
   {00000000-0000-0000-0058-000000000001},  !- Availability Schedule Name
-  34279.1076337371,                        !- Rated Total Heating Capacity {W}
-  3.56172578917625,                        !- Rated COP {W/W}
+  Autosize,                                !- Rated Total Heating Capacity {W}
+  3.47486984599826,                        !- Rated COP {W/W}
   Autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -2071,8 +2071,8 @@ OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0013-000000000002},  !- Handle
   CoilHeatingDXSingleSpeed_ashp 10 67 Htg kBtu/hr 3.3COPH, !- Name
   {00000000-0000-0000-0058-000000000001},  !- Availability Schedule Name
-  19686.067006395,                         !- Rated Total Heating Capacity {W}
-  3.53740663328616,                        !- Rated COP {W/W}
+  Autosize,                                !- Rated Total Heating Capacity {W}
+  3.54988805073886,                        !- Rated COP {W/W}
   Autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -2098,8 +2098,8 @@ OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0013-000000000003},  !- Handle
   CoilHeatingDXSingleSpeed_ashp 11 280 Htg kBtu/hr 3.2COPH, !- Name
   {00000000-0000-0000-0058-000000000001},  !- Availability Schedule Name
-  82193.7974987324,                        !- Rated Total Heating Capacity {W}
-  3.5312243776246,                         !- Rated COP {W/W}
+  Autosize,                                !- Rated Total Heating Capacity {W}
+  3.58175795388543,                        !- Rated COP {W/W}
   Autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -2341,8 +2341,8 @@ OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0013-000000000012},  !- Handle
   CoilHeatingDXSingleSpeed_ashp 9 178 Htg kBtu/hr 3.2COPH, !- Name
   {00000000-0000-0000-0058-000000000001},  !- Availability Schedule Name
-  52186.2352229191,                        !- Rated Total Heating Capacity {W}
-  3.48273244873692,                        !- Rated COP {W/W}
+  Autosize,                                !- Rated Total Heating Capacity {W}
+  3.5148170728528,                         !- Rated COP {W/W}
   Autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -2935,14 +2935,14 @@ OS:Connection,
 
 OS:Connection,
   {00000000-0000-0000-0015-000000000060},  !- Handle
-  {00000000-0000-0000-0013-000000000006},  !- Source Object
+  {00000000-0000-0000-0013-000000000008},  !- Source Object
   9,                                       !- Outlet Port
-  {00000000-0000-0000-0047-000000000122},  !- Target Object
+  {00000000-0000-0000-0047-000000000124},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
   {00000000-0000-0000-0015-000000000061},  !- Handle
-  {00000000-0000-0000-0047-000000000122},  !- Source Object
+  {00000000-0000-0000-0047-000000000124},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0014-000000000001},  !- Target Object
   5;                                       !- Inlet Port
@@ -2958,7 +2958,7 @@ OS:Connection,
   {00000000-0000-0000-0015-000000000063},  !- Handle
   {00000000-0000-0000-0047-000000000112},  !- Source Object
   3,                                       !- Outlet Port
-  {00000000-0000-0000-0013-000000000006},  !- Target Object
+  {00000000-0000-0000-0013-000000000008},  !- Target Object
   8;                                       !- Inlet Port
 
 OS:Connection,
@@ -3719,14 +3719,14 @@ OS:Connection,
 
 OS:Connection,
   {00000000-0000-0000-0015-000000000172},  !- Handle
-  {00000000-0000-0000-0013-000000000007},  !- Source Object
+  {00000000-0000-0000-0013-000000000006},  !- Source Object
   9,                                       !- Outlet Port
-  {00000000-0000-0000-0047-000000000123},  !- Target Object
+  {00000000-0000-0000-0047-000000000122},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
   {00000000-0000-0000-0015-000000000173},  !- Handle
-  {00000000-0000-0000-0047-000000000123},  !- Source Object
+  {00000000-0000-0000-0047-000000000122},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0014-000000000008},  !- Target Object
   5;                                       !- Inlet Port
@@ -3742,7 +3742,7 @@ OS:Connection,
   {00000000-0000-0000-0015-000000000175},  !- Handle
   {00000000-0000-0000-0047-000000000110},  !- Source Object
   3,                                       !- Outlet Port
-  {00000000-0000-0000-0013-000000000007},  !- Target Object
+  {00000000-0000-0000-0013-000000000006},  !- Target Object
   8;                                       !- Inlet Port
 
 OS:Connection,
@@ -3957,14 +3957,14 @@ OS:Connection,
 
 OS:Connection,
   {00000000-0000-0000-0015-000000000206},  !- Handle
-  {00000000-0000-0000-0013-000000000008},  !- Source Object
+  {00000000-0000-0000-0013-000000000007},  !- Source Object
   9,                                       !- Outlet Port
-  {00000000-0000-0000-0047-000000000124},  !- Target Object
+  {00000000-0000-0000-0047-000000000123},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
   {00000000-0000-0000-0015-000000000207},  !- Handle
-  {00000000-0000-0000-0047-000000000124},  !- Source Object
+  {00000000-0000-0000-0047-000000000123},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0014-000000000009},  !- Target Object
   5;                                       !- Inlet Port
@@ -3980,7 +3980,7 @@ OS:Connection,
   {00000000-0000-0000-0015-000000000209},  !- Handle
   {00000000-0000-0000-0047-000000000111},  !- Source Object
   3,                                       !- Outlet Port
-  {00000000-0000-0000-0013-000000000008},  !- Target Object
+  {00000000-0000-0000-0013-000000000007},  !- Target Object
   8;                                       !- Inlet Port
 
 OS:Connection,
@@ -10421,22 +10421,22 @@ OS:ModelObjectList,
 OS:ModelObjectList,
   {00000000-0000-0000-0046-000000000049},  !- Handle
   Table Lookup 1 Independent Variable List 48, !- Name
-  {00000000-0000-0000-0089-000000000044};  !- Model Object 1
+  {00000000-0000-0000-0089-000000000036};  !- Model Object 1
 
 OS:ModelObjectList,
   {00000000-0000-0000-0046-000000000050},  !- Handle
   Table Lookup 1 Independent Variable List 49, !- Name
-  {00000000-0000-0000-0089-000000000042};  !- Model Object 1
+  {00000000-0000-0000-0089-000000000034};  !- Model Object 1
 
 OS:ModelObjectList,
   {00000000-0000-0000-0046-000000000051},  !- Handle
   Table Lookup 1 Independent Variable List 50, !- Name
-  {00000000-0000-0000-0089-000000000043};  !- Model Object 1
+  {00000000-0000-0000-0089-000000000035};  !- Model Object 1
 
 OS:ModelObjectList,
   {00000000-0000-0000-0046-000000000052},  !- Handle
   Table Lookup 1 Independent Variable List 51, !- Name
-  {00000000-0000-0000-0089-000000000041};  !- Model Object 1
+  {00000000-0000-0000-0089-000000000033};  !- Model Object 1
 
 OS:ModelObjectList,
   {00000000-0000-0000-0046-000000000053},  !- Handle
@@ -11401,6 +11401,12 @@ OS:Node,
   CoilHeatingDXSingleSpeed_ashp 5 59 Htg kBtu/hr 7.4HSPF Outlet Air Node, !- Name
   {00000000-0000-0000-0015-000000000206},  !- Inlet Port
   {00000000-0000-0000-0015-000000000207};  !- Outlet Port
+
+OS:Node,
+  {00000000-0000-0000-0047-000000000124},  !- Handle
+  CoilHeatingDXSingleSpeed_ashp 55 Clg kBtu/hr 3.3COPH Outlet Air Node, !- Name
+  {00000000-0000-0000-0015-000000000060},  !- Inlet Port
+  {00000000-0000-0000-0015-000000000061};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0047-000000000125},  !- Handle
@@ -27586,7 +27592,7 @@ OS:Table:Lookup,
 OS:Table:Lookup,
   {00000000-0000-0000-0090-000000000041},  !- Handle
   sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 1 ERV_LatCoolEff 1, !- Name
-  {00000000-0000-0000-0046-000000000052},  !- Independent Variable List Name
+  {00000000-0000-0000-0046-000000000076},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
   0,                                       !- Minimum Output {BasedOnField A5}
@@ -27601,7 +27607,7 @@ OS:Table:Lookup,
 OS:Table:Lookup,
   {00000000-0000-0000-0090-000000000042},  !- Handle
   sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 1 ERV_LatHeatEff 1, !- Name
-  {00000000-0000-0000-0046-000000000050},  !- Independent Variable List Name
+  {00000000-0000-0000-0046-000000000074},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
   0,                                       !- Minimum Output {BasedOnField A5}
@@ -27616,7 +27622,7 @@ OS:Table:Lookup,
 OS:Table:Lookup,
   {00000000-0000-0000-0090-000000000043},  !- Handle
   sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 1 ERV_SensCoolEff 1, !- Name
-  {00000000-0000-0000-0046-000000000051},  !- Independent Variable List Name
+  {00000000-0000-0000-0046-000000000075},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
   0,                                       !- Minimum Output {BasedOnField A5}
@@ -27631,7 +27637,7 @@ OS:Table:Lookup,
 OS:Table:Lookup,
   {00000000-0000-0000-0090-000000000044},  !- Handle
   sys_4|mixed|shr>none|sc>ashp|sh>ashp>c-g|ssf>cv|zh>b-e|zc>none|srf>none| 1 ERV_SensHeatEff 1, !- Name
-  {00000000-0000-0000-0046-000000000049},  !- Independent Variable List Name
+  {00000000-0000-0000-0046-000000000073},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
   0,                                       !- Minimum Output {BasedOnField A5}

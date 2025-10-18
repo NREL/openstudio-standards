@@ -1765,10 +1765,10 @@ OS:Curve:Biquadratic,
   0,                                       !- Coefficient4 y
   0,                                       !- Coefficient5 y**2
   0,                                       !- Coefficient6 x*y
-  12.77778,                                !- Minimum Value of x
-  23.88889,                                !- Maximum Value of x
-  21.11111,                                !- Minimum Value of y
-  46.11111,                                !- Maximum Value of y
+  10,                                      !- Minimum Value of x
+  30,                                      !- Maximum Value of x
+  -20,                                     !- Minimum Value of y
+  20,                                      !- Maximum Value of y
   0,                                       !- Minimum Curve Output
   1;                                       !- Maximum Curve Output
 

@@ -715,11 +715,11 @@ OS:ClimateZones,
 
 OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0013-000000000001},  !- Handle
-  CoilCoolingDXSingleSpeed_ashp 1 276kBtu/hr 10.0EER, !- Name
+  CoilCoolingDXSingleSpeed_ashp 1 276kBtu/hr 9.8EER, !- Name
   {00000000-0000-0000-0061-000000000001},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.46671670650253,                        !- Rated COP {W/W}
+  3.40010964509975,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -750,11 +750,11 @@ OS:Coil:Cooling:DX:SingleSpeed,
 
 OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0013-000000000002},  !- Handle
-  CoilCoolingDXSingleSpeed_ashp 2 304kBtu/hr 10.0EER, !- Name
+  CoilCoolingDXSingleSpeed_ashp 2 304kBtu/hr 9.8EER, !- Name
   {00000000-0000-0000-0061-000000000001},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.46671670650253,                        !- Rated COP {W/W}
+  3.40010964509975,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -785,11 +785,11 @@ OS:Coil:Cooling:DX:SingleSpeed,
 
 OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0013-000000000003},  !- Handle
-  CoilCoolingDXSingleSpeed_ashp 238kBtu/hr 11.0EER, !- Name
+  CoilCoolingDXSingleSpeed_ashp 238kBtu/hr 10.8EER, !- Name
   {00000000-0000-0000-0061-000000000001},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.79975201351641,                        !- Rated COP {W/W}
+  3.73314495211364,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -822,8 +822,8 @@ OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0014-000000000001},  !- Handle
   CoilHeatingDXSingleSpeed_ashp 1 200 Htg kBtu/hr 3.2COPH, !- Name
   {00000000-0000-0000-0061-000000000001},  !- Availability Schedule Name
-  58555.162216468,                         !- Rated Total Heating Capacity {W}
-  3.49302457283628,                        !- Rated COP {W/W}
+  Autosize,                                !- Rated Total Heating Capacity {W}
+  3.52902487754756,                        !- Rated COP {W/W}
   Autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -849,13 +849,13 @@ OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0014-000000000002},  !- Handle
   CoilHeatingDXSingleSpeed_ashp 172 Htg kBtu/hr 3.2COPH, !- Name
   {00000000-0000-0000-0061-000000000001},  !- Availability Schedule Name
-  50470.2283105833,                        !- Rated Total Heating Capacity {W}
-  3.47995939825055,                        !- Rated COP {W/W}
+  Autosize,                                !- Rated Total Heating Capacity {W}
+  3.54249590817273,                        !- Rated COP {W/W}
   Autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
-  {00000000-0000-0000-0017-000000000072},  !- Air Inlet Node Name
-  {00000000-0000-0000-0017-000000000069},  !- Air Outlet Node Name
+  {00000000-0000-0000-0017-000000000203},  !- Air Inlet Node Name
+  {00000000-0000-0000-0017-000000000200},  !- Air Outlet Node Name
   {00000000-0000-0000-0025-000000000019},  !- Total Heating Capacity Function of Temperature Curve Name
   {00000000-0000-0000-0025-000000000018},  !- Total Heating Capacity Function of Flow Fraction Curve Name
   {00000000-0000-0000-0025-000000000020},  !- Energy Input Ratio Function of Temperature Curve Name
@@ -876,13 +876,13 @@ OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0014-000000000003},  !- Handle
   CoilHeatingDXSingleSpeed_ashp 2 220 Htg kBtu/hr 3.2COPH, !- Name
   {00000000-0000-0000-0061-000000000001},  !- Availability Schedule Name
-  64593.8157891189,                        !- Rated Total Heating Capacity {W}
-  3.50278297829857,                        !- Rated COP {W/W}
+  Autosize,                                !- Rated Total Heating Capacity {W}
+  3.51098900399755,                        !- Rated COP {W/W}
   Autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
-  {00000000-0000-0000-0017-000000000203},  !- Air Inlet Node Name
-  {00000000-0000-0000-0017-000000000200},  !- Air Outlet Node Name
+  {00000000-0000-0000-0017-000000000072},  !- Air Inlet Node Name
+  {00000000-0000-0000-0017-000000000069},  !- Air Outlet Node Name
   {00000000-0000-0000-0025-000000000019},  !- Total Heating Capacity Function of Temperature Curve Name
   {00000000-0000-0000-0025-000000000018},  !- Total Heating Capacity Function of Flow Fraction Curve Name
   {00000000-0000-0000-0025-000000000020},  !- Energy Input Ratio Function of Temperature Curve Name
@@ -1707,14 +1707,14 @@ OS:Connection,
 
 OS:Connection,
   {00000000-0000-0000-0017-000000000069},  !- Handle
-  {00000000-0000-0000-0014-000000000002},  !- Source Object
+  {00000000-0000-0000-0014-000000000003},  !- Source Object
   9,                                       !- Outlet Port
-  {00000000-0000-0000-0050-000000000100},  !- Target Object
+  {00000000-0000-0000-0050-000000000101},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
   {00000000-0000-0000-0017-000000000070},  !- Handle
-  {00000000-0000-0000-0050-000000000100},  !- Source Object
+  {00000000-0000-0000-0050-000000000101},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0039-000000000006},  !- Target Object
   8;                                       !- Inlet Port
@@ -1730,7 +1730,7 @@ OS:Connection,
   {00000000-0000-0000-0017-000000000072},  !- Handle
   {00000000-0000-0000-0050-000000000098},  !- Source Object
   3,                                       !- Outlet Port
-  {00000000-0000-0000-0014-000000000002},  !- Target Object
+  {00000000-0000-0000-0014-000000000003},  !- Target Object
   8;                                       !- Inlet Port
 
 OS:Connection,
@@ -2624,14 +2624,14 @@ OS:Connection,
 
 OS:Connection,
   {00000000-0000-0000-0017-000000000200},  !- Handle
-  {00000000-0000-0000-0014-000000000003},  !- Source Object
+  {00000000-0000-0000-0014-000000000002},  !- Source Object
   9,                                       !- Outlet Port
-  {00000000-0000-0000-0050-000000000101},  !- Target Object
+  {00000000-0000-0000-0050-000000000100},  !- Target Object
   2;                                       !- Inlet Port
 
 OS:Connection,
   {00000000-0000-0000-0017-000000000201},  !- Handle
-  {00000000-0000-0000-0050-000000000101},  !- Source Object
+  {00000000-0000-0000-0050-000000000100},  !- Source Object
   3,                                       !- Outlet Port
   {00000000-0000-0000-0039-000000000005},  !- Target Object
   8;                                       !- Inlet Port
@@ -2647,7 +2647,7 @@ OS:Connection,
   {00000000-0000-0000-0017-000000000203},  !- Handle
   {00000000-0000-0000-0050-000000000097},  !- Source Object
   3,                                       !- Outlet Port
-  {00000000-0000-0000-0014-000000000003},  !- Target Object
+  {00000000-0000-0000-0014-000000000002},  !- Target Object
   8;                                       !- Inlet Port
 
 OS:Connection,
@@ -6226,19 +6226,19 @@ OS:Node,
 
 OS:Node,
   {00000000-0000-0000-0050-000000000096},  !- Handle
-  CoilCoolingDXSingleSpeed_ashp 1 276kBtu/hr 10.0EER Outlet Air Node, !- Name
+  CoilCoolingDXSingleSpeed_ashp 1 276kBtu/hr 9.8EER Outlet Air Node, !- Name
   {00000000-0000-0000-0017-000000000136},  !- Inlet Port
   {00000000-0000-0000-0017-000000000137};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0050-000000000097},  !- Handle
-  CoilCoolingDXSingleSpeed_ashp 2 304kBtu/hr 10.0EER Outlet Air Node, !- Name
+  CoilCoolingDXSingleSpeed_ashp 2 304kBtu/hr 9.8EER Outlet Air Node, !- Name
   {00000000-0000-0000-0017-000000000202},  !- Inlet Port
   {00000000-0000-0000-0017-000000000203};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0050-000000000098},  !- Handle
-  CoilCoolingDXSingleSpeed_ashp 238kBtu/hr 11.0EER Outlet Air Node, !- Name
+  CoilCoolingDXSingleSpeed_ashp 238kBtu/hr 10.8EER Outlet Air Node, !- Name
   {00000000-0000-0000-0017-000000000071},  !- Inlet Port
   {00000000-0000-0000-0017-000000000072};  !- Outlet Port
 

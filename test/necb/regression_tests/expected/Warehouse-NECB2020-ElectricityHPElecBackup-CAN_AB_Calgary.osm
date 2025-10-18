@@ -392,11 +392,11 @@ OS:ClimateZones,
 
 OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0012-000000000001},  !- Handle
-  CoilCoolingDXSingleSpeed_ashp 1 293kBtu/hr 10.0EER, !- Name
+  CoilCoolingDXSingleSpeed_ashp 1 293kBtu/hr 9.8EER, !- Name
   {00000000-0000-0000-0056-000000000001},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.46671670650253,                        !- Rated COP {W/W}
+  3.40010964509975,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -427,11 +427,11 @@ OS:Coil:Cooling:DX:SingleSpeed,
 
 OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0012-000000000002},  !- Handle
-  CoilCoolingDXSingleSpeed_ashp 2 549kBtu/hr 10.0EER, !- Name
+  CoilCoolingDXSingleSpeed_ashp 2 549kBtu/hr 9.8EER, !- Name
   {00000000-0000-0000-0056-000000000001},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.46671670650253,                        !- Rated COP {W/W}
+  3.40010964509975,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -499,8 +499,8 @@ OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0013-000000000001},  !- Handle
   CoilHeatingDXSingleSpeed_ashp 1 212 Htg kBtu/hr 3.2COPH, !- Name
   {00000000-0000-0000-0056-000000000001},  !- Availability Schedule Name
-  62162.2124271435,                        !- Rated Total Heating Capacity {W}
-  3.49885353090701,                        !- Rated COP {W/W}
+  Autosize,                                !- Rated Total Heating Capacity {W}
+  3.53707148649274,                        !- Rated COP {W/W}
   Autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -526,8 +526,8 @@ OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0013-000000000002},  !- Handle
   CoilHeatingDXSingleSpeed_ashp 2 398 Htg kBtu/hr 3.2COPH, !- Name
   {00000000-0000-0000-0056-000000000001},  !- Availability Schedule Name
-  116524.995609652,                        !- Rated Total Heating Capacity {W}
-  3.58670325998503,                        !- Rated COP {W/W}
+  Autosize,                                !- Rated Total Heating Capacity {W}
+  3.65834400333947,                        !- Rated COP {W/W}
   Autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -3463,13 +3463,13 @@ OS:Node,
 
 OS:Node,
   {00000000-0000-0000-0047-000000000018},  !- Handle
-  CoilCoolingDXSingleSpeed_ashp 1 293kBtu/hr 10.0EER Outlet Air Node, !- Name
+  CoilCoolingDXSingleSpeed_ashp 1 293kBtu/hr 9.8EER Outlet Air Node, !- Name
   {00000000-0000-0000-0015-000000000040},  !- Inlet Port
   {00000000-0000-0000-0015-000000000041};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0047-000000000019},  !- Handle
-  CoilCoolingDXSingleSpeed_ashp 2 549kBtu/hr 10.0EER Outlet Air Node, !- Name
+  CoilCoolingDXSingleSpeed_ashp 2 549kBtu/hr 9.8EER Outlet Air Node, !- Name
   {00000000-0000-0000-0015-000000000062},  !- Inlet Port
   {00000000-0000-0000-0015-000000000063};  !- Outlet Port
 

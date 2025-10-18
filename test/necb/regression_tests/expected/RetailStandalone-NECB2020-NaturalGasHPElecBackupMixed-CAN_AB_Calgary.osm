@@ -628,11 +628,11 @@ OS:ClimateZones,
 
 OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0013-000000000001},  !- Handle
-  CoilCoolingDXSingleSpeed_ashp 1 76kBtu/hr 11.2EER, !- Name
+  CoilCoolingDXSingleSpeed_ashp 1 76kBtu/hr 11.0EER, !- Name
   {00000000-0000-0000-0058-000000000001},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.86635907491919,                        !- Rated COP {W/W}
+  3.79975201351641,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -663,11 +663,11 @@ OS:Coil:Cooling:DX:SingleSpeed,
 
 OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0013-000000000002},  !- Handle
-  CoilCoolingDXSingleSpeed_ashp 2 75kBtu/hr 11.2EER, !- Name
+  CoilCoolingDXSingleSpeed_ashp 2 75kBtu/hr 11.0EER, !- Name
   {00000000-0000-0000-0058-000000000001},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.86635907491919,                        !- Rated COP {W/W}
+  3.79975201351641,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -733,11 +733,11 @@ OS:Coil:Cooling:DX:SingleSpeed,
 
 OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0013-000000000004},  !- Handle
-  CoilCoolingDXSingleSpeed_ashp 4 258kBtu/hr 10.0EER, !- Name
+  CoilCoolingDXSingleSpeed_ashp 4 258kBtu/hr 9.8EER, !- Name
   {00000000-0000-0000-0058-000000000001},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.46671670650253,                        !- Rated COP {W/W}
+  3.40010964509975,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -768,11 +768,11 @@ OS:Coil:Cooling:DX:SingleSpeed,
 
 OS:Coil:Cooling:DX:SingleSpeed,
   {00000000-0000-0000-0013-000000000005},  !- Handle
-  CoilCoolingDXSingleSpeed_ashp 90kBtu/hr 11.2EER, !- Name
+  CoilCoolingDXSingleSpeed_ashp 90kBtu/hr 11.0EER, !- Name
   {00000000-0000-0000-0058-000000000001},  !- Availability Schedule Name
   autosize,                                !- Rated Total Cooling Capacity {W}
   autosize,                                !- Rated Sensible Heat Ratio
-  3.86635907491919,                        !- Rated COP {W/W}
+  3.79975201351641,                        !- Rated COP {W/W}
   autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Evaporator Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -886,8 +886,8 @@ OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0014-000000000004},  !- Handle
   CoilHeatingDXSingleSpeed_ashp 4 187 Htg kBtu/hr 3.2COPH, !- Name
   {00000000-0000-0000-0058-000000000001},  !- Availability Schedule Name
-  54785.1540616621,                        !- Rated Total Heating Capacity {W}
-  3.48693227631221,                        !- Rated COP {W/W}
+  Autosize,                                !- Rated Total Heating Capacity {W}
+  3.52061474196029,                        !- Rated COP {W/W}
   Autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -913,8 +913,8 @@ OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0014-000000000005},  !- Handle
   CoilHeatingDXSingleSpeed_ashp 65 Htg kBtu/hr 3.3COPH, !- Name
   {00000000-0000-0000-0058-000000000001},  !- Availability Schedule Name
-  19063.1403274521,                        !- Rated Total Heating Capacity {W}
-  3.5363685322214,                         !- Rated COP {W/W}
+  Autosize,                                !- Rated Total Heating Capacity {W}
+  3.54845499988958,                        !- Rated COP {W/W}
   Autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
   934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
@@ -5106,13 +5106,13 @@ OS:Node,
 
 OS:Node,
   {00000000-0000-0000-0046-000000000038},  !- Handle
-  CoilCoolingDXSingleSpeed_ashp 1 76kBtu/hr 11.2EER Outlet Air Node, !- Name
+  CoilCoolingDXSingleSpeed_ashp 1 76kBtu/hr 11.0EER Outlet Air Node, !- Name
   {00000000-0000-0000-0017-000000000067},  !- Inlet Port
   {00000000-0000-0000-0017-000000000068};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0046-000000000039},  !- Handle
-  CoilCoolingDXSingleSpeed_ashp 2 75kBtu/hr 11.2EER Outlet Air Node, !- Name
+  CoilCoolingDXSingleSpeed_ashp 2 75kBtu/hr 11.0EER Outlet Air Node, !- Name
   {00000000-0000-0000-0017-000000000093},  !- Inlet Port
   {00000000-0000-0000-0017-000000000094};  !- Outlet Port
 
@@ -5124,13 +5124,13 @@ OS:Node,
 
 OS:Node,
   {00000000-0000-0000-0046-000000000041},  !- Handle
-  CoilCoolingDXSingleSpeed_ashp 4 258kBtu/hr 10.0EER Outlet Air Node, !- Name
+  CoilCoolingDXSingleSpeed_ashp 4 258kBtu/hr 9.8EER Outlet Air Node, !- Name
   {00000000-0000-0000-0017-000000000145},  !- Inlet Port
   {00000000-0000-0000-0017-000000000146};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0046-000000000042},  !- Handle
-  CoilCoolingDXSingleSpeed_ashp 90kBtu/hr 11.2EER Outlet Air Node, !- Name
+  CoilCoolingDXSingleSpeed_ashp 90kBtu/hr 11.0EER Outlet Air Node, !- Name
   {00000000-0000-0000-0017-000000000042},  !- Inlet Port
   {00000000-0000-0000-0017-000000000043};  !- Outlet Port
 
