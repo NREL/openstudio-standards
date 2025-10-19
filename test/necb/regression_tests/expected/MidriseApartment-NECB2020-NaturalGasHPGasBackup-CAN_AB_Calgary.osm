@@ -954,9 +954,9 @@ OS:Coil:Cooling:DX:SingleSpeed,
 
 OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0015-000000000001},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 1 31 Htg kBtu/hr 7.4HSPF, !- Name
+  CoilHeatingDXSingleSpeed_ashp 1 43 Htg kBtu/hr 7.4HSPF, !- Name
   {00000000-0000-0000-0062-000000000001},  !- Availability Schedule Name
-  9182.76937562046,                        !- Rated Total Heating Capacity {W}
+  Autosize,                                !- Rated Total Heating Capacity {W}
   3.658264,                                !- Rated COP {W/W}
   Autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
@@ -981,7 +981,7 @@ OS:Coil:Heating:DX:SingleSpeed,
 
 OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0015-000000000002},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 374 Htg kBtu/hr 3.2COPH, !- Name
+  CoilHeatingDXSingleSpeed_ashp 516 Htg kBtu/hr 3.2COPH, !- Name
   {00000000-0000-0000-0062-000000000001},  !- Availability Schedule Name
   Autosize,                                !- Rated Total Heating Capacity {W}
   3.64298459270472,                        !- Rated COP {W/W}
@@ -6071,21 +6071,21 @@ OS:EnergyManagementSystem:Actuator,
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0035-000000000001},  !- Handle
   ems_sys_1_mixed_shr_none_sc_ashp_sh_ashp_c_g_ssf_cv_zh_b_hw_zc_none_srf_none__OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {397a9b7a-0edb-4454-92f8-e455080b4175}<23.9 && {397a9b7a-0edb-4454-92f8-e455080b4175}>1.7, !- Program Line 1
-  SET {a4653c23-7d22-45e1-b135-560f63cfa9e9} = 29.4, !- Program Line 2
-  SET {bb35e61d-850c-43b7-879a-8260a005acc0} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {397a9b7a-0edb-4454-92f8-e455080b4175}<23.9 && {397a9b7a-0edb-4454-92f8-e455080b4175}>1.7, !- Program Line 4
-  SET {a4653c23-7d22-45e1-b135-560f63cfa9e9} = 29.4, !- Program Line 5
-  SET {bb35e61d-850c-43b7-879a-8260a005acc0} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {397a9b7a-0edb-4454-92f8-e455080b4175}<23.9 && {397a9b7a-0edb-4454-92f8-e455080b4175}>1.7, !- Program Line 7
-  SET {a4653c23-7d22-45e1-b135-560f63cfa9e9} = 29.4, !- Program Line 8
-  SET {bb35e61d-850c-43b7-879a-8260a005acc0} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {397a9b7a-0edb-4454-92f8-e455080b4175}<23.9 && {397a9b7a-0edb-4454-92f8-e455080b4175}>1.7, !- Program Line 10
-  SET {a4653c23-7d22-45e1-b135-560f63cfa9e9} = 29.4, !- Program Line 11
-  SET {bb35e61d-850c-43b7-879a-8260a005acc0} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {40d7b539-a398-44aa-ae98-b3d2b9c5359d}<23.9 && {40d7b539-a398-44aa-ae98-b3d2b9c5359d}>1.7, !- Program Line 1
+  SET {3c6e2f61-e686-4f26-a19f-6e03a97253e8} = 29.4, !- Program Line 2
+  SET {0d105a73-a94c-4cbd-aaf8-97d1694267da} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {40d7b539-a398-44aa-ae98-b3d2b9c5359d}<23.9 && {40d7b539-a398-44aa-ae98-b3d2b9c5359d}>1.7, !- Program Line 4
+  SET {3c6e2f61-e686-4f26-a19f-6e03a97253e8} = 29.4, !- Program Line 5
+  SET {0d105a73-a94c-4cbd-aaf8-97d1694267da} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {40d7b539-a398-44aa-ae98-b3d2b9c5359d}<23.9 && {40d7b539-a398-44aa-ae98-b3d2b9c5359d}>1.7, !- Program Line 7
+  SET {3c6e2f61-e686-4f26-a19f-6e03a97253e8} = 29.4, !- Program Line 8
+  SET {0d105a73-a94c-4cbd-aaf8-97d1694267da} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {40d7b539-a398-44aa-ae98-b3d2b9c5359d}<23.9 && {40d7b539-a398-44aa-ae98-b3d2b9c5359d}>1.7, !- Program Line 10
+  SET {3c6e2f61-e686-4f26-a19f-6e03a97253e8} = 29.4, !- Program Line 11
+  SET {0d105a73-a94c-4cbd-aaf8-97d1694267da} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {a4653c23-7d22-45e1-b135-560f63cfa9e9} = NULL, !- Program Line 14
-  SET {bb35e61d-850c-43b7-879a-8260a005acc0} = NULL, !- Program Line 15
+  SET {3c6e2f61-e686-4f26-a19f-6e03a97253e8} = NULL, !- Program Line 14
+  SET {0d105a73-a94c-4cbd-aaf8-97d1694267da} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:ProgramCallingManager,
@@ -7408,13 +7408,13 @@ OS:Node,
 
 OS:Node,
   {00000000-0000-0000-0050-000000000114},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 1 31 Htg kBtu/hr 7.4HSPF Outlet Air Node, !- Name
+  CoilHeatingDXSingleSpeed_ashp 1 43 Htg kBtu/hr 7.4HSPF Outlet Air Node, !- Name
   {00000000-0000-0000-0018-000000000315},  !- Inlet Port
   {00000000-0000-0000-0018-000000000316};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0050-000000000115},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 374 Htg kBtu/hr 3.2COPH Outlet Air Node, !- Name
+  CoilHeatingDXSingleSpeed_ashp 516 Htg kBtu/hr 3.2COPH Outlet Air Node, !- Name
   {00000000-0000-0000-0018-000000000060},  !- Inlet Port
   {00000000-0000-0000-0018-000000000061};  !- Outlet Port
 

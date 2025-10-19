@@ -358,7 +358,7 @@ OS:Coil:Cooling:DX:SingleSpeed,
 
 OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0013-000000000001},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 1 79 Htg kBtu/hr 3.3COPH, !- Name
+  CoilHeatingDXSingleSpeed_ashp 1 109 Htg kBtu/hr 3.3COPH, !- Name
   {00000000-0000-0000-0054-000000000001},  !- Availability Schedule Name
   Autosize,                                !- Rated Total Heating Capacity {W}
   3.5575974711404,                         !- Rated COP {W/W}
@@ -385,9 +385,9 @@ OS:Coil:Heating:DX:SingleSpeed,
 
 OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0013-000000000002},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 13 Htg kBtu/hr 14SEER, !- Name
+  CoilHeatingDXSingleSpeed_ashp 18 Htg kBtu/hr 14SEER, !- Name
   {00000000-0000-0000-0054-000000000001},  !- Availability Schedule Name
-  3915.12758667413,                        !- Rated Total Heating Capacity {W}
+  Autosize,                                !- Rated Total Heating Capacity {W}
   3.8248,                                  !- Rated COP {W/W}
   Autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
@@ -2654,13 +2654,13 @@ OS:Node,
 
 OS:Node,
   {00000000-0000-0000-0043-000000000016},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 1 79 Htg kBtu/hr 3.3COPH Outlet Air Node, !- Name
+  CoilHeatingDXSingleSpeed_ashp 1 109 Htg kBtu/hr 3.3COPH Outlet Air Node, !- Name
   {00000000-0000-0000-0015-000000000035},  !- Inlet Port
   {00000000-0000-0000-0015-000000000036};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0043-000000000017},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 13 Htg kBtu/hr 14SEER Outlet Air Node, !- Name
+  CoilHeatingDXSingleSpeed_ashp 18 Htg kBtu/hr 14SEER Outlet Air Node, !- Name
   {00000000-0000-0000-0015-000000000013},  !- Inlet Port
   {00000000-0000-0000-0015-000000000014};  !- Outlet Port
 

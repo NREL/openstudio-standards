@@ -1183,9 +1183,9 @@ OS:Coil:Cooling:DX:SingleSpeed,
 
 OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0015-000000000001},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 1 23 Htg kBtu/hr 7.4HSPF, !- Name
+  CoilHeatingDXSingleSpeed_ashp 1 32 Htg kBtu/hr 7.4HSPF, !- Name
   {00000000-0000-0000-0058-000000000001},  !- Availability Schedule Name
-  6692.13878548456,                        !- Rated Total Heating Capacity {W}
+  Autosize,                                !- Rated Total Heating Capacity {W}
   3.658264,                                !- Rated COP {W/W}
   Autosize,                                !- Rated Air Flow Rate {m3/s}
   773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
@@ -1210,7 +1210,7 @@ OS:Coil:Heating:DX:SingleSpeed,
 
 OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0015-000000000002},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 2 281 Htg kBtu/hr 3.2COPH, !- Name
+  CoilHeatingDXSingleSpeed_ashp 103 Htg kBtu/hr 3.3COPH, !- Name
   {00000000-0000-0000-0058-000000000001},  !- Availability Schedule Name
   Autosize,                                !- Rated Total Heating Capacity {W}
   3.55502320204616,                        !- Rated COP {W/W}
@@ -1237,7 +1237,7 @@ OS:Coil:Heating:DX:SingleSpeed,
 
 OS:Coil:Heating:DX:SingleSpeed,
   {00000000-0000-0000-0015-000000000003},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 2 388 Clg kBtu/hr 3.2COPH, !- Name
+  CoilHeatingDXSingleSpeed_ashp 2 388 Htg kBtu/hr 3.2COPH, !- Name
   {00000000-0000-0000-0058-000000000001},  !- Availability Schedule Name
   Autosize,                                !- Rated Total Heating Capacity {W}
   3.58228952187119,                        !- Rated COP {W/W}
@@ -1263,8 +1263,8 @@ OS:Coil:Heating:DX:SingleSpeed,
   2000;                                    !- Resistive Defrost Heater Capacity {W}
 
 OS:Coil:Heating:DX:SingleSpeed,
-  {00000000-0000-0000-0015-000000000003},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 3 4142 Htg kBtu/hr 3.2COPH, !- Name
+  {00000000-0000-0000-0015-000000000004},  !- Handle
+  CoilHeatingDXSingleSpeed_ashp 3 5718 Htg kBtu/hr 3.2COPH, !- Name
   {00000000-0000-0000-0058-000000000001},  !- Availability Schedule Name
   Autosize,                                !- Rated Total Heating Capacity {W}
   6.1064738719091,                         !- Rated COP {W/W}
@@ -1290,8 +1290,8 @@ OS:Coil:Heating:DX:SingleSpeed,
   2000;                                    !- Resistive Defrost Heater Capacity {W}
 
 OS:Coil:Heating:DX:SingleSpeed,
-  {00000000-0000-0000-0015-000000000004},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 4 420 Htg kBtu/hr 3.2COPH, !- Name
+  {00000000-0000-0000-0015-000000000005},  !- Handle
+  CoilHeatingDXSingleSpeed_ashp 4 580 Htg kBtu/hr 3.2COPH, !- Name
   {00000000-0000-0000-0058-000000000001},  !- Availability Schedule Name
   Autosize,                                !- Rated Total Heating Capacity {W}
   3.67309979074966,                        !- Rated COP {W/W}
@@ -1300,33 +1300,6 @@ OS:Coil:Heating:DX:SingleSpeed,
   934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
   {00000000-0000-0000-0018-000000000285},  !- Air Inlet Node Name
   {00000000-0000-0000-0018-000000000282},  !- Air Outlet Node Name
-  {00000000-0000-0000-0025-000000000029},  !- Total Heating Capacity Function of Temperature Curve Name
-  {00000000-0000-0000-0025-000000000028},  !- Total Heating Capacity Function of Flow Fraction Curve Name
-  {00000000-0000-0000-0025-000000000030},  !- Energy Input Ratio Function of Temperature Curve Name
-  {00000000-0000-0000-0026-000000000018},  !- Energy Input Ratio Function of Flow Fraction Curve Name
-  {00000000-0000-0000-0025-000000000031},  !- Part Load Fraction Correlation Curve Name
-  ,                                        !- Defrost Energy Input Ratio Function of Temperature Curve Name
-  -10,                                     !- Minimum Outdoor Dry-Bulb Temperature for Compressor Operation {C}
-  ,                                        !- Maximum Outdoor Dry-Bulb Temperature for Defrost Operation {C}
-  ,                                        !- Crankcase Heater Capacity {W}
-  ,                                        !- Crankcase Heater Capacity Function of Temperature Curve Name
-  ,                                        !- Maximum Outdoor Dry-Bulb Temperature for Crankcase Heater Operation {C}
-  Resistive,                               !- Defrost Strategy
-  Timed,                                   !- Defrost Control
-  0.166667,                                !- Defrost Time Period Fraction
-  2000;                                    !- Resistive Defrost Heater Capacity {W}
-
-OS:Coil:Heating:DX:SingleSpeed,
-  {00000000-0000-0000-0015-000000000005},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 75 Htg kBtu/hr 3.3COPH, !- Name
-  {00000000-0000-0000-0058-000000000001},  !- Availability Schedule Name
-  21918.2437301494,                        !- Rated Total Heating Capacity {W}
-  3.54112653341565,                        !- Rated COP {W/W}
-  Autosize,                                !- Rated Air Flow Rate {m3/s}
-  773.3,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2017 {W/(m3/s)}
-  934.4,                                   !- Rated Supply Fan Power Per Volume Flow Rate 2023 {W/(m3/s)}
-  {00000000-0000-0000-0018-000000000084},  !- Air Inlet Node Name
-  {00000000-0000-0000-0018-000000000081},  !- Air Outlet Node Name
   {00000000-0000-0000-0025-000000000029},  !- Total Heating Capacity Function of Temperature Curve Name
   {00000000-0000-0000-0025-000000000028},  !- Total Heating Capacity Function of Flow Fraction Curve Name
   {00000000-0000-0000-0025-000000000030},  !- Energy Input Ratio Function of Temperature Curve Name
@@ -6715,61 +6688,61 @@ OS:EnergyManagementSystem:Actuator,
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0035-000000000001},  !- Handle
   ems_sys_6_mixed_shr_none_sh_ashp_sc_ashp_ssf_cv_zh_b_hw_zc_none_srf_cv__1_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {a31e1c3c-adcf-4e80-bfad-cf21d0766af4}<23.9 && {a31e1c3c-adcf-4e80-bfad-cf21d0766af4}>1.7, !- Program Line 1
-  SET {68a2f0f7-ab5b-4748-93bc-2e3a489155d8} = 29.4, !- Program Line 2
-  SET {1a9ce182-6426-40ca-a8b1-075341a45d59} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {a31e1c3c-adcf-4e80-bfad-cf21d0766af4}<23.9 && {a31e1c3c-adcf-4e80-bfad-cf21d0766af4}>1.7, !- Program Line 4
-  SET {68a2f0f7-ab5b-4748-93bc-2e3a489155d8} = 29.4, !- Program Line 5
-  SET {1a9ce182-6426-40ca-a8b1-075341a45d59} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {a31e1c3c-adcf-4e80-bfad-cf21d0766af4}<23.9 && {a31e1c3c-adcf-4e80-bfad-cf21d0766af4}>1.7, !- Program Line 7
-  SET {68a2f0f7-ab5b-4748-93bc-2e3a489155d8} = 29.4, !- Program Line 8
-  SET {1a9ce182-6426-40ca-a8b1-075341a45d59} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {a31e1c3c-adcf-4e80-bfad-cf21d0766af4}<23.9 && {a31e1c3c-adcf-4e80-bfad-cf21d0766af4}>1.7, !- Program Line 10
-  SET {68a2f0f7-ab5b-4748-93bc-2e3a489155d8} = 29.4, !- Program Line 11
-  SET {1a9ce182-6426-40ca-a8b1-075341a45d59} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {34cb1e50-6c8d-4350-8718-9ce468d41c83}<23.9 && {34cb1e50-6c8d-4350-8718-9ce468d41c83}>1.7, !- Program Line 1
+  SET {2b2d5892-ef3d-453a-b22f-704f56c30fe1} = 29.4, !- Program Line 2
+  SET {3c737fb9-5238-43ea-a933-3a763bf4ed93} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {34cb1e50-6c8d-4350-8718-9ce468d41c83}<23.9 && {34cb1e50-6c8d-4350-8718-9ce468d41c83}>1.7, !- Program Line 4
+  SET {2b2d5892-ef3d-453a-b22f-704f56c30fe1} = 29.4, !- Program Line 5
+  SET {3c737fb9-5238-43ea-a933-3a763bf4ed93} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {34cb1e50-6c8d-4350-8718-9ce468d41c83}<23.9 && {34cb1e50-6c8d-4350-8718-9ce468d41c83}>1.7, !- Program Line 7
+  SET {2b2d5892-ef3d-453a-b22f-704f56c30fe1} = 29.4, !- Program Line 8
+  SET {3c737fb9-5238-43ea-a933-3a763bf4ed93} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {34cb1e50-6c8d-4350-8718-9ce468d41c83}<23.9 && {34cb1e50-6c8d-4350-8718-9ce468d41c83}>1.7, !- Program Line 10
+  SET {2b2d5892-ef3d-453a-b22f-704f56c30fe1} = 29.4, !- Program Line 11
+  SET {3c737fb9-5238-43ea-a933-3a763bf4ed93} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {68a2f0f7-ab5b-4748-93bc-2e3a489155d8} = NULL, !- Program Line 14
-  SET {1a9ce182-6426-40ca-a8b1-075341a45d59} = NULL, !- Program Line 15
+  SET {2b2d5892-ef3d-453a-b22f-704f56c30fe1} = NULL, !- Program Line 14
+  SET {3c737fb9-5238-43ea-a933-3a763bf4ed93} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0035-000000000002},  !- Handle
   ems_sys_6_mixed_shr_none_sh_ashp_sc_ashp_ssf_cv_zh_b_hw_zc_none_srf_cv__2_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {37f4d25e-5f9e-4afa-a7b4-c27fccd1b17f}<23.9 && {37f4d25e-5f9e-4afa-a7b4-c27fccd1b17f}>1.7, !- Program Line 1
-  SET {af1f2650-0736-4d64-8d63-7b13b9dac77a} = 29.4, !- Program Line 2
-  SET {c41e482e-e385-4953-b1e5-973469b76e97} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {37f4d25e-5f9e-4afa-a7b4-c27fccd1b17f}<23.9 && {37f4d25e-5f9e-4afa-a7b4-c27fccd1b17f}>1.7, !- Program Line 4
-  SET {af1f2650-0736-4d64-8d63-7b13b9dac77a} = 29.4, !- Program Line 5
-  SET {c41e482e-e385-4953-b1e5-973469b76e97} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {37f4d25e-5f9e-4afa-a7b4-c27fccd1b17f}<23.9 && {37f4d25e-5f9e-4afa-a7b4-c27fccd1b17f}>1.7, !- Program Line 7
-  SET {af1f2650-0736-4d64-8d63-7b13b9dac77a} = 29.4, !- Program Line 8
-  SET {c41e482e-e385-4953-b1e5-973469b76e97} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {37f4d25e-5f9e-4afa-a7b4-c27fccd1b17f}<23.9 && {37f4d25e-5f9e-4afa-a7b4-c27fccd1b17f}>1.7, !- Program Line 10
-  SET {af1f2650-0736-4d64-8d63-7b13b9dac77a} = 29.4, !- Program Line 11
-  SET {c41e482e-e385-4953-b1e5-973469b76e97} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {d809bf49-52dd-4755-a594-bcbed634da39}<23.9 && {d809bf49-52dd-4755-a594-bcbed634da39}>1.7, !- Program Line 1
+  SET {58126dae-0e0a-4e04-a8ef-63643c81c364} = 29.4, !- Program Line 2
+  SET {c7f47e69-d3c5-4422-ae36-41a79cb14993} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {d809bf49-52dd-4755-a594-bcbed634da39}<23.9 && {d809bf49-52dd-4755-a594-bcbed634da39}>1.7, !- Program Line 4
+  SET {58126dae-0e0a-4e04-a8ef-63643c81c364} = 29.4, !- Program Line 5
+  SET {c7f47e69-d3c5-4422-ae36-41a79cb14993} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {d809bf49-52dd-4755-a594-bcbed634da39}<23.9 && {d809bf49-52dd-4755-a594-bcbed634da39}>1.7, !- Program Line 7
+  SET {58126dae-0e0a-4e04-a8ef-63643c81c364} = 29.4, !- Program Line 8
+  SET {c7f47e69-d3c5-4422-ae36-41a79cb14993} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {d809bf49-52dd-4755-a594-bcbed634da39}<23.9 && {d809bf49-52dd-4755-a594-bcbed634da39}>1.7, !- Program Line 10
+  SET {58126dae-0e0a-4e04-a8ef-63643c81c364} = 29.4, !- Program Line 11
+  SET {c7f47e69-d3c5-4422-ae36-41a79cb14993} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {af1f2650-0736-4d64-8d63-7b13b9dac77a} = NULL, !- Program Line 14
-  SET {c41e482e-e385-4953-b1e5-973469b76e97} = NULL, !- Program Line 15
+  SET {58126dae-0e0a-4e04-a8ef-63643c81c364} = NULL, !- Program Line 14
+  SET {c7f47e69-d3c5-4422-ae36-41a79cb14993} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0035-000000000003},  !- Handle
   ems_sys_6_mixed_shr_none_sh_ashp_sc_ashp_ssf_cv_zh_b_hw_zc_none_srf_cv__3_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {29141420-9c1c-480b-8de4-7f5893c875e5}<23.9 && {29141420-9c1c-480b-8de4-7f5893c875e5}>1.7, !- Program Line 1
-  SET {c67ce700-23b3-4f9a-8218-b2dfbcaddd85} = 29.4, !- Program Line 2
-  SET {3a39c75e-33f4-4a60-9182-02def2ea7a98} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {29141420-9c1c-480b-8de4-7f5893c875e5}<23.9 && {29141420-9c1c-480b-8de4-7f5893c875e5}>1.7, !- Program Line 4
-  SET {c67ce700-23b3-4f9a-8218-b2dfbcaddd85} = 29.4, !- Program Line 5
-  SET {3a39c75e-33f4-4a60-9182-02def2ea7a98} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {29141420-9c1c-480b-8de4-7f5893c875e5}<23.9 && {29141420-9c1c-480b-8de4-7f5893c875e5}>1.7, !- Program Line 7
-  SET {c67ce700-23b3-4f9a-8218-b2dfbcaddd85} = 29.4, !- Program Line 8
-  SET {3a39c75e-33f4-4a60-9182-02def2ea7a98} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {29141420-9c1c-480b-8de4-7f5893c875e5}<23.9 && {29141420-9c1c-480b-8de4-7f5893c875e5}>1.7, !- Program Line 10
-  SET {c67ce700-23b3-4f9a-8218-b2dfbcaddd85} = 29.4, !- Program Line 11
-  SET {3a39c75e-33f4-4a60-9182-02def2ea7a98} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {c016105e-74ba-4825-94e3-59b53bc0ffe4}<23.9 && {c016105e-74ba-4825-94e3-59b53bc0ffe4}>1.7, !- Program Line 1
+  SET {0b247a8a-3b36-49c7-b8c1-e2ab675976a9} = 29.4, !- Program Line 2
+  SET {e5df4ad5-9d38-4499-83be-1908d75881ed} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {c016105e-74ba-4825-94e3-59b53bc0ffe4}<23.9 && {c016105e-74ba-4825-94e3-59b53bc0ffe4}>1.7, !- Program Line 4
+  SET {0b247a8a-3b36-49c7-b8c1-e2ab675976a9} = 29.4, !- Program Line 5
+  SET {e5df4ad5-9d38-4499-83be-1908d75881ed} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {c016105e-74ba-4825-94e3-59b53bc0ffe4}<23.9 && {c016105e-74ba-4825-94e3-59b53bc0ffe4}>1.7, !- Program Line 7
+  SET {0b247a8a-3b36-49c7-b8c1-e2ab675976a9} = 29.4, !- Program Line 8
+  SET {e5df4ad5-9d38-4499-83be-1908d75881ed} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {c016105e-74ba-4825-94e3-59b53bc0ffe4}<23.9 && {c016105e-74ba-4825-94e3-59b53bc0ffe4}>1.7, !- Program Line 10
+  SET {0b247a8a-3b36-49c7-b8c1-e2ab675976a9} = 29.4, !- Program Line 11
+  SET {e5df4ad5-9d38-4499-83be-1908d75881ed} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {c67ce700-23b3-4f9a-8218-b2dfbcaddd85} = NULL, !- Program Line 14
-  SET {3a39c75e-33f4-4a60-9182-02def2ea7a98} = NULL, !- Program Line 15
+  SET {0b247a8a-3b36-49c7-b8c1-e2ab675976a9} = NULL, !- Program Line 14
+  SET {e5df4ad5-9d38-4499-83be-1908d75881ed} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:ProgramCallingManager,
@@ -7606,82 +7579,82 @@ OS:ModelObjectList,
 OS:ModelObjectList,
   {00000000-0000-0000-0047-000000000021},  !- Handle
   Table Lookup 1 Independent Variable List 20, !- Name
-  {00000000-0000-0000-0090-000000000012};  !- Model Object 1
+  {00000000-0000-0000-0090-000000000016};  !- Model Object 1
 
 OS:ModelObjectList,
   {00000000-0000-0000-0047-000000000022},  !- Handle
   Table Lookup 1 Independent Variable List 21, !- Name
-  {00000000-0000-0000-0090-000000000010};  !- Model Object 1
+  {00000000-0000-0000-0090-000000000014};  !- Model Object 1
 
 OS:ModelObjectList,
   {00000000-0000-0000-0047-000000000023},  !- Handle
   Table Lookup 1 Independent Variable List 22, !- Name
-  {00000000-0000-0000-0090-000000000011};  !- Model Object 1
+  {00000000-0000-0000-0090-000000000015};  !- Model Object 1
 
 OS:ModelObjectList,
   {00000000-0000-0000-0047-000000000024},  !- Handle
   Table Lookup 1 Independent Variable List 23, !- Name
-  {00000000-0000-0000-0090-000000000009};  !- Model Object 1
+  {00000000-0000-0000-0090-000000000013};  !- Model Object 1
 
 OS:ModelObjectList,
   {00000000-0000-0000-0047-000000000025},  !- Handle
   Table Lookup 1 Independent Variable List 24, !- Name
-  {00000000-0000-0000-0090-000000000008};  !- Model Object 1
+  {00000000-0000-0000-0090-000000000012};  !- Model Object 1
 
 OS:ModelObjectList,
   {00000000-0000-0000-0047-000000000026},  !- Handle
   Table Lookup 1 Independent Variable List 25, !- Name
-  {00000000-0000-0000-0090-000000000006};  !- Model Object 1
+  {00000000-0000-0000-0090-000000000010};  !- Model Object 1
 
 OS:ModelObjectList,
   {00000000-0000-0000-0047-000000000027},  !- Handle
   Table Lookup 1 Independent Variable List 26, !- Name
-  {00000000-0000-0000-0090-000000000007};  !- Model Object 1
+  {00000000-0000-0000-0090-000000000011};  !- Model Object 1
 
 OS:ModelObjectList,
   {00000000-0000-0000-0047-000000000028},  !- Handle
   Table Lookup 1 Independent Variable List 27, !- Name
-  {00000000-0000-0000-0090-000000000005};  !- Model Object 1
+  {00000000-0000-0000-0090-000000000009};  !- Model Object 1
 
 OS:ModelObjectList,
   {00000000-0000-0000-0047-000000000029},  !- Handle
   Table Lookup 1 Independent Variable List 28, !- Name
-  {00000000-0000-0000-0090-000000000016};  !- Model Object 1
+  {00000000-0000-0000-0090-000000000020};  !- Model Object 1
 
 OS:ModelObjectList,
   {00000000-0000-0000-0047-000000000030},  !- Handle
   Table Lookup 1 Independent Variable List 29, !- Name
-  {00000000-0000-0000-0090-000000000014};  !- Model Object 1
+  {00000000-0000-0000-0090-000000000018};  !- Model Object 1
 
 OS:ModelObjectList,
   {00000000-0000-0000-0047-000000000031},  !- Handle
   Table Lookup 1 Independent Variable List 30, !- Name
-  {00000000-0000-0000-0090-000000000015};  !- Model Object 1
+  {00000000-0000-0000-0090-000000000019};  !- Model Object 1
 
 OS:ModelObjectList,
   {00000000-0000-0000-0047-000000000032},  !- Handle
   Table Lookup 1 Independent Variable List 31, !- Name
-  {00000000-0000-0000-0090-000000000013};  !- Model Object 1
+  {00000000-0000-0000-0090-000000000017};  !- Model Object 1
 
 OS:ModelObjectList,
   {00000000-0000-0000-0047-000000000033},  !- Handle
   Table Lookup 1 Independent Variable List 32, !- Name
-  {00000000-0000-0000-0090-000000000020};  !- Model Object 1
+  {00000000-0000-0000-0090-000000000008};  !- Model Object 1
 
 OS:ModelObjectList,
   {00000000-0000-0000-0047-000000000034},  !- Handle
   Table Lookup 1 Independent Variable List 33, !- Name
-  {00000000-0000-0000-0090-000000000018};  !- Model Object 1
+  {00000000-0000-0000-0090-000000000006};  !- Model Object 1
 
 OS:ModelObjectList,
   {00000000-0000-0000-0047-000000000035},  !- Handle
   Table Lookup 1 Independent Variable List 34, !- Name
-  {00000000-0000-0000-0090-000000000019};  !- Model Object 1
+  {00000000-0000-0000-0090-000000000007};  !- Model Object 1
 
 OS:ModelObjectList,
   {00000000-0000-0000-0047-000000000036},  !- Handle
   Table Lookup 1 Independent Variable List 35, !- Name
-  {00000000-0000-0000-0090-000000000017};  !- Model Object 1
+  {00000000-0000-0000-0090-000000000005};  !- Model Object 1
 
 OS:ModelObjectList,
   {00000000-0000-0000-0047-000000000037},  !- Handle
@@ -8479,33 +8452,33 @@ OS:Node,
 
 OS:Node,
   {00000000-0000-0000-0048-000000000130},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 1 23 Htg kBtu/hr 7.4HSPF Outlet Air Node, !- Name
+  CoilHeatingDXSingleSpeed_ashp 1 32 Htg kBtu/hr 7.4HSPF Outlet Air Node, !- Name
   {00000000-0000-0000-0018-000000000104},  !- Inlet Port
   {00000000-0000-0000-0018-000000000105};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0048-000000000131},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 2 281 Htg kBtu/hr 3.2COPH Outlet Air Node, !- Name
+  CoilHeatingDXSingleSpeed_ashp 103 Htg kBtu/hr 3.3COPH Outlet Air Node, !- Name
+  {00000000-0000-0000-0018-000000000081},  !- Inlet Port
+  {00000000-0000-0000-0018-000000000082};  !- Outlet Port
+
+OS:Node,
+  {00000000-0000-0000-0048-000000000132},  !- Handle
+  CoilHeatingDXSingleSpeed_ashp 2 388 Htg kBtu/hr 3.2COPH Outlet Air Node, !- Name
   {00000000-0000-0000-0018-000000000130},  !- Inlet Port
   {00000000-0000-0000-0018-000000000131};  !- Outlet Port
 
 OS:Node,
-  {00000000-0000-0000-0048-000000000132},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 3 4142 Htg kBtu/hr 3.2COPH Outlet Air Node, !- Name
+  {00000000-0000-0000-0048-000000000133},  !- Handle
+  CoilHeatingDXSingleSpeed_ashp 3 5718 Htg kBtu/hr 3.2COPH Outlet Air Node, !- Name
   {00000000-0000-0000-0018-000000000206},  !- Inlet Port
   {00000000-0000-0000-0018-000000000207};  !- Outlet Port
 
 OS:Node,
-  {00000000-0000-0000-0048-000000000133},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 4 420 Htg kBtu/hr 3.2COPH Outlet Air Node, !- Name
+  {00000000-0000-0000-0048-000000000134},  !- Handle
+  CoilHeatingDXSingleSpeed_ashp 4 580 Htg kBtu/hr 3.2COPH Outlet Air Node, !- Name
   {00000000-0000-0000-0018-000000000282},  !- Inlet Port
   {00000000-0000-0000-0018-000000000283};  !- Outlet Port
-
-OS:Node,
-  {00000000-0000-0000-0048-000000000134},  !- Handle
-  CoilHeatingDXSingleSpeed_ashp 75 Htg kBtu/hr 3.3COPH Outlet Air Node, !- Name
-  {00000000-0000-0000-0018-000000000081},  !- Inlet Port
-  {00000000-0000-0000-0018-000000000082};  !- Outlet Port
 
 OS:Node,
   {00000000-0000-0000-0048-000000000135},  !- Handle
@@ -17571,7 +17544,7 @@ OS:Table:Lookup,
 OS:Table:Lookup,
   {00000000-0000-0000-0091-000000000005},  !- Handle
   sys_6|mixed|shr>none|sh>ashp|sc>ashp|ssf>cv|zh>b-hw|zc>none|srf>cv| 1 ERV_LatCoolEff 1, !- Name
-  {00000000-0000-0000-0047-000000000028},  !- Independent Variable List Name
+  {00000000-0000-0000-0047-000000000036},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
   0,                                       !- Minimum Output {BasedOnField A5}
@@ -17586,7 +17559,7 @@ OS:Table:Lookup,
 OS:Table:Lookup,
   {00000000-0000-0000-0091-000000000006},  !- Handle
   sys_6|mixed|shr>none|sh>ashp|sc>ashp|ssf>cv|zh>b-hw|zc>none|srf>cv| 1 ERV_LatHeatEff 1, !- Name
-  {00000000-0000-0000-0047-000000000026},  !- Independent Variable List Name
+  {00000000-0000-0000-0047-000000000034},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
   0,                                       !- Minimum Output {BasedOnField A5}
@@ -17601,7 +17574,7 @@ OS:Table:Lookup,
 OS:Table:Lookup,
   {00000000-0000-0000-0091-000000000007},  !- Handle
   sys_6|mixed|shr>none|sh>ashp|sc>ashp|ssf>cv|zh>b-hw|zc>none|srf>cv| 1 ERV_SensCoolEff 1, !- Name
-  {00000000-0000-0000-0047-000000000027},  !- Independent Variable List Name
+  {00000000-0000-0000-0047-000000000035},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
   0,                                       !- Minimum Output {BasedOnField A5}
@@ -17616,7 +17589,7 @@ OS:Table:Lookup,
 OS:Table:Lookup,
   {00000000-0000-0000-0091-000000000008},  !- Handle
   sys_6|mixed|shr>none|sh>ashp|sc>ashp|ssf>cv|zh>b-hw|zc>none|srf>cv| 1 ERV_SensHeatEff 1, !- Name
-  {00000000-0000-0000-0047-000000000025},  !- Independent Variable List Name
+  {00000000-0000-0000-0047-000000000033},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
   0,                                       !- Minimum Output {BasedOnField A5}
@@ -17631,7 +17604,7 @@ OS:Table:Lookup,
 OS:Table:Lookup,
   {00000000-0000-0000-0091-000000000009},  !- Handle
   sys_6|mixed|shr>none|sh>ashp|sc>ashp|ssf>cv|zh>b-hw|zc>none|srf>cv| 2 ERV_LatCoolEff 1, !- Name
-  {00000000-0000-0000-0047-000000000024},  !- Independent Variable List Name
+  {00000000-0000-0000-0047-000000000028},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
   0,                                       !- Minimum Output {BasedOnField A5}
@@ -17646,7 +17619,7 @@ OS:Table:Lookup,
 OS:Table:Lookup,
   {00000000-0000-0000-0091-000000000010},  !- Handle
   sys_6|mixed|shr>none|sh>ashp|sc>ashp|ssf>cv|zh>b-hw|zc>none|srf>cv| 2 ERV_LatHeatEff 1, !- Name
-  {00000000-0000-0000-0047-000000000022},  !- Independent Variable List Name
+  {00000000-0000-0000-0047-000000000026},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
   0,                                       !- Minimum Output {BasedOnField A5}
@@ -17661,7 +17634,7 @@ OS:Table:Lookup,
 OS:Table:Lookup,
   {00000000-0000-0000-0091-000000000011},  !- Handle
   sys_6|mixed|shr>none|sh>ashp|sc>ashp|ssf>cv|zh>b-hw|zc>none|srf>cv| 2 ERV_SensCoolEff 1, !- Name
-  {00000000-0000-0000-0047-000000000023},  !- Independent Variable List Name
+  {00000000-0000-0000-0047-000000000027},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
   0,                                       !- Minimum Output {BasedOnField A5}
@@ -17676,7 +17649,7 @@ OS:Table:Lookup,
 OS:Table:Lookup,
   {00000000-0000-0000-0091-000000000012},  !- Handle
   sys_6|mixed|shr>none|sh>ashp|sc>ashp|ssf>cv|zh>b-hw|zc>none|srf>cv| 2 ERV_SensHeatEff 1, !- Name
-  {00000000-0000-0000-0047-000000000021},  !- Independent Variable List Name
+  {00000000-0000-0000-0047-000000000025},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
   0,                                       !- Minimum Output {BasedOnField A5}
@@ -17691,7 +17664,7 @@ OS:Table:Lookup,
 OS:Table:Lookup,
   {00000000-0000-0000-0091-000000000013},  !- Handle
   sys_6|mixed|shr>none|sh>ashp|sc>ashp|ssf>cv|zh>b-hw|zc>none|srf>cv| 3 ERV_LatCoolEff 1, !- Name
-  {00000000-0000-0000-0047-000000000032},  !- Independent Variable List Name
+  {00000000-0000-0000-0047-000000000024},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
   0,                                       !- Minimum Output {BasedOnField A5}
@@ -17706,7 +17679,7 @@ OS:Table:Lookup,
 OS:Table:Lookup,
   {00000000-0000-0000-0091-000000000014},  !- Handle
   sys_6|mixed|shr>none|sh>ashp|sc>ashp|ssf>cv|zh>b-hw|zc>none|srf>cv| 3 ERV_LatHeatEff 1, !- Name
-  {00000000-0000-0000-0047-000000000030},  !- Independent Variable List Name
+  {00000000-0000-0000-0047-000000000022},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
   0,                                       !- Minimum Output {BasedOnField A5}
@@ -17721,7 +17694,7 @@ OS:Table:Lookup,
 OS:Table:Lookup,
   {00000000-0000-0000-0091-000000000015},  !- Handle
   sys_6|mixed|shr>none|sh>ashp|sc>ashp|ssf>cv|zh>b-hw|zc>none|srf>cv| 3 ERV_SensCoolEff 1, !- Name
-  {00000000-0000-0000-0047-000000000031},  !- Independent Variable List Name
+  {00000000-0000-0000-0047-000000000023},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
   0,                                       !- Minimum Output {BasedOnField A5}
@@ -17736,7 +17709,7 @@ OS:Table:Lookup,
 OS:Table:Lookup,
   {00000000-0000-0000-0091-000000000016},  !- Handle
   sys_6|mixed|shr>none|sh>ashp|sc>ashp|ssf>cv|zh>b-hw|zc>none|srf>cv| 3 ERV_SensHeatEff 1, !- Name
-  {00000000-0000-0000-0047-000000000029},  !- Independent Variable List Name
+  {00000000-0000-0000-0047-000000000021},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
   0,                                       !- Minimum Output {BasedOnField A5}
@@ -17751,7 +17724,7 @@ OS:Table:Lookup,
 OS:Table:Lookup,
   {00000000-0000-0000-0091-000000000017},  !- Handle
   sys_6|mixed|shr>none|sh>ashp|sc>ashp|ssf>cv|zh>b-hw|zc>none|srf>cv| ERV_LatCoolEff 1, !- Name
-  {00000000-0000-0000-0047-000000000036},  !- Independent Variable List Name
+  {00000000-0000-0000-0047-000000000032},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
   0,                                       !- Minimum Output {BasedOnField A5}
@@ -17766,7 +17739,7 @@ OS:Table:Lookup,
 OS:Table:Lookup,
   {00000000-0000-0000-0091-000000000018},  !- Handle
   sys_6|mixed|shr>none|sh>ashp|sc>ashp|ssf>cv|zh>b-hw|zc>none|srf>cv| ERV_LatHeatEff 1, !- Name
-  {00000000-0000-0000-0047-000000000034},  !- Independent Variable List Name
+  {00000000-0000-0000-0047-000000000030},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
   0,                                       !- Minimum Output {BasedOnField A5}
@@ -17781,7 +17754,7 @@ OS:Table:Lookup,
 OS:Table:Lookup,
   {00000000-0000-0000-0091-000000000019},  !- Handle
   sys_6|mixed|shr>none|sh>ashp|sc>ashp|ssf>cv|zh>b-hw|zc>none|srf>cv| ERV_SensCoolEff 1, !- Name
-  {00000000-0000-0000-0047-000000000035},  !- Independent Variable List Name
+  {00000000-0000-0000-0047-000000000031},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
   0,                                       !- Minimum Output {BasedOnField A5}
@@ -17796,7 +17769,7 @@ OS:Table:Lookup,
 OS:Table:Lookup,
   {00000000-0000-0000-0091-000000000020},  !- Handle
   sys_6|mixed|shr>none|sh>ashp|sc>ashp|ssf>cv|zh>b-hw|zc>none|srf>cv| ERV_SensHeatEff 1, !- Name
-  {00000000-0000-0000-0047-000000000033},  !- Independent Variable List Name
+  {00000000-0000-0000-0047-000000000029},  !- Independent Variable List Name
   DivisorOnly,                             !- Normalization Method
   0.5,                                     !- Normalization Divisor
   0,                                       !- Minimum Output {BasedOnField A5}
