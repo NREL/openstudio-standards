@@ -323,16 +323,13 @@ class BTAPDatapoint
     require 'aws-sdk-s3'
     Aws.use_bundled_cert!
     s3_client = Aws::S3::Client.new(region: 'ca-central-1')
+    # Using transfer manager class instead of depricated method
     transfer_manager = Aws::S3::TransferManager.new(client: s3_client)
-    #s3_resource = Aws::S3::Resource.new(region: 'ca-central-1')
 
     puts("Copying File to S3. source_file:#{source_file} bucket:#{bucket_name} target_folder:#{target_file}")
     response = nil
     begin
-      #obj = s3_resource.bucket(bucket_name).object(target_file)
-
-      # passing the TempFile object's path is massively faster than passing the TempFile object itself
-      #result = obj.upload_file(source_file)
+      # Using upload_file from transfer manager class instead of depricated method from older class structure
       result = transfer_manager.upload_file(source_file, bucket: bucket_name, key: target_file)
 
       if result == true
