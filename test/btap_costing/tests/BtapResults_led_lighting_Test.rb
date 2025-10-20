@@ -144,7 +144,7 @@ class BTAPResults_Test < Minitest::Test
     end
 
     cost_result = post_analysis.run_costing
-    helper.evaluate_regression_files(test_instance: self)
+    helper.evaluate_regression_files(test_instance: self, cost_result: cost_result)
   end
 end
 
