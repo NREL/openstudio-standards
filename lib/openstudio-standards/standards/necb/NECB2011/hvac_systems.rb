@@ -23,8 +23,8 @@ class NECB2011
     economizer_required = false
 
     # need a better way to determine if an economizer is needed.
-    return economizer_required if ((air_loop_hvac.name.to_s.include? 'Outpatient F1' ) ||
-                                   (air_loop_hvac.sizingSystem.typeofLoadtoSizeOn.to_s == "VentilationRequirement"))
+    return economizer_required if ((air_loop_hvac.name.to_s.include? 'Outpatient F1') ||
+      (air_loop_hvac.sizingSystem.typeofLoadtoSizeOn.to_s == "VentilationRequirement"))
 
     # A big number of btu per hr as the minimum requirement
     infinity_btu_per_hr = 999_999_999_999
@@ -117,14 +117,12 @@ class NECB2011
     # OpenStudio::logFree(OpenStudio::Info, "openstudio.standards.AirLoopHVAC", "For #{self.name}, ERV not applicable because it because it serves parking garage, warehouse, or multifamily.")
     # return false
     # end
-
     erv_required = nil
     # ERV not applicable for medical AHUs (AHU1 in Outpatient), per AIA 2001 - 7.31.D2.
     if air_loop_hvac.name.to_s.include? 'Outpatient F1'
       erv_required = false
       return erv_required
     end
-
     # ERV not applicable for medical AHUs, per AIA 2001 - 7.31.D2.
     if air_loop_hvac.name.to_s.include? 'VAV_ER'
       erv_required = false
@@ -133,7 +131,6 @@ class NECB2011
       erv_required = false
       return erv_required
     end
-
     # ERV Not Applicable for AHUs that have DCV
     # or that have no OA intake.
     controller_oa = nil
@@ -176,7 +173,7 @@ class NECB2011
     end
     min_oa_flow_cfm = OpenStudio.convert(min_oa_flow_m3_per_s, 'm^3/s', 'cfm').get
 
-    # Calculate the percent OA at design airflow
+    # Calculate the fraction OA at design airflow.
     pct_oa = min_oa_flow_m3_per_s / dsn_flow_m3_per_s
 
     # The NECB2011 requirement is that systems with an exhaust heat content > 150 kW require an HRV
@@ -185,7 +182,8 @@ class NECB2011
     erv_cfm = nil
 
     # Determine if an ERV is required
-    # erv_required = nil
+    # erv_cfm = nil
+
     if erv_cfm.nil?
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}, ERV not required based on #{(pct_oa * 100).round}% OA flow, design supply air flow of #{dsn_flow_cfm.round}cfm, and climate zone #{climate_zone}.")
       erv_required = false
@@ -197,53 +195,87 @@ class NECB2011
       erv_required = true
     end
 
-    # This code modifies erv_required for NECB2011
-    # Calculation of exhaust heat content and check whether it is > 150 kW
+    # Calculate the heat content pof the exhaust air.
+    exhaust_heat_content = calculate_exhaust_heat(air_loop_hvac)
 
-    # get all zones in the model
-    zones = air_loop_hvac.thermalZones
-
-    # initialize counters
+    # Modify erv_required based on exhaust heat content
+    if exhaust_heat_content > 150.0
+      erv_required = true
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}, ERV required based on exhaust heat content.")
+    else
+      erv_required = false
+      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}, ERV not required based on exhaust heat content.")
+    end
+    return erv_required
+   end
+  
+   def calculate_exhaust_heat(air_loop_hvac)
+    # Initialize counters
     sum_zone_oa = 0.0
     sum_zone_oa_times_heat_design_t = 0.0
+    exhaust_heat_content = 0.0
 
-    # zone loop
+    # Get all zones in the model
+    zones = air_loop_hvac.thermalZones
+
     zones.each do |zone|
-      # get design heat temperature for each zone; this is equivalent to design exhaust temperature
-      heat_design_t = 21.0
-      zone_thermostat = zone.thermostat.get
-      if zone_thermostat.to_ThermostatSetpointDualSetpoint.is_initialized
-        dual_thermostat = zone_thermostat.to_ThermostatSetpointDualSetpoint.get
-        if dual_thermostat.heatingSetpointTemperatureSchedule.is_initialized
-          htg_temp_sch = dual_thermostat.heatingSetpointTemperatureSchedule.get
-          htg_temp_sch_ruleset = htg_temp_sch.to_ScheduleRuleset.get
-          winter_dd_sch = htg_temp_sch_ruleset.winterDesignDaySchedule
-          heat_design_t = winter_dd_sch.values.max
-        end
-      end
-      # initialize counter
+      # Initialize variables
       zone_oa = 0.0
-      # outdoor defined at space level; get OA flow for all spaces within zone
-      spaces = zone.spaces
+      heat_design_t = 21.0
 
-      # space loop
-      spaces.each do |space|
-        unless space.designSpecificationOutdoorAir.empty? # if empty, don't do anything
-          outdoor_air = space.designSpecificationOutdoorAir.get
-          # in bTAP, outdoor air specified as outdoor air per
-          oa_flow_per_floor_area = outdoor_air.outdoorAirFlowperFloorArea
-          oa_flow = oa_flow_per_floor_area * space.floorArea * zone.multiplier # oa flow for the space
-          zone_oa += oa_flow # add up oa flow for all spaces to get zone air flow
+      zone.spaces.each do |space|
+        next if space.designSpecificationOutdoorAir.empty?
+        outdoor_air = space.designSpecificationOutdoorAir.get
+
+        # Initialize variables
+        outdoorAirFlowRate = 0.0
+        oa_flow_per_floor_area = 0.0
+        oa_flow_per_person = 0.0
+        oa_flow_ach = 0.0
+
+        # Assign values conditionally
+        outdoorAirFlowRate = outdoor_air.outdoorAirFlowRate * zone.multiplier if outdoor_air.outdoorAirFlowRate > 0.0
+        oa_flow_per_floor_area = outdoor_air.outdoorAirFlowperFloorArea * zone.floorArea * zone.multiplier if outdoor_air.outdoorAirFlowperFloorArea > 0.0
+        oa_flow_per_person = outdoor_air.outdoorAirFlowperPerson * zone.numberOfPeople * zone.multiplier if outdoor_air.outdoorAirFlowperPerson > 0.0
+        oa_flow_ach = outdoor_air.outdoorAirFlowAirChangesperHour * zone.volume / 3600.0 * zone.multiplier if outdoor_air.outdoorAirFlowAirChangesperHour > 0.0
+
+        # Calculate outdoor air flow based on method
+        if outdoor_air.outdoorAirMethod == "Sum"
+          zone_oa += outdoorAirFlowRate + oa_flow_per_floor_area + oa_flow_per_person + oa_flow_ach
+        elsif outdoor_air.outdoorAirMethod == "Maximum"
+          zone_oa += [outdoorAirFlowRate, oa_flow_per_floor_area, oa_flow_per_person, oa_flow_ach].max
+        else
+          # Handle unexpected outdoor air method
+          zone_oa += 0.0
         end
-        # space loop
       end
-      sum_zone_oa += zone_oa # sum of all zone oa flows to get system oa flow
-      sum_zone_oa_times_heat_design_t += (zone_oa * heat_design_t) # calculated to get oa flow weighted average of design exhaust temperature
-      # zone loop
+
+      # Get design heat temperature for each zone; this is equivalent to design exhaust temperature
+      if zone.thermostat.is_initialized
+        zone_thermostat = zone.thermostat.get
+        if zone_thermostat.to_ThermostatSetpointDualSetpoint.is_initialized
+          dual_thermostat = zone_thermostat.to_ThermostatSetpointDualSetpoint.get
+          if dual_thermostat.heatingSetpointTemperatureSchedule.is_initialized
+            htg_temp_sch = dual_thermostat.heatingSetpointTemperatureSchedule.get
+            htg_temp_sch_ruleset = htg_temp_sch.to_ScheduleRuleset.get
+            winter_dd_sch = htg_temp_sch_ruleset.winterDesignDaySchedule
+            heat_design_t = winter_dd_sch.values.max
+          end
+        end
+      end
+
+      # Add the zone_oa to the sum_zone_oa
+      sum_zone_oa += zone_oa
+
+      # Debugging output
+      puts "Zone: #{zone.name.get} | Zone OA: #{zone_oa} | Sum Zone OA: #{sum_zone_oa}"
+
+      # Calculate weighted average of design exhaust temperature
+      sum_zone_oa_times_heat_design_t += (zone_oa * heat_design_t)
     end
 
-    # Calculate average exhaust temperature (oa flow weighted average)
-    avg_exhaust_temp = sum_zone_oa_times_heat_design_t / sum_zone_oa
+    # Calculate average exhaust temperature (OA flow weighted average)
+    avg_exhaust_temp = sum_zone_oa > 0 ? sum_zone_oa_times_heat_design_t / sum_zone_oa : 0.0
 
     # for debugging/testing
     #      puts "average exhaust temp = #{avg_exhaust_temp}"
@@ -266,19 +298,7 @@ class NECB2011
     # Calculate exhaust heat content
     exhaust_heat_content = 0.00123 * sum_zone_oa * 1000.0 * (avg_exhaust_temp - outdoor_temp)
 
-    # for debugging/testing
-    #      puts "exhaust heat content = #{exhaust_heat_content}"
-
-    # Modify erv_required based on exhaust heat content
-    if exhaust_heat_content > 150.0
-      erv_required = true
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}, ERV required based on exhaust heat content.")
-    else
-      erv_required = false
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC', "For #{air_loop_hvac.name}, ERV not required based on exhaust heat content.")
-    end
-
-    return erv_required
+    return exhaust_heat_content
   end
 
   # Add an ERV to this airloop.
@@ -298,20 +318,20 @@ class NECB2011
     end
 
     # Create an ERV
-    erv = OpenstudioStandards::HVAC.create_hx_air_to_air_sensible_and_latent(air_loop_hvac.model,
-                                                                            name: "#{air_loop_hvac.name} ERV",
-                                                                            type: "Rotary",
-                                                                            economizer_lockout: true,
-                                                                            supply_air_outlet_temperature_control: true,
-                                                                            frost_control_type: 'ExhaustOnly',
-                                                                            sensible_heating_100_eff: 0.5,
-                                                                            sensible_heating_75_eff: 0.5,
-                                                                            latent_heating_100_eff: 0.5,
-                                                                            latent_heating_75_eff: 0.5,
-                                                                            sensible_cooling_100_eff: 0.5,
-                                                                            sensible_cooling_75_eff: 0.5,
-                                                                            latent_cooling_100_eff: 0.5,
-                                                                            latent_cooling_75_eff: 0.5)
+    erv = OpenstudioStandards::HVAC.create_heat_exchanger_air_to_air_sensible_and_latent(air_loop_hvac.model,
+                                                                                         name: "#{air_loop_hvac.name} ERV",
+                                                                                         type: "Rotary",
+                                                                                         economizer_lockout: true,
+                                                                                         supply_air_outlet_temperature_control: true,
+                                                                                         frost_control_type: 'ExhaustOnly',
+                                                                                         sensible_heating_100_eff: 0.5,
+                                                                                         sensible_heating_75_eff: 0.5,
+                                                                                         latent_heating_100_eff: 0.5,
+                                                                                         latent_heating_75_eff: 0.5,
+                                                                                         sensible_cooling_100_eff: 0.5,
+                                                                                         sensible_cooling_75_eff: 0.5,
+                                                                                         latent_cooling_100_eff: 0.5,
+                                                                                         latent_cooling_75_eff: 0.5)
 
     erv.setThresholdTemperature(-23.3) # -10F
     erv.setInitialDefrostTimeFraction(0.167)
@@ -546,7 +566,7 @@ class NECB2011
     fluid_type = search_criteria['fluid_type']
 
     # Get the capacity
-    capacity_w = boiler_hot_water_find_capacity(boiler_hot_water)
+    capacity_w = OpenstudioStandards::HVAC.boiler_hot_water_get_capacity(boiler_hot_water)
 
     boiler_capacity = capacity_w
     # Use the NECB capacities if the SystemFuels class is not defined (i.e. this method was not called from something
@@ -611,7 +631,7 @@ class NECB2011
     # If specified as AFUE
     unless blr_props['minimum_annual_fuel_utilization_efficiency'].nil?
       min_afue = blr_props['minimum_annual_fuel_utilization_efficiency']
-      thermal_eff = afue_to_thermal_eff(min_afue)
+      thermal_eff = OpenstudioStandards::HVAC.afue_to_thermal_eff(min_afue)
       new_comp_name = "#{boiler_hot_water.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_afue} AFUE"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.BoilerHotWater', "For #{template}: #{boiler_hot_water.name}: #{fuel_type} #{fluid_type} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; AFUE = #{min_afue}")
     end
@@ -626,7 +646,7 @@ class NECB2011
     # If specified as combustion efficiency
     unless blr_props['minimum_combustion_efficiency'].nil?
       min_comb_eff = blr_props['minimum_combustion_efficiency']
-      thermal_eff = combustion_eff_to_thermal_eff(min_comb_eff)
+      thermal_eff = OpenstudioStandards::HVAC.combustion_eff_to_thermal_eff(min_comb_eff)
       new_comp_name = "#{boiler_hot_water.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_comb_eff} Combustion Eff"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.BoilerHotWater', "For #{template}: #{boiler_hot_water.name}: #{fuel_type} #{fluid_type} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; Combustion Efficiency = #{min_comb_eff}")
     end
@@ -654,7 +674,7 @@ class NECB2011
     compressor_type = search_criteria['compressor_type']
 
     # Get the chiller capacity
-    capacity_w = chiller_electric_eir_find_capacity(chiller_electric_eir)
+    capacity_w = OpenstudioStandards::HVAC.chiller_electric_get_capacity(chiller_electric_eir)
 
     # All chillers must be modulating down to 25% of their capacity
     chiller_electric_eir.setChillerFlowMode('LeavingSetpointModulated')
@@ -679,8 +699,8 @@ class NECB2011
     capacity_tons = OpenStudio.convert(chiller_capacity, 'W', 'ton').get
 
     # Get chiller compressor type if needed
-    chiller_types = ['reciprocating','scroll','rotary screw','centrifugal']
-    chiller_name_has_type = chiller_types.any? {|type| chiller_electric_eir.name.to_s.downcase.include? type}
+    chiller_types = ['reciprocating', 'scroll', 'rotary screw', 'centrifugal']
+    chiller_name_has_type = chiller_types.any? { |type| chiller_electric_eir.name.to_s.downcase.include? type }
     unless chiller_name_has_type
       chlr_type_search_criteria = {}
       chlr_type_search_criteria['cooling_type'] = cooling_type
@@ -737,7 +757,7 @@ class NECB2011
     cop = nil
     if chlr_props['minimum_full_load_efficiency']
       kw_per_ton = chlr_props['minimum_full_load_efficiency']
-      cop = kw_per_ton_to_cop(kw_per_ton)
+      cop = OpenstudioStandards::HVAC.kw_per_ton_to_cop(kw_per_ton)
       chiller_electric_eir.setReferenceCOP(cop)
     else
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ChillerElectricEIR', "For #{chiller_electric_eir.name}, cannot find minimum full load efficiency, will not be set.")
@@ -786,32 +806,13 @@ class NECB2011
     return search_criteria
   end
 
-  # find furnace capacity
-  #
-  # @return [Hash] used for standards_lookup_table(model)
-  def coil_heating_gas_find_capacity(coil_heating_gas)
-    # Get the coil capacity
-    capacity_w = nil
-    if coil_heating_gas.nominalCapacity.is_initialized
-      capacity_w = coil_heating_gas.nominalCapacity.get
-    elsif coil_heating_gas.autosizedNominalCapacity.is_initialized
-      capacity_w = coil_heating_gas.autosizedNominalCapacity.get
-    else
-      OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingGas', "For #{coil_heating_gas.name} capacity is not available, cannot apply efficiency standard.")
-      successfully_set_all_properties = false
-      return successfully_set_all_properties
-    end
-
-    return capacity_w
-  end
-
   # Finds lookup object in standards and return minimum thermal efficiency
   #
   # @return [Double] minimum thermal efficiency
   def coil_heating_gas_standard_minimum_thermal_efficiency(coil_heating_gas, rename = false)
     # Get the coil properties
     search_criteria = coil_heating_gas_find_search_criteria
-    capacity_w = coil_heating_gas_find_capacity(coil_heating_gas)
+    capacity_w = OpenstudioStandards::HVAC.coil_heating_gas_get_capacity(coil_heating_gas)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
     capacity_kbtu_per_hr = OpenStudio.convert(capacity_w, 'W', 'kBtu/hr').get
 
@@ -834,7 +835,7 @@ class NECB2011
     # If specified as AFUE
     unless coil_props['minimum_annual_fuel_utilization_efficiency'].nil?
       min_afue = coil_props['minimum_annual_fuel_utilization_efficiency']
-      thermal_eff = afue_to_thermal_eff(min_afue)
+      thermal_eff = OpenstudioStandards::HVAC.afue_to_thermal_eff(min_afue)
       new_comp_name = "#{coil_heating_gas.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_afue} AFUE"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingGas', "For #{template}: #{coil_heating_gas.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; AFUE = #{min_afue}")
     end
@@ -849,7 +850,7 @@ class NECB2011
     # If specified as combustion efficiency
     unless coil_props['minimum_combustion_efficiency'].nil?
       min_comb_eff = coil_props['minimum_combustion_efficiency']
-      thermal_eff = combustion_eff_to_thermal_eff(min_comb_eff)
+      thermal_eff = OpenstudioStandards::HVAC.combustion_eff_to_thermal_eff(min_comb_eff)
       new_comp_name = "#{coil_heating_gas.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_comb_eff} Combustion Eff"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingGas', "For #{template}: #{coil_heating_gas.name}: Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; Combustion Efficiency = #{min_comb_eff}")
     end
@@ -878,7 +879,7 @@ class NECB2011
     search_criteria = coil_heating_gas_find_search_criteria
 
     # Get the coil capacity
-    capacity_w = coil_heating_gas_find_capacity(coil_heating_gas)
+    capacity_w = OpenstudioStandards::HVAC.coil_heating_gas_get_capacity(coil_heating_gas)
     capacity_btu_per_hr = OpenStudio.convert(capacity_w, 'W', 'Btu/hr').get
 
     # lookup properties
@@ -920,7 +921,7 @@ class NECB2011
 
     # Define the criteria to find the properties in the hvac standards data set
     search_criteria = coil_dx_find_search_criteria(coil_cooling_dx_multi_speed)
-    capacity_w = coil_cooling_dx_multi_speed_find_capacity(coil_cooling_dx_multi_speed)
+    capacity_w = OpenstudioStandards::HVAC.coil_cooling_dx_multi_speed_get_capacity(coil_cooling_dx_multi_speed)
 
     # Find design outside air flow rate and flow fraction
     controller_oa = nil
@@ -938,7 +939,9 @@ class NECB2011
       elsif controller_oa.autosizedMinimumOutdoorAirFlowRate.is_initialized
         min_oa_flow_rate = controller_oa.autosizedMinimumOutdoorAirFlowRate.get
       end
-      if min_oa_flow_rate then oaf = min_oa_flow_rate.to_f / airloop.autosizedDesignSupplyAirFlowRate.to_f end
+      if min_oa_flow_rate then
+        oaf = min_oa_flow_rate.to_f / airloop.autosizedDesignSupplyAirFlowRate.to_f
+      end
     end
 
     # Find required capacity of each stage and total number of stages based on NECB rules
@@ -981,7 +984,9 @@ class NECB2011
     coil_cooling_dx_multi_speed.stages[1].setGrossRatedTotalCoolingCapacity(stage_cap[1])
     case coil_cooling_dx_multi_speed.stages.size
     when 2
-      if oaf > 0.5 then multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringCoolingOperation(min_oa_flow_rate) end
+      if oaf > 0.5 then
+        multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringCoolingOperation(min_oa_flow_rate)
+      end
     when 3
       coil_cooling_dx_multi_speed.stages[2].setGrossRatedTotalCoolingCapacity(stage_cap[2])
       if (oaf > 0.333) && (oaf <= 0.666)
@@ -1010,7 +1015,7 @@ class NECB2011
 
     # Lookup efficiencies depending on whether it is a unitary AC or a heat pump
     ac_props = nil
-    ac_props = if coil_dx_heat_pump?(coil_cooling_dx_multi_speed)
+    ac_props = if OpenstudioStandards::HVAC.coil_dx_heat_pump?(coil_cooling_dx_multi_speed)
                  model_find_object(standards_data['heat_pumps'], search_criteria, capacity_btu_per_hr, Date.today)
                else
                  model_find_object(standards_data['unitary_acs'], search_criteria, capacity_btu_per_hr, Date.today)
@@ -1140,7 +1145,7 @@ class NECB2011
     # This method will seem like an error in number of args..but this is due to swig voodoo.
     heat_pump_avail_sch_actuator = OpenStudio::Model::EnergyManagementSystemActuator.new(updated_heat_pump_avail_sch, 'Schedule:Constant', 'Schedule Value')
     heat_pump_avail_sch_prog = OpenStudio::Model::EnergyManagementSystemProgram.new(model)
-    heat_pump_avail_sch_prog.setName("#{ems_friendly_name(multi_speed_heat_pump.name)} Availability Schedule Program by Line")
+    heat_pump_avail_sch_prog.setName("#{OpenstudioStandards::HVAC.ems_friendly_name(multi_speed_heat_pump.name)} Availability Schedule Program by Line")
     heat_pump_avail_sch_prog_body = <<-EMS
         IF #{heat_pump_avail_sch_sensor.handle} > 0.0
           SET #{heat_pump_avail_sch_actuator.handle} = #{heat_pump_avail_sch_sensor.handle}
@@ -1179,7 +1184,7 @@ class NECB2011
     # Define the criteria to find the properties in the hvac standards data set.
     search_criteria = coil_heating_gas_multi_stage_find_search_criteria(coil_heating_gas_multi_stage)
     fuel_type = search_criteria['fuel_type']
-    capacity_w = coil_heating_gas_multi_stage_find_capacity(coil_heating_gas_multi_stage)
+    capacity_w = OpenstudioStandards::HVAC.coil_heating_gas_multi_stage_get_capacity(coil_heating_gas_multi_stage)
 
     # Find system design outside air flow rate and fraction
     controller_oa = nil
@@ -1196,7 +1201,9 @@ class NECB2011
       elsif controller_oa.autosizedMinimumOutdoorAirFlowRate.is_initialized
         min_oa_flow_rate = controller_oa.autosizedMinimumOutdoorAirFlowRate.get
       end
-      if min_oa_flow_rate then oaf = min_oa_flow_rate.to_f / airloop.autosizedDesignSupplyAirFlowRate.to_f end
+      if min_oa_flow_rate then
+        oaf = min_oa_flow_rate.to_f / airloop.autosizedDesignSupplyAirFlowRate.to_f
+      end
     end
 
     # Find capacities of each of the stages and the total number of stages required based on NECB rules.
@@ -1244,7 +1251,9 @@ class NECB2011
     case coil_heating_gas_multi_stage.stages.size
     when 2
       coil_heating_gas_multi_stage.stages[1].setNominalCapacity(stage_cap[1])
-      if oaf > 0.5 then multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringHeatingOperation(min_oa_flow_rate) end
+      if oaf > 0.5 then
+        multi_speed_heat_pump.setSpeed1SupplyAirFlowRateDuringHeatingOperation(min_oa_flow_rate)
+      end
     when 3
       coil_heating_gas_multi_stage.stages[1].setNominalCapacity(stage_cap[1])
       coil_heating_gas_multi_stage.stages[2].setNominalCapacity(stage_cap[2])
@@ -1301,7 +1310,7 @@ class NECB2011
     # If specified as AFUE
     unless heater_props['minimum_annual_fuel_utilization_efficiency'].nil?
       min_afue = heater_props['minimum_annual_fuel_utilization_efficiency']
-      thermal_eff = afue_to_thermal_eff(min_afue)
+      thermal_eff = OpenstudioStandards::HVAC.afue_to_thermal_eff(min_afue)
       new_comp_name = "#{coil_heating_gas_multi_stage.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_afue} AFUE"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingGasMultiStage', "For #{template}: #{coil_heating_gas_multi_stage.name}: #{fuel_type} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; AFUE = #{min_afue}")
     end
@@ -1316,7 +1325,7 @@ class NECB2011
     # If specified as combustion efficiency
     unless heater_props['minimum_combustion_efficiency'].nil?
       min_comb_eff = heater_props['minimum_combustion_efficiency']
-      thermal_eff = combustion_eff_to_thermal_eff(min_comb_eff)
+      thermal_eff = OpenstudioStandards::HVAC.combustion_eff_to_thermal_eff(min_comb_eff)
       new_comp_name = "#{coil_heating_gas_multi_stage.name} #{capacity_kbtu_per_hr.round}kBtu/hr #{min_comb_eff} Combustion Eff"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.BoilerHotWater', "For #{template}: #{coil_heating_gas_multi_stage.name}: #{fuel_type} Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; Combustion Efficiency = #{min_comb_eff}")
     end
@@ -1392,9 +1401,16 @@ class NECB2011
       elsif fan.name.to_s.include?('Return')
         motor_type += 'VARIABLE-RETURN'
       end
-      # 0.909 corrects for 10% over sizing implemented upstream
-      # 0.7457 is to convert from bhp to kW
-      fan_power_kw = 0.909 * 0.7457 * motor_bhp
+      
+      # Calculate fan power using NECB equation (5.2.3.2). This requires the max flow rate which is unknown for 
+      if fan.isMaximumFlowRateAutosized	then
+        fan_power_kw = 0.909 * 0.7457 * motor_bhp # Fall back if fan is autosized.
+      else
+        max_flow = fan.maximumFlowRate.get
+        static_p = fan.pressureRise
+        total_eff = fan.fanTotalEfficiency
+        fan_power_kw = max_flow * static_p / (total_eff * 1000.0)
+      end
       power_vs_flow_curve_name = if fan_power_kw >= 25.0
                                    'VarVolFan-FCInletVanes-NECB2011-FPLR'
                                  elsif fan_power_kw >= 7.5 && fan_power_kw < 25
@@ -2013,7 +2029,6 @@ class NECB2011
 
   def add_onespeed_htg_DX_coil(model, sch)
 
-
     htg_cap_f_of_temp = OpenStudio::Model::CurveCubic.new(model)
     htg_cap_f_of_temp.setCoefficient1Constant(0.729009)
     htg_cap_f_of_temp.setCoefficient2x(0.0319275)
@@ -2116,7 +2131,7 @@ class NECB2011
                                                                          htg_coil,
                                                                          clg_coil)
     ptac.setName("#{zone.name} PTAC")
-    ptac.setSupplyAirFanOperatingModeSchedule(always_off)
+	ptac.setSupplyAirFanOperatingModeSchedule(always_off)
     if zero_outdoor_air
       ptac.setOutdoorAirFlowRateWhenNoCoolingorHeatingisNeeded 1.0e-5
       ptac.setOutdoorAirFlowRateDuringCoolingOperation(1.0e-5)
@@ -2336,26 +2351,32 @@ class NECB2011
                       zone_htg: nil,
                       zone_clg: nil,
                       sys_rf: nil)
-    name_parts = airloop.name.to_s.split('|').reject(&:empty?)
-    if sys_abbr.is_a? String then name_parts[0] = sys_abbr end
-    if sys_oa.is_a? String then name_parts[1] = sys_oa end
-    for i in 0..name_parts.size - 1
-      if (name_parts[i].include? 'shr>') && (sys_hr.is_a? String)
-        name_parts[i] = "shr>#{sys_hr}"
-      elsif (name_parts[i].include? 'sh>') && (sys_htg.is_a? String)
-        name_parts[i] = "sh>#{sys_htg}"
-      elsif (name_parts[i].include? 'sc>') && (sys_clg.is_a? String)
-        name_parts[i] = "sc>#{sys_clg}"
-      elsif (name_parts[i].include? 'ssf') && (sys_sf.is_a? String)
-        name_parts[i] = "ssf>#{sys_sf}"
-      elsif (name_parts[i].include? 'zh>') && (zone_htg.is_a? String)
-        name_parts[i] = "zh>#{zone_htg}"
-      elsif (name_parts[i].include? 'zc>') && (zone_clg.is_a? String)
-        name_parts[i] = "zc>#{zone_clg}"
-      elsif (name_parts[i].include? 'srf>') && (sys_rf.is_a? String)
-        name_parts[i] = "srf>#{sys_rf}"
+    original_name = airloop.name.to_s
+    name_parts = original_name.split('|').reject(&:empty?)
+
+    # Update name parts based on provided parameters
+    name_parts[0] = sys_abbr if sys_abbr.is_a?(String)
+    name_parts[1] = sys_oa if sys_oa.is_a?(String)
+
+    name_parts.each_with_index do |part, index|
+      if part.include?('shr>') && sys_hr.is_a?(String)
+        name_parts[index] = "shr>#{sys_hr}"
+      elsif part.include?('sh>') && sys_htg.is_a?(String)
+        name_parts[index] = "sh>#{sys_htg}"
+      elsif part.include?('sc>') && sys_clg.is_a?(String)
+        name_parts[index] = "sc>#{sys_clg}"
+      elsif part.include?('ssf') && sys_sf.is_a?(String)
+        name_parts[index] = "ssf>#{sys_sf}"
+      elsif part.include?('zh>') && zone_htg.is_a?(String)
+        name_parts[index] = "zh>#{zone_htg}"
+      elsif part.include?('zc>') && zone_clg.is_a?(String)
+        name_parts[index] = "zc>#{zone_clg}"
+      elsif part.include?('srf>') && sys_rf.is_a?(String)
+        name_parts[index] = "srf>#{sys_rf}"
       end
     end
+
+    # Join name parts with '|' separator
     sys_name = ''
     name_parts.each { |part| sys_name += "#{part}|" }
 
@@ -2373,7 +2394,7 @@ class NECB2011
   def coil_heating_dx_single_speed_find_capacity(coil_heating_dx_single_speed, necb_reference_hp = false)
     # Set Rated heating capacity = 50% cooling coil capacity at -8.3 C outdoor [8.4.4.13 (2)(c)]
 
-    if necb_reference_hp #NECB reference heat pump rules apply
+    if necb_reference_hp # NECB reference heat pump rules apply
       # grab paired cooling coil
       if coil_heating_dx_single_speed.airLoopHVAC.empty?
 
@@ -2401,8 +2422,8 @@ class NECB2011
         air_loop = coil_heating_dx_single_speed.airLoopHVAC.get
         # Check for the presence of any other type of cooling coil
         clg_types = ['OS:Coil:Cooling:DX:SingleSpeed',
-                    'OS:Coil:Cooling:DX:TwoSpeed',
-                    'OS:Coil:Cooling:DX:MultiSpeed']
+                     'OS:Coil:Cooling:DX:TwoSpeed',
+                     'OS:Coil:Cooling:DX:MultiSpeed']
         clg_types.each do |ct|
           coils = air_loop.supplyComponents(ct.to_IddObjectType)
           next if coils.empty?
@@ -2419,7 +2440,7 @@ class NECB2011
       # Paired cooling coil parameters
       clg_coil = clg_coil.to_CoilCoolingDXSingleSpeed.get
       capacity_w = coil_cooling_dx_single_speed_find_capacity(clg_coil)
-      indoor_wb = 19.4 #rated indoor wb
+      indoor_wb = 19.4 # rated indoor wb
       outdoor_db = -8.3 # outdoor db
 
       # heating capacity = capacity factor (function of temp) from biquadratic curve
@@ -2447,7 +2468,7 @@ class NECB2011
       puts "htg_cap_w_min_y #{htg_cap_w_min_y}"
 
       # use actual factor from -8.3 to compute rated heating capacity unless it's < 0
-      if cooling_cap_f_temp_factor_no_min_y>0
+      if cooling_cap_f_temp_factor_no_min_y > 0
         htg_cap_w = htg_cap_w_no_min_y
       else
         htg_cap_w = htg_cap_w_min_y
@@ -2457,7 +2478,8 @@ class NECB2011
       coil_heating_dx_single_speed.setRatedTotalHeatingCapacity(htg_cap_w)
 
       return htg_cap_w
-    else # Do not follow NECB reference HP rule; proceed as usual
+    else
+      # Do not follow NECB reference HP rule; proceed as usual
       return super(coil_heating_dx_single_speed)
     end
   end
@@ -2467,7 +2489,7 @@ class NECB2011
   # 1.  DX htg/cooling + gas supplement htg
   # 2.  Potential lack of AirLoopHVACUnitaryHeatPumpAirToAir or AirLoopHVACUnitarySystem
   # @param necb_reference_hp [Boolean] if true, NECB reference model rules for heat pumps will be used.
-  def coil_dx_heating_type(coil_dx, necb_reference_hp = false)
+  def coil_dx_heating_type(coil_dx)
     supp_htg_type = nil
 
     # If not heat pump reference case use the standard implementation.
@@ -2529,9 +2551,9 @@ class NECB2011
           puts "num_of_supp_coils #{num_of_supp_coils}"
           return supp_htg_type = 'Electric Resistance or None'
         end
+       end 
       end
     end
-  end
 
   # Sets the capacity of the reheat coil based on the minimum flow fraction, and the maximum flow rate.
   #
