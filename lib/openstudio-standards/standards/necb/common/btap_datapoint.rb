@@ -312,7 +312,7 @@ class BTAPDatapoint
       # clean temp/cache folder up.
       FileUtils.rm_rf(input_folder_cache)
       FileUtils.rm_rf(@dp_temp_folder)
-      if @failed == true
+      unless @failed == false || (@dp_output_folder.start_with?('s3://'))
         raise(@bang)
       end
     end
