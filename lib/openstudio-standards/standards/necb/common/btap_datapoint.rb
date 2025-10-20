@@ -313,7 +313,8 @@ class BTAPDatapoint
       FileUtils.rm_rf(input_folder_cache)
       FileUtils.rm_rf(@dp_temp_folder)
       # Do not fail container if running on AWS, handle error on AWS instead to avoid isuses with large analyses.
-      unless @failed == false || (@dp_output_folder.start_with?('s3://'))
+      #unless @failed == false || (@dp_output_folder.start_with?('s3://'))
+      if @failed
         raise(@bang)
       end
     end
