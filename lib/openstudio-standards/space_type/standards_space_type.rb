@@ -8,7 +8,7 @@ module OpenstudioStandards
     # @param model [OpenStudio::Model::Model] OpenStudio model object
     # @param space_type_field [String] where the standards space type is stored, either 'StandardsSpaceType' or 'AdditionalProperties'
     # @param reset_standards_space_type [Boolean] if true, resets the Standards Space Type to match the new space type names
-    # @return [Boolean] returns true if plenum, false if not
+    # @return [Boolean] returns true if successful, false if not
     def self.set_standards_space_type_additional_properties(model, space_type_field: 'StandardsSpaceType', reset_standards_space_type: false)
       # load space types data
       space_types_data = JSON.parse(File.read("#{File.dirname(__FILE__)}/data/level_1_space_types.json"), symbolize_names: true)
@@ -43,7 +43,7 @@ module OpenstudioStandards
           schedule_set_name = space_type_properties[:schedule_set_name].nil? ? 'na' : space_type_properties[:schedule_set_name]
           space_type.additionalProperties.setFeature('schedule_set', schedule_set_name)
         else
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.SpaceType', "No space type properties found for space type #{space_type.name} with standards space type '#{space_type_name}'")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.SpaceType', "No space type properties found for space type #{space_type.name} with standards space type '#{space_type_name}' in building #{model.getBuilding.name}")
         end
       end
 

@@ -181,6 +181,11 @@
   },
   {
     "standards_building_type": "Courthouse",
+    "standards_space_type": "Courthouse - Restrooms",
+    "new_standards_space_type": "restroom"
+  },
+  {
+    "standards_building_type": "Courthouse",
     "standards_space_type": "Courthouse - Stairs",
     "new_standards_space_type": "stairwell"
   },
@@ -197,12 +202,12 @@
   {
     "standards_building_type": "FullServiceRestaurant",
     "standards_space_type": "Basement",
-    "new_standards_space_type": "whole_building_office"
+    "new_standards_space_type": "electrical/mechanical"
   },
   {
     "standards_building_type": "FullServiceRestaurant",
     "standards_space_type": "Corridor",
-    "new_standards_space_type": "corridor_all_other"
+    "new_standards_space_type": "corridor"
   },
   {
     "standards_building_type": "FullServiceRestaurant",
@@ -542,22 +547,22 @@
   {
     "standards_building_type": "Office",
     "standards_space_type": "WholeBuilding - Sm Office",
-    "new_standards_space_type": "whole_building_office"
+    "new_standards_space_type": "office"
   },
   {
     "standards_building_type": "Office",
     "standards_space_type": "WholeBuilding - Md Office",
-    "new_standards_space_type": "whole_building_office"
+    "new_standards_space_type": "office"
   },
   {
     "standards_building_type": "Office",
     "standards_space_type": "WholeBuilding - Lg Office",
-    "new_standards_space_type": "whole_building_office"
+    "new_standards_space_type": "office"
   },
   {
     "standards_building_type": "Office",
     "standards_space_type": "WholeBuilding - Lg Office-basement",
-    "new_standards_space_type": "whole_building_office"
+    "new_standards_space_type": "office"
   },
   {
     "standards_building_type": "Office",
@@ -633,6 +638,16 @@
     "standards_building_type": "Office",
     "standards_space_type": "Classroom",
     "new_standards_space_type": "classroom/lecture/training"
+  },
+  {
+    "standards_building_type": "LargeOffice",
+    "standards_space_type": "Plenum",
+    "new_standards_space_type": "plenum"
+  },
+  {
+    "standards_building_type": "MediumOffice",
+    "standards_space_type": "Plenum",
+    "new_standards_space_type": "plenum"
   },
   {
     "standards_building_type": "Office",
@@ -816,6 +831,11 @@
   },
   {
     "standards_building_type": "Outpatient",
+    "standards_space_type": "Hall",
+    "new_standards_space_type": "corridor"
+  },
+  {
+    "standards_building_type": "Outpatient",
     "standards_space_type": "IT_Room",
     "new_standards_space_type": "datacenter/low ite"
   },
@@ -897,7 +917,7 @@
   {
     "standards_building_type": "Outpatient",
     "standards_space_type": "Reception",
-    "new_standards_space_type": "lobby_all_other"
+    "new_standards_space_type": "lobby"
   },
   {
     "standards_building_type": "Outpatient",
@@ -1335,12 +1355,12 @@
     "new_standards_space_type": "audience seating"
   },
   {
-    "standards_building_type": "ASm",
+    "standards_building_type": "Asm",
     "standards_space_type": "OfficeGeneral",
     "new_standards_space_type": "office"
   },
   {
-    "standards_building_type": "ASm",
+    "standards_building_type": "Asm",
     "standards_space_type": "Plenum",
     "new_standards_space_type": "plenum"
   },
@@ -1375,6 +1395,11 @@
     "new_standards_space_type": "office"
   },
   {
+    "standards_building_type": "ECC",
+    "standards_space_type": "Plenum",
+    "new_standards_space_type": "plenum"
+  },
+  {
     "standards_building_type": "EPr",
     "standards_space_type": "Classroom",
     "new_standards_space_type": "classroom/lecture/training"
@@ -1398,6 +1423,11 @@
     "standards_building_type": "EPr",
     "standards_space_type": "Kitchen",
     "new_standards_space_type": "food preparation"
+  },
+  {
+    "standards_building_type": "EPr",
+    "standards_space_type": "Plenum",
+    "new_standards_space_type": "plenum"
   },
   {
     "standards_building_type": "ERC",
@@ -1440,6 +1470,11 @@
     "new_standards_space_type": "office"
   },
   {
+    "standards_building_type": "ESe",
+    "standards_space_type": "Plenum",
+    "new_standards_space_type": "plenum"
+  },
+  {
     "standards_building_type": "EUn",
     "standards_space_type": "Dining",
     "new_standards_space_type": "dining"
@@ -1477,7 +1512,12 @@
   {
     "standards_building_type": "EUn",
     "standards_space_type": "DormitoryRoom",
-    "new_standards_space_type": "guest_room"
+    "new_standards_space_type": "guest room"
+  },
+  {
+    "standards_building_type": "EUn",
+    "standards_space_type": "Plenum",
+    "new_standards_space_type": "plenum"
   },
   {
     "standards_building_type": "Gro",
@@ -1493,6 +1533,16 @@
     "standards_building_type": "Gro",
     "standards_space_type": "RefFoodPrep",
     "new_standards_space_type": "food preparation"
+  },
+  {
+    "standards_building_type": "Gro",
+    "standards_space_type": "RefWalkInCool",
+    "new_standards_space_type": "electrical/mechanical"
+  },
+  {
+    "standards_building_type": "Gro",
+    "standards_space_type": "RefWalkInFreeze",
+    "new_standards_space_type": "electrical/mechanical"
   },
   {
     "standards_building_type": "Gro",
@@ -1523,6 +1573,11 @@
     "standards_building_type": "Hsp",
     "standards_space_type": "PatientRoom",
     "new_standards_space_type": "patient room"
+  },
+  {
+    "standards_building_type": "Hsp",
+    "standards_space_type": "Plenum",
+    "new_standards_space_type": "plenum"
   },
   {
     "standards_building_type": "Htl",
@@ -1570,6 +1625,11 @@
     "new_standards_space_type": "food preparation"
   },
   {
+    "standards_building_type": "Htl",
+    "standards_space_type": "Plenum",
+    "new_standards_space_type": "plenum"
+  },
+  {
     "standards_building_type": "MBT",
     "standards_space_type": "CompRoomData",
     "new_standards_space_type": "datacenter/low ite"
@@ -1603,6 +1663,11 @@
     "standards_building_type": "MBT",
     "standards_space_type": "Kitchen",
     "new_standards_space_type": "food preparation"
+  },
+  {
+    "standards_building_type": "MBT",
+    "standards_space_type": "Plenum",
+    "new_standards_space_type": "plenum"
   },
   {
     "standards_building_type": "MLI",
@@ -1665,6 +1730,11 @@
     "new_standards_space_type": "patient room"
   },
   {
+    "standards_building_type": "Nrs",
+    "standards_space_type": "Plenum",
+    "new_standards_space_type": "plenum"
+  },
+  {
     "standards_building_type": "OfL",
     "standards_space_type": "LobbyWaiting",
     "new_standards_space_type": "lobby"
@@ -1685,6 +1755,11 @@
     "new_standards_space_type": "electrical/mechanical"
   },
   {
+    "standards_building_type": "OfL",
+    "standards_space_type": "Plenum",
+    "new_standards_space_type": "plenum"
+  },
+  {
     "standards_building_type": "OfS",
     "standards_space_type": "Hall",
     "new_standards_space_type": "corridor"
@@ -1695,6 +1770,11 @@
     "new_standards_space_type": "office"
   },
   {
+    "standards_building_type": "OfS",
+    "standards_space_type": "Plenum",
+    "new_standards_space_type": "plenum"
+  },
+  {
     "standards_building_type": "RFF",
     "standards_space_type": "Dining",
     "new_standards_space_type": "dining"
@@ -1715,6 +1795,11 @@
     "new_standards_space_type": "restroom"
   },
   {
+    "standards_building_type": "RFF",
+    "standards_space_type": "Plenum",
+    "new_standards_space_type": "plenum"
+  },
+  {
     "standards_building_type": "RSD",
     "standards_space_type": "Restroom",
     "new_standards_space_type": "restroom"
@@ -1733,11 +1818,21 @@
     "standards_building_type": "RSD",
     "standards_space_type": "Kitchen",
     "new_standards_space_type": "food preparation"
+  },
+  {
+    "standards_building_type": "RSD",
+    "standards_space_type": "Plenum",
+    "new_standards_space_type": "plenum"
   },
   {
     "standards_building_type": "Rt3",
     "standards_space_type": "RetailSales",
     "new_standards_space_type": "retail"
+  },
+  {
+    "standards_building_type": "Rt3",
+    "standards_space_type": "Plenum",
+    "new_standards_space_type": "plenum"
   },
   {
     "standards_building_type": "RtL",
@@ -1773,6 +1868,11 @@
     "standards_building_type": "RtS",
     "standards_space_type": "StockRoom",
     "new_standards_space_type": "storage"
+  },
+  {
+    "standards_building_type": "RtS",
+    "standards_space_type": "Plenum",
+    "new_standards_space_type": "plenum"
   },
   {
     "standards_building_type": "SCn",

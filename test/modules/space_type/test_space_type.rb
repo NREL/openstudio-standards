@@ -69,4 +69,238 @@ class TestSpaceTypeModule < Minitest::Test
       end
     end
   end
+
+  def test_set_standards_space_type_additional_properties_all_ashrae_models
+    # load model and set up weather file
+    template = '90.1-2013'
+    climate_zone = 'ASHRAE 169-2013-4A'
+    std = Standard.build(template)
+
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/ASHRAECollege.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    assert(result)
+
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/ASHRAECourthouse.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    assert(result)
+
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/ASHRAEFullServiceRestaurant.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    assert(result)
+
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/ASHRAEHighriseApartment.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    assert(result)
+
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/ASHRAEHospital.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    assert(result)
+
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/ASHRAELaboratory.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    assert(result)
+
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/ASHRAELargeDataCenterHighITE.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    assert(result)
+
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/ASHRAELargeDataCenterLowITE.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    assert(result)
+
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/ASHRAELargeHotel.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    assert(result)
+
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/ASHRAELargeOffice.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    assert(result)
+
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/ASHRAEMediumOffice.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    assert(result)
+
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/ASHRAEMidriseApartment.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    assert(result)
+
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/ASHRAEOutpatient.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    assert(result)
+
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/ASHRAEPrimarySchool.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    assert(result)
+
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/ASHRAEQuickServiceRestaurant.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    assert(result)
+
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/ASHRAERetailStripmall.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    assert(result)
+
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/ASHRAESecondarySchool.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    assert(result)
+
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/ASHRAESmallDataCenterHighITE.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    assert(result)
+
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/ASHRAESmallDataCenterLowITE.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    assert(result)
+
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/ASHRAESmallHotel.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    assert(result)
+
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/ASHRAESupermarket.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    assert(result)
+
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/ASHRAE90120102013Warehouse.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    assert(result)
+  end
+
+  def test_set_standards_space_type_additional_properties_all_deer_models
+    # load model and set up weather file
+    template = 'DEER 2011'
+    climate_zone = 'CEC T24-CEC3'
+    std = Standard.build(template)
+
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/DEER_Asm.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    assert(result)
+
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/DEER_ECC.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    assert(result)
+
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/DEER_EPr.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    assert(result)
+
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/DEER_ESe.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    assert(result)
+
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/DEER_EUn.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    assert(result)
+
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/DEER_Gro.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    assert(result)
+
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/DEER_Hsp.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    assert(result)
+
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/DEER_Htl.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    assert(result)
+
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/DEER_MBT.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    assert(result)
+
+    # model = std.safe_load_model("#{__dir__}/../../../data/geometry/DEER_MFm.osm")
+    # OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    # result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    # assert(result)
+
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/DEER_MLI.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    assert(result)
+
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/DEER_Nrs.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    assert(result)
+
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/DEER_OfL.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    assert(result)
+
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/DEER_OfS.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    assert(result)
+
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/DEER_RFF.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    assert(result)
+
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/DEER_RSD.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    assert(result)
+
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/DEER_Rt3.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    assert(result)
+
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/DEER_RtL.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    assert(result)
+
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/DEER_RtS.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    assert(result)
+
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/DEER_SCn.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    assert(result)
+
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/DEER_SUn.osm")
+    OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    assert(result)
+
+    # model = std.safe_load_model("#{__dir__}/../../../data/geometry/DEER_WRf.osm")
+    # OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone)
+    # result = std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
+    # assert(result)
+  end
 end

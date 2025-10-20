@@ -5,7 +5,7 @@ class Standard
   # @param model [OpenStudio::Model::Model] OpenStudio model object
   # @param reset_standards_space_type [Boolean] if true, resets the Standards Space Type to new space types
   # @param set_additional_properties [Boolean] if true, sets additional properties on the space type with new space type information
-  # @return [Boolean] returns true if plenum, false if not
+  # @return [Boolean] returns true if successful, false if not
   def prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: true)
     # load space types mapping data
     space_types_data = JSON.parse(File.read("#{File.dirname(__FILE__)}/data/prototype_space_type_map.json"), symbolize_names: true)
@@ -24,7 +24,7 @@ class Standard
             space_type.setStandardsSpaceType(new_standards_space_type_name)
           end
         else
-          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Prototypes', "No mapping found for standards building type '#{building_type}' and standards space type '#{standards_space_type}'")
+          OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Prototypes', "No mapping found for standards building type '#{standards_building_type}' and standards space type '#{standards_space_type}'")
         end
       else
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.Prototypes', "Space type '#{space_type.name}' is missing either Standards Space Type or Building Type")
@@ -33,7 +33,7 @@ class Standard
 
     # set additional properties for each space type if requested
     if set_additional_properties
-      OpenstudioStandards::SpaceType.set_standards_space_type_additional_properties(model, space_type_field: 'AdditionalProperties')
+      OpenstudioStandards::SpaceType.set_standards_space_type_additional_properties(model, space_type_field: 'AdditionalProperties', reset_standards_space_type: false)
     end
 
     return true
