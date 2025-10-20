@@ -137,7 +137,7 @@ class ASHRAE901PRM < Standard
     end
 
     # Get existing plant loop pump. We'll copy this pumps parameters before removing it. Throw exception for multiple pumps on supply side
-    if pumps.size.zero?
+    if pumps.empty?
       OpenStudio.logFree(OpenStudio::Error, 'prm.log', "For #{plant_loop.name}, found #{pumps.size} pumps. A loop must have at least one pump.")
       return false
     elsif pumps.size > 1
@@ -271,7 +271,7 @@ class ASHRAE901PRM < Standard
     chw_sensor.setName("#{plant_name.gsub(/[-\s]+/, '_')}_CHW_DEMAND")
 
     # Sort chillers by their reference capacity
-    sorted_chiller_list = chiller_list.sort_by { |chiller| chiller.referenceCapacity.get.to_f}
+    sorted_chiller_list = chiller_list.sort_by { |chiller| chiller.referenceCapacity.get.to_f }
 
     # Make pump specific parameters for EMS. Use counter
     sorted_chiller_list.each_with_index do |chiller, i|

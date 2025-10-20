@@ -28,7 +28,7 @@ module OpenstudioStandards
       # load lighting space types data
       lighting_space_type_properties_data = JSON.parse(File.read("#{File.dirname(__FILE__)}/data/lighting_space_types.json"), symbolize_names: true)
       if lighting_space_type_properties_data.nil?
-        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.InteriorLighting', "Unable to load lighting space types data. No interior lighting will be added to model.")
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.InteriorLighting', 'Unable to load lighting space types data. No interior lighting will be added to model.')
         return interior_lights
       end
       lighting_space_type_properties_data = lighting_space_type_properties_data[:lighting_space_types]

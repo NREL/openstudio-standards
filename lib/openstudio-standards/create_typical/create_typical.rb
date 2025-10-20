@@ -217,7 +217,7 @@ module OpenstudioStandards
         # remove internal loads
         if remove_objects
           model.getSpaceLoads.sort.each do |instance|
-            # most prototype building types model exterior elevators with name Elevator
+            # most prototype building types model elevators with name Elevator
             next if instance.name.to_s.include?('Elevator')
             next if instance.to_InternalMass.is_initialized
             next if instance.to_WaterUseEquipment.is_initialized
