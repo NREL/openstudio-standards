@@ -6,12 +6,12 @@ require 'fileutils'
 require 'minitest/unit'
 require 'optparse'
 
-# Note: Runs are cached automatically. To run this test with an annual
-# simulation and update the cache, use the command:
-# RERUN_CACHED=true bundle exec ruby ./BtapResults_DX_Adv_Test.rb
+# NOTE: Runs are cached automatically. To run this test with an annual
+# simulation and update the cache, pass the RERUN_CACHED=true environment
+# variable pair to the test file, for example:
+# RERUN_CACHED=true bundle exec ruby [test_file]
 class BTAPResults_Test < Minitest::Test
   def test_qaqc()
-
     #building_type = 'Outpatient'
     #building_type = 'LargeHotel'
     building_type = 'FullServiceRestaurant'
@@ -116,6 +116,7 @@ class BTAPResults_Test < Minitest::Test
     test_dir   = "#{File.dirname(__FILE__)}/output"
     run_dir    = "#{test_dir}/#{model_name}"
     helper     = BTAPResultsHelper.new(test_path: __FILE__, model_name: model_name, run_dir: run_dir)
+
     if !cached
       if !Dir.exist?(test_dir)
         Dir.mkdir(test_dir)
@@ -124,8 +125,8 @@ class BTAPResults_Test < Minitest::Test
       if !Dir.exist?(run_dir)
         Dir.mkdir(run_dir)
       end
+
       standard = Standard.build("#{template}")
-      #create standard model
       model = standard.load_building_type_from_library(building_type: building_type)
       standard.model_apply_standard(
         model: model,
@@ -196,11 +197,9 @@ class BTAPResults_Test < Minitest::Test
         standard: standard,
         qaqc: nil)
     else
-      # Run the test with cached attributes.
       post_analysis = helper.get_analysis(output_folder: run_dir, template: template)
     end
 
-    # Run costing and compare the output of the regression test.
     cost_result = post_analysis.run_costing
     helper.evaluate_regression_files(test_instance: self)
   end

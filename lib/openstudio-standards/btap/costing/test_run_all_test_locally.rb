@@ -1,4 +1,3 @@
-
 require 'fileutils'
 require 'parallel'
 require 'open3'
@@ -8,6 +7,11 @@ require_relative './parallel_tests'
 require_relative './btap_results/tests/BtapResults_test_helper' # Required for the cached switch
 TestListFile = File.join(File.dirname(__FILE__), 'test_list.txt')
 
+# NOTE: Runs are cached automatically. To run this test with an annual
+# simulation and update the cache, pass the RERUN_CACHED=true environment
+# variable pair to the test file, for example:
+# RERUN_CACHED=true bundle exec ruby [test_file]
+# TODO: This only runs given the correct directory, fix this.
 class RunAllTests < Minitest::Test
   def test_all()
     full_file_list = nil
