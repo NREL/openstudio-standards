@@ -237,13 +237,8 @@ class Standard
       # Modify the internal loads in each space type, keeping user-defined schedules.
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.Model', '*** Changing Lighting Loads ***')
       model.getSpaceTypes.sort.each do |space_type|
-        set_people = false
-        set_lights = true
-        set_electric_equipment = false
-        set_gas_equipment = false
-        set_ventilation = false
-        # For PRM, it only applies lights for now.
-        space_type_apply_internal_loads(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation)
+        # For PRM, only apply lights for now
+        space_type_apply_internal_loads(space_type, set_people: false, set_lights: true, set_electric_equipment: false, set_gas_equipment: false, set_ventilation: false)
       end
 
       # Modify the lighting schedule to handle lighting occupancy sensors

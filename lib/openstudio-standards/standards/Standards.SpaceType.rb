@@ -23,7 +23,7 @@ class Standard
     # lookup space type properties
     space_type_properties = model_find_object(standards_data['space_types'], search_criteria)
 
-    if space_type_properties.nil?
+    if space_type_properties.nil? || space_type_properties.empty?
       OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.SpaceType', "Space type properties lookup failed: #{search_criteria}.")
       space_type_properties = {}
     end
@@ -106,7 +106,7 @@ class Standard
   # @param set_gas_equipment [Boolean] if true, set the gas equipment density
   # @param set_ventilation [Boolean] if true, set the ventilation rates (per-person and per-area)
   # @return [Boolean] returns true if successful, false if not
-  def space_type_apply_internal_loads(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation)
+  def space_type_apply_internal_loads(space_type, set_people: true, set_lights: true, set_electric_equipment: true, set_gas_equipment: true, set_ventilation: true)
     # Skip plenums
     # Check if the space type name
     # contains the word plenum.
@@ -525,7 +525,7 @@ class Standard
   #   schedules listed for the space type.  This thermostat is not hooked to any zone by this method,
   #   but may be found and used later.
   # @return [Boolean] returns true if successful, false if not
-  def space_type_apply_internal_load_schedules(space_type, set_people, set_lights, set_electric_equipment, set_gas_equipment, set_ventilation, make_thermostat)
+  def space_type_apply_internal_load_schedules(space_type, set_people: true, set_lights: true, set_electric_equipment: true, set_gas_equipment: true, set_ventilation: true, make_thermostat: true)
     # Get the standards data
     space_type_properties = space_type_get_standards_data(space_type)
 
@@ -558,9 +558,7 @@ class Standard
 
     # Lights
     if set_lights
-
       apply_lighting_schedule(space_type, space_type_properties, default_sch_set)
-
     end
 
     # Electric Equipment
