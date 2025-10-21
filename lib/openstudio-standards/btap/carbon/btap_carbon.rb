@@ -1,42 +1,11 @@
 class BTAPCarbon
-  def initialize(attributes:)
+  def initialize(attributes:, standards_data:)
     @carbon_database  = {}
     @costing_database = CostingDatabase.instance
     @cp               = CommonPaths.instance
     @attributes       = attributes
     @carbon_report    = {}
-    @frame_m_to_kg    = {
-      "vinyl-wood" => {
-        "OperableWindow" => {
-          "Double Pane" => 3.062240537,
-          "Triple Pane" => 3.980912698
-        },
-        "FixedWindow" => {
-          "Double Pane" => 1.837344322,
-          "Triple Pane" => 2.204813187
-        }
-      },
-      "plastic" => {
-        "OperableWindow" => {
-          "Double Pane" => 3.563888889,
-          "Triple Pane" => 4.633055556
-        },
-        "FixedWindow" => {
-          "Double Pane" => 2.138333333,
-          "Triple Pane" => 2.566
-        }
-      },
-      "aluminum" => {
-        "OperableWindow" => {
-          "Double Pane" => 1.026756778,
-          "Triple Pane" => 1.334783811
-        },
-        "FixedWindow" => {
-          "Double Pane" => 0.616054067,
-          "Triple Pane" => 0.73926488
-        }
-      }
-    }
+    @frame_m_to_kg    = standards_data["constants"]["glazing_frame_m_to_kg"]
 
     # Build the carbon database.
     carbon_opaque = CSV.read(@cp.carbon_opaque_path)

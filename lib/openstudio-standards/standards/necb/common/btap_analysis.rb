@@ -36,7 +36,7 @@ class BTAPAnalysis
   end
 
   def run_carbon
-    carbon = BTAPCarbon.new(attributes: @attributes)
+    carbon = BTAPCarbon.new(attributes: @attributes, standards_data: @standard.standards_data)
     carbon_result = carbon.audit_embodied_carbon
 
     if not @qaqc.nil?
