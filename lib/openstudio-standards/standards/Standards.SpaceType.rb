@@ -388,7 +388,7 @@ class Standard
     end
 
     # Ventilation
-    space_type_apply_ventilation(space_type)
+    space_type_apply_ventilation(space_type) if set_ventilation
 
     return true
   end
