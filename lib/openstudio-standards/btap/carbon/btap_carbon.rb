@@ -166,9 +166,8 @@ class BTAPCarbon
         fenestration_type = construction["fenestration_type"]
         fenestration_number_of_panes = material_costing["fenestration_number_of_panes"]
         conversion_factor = @frame_m_to_kg[frame_material][fenestration_type][fenestration_number_of_panes] 
-        total_emissions += material_frame["Embodied Carbon (A-C)"] * \
-                           BTAP::Geometry::Surfaces.getSurfacePerimeterFromVertices(vertices: surface.vertices) * \
-                           conversion_factor
+        perimeter = BTAP::Geometry::Surfaces.getSurfacePerimeterFromVertices(vertices: surface.vertices)
+        total_emissions += material_frame["Embodied Carbon (A-C)"] * perimeter * conversion_factor
       end
       total_emissions += material_carbon["Embodied Carbon (A-C)"] * surface_area
     end
