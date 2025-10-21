@@ -388,53 +388,7 @@ class Standard
     end
 
     # Ventilation
-    ventilation_have_info = false
-    ventilation_per_area = space_type_properties['ventilation_per_area'].to_f
-    ventilation_per_person = space_type_properties['ventilation_per_person'].to_f
-    ventilation_ach = space_type_properties['ventilation_air_changes'].to_f
-    ventilation_have_info = true unless ventilation_per_area.zero?
-    ventilation_have_info = true unless ventilation_per_person.zero?
-    ventilation_have_info = true unless ventilation_ach.zero?
-
-    # Get the design OA or create a new one if none exists
-    ventilation = space_type.designSpecificationOutdoorAir
-    if ventilation.is_initialized
-      ventilation = ventilation.get
-    else
-      ventilation = OpenStudio::Model::DesignSpecificationOutdoorAir.new(space_type.model)
-      ventilation.setName("#{space_type.name} Ventilation")
-      space_type.setDesignSpecificationOutdoorAir(ventilation)
-      OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} had no ventilation specification, one has been created.")
-    end
-
-    if set_ventilation && ventilation_have_info
-
-      # Modify the ventilation properties
-      ventilation_method = model_ventilation_method(space_type.model)
-      ventilation.setOutdoorAirMethod(ventilation_method)
-      unless ventilation_per_area.zero?
-        ventilation.setOutdoorAirFlowperFloorArea(OpenStudio.convert(ventilation_per_area.to_f, 'ft^3/min*ft^2', 'm^3/s*m^2').get)
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set ventilation per area to #{ventilation_per_area} cfm/ft^2.")
-      end
-      unless ventilation_per_person.zero?
-        ventilation.setOutdoorAirFlowperPerson(OpenStudio.convert(ventilation_per_person.to_f, 'ft^3/min*person', 'm^3/s*person').get)
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set ventilation per person to #{ventilation_per_person} cfm/person.")
-      end
-      unless ventilation_ach.zero?
-        ventilation.setOutdoorAirFlowAirChangesperHour(ventilation_ach)
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.SpaceType', "#{space_type.name} set ventilation to #{ventilation_ach} ACH.")
-      end
-
-    elsif set_ventilation && !ventilation_have_info
-
-      # All space types must have a design spec OA
-      # object for ventilation controls to work correctly,
-      # even if the values are all zero.
-      ventilation.setOutdoorAirFlowperFloorArea(0)
-      ventilation.setOutdoorAirFlowperPerson(0)
-      ventilation.setOutdoorAirFlowAirChangesperHour(0)
-
-    end
+    space_type_apply_ventilation(space_type)
 
     return true
   end
