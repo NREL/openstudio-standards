@@ -6,7 +6,7 @@ module OpenstudioStandards
 
     # Return the capacity in W of a ChillerElectricEIR
     #
-    # @param boiler_hot_water [OpenStudio::Model::ChillerElectricEIR] chiller object
+    # @param chiller_electric_eir [OpenStudio::Model::ChillerElectricEIR] chiller object
     # @return [Double] capacity in W
     def self.chiller_electric_get_capacity(chiller_electric_eir)
       capacity_w = nil

@@ -26,6 +26,10 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/infiltration/infiltration'
   require_relative 'openstudio-standards/infiltration/nist_infiltration'
 
+  # Interior Lighting Module
+  require_relative 'openstudio-standards/interior_lighting/create_lights'
+  require_relative 'openstudio-standards/interior_lighting/create_typical_interior_lighting'
+
   # Daylighting Module
   require_relative 'openstudio-standards/daylighting/space'
 
@@ -58,6 +62,9 @@ module OpenstudioStandards
 
   # Space Module
   require_relative 'openstudio-standards/space/space'
+
+  # Space Type Module
+  require_relative 'openstudio-standards/space_type/standards_space_type'
 
   # Thermal Zone Module
   require_relative 'openstudio-standards/thermal_zone/thermal_zone'
@@ -512,6 +519,9 @@ module OpenstudioStandards
   require_relative "#{stds}/cbes/cbes.PlantLoop"
 
   ### Prototypes ###
+  # Mapping Old Standards Space Types
+  require_relative "#{proto}/common/prototype_space_type_map"
+
   # Building Types
   require_relative "#{proto}/common/buildings/Prototype.FullServiceRestaurant"
   require_relative "#{proto}/common/buildings/Prototype.HighRiseApartment"
