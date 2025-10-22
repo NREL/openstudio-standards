@@ -34,7 +34,7 @@ class NECB_HVAC_System_2_Test < Minitest::Test
     template_osm_file = "#{__dir__}/../resources/5ZoneNoHVAC.osm"
     system_name = 'system_2'
     vintage = 'NECB2011'
-    boiler_fueltype = 'FuelOil#2'
+    boiler_fueltype = 'FuelOilNo2'
     chiller_type = 'Scroll'
     mua_cooling_type = 'DX'
     fan_coil_type = 'FPFC'
