@@ -74,6 +74,7 @@ class UserDataCSV
     if @unique_model_object
       return [@model.public_send("get#{@component_name}")]
     end
+
     return @model.public_send("get#{@component_name}")
   end
 end

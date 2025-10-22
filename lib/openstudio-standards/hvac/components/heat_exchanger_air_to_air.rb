@@ -97,7 +97,7 @@ module OpenstudioStandards
     #
     # @param heat_exchanger [<OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent>] OpenStudio heat exchanger object to update
     # @param type [String] type of curve to create. one of 'Sensible Heating', 'Latent Heating, 'Sensible Cooling', 'Latent Cooling'
-    # @param values_hash [Hash{Float=>Float}] user_input flow decimal fraction => effectiveness decimal fraction pairs, e.g. {0.75 => 0.81, 1.0 => 0.76}
+    # @param values_hash [Hash(Float=>Float)] user_input flow decimal fraction => effectiveness decimal fraction pairs, e.g. (0.75 => 0.81, 1.0 => 0.76)
     # @return [<OpenStudio::Model::TableLookup>] lookup table object
     def self.create_heat_exchanger_effectiveness_table(heat_exchanger, type, values_hash)
       # validate inputs
@@ -171,7 +171,7 @@ module OpenstudioStandards
     # @param defaults [Boolean] flag to apply historical default curves
     # @param values [Hash{String=>Hash{Float=>Float}}] user-input effectiveness values, where keys are one of
     #   'Sensible Heating', 'Latent Heating, 'Sensible Cooling', 'Latent Cooling'
-    #   and value is a hash of {flow decimal fraction => effectivess decimal fraction}, e.g. {0.75 => 0.81, 1.0 => 0.76}
+    #   and value is a hash of (flow decimal fraction => effectivess decimal fraction), e.g. (0.75 => 0.81, 1.0 => 0.76)
     # @return [<OpenStudio::Model::HeatExchangerAirToAirSensibleAndLatent>] modified OpenStudio HeatExchangerAirToAirSensibleAndLatent object
     def self.heat_exchanger_air_to_air_set_effectiveness_values(heat_exchanger, defaults: false, values: nil)
       if defaults

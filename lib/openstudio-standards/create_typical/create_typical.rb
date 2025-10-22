@@ -217,7 +217,7 @@ module OpenstudioStandards
         # remove internal loads
         if remove_objects
           model.getSpaceLoads.sort.each do |instance|
-            # most prototype building types model exterior elevators with name Elevator
+            # most prototype building types model elevators with name Elevator
             next if instance.name.to_s.include?('Elevator')
             next if instance.to_InternalMass.is_initialized
             next if instance.to_WaterUseEquipment.is_initialized
@@ -458,10 +458,10 @@ module OpenstudioStandards
             ext_light.remove
           end
         end
-        exterior_lights = OpenstudioStandards::ExteriorLighting.model_create_typical_exterior_lighting(model,
-                                                                                                       lighting_generation: 'default',
-                                                                                                       lighting_zone: exterior_lighting_zone.chars[0].to_i,
-                                                                                                       onsite_parking_fraction: onsite_parking_fraction)
+        exterior_lights = OpenstudioStandards::ExteriorLighting.create_typical_exterior_lighting(model,
+                                                                                                 lighting_generation: 'default',
+                                                                                                 lighting_zone: exterior_lighting_zone.chars[0].to_i,
+                                                                                                 onsite_parking_fraction: onsite_parking_fraction)
         exterior_lights.each do |v|
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Adding Exterior Lights named #{v.exteriorLightsDefinition.name} with design level of #{v.exteriorLightsDefinition.designLevel} * #{OpenStudio.toNeatString(v.multiplier, 0, true)}.")
         end
