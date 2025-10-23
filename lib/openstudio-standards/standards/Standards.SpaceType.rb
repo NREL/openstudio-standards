@@ -126,7 +126,7 @@ class Standard
     end
 
     # People
-    space_type_apply_people if set_people
+    space_type_apply_people(space_type) if set_people
 
     # Lights
     lights_have_info = false
