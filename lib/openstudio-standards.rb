@@ -338,6 +338,7 @@ module OpenstudioStandards
   require_relative "#{stds}/Standards.SubSurface"
   require_relative "#{stds}/Standards.Surface"
   require_relative "#{stds}/Standards.ThermalZone"
+  require_relative "#{stds}/Standards.Ventilation"
   require_relative "#{stds}/Standards.WaterHeaterMixed"
   require_relative "#{stds}/Standards.ZoneHVACComponent"
   # 90.1 Common
