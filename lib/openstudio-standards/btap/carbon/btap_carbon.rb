@@ -114,9 +114,8 @@ class BTAPCarbon
     construction[id_layers_column].split(',').each do |material_id|
 
       # Locate the material entry in the carbon database
-      material_carbon = @carbon_database[construction["type"]].find do |row| 
-        row[id_column] == material_id
-      end
+      material_carbon = @carbon_database[construction["type"]].find { |row| 
+        row[id_column] == material_id }["Embodied Carbon (A-C)"]
 
       if material_carbon.nil?
         raise("Error: Could not find material with ID #{material_id} in the carbon database.")
@@ -125,21 +124,28 @@ class BTAPCarbon
       # If the material is glazing, the frame must be calculated by retrieving the perimeter of the window
       # and converting according to the correct attributes of the window.
       if construction["type"] == "glazing"
+        fenestration_type = construction["fenestration_type"]
 
-        material_frame = @carbon_database["frame"].find do |row|
-          row[id_column] == material_id
+        # Skip skylights and doors since we don't have the data for them.
+        # Only consider fixed and operable windows.
+        if fenestration_type != "FixedWindow" and fenestration_type != "OperableWindow"
+          puts "Fenestration type #{fenestration_type} is not defined for carbon calculation, skipping this component."
+          next
         end
+
+        material_frame = @carbon_database["frame"].find { |row|
+          row[id_column] == material_id }["Embodied Carbon (A-C)"]
 
         # Get the materials_glazing entry from the costing database to access the number of panes the window has.
-        material_costing = @costing_database["raw"][materials_file].find do |row|
-          row[id_column] == material_id
-        end
+        material_costing = @costing_database["raw"][materials_file].find { |row| row[id_column] == material_id }
 
         if material_costing.nil?
           raise("Error: Could not find material with ID #{material_id} in the costing database.")
         end
 
-        # Try to get the correct frame material.
+        fenestration_number_of_panes = material_costing["fenestration_number_of_panes"]
+
+        # Try to get the correct frame material. 
         frame_material = nil
         construction_component   = construction["component"].downcase
         construction_description = construction["description"].downcase
@@ -158,14 +164,12 @@ class BTAPCarbon
         end
 
         # Get the conversion factor for the window frame and add it to the total emissions.
-        fenestration_type = construction["fenestration_type"]
-        fenestration_number_of_panes = material_costing["fenestration_number_of_panes"]
         conversion_factor = @frame_m_to_kg[frame_material][fenestration_type][fenestration_number_of_panes] 
         perimeter = BTAP::Geometry::Surfaces.getSurfacePerimeterFromVertices(vertices: surface.vertices)
-        total_emissions += material_frame["Embodied Carbon (A-C)"] * perimeter * conversion_factor
+        total_emissions += material_frame * perimeter * conversion_factor
       end
 
-      total_emissions += material_carbon["Embodied Carbon (A-C)"] * surface_area
+      total_emissions += material_carbon * surface_area
     end
 
     return total_emissions
