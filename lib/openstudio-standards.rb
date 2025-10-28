@@ -67,7 +67,7 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/space_type/standards_space_type'
 
   # Thermal Zone Module
-  require_relative 'openstudio-standards/thermal_zone/thermal_zone'
+  require_relative 'openstudio-standards/thermal_zone/information'
 
   # HVAC Module
   require_relative 'openstudio-standards/hvac/air_loop/information'
