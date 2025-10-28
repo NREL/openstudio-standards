@@ -7,7 +7,7 @@
 :boiler_fuel: NECB_Default
 :boiler_cap_ratio: NECB_Default
 :btap_weather: true
-:building_type: FullServiceRestaurant
+:building_type: MidriseApartment
 :chiller_type: NECB_Default
 :compute_environment: local
 :construction_opt: ''
@@ -18,7 +18,7 @@
 :ecm_system_name: NECB_Default
 :enable_costing: false
 :electrical_loads_scale: NECB_Default
-:epw_file:  CAN_QC_Montreal.Intl.AP.716270_CWEC2020.epw
+:epw_file:  CAN_NS_Halifax.Dockyard.713280_CWEC2020.epw
 :erv_package: NECB_Default
 :ext_floor_cond: NECB_Default
 :ext_roof_cond: NECB_Default
@@ -48,7 +48,7 @@
 :oa_scale: NECB_Default
 :occupancy_loads_scale: NECB_Default
 :overhead_door_cond: NECB_Default
-:primary_heating_fuel: NaturalGasHPGasBackup
+:primary_heating_fuel: ElectricityHPElecBackup
 :pv_ground_azimuth_angle: NECB_Default
 :pv_ground_module_description: NECB_Default
 :pv_ground_tilt_angle: NECB_Default

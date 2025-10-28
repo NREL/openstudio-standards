@@ -54,8 +54,11 @@ class NECB2011
     system_data[:CentralHeatingDesignSupplyAirTemperature] = 43.0
     system_data[:AllOutdoorAirinCooling] = true
     system_data[:AllOutdoorAirinHeating] = true
-    # DOAS systems should always size on ventilation requirement, not total load
-    system_data[:TypeofLoadtoSizeOn] = 'VentilationRequirement'
+    if necb_reference_hp
+      system_data[:TypeofLoadtoSizeOn] = 'Total'
+    else
+      system_data[:TypeofLoadtoSizeOn] = 'VentilationRequirement'
+    end
     system_data[:MinimumSystemAirFlowRatio] = 1.0
     # Zone Sizing data
     system_data[:system_supply_air_temperature] = 20.0
@@ -166,12 +169,19 @@ class NECB2011
       oa_system.addToNode(supply_inlet_node)
 
       # Add a setpoint manager to control the supply air temperature
-      sat_sch = OpenStudio::Model::ScheduleRuleset.new(model)
-      sat_sch.setName('Makeup-Air Unit Supply Air Temp')
-      sat_sch.defaultDaySchedule.setName('Makeup Air Unit Supply Air Temp Default')
-      sat_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), system_data[:system_supply_air_temperature])
-      setpoint_mgr = OpenStudio::Model::SetpointManagerScheduled.new(model, sat_sch)
-      setpoint_mgr.addToNode(mau_air_loop.supplyOutletNode)
+      if necb_reference_hp
+        setpoint_mgr = OpenStudio::Model::SetpointManagerWarmest.new(model)
+        setpoint_mgr.setMinimumSetpointTemperature(13)
+        setpoint_mgr.setMaximumSetpointTemperature(20)
+        setpoint_mgr.addToNode(mau_air_loop.supplyOutletNode)
+      else
+        sat_sch = OpenStudio::Model::ScheduleRuleset.new(model)
+        sat_sch.setName('Makeup-Air Unit Supply Air Temp')
+        sat_sch.defaultDaySchedule.setName('Makeup Air Unit Supply Air Temp Default')
+        sat_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), system_data[:system_supply_air_temperature])
+        setpoint_mgr = OpenStudio::Model::SetpointManagerScheduled.new(model, sat_sch)
+        setpoint_mgr.addToNode(mau_air_loop.supplyOutletNode)
+      end
     end
 
     zones.each do |zone|
@@ -181,8 +191,14 @@ class NECB2011
       sizing_zone.setZoneCoolingDesignSupplyAirTemperatureDifference(system_data[:ZoneCoolingDesignSupplyAirTemperatureDifference])
       sizing_zone.setZoneHeatingDesignSupplyAirTemperatureInputMethod(system_data[:ZoneHeatingDesignSupplyAirTemperatureInputMethod])
       sizing_zone.setZoneHeatingDesignSupplyAirTemperatureDifference(system_data[:ZoneHeatingDesignSupplyAirTemperatureDifference])
-      sizing_zone.setZoneCoolingSizingFactor(system_data[:ZoneCoolingSizingFactor])
-      sizing_zone.setZoneHeatingSizingFactor(system_data[:ZoneHeatingSizingFactor])
+      # Different sizing factors for reference HP capacity
+      if necb_reference_hp
+        sizing_zone.setZoneCoolingSizingFactor(system_data[:ZoneDXCoolingSizingFactor])
+        sizing_zone.setZoneHeatingSizingFactor(system_data[:ZoneDXHeatingSizingFactor])
+      else
+        sizing_zone.setZoneCoolingSizingFactor(system_data[:ZoneCoolingSizingFactor])
+        sizing_zone.setZoneHeatingSizingFactor(system_data[:ZoneHeatingSizingFactor])
+      end
 
       # Create a PTAC for each zone:
       # PTAC DX Cooling with electric heating coil; electric heating coil is always off
@@ -197,8 +213,10 @@ class NECB2011
 
       # htg_coil_elec = OpenStudio::Model::CoilHeatingElectric.new(model,always_on)
       zero_outdoor_air = true # flag to set outside air flow to 0.0
-      # Create PTAC for all systems - DOAS handles outdoor air, PTAC handles comfort
-      add_ptac_dx_cooling(model, zone, zero_outdoor_air)
+      # Reference HP system does not use PTAC
+      unless necb_reference_hp
+        add_ptac_dx_cooling(model, zone, zero_outdoor_air)
+      end
 
       # add zone baseboards
       add_zone_baseboards(baseboard_type: baseboard_type,
@@ -207,9 +225,26 @@ class NECB2011
                           zone: zone)
 
       #  # Create a diffuser and attach the zone/diffuser pair to the MAU air loop, if applicable
-      # Heat pump systems use PTAC only - no CAV terminals created
 
-      if mau_type == true
+      if necb_reference_hp
+        # Create CAV RH (RH based on region's default fuel type or user input)
+        if necb_reference_hp_supp_fuel == 'DefaultFuel'
+          epw = OpenStudio::EpwFile.new(model.weatherFile.get.path.get)
+          necb_reference_hp_supp_fuel = @standards_data['regional_fuel_use'].detect { |fuel_sources| fuel_sources['state_province_regions'].include?(epw.stateProvinceRegion) }['fueltype_set']
+        end
+        if necb_reference_hp_supp_fuel == 'NaturalGas' || necb_reference_hp_supp_fuel == "Gas"
+          rh_coil = OpenStudio::Model::CoilHeatingGas.new(model, always_on)
+        elsif necb_reference_hp_supp_fuel == 'Electricity' || necb_reference_hp_supp_fuel == 'Electric' || necb_reference_hp_supp_fuel == 'FuelOilNo2'
+          rh_coil = OpenStudio::Model::CoilHeatingElectric.new(model, always_on)
+        elsif necb_reference_hp_supp_fuel == 'Hot Water' || necb_reference_hp_supp_fuel == 'HotWater'
+          rh_coil = OpenStudio::Model::CoilHeatingWater.new(model, always_on)
+          hw_loop.addDemandBranchForComponent(rh_coil)
+        else
+          raise('Invalid fuel type selected for heat pump supplemental coil')
+        end
+        cav_rh_terminal = OpenStudio::Model::AirTerminalSingleDuctConstantVolumeReheat.new(model, always_on, rh_coil)
+        mau_air_loop.addBranchForZone(zone, cav_rh_terminal.to_StraightComponent)
+      elsif mau_type == true
         diffuser = OpenStudio::Model::AirTerminalSingleDuctUncontrolled.new(model, always_on)
         mau_air_loop.addBranchForZone(zone, diffuser.to_StraightComponent)
         # components for MAU
@@ -228,9 +263,14 @@ class NECB2011
       sys_name_pars['sys_htg'] = 'ashp>c-hw' if necb_reference_hp && (necb_reference_hp_supp_fuel == "Hot Water" || necb_reference_hp_supp_fuel == "HotWater")
       sys_name_pars['sys_sf'] = 'cv'
       sys_name_pars['zone_htg'] = baseboard_type
-      # All systems use PTAC for zone cooling and DOAS for outdoor air
-      sys_name_pars['zone_clg'] = 'ptac'
       sys_oa = 'doas'
+      if necb_reference_hp
+        sys_name_pars['zone_clg'] = 'none'
+        sys_oa = 'mixed'
+      else
+        sys_name_pars['zone_clg'] = 'ptac'
+        sys_oa = 'doas'
+      end
       sys_name_pars['sys_rf'] = 'none'
       return assign_base_sys_name(air_loop: mau_air_loop,
                            sys_abbr: 'sys_1',
