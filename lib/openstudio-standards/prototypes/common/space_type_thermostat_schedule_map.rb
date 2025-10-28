@@ -104,7 +104,7 @@ all_new_space_types.each do |new_space_type|
       puts "Space type '#{new_space_type}' and standards building type '#{bldg_type}' has #{heating_thermostat_schs.size} heating setpoint schedules and #{cooling_thermostat_schs.size} cooling setpoint schedules, depending on the template. Using 'ComStock 90.1-2013'."
       data_subset = data_subset.select { |h| h[:template] == 'ComStock 90.1-2013' }[0]
       heating_thermostat_sch = data_subset.nil? ? nil : data_subset[:heating_setpoint_schedule]
-      cooling_thermostat_sch = data_subset.nil? ? nil : data_subset[:heating_setpoint_schedule]
+      cooling_thermostat_sch = data_subset.nil? ? nil : data_subset[:cooling_setpoint_schedule]
       thermostat_schedule_lookup << {
         space_type: new_space_type,
         standards_building_type: bldg_type,

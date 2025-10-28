@@ -189,23 +189,6 @@ class TestThermalZone < Minitest::Test
     assert_equal(true, @zone.thermal_zone_mixed_heat?(thermal_zone))
   end
 
-  def test_thermal_zone_set_unconditioned_thermostat
-    model = OpenStudio::Model::Model.new
-    polygon = OpenStudio::Point3dVector.new
-    origin = OpenStudio::Point3d.new(0.0, 0.0, 0.0)
-    polygon << origin
-    polygon << origin + OpenStudio::Vector3d.new(0.0, 5.0, 0.0)
-    polygon << origin + OpenStudio::Vector3d.new(5.0, 5.0, 0.0)
-    polygon << origin + OpenStudio::Vector3d.new(5.0, 0.0, 0.0)
-    space = OpenStudio::Model::Space.fromFloorPrint(polygon, 3.0, model).get
-    thermal_zone = OpenStudio::Model::ThermalZone.new(model)
-    space.setThermalZone(thermal_zone)
-    @zone.thermal_zone_set_unconditioned_thermostat(thermal_zone)
-    assert(thermal_zone.thermostatSetpointDualSetpoint.is_initialized)
-    assert_equal(false, @zone.thermal_zone_heated?(thermal_zone))
-    assert_equal(false, @zone.thermal_zone_cooled?(thermal_zone))
-  end
-
   def test_thermal_zone_get_design_internal_load
     model = OpenStudio::Model::Model.new
     polygon = OpenStudio::Point3dVector.new

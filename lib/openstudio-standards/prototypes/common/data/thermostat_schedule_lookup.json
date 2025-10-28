@@ -27,7 +27,7 @@
     "space_type": "retail",
     "standards_building_type": "LargeHotel",
     "heating_setpoint_schedule": "HotelLarge HTGSETP_SCH",
-    "cooling_setpoint_schedule": "HotelLarge HTGSETP_SCH"
+    "cooling_setpoint_schedule": "HotelLarge CLGSETP_SCH"
   },
   {
     "space_type": "retail",
@@ -45,7 +45,7 @@
     "space_type": "retail",
     "standards_building_type": "Retail",
     "heating_setpoint_schedule": "RetailStandalone HTGSETP_SCH_YES_OPTIMUM",
-    "cooling_setpoint_schedule": "RetailStandalone HTGSETP_SCH_YES_OPTIMUM"
+    "cooling_setpoint_schedule": "RetailStandalone CLGSETP_SCH_YES_OPTIMUM"
   },
   {
     "space_type": "retail",
@@ -69,13 +69,13 @@
     "space_type": "retail",
     "standards_building_type": "StripMall",
     "heating_setpoint_schedule": "RetailStripmall Type3_HTGSETP_SCH_NO_OPTIMUM",
-    "cooling_setpoint_schedule": "RetailStripmall Type3_HTGSETP_SCH_NO_OPTIMUM"
+    "cooling_setpoint_schedule": "RetailStripmall Type3_CLGSETP_SCH_NO_OPTIMUM"
   },
   {
     "space_type": "retail",
     "standards_building_type": "SuperMarket",
     "heating_setpoint_schedule": "SuperMarket HtgSetp_Enduse",
-    "cooling_setpoint_schedule": "SuperMarket HtgSetp_Enduse"
+    "cooling_setpoint_schedule": "SuperMarket ClgSetp_Enduse"
   },
   {
     "space_type": "dining",
@@ -111,13 +111,13 @@
     "space_type": "dining",
     "standards_building_type": "FullServiceRestaurant",
     "heating_setpoint_schedule": "RestaurantSitDown HTGSETP_SCH_NO_OPTIMUM",
-    "cooling_setpoint_schedule": "RestaurantSitDown HTGSETP_SCH_NO_OPTIMUM"
+    "cooling_setpoint_schedule": "RestaurantSitDown CLGSETP_SCH_NO_OPTIMUM"
   },
   {
     "space_type": "dining",
     "standards_building_type": "Hospital",
     "heating_setpoint_schedule": "Hospital HTGSETP_SCH",
-    "cooling_setpoint_schedule": "Hospital HTGSETP_SCH"
+    "cooling_setpoint_schedule": "Hospital CLGSETP_SCH"
   },
   {
     "space_type": "dining",
@@ -135,7 +135,7 @@
     "space_type": "dining",
     "standards_building_type": "LargeHotel",
     "heating_setpoint_schedule": "HotelLarge HTGSETP_SCH",
-    "cooling_setpoint_schedule": "HotelLarge HTGSETP_SCH"
+    "cooling_setpoint_schedule": "HotelLarge CLGSETP_SCH"
   },
   {
     "space_type": "dining",
@@ -153,25 +153,25 @@
     "space_type": "dining",
     "standards_building_type": "Office",
     "heating_setpoint_schedule": "OfficeLarge HTGSETP_SCH_YES_OPTIMUM",
-    "cooling_setpoint_schedule": "OfficeLarge HTGSETP_SCH_YES_OPTIMUM"
+    "cooling_setpoint_schedule": "OfficeLarge CLGSETP_SCH_NO_SETBACK"
   },
   {
     "space_type": "dining",
     "standards_building_type": "Outpatient",
     "heating_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM",
-    "cooling_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM"
+    "cooling_setpoint_schedule": "OutPatientHealthCare CLGSETP_SCH_YES_OPTIMUM"
   },
   {
     "space_type": "dining",
     "standards_building_type": "PrimarySchool",
     "heating_setpoint_schedule": "SchoolPrimary HTGSETP_SCH_NO_OPTIMUM",
-    "cooling_setpoint_schedule": "SchoolPrimary HTGSETP_SCH_NO_OPTIMUM"
+    "cooling_setpoint_schedule": "SchoolPrimary CLGSETP_SCH_NO_OPTIMUM"
   },
   {
     "space_type": "dining",
     "standards_building_type": "QuickServiceRestaurant",
     "heating_setpoint_schedule": "RestaurantFastFood HTGSETP_SCH_NO_OPTIMUM",
-    "cooling_setpoint_schedule": "RestaurantFastFood HTGSETP_SCH_NO_OPTIMUM"
+    "cooling_setpoint_schedule": "RestaurantFastFood CLGSETP_SCH_NO_OPTIMUM"
   },
   {
     "space_type": "dining",
@@ -189,13 +189,13 @@
     "space_type": "dining",
     "standards_building_type": "SecondarySchool",
     "heating_setpoint_schedule": "SchoolSecondary HTGSETP_SCH_PSZ_AC",
-    "cooling_setpoint_schedule": "SchoolSecondary HTGSETP_SCH_PSZ_AC"
+    "cooling_setpoint_schedule": "SchoolSecondary CLGSETP_SCH_NO_SETBACK"
   },
   {
     "space_type": "dining",
     "standards_building_type": "SuperMarket",
     "heating_setpoint_schedule": "SuperMarket HtgSetp_Enduse",
-    "cooling_setpoint_schedule": "SuperMarket HtgSetp_Enduse"
+    "cooling_setpoint_schedule": "SuperMarket ClgSetp_Enduse"
   },
   {
     "space_type": "storage",
@@ -261,7 +261,7 @@
     "space_type": "storage",
     "standards_building_type": "LargeHotel",
     "heating_setpoint_schedule": "HotelLarge HTGSETP_SCH",
-    "cooling_setpoint_schedule": "HotelLarge HTGSETP_SCH"
+    "cooling_setpoint_schedule": "HotelLarge CLGSETP_SCH"
   },
   {
     "space_type": "storage",
@@ -303,13 +303,13 @@
     "space_type": "storage",
     "standards_building_type": "Office",
     "heating_setpoint_schedule": "OfficeSmall HTGSETP_SCH_NO_OPTIMUM",
-    "cooling_setpoint_schedule": "OfficeSmall HTGSETP_SCH_NO_OPTIMUM"
+    "cooling_setpoint_schedule": "OfficeSmall CLGSETP_SCH_NO_OPTIMUM"
   },
   {
     "space_type": "storage",
     "standards_building_type": "Outpatient",
     "heating_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM",
-    "cooling_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM"
+    "cooling_setpoint_schedule": "OutPatientHealthCare CLGSETP_SCH_NO_SETBACK"
   },
   {
     "space_type": "storage",
@@ -327,7 +327,7 @@
     "space_type": "storage",
     "standards_building_type": "Retail",
     "heating_setpoint_schedule": "RetailStandalone HTGSETP_SCH_NO_OPTIMUM",
-    "cooling_setpoint_schedule": "RetailStandalone HTGSETP_SCH_NO_OPTIMUM"
+    "cooling_setpoint_schedule": "RetailStandalone CLGSETP_SCH_NO_SETBACK"
   },
   {
     "space_type": "storage",
@@ -363,13 +363,13 @@
     "space_type": "storage",
     "standards_building_type": "SmallHotel",
     "heating_setpoint_schedule": "HotelSmall SemiHeated_HtgSP_Sch",
-    "cooling_setpoint_schedule": "HotelSmall SemiHeated_HtgSP_Sch"
+    "cooling_setpoint_schedule": "SmallHotel UnitHeater ClgSP Sch"
   },
   {
     "space_type": "storage",
     "standards_building_type": "SuperMarket",
     "heating_setpoint_schedule": "SuperMarket HtgSetp_Enduse",
-    "cooling_setpoint_schedule": "SuperMarket HtgSetp_Enduse"
+    "cooling_setpoint_schedule": "SuperMarket ClgSetp_Enduse"
   },
   {
     "space_type": "storage",
@@ -381,7 +381,7 @@
     "space_type": "storage",
     "standards_building_type": "Warehouse",
     "heating_setpoint_schedule": "Warehouse Bulk Storage Heating Setpoint Schedule",
-    "cooling_setpoint_schedule": "Warehouse Bulk Storage Heating Setpoint Schedule"
+    "cooling_setpoint_schedule": "Warehouse ClgSetp BulkStorage"
   },
   {
     "space_type": "lobby",
@@ -411,7 +411,7 @@
     "space_type": "lobby",
     "standards_building_type": "Hospital",
     "heating_setpoint_schedule": "Hospital HTGSETP_SCH",
-    "cooling_setpoint_schedule": "Hospital HTGSETP_SCH"
+    "cooling_setpoint_schedule": "Hospital CLGSETP_SCH"
   },
   {
     "space_type": "lobby",
@@ -429,7 +429,7 @@
     "space_type": "lobby",
     "standards_building_type": "LargeHotel",
     "heating_setpoint_schedule": "HotelLarge HTGSETP_SCH",
-    "cooling_setpoint_schedule": "HotelLarge HTGSETP_SCH"
+    "cooling_setpoint_schedule": "HotelLarge CLGSETP_SCH"
   },
   {
     "space_type": "lobby",
@@ -465,19 +465,19 @@
     "space_type": "lobby",
     "standards_building_type": "Office",
     "heating_setpoint_schedule": "OfficeMedium HTGSETP_SCH_YES_OPTIMUM",
-    "cooling_setpoint_schedule": "OfficeMedium HTGSETP_SCH_YES_OPTIMUM"
+    "cooling_setpoint_schedule": "OfficeMedium CLGSETP_SCH_YES_OPTIMUM"
   },
   {
     "space_type": "lobby",
     "standards_building_type": "Outpatient",
     "heating_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM",
-    "cooling_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM"
+    "cooling_setpoint_schedule": "OutPatientHealthCare CLGSETP_SCH_YES_OPTIMUM"
   },
   {
     "space_type": "lobby",
     "standards_building_type": "PrimarySchool",
     "heating_setpoint_schedule": "SchoolPrimary HTGSETP_SCH_NO_OPTIMUM",
-    "cooling_setpoint_schedule": "SchoolPrimary HTGSETP_SCH_NO_OPTIMUM"
+    "cooling_setpoint_schedule": "SchoolPrimary CLGSETP_SCH_NO_OPTIMUM"
   },
   {
     "space_type": "lobby",
@@ -495,13 +495,13 @@
     "space_type": "lobby",
     "standards_building_type": "Retail",
     "heating_setpoint_schedule": "RetailStandalone HTGSETP_SCH_FrontEntry_STD2013",
-    "cooling_setpoint_schedule": "RetailStandalone HTGSETP_SCH_FrontEntry_STD2013"
+    "cooling_setpoint_schedule": "RetailStandalone FRONT_ENTRY_COOLING"
   },
   {
     "space_type": "lobby",
     "standards_building_type": "SecondarySchool",
     "heating_setpoint_schedule": "SchoolSecondary HTGSETP_SCH_YES_OPTIMUM",
-    "cooling_setpoint_schedule": "SchoolSecondary HTGSETP_SCH_YES_OPTIMUM"
+    "cooling_setpoint_schedule": "SchoolSecondary CLGSETP_SCH_NO_SETBACK"
   },
   {
     "space_type": "lobby",
@@ -621,19 +621,19 @@
     "space_type": "restroom",
     "standards_building_type": "Office",
     "heating_setpoint_schedule": "OfficeMedium HTGSETP_SCH_YES_OPTIMUM",
-    "cooling_setpoint_schedule": "OfficeMedium HTGSETP_SCH_YES_OPTIMUM"
+    "cooling_setpoint_schedule": "OfficeMedium CLGSETP_SCH_YES_OPTIMUM"
   },
   {
     "space_type": "restroom",
     "standards_building_type": "Outpatient",
     "heating_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM",
-    "cooling_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM"
+    "cooling_setpoint_schedule": "OutPatientHealthCare CLGSETP_SCH_YES_OPTIMUM"
   },
   {
     "space_type": "restroom",
     "standards_building_type": "PrimarySchool",
     "heating_setpoint_schedule": "SchoolPrimary HTGSETP_SCH_NO_OPTIMUM",
-    "cooling_setpoint_schedule": "SchoolPrimary HTGSETP_SCH_NO_OPTIMUM"
+    "cooling_setpoint_schedule": "SchoolPrimary CLGSETP_SCH_NO_OPTIMUM"
   },
   {
     "space_type": "restroom",
@@ -681,19 +681,19 @@
     "space_type": "restroom",
     "standards_building_type": "SecondarySchool",
     "heating_setpoint_schedule": "SchoolSecondary HTGSETP_SCH_Setback",
-    "cooling_setpoint_schedule": "SchoolSecondary HTGSETP_SCH_Setback"
+    "cooling_setpoint_schedule": "SchoolSecondary CLGSETP_SCH_Setback"
   },
   {
     "space_type": "restroom",
     "standards_building_type": "SmallHotel",
     "heating_setpoint_schedule": "HotelSmall CommonArea_HtgSP_Sch",
-    "cooling_setpoint_schedule": "HotelSmall CommonArea_HtgSP_Sch"
+    "cooling_setpoint_schedule": "HotelSmall CommonArea_ClgSP_Sch"
   },
   {
     "space_type": "restroom",
     "standards_building_type": "SuperMarket",
     "heating_setpoint_schedule": "SuperMarket HtgSetp_Enduse",
-    "cooling_setpoint_schedule": "SuperMarket HtgSetp_Enduse"
+    "cooling_setpoint_schedule": "SuperMarket ClgSetp_Enduse"
   },
   {
     "space_type": "restroom",
@@ -741,13 +741,13 @@
     "space_type": "electrical/mechanical",
     "standards_building_type": "Hospital",
     "heating_setpoint_schedule": "Hospital HTGSETP_SCH",
-    "cooling_setpoint_schedule": "Hospital HTGSETP_SCH"
+    "cooling_setpoint_schedule": "Hospital CLGSETP_SCH"
   },
   {
     "space_type": "electrical/mechanical",
     "standards_building_type": "LargeHotel",
     "heating_setpoint_schedule": "HotelLarge HTGSETP_SCH",
-    "cooling_setpoint_schedule": "HotelLarge HTGSETP_SCH"
+    "cooling_setpoint_schedule": "HotelLarge CLGSETP_SCH"
   },
   {
     "space_type": "electrical/mechanical",
@@ -789,19 +789,19 @@
     "space_type": "electrical/mechanical",
     "standards_building_type": "Office",
     "heating_setpoint_schedule": "OfficeMedium HTGSETP_SCH_YES_OPTIMUM",
-    "cooling_setpoint_schedule": "OfficeMedium HTGSETP_SCH_YES_OPTIMUM"
+    "cooling_setpoint_schedule": "OfficeMedium CLGSETP_SCH_YES_OPTIMUM"
   },
   {
     "space_type": "electrical/mechanical",
     "standards_building_type": "Outpatient",
     "heating_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM",
-    "cooling_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM"
+    "cooling_setpoint_schedule": "OutPatientHealthCare CLGSETP_SCH_YES_OPTIMUM"
   },
   {
     "space_type": "electrical/mechanical",
     "standards_building_type": "PrimarySchool",
     "heating_setpoint_schedule": "SchoolPrimary HTGSETP_SCH_NO_OPTIMUM",
-    "cooling_setpoint_schedule": "SchoolPrimary HTGSETP_SCH_NO_OPTIMUM"
+    "cooling_setpoint_schedule": "SchoolPrimary CLGSETP_SCH_NO_OPTIMUM"
   },
   {
     "space_type": "electrical/mechanical",
@@ -825,7 +825,7 @@
     "space_type": "electrical/mechanical",
     "standards_building_type": "SecondarySchool",
     "heating_setpoint_schedule": "SchoolSecondary HTGSETP_SCH_Setback",
-    "cooling_setpoint_schedule": "SchoolSecondary HTGSETP_SCH_Setback"
+    "cooling_setpoint_schedule": "SchoolSecondary CLGSETP_SCH_Setback"
   },
   {
     "space_type": "electrical/mechanical",
@@ -837,7 +837,7 @@
     "space_type": "electrical/mechanical",
     "standards_building_type": "SuperMarket",
     "heating_setpoint_schedule": "SuperMarket HtgSetp",
-    "cooling_setpoint_schedule": "SuperMarket HtgSetp"
+    "cooling_setpoint_schedule": "SuperMarket ClgSetp"
   },
   {
     "space_type": "electrical/mechanical",
@@ -879,7 +879,7 @@
     "space_type": "food preparation",
     "standards_building_type": "FullServiceRestaurant",
     "heating_setpoint_schedule": "RestaurantSitDown HTGSETP_KITCHEN_SCH_NO_OPTIMUM",
-    "cooling_setpoint_schedule": "RestaurantSitDown HTGSETP_KITCHEN_SCH_NO_OPTIMUM"
+    "cooling_setpoint_schedule": "RestaurantSitDown CLGSETP_KITCHEN_SCH_NO_OPTIMUM"
   },
   {
     "space_type": "food preparation",
@@ -891,7 +891,7 @@
     "space_type": "food preparation",
     "standards_building_type": "Hospital",
     "heating_setpoint_schedule": "Hospital HTGSETP_SCH",
-    "cooling_setpoint_schedule": "Hospital HTGSETP_SCH"
+    "cooling_setpoint_schedule": "Hospital CLGSETP_SCH"
   },
   {
     "space_type": "food preparation",
@@ -909,7 +909,7 @@
     "space_type": "food preparation",
     "standards_building_type": "LargeHotel",
     "heating_setpoint_schedule": "HotelLarge HTGSETP_SCH",
-    "cooling_setpoint_schedule": "HotelLarge HTGSETP_SCH"
+    "cooling_setpoint_schedule": "HotelLarge CLGSETP_SCH"
   },
   {
     "space_type": "food preparation",
@@ -927,13 +927,13 @@
     "space_type": "food preparation",
     "standards_building_type": "PrimarySchool",
     "heating_setpoint_schedule": "SchoolPrimary HTGSETP_SCH_NO_OPTIMUM",
-    "cooling_setpoint_schedule": "SchoolPrimary HTGSETP_SCH_NO_OPTIMUM"
+    "cooling_setpoint_schedule": "SchoolPrimary CLGSETP_SCH_NO_OPTIMUM"
   },
   {
     "space_type": "food preparation",
     "standards_building_type": "QuickServiceRestaurant",
     "heating_setpoint_schedule": "RestaurantFastFood HTGSETP_KITCHEN_SCH_NO_OPTIMUM",
-    "cooling_setpoint_schedule": "RestaurantFastFood HTGSETP_KITCHEN_SCH_NO_OPTIMUM"
+    "cooling_setpoint_schedule": "RestaurantFastFood CLGSETP_KITCHEN_SCH_NO_OPTIMUM"
   },
   {
     "space_type": "food preparation",
@@ -957,13 +957,13 @@
     "space_type": "food preparation",
     "standards_building_type": "SecondarySchool",
     "heating_setpoint_schedule": "SchoolSecondary HTGSETP_SCH_PSZ_AC",
-    "cooling_setpoint_schedule": "SchoolSecondary HTGSETP_SCH_PSZ_AC"
+    "cooling_setpoint_schedule": "SchoolSecondary CLGSETP_SCH_NO_SETBACK"
   },
   {
     "space_type": "food preparation",
     "standards_building_type": "SuperMarket",
     "heating_setpoint_schedule": "SuperMarket HtgSetp_Enduse",
-    "cooling_setpoint_schedule": "SuperMarket HtgSetp_Enduse"
+    "cooling_setpoint_schedule": "SuperMarket ClgSetp_Enduse"
   },
   {
     "space_type": "conference/meeting/multipurpose",
@@ -1023,25 +1023,25 @@
     "space_type": "conference/meeting/multipurpose",
     "standards_building_type": "Office",
     "heating_setpoint_schedule": "OfficeMedium HTGSETP_SCH_YES_OPTIMUM",
-    "cooling_setpoint_schedule": "OfficeMedium HTGSETP_SCH_YES_OPTIMUM"
+    "cooling_setpoint_schedule": "OfficeMedium CLGSETP_SCH_YES_OPTIMUM"
   },
   {
     "space_type": "conference/meeting/multipurpose",
     "standards_building_type": "Outpatient",
     "heating_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM",
-    "cooling_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM"
+    "cooling_setpoint_schedule": "OutPatientHealthCare CLGSETP_SCH_YES_OPTIMUM"
   },
   {
     "space_type": "conference/meeting/multipurpose",
     "standards_building_type": "SmallHotel",
     "heating_setpoint_schedule": "HotelSmall CommonArea_HtgSP_Sch",
-    "cooling_setpoint_schedule": "HotelSmall CommonArea_HtgSP_Sch"
+    "cooling_setpoint_schedule": "HotelSmall CommonArea_ClgSP_Sch"
   },
   {
     "space_type": "conference/meeting/multipurpose",
     "standards_building_type": "SuperMarket",
     "heating_setpoint_schedule": "SuperMarket HtgSetp",
-    "cooling_setpoint_schedule": "SuperMarket HtgSetp"
+    "cooling_setpoint_schedule": "SuperMarket ClgSetp"
   },
   {
     "space_type": "audience seating",
@@ -1065,7 +1065,7 @@
     "space_type": "audience seating",
     "standards_building_type": "SecondarySchool",
     "heating_setpoint_schedule": "SchoolSecondary HTGSETP_SCH_PSZ_AC",
-    "cooling_setpoint_schedule": "SchoolSecondary HTGSETP_SCH_PSZ_AC"
+    "cooling_setpoint_schedule": "SchoolSecondary CLGSETP_SCH_NO_SETBACK"
   },
   {
     "space_type": "classroom/lecture/training",
@@ -1113,19 +1113,19 @@
     "space_type": "classroom/lecture/training",
     "standards_building_type": "Office",
     "heating_setpoint_schedule": "OfficeMedium HTGSETP_SCH_YES_OPTIMUM",
-    "cooling_setpoint_schedule": "OfficeMedium HTGSETP_SCH_YES_OPTIMUM"
+    "cooling_setpoint_schedule": "OfficeMedium CLGSETP_SCH_YES_OPTIMUM"
   },
   {
     "space_type": "classroom/lecture/training",
     "standards_building_type": "PrimarySchool",
     "heating_setpoint_schedule": "SchoolPrimary HTGSETP_SCH_NO_OPTIMUM",
-    "cooling_setpoint_schedule": "SchoolPrimary HTGSETP_SCH_NO_OPTIMUM"
+    "cooling_setpoint_schedule": "SchoolPrimary CLGSETP_SCH_NO_OPTIMUM"
   },
   {
     "space_type": "classroom/lecture/training",
     "standards_building_type": "SecondarySchool",
     "heating_setpoint_schedule": "SchoolSecondary HTGSETP_SCH_YES_OPTIMUM",
-    "cooling_setpoint_schedule": "SchoolSecondary HTGSETP_SCH_YES_OPTIMUM"
+    "cooling_setpoint_schedule": "SchoolSecondary CLGSETP_SCH_NO_SETBACK"
   },
   {
     "space_type": "corridor",
@@ -1185,7 +1185,7 @@
     "space_type": "corridor",
     "standards_building_type": "Hospital",
     "heating_setpoint_schedule": "Hospital HTGSETP_SCH",
-    "cooling_setpoint_schedule": "Hospital HTGSETP_SCH"
+    "cooling_setpoint_schedule": "Hospital CLGSETP_SCH"
   },
   {
     "space_type": "corridor",
@@ -1209,7 +1209,7 @@
     "space_type": "corridor",
     "standards_building_type": "LargeHotel",
     "heating_setpoint_schedule": "HotelLarge HTGSETP_SCH",
-    "cooling_setpoint_schedule": "HotelLarge HTGSETP_SCH"
+    "cooling_setpoint_schedule": "HotelLarge CLGSETP_SCH"
   },
   {
     "space_type": "corridor",
@@ -1233,7 +1233,7 @@
     "space_type": "corridor",
     "standards_building_type": "MidriseApartment",
     "heating_setpoint_schedule": "ApartmentMidRise HTGSETP_APT_SCH",
-    "cooling_setpoint_schedule": "ApartmentMidRise HTGSETP_APT_SCH"
+    "cooling_setpoint_schedule": "ApartmentMidRise CLGSETP_APT_SCH"
   },
   {
     "space_type": "corridor",
@@ -1263,19 +1263,19 @@
     "space_type": "corridor",
     "standards_building_type": "Office",
     "heating_setpoint_schedule": "OfficeMedium HTGSETP_SCH_YES_OPTIMUM",
-    "cooling_setpoint_schedule": "OfficeMedium HTGSETP_SCH_YES_OPTIMUM"
+    "cooling_setpoint_schedule": "OfficeMedium CLGSETP_SCH_YES_OPTIMUM"
   },
   {
     "space_type": "corridor",
     "standards_building_type": "Outpatient",
     "heating_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM",
-    "cooling_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM"
+    "cooling_setpoint_schedule": "OutPatientHealthCare CLGSETP_SCH_YES_OPTIMUM"
   },
   {
     "space_type": "corridor",
     "standards_building_type": "PrimarySchool",
     "heating_setpoint_schedule": "SchoolPrimary HTGSETP_SCH_NO_OPTIMUM",
-    "cooling_setpoint_schedule": "SchoolPrimary HTGSETP_SCH_NO_OPTIMUM"
+    "cooling_setpoint_schedule": "SchoolPrimary CLGSETP_SCH_NO_OPTIMUM"
   },
   {
     "space_type": "corridor",
@@ -1311,19 +1311,19 @@
     "space_type": "corridor",
     "standards_building_type": "SecondarySchool",
     "heating_setpoint_schedule": "SchoolSecondary HTGSETP_SCH_YES_OPTIMUM",
-    "cooling_setpoint_schedule": "SchoolSecondary HTGSETP_SCH_YES_OPTIMUM"
+    "cooling_setpoint_schedule": "SchoolSecondary CLGSETP_SCH_NO_SETBACK"
   },
   {
     "space_type": "corridor",
     "standards_building_type": "SmallHotel",
     "heating_setpoint_schedule": "HotelSmall CommonArea_HtgSP_Sch",
-    "cooling_setpoint_schedule": "HotelSmall CommonArea_HtgSP_Sch"
+    "cooling_setpoint_schedule": "HotelSmall CommonArea_ClgSP_Sch"
   },
   {
     "space_type": "corridor",
     "standards_building_type": "SuperMarket",
     "heating_setpoint_schedule": "SuperMarket HtgSetp",
-    "cooling_setpoint_schedule": "SuperMarket HtgSetp"
+    "cooling_setpoint_schedule": "SuperMarket ClgSetp"
   },
   {
     "space_type": "office",
@@ -1383,7 +1383,7 @@
     "space_type": "office",
     "standards_building_type": "Hospital",
     "heating_setpoint_schedule": "Hospital HTGSETP_SCH",
-    "cooling_setpoint_schedule": "Hospital HTGSETP_SCH"
+    "cooling_setpoint_schedule": "Hospital CLGSETP_SCH"
   },
   {
     "space_type": "office",
@@ -1419,7 +1419,7 @@
     "space_type": "office",
     "standards_building_type": "MidriseApartment",
     "heating_setpoint_schedule": "ApartmentMidRise HTGSETP_OFF_SCH_NO_OPTIMUM",
-    "cooling_setpoint_schedule": "ApartmentMidRise HTGSETP_OFF_SCH_NO_OPTIMUM"
+    "cooling_setpoint_schedule": "ApartmentMidRise CLGSETP_OFF_SCH_NO_OPTIMUM"
   },
   {
     "space_type": "office",
@@ -1449,19 +1449,19 @@
     "space_type": "office",
     "standards_building_type": "Office",
     "heating_setpoint_schedule": "OfficeMedium HTGSETP_SCH_YES_OPTIMUM",
-    "cooling_setpoint_schedule": "OfficeMedium HTGSETP_SCH_YES_OPTIMUM"
+    "cooling_setpoint_schedule": "OfficeMedium CLGSETP_SCH_YES_OPTIMUM"
   },
   {
     "space_type": "office",
     "standards_building_type": "Outpatient",
     "heating_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM",
-    "cooling_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM"
+    "cooling_setpoint_schedule": "OutPatientHealthCare CLGSETP_SCH_YES_OPTIMUM"
   },
   {
     "space_type": "office",
     "standards_building_type": "PrimarySchool",
     "heating_setpoint_schedule": "SchoolPrimary HTGSETP_SCH_NO_OPTIMUM",
-    "cooling_setpoint_schedule": "SchoolPrimary HTGSETP_SCH_NO_OPTIMUM"
+    "cooling_setpoint_schedule": "SchoolPrimary CLGSETP_SCH_NO_OPTIMUM"
   },
   {
     "space_type": "office",
@@ -1509,19 +1509,19 @@
     "space_type": "office",
     "standards_building_type": "SecondarySchool",
     "heating_setpoint_schedule": "SchoolSecondary HTGSETP_SCH_YES_OPTIMUM",
-    "cooling_setpoint_schedule": "SchoolSecondary HTGSETP_SCH_YES_OPTIMUM"
+    "cooling_setpoint_schedule": "SchoolSecondary CLGSETP_SCH_NO_SETBACK"
   },
   {
     "space_type": "office",
     "standards_building_type": "SmallHotel",
     "heating_setpoint_schedule": "HotelSmall CommonArea_HtgSP_Sch",
-    "cooling_setpoint_schedule": "HotelSmall CommonArea_HtgSP_Sch"
+    "cooling_setpoint_schedule": "HotelSmall CommonArea_ClgSP_Sch"
   },
   {
     "space_type": "office",
     "standards_building_type": "SuperMarket",
     "heating_setpoint_schedule": "SuperMarket HtgSetp",
-    "cooling_setpoint_schedule": "SuperMarket HtgSetp"
+    "cooling_setpoint_schedule": "SuperMarket ClgSetp"
   },
   {
     "space_type": "office",
@@ -1533,7 +1533,7 @@
     "space_type": "office",
     "standards_building_type": "Warehouse",
     "heating_setpoint_schedule": "Warehouse HtgSetp",
-    "cooling_setpoint_schedule": "Warehouse HtgSetp"
+    "cooling_setpoint_schedule": "Warehouse ClgSetp"
   },
   {
     "space_type": "lounge/breakroom",
@@ -1593,13 +1593,13 @@
     "space_type": "lounge/breakroom",
     "standards_building_type": "Office",
     "heating_setpoint_schedule": "OfficeMedium HTGSETP_SCH_YES_OPTIMUM",
-    "cooling_setpoint_schedule": "OfficeMedium HTGSETP_SCH_YES_OPTIMUM"
+    "cooling_setpoint_schedule": "OfficeMedium CLGSETP_SCH_YES_OPTIMUM"
   },
   {
     "space_type": "lounge/breakroom",
     "standards_building_type": "Outpatient",
     "heating_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM",
-    "cooling_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM"
+    "cooling_setpoint_schedule": "OutPatientHealthCare CLGSETP_SCH_YES_OPTIMUM"
   },
   {
     "space_type": "lounge/breakroom",
@@ -1629,7 +1629,7 @@
     "space_type": "lounge/breakroom",
     "standards_building_type": "SmallHotel",
     "heating_setpoint_schedule": "HotelSmall CommonArea_HtgSP_Sch",
-    "cooling_setpoint_schedule": "HotelSmall CommonArea_HtgSP_Sch"
+    "cooling_setpoint_schedule": "HotelSmall CommonArea_ClgSP_Sch"
   },
   {
     "space_type": "stairwell",
@@ -1647,19 +1647,19 @@
     "space_type": "stairwell",
     "standards_building_type": "Office",
     "heating_setpoint_schedule": "OfficeMedium HTGSETP_SCH_YES_OPTIMUM",
-    "cooling_setpoint_schedule": "OfficeMedium HTGSETP_SCH_YES_OPTIMUM"
+    "cooling_setpoint_schedule": "OfficeMedium CLGSETP_SCH_YES_OPTIMUM"
   },
   {
     "space_type": "stairwell",
     "standards_building_type": "Outpatient",
     "heating_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM",
-    "cooling_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM"
+    "cooling_setpoint_schedule": "OutPatientHealthCare CLGSETP_SCH_YES_OPTIMUM"
   },
   {
     "space_type": "stairwell",
     "standards_building_type": "SmallHotel",
     "heating_setpoint_schedule": "HotelSmall SemiHeated_HtgSP_Sch",
-    "cooling_setpoint_schedule": "HotelSmall SemiHeated_HtgSP_Sch"
+    "cooling_setpoint_schedule": "SmallHotel UnitHeater ClgSP Sch"
   },
   {
     "space_type": "laboratory",
@@ -1671,7 +1671,7 @@
     "space_type": "laboratory",
     "standards_building_type": "Hospital",
     "heating_setpoint_schedule": "Hospital HTGSETP_SCH",
-    "cooling_setpoint_schedule": "Hospital HTGSETP_SCH"
+    "cooling_setpoint_schedule": "Hospital CLGSETP_SCH"
   },
   {
     "space_type": "laboratory",
@@ -1701,7 +1701,7 @@
     "space_type": "computer room",
     "standards_building_type": "SecondarySchool",
     "heating_setpoint_schedule": "SchoolSecondary HTGSETP_SCH_YES_OPTIMUM",
-    "cooling_setpoint_schedule": "SchoolSecondary HTGSETP_SCH_YES_OPTIMUM"
+    "cooling_setpoint_schedule": "SchoolSecondary CLGSETP_SCH_NO_SETBACK"
   },
   {
     "space_type": "shaft",
@@ -1761,13 +1761,13 @@
     "space_type": "library",
     "standards_building_type": "PrimarySchool",
     "heating_setpoint_schedule": "SchoolPrimary HTGSETP_SCH_NO_OPTIMUM",
-    "cooling_setpoint_schedule": "SchoolPrimary HTGSETP_SCH_NO_OPTIMUM"
+    "cooling_setpoint_schedule": "SchoolPrimary CLGSETP_SCH_NO_OPTIMUM"
   },
   {
     "space_type": "library",
     "standards_building_type": "SecondarySchool",
     "heating_setpoint_schedule": "SchoolSecondary HTGSETP_SCH_YES_OPTIMUM",
-    "cooling_setpoint_schedule": "SchoolSecondary HTGSETP_SCH_YES_OPTIMUM"
+    "cooling_setpoint_schedule": "SchoolSecondary CLGSETP_SCH_NO_SETBACK"
   },
   {
     "space_type": "interior parking",
@@ -1803,19 +1803,19 @@
     "space_type": "exercise area",
     "standards_building_type": "PrimarySchool",
     "heating_setpoint_schedule": "SchoolPrimary HTGSETP_SCH_NO_OPTIMUM",
-    "cooling_setpoint_schedule": "SchoolPrimary HTGSETP_SCH_NO_OPTIMUM"
+    "cooling_setpoint_schedule": "SchoolPrimary CLGSETP_SCH_NO_OPTIMUM"
   },
   {
     "space_type": "exercise area",
     "standards_building_type": "SecondarySchool",
     "heating_setpoint_schedule": "SchoolSecondary HTGSETP_SCH_PSZ_AC",
-    "cooling_setpoint_schedule": "SchoolSecondary HTGSETP_SCH_PSZ_AC"
+    "cooling_setpoint_schedule": "SchoolSecondary CLGSETP_SCH_NO_SETBACK"
   },
   {
     "space_type": "exercise area",
     "standards_building_type": "SmallHotel",
     "heating_setpoint_schedule": "HotelSmall CommonArea_HtgSP_Sch",
-    "cooling_setpoint_schedule": "HotelSmall CommonArea_HtgSP_Sch"
+    "cooling_setpoint_schedule": "HotelSmall CommonArea_ClgSP_Sch"
   },
   {
     "space_type": "workshop",
@@ -1851,7 +1851,7 @@
     "space_type": "guest room",
     "standards_building_type": "LargeHotel",
     "heating_setpoint_schedule": "HotelLarge VAC_OccGuestRoom_HtgSP_Sch",
-    "cooling_setpoint_schedule": "HotelLarge VAC_OccGuestRoom_HtgSP_Sch"
+    "cooling_setpoint_schedule": "HotelLarge VAC_OccGuestRoom_ClgSP_Sch"
   },
   {
     "space_type": "guest room",
@@ -1863,7 +1863,7 @@
     "space_type": "guest room",
     "standards_building_type": "SmallHotel",
     "heating_setpoint_schedule": "Hospital HTGSETP_SCH",
-    "cooling_setpoint_schedule": "Hospital HTGSETP_SCH"
+    "cooling_setpoint_schedule": "Hospital CLGSETP_SCH"
   },
   {
     "space_type": "attic",
@@ -1887,43 +1887,43 @@
     "space_type": "apartment",
     "standards_building_type": "MidriseApartment",
     "heating_setpoint_schedule": "ApartmentMidRise HTGSETP_APT_SCH",
-    "cooling_setpoint_schedule": "ApartmentMidRise HTGSETP_APT_SCH"
+    "cooling_setpoint_schedule": "ApartmentMidRise CLGSETP_APT_SCH"
   },
   {
     "space_type": "imaging",
     "standards_building_type": "Hospital",
     "heating_setpoint_schedule": "Hospital HTGSETP_SCH",
-    "cooling_setpoint_schedule": "Hospital HTGSETP_SCH"
+    "cooling_setpoint_schedule": "Hospital CLGSETP_SCH"
   },
   {
     "space_type": "imaging",
     "standards_building_type": "Outpatient",
     "heating_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM",
-    "cooling_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM"
+    "cooling_setpoint_schedule": "OutPatientHealthCare CLGSETP_SCH_YES_OPTIMUM"
   },
   {
     "space_type": "physical therapy",
     "standards_building_type": "Hospital",
     "heating_setpoint_schedule": "Hospital HTGSETP_SCH",
-    "cooling_setpoint_schedule": "Hospital HTGSETP_SCH"
+    "cooling_setpoint_schedule": "Hospital CLGSETP_SCH"
   },
   {
     "space_type": "physical therapy",
     "standards_building_type": "Outpatient",
     "heating_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM",
-    "cooling_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM"
+    "cooling_setpoint_schedule": "OutPatientHealthCare CLGSETP_SCH_YES_OPTIMUM"
   },
   {
     "space_type": "emergency room",
     "standards_building_type": "Hospital",
     "heating_setpoint_schedule": "Hospital HTGSETP_SCH",
-    "cooling_setpoint_schedule": "Hospital HTGSETP_SCH"
+    "cooling_setpoint_schedule": "Hospital CLGSETP_SCH"
   },
   {
     "space_type": "patient room",
     "standards_building_type": "Hospital",
     "heating_setpoint_schedule": "Hospital HTGSETP_SCH",
-    "cooling_setpoint_schedule": "Hospital HTGSETP_SCH"
+    "cooling_setpoint_schedule": "Hospital CLGSETP_SCH"
   },
   {
     "space_type": "patient room",
@@ -1941,7 +1941,7 @@
     "space_type": "nurses station",
     "standards_building_type": "Hospital",
     "heating_setpoint_schedule": "Hospital HTGSETP_SCH",
-    "cooling_setpoint_schedule": "Hospital HTGSETP_SCH"
+    "cooling_setpoint_schedule": "Hospital CLGSETP_SCH"
   },
   {
     "space_type": "nurses station",
@@ -1953,25 +1953,25 @@
     "space_type": "nurses station",
     "standards_building_type": "Outpatient",
     "heating_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM",
-    "cooling_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM"
+    "cooling_setpoint_schedule": "OutPatientHealthCare CLGSETP_SCH_YES_OPTIMUM"
   },
   {
     "space_type": "exam/treatment",
     "standards_building_type": "Hospital",
     "heating_setpoint_schedule": "Hospital HTGSETP_SCH",
-    "cooling_setpoint_schedule": "Hospital HTGSETP_SCH"
+    "cooling_setpoint_schedule": "Hospital CLGSETP_SCH"
   },
   {
     "space_type": "exam/treatment",
     "standards_building_type": "Outpatient",
     "heating_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM",
-    "cooling_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM"
+    "cooling_setpoint_schedule": "OutPatientHealthCare CLGSETP_SCH_YES_OPTIMUM"
   },
   {
     "space_type": "operating room",
     "standards_building_type": "Hospital",
     "heating_setpoint_schedule": "Hospital HTGSETP_SCH",
-    "cooling_setpoint_schedule": "Hospital HTGSETP_SCH"
+    "cooling_setpoint_schedule": "Hospital CLGSETP_SCH"
   },
   {
     "space_type": "operating room",
@@ -1983,7 +1983,7 @@
     "space_type": "operating room",
     "standards_building_type": "Outpatient",
     "heating_setpoint_schedule": "OutPatientHealthCare OR_HTGSETP_SCH",
-    "cooling_setpoint_schedule": "OutPatientHealthCare OR_HTGSETP_SCH"
+    "cooling_setpoint_schedule": "OutPatientHealthCare OR_CLGSETP_SCH"
   },
   {
     "space_type": "laundry/washing",
@@ -1995,7 +1995,7 @@
     "space_type": "laundry/washing",
     "standards_building_type": "LargeHotel",
     "heating_setpoint_schedule": "HotelLarge HTGSETP_SCH",
-    "cooling_setpoint_schedule": "HotelLarge HTGSETP_SCH"
+    "cooling_setpoint_schedule": "HotelLarge CLGSETP_SCH"
   },
   {
     "space_type": "laundry/washing",
@@ -2013,7 +2013,7 @@
     "space_type": "laundry/washing",
     "standards_building_type": "SmallHotel",
     "heating_setpoint_schedule": "HotelSmall CommonArea_HtgSP_Sch",
-    "cooling_setpoint_schedule": "HotelSmall CommonArea_HtgSP_Sch"
+    "cooling_setpoint_schedule": "HotelSmall CommonArea_ClgSP_Sch"
   },
   {
     "space_type": "datacenter/high ite",
@@ -2055,13 +2055,13 @@
     "space_type": "datacenter/low ite",
     "standards_building_type": "Office",
     "heating_setpoint_schedule": "OfficeLarge HTGSETP_SCH_YES_OPTIMUM",
-    "cooling_setpoint_schedule": "OfficeLarge HTGSETP_SCH_YES_OPTIMUM"
+    "cooling_setpoint_schedule": "OfficeLarge CLGSETP_SCH_NO_SETBACK"
   },
   {
     "space_type": "datacenter/low ite",
     "standards_building_type": "Outpatient",
     "heating_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM",
-    "cooling_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM"
+    "cooling_setpoint_schedule": "OutPatientHealthCare CLGSETP_SCH_YES_OPTIMUM"
   },
   {
     "space_type": "datacenter/low ite",
@@ -2085,24 +2085,24 @@
     "space_type": "copy/print",
     "standards_building_type": "Office",
     "heating_setpoint_schedule": "OfficeLarge HTGSETP_SCH_YES_OPTIMUM",
-    "cooling_setpoint_schedule": "OfficeLarge HTGSETP_SCH_YES_OPTIMUM"
+    "cooling_setpoint_schedule": "OfficeLarge CLGSETP_SCH_NO_SETBACK"
   },
   {
     "space_type": "locker room",
     "standards_building_type": "Outpatient",
     "heating_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM",
-    "cooling_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM"
+    "cooling_setpoint_schedule": "OutPatientHealthCare CLGSETP_SCH_YES_OPTIMUM"
   },
   {
     "space_type": "dressing room",
     "standards_building_type": "Outpatient",
     "heating_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM",
-    "cooling_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM"
+    "cooling_setpoint_schedule": "OutPatientHealthCare CLGSETP_SCH_YES_OPTIMUM"
   },
   {
     "space_type": "recovery",
     "standards_building_type": "Outpatient",
     "heating_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM",
-    "cooling_setpoint_schedule": "OutPatientHealthCare HTGSETP_SCH_YES_OPTIMUM"
+    "cooling_setpoint_schedule": "OutPatientHealthCare CLGSETP_SCH_YES_OPTIMUM"
   }
 ]
