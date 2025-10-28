@@ -68,6 +68,7 @@ module OpenstudioStandards
 
   # Thermal Zone Module
   require_relative 'openstudio-standards/thermal_zone/information'
+  require_relative 'openstudio-standards/thermal_zone/thermostat_schedules'
 
   # HVAC Module
   require_relative 'openstudio-standards/hvac/air_loop/information'
