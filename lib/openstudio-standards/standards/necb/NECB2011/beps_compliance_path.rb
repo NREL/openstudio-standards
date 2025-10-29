@@ -16,13 +16,7 @@ class NECB2011
       space_type_apply_internal_loads(space_type: space_type)
 
       # Schedules
-      space_type_apply_internal_load_schedules(space_type,
-                                               true,
-                                               true,
-                                               true,
-                                               true,
-                                               true,
-                                               true)
+      space_type_apply_internal_load_schedules(space_type)
     end
   end
 

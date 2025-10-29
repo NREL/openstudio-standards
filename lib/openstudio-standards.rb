@@ -330,6 +330,7 @@ module OpenstudioStandards
   require_relative "#{stds}/Standards.HeatExchangerSensLat"
   require_relative "#{stds}/Standards.Model"
   require_relative "#{stds}/Standards.Motor"
+  require_relative "#{stds}/Standards.People"
   require_relative "#{stds}/Standards.PlanarSurface"
   require_relative "#{stds}/Standards.PlantLoop"
   require_relative "#{stds}/Standards.Pump"
@@ -341,6 +342,7 @@ module OpenstudioStandards
   require_relative "#{stds}/Standards.SubSurface"
   require_relative "#{stds}/Standards.Surface"
   require_relative "#{stds}/Standards.ThermalZone"
+  require_relative "#{stds}/Standards.Ventilation"
   require_relative "#{stds}/Standards.WaterHeaterMixed"
   require_relative "#{stds}/Standards.ZoneHVACComponent"
   # 90.1 Common
