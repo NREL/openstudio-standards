@@ -6,20 +6,36 @@ class TestThermalZoneThermostatSchedules < Minitest::Test
     @sch = OpenstudioStandards::Schedules
   end
 
-  def test_thermal_zones_set_thermostat_schedules
+  def test_thermal_zones_set_thermostat_schedules_primary_school
     # load model and set up weather file
     template = '90.1-2013'
     climate_zone = 'ASHRAE 169-2013-4A'
     std = Standard.build(template)
     model = std.safe_load_model("#{__dir__}/../../../data/geometry/ASHRAEPrimarySchool.osm")
     assert(OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone))
-    std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: false)
+    assert(std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: false))
 
     # test assigning thermostat schedules
     assert(@zone.thermal_zones_set_thermostat_schedules(model.getThermalZones))
     test_zone = model.getThermalZoneByName('TZ-Mult_Class_1_Pod_1_ZN_1_FLR_1').get
     thermostat = test_zone.thermostatSetpointDualSetpoint.get
-    assert_equal('SchoolPrimary HTGSETP_SCH_NO_OPTIMUM', thermostat.heatingSetpointTemperatureSchedule.get.name.to_s)
+
+  end
+
+  def test_thermal_zones_set_thermostat_schedules_ese
+    # load a model and set up weather file
+    template = 'DEER 2011'
+    climate_zone = 'CEC T24-CEC3'
+    std = Standard.build(template)
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/DEER_ESe.osm")
+    assert(OpenstudioStandards::Weather.model_set_building_location(model, climate_zone: climate_zone))
+    assert(std.prototype_space_type_map(model, reset_standards_space_type: false, set_additional_properties: false))
+
+    # test assigning thermostat schedules
+    assert(@zone.thermal_zones_set_thermostat_schedules(model.getThermalZones))
+    test_zone = model.getThermalZoneByName('E1 West Perim Spc (G.W1) ZN').get
+    thermostat = test_zone.thermostatSetpointDualSetpoint.get
+    assert_equal('D_ESe_All_HTemp_Yr', thermostat.heatingSetpointTemperatureSchedule.get.name.to_s)
   end
 
   def test_thermal_zone_set_unconditioned_thermostat

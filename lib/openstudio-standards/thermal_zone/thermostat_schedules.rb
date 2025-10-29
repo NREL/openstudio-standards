@@ -59,7 +59,7 @@ module OpenstudioStandards
           else
             # if not, get the heating and cooling thermostat schedule by standards building type
             if space_type.standardsBuildingType.is_initialized
-               # select down to building type
+              # select down to building type
               space_type_data = space_type_data.select { |h| h[:standards_building_type] == space_type.standardsBuildingType.get }
               if space_type_data.empty?
                 OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ThermalZone', "No thermostat schedule data is available for space type '#{space_type.name} with standards space type #{space_type_name} and standards building type #{space_type.standardsBuildingType.get}. Unable to create thermostat schedules.")
@@ -104,9 +104,9 @@ module OpenstudioStandards
         # If only one thermostat, use it
         if zone_thermostats_options.size == 1
           thermal_zone.setThermostatSetpointDualSetpoint(zone_thermostats_options[0])
-        elsif
+        elsif zone_thermostats_options.size > 1
           # otherwise find the zone thermostat with the most restrictive setpoints
-          # logic here to pick between options
+          # @todo logic here to pick between options
           OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ThermalZone', "Multiple thermostat options for thermal zone #{zone.name} depending on space types.")
           thermal_zone.setThermostatSetpointDualSetpoint(zone_thermostats_options[0])
         else
