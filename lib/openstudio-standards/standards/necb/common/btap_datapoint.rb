@@ -2,7 +2,7 @@ require 'openstudio'
 require 'securerandom'
 require 'optparse'
 require 'yaml'
-# require 'git-revision'
+require 'git-revision'
 # resource_folder = File.join(__dir__, '..', '..', 'measures/btap_results/resources')
 # OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 
@@ -226,8 +226,8 @@ class BTAPDatapoint
         if @options[:enable_costing] or @options[:enable_carbon]
           @cp = CommonPaths.instance
           post_analysis = BTAPDatapointAnalysis.new(
-            model: model, 
-            output_folder: @dp_temp_folder, 
+            model: model,
+            output_folder: @dp_temp_folder,
             template: @options[:template],
             standard: @standard,
             qaqc: @qaqc)
@@ -236,7 +236,7 @@ class BTAPDatapoint
         @cost_result = nil
         if @options[:enable_costing]
           @cost_result = post_analysis.run_costing(
-            costs_csv: @cp.costs_path, 
+            costs_csv: @cp.costs_path,
             factors_csv: @cp.costs_local_factors_path)
         end
 
@@ -304,9 +304,9 @@ class BTAPDatapoint
   end
 
   class << self
-    
+
     # Initializes the qaqc data structure.
-    # Scoped inside of the class so that it can be used in the intialization of 
+    # Scoped inside of the class so that it can be used in the intialization of
     # this class as well as in BTAPAnalysis.
     def build_qaqc(model, standard, datapoint_id, analysis_id)
       qaqc = standard.init_qaqc(model)
@@ -339,8 +339,8 @@ class BTAPDatapoint
   end
 
   def s3_copy_file_to_s3(bucket_name:, source_file:, target_file:, n: 0)
-    #require 'aws-sdk-core'
-    #require 'aws-sdk-s3'
+    require 'aws-sdk-core'
+    require 'aws-sdk-s3'
     Aws.use_bundled_cert!
     s3_client = Aws::S3::Client.new(region: 'ca-central-1')
     # Using transfer manager class instead of depricated method
