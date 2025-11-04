@@ -226,8 +226,8 @@ class BTAPDatapoint
         if @options[:enable_costing] or @options[:enable_carbon]
           @cp = CommonPaths.instance
           post_analysis = BTAPDatapointAnalysis.new(
-            model: model, 
-            output_folder: @dp_temp_folder, 
+            model: model,
+            output_folder: @dp_temp_folder,
             template: @options[:template],
             standard: @standard,
             qaqc: @qaqc)
@@ -236,7 +236,7 @@ class BTAPDatapoint
         @cost_result = nil
         if @options[:enable_costing]
           @cost_result = post_analysis.run_costing(
-            costs_csv: @cp.costs_path, 
+            costs_csv: @cp.costs_path,
             factors_csv: @cp.costs_local_factors_path)
         end
 
@@ -295,16 +295,18 @@ class BTAPDatapoint
       # clean temp/cache folder up.
       FileUtils.rm_rf(input_folder_cache)
       FileUtils.rm_rf(@dp_temp_folder)
-      if @failed == true
+      # Do not fail container if running on AWS, handle error on AWS instead to avoid isuses with large analyses.
+      unless @failed == false || (@dp_output_folder.start_with?('s3://'))
+      #if @failed == true
         raise(@bang)
       end
     end
   end
 
   class << self
-    
+
     # Initializes the qaqc data structure.
-    # Scoped inside of the class so that it can be used in the intialization of 
+    # Scoped inside of the class so that it can be used in the intialization of
     # this class as well as in BTAPAnalysis.
     def build_qaqc(model, standard, datapoint_id, analysis_id)
       qaqc = standard.init_qaqc(model)
@@ -340,15 +342,15 @@ class BTAPDatapoint
     require 'aws-sdk-core'
     require 'aws-sdk-s3'
     Aws.use_bundled_cert!
-    s3_resource = Aws::S3::Resource.new(region: 'ca-central-1')
+    s3_client = Aws::S3::Client.new(region: 'ca-central-1')
+    # Using transfer manager class instead of depricated method
+    transfer_manager = Aws::S3::TransferManager.new(client: s3_client)
 
     puts("Copying File to S3. source_file:#{source_file} bucket:#{bucket_name} target_folder:#{target_file}")
     response = nil
     begin
-      obj = s3_resource.bucket(bucket_name).object(target_file)
-
-      # passing the TempFile object's path is massively faster than passing the TempFile object itself
-      result = obj.upload_file(source_file)
+      # Using upload_file from transfer manager class instead of depricated method from older class structure
+      result = transfer_manager.upload_file(source_file, bucket: bucket_name, key: target_file)
 
       if result == true
         puts "Object '#{source_file}' uploaded to bucket '#{bucket_name}'."

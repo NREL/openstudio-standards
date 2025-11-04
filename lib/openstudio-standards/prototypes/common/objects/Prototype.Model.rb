@@ -363,10 +363,10 @@ Standard.class_eval do
       space_type_apply_rendering_color(space_type)
 
       # Loads
-      space_type_apply_internal_loads(space_type, true, true, true, true, true)
+      space_type_apply_internal_loads(space_type)
 
       # Schedules
-      space_type_apply_internal_load_schedules(space_type, true, true, true, true, true, true)
+      space_type_apply_internal_load_schedules(space_type)
     end
 
     OpenStudio.logFree(OpenStudio::Info, 'openstudio.model.Model', 'Finished applying space types (loads)')
