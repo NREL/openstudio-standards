@@ -170,8 +170,8 @@
   {
     "space_type": "dining",
     "standards_building_type": "QuickServiceRestaurant",
-    "heating_setpoint_schedule": "RestaurantFastFood HTGSETP_SCH_NO_OPTIMUM",
-    "cooling_setpoint_schedule": "RestaurantFastFood CLGSETP_SCH_NO_OPTIMUM"
+    "heating_setpoint_schedule": "QuickServiceRestaurant HtgSetp",
+    "cooling_setpoint_schedule": "QuickServiceRestaurant ClgSetp"
   },
   {
     "space_type": "dining",
@@ -932,8 +932,8 @@
   {
     "space_type": "food preparation",
     "standards_building_type": "QuickServiceRestaurant",
-    "heating_setpoint_schedule": "RestaurantFastFood HTGSETP_KITCHEN_SCH_NO_OPTIMUM",
-    "cooling_setpoint_schedule": "RestaurantFastFood CLGSETP_KITCHEN_SCH_NO_OPTIMUM"
+    "heating_setpoint_schedule": "QuickServiceRestaurant HtgSetp",
+    "cooling_setpoint_schedule": "QuickServiceRestaurant ClgSetp"
   },
   {
     "space_type": "food preparation",
