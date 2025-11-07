@@ -1,4 +1,4 @@
-require_relative '../../../../../openstudio-standards.rb'
+require_relative '../../../lib/openstudio-standards.rb'
 require_relative './BtapResults_test_helper'
 require 'minitest/autorun'
 require 'optparse'
@@ -122,15 +122,10 @@ class BTAPResults_VRF_Test < Minitest::Test
     run_dir    = "#{test_dir}/#{model_name}"
     helper     = BTAPResultsHelper.new(test_path: __FILE__, model_name: model_name, run_dir: run_dir)
 
+    Dir.mkdir(test_dir) unless Dir.exist?(test_dir)
+    Dir.mkdir(run_dir) unless Dir.exist?(run_dir)
+
     if !cached
-      if !Dir.exist?(test_dir)
-        Dir.mkdir(test_dir)
-      end
-
-      if !Dir.exist?(run_dir)
-        Dir.mkdir(run_dir)
-      end
-
       standard = Standard.build("#{template}")
       ecm = ECMS.new  #Sara
       model_name = "#{building_type}-#{template}-DefaultFuel-#{File.basename(epw_file, '.epw')}_VRF"
@@ -198,8 +193,8 @@ class BTAPResults_VRF_Test < Minitest::Test
       model.save(model_out_path, true)
       helper.cache_osm_and_sql(model_path: model_out_path, sql_path: sql_path)
       post_analysis = BTAPDatapointAnalysis.new(
-        model: model, 
-        output_folder: run_dir, 
+        model: model,
+        output_folder: run_dir,
         template: template,
         standard: standard,
         qaqc: nil)
@@ -211,4 +206,3 @@ class BTAPResults_VRF_Test < Minitest::Test
     helper.evaluate_regression_files(test_instance: self, cost_result: cost_result)
   end
 end
-

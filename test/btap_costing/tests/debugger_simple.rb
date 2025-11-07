@@ -1,4 +1,4 @@
-require_relative '../../../../../openstudio-standards.rb'
+require_relative '../../../lib/openstudio-standards.rb'
 require 'minitest/autorun'
 require 'optparse'
 require 'fileutils'
