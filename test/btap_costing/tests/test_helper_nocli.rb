@@ -1,8 +1,8 @@
-require_relative '../../../../../openstudio-standards.rb'
+require_relative '../../../lib/openstudio-standards.rb'
 require 'optparse'
 require 'logger'
 require 'minitest/autorun'
-require_relative '../../btap_workflow.rb'
+require_relative '../../../lib/openstudio-standards/btap/costing/btap_workflow.rb'
 require 'fileutils'
 #require 'optparse'
 
@@ -87,8 +87,8 @@ class Btap_results_helper
 
     # Do costing.
     post_analysis = BTAPDatapointAnalysis.new(
-      model: model, 
-      output_folder: run_dir, 
+      model: model,
+      output_folder: run_dir,
       template: template,
       standard: standard,
       qaqc: nil)
