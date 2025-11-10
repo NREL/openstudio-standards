@@ -49,7 +49,7 @@ class BTAPResults_Test < Minitest::Test
                                                      template:,
                                                      building_type:,
                                                      daylighting_type:,
-                                                     cached: true)
+                                                     cached: false)
 
     model_name = "#{building_type}-#{template}-#{File.basename(epw_file, '.epw')}-#{daylighting_type}"
     test_dir   = "#{File.dirname(File.absolute_path(__FILE__))}/output"

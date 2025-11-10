@@ -49,7 +49,7 @@ class BTAPResults_Test < Minitest::Test
                                                      template:,
                                                      building_type:,
                                                      baseline_system_zones_map_option:,
-                                                     cached: true)
+                                                     cached: false)
 
     model_name = "#{building_type}-#{template}-#{File.basename(epw_file, '.epw')}-doas-type-#{baseline_system_zones_map_option}"
     test_dir   = "#{File.dirname(__FILE__)}/output"

@@ -283,7 +283,7 @@ class BTAPResults_Test < Minitest::Test
                                                      ecm_system_zones_map_option: nil,
                                                      shw_scale: nil,
                                                      baseline_system_zones_map_option:,
-                                                     cached: true)
+                                                     cached: false)
 
     model_name = "#{building_type}-#{template}-DefaultFuel-#{File.basename(epw_file, '.epw')}"
     test_dir   = "#{File.dirname(__FILE__)}/output"

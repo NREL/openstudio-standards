@@ -48,7 +48,7 @@ class BTAPResults_Test < Minitest::Test
                                                      template:,
                                                      building_type:,
                                                      chiller_type:,
-                                                     cached: true)
+                                                     cached: false)
 
     model_name = "#{building_type}-#{template}-#{File.basename(epw_file, '.epw')}-chiller-type-#{chiller_type}"
     test_dir   = "#{File.dirname(__FILE__)}/output"

@@ -59,7 +59,7 @@ class BTAPResults_Test < Minitest::Test
                                                      nv_opening_fraction:,
                                                      nv_temp_out_min:,
                                                      nv_delta_temp_in_out:,
-                                                     cached: true)
+                                                     cached: false)
 
     model_name = "#{building_type}-#{template}-#{File.basename(epw_file, '.epw')}-NVtype-#{true}"
     test_dir   = "#{File.dirname(__FILE__)}/output"

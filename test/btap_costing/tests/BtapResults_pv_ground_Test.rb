@@ -60,7 +60,7 @@ class BTAPResults_Test < Minitest::Test
                                                      pv_ground_tilt_angle:,
                                                      pv_ground_azimuth_angle:,
                                                      pv_ground_module_description:,
-                                                     cached: true)
+                                                     cached: false)
 
     model_name = "#{building_type}-#{template}-#{File.basename(epw_file, '.epw')}-pv-ground-type-#{true}"
     test_dir   = "#{File.dirname(__FILE__)}/output"

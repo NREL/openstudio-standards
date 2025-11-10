@@ -4,17 +4,22 @@ require 'minitest'
 # BTAPResultsHelper
 #   Helper methods for the BtapResults suite of tests.
 class BTAPResultsHelper < Minitest::Test
-  @@cached = !(ENV["RERUN_CACHED"] == "true")
-  puts "BTAP Results caching #{@@cached ? "enabled" : "disabled"}."
+  @@cached = false
 
   def initialize(test_path:, model_name:, run_dir:)
     @test_path             = File.expand_path(test_path) 
     @test_filename         = File.basename(test_path, '.rb')
     @model_name            = model_name
     @run_dir               = File.expand_path(run_dir)
-    cached_folder          = "#{__dir__}/cache/#{@test_filename}"
+    cached_folder          = ""
     @model_cached_path     = cached_folder + "/output.osm"
     @sql_cached_path       = cached_folder + "/eplusout.sql"
+  end
+
+  class << self
+    def cached
+      return @@cached
+    end
   end
 
   def cache_osm_and_sql(model_path:, sql_path:)
@@ -76,12 +81,6 @@ class BTAPResultsHelper < Minitest::Test
       else
         puts("Total Cost Difference: #{cost_sum['grand_total'].to_f - cost_list_output['grand_total'].to_f}")
       end
-    end
-  end
-
-  class << self
-    def cached
-      return @@cached
     end
   end
 end

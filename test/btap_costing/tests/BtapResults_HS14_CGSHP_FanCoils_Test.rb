@@ -52,7 +52,7 @@ class BTAPResults_HS14_Test < Minitest::Test
                                                      building_type:,
                                                      primary_heating_fuel:,
                                                      ecm_system_name:,
-                                                     cached: true)
+                                                     cached: false)
 
     model_name = "#{building_type}-#{template}-#{File.basename(epw_file, '.epw')}-ecm_system_name-#{ecm_system_name}"
     test_dir   = "#{File.dirname(__FILE__)}/output"

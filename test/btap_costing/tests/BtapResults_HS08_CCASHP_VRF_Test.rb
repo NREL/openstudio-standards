@@ -115,7 +115,7 @@ class BTAPResults_VRF_Test < Minitest::Test
                                                      furnace_eff: 'NECB_Default',
                                                      unitary_cop: 'NECB_Default',
                                                      shw_eff: 'NECB_Default',
-                                                     cached: true)
+                                                     cached: false)
 
     model_name = "#{building_type}-#{template}-DefaultFuel-#{File.basename(epw_file, '.epw')}_VRF"
     test_dir   = "#{File.dirname(__FILE__)}/output"

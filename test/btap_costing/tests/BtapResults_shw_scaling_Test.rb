@@ -49,7 +49,7 @@ class BTAPResults_Test < Minitest::Test
                                                      template:,
                                                      building_type:,
                                                      shw_scale:,
-                                                     cached: true)
+                                                     cached: false)
 
     model_name = "#{building_type}-#{template}-#{File.basename(epw_file, '.epw')}-shw-scale-#{shw_scale}"
     test_dir   = "#{File.dirname(__FILE__)}/output"
