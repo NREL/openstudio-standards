@@ -188,7 +188,6 @@ class BTAPResults_Test < Minitest::Test
       model_out_path = "#{run_dir}/final.osm"
       sql_path = "#{run_dir}/run/eplusout.sql"
       model.save(model_out_path, true)
-      helper.cache_osm_and_sql(model_path: model_out_path, sql_path: sql_path)
       post_analysis = BTAPDatapointAnalysis.new(
         model: model,
         output_folder: run_dir,
