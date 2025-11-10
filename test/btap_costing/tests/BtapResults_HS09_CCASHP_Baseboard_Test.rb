@@ -1,5 +1,5 @@
 require_relative '../../../lib/openstudio-standards.rb'
-require_relative './BtapResults_test_helper'
+require_relative '../../../lib/openstudio-standards/btap/btap_test_helper.rb'
 require 'minitest/autorun'
 require 'optparse'
 require 'fileutils'
