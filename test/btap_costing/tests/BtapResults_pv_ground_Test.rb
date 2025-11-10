@@ -1,5 +1,5 @@
 require_relative '../../../lib/openstudio-standards.rb'
-require_relative './BtapResults_test_helper'
+require_relative '../../../lib/openstudio-standards/btap/btap_test_helper.rb'
 require 'minitest/autorun'
 require 'optparse'
 require 'fileutils'
@@ -60,7 +60,7 @@ class BTAPResults_Test < Minitest::Test
                                                      pv_ground_tilt_angle:,
                                                      pv_ground_azimuth_angle:,
                                                      pv_ground_module_description:,
-                                                     cached: true)
+                                                     cached: false)
 
     model_name = "#{building_type}-#{template}-#{File.basename(epw_file, '.epw')}-pv-ground-type-#{true}"
     test_dir   = "#{File.dirname(__FILE__)}/output"
@@ -134,7 +134,6 @@ class BTAPResults_Test < Minitest::Test
       model_out_path = "#{run_dir}/final.osm"
       sql_path = "#{run_dir}/run/eplusout.sql"
       model.save(model_out_path, true)
-      helper.cache_osm_and_sql(model_path: model_out_path, sql_path: sql_path)
       post_analysis = BTAPDatapointAnalysis.new(
         model: model,
         output_folder: run_dir,

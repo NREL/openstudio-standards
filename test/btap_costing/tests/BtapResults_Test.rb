@@ -1,5 +1,5 @@
 require_relative '../../../lib/openstudio-standards.rb'
-require_relative './BtapResults_test_helper'
+require_relative '../../../lib/openstudio-standards/btap/btap_test_helper.rb'
 require 'minitest/autorun'
 require 'optparse'
 require 'fileutils'
@@ -283,7 +283,7 @@ class BTAPResults_Test < Minitest::Test
                                                      ecm_system_zones_map_option: nil,
                                                      shw_scale: nil,
                                                      baseline_system_zones_map_option:,
-                                                     cached: true)
+                                                     cached: false)
 
     model_name = "#{building_type}-#{template}-DefaultFuel-#{File.basename(epw_file, '.epw')}"
     test_dir   = "#{File.dirname(__FILE__)}/output"
@@ -358,7 +358,6 @@ class BTAPResults_Test < Minitest::Test
       sql_path = "#{run_dir}/run/eplusout.sql"
       #create osm file to use mimic PAT/OS server called final
       model.save(model_out_path, true)
-      helper.cache_osm_and_sql(model_path: model_out_path, sql_path: sql_path)
       post_analysis = BTAPDatapointAnalysis.new(
         model: model,
         output_folder: run_dir,

@@ -1,5 +1,5 @@
 require_relative '../../../lib/openstudio-standards.rb'
-require_relative './BtapResults_test_helper'
+require_relative '../../../lib/openstudio-standards/btap/btap_test_helper.rb'
 require 'minitest/autorun'
 require 'optparse'
 require 'fileutils'
@@ -114,7 +114,7 @@ class BTAPResults_Test < Minitest::Test
                                                      furnace_eff: 'NECB_Default',
                                                      unitary_cop: 'NECB_Default',
                                                      shw_eff: 'NECB_Default',
-                                                     cached: true)
+                                                     cached: false)
 
     model_name = "#{building_type}-#{template}-DefaultFuel-#{File.basename(epw_file, '.epw')}_SHW"
     test_dir   = "#{File.dirname(__FILE__)}/output"
@@ -188,7 +188,6 @@ class BTAPResults_Test < Minitest::Test
       model_out_path = "#{run_dir}/final.osm"
       sql_path = "#{run_dir}/run/eplusout.sql"
       model.save(model_out_path, true)
-      helper.cache_osm_and_sql(model_path: model_out_path, sql_path: sql_path)
       post_analysis = BTAPDatapointAnalysis.new(
         model: model,
         output_folder: run_dir,
