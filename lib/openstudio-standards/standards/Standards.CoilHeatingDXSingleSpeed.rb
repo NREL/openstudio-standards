@@ -90,7 +90,7 @@ class Standard
 
       min_coph = pthp_cop_coeff_1 - (pthp_cop_coeff_2 * capacity_btu_per_hr / 1000.0)
       cop = OpenstudioStandards::HVAC.cop_heating_to_cop_heating_no_fan(min_coph, OpenStudio.convert(capacity_btu_per_hr, 'Btu/hr', 'W').get)
-      new_comp_name = "#{coil_heating_dx_single_speed.name} #{capacity_kbtu_per_hr.round} Htg kBtu/hr #{min_coph.round(1)}COPH"
+      new_comp_name = "#{coil_heating_dx_single_speed.name} #{capacity_kbtu_per_hr.round} Clg kBtu/hr #{min_coph.round(1)}COPH"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{coil_heating_dx_single_speed.name}: #{sub_category} Cooling Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; COPH = #{min_coph.round(2)}")
     end
 
