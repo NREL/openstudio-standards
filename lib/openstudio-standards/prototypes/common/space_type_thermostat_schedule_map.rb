@@ -28,7 +28,7 @@ templates = [
 
 prototype_map = JSON.parse(File.read("#{File.dirname(__FILE__)}/data/prototype_space_type_map.json"), symbolize_names: true)
 
-# loop through sapce types and store thermostat data
+# loop through space types and store thermostat data
 all_data_json = []
 templates.each do |template|
   std = Standard.build(template)
