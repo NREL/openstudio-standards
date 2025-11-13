@@ -129,7 +129,7 @@ class Standard
     unless hp_props['minimum_seasonal_energy_efficiency_ratio'].nil?
       min_seer = hp_props['minimum_seasonal_energy_efficiency_ratio']
       cop = OpenstudioStandards::HVAC.seer_to_cop_no_fan(min_seer)
-      new_comp_name = "#{coil_heating_dx_single_speed.name} #{capacity_kbtu_per_hr.round} Ctg kBtu/hr #{min_seer.round(1)}SEER"
+      new_comp_name = "#{coil_heating_dx_single_speed.name} #{capacity_kbtu_per_hr.round} Clg kBtu/hr #{min_seer.round(1)}SEER"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{template}: #{coil_heating_dx_single_speed.name}:  #{suppl_heating_type} #{sub_category} Cooling Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
     end
 
