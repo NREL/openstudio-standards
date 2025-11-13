@@ -133,11 +133,6 @@ class Standard
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{template}: #{coil_heating_dx_single_speed.name}:  #{suppl_heating_type} #{sub_category} Cooling Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
     end
 
-    puts "#######################################################################################"
-    puts "Coil name: #{coil_heating_dx_single_speed.name} !!!!!!!!!!!!!!!!!!!!!!!!!!!."
-    puts "New name: #{new_comp_name} !!!!!!!!!!!!!!!!!!!!!!!!!!!."
-    puts "#######################################################################################"
-
     # Rename
     if rename
       coil_heating_dx_single_speed.setName(new_comp_name)
