@@ -75,7 +75,7 @@ module OpenstudioStandards
         space.spaceInfiltrationDesignFlowRates.each do |infil|
           if infil.designFlowRate.is_initialized
             is_vest = true
-            OpenStudio.logFree(OpenStudio::Info, 'OpenstudioStandards::ThermalZone', "For #{thermal_zone.name}: This zone is considered a vestibule.")
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ThermalZone', "For #{thermal_zone.name}: This zone is considered a vestibule.")
             break
           end
         end
@@ -175,7 +175,7 @@ module OpenstudioStandards
             htd = true
           end
         else
-          OpenStudio.logFree(OpenStudio::Debug, 'OpenstudioStandards::ThermalZone', "Zone #{thermal_zone.name} used an unknown schedule type for the heating setpoint; assuming heated.")
+          OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ThermalZone', "Zone #{thermal_zone.name} used an unknown schedule type for the heating setpoint; assuming heated.")
           htd = true
         end
       end
@@ -211,7 +211,7 @@ module OpenstudioStandards
               htd = true
             end
           else
-            OpenStudio.logFree(OpenStudio::Debug, 'OpenstudioStandards::ThermalZone', "Zone #{thermal_zone.name} used an unknown schedule type for the heating setpoint; assuming heated.")
+            OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ThermalZone', "Zone #{thermal_zone.name} used an unknown schedule type for the heating setpoint; assuming heated.")
             htd = true
           end
         end
@@ -316,7 +316,7 @@ module OpenstudioStandards
             cld = true
           end
         else
-          OpenStudio.logFree(OpenStudio::Debug, 'OpenstudioStandards::ThermalZone', "Zone #{thermal_zone.name} used an unknown schedule type for the cooling setpoint; assuming cooled.")
+          OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ThermalZone', "Zone #{thermal_zone.name} used an unknown schedule type for the cooling setpoint; assuming cooled.")
           cld = true
         end
       end
@@ -352,7 +352,7 @@ module OpenstudioStandards
               cld = true
             end
           else
-            OpenStudio.logFree(OpenStudio::Debug, 'OpenstudioStandards::ThermalZone', "Zone #{thermal_zone.name} used an unknown schedule type for the cooling setpoint; assuming cooled.")
+            OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ThermalZone', "Zone #{thermal_zone.name} used an unknown schedule type for the cooling setpoint; assuming cooled.")
             cld = true
           end
         end
@@ -384,7 +384,7 @@ module OpenstudioStandards
     def self.thermal_zone_electric_heat?(thermal_zone)
       # error if HVACComponent heating fuels method is not available
       if thermal_zone.model.version < OpenStudio::VersionString.new('3.6.0')
-        OpenStudio.logFree(OpenStudio::Error, 'OpenstudioStandards::ThermalZone', 'Required HVACComponent method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ThermalZone', 'Required HVACComponent method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
       end
 
       # Get an array of the heating fuels used by the zone
@@ -404,7 +404,7 @@ module OpenstudioStandards
     def self.thermal_zone_fossil_heat?(thermal_zone)
       # error if HVACComponent heating fuels method is not available
       if thermal_zone.model.version < OpenStudio::VersionString.new('3.6.0')
-        OpenStudio.logFree(OpenStudio::Error, 'OpenstudioStandards::ThermalZone', 'Required HVACComponent method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ThermalZone', 'Required HVACComponent method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
       end
 
       is_fossil = false
@@ -438,7 +438,7 @@ module OpenstudioStandards
     def self.thermal_zone_district_heat?(thermal_zone)
       # error if HVACComponent heating fuels method is not available
       if thermal_zone.model.version < OpenStudio::VersionString.new('3.6.0')
-        OpenStudio.logFree(OpenStudio::Error, 'OpenstudioStandards::ThermalZone', 'Required HVACComponent method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ThermalZone', 'Required HVACComponent method .heatingFuelTypes is not available in pre-OpenStudio 3.6.0 versions. Use a more recent version of OpenStudio.')
       end
 
       is_district = false
@@ -465,39 +465,6 @@ module OpenstudioStandards
       is_mixed = [electric_heat, fossil_heat, district_heat].count(true) > 1
 
       return is_mixed
-    end
-
-    # Adds a thermostat that heats the space to 0 F and cools to 120 F.
-    # These numbers are outside of the threshold that is considered heated
-    # or cooled by thermal_zone_cooled?() and thermal_zone_heated?()
-    #
-    # @param thermal_zone [OpenStudio::Model::ThermalZone] OpenStudio ThermalZone object
-    # @return [Boolean] returns true if successful, false if not
-    def self.thermal_zone_add_unconditioned_thermostat(thermal_zone)
-      # Heated to 0F (below thermal_zone_heated?(thermal_zone)  threshold)
-      htg_t_f = 0
-      htg_t_c = OpenStudio.convert(htg_t_f, 'F', 'C').get
-      htg_stpt_sch = OpenStudio::Model::ScheduleRuleset.new(thermal_zone.model)
-      htg_stpt_sch.setName('Unconditioned Minimal Heating')
-      htg_stpt_sch.defaultDaySchedule.setName('Unconditioned Minimal Heating Default')
-      htg_stpt_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), htg_t_c)
-
-      # Cooled to 120F (above thermal_zone_cooled?(thermal_zone)  threshold)
-      clg_t_f = 120
-      clg_t_c = OpenStudio.convert(clg_t_f, 'F', 'C').get
-      clg_stpt_sch = OpenStudio::Model::ScheduleRuleset.new(thermal_zone.model)
-      clg_stpt_sch.setName('Unconditioned Minimal Heating')
-      clg_stpt_sch.defaultDaySchedule.setName('Unconditioned Minimal Heating Default')
-      clg_stpt_sch.defaultDaySchedule.addValue(OpenStudio::Time.new(0, 24, 0, 0), clg_t_c)
-
-      # Thermostat
-      thermostat = OpenStudio::Model::ThermostatSetpointDualSetpoint.new(thermal_zone.model)
-      thermostat.setName("#{thermal_zone.name} Unconditioned Thermostat")
-      thermostat.setHeatingSetpointTemperatureSchedule(htg_stpt_sch)
-      thermostat.setCoolingSetpointTemperatureSchedule(clg_stpt_sch)
-      thermal_zone.setThermostatSetpointDualSetpoint(thermostat)
-
-      return true
     end
 
     # Determine the design internal load (W) for this zone without space multipliers.
@@ -569,7 +536,7 @@ module OpenstudioStandards
       building_type = building_type_areas.key(building_type_areas.values.max)
 
       if building_type.nil?
-        OpenStudio.logFree(OpenStudio::Info, 'OpenstudioStandards::ThermalZone', "Thermal zone #{thermal_zone.name} does not have standards building type.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ThermalZone', "Thermal zone #{thermal_zone.name} does not have standards building type.")
       end
 
       return building_type
@@ -687,7 +654,7 @@ module OpenstudioStandards
       # Convert to cfm
       tot_oa_flow_rate_cfm = OpenStudio.convert(tot_oa_flow_rate, 'm^3/s', 'cfm').get
 
-      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "For #{thermal_zone.name}, design min OA = #{tot_oa_flow_rate_cfm.round} cfm.")
+      OpenStudio.logFree(OpenStudio::Debug, 'openstudio.standards.ThermalZone', "For #{thermal_zone.name}, design min OA = #{tot_oa_flow_rate_cfm.round} cfm.")
 
       return tot_oa_flow_rate
     end
@@ -711,7 +678,7 @@ module OpenstudioStandards
       # Calculate the per-area value
       tot_oa_flow_rate_per_area = tot_oa_flow_rate / sum_floor_area
 
-      # OpenStudio::logFree(OpenStudio::Debug, "openstudio.Standards.Model", "For #{self.name}, OA per area = #{tot_oa_flow_rate_per_area.round(8)} m^3/s*m^2.")
+      # OpenStudio::logFree(OpenStudio::Debug, "openstudio.standards.ThermalZone", "For #{self.name}, OA per area = #{tot_oa_flow_rate_per_area.round(8)} m^3/s*m^2.")
 
       return tot_oa_flow_rate_per_area
     end
@@ -776,7 +743,7 @@ module OpenstudioStandards
           new_dsn_oa.setOutdoorAirFlowRateFractionSchedule(oa_sch)
         end
 
-        OpenStudio.logFree(OpenStudio::Info, 'openstudio.Standards.ThermalZone', "For #{thermal_zone.name}: Converted total ventilation requirements to per-area value.")
+        OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.ThermalZone', "For #{thermal_zone.name}: Converted total ventilation requirements to per-area value.")
       end
 
       return true

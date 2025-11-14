@@ -1,5 +1,5 @@
-require_relative '../../../../../openstudio-standards.rb'
-require_relative './BtapResults_test_helper'
+require_relative '../../../lib/openstudio-standards.rb'
+require_relative '../../../lib/openstudio-standards/btap/btap_test_helper.rb'
 require 'minitest/autorun'
 require 'optparse'
 require 'fileutils'
@@ -110,22 +110,17 @@ class BTAPResults_Test < Minitest::Test
                                                      furnace_eff: 'NECB_Default',
                                                      unitary_cop: 'NECB_Default',
                                                      shw_eff: 'NECB_Default',
-                                                     cached: true)
+                                                     cached: false)
 
     model_name = "#{building_type}-#{template}-DefaultFuel-#{File.basename(epw_file, '.epw')}_DX_Adv"
     test_dir   = "#{File.dirname(__FILE__)}/output"
     run_dir    = "#{test_dir}/#{model_name}"
     helper     = BTAPResultsHelper.new(test_path: __FILE__, model_name: model_name, run_dir: run_dir)
 
+    Dir.mkdir(test_dir) unless Dir.exist?(test_dir)
+    Dir.mkdir(run_dir) unless Dir.exist?(run_dir)
+
     if !cached
-      if !Dir.exist?(test_dir)
-        Dir.mkdir(test_dir)
-      end
-
-      if !Dir.exist?(run_dir)
-        Dir.mkdir(run_dir)
-      end
-
       standard = Standard.build("#{template}")
       model = standard.load_building_type_from_library(building_type: building_type)
       standard.model_apply_standard(
@@ -189,10 +184,9 @@ class BTAPResults_Test < Minitest::Test
       model_out_path = "#{run_dir}/final.osm"
       sql_path = "#{run_dir}/run/eplusout.sql"
       model.save(model_out_path, true)
-      helper.cache_osm_and_sql(model_path: model_out_path, sql_path: sql_path)
       post_analysis = BTAPDatapointAnalysis.new(
-        model: model, 
-        output_folder: run_dir, 
+        model: model,
+        output_folder: run_dir,
         template: template,
         standard: standard,
         qaqc: nil)
