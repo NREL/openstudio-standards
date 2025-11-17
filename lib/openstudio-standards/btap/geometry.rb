@@ -1,5 +1,5 @@
 # *********************************************************************
-# *  Copyright (c) 2008-2015, Natural Resources Canada
+# *  Copyright (c) 2008-2025, Natural Resources Canada
 # *  All rights reserved.
 # *
 # *  This library is free software; you can redistribute it and/or
@@ -17,6 +17,7 @@
 # *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 # **********************************************************************/
 
+require 'tbd'
 
 module BTAP
   module Geometry
@@ -205,8 +206,7 @@ module BTAP
       return model
     end
 
-    def self.rotate_building(model: , degrees: nil)
-
+    def self.rotate_building(model:, degrees: nil)
       # report as not applicable if effective relative rotation is 0
       if degrees == 0 || degrees.nil?
         puts ('The requested rotation was 0 or nil degrees. The model was not rotated.')
@@ -489,7 +489,6 @@ module BTAP
         return array
       end
 
-
       def self.filter_spaces_by_space_types(model, spaces_array, spacetype_array)
         spaces_array = BTAP::Common::validate_array(model, spaces_array, "Space")
         spacetype_array = BTAP::Common::validate_array(model, spacetype_array, "SpaceType")
@@ -500,11 +499,30 @@ module BTAP
         end
         return returnarray
       end
+
+      ##
+      # Fetch a space's full height.
+      #
+      # @param space [OpenStudio::Model::Space] a space
+      #
+      # @return [Float] full height of space (0 if invalid input)
+      def self.space_height(space = nil)
+        TBD.spaceHeight(space)
+      end
+
+      ##
+      # Fetch a space's width.
+      #
+      # @param space [OpenStudio::Model::Space] a space
+      #
+      # @return [Float] width of a space (0 if invalid input)
+      def self.space_width(space = nil)
+        TBD.spaceWidth(space)
+      end
     end
 
     #This Module contains methods that create, modify and query Thermal zone objects.
     module Zones
-
       # This method will filter an array of zones that have an external wall
       # passed floors. Note: if you wish to avoid to create an array of spaces,
       # simply put the space variable in [] brackets
@@ -523,7 +541,6 @@ module BTAP
         end
         return array
       end
-
 
       # This method will filter an array of zones that have no external wall
       # passed floors. Note: if you wish to avoid to create an array of spaces,
@@ -1571,6 +1588,18 @@ module BTAP
         end
         return area
       end
+
+      # Calculate the perimeter from a set of OpenStudio vertices.
+      # Calculated by iterating through vertex pairs, subtracting the difference, and getting the length of the returned
+      # Vector3d object.
+      def self.getSurfacePerimeterFromVertices(vertices:)
+        perimeter = 0.0
+        return 0.0 if vertices.size < 2
+        (vertices.size - 1).times do |i|
+          perimeter += (vertices[i] - vertices[(i + 1) % vertices.size]).length
+        end
+        return perimeter
+      end 
     end #Module Surfaces
   end #module Geometry
 end
