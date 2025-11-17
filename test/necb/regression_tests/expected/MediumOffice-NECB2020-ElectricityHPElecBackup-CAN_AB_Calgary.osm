@@ -1,5 +1,157 @@
 OS:AdditionalProperties,
   {00000000-0000-0000-0001-000000000001},  !- Handle
+  {00000000-0000-0000-0079-000000000002},  !- Object Name
+  space_conditioning_category,             !- Feature Name 1
+  String,                                  !- Feature Data Type 1
+  nonresconditioned;                       !- Feature Value 1
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000002},  !- Handle
+  {00000000-0000-0000-0079-000000000014},  !- Object Name
+  space_conditioning_category,             !- Feature Name 1
+  String,                                  !- Feature Data Type 1
+  nonresconditioned;                       !- Feature Value 1
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000003},  !- Handle
+  {00000000-0000-0000-0079-000000000015},  !- Object Name
+  space_conditioning_category,             !- Feature Name 1
+  String,                                  !- Feature Data Type 1
+  nonresconditioned;                       !- Feature Value 1
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000004},  !- Handle
+  {00000000-0000-0000-0079-000000000003},  !- Object Name
+  space_conditioning_category,             !- Feature Name 1
+  String,                                  !- Feature Data Type 1
+  nonresconditioned;                       !- Feature Value 1
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000005},  !- Handle
+  {00000000-0000-0000-0079-000000000013},  !- Object Name
+  space_conditioning_category,             !- Feature Name 1
+  String,                                  !- Feature Data Type 1
+  nonresconditioned;                       !- Feature Value 1
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000006},  !- Handle
+  {00000000-0000-0000-0079-000000000001},  !- Object Name
+  space_conditioning_category,             !- Feature Name 1
+  String,                                  !- Feature Data Type 1
+  nonresconditioned;                       !- Feature Value 1
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000007},  !- Handle
+  {00000000-0000-0000-0079-000000000016},  !- Object Name
+  space_conditioning_category,             !- Feature Name 1
+  String,                                  !- Feature Data Type 1
+  nonresconditioned;                       !- Feature Value 1
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000008},  !- Handle
+  {00000000-0000-0000-0079-000000000012},  !- Object Name
+  space_conditioning_category,             !- Feature Name 1
+  String,                                  !- Feature Data Type 1
+  nonresconditioned;                       !- Feature Value 1
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000009},  !- Handle
+  {00000000-0000-0000-0079-000000000018},  !- Object Name
+  space_conditioning_category,             !- Feature Name 1
+  String,                                  !- Feature Data Type 1
+  nonresconditioned;                       !- Feature Value 1
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000010},  !- Handle
+  {00000000-0000-0000-0079-000000000017},  !- Object Name
+  space_conditioning_category,             !- Feature Name 1
+  String,                                  !- Feature Data Type 1
+  nonresconditioned;                       !- Feature Value 1
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000011},  !- Handle
+  {00000000-0000-0000-0079-000000000007},  !- Object Name
+  space_conditioning_category,             !- Feature Name 1
+  String,                                  !- Feature Data Type 1
+  nonresconditioned;                       !- Feature Value 1
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000012},  !- Handle
+  {00000000-0000-0000-0079-000000000005},  !- Object Name
+  space_conditioning_category,             !- Feature Name 1
+  String,                                  !- Feature Data Type 1
+  nonresconditioned;                       !- Feature Value 1
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000013},  !- Handle
+  {00000000-0000-0000-0079-000000000010},  !- Object Name
+  space_conditioning_category,             !- Feature Name 1
+  String,                                  !- Feature Data Type 1
+  nonresconditioned;                       !- Feature Value 1
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000014},  !- Handle
+  {00000000-0000-0000-0079-000000000006},  !- Object Name
+  space_conditioning_category,             !- Feature Name 1
+  String,                                  !- Feature Data Type 1
+  nonresconditioned;                       !- Feature Value 1
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000015},  !- Handle
+  {00000000-0000-0000-0079-000000000004},  !- Object Name
+  space_conditioning_category,             !- Feature Name 1
+  String,                                  !- Feature Data Type 1
+  nonresconditioned;                       !- Feature Value 1
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000016},  !- Handle
+  {00000000-0000-0000-0079-000000000011},  !- Object Name
+  space_conditioning_category,             !- Feature Name 1
+  String,                                  !- Feature Data Type 1
+  nonresconditioned;                       !- Feature Value 1
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000017},  !- Handle
+  {00000000-0000-0000-0079-000000000008},  !- Object Name
+  space_conditioning_category,             !- Feature Name 1
+  String,                                  !- Feature Data Type 1
+  nonresconditioned;                       !- Feature Value 1
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000018},  !- Handle
+  {00000000-0000-0000-0079-000000000009},  !- Object Name
+  space_conditioning_category,             !- Feature Name 1
+  String,                                  !- Feature Data Type 1
+  nonresconditioned;                       !- Feature Value 1
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000019},  !- Handle
+  {00000000-0000-0000-0009-000000000001};  !- Object Name
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000020},  !- Handle
+  {00000000-0000-0000-0029-000000000002},  !- Object Name
+  Ref OA per area,                         !- Feature Name 1
+  Double,                                  !- Feature Data Type 1
+  0.059999999999999998,                    !- Feature Value 1
+  Ref OA per person,                       !- Feature Name 2
+  Double,                                  !- Feature Data Type 2
+  5,                                       !- Feature Value 2
+  Ref OA ach,                              !- Feature Name 3
+  Double,                                  !- Feature Data Type 3
+  0,                                       !- Feature Value 3
+  Ref occupancy per 1000ft2,               !- Feature Name 4
+  Double,                                  !- Feature Data Type 4
+  5,                                       !- Feature Value 4
+  Ref standard,                            !- Feature Name 5
+  String,                                  !- Feature Data Type 5
+  ASHRAE 62.1-2016 Occupancy,              !- Feature Value 5
+  Ref space type,                          !- Feature Name 6
+  String,                                  !- Feature Data Type 6
+  Office space;                            !- Feature Value 6
+
+OS:AdditionalProperties,
+  {00000000-0000-0000-0001-000000000021},  !- Handle
   {00000000-0000-0000-0061-000000000024},  !- Object Name
   max_occ_in_spaces,                       !- Feature Name 1
   Double,                                  !- Feature Data Type 1
@@ -15,7 +167,7 @@ OS:AdditionalProperties,
   2024-01-01 01:00:00 UTC;                 !- Feature Value 4
 
 OS:AdditionalProperties,
-  {00000000-0000-0000-0001-000000000002},  !- Handle
+  {00000000-0000-0000-0001-000000000022},  !- Handle
   {00000000-0000-0000-0061-000000000022},  !- Object Name
   max_occ_in_spaces,                       !- Feature Name 1
   Double,                                  !- Feature Data Type 1
@@ -31,7 +183,7 @@ OS:AdditionalProperties,
   2024-01-01 01:00:00 UTC;                 !- Feature Value 4
 
 OS:AdditionalProperties,
-  {00000000-0000-0000-0001-000000000003},  !- Handle
+  {00000000-0000-0000-0001-000000000023},  !- Handle
   {00000000-0000-0000-0061-000000000023},  !- Object Name
   max_occ_in_spaces,                       !- Feature Name 1
   Double,                                  !- Feature Data Type 1
@@ -3811,41 +3963,41 @@ OS:EnergyManagementSystem:Actuator,
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0033-000000000001},  !- Handle
   ems_sys_6_mixed_shr_none_sh_ashp_sc_ashp_ssf_cv_zh_b_e_zc_none_srf_cv__1_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {19603746-824d-442f-9aca-5f9cc35a49a2}<23.9 && {19603746-824d-442f-9aca-5f9cc35a49a2}>1.7, !- Program Line 1
-  SET {de973d4c-6479-46d2-b939-b2e2c38c592c} = 29.4, !- Program Line 2
-  SET {85c897e6-fd55-4c14-8cce-20c60d12f0b8} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {19603746-824d-442f-9aca-5f9cc35a49a2}<23.9 && {19603746-824d-442f-9aca-5f9cc35a49a2}>1.7, !- Program Line 4
-  SET {de973d4c-6479-46d2-b939-b2e2c38c592c} = 29.4, !- Program Line 5
-  SET {85c897e6-fd55-4c14-8cce-20c60d12f0b8} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {19603746-824d-442f-9aca-5f9cc35a49a2}<23.9 && {19603746-824d-442f-9aca-5f9cc35a49a2}>1.7, !- Program Line 7
-  SET {de973d4c-6479-46d2-b939-b2e2c38c592c} = 29.4, !- Program Line 8
-  SET {85c897e6-fd55-4c14-8cce-20c60d12f0b8} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {19603746-824d-442f-9aca-5f9cc35a49a2}<23.9 && {19603746-824d-442f-9aca-5f9cc35a49a2}>1.7, !- Program Line 10
-  SET {de973d4c-6479-46d2-b939-b2e2c38c592c} = 29.4, !- Program Line 11
-  SET {85c897e6-fd55-4c14-8cce-20c60d12f0b8} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {38dc14c4-9a17-4448-a66a-9bf09f6d5b40}<23.9 && {38dc14c4-9a17-4448-a66a-9bf09f6d5b40}>1.7, !- Program Line 1
+  SET {a9ea374f-6039-445d-b97a-84765ba53c4b} = 29.4, !- Program Line 2
+  SET {829e906c-b212-4d13-94c4-d116a1e7e759} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {38dc14c4-9a17-4448-a66a-9bf09f6d5b40}<23.9 && {38dc14c4-9a17-4448-a66a-9bf09f6d5b40}>1.7, !- Program Line 4
+  SET {a9ea374f-6039-445d-b97a-84765ba53c4b} = 29.4, !- Program Line 5
+  SET {829e906c-b212-4d13-94c4-d116a1e7e759} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {38dc14c4-9a17-4448-a66a-9bf09f6d5b40}<23.9 && {38dc14c4-9a17-4448-a66a-9bf09f6d5b40}>1.7, !- Program Line 7
+  SET {a9ea374f-6039-445d-b97a-84765ba53c4b} = 29.4, !- Program Line 8
+  SET {829e906c-b212-4d13-94c4-d116a1e7e759} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {38dc14c4-9a17-4448-a66a-9bf09f6d5b40}<23.9 && {38dc14c4-9a17-4448-a66a-9bf09f6d5b40}>1.7, !- Program Line 10
+  SET {a9ea374f-6039-445d-b97a-84765ba53c4b} = 29.4, !- Program Line 11
+  SET {829e906c-b212-4d13-94c4-d116a1e7e759} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {de973d4c-6479-46d2-b939-b2e2c38c592c} = NULL, !- Program Line 14
-  SET {85c897e6-fd55-4c14-8cce-20c60d12f0b8} = NULL, !- Program Line 15
+  SET {a9ea374f-6039-445d-b97a-84765ba53c4b} = NULL, !- Program Line 14
+  SET {829e906c-b212-4d13-94c4-d116a1e7e759} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:Program,
   {00000000-0000-0000-0033-000000000002},  !- Handle
   ems_sys_6_mixed_shr_none_sh_ashp_sc_ashp_ssf_cv_zh_b_e_zc_none_srf_cv__2_OptimumStartProg0, !- Name
-  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {7b3b9057-6ce0-4205-a0af-ae6580013a36}<23.9 && {7b3b9057-6ce0-4205-a0af-ae6580013a36}>1.7, !- Program Line 1
-  SET {07274b87-3a4a-4711-a4c4-f8d86e7bb8fc} = 29.4, !- Program Line 2
-  SET {076e01b9-f2fa-4a39-a65d-6cd157d6c48a} = 15.6, !- Program Line 3
-  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {7b3b9057-6ce0-4205-a0af-ae6580013a36}<23.9 && {7b3b9057-6ce0-4205-a0af-ae6580013a36}>1.7, !- Program Line 4
-  SET {07274b87-3a4a-4711-a4c4-f8d86e7bb8fc} = 29.4, !- Program Line 5
-  SET {076e01b9-f2fa-4a39-a65d-6cd157d6c48a} = 15.6, !- Program Line 6
-  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {7b3b9057-6ce0-4205-a0af-ae6580013a36}<23.9 && {7b3b9057-6ce0-4205-a0af-ae6580013a36}>1.7, !- Program Line 7
-  SET {07274b87-3a4a-4711-a4c4-f8d86e7bb8fc} = 29.4, !- Program Line 8
-  SET {076e01b9-f2fa-4a39-a65d-6cd157d6c48a} = 15.6, !- Program Line 9
-  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {7b3b9057-6ce0-4205-a0af-ae6580013a36}<23.9 && {7b3b9057-6ce0-4205-a0af-ae6580013a36}>1.7, !- Program Line 10
-  SET {07274b87-3a4a-4711-a4c4-f8d86e7bb8fc} = 29.4, !- Program Line 11
-  SET {076e01b9-f2fa-4a39-a65d-6cd157d6c48a} = 15.6, !- Program Line 12
+  IF DaylightSavings==0 && DayOfWeek>1 && Hour==5 && {125f2b49-4d0e-48a3-baa2-05aa39976cd3}<23.9 && {125f2b49-4d0e-48a3-baa2-05aa39976cd3}>1.7, !- Program Line 1
+  SET {875519b0-8b63-4dc8-a5ce-e11f010e8a94} = 29.4, !- Program Line 2
+  SET {c61ccf70-afc2-44cb-9cdb-828a42117332} = 15.6, !- Program Line 3
+  ELSEIF DaylightSavings==0 && DayOfWeek==1 && Hour==7 && {125f2b49-4d0e-48a3-baa2-05aa39976cd3}<23.9 && {125f2b49-4d0e-48a3-baa2-05aa39976cd3}>1.7, !- Program Line 4
+  SET {875519b0-8b63-4dc8-a5ce-e11f010e8a94} = 29.4, !- Program Line 5
+  SET {c61ccf70-afc2-44cb-9cdb-828a42117332} = 15.6, !- Program Line 6
+  ELSEIF DaylightSavings==1 && DayOfWeek>1 && Hour==4 && {125f2b49-4d0e-48a3-baa2-05aa39976cd3}<23.9 && {125f2b49-4d0e-48a3-baa2-05aa39976cd3}>1.7, !- Program Line 7
+  SET {875519b0-8b63-4dc8-a5ce-e11f010e8a94} = 29.4, !- Program Line 8
+  SET {c61ccf70-afc2-44cb-9cdb-828a42117332} = 15.6, !- Program Line 9
+  ELSEIF DaylightSavings==1 && DayOfWeek==1 && Hour==6 && {125f2b49-4d0e-48a3-baa2-05aa39976cd3}<23.9 && {125f2b49-4d0e-48a3-baa2-05aa39976cd3}>1.7, !- Program Line 10
+  SET {875519b0-8b63-4dc8-a5ce-e11f010e8a94} = 29.4, !- Program Line 11
+  SET {c61ccf70-afc2-44cb-9cdb-828a42117332} = 15.6, !- Program Line 12
   ELSE,                                    !- Program Line 13
-  SET {07274b87-3a4a-4711-a4c4-f8d86e7bb8fc} = NULL, !- Program Line 14
-  SET {076e01b9-f2fa-4a39-a65d-6cd157d6c48a} = NULL, !- Program Line 15
+  SET {875519b0-8b63-4dc8-a5ce-e11f010e8a94} = NULL, !- Program Line 14
+  SET {c61ccf70-afc2-44cb-9cdb-828a42117332} = NULL, !- Program Line 15
   ENDIF;                                   !- Program Line 16
 
 OS:EnergyManagementSystem:ProgramCallingManager,

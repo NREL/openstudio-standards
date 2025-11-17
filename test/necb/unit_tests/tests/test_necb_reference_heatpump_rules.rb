@@ -71,11 +71,18 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
                 new_auto_zoner: false)
           elsif sys_number == 'sys4'
             model = standard.load_building_type_from_library(building_type: 'SmallOffice')
+
+            standard.assign_building_activity(model: model)
+            standard.assign_building_structure(model: model, activity: @activity, massive: false)
             standard.apply_weather_data(model: model, epw_file: 'CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+            standard.assign_building_activity(model: model)
+            standard.assign_building_structure(model: model, activity: @activity)
             standard.apply_loads(model: model)
             standard.apply_envelope(model: model)
             standard.apply_fdwr_srr_daylighting(model: model)
             standard.apply_auto_zoning(model: model, sizing_run_dir: output_folder)
+            #standard.model_apply_standard(model: model, 
+            #                              epw_file: 'CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
             hw_loop = OpenStudio::Model::PlantLoop.new(model)
             standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, fuel_type, model.alwaysOnDiscreteSchedule)
             standard.add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
@@ -196,7 +203,7 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
               CSV.foreach(cooling_curve_expected_result_file) do |data|
                 if data[0] == "DXCOOL-NECB2011-REF-CAPFT"
                   capftemp_coeff = data
-                  puts "capftemp_coeff #{capftemp_coeff}"
+                  #puts "capftemp_coeff #{capftemp_coeff}"
                 end
               end
 
@@ -223,6 +230,9 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
 
   # Test heating coil to check if it turns off at <-10C
   def test_ref_heatpump_heating_low_temp
+    skip "test_ref_heatpump_heating_low_temp skipped due to code commented out in commit 4508136."
+    # See: https://github.com/NREL/openstudio-standards/blob/c126813f59d4ae63e9c76b1a2006633917eb1b22/lib/openstudio-standards/standards/necb/NECB2011/hvac_system_3_and_8_single_speed.rb#L164
+    # (That is an example, there is more code commented out.)
 
     # Set up remaining parameters for test.
     output_folder = method_output_folder(__method__)
@@ -273,11 +283,18 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
                 new_auto_zoner: false)
           elsif sys_number == 'sys4'
             model = standard.load_building_type_from_library(building_type: 'SmallOffice')
+
+            standard.assign_building_activity(model: model)
+            standard.assign_building_structure(model: model, activity: @activity, massive: false)
             standard.apply_weather_data(model: model, epw_file: 'CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+            standard.assign_building_activity(model: model) 
+            standard.assign_building_structure(model: model, activity: @activity)
             standard.apply_loads(model: model)
             standard.apply_envelope(model: model)
             standard.apply_fdwr_srr_daylighting(model: model)
             standard.apply_auto_zoning(model: model, sizing_run_dir: output_folder)
+            #standard.model_apply_standard(model: model, 
+            #                              epw_file: 'CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
             hw_loop = OpenStudio::Model::PlantLoop.new(model)
             standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, fuel_type, model.alwaysOnDiscreteSchedule)
             standard.add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
@@ -383,11 +400,18 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
                 new_auto_zoner: false)
           elsif sys_number == 'sys4'
             model = standard.load_building_type_from_library(building_type: 'SmallOffice')
+
+            standard.assign_building_activity(model: model)
+            standard.assign_building_structure(model: model, activity: @activity, massive: false)
             standard.apply_weather_data(model: model, epw_file: 'CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+            standard.assign_building_activity(model: model)
+            standard.assign_building_structure(model: model, activity: @activity)
             standard.apply_loads(model: model)
             standard.apply_envelope(model: model)
             standard.apply_fdwr_srr_daylighting(model: model)
             standard.apply_auto_zoning(model: model, sizing_run_dir: output_folder)
+            #standard.model_apply_standard(model: model, 
+            #                              epw_file: 'CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
             hw_loop = OpenStudio::Model::PlantLoop.new(model)
             standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, fuel_type, model.alwaysOnDiscreteSchedule)
             standard.add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
@@ -424,7 +448,7 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
           CSV.foreach(cooling_curve_expected_result_file) do |data|
             if data[0] == "DXCOOL-NECB2011-REF-COOLPLFFPLR"
               cool_plf_plr_coeff = data
-              puts "cool_plf_plr_coeff #{cool_plf_plr_coeff}"
+              #puts "cool_plf_plr_coeff #{cool_plf_plr_coeff}"
             elsif data[0] == "DXCOOL-NECB2011-REF-CAPFT"
               cool_capft_coeff = data
             elsif data[0] == "DXCOOL-NECB2011-REF-COOLEIRFT"
@@ -475,7 +499,7 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
           CSV.foreach(heating_curve_expected_result_file) do |data|
             if data[0] == "DXHEAT-NECB2011-REF-PLFFPLR"
               heat_plf_plr_coeff = data
-              puts "heat_plf_plr_coeff #{heat_plf_plr_coeff}"
+              #puts "heat_plf_plr_coeff #{heat_plf_plr_coeff}"
             elsif data[0] == "DXHEAT-NECB2011-REF-CAPFT"
               heat_capft_coeff = data
             elsif data[0] == "DXHEAT-NECB2011-REF-EIRFT"
@@ -771,6 +795,9 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
 
   # Test HP cooling set to zone peak load without oversizing
   def test_ref_heatpump_sizing_factor
+    skip "test_ref_heatpump_sizing_factor skipped due to code commented out in commit 4508136."
+    # See: https://github.com/NREL/openstudio-standards/blob/c126813f59d4ae63e9c76b1a2006633917eb1b22/lib/openstudio-standards/standards/necb/NECB2011/hvac_system_3_and_8_single_speed.rb#L164
+    # (That is an example, there is more code commented out.)
 
   # Set up remaining parameters for test.
   templates = ['NECB2011', 'NECB2015', 'NECB2017']
@@ -781,8 +808,8 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
       necb_reference_hp_supp_fuels.each do |necb_reference_hp_supp_fuel|
         name = "test_ref_heatpump_sizing_factor_#{template}_#{sys_number}"
         name_short = "ref_hp_size_factor_#{template}_#{sys_number}"
-        puts"name#{name}"
-        puts "necb_reference_hp_supp_fuel #{necb_reference_hp_supp_fuel}"
+        #puts"name#{name}"
+        #puts "necb_reference_hp_supp_fuel #{necb_reference_hp_supp_fuel}"
         output_folder = method_output_folder("#{__method__}/#{name_short}")
         standard = get_standard(template)
 
@@ -823,11 +850,8 @@ class NECB_HVAC_Ref_Heat_Pump_Tests < Minitest::Test
               new_auto_zoner: false)
         elsif sys_number == 'sys4'
           model = standard.load_building_type_from_library(building_type: 'SmallOffice')
-          standard.apply_weather_data(model: model, epw_file: 'CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
-          standard.apply_loads(model: model)
-          standard.apply_envelope(model: model)
-          standard.apply_fdwr_srr_daylighting(model: model)
-          standard.apply_auto_zoning(model: model, sizing_run_dir: output_folder)
+            standard.model_apply_standard(model: model,
+                                          epw_file: 'CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
           hw_loop = OpenStudio::Model::PlantLoop.new(model)
           standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, fuel_type, model.alwaysOnDiscreteSchedule)
           standard.add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
@@ -865,6 +889,9 @@ end
 # Test for correct supplemental heating
 # Test heating coil to check if it turns off at <-10C
 def test_ref_heatpump_heating_low_temp
+  skip "test_ref_heatpump_heating_low_temp skipped due to code commented out in commit 4508136."
+  # See: https://github.com/NREL/openstudio-standards/blob/c126813f59d4ae63e9c76b1a2006633917eb1b22/lib/openstudio-standards/standards/necb/NECB2011/hvac_system_3_and_8_single_speed.rb#L164
+  # (That is an example, there is more code commented out.)
 
   # Set up remaining parameters for test.
   templates = ['NECB2011', 'NECB2015', 'NECB2017']
@@ -883,6 +910,8 @@ def test_ref_heatpump_heating_low_temp
 
         # Set up model.
         model = BTAP::FileIO.load_osm(File.join(@resources_folder,"5ZoneNoHVAC.osm"))
+        weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
+        OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
 
         # Set up hvac system parameters and components.
         fuel_type = 'Electricity'
@@ -890,8 +919,6 @@ def test_ref_heatpump_heating_low_temp
         heating_coil_type = 'DX'
         hw_loop = OpenStudio::Model::PlantLoop.new(model)
         always_on = model.alwaysOnDiscreteSchedule
-        weather_file_path = OpenstudioStandards::Weather.get_standards_weather_file_path('CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
-        OpenstudioStandards::Weather.model_set_building_location(model, weather_file_path: weather_file_path)
 
         # Save baseline model.
         BTAP::FileIO.save_osm(model, "#{output_folder}/#{name}-baseline.osm")
@@ -918,11 +945,8 @@ def test_ref_heatpump_heating_low_temp
               new_auto_zoner: false)
         elsif sys_number == 'sys4'
           model = standard.load_building_type_from_library(building_type: 'SmallOffice')
-          standard.apply_weather_data(model: model, epw_file: 'CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
-          standard.apply_loads(model: model)
-          standard.apply_envelope(model: model)
-          standard.apply_fdwr_srr_daylighting(model: model)
-          standard.apply_auto_zoning(model: model, sizing_run_dir: output_folder)
+            standard.model_apply_standard(model: model, 
+                                          epw_file: 'CAN_ON_Toronto.Intl.AP.716240_CWEC2020.epw')
           hw_loop = OpenStudio::Model::PlantLoop.new(model)
           standard.setup_hw_loop_with_components(model, hw_loop, fuel_type, fuel_type, model.alwaysOnDiscreteSchedule)
           standard.add_sys4_single_zone_make_up_air_unit_with_baseboard_heating(model: model,
@@ -943,7 +967,6 @@ def test_ref_heatpump_heating_low_temp
 
         # Run sizing.
         run_sizing(model: model, template: template, save_model_versions: false, output_dir: output_folder, necb_ref_hp: true) if PERFORM_STANDARDS
-
         # non-sys6 uses AirLoopHVACUnitaryHeatPumpAirToAirs
         unless sys_number == 'sys6'
           model.getAirLoopHVACUnitaryHeatPumpAirToAirs.each do |heatpump|

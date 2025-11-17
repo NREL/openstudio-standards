@@ -1,8 +1,8 @@
-require_relative '../../../../../openstudio-standards.rb'
+require_relative '../../../lib/openstudio-standards.rb'
 require 'optparse'
 require 'logger'
 require 'minitest/autorun'
-require_relative '../../btap_workflow.rb'
+require_relative '../../../lib/openstudio-standards/btap/costing/btap_workflow.rb'
 require 'fileutils'
 require 'optparse'
 
