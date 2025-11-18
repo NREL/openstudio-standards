@@ -50,7 +50,7 @@ module OpenstudioStandards
       water_use_def.setSensibleFractionSchedule(water_use_sensible_frac_sch)
       water_use_def.setLatentFractionSchedule(water_use_latent_frac_sch)
       water_use_def.setPeakFlowRate(flow_rate)
-      water_use_def.setName("#{name} #{flow_rate_gpm.round(2)}gpm #{water_use_temperature_f.round}F")
+      water_use_def.setName("#{name} #{flow_rate_gpm.round(4)}gpm #{water_use_temperature_f.round}F")
 
       # target mixed water temperature
       if water_use_temperature_schedule.nil?
