@@ -22,6 +22,9 @@ module OpenstudioStandards
   require_relative 'openstudio-standards/constructions/materials/information'
   require_relative 'openstudio-standards/constructions/materials/modify'
 
+  # Equipment Module
+  require_relative 'openstudio-standards/equipment/create_typical_equipment'
+
   # Infiltration Module
   require_relative 'openstudio-standards/infiltration/infiltration'
   require_relative 'openstudio-standards/infiltration/nist_infiltration'
