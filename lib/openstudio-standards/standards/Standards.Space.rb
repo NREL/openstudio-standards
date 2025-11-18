@@ -1254,6 +1254,9 @@ class Standard
 
     # Get climate zone
     climate_zone = OpenstudioStandards::Weather.model_get_climate_zone(space.model)
+    if climate_zone.empty?
+      OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.Space', 'Model has no climate zone assigned, cannot determine space conditioning category.')
+    end
 
     # Get the zone this space is inside
     zone = space.thermalZone
@@ -1274,7 +1277,7 @@ class Standard
     space.model.getAirLoopHVACReturnPlenums.each do |return_air_plenum|
       if return_air_plenum.thermalZone.get.name.to_s == zone.get.name.to_s
         # Determine if residential
-        res = OpenstudioStandards::ThermalZone.thermal_zone_residential?(zone.get) ? true : false
+        res = OpenstudioStandards::ThermalZone.thermal_zone_residential?(zone.get)
 
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "Zone #{zone.get.name} is (indirectly) conditioned (return air plenum).")
         cond_cat = res ? 'ResConditioned' : 'NonResConditioned'
@@ -1287,7 +1290,7 @@ class Standard
     space.model.getAirLoopHVACSupplyPlenums.each do |supply_air_plenum|
       if supply_air_plenum.thermalZone.get.name.to_s == zone.get.name.to_s
         # Determine if residential
-        res = OpenstudioStandards::ThermalZone.thermal_zone_residential?(zone.get) ? true : false
+        res = OpenstudioStandards::ThermalZone.thermal_zone_residential?(zone.get)
 
         OpenStudio.logFree(OpenStudio::Debug, 'openstudio.Standards.ThermalZone', "Zone #{zone.get.name} is (indirectly) conditioned (supply air plenum).")
         cond_cat = res ? 'ResConditioned' : 'NonResConditioned'
@@ -1350,7 +1353,7 @@ class Standard
       end
 
       # Determine if residential
-      res = OpenstudioStandards::ThermalZone.thermal_zone_residential?(zone.get) ? true : false
+      res = OpenstudioStandards::ThermalZone.thermal_zone_residential?(zone.get)
 
       return cond_cat unless cond_ua > otr_ua
 

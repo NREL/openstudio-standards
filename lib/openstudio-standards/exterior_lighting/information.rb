@@ -9,22 +9,22 @@ module OpenstudioStandards
     # @return [Hash] hash of exterior lighting value types and building type and model specific values
     def self.model_get_exterior_lighting_sizes(model)
       # load parking file and convert to hash table
-      parking_csv = "#{__dir__}/data/parking.csv"
-      unless File.exist?(parking_csv)
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ExteriorLighting', "Unable to find file: #{parking_csv}")
+      parking_json = "#{File.dirname(__FILE__)}/data/parking.json"
+      unless File.file?(parking_json)
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ExteriorLighting', "Unable to find file: #{parking_json}")
         return false
       end
-      parking_tbl = CSV.table(parking_csv, encoding: 'ISO8859-1:utf-8')
-      parking_hsh = parking_tbl.map(&:to_hash)
+      parking_hsh = JSON.parse(File.read("#{File.dirname(__FILE__)}/data/parking.json"), symbolize_names: true)
+      parking_hsh = parking_hsh[:parking]
 
       # load entryways file and convert to hash table
-      entryways_csv = "#{__dir__}/data/entryways.csv"
-      unless File.exist?(entryways_csv)
-        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ExteriorLighting', "Unable to find file: #{entryways_csv}")
+      entryways_json = "#{File.dirname(__FILE__)}/data/entryways.json"
+      unless File.file?(entryways_json)
+        OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.ExteriorLighting', "Unable to find file: #{entryways_json}")
         return false
       end
-      entryways_tbl = CSV.table(entryways_csv, encoding: 'ISO8859-1:utf-8')
-      entryways_hsh = entryways_tbl.map(&:to_hash)
+      entryways_hsh = JSON.parse(File.read("#{File.dirname(__FILE__)}/data/entryways.json"), symbolize_names: true)
+      entryways_hsh = entryways_hsh[:entryways]
 
       # get space properties from the model
       space_type_hash = OpenstudioStandards::CreateTypical.model_get_space_type_information(model)
@@ -123,12 +123,12 @@ module OpenstudioStandards
         # calculate door, window, and canopy length properties for exterior lighting
         # main entries
         unless entryways_properties[:entrance_doors_per_10000_ft2].nil?
-          main_entries += (ground_floor_area_ft2 / 10_000.0) * entryways_properties[:entrance_doors_per_10000_ft2]
+          main_entries += (ground_floor_area_ft2 / 10_000.0) * entryways_properties[:entrance_doors_per_10000_ft2].to_f
         end
 
         # other doors
         unless entryways_properties[:other_doors_per_10000_ft2].nil?
-          other_doors += (ground_floor_area_ft2 / 10_000.0) * entryways_properties[:other_doors_per_10000_ft2]
+          other_doors += (ground_floor_area_ft2 / 10_000.0) * entryways_properties[:other_doors_per_10000_ft2].to_f
         end
 
         # rollup doors
@@ -143,12 +143,12 @@ module OpenstudioStandards
 
         # entrance canopies
         if !entryways_properties[:entrance_canopies].nil? && !entryways_properties[:canopy_size].nil?
-          canopy_entry_area += entryways_properties[:entrance_canopies] * entryways_properties[:canopy_size]
+          canopy_entry_area += entryways_properties[:entrance_canopies] * entryways_properties[:canopy_size].to_f
         end
 
         # emergency canopies
         if !entryways_properties[:emergency_canopies].nil? && !entryways_properties[:canopy_size].nil?
-          canopy_emergency_area += entryways_properties[:emergency_canopies] * entryways_properties[:canopy_size]
+          canopy_emergency_area += entryways_properties[:emergency_canopies] * entryways_properties[:canopy_size].to_f
         end
 
         # building_facades
@@ -178,6 +178,26 @@ module OpenstudioStandards
       area_length_count_hash[:building_facades] = ground_story_ext_wall_area
 
       return area_length_count_hash
+    end
+
+    # get exterior lighting properties by lighting generation
+    #
+    # @param lighting_generation [String] lighting generation
+    # @param lighting_zone [Integer] exterior lighting zone
+    # @return [Hash] hash of exterior lighting properties
+    def self.exterior_lighting_properties(lighting_generation: 'default',
+                                          lighting_zone: 3)
+      # load typical exterior lighting data
+      data = JSON.parse(File.read("#{File.dirname(__FILE__)}/data/typical_exterior_lighting.json"))
+      exterior_lighting_properties = data['exterior_lighting'].select { |hash| (hash['lighting_generation'] == lighting_generation) && (hash['lighting_zone'] == lighting_zone) }[0]
+
+      # make sure lighting properties were found
+      if exterior_lighting_properties.nil?
+        OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.ExteriorLighting', "Exterior lighting properties not found for lighting generation #{lighting_generation}, exterior lighting zone #{lighting_zone}.")
+        return nil
+      end
+
+      return exterior_lighting_properties
     end
   end
 end
