@@ -24,6 +24,7 @@ module OpenstudioStandards
 
   # Equipment Module
   require_relative 'openstudio-standards/equipment/create_typical_equipment'
+  require_relative 'openstudio-standards/equipment/create_transformer'
 
   # Infiltration Module
   require_relative 'openstudio-standards/infiltration/infiltration'
@@ -578,7 +579,6 @@ module OpenstudioStandards
   require_relative "#{proto}/common/objects/Prototype.HeatExchangerAirToAirSensibleAndLatent"
   require_relative "#{proto}/common/objects/Prototype.hvac_systems"
   require_relative "#{proto}/common/objects/Prototype.Model.elevators"
-  require_relative "#{proto}/common/objects/Prototype.Model.transformers"
   require_relative "#{proto}/common/objects/Prototype.Model.hvac"
   require_relative "#{proto}/common/objects/Prototype.Model"
   require_relative "#{proto}/common/objects/Prototype.refrigeration"
