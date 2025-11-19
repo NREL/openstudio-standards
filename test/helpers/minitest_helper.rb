@@ -1,28 +1,12 @@
-=begin
+# SimpleCov configuration for coverage reporting
+# This works both for parallel test runs and individual test execution
 require 'simplecov'
-require 'codecov'
 
-# Get the code coverage in html for local viewing
-# and in JSON for CI codecov
-if ENV['CI'] == 'true'
-  SimpleCov.formatter = SimpleCov::Formatter::Codecov
-else
-  SimpleCov.formatter = SimpleCov::Formatter::HTMLFormatter
-end
-
-# Ignore some of the code in coverage testing
 SimpleCov.start do
-  add_filter '/.idea/'
-  add_filter '/.yardoc/'
-  add_filter '/data/'
-  add_filter '/doc/'
-  add_filter '/docs/'
-  add_filter '/pkg/'
   add_filter '/test/'
-  add_filter '/hvac_sizing/'
-  add_filter 'version'  
+  add_filter '/vendor/'
 end
-=end
+SimpleCov.command_name("Test:#{Process.pid}")
 
 $LOAD_PATH.unshift File.expand_path('../../../lib', __FILE__)
 require 'minitest/autorun'
