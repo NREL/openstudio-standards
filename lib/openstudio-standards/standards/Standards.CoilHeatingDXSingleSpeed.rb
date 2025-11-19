@@ -76,19 +76,19 @@ class Standard
       # If the unit's capacity is greater than 15,000 Btu/h, use 15,000 Btu/h in the calculation
       if capacity_btu_per_hr.nil?
         capacity_btu_per_hr = 7000.0
+        capacity_kbtu_per_hr = capacity_btu_per_hr / 1000.0
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For PTHP units, 90.1 heating efficiency depends on paired cooling capacity. Cooling Capacity for #{coil_heating_dx_single_speed.name}: #{sub_category} is nil. This zone may not have heating. Using default equipment efficiency for a 7 kBtu/hr unit.")
       elsif capacity_btu_per_hr < 7000
         capacity_btu_per_hr = 7000.0
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For PTHP units, 90.1 heating efficiency depends on paired cooling capacity. Cooling Capacity for #{coil_heating_dx_single_speed.name}: #{sub_category} is #{capacity_btu_per_hr.round} Btu/hr, which is less than the typical minimum equipment size of 7 kBtu/hr. Using default equipment efficiency for a 7 kBtu/hr unit.")
       elsif capacity_btu_per_hr > 15_000
-        capacity_btu_per_hr = 15_000.0
         OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For PTHP units, 90.1 heating efficiency depends on paired cooling capacity. Cooling Capacity for #{coil_heating_dx_single_speed.name}: #{sub_category} is #{capacity_btu_per_hr.round} Btu/hr, which is more than the typical maximum equipment size of 15 kBtu/hr. Using default equipment efficiency for a 15 kBtu/hr unit.")
+        capacity_btu_per_hr = 15_000.0
       end
-      capacity_kbtu_per_hr = capacity_btu_per_hr / 1000.0
 
       min_coph = pthp_cop_coeff_1 - (pthp_cop_coeff_2 * capacity_btu_per_hr / 1000.0)
       cop = OpenstudioStandards::HVAC.cop_heating_to_cop_heating_no_fan(min_coph, OpenStudio.convert(capacity_btu_per_hr, 'Btu/hr', 'W').get)
-      new_comp_name = "#{coil_heating_dx_single_speed.name} #{capacity_kbtu_per_hr.round} Htg kBtu/hr #{min_coph.round(1)}COPH"
+      new_comp_name = "#{coil_heating_dx_single_speed.name} #{capacity_kbtu_per_hr.round} Clg kBtu/hr #{min_coph.round(1)}COPH"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{coil_heating_dx_single_speed.name}: #{sub_category} Cooling Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; COPH = #{min_coph.round(2)}")
     end
 
@@ -96,7 +96,7 @@ class Standard
     unless hp_props['minimum_heating_seasonal_performance_factor'].nil?
       min_hspf = hp_props['minimum_heating_seasonal_performance_factor']
       cop = OpenstudioStandards::HVAC.hspf_to_cop_no_fan(min_hspf)
-      new_comp_name = "#{coil_heating_dx_single_speed.name} #{capacity_kbtu_per_hr.round} Htg kBtu/hr #{min_hspf.round(1)}HSPF"
+      new_comp_name = "#{coil_heating_dx_single_speed.name} #{capacity_kbtu_per_hr.round} Clg kBtu/hr #{min_hspf.round(1)}HSPF"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{template}: #{coil_heating_dx_single_speed.name}: #{suppl_heating_type} #{sub_category} Cooling Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; HSPF = #{min_hspf}")
     end
 
@@ -113,7 +113,7 @@ class Standard
     unless hp_props['minimum_coefficient_of_performance_heating'].nil?
       min_coph = hp_props['minimum_coefficient_of_performance_heating']
       cop = OpenstudioStandards::HVAC.cop_heating_to_cop_heating_no_fan(min_coph, OpenStudio.convert(capacity_kbtu_per_hr, 'kBtu/hr', 'W').get)
-      new_comp_name = "#{coil_heating_dx_single_speed.name} #{capacity_kbtu_per_hr.round} Htg kBtu/hr #{min_coph.round(1)}COPH"
+      new_comp_name = "#{coil_heating_dx_single_speed.name} #{capacity_kbtu_per_hr.round} Clg kBtu/hr #{min_coph.round(1)}COPH"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{template}: #{coil_heating_dx_single_speed.name}: #{suppl_heating_type} #{sub_category} Cooling Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; COPH = #{min_coph}")
     end
 
@@ -121,7 +121,7 @@ class Standard
     unless hp_props['minimum_energy_efficiency_ratio'].nil?
       min_eer = hp_props['minimum_energy_efficiency_ratio']
       cop = OpenstudioStandards::HVAC.eer_to_cop_no_fan(min_eer)
-      new_comp_name = "#{coil_heating_dx_single_speed.name} #{capacity_kbtu_per_hr.round} Htg kBtu/hr #{min_eer.round(1)}EER"
+      new_comp_name = "#{coil_heating_dx_single_speed.name} #{capacity_kbtu_per_hr.round} Clg kBtu/hr #{min_eer.round(1)}EER"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{template}: #{coil_heating_dx_single_speed.name}:  #{suppl_heating_type} #{sub_category} Cooling Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; EER = #{min_eer}")
     end
 
@@ -129,7 +129,7 @@ class Standard
     unless hp_props['minimum_seasonal_energy_efficiency_ratio'].nil?
       min_seer = hp_props['minimum_seasonal_energy_efficiency_ratio']
       cop = OpenstudioStandards::HVAC.seer_to_cop_no_fan(min_seer)
-      new_comp_name = "#{coil_heating_dx_single_speed.name} #{capacity_kbtu_per_hr.round} Htg kBtu/hr #{min_seer.round(1)}SEER"
+      new_comp_name = "#{coil_heating_dx_single_speed.name} #{capacity_kbtu_per_hr.round} Clg kBtu/hr #{min_seer.round(1)}SEER"
       OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CoilHeatingDXSingleSpeed', "For #{template}: #{coil_heating_dx_single_speed.name}:  #{suppl_heating_type} #{sub_category} Cooling Capacity = #{capacity_kbtu_per_hr.round}kBtu/hr; SEER = #{min_seer}")
     end
 
