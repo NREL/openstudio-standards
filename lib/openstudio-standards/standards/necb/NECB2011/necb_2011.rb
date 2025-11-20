@@ -2812,45 +2812,103 @@ class NECB2011 < Standard
   # Arguments:
   # model (OpenStudio::Model::Model): The model to run the sizing run on.
   # sizing_run_dir (String): The directory where the sizing run files will be saved.
-  def try_sizing_run(model:, sizing_run_dir:, sizing_run_subdir:)
+  def try_sizing_run(model:, sizing_run_dir:, sizing_run_subdir:, retry: 0)
     raise('validation of model failed.') unless validate_initial_model(model)
 
     # Do a sizing run to determine the system capacities.  If a sizing run fails, hard size any failing DX heating coils
     # to 1.0 kW and rerun the sizing run until it succeeds.  If no DX heating coils are found, or none had a small
     # capacity then raise an error.
+    dx_coil_changed = false
+    num_changes = 0
     loop do
       sizing_run_success = model_run_sizing_run(model, "#{sizing_run_dir}/#{sizing_run_subdir}", true)
       break if sizing_run_success
+      num_changes += 1
 
-      # Sizing run failed, check all DX heating coils and set their size to 1 if less than 1
-      dx_coil_changed = false
+      # Report severe or fatal errors in the run
+      error_query = "SELECT ErrorMessage
+          FROM Errors
+          WHERE ErrorType in(1,2)"
+      errs = model.sqlFile.get.execAndReturnVectorOfString(error_query)
+      if errs.is_initialized
+        errs = errs.get
+      end
+      # Get error and get any DX coils with issues
+      coil_errs = errs.select { |err| err.to_s.downcase.include?("coilcoolingdx") || err.to_s.downcase.include?("coilheatingdx") }
+      issue_coil_names = []
+      coil_errs.each { |err| issue_coil_names << err.to_s.split('"')[1] }
+      issue_coil_names.uniq!
 
-      model.getCoilHeatingDXSingleSpeeds.each do |coil|
-        autosized_capacity = coil.autosizedRatedTotalHeatingCapacity
-        if autosized_capacity.is_initialized && autosized_capacity.get < 1.0
-          coil.setRatedTotalHeatingCapacity(1.0)
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC',  "DX Heating Coil #{coil.name.to_s} has a rated capacity less than 1.0 kW and has been resized to 1.0 kW to avoid sizing run failure.")
-          puts "DX Heating Coil #{coil.name.to_s} has a rated capacity less than 1.0 kW and has been resized to 1.0 kW to avoid sizing run failure."
-          dx_coil_changed = true
+      issue_coils = []
+      issue_coil_names.each do |coil_name|
+        heating_coil = model.getCoilHeatingDXSingleSpeeds.select { |coil| coil.name.to_s.downcase == coil_name.to_s.downcase }[0]
+        unless heating_coil.nil?
+          heating_coil_element = {}
+          heating_coil_element[:heating_coil] = heating_coil
+          heating_coil_element[:is_autosized] = true if heating_coil.isRatedTotalHeatingCapacityAutosized
+          heating_coil_element[:is_autosized] = false unless heating_coil.isRatedTotalHeatingCapacityAutosized
+          heating_coil_element[:capacity] = heating_coil.ratedTotalHeatingCapacity.get
+          issue_coils << heating_coil_element
+        end
+        cooling_coil = model.getCoilCoolingDXSingleSpeeds.select { |coil| coil.name.to_s.downcase == coil_name.to_s.downcase }[0]
+        unless cooling_coil.nil?
+          cooling_coil_element = {}
+          cooling_coil_element[:cooling_coil] = cooling_coil
+          cooling_coil_element[:is_autosized] = true if cooling_coil.isRatedTotalCoolingCapacityAutosized
+          cooling_coil_element[:is_autosized] = false unless cooling_coil.isRatedTotalCoolingCapacityAutosized
+          cooling_coil_element[:capacity] = cooling_coil.ratedTotalCoolingCapacity.get
+          issue_coils << cooling_coil_element
         end
       end
-      model.getCoilHeatingDXMultiSpeeds.each do |coil|
-        coil.stages.each do |stage|
-          autosized_capacity = stage.autosizedGrossRatedHeatingCapacity
-          if autosized_capacity.is_initialized && autosized_capacity.get < 1.0
-            stage.setGrossRatedHeatingCapacity(1.0)
-            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC',  "A DX Heating Coil #{coil.name.to_s} stage has a rated capacity less than 1.0 kW and has been resized to 1.0 kW to avoid sizing run failure.")
-            puts "A DX Heating Coil #{coil.name.to_s} stage has a rated capacity less than 1.0 kW and has been resized to 1.0 kW to avoid sizing run failure."
+
+      # Adjust the capacity of DX coils with issues.  This resolves most sizing run issues.
+      issue_coils.each do |issue_coil|
+        if issue_coil[:is_autosized] == true && issue_coil[:capacity].to_f < 1.0
+          if issue_coil.key?(:heating_coil)
+            issue_coil[:heating_coil].setRatedTotalHeatingCapacity(1.0)
             dx_coil_changed = true
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC',  "DX Heating Coil #{coil.name.to_s} has a rated capacity less than 1.0 kW and has been resized to 1.0 kW to avoid sizing run failure.")
+            puts "DX Heating Coil #{coil.name.to_s} has a rated capacity less than 1.0 kW and has been resized to 1.0 kW to avoid sizing run failure."
+          else
+            issue_coil[:cooling_coil].setRatedTotalCoolingCapacity(1.0)
+            dx_coil_changed = true
+            OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC',  "DX Cooling Coil #{coil.name.to_s} has a rated capacity less than 1.0 kW and has been resized to 1.0 kW to avoid sizing run failure.")
+            puts "DX Cooling Coil #{coil.name.to_s} has a rated capacity less than 1.0 kW and has been resized to 1.0 kW to avoid sizing run failure."
+          end
+        else
+          if issue_coil.key?(:heating_coil)
+            cooling_coil_name = issue_coil[:heating_coil].name.to_s.gsub('CoilHeatingDX','CoilCoolingDX')
+            cooling_coil = model.getCoilCoolingDXSingleSpeeds.select { |coil| cooling_coil_name.to_s.downcase == coil.name.to_s.downcase }[0]
+            if cooling_coil.ratedTotalCoolingCapacity.to_f.round(0) == issue_coil[:capacity].to_f.round(0)
+              revised_capacity = issue_coil[:capacity].to_f * 1.01
+              issue_coil[:heating_coil].setRatedTotalHeatingCapacity(revised_capacity)
+              cooling_coil.setRatedTotalCoolingCapacity(revised_capacity)
+              dx_coil_changed = true
+              OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC',  "DX heating and cooling coil #{issue_coil[:heating_coil].name.to_s} has been resized #{revised_capacity}W to avoid sizing run failure.")
+              puts "Adjusted both heating and cooling coil #{issue_coil[:heating_coil].name.to_s} capacity to #{revised_capacity}W to avoid sizing run failure."
+              dx_coil_changed = true
+            end
+          elsif issue_coil.key?(:cooling_coil)
+            heating_coil_name = issue_coil[:cooling_coil].name.to_s.gsub('CoilCoolingDX','CoilHeatingDX')
+            heating_coil = model.getCoilHeatingDXSingleSpeeds.select { |coil| heating_coil_name.to_s.downcase == coil.name.to_s.downcase }[0]
+            if heating_coil.ratedTotalHeatingCapacity.to_f.round(0) == issue_coil[:capacity].to_f.round(0)
+              revised_capacity = issue_coil[:capacity].to_f * 1.01
+              issue_coil[:cooling_coil].setRatedTotalCoolingCapacity(revised_capacity)
+              heating_coil.setRatedTotalHeatingCapacity(revised_capacity)
+              dx_coil_changed = true
+              OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.AirLoopHVAC',  "DX heating and cooling coil #{issue_coil[:cooling_coil].name.to_s} has been resized #{revised_capacity}W to avoid sizing run failure.")
+              puts "Adjusted both heating and cooling coil #{issue_coil[:cooling_coil].name.to_s} capacity to #{revised_capacity}W to avoid sizing run failure."
+              dx_coil_changed = true
+            end
           end
         end
       end
 
-      # If no DX coil was changed, break loop and raise error
-      if !dx_coil_changed
+      # If no DX coil was changed, or too many changes were made, break loop and raise error
+      if !dx_coil_changed || num_changes > 100
         raise("sizing run failed! check #{sizing_run_dir}/#{sizing_run_subdir} (DX coil sizes adjusted, but no further changes possible)")
       end
-      puts "Rerunning sizing run after adjusting DX heating coil capacity to 1.0 kW."
+      puts "Rerunning sizing run after adjusting coil capacity this many times: #{num_changes}."
       # Otherwise, loop will rerun sizing
     end
   end
