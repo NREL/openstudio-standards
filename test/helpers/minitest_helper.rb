@@ -1,8 +1,7 @@
-# SimpleCov configuration for coverage reporting
-# This works both for parallel test runs and individual test execution
 require 'simplecov'
 
 SimpleCov.start do
+  add_group "NECB", "lib/openstudio-standards/standards/necb/"
   add_filter '/test/'
   add_filter '/vendor/'
 end
