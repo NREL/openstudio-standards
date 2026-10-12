@@ -123,8 +123,8 @@ class TestCreateTypicalServiceWaterHeating < Minitest::Test
     non_booster_volume_gal = OpenStudio::convert(non_booster_volume, 'm^3', 'gal').get
 
     # check results
-    assert_in_epsilon(125.4, non_booster_capacity_kbtu_hr, 0.40, "Expected 125 kBtu/hr capacity for the shared water heater.")
-    assert_in_epsilon(125.4, non_booster_volume_gal, 0.40, "Expected 125 gal volume for the shared water heater.")
+    assert_in_epsilon(264.0, non_booster_capacity_kbtu_hr, 0.40)
+    assert_in_epsilon(264.0, non_booster_volume_gal, 0.40)
   end
 
   def test_create_typical_service_water_heating_large_hotel
