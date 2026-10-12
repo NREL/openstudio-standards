@@ -247,7 +247,7 @@
     "electric_equipment_space_type_name": "gymnasium_exercise_area_electric_equipment",
     "natural_gas_equipment_space_type_name": null,
     "refrigeration_space_type_name": null,
-    "service_water_space_type_name": "exercise area",
+    "service_water_space_type_name": "exercise_area",
     "ventilation_space_type_name": "exercise_area_ventilation",
     "schedule_set_name": "gymnasium_exercise_area"
   },

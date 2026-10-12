@@ -255,7 +255,7 @@
       ]
     },
     {
-      "service_water_space_type": "laundary_washing",
+      "service_water_space_type": "laundry_washing",
       "standards_building_type": "LargeHotel",
       "water_use_equipment": [
         {
@@ -503,7 +503,7 @@
       ]
     },
     {
-      "service_water_space_type": "laundary_washing",
+      "service_water_space_type": "laundry_washing",
       "standards_building_type": "SmallHotel",
       "water_use_equipment": [
         {
@@ -657,7 +657,7 @@
       ]
     },
     {
-      "service_water_space_type": "laundary_washing",
+      "service_water_space_type": "laundry_washing",
       "standards_building_type": "Mtl",
       "water_use_equipment": [
         {
