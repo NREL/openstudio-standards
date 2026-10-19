@@ -2015,8 +2015,13 @@ class Standard
         else
           terminal.setZoneMinimumAirFlowInputMethod('Constant')
         end
-        # default to single maximum control logic
-        terminal.setDamperHeatingAction('Normal')
+        
+        # Default dual maximum control 'ReverseWithLimits' for the damper heating action for the terminal with a maximum flow fraction during reheat set to 0.5.
+        # To avoid sizing issues, also set the maximum flow fraction during reheat on the zone sizing object.
+        terminal.setDamperHeatingAction('ReverseWithLimits')
+        terminal.setMaximumFlowFractionDuringReheat(0.5)
+        zone.sizingZone.setHeatingMaximumAirFlowFraction(0.5)
+
         terminal.setMaximumReheatAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
         air_loop.multiAddBranchForZone(zone, terminal.to_HVACComponent.get)
         oa_rate = OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate_per_area(zone)
@@ -2026,7 +2031,6 @@ class Standard
         sizing_zone = zone.sizingZone
         sizing_zone.setCoolingDesignAirFlowMethod('DesignDayWithLimit')
         sizing_zone.setHeatingDesignAirFlowMethod('DesignDay')
-        sizing_zone.setHeatingMaximumAirFlowFraction(1.0)
         sizing_zone.setZoneCoolingDesignSupplyAirTemperature(dsgn_temps['zn_clg_dsgn_sup_air_temp_c'])
         sizing_zone.setZoneHeatingDesignSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
       else
@@ -2380,8 +2384,13 @@ class Standard
       else
         terminal.setZoneMinimumAirFlowInputMethod('Constant')
       end
-      # default to single maximum control logic
-      terminal.setDamperHeatingAction('Normal')
+
+      # Default dual maximum control 'ReverseWithLimits' for the damper heating action for the terminal with a maximum flow fraction during reheat set to 0.5.
+      # To avoid sizing issues, also set the maximum flow fraction during reheat on the zone sizing object.
+      terminal.setDamperHeatingAction('ReverseWithLimits')
+      terminal.setMaximumFlowFractionDuringReheat(0.5)
+      zone.sizingZone.setHeatingMaximumAirFlowFraction(0.5)
+
       terminal.setMaximumReheatAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
       air_loop.multiAddBranchForZone(zone, terminal.to_HVACComponent.get)
       oa_rate = OpenstudioStandards::ThermalZone.thermal_zone_get_outdoor_airflow_rate_per_area(zone)
@@ -2393,7 +2402,6 @@ class Standard
 
       # zone sizing
       sizing_zone = zone.sizingZone
-      sizing_zone.setHeatingMaximumAirFlowFraction(1.0)
       sizing_zone.setZoneCoolingDesignSupplyAirTemperature(dsgn_temps['zn_clg_dsgn_sup_air_temp_c'])
       sizing_zone.setZoneHeatingDesignSupplyAirTemperature(dsgn_temps['zn_htg_dsgn_sup_air_temp_c'])
     end
