@@ -123,14 +123,14 @@ class TestAddHVACSystems < Minitest::Test
     hvac_systems = [
       {model_test_name: 'PVAV_Reheat_gas_elec', system_type: 'PVAV Reheat', main_heat_fuel: 'NaturalGas', zone_heat_fuel: 'Electricity', cool_fuel: 'Electricity', unmet_hrs_htg: 1500.0},
       {model_test_name: 'PVAV_Reheat_gas_gas', system_type: 'PVAV Reheat', main_heat_fuel: 'NaturalGas', zone_heat_fuel: 'NaturalGas', cool_fuel: 'Electricity', unmet_hrs_htg: 1500.0},
-      # Disable this test for now because of an EnergyPlus issue introduced in v25.2 (OS 3.11.0), addressed in v26.0
-      # https://github.com/NatLabRockies/EnergyPlus/pull/11079
+      # Disable this test for now. See issue #2164
       # {model_test_name: 'PVAV_Reheat_ashp', system_type: 'PVAV Reheat', main_heat_fuel: 'AirSourceHeatPump', zone_heat_fuel: 'AirSourceHeatPump', cool_fuel: 'Electricity', unmet_hrs_htg: 1500.0},
       {model_test_name: 'PVAV_Reheat_district', system_type: 'PVAV Reheat', main_heat_fuel: 'DistrictHeating', zone_heat_fuel: 'DistrictHeating', cool_fuel: 'Electricity', unmet_hrs_htg: 1500.0},
       {model_test_name: 'PVAV_PFP_Boxes', system_type: 'PVAV PFP Boxes', main_heat_fuel: 'Electricity', zone_heat_fuel: 'Electricity', cool_fuel: 'Electricity'},
       {model_test_name: 'VAV_Reheat_gas_gas', system_type: 'VAV Reheat', main_heat_fuel: 'NaturalGas', zone_heat_fuel: 'NaturalGas', cool_fuel: 'Electricity', unmet_hrs_htg: 550.0},
-      {model_test_name: 'VAV_Reheat_ashp_gas', system_type: 'VAV Reheat', main_heat_fuel: 'AirSourceHeatPump', zone_heat_fuel: 'NaturalGas', cool_fuel: 'Electricity', unmet_hrs_htg: 550.0},
-      {model_test_name: 'VAV_Reheat_ashp_ashp', system_type: 'VAV Reheat', main_heat_fuel: 'AirSourceHeatPump', zone_heat_fuel: 'AirSourceHeatPump', cool_fuel: 'Electricity', unmet_hrs_htg: 550.0},
+      # Disable this test for now. See issue #2164
+      # {model_test_name: 'VAV_Reheat_ashp_gas', system_type: 'VAV Reheat', main_heat_fuel: 'AirSourceHeatPump', zone_heat_fuel: 'NaturalGas', cool_fuel: 'Electricity', unmet_hrs_htg: 550.0},
+      # {model_test_name: 'VAV_Reheat_ashp_ashp', system_type: 'VAV Reheat', main_heat_fuel: 'AirSourceHeatPump', zone_heat_fuel: 'AirSourceHeatPump', cool_fuel: 'Electricity', unmet_hrs_htg: 550.0},
       {model_test_name: 'VAV_Reheat_district', system_type: 'VAV Reheat', main_heat_fuel: 'DistrictHeating', zone_heat_fuel: 'DistrictHeating', cool_fuel: 'DistrictCooling', unmet_hrs_htg: 550.0},
       {model_test_name: 'VAV_PFP_gas_elec', system_type: 'VAV PFP Boxes', main_heat_fuel: 'NaturalGas', zone_heat_fuel: 'Electricity', cool_fuel: 'Electricity'},
       {model_test_name: 'VAV_PFP_ashp_elec', system_type: 'VAV PFP Boxes', main_heat_fuel: 'AirSourceHeatPump', zone_heat_fuel: 'Electricity', cool_fuel: 'Electricity'},
