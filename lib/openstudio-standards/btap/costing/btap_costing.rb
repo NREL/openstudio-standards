@@ -315,7 +315,7 @@ module BTAP
         # If no costing information is found then return an error.
         if costing_data.nil?
           raise "Error: no costing information available for material id #{costing_item['id']}!"
-        elsif costing_data['baseCosts']['materialOpCost'].nil? && costing_data['baseCosts']['laborOpCost'].nil?
+        elsif costing_data['materialOpCost'].nil? && costing_data['laborOpCost'].nil?
 
           # This is a stub for some work that needs to be done to account for
           # equipment costing. For now this is zeroed out. A similar test is
@@ -324,12 +324,12 @@ module BTAP
           raise "Error: costing information for material id #{costing_item['id']} is nil.  Please check costing data."
         end
 
-        costing_data['baseCosts']['equipmentOpCost'].nil? ? equip_base_cost = 0.0 : equip_base_cost =
-          costing_data['baseCosts']['equipmentOpCost'].to_f
-        costing_data['baseCosts']['materialOpCost'].nil? ? mat_base_cost    = 0.0 : mat_base_cost   =
-          costing_data['baseCosts']['materialOpCost'].to_f
-        costing_data['baseCosts']['laborOpCost'].nil? ? lab_base_cost       = 0.0 : lab_base_cost   =
-          costing_data['baseCosts']['laborOpCost'].to_f
+        costing_data['equipmentOpCost'].nil? ? equip_base_cost = 0.0 : equip_base_cost =
+          costing_data['equipmentOpCost'].to_f
+        costing_data['materialOpCost'].nil? ? mat_base_cost    = 0.0 : mat_base_cost   =
+          costing_data['materialOpCost'].to_f
+        costing_data['laborOpCost'].nil? ? lab_base_cost       = 0.0 : lab_base_cost   =
+          costing_data['laborOpCost'].to_f
 
         # The costs from the costing database are US national average costs
         # (for placeholder costs) or whatever is in the 'province_state' and

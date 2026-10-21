@@ -185,9 +185,9 @@ module BTAP
               regional_material, regional_installation = get_regional_cost_factors(province_state, city, material)
 
               # Get cost information from lookup.
-              material_cost  = costing_data['baseCosts']['materialOpCost'] * material['material_mult'].to_f
-              labour_cost    = costing_data['baseCosts']['laborOpCost']    * material['labour_mult'].to_f
-              equipment_cost = costing_data['baseCosts']['equipmentOpCost']
+              material_cost  = costing_data['materialOpCost'] * material['material_mult'].to_f
+              labour_cost    = costing_data['laborOpCost']    * material['labour_mult'].to_f
+              equipment_cost = costing_data['equipmentOpCost']
               layer_cost     = (((material_cost * regional_material / 100.0) + \
                                (labour_cost * regional_installation / 100.0) + equipment_cost) * \
                                material['quantity'].to_f).round(2)

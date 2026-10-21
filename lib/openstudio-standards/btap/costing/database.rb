@@ -10,36 +10,19 @@ module BTAP
       @db = Hash.new # Stores all database information
 
       # Load the database from the individual CSV/JSON files
-      @db["costs"]                = []
       @db["localization_factors"] = [] # Local costing factors
       @db["raw"]                  = {}
       @db["constructions"]        = {}
       @db["db_errors"]            = []
 
-      # Load costing data
-      data_costs = CSV.read(Paths.costs_path)
-
-      1.upto data_costs.length - 1 do |i|
-        row = data_costs[i]
-        index = row.each
-        item = Hash.new
-        item["baseCosts"] = Hash.new
-        costs = item["baseCosts"]
-
-        item["id"]               = index.next
-        item["sheet"]            = index.next
-        item["source"]           = index.next
-        item["description"]      = index.next
-        item["city"]             = index.next
-        item["province_state"]   = index.next
-        costs["materialOpCost"]  = index.next.to_f
-        costs["laborOpCost"]     = index.next.to_f
-        costs["equipmentOpCost"] = index.next.to_f
-
-        @db["costs"] << item
+      # Load the costing data.
+      # Note CSV::Table doesn't work with mutative `map!`
+      @db["costs"] = CSV.read(Paths.costs_path, headers: true)
+      ["materialOpCost", "laborOpCost", "equipmentOpCost"].each do |header|
+        @db["costs"][header] = @db["costs"][header].map(&:to_f)
       end
 
-      # Load the localization factors
+      # Load the localization factors.
       data_factors = CSV.read(Paths.costs_local_factors_path)
 
       1.upto data_factors.length - 1 do |i|

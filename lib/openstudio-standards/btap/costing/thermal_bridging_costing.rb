@@ -50,9 +50,9 @@ module BTAP
           puts "Thermal bridging material id #{material['id']} not found in the costing database. Skipping."
           next
         end
-        material_cost     = costing_data["baseCosts"]["materialOpCost"] * material["material_mult"].to_f
-        labour_cost       = costing_data["baseCosts"]["laborOpCost"] * material["labour_mult"].to_f
-        equipment_cost    = costing_data["baseCosts"]["equipmentOpCost"]
+        material_cost     = costing_data["materialOpCost"] * material["material_mult"].to_f
+        labour_cost       = costing_data["laborOpCost"] * material["labour_mult"].to_f
+        equipment_cost    = costing_data["equipmentOpCost"]
         tbd_quantity      = OpenStudio.convert(tbd_quantity, "m", "ft").get # Convert from m to ft
         material_quantity = Math.sqrt(material["quantity"].to_f) # Convert from ft^2 to ft
 

@@ -645,7 +645,7 @@ module BTAP
       # If no costing information is found then return an error.
       if costing_data.nil?
         raise "Error: no costing information available for material id #{mat_cost_info['id']}!"
-      elsif costing_data['baseCosts']['materialOpCost'].nil? || costing_data['baseCosts']['laborOpCost'].nil?
+      elsif costing_data['materialOpCost'].nil? || costing_data['laborOpCost'].nil?
         #This is a stub for some work that needs to be done to account for equipment costing. For now this is zeroed out.
         # A similar test is done on reading the data from the database and collected in the error file when the
         # costing database is generated.
@@ -665,8 +665,8 @@ module BTAP
       mat_cost_info['material_mult'].to_f == 0 ? mat_quant = 1.0 : mat_quant = mat_cost_info['material_mult'].to_f
       mat_cost_info['labour_mult'].to_f == 0 ? lab_quant = 1.0 : lab_quant = mat_cost_info['labour_mult'].to_f
       # Calculate the adjusted material and labour costs.
-      mat_cost = costing_data['baseCosts']['materialOpCost']*(mat_mult/100.0)*mat_quant
-      lab_cost = costing_data['baseCosts']['laborOpCost']*(inst_mult/100.0)*lab_quant
+      mat_cost = costing_data['materialOpCost']*(mat_mult/100.0)*mat_quant
+      lab_cost = costing_data['laborOpCost']*(inst_mult/100.0)*lab_quant
       # Add information to report output if tags provided.
       unless cost_tags.empty?
         cost_tags << mat_cost_info['Material'].to_s

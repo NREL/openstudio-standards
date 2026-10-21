@@ -1281,8 +1281,8 @@ module BTAP
         (materialHash['labour_mult'].nil?) || (materialHash['labour_mult'].empty?) ?
           lab_mult = 1.0 : lab_mult = materialHash['labour_mult'].to_f
 
-        material_cost = costing_data['baseCosts']['materialOpCost'].to_f * multiplier * mat_mult
-        labour_cost = costing_data['baseCosts']['laborOpCost'].to_f * multiplier * lab_mult
+        material_cost = costing_data['materialOpCost'].to_f * multiplier * mat_mult
+        labour_cost = costing_data['laborOpCost'].to_f * multiplier * lab_mult
       end
       return material_cost, labour_cost
     end

@@ -642,20 +642,20 @@ module BTAP
       regional_material, regional_installation, regional_equipment = get_regional_cost_factors(@costing_report["province_state"], @costing_report["city"], mat_cost_info)
       # puts "regional_material, regional_installation, regional_equipment #{regional_material}, #{regional_installation}, #{regional_equipment}"
 
-      if mat_cost_info['baseCosts']['materialOpCost'].nil?
+      if mat_cost_info['materialOpCost'].nil?
         cost_material = 0.0
       else
-        cost_material = mat_cost_info['baseCosts']['materialOpCost'] * (regional_material / 100.0) * material_adjust.to_f
+        cost_material = mat_cost_info['materialOpCost'] * (regional_material / 100.0) * material_adjust.to_f
       end
-      if mat_cost_info['baseCosts']['laborOpCost'].nil?
+      if mat_cost_info['laborOpCost'].nil?
         cost_labour = 0.0
       else
-        cost_labour = mat_cost_info['baseCosts']['laborOpCost'] * (regional_installation / 100.0) * labour_adjust.to_f
+        cost_labour = mat_cost_info['laborOpCost'] * (regional_installation / 100.0) * labour_adjust.to_f
       end
-      if mat_cost_info['baseCosts']['equipmentOpCost'].nil?
+      if mat_cost_info['equipmentOpCost'].nil?
         cost_equipment = 0.0
       else
-        cost_equipment = mat_cost_info['baseCosts']['equipmentOpCost'] * (regional_equipment / 100.0)
+        cost_equipment = mat_cost_info['equipmentOpCost'] * (regional_equipment / 100.0)
       end
 
       cost_unit = cost_material + cost_labour + cost_equipment
