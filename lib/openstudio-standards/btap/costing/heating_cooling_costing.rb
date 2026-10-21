@@ -17,7 +17,7 @@ module BTAP
       # Get regional cost factors for this province and city.
       materials_hvac = @costing_database["materials_hvac"]
       hvac_material = materials_hvac.select {|data|
-        data['Material'].to_s == "GasBoilers"}.first  # Get any row from spreadsheet in case of region error.
+        data['Material'] == "GasBoilers"}.first  # Get any row from spreadsheet in case of region error.
       regional_material, regional_installation =
           get_regional_cost_factors(@costing_report['province_state'], @costing_report['city'], hvac_material)
 
@@ -413,7 +413,7 @@ module BTAP
       # Get regional cost factors for this province and city.
       materials_hvac = @costing_database["materials_hvac"]
       hvac_material = materials_hvac.select {|data|
-        data['Material'].to_s == "GasBoilers"}.first  # Get any row from spreadsheet in case of region error
+        data['Material'] == "GasBoilers"}.first  # Get any row from spreadsheet in case of region error
       regional_material, regional_installation =
           get_regional_cost_factors(@costing_report['province_state'], @costing_report['city'], hvac_material)
 
@@ -811,7 +811,7 @@ module BTAP
       # Get regional cost factors for this province and city.
       materials_hvac = @costing_database["materials_hvac"]
       hvac_material = materials_hvac.select {|data|
-        data['Material'].to_s == "GasBoilers"}.first  # Get any row from spreadsheet in case of region error.
+        data['Material'] == "GasBoilers"}.first  # Get any row from spreadsheet in case of region error.
       regional_material, regional_installation =
           get_regional_cost_factors(@costing_report['province_state'], @costing_report['city'], hvac_material)
 
@@ -1265,7 +1265,7 @@ module BTAP
     def getCost(materialType, materialHash, multiplier)
       material_cost = 0.0 ; labour_cost = 0.0
       costing_data = @costing_database['costs'].detect do |data|
-        data['id'].to_s.upcase == materialHash['id'].to_s.upcase
+        data['id'] == materialHash['id']
       end
       if costing_data.nil?
         puts "HVAC #{materialType} with id #{materialHash['id']} not found in the costing database. Skipping."
@@ -1377,7 +1377,7 @@ module BTAP
       # Get regional cost factors for this province and city.
       materials_hvac = @costing_database["materials_hvac"]
       hvac_material = materials_hvac.select {|data|
-        data['Material'].to_s == "GasBoilers"}.first  # Get any row from spreadsheet in case of region error
+        data['Material'] == "GasBoilers"}.first  # Get any row from spreadsheet in case of region error
       regional_material, regional_installation =
           get_regional_cost_factors(@costing_report['province_state'], @costing_report['city'], hvac_material)
 
@@ -2708,15 +2708,9 @@ module BTAP
     # This method is for the calculation of VSD chiller cost
     def vsd_chiller_cost(primaryCap:)
       # Gather a list of VSD chillers that exist in the costing spreadsheet
-      vsd_chiller_sizes = []
-      vsd_chiller_options = @costing_database['materials_hvac'].select {|data|
+      vsd_chiller_sizes = @costing_database['materials_hvac'].select {|data|
         data['Material'].to_s.upcase == 'ChillerElectricEIR_VSDCentrifugalWaterChiller'.upcase
-      }
-      vsd_chiller_options[0..-1].each do |a,b|
-        a.each do |key,value|
-          vsd_chiller_sizes << value.to_f if key=='Size'
-        end
-      end
+      }.map { |data| data['Size'] }
 
       # Look for a VSD in the list of VSDs that has the closest size, and calculate its cost
       vsd_chiller_closet_to_current_kw = vsd_chiller_sizes.sort_by { |item| (primaryCap-item).abs }.first(1)

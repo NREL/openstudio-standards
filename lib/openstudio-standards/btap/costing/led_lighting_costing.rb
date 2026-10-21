@@ -78,20 +78,20 @@ module BTAP
             # 'id_layers_quantity_multipliers' based on fixture_type; and
             # calculate LED cost
             search_id_layers = @costing_database['lighting'].select { |data|
-              data['lighting_type_id'].to_f.round(1) == fixture_type.to_f.round(1)
+              data['lighting_type_id'] == fixture_type
             }.first
             if search_id_layers.nil?
               raise("No data found for #{search_id_layers}!")
             end
-            ids = search_id_layers['id_layers'].to_s.split(',')
+            ids = search_id_layers['id_layers'].split(',')
 
             search_id_layers_quantity_multipliers = @costing_database['lighting'].select { |data|
-              data['lighting_type_id'].to_f.round(1) == fixture_type.to_f.round(1)
+              data['lighting_type_id'] == fixture_type
             }.first
             if search_id_layers_quantity_multipliers.nil?
               raise("No data found for #{search_id_layers_quantity_multipliers}!")
             end
-            id_quants = search_id_layers_quantity_multipliers['Id_layers_quantity_multipliers'].to_s.split(',')
+            id_quants = search_id_layers_quantity_multipliers['Id_layers_quantity_multipliers'].split(',')
 
             overall_mult = 1.0
 

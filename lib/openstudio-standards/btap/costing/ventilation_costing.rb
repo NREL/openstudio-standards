@@ -470,7 +470,7 @@ module BTAP
         # Get the equipment information from the costing spreadsheet's 'material_hvac' sheet whose 'material_id' matches
         # the id.
         mat_cost_info = @costing_database['materials_hvac'].select {|data|
-          data['material_id'].to_f.round(0) == id.to_f.round(0)
+          data['material_id'] == id.to_s
         }.first
         # If it cannot find it there is an issue with either the 'materials_hvac' sheet or the 'hvac_vent_ahu' sheet which
         # the user has to deal with.
@@ -570,8 +570,8 @@ module BTAP
       # Look for the largest air handler that matches the system type, heating fuel, and cooling type requirements
       ahu = @costing_database['hvac_vent_ahu'].select {|data|
         data['Sys_type'] == loop_equip[:sys_type].to_f.round(0) and
-            data['Htg'].to_s.upcase == loop_equip[:heating_fuel].to_s.upcase and
-            data['Clg'].to_s.upcase == loop_equip[:cooling_type].to_s.upcase
+            data['Htg'].upcase == loop_equip[:heating_fuel].to_s.upcase and
+            data['Clg'].upcase == loop_equip[:cooling_type].to_s.upcase
       }.max_by {|element| element['Supply_air']}
       # If none are found something has gone wrong.  Tell the user.
       if ahu.nil? || ahu.empty?
@@ -592,8 +592,8 @@ module BTAP
       # Find air handlers that can meet that air flow and choose the smallest one that meets the requirement.
       rev_ahu = @costing_database['hvac_vent_ahu'].select {|data|
         data['Sys_type'] == loop_equip[:sys_type].to_f.round(0) and
-          data['Htg'].to_s.upcase == loop_equip[:heating_fuel].to_s.upcase and
-          data['Clg'].to_s.upcase == loop_equip[:cooling_type].to_s.upcase and
+          data['Htg'].upcase == loop_equip[:heating_fuel].to_s.upcase and
+          data['Clg'].upcase == loop_equip[:cooling_type].to_s.upcase and
           data['Supply_air'] >= rev_air_flow
       }.min_by{|info| info['Supply_air']}
       # If none are found something weird is happening so keep the one you already found.
@@ -641,7 +641,7 @@ module BTAP
         raise("Error: no assembly information available for material!")
       end
       # Look for the costing information for the piece of equipment in the costing database.
-      costing_data = @costing_database['costs'].detect {|data| data['id'].to_s.upcase == mat_cost_info['id'].to_s.upcase}
+      costing_data = @costing_database['costs'].detect {|data| data['id'] == mat_cost_info['id']}
       # If no costing information is found then return an error.
       if costing_data.nil?
         raise "Error: no costing information available for material id #{mat_cost_info['id']}!"
@@ -854,8 +854,8 @@ module BTAP
       ahu = @costing_database['hvac_vent_ahu'].select {|data|
         data['Sys_type'] == sys_type.to_f.round(0) and
             data['Supply_air'] >= airloop_flow_lps and
-            data['Htg'].to_s == heating_fuel and
-            data['Clg'].to_s == cooling_type
+            data['Htg'] == heating_fuel and
+            data['Clg'] == cooling_type
       }.min_by{|info| info['Supply_air']}
       # If none are there assume that none had a big enough air flow rate.  Create a data structure with the pertinent
       # air handler information.
@@ -880,10 +880,10 @@ module BTAP
       # the 'ahu_costing' method).
       ahu['Supply_air'].round(0) == 15000 ? ahu_cost_mod = 1.0 : ahu_cost_mod = (rev_airloop_flow_lps/(ahu['Supply_air']))
       # Get the 'id_layers' from the 'hvac_vent_ahu' sheet and put them into an array
-      ids = ahu['id_layers'].to_s.split(',')
+      ids = ahu['id_layers'].split(',')
       # Get the quantity of each of the preceding 'id_layers'.  To do this, get the 'id_layers_quantity_multipliers'
       # numbers from the 'hvac_vent_ahu' and convert them into an array
-      id_quants = ahu['Id_layers_quantity_multipliers'].to_s.split(',')
+      id_quants = ahu['Id_layers_quantity_multipliers'].split(',')
       # Check that the number of ids is the same as the number of id_quants.  If it isn't something is wrong and raise an
       # error.
       raise "The number of id_layers does not match the number of id_layer_quantity_multipliers in the hvac_vent_auh sheet of the costing spreadsheet.  Please look for the air handler in the costing spreadsheet and check the appropriate columns.  The air handler characteristics are: #{ahu}" if ids.size != id_quants.size

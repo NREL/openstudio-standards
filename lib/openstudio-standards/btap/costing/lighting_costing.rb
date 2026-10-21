@@ -57,16 +57,16 @@ module BTAP
           # (spacetype, no of stories, etc.).
           if space_has_no_light == false
             lighting_set = @costing_database['lighting_sets'].detect {|data|
-              data['template'].to_s.gsub(/\s*/, '') == template_type and
-              data['building_type'].to_s.downcase   == building_type.to_s.downcase and
-              data['space_type'].to_s.downcase      == space_type.to_s.downcase and
+              data['template'].gsub(/\s*/, '') == template_type and
+              data['building_type'].downcase   == building_type.to_s.downcase and
+              data['space_type'].downcase      == space_type.to_s.downcase and
               data['Type'].to_s.downcase            == light_type.to_s.downcase
             }
           else
             lighting_set = @costing_database['lighting_sets'].detect {|data|
-              data['template'].to_s.gsub(/\s*/, '') == template_type and
-              data['building_type'].to_s.downcase   == building_type.to_s.downcase and
-              data['space_type'].to_s.downcase      == space_type.to_s.downcase
+              data['template'].gsub(/\s*/, '') == template_type and
+              data['building_type'].downcase   == building_type.to_s.downcase and
+              data['space_type'].downcase      == space_type.to_s.downcase
             }
           end
 
@@ -101,7 +101,7 @@ module BTAP
 
             # Get lighting type sets based on fixtureType.
             lighting_type = @costing_database['lighting'].select {|lighting_layer_data|
-              lighting_layer_data['lighting_type_id'].to_s == fixtureType.to_s
+              lighting_layer_data['lighting_type_id'] == fixtureType
             }.first
 
             # Scan through layer IDs in id_layers field to get API data from materials_lighting sheet
@@ -125,13 +125,13 @@ module BTAP
                 # "lighting_type_id" is mislabelled and should really be
                 # "lighting_type_layer_id" but left it as-is (below).
                 lighting_material = materials_lighting_database.find do |data|
-                  data["lighting_type_id"].to_s == layer_id.to_s
+                  data["lighting_type_id"] == layer_id
                 end
                 if lighting_material.nil?
                   puts "Lighting material error..could not find lighting material #{layer_id} in #{materials_lighting_database}"
                   raise
                 else
-                  costing_data = @costing_database['costs'].detect {|data| data['id'].to_s.upcase == lighting_material['id'].to_s.upcase}
+                  costing_data = @costing_database['costs'].detect {|data| data['id'] == lighting_material['id']}
                   if costing_data.nil?
                     puts "Lighting material id #{lighting_material['id']} not found in costing data. Skipping."
                     raise

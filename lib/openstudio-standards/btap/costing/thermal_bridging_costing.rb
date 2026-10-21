@@ -37,7 +37,7 @@ module BTAP
       # bridging edge tallies should be costed nationwide.
       material_quantities.each do |id, tbd_quantity|
         material = @costing_database["materials_opaque"].find do |data|
-          data["materials_opaque_id"].to_s == id.to_s
+          data["materials_opaque_id"] == id
         end
 
         if material.nil?

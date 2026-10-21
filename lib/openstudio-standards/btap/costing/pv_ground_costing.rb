@@ -638,7 +638,7 @@ module BTAP
       labour_adjust = 1.0 if labour_adjust.nil?
       #-------------------------------------------------------------------------------------------------------------------
       ### Step II: calculate unit cost
-      mat_cost_info = @costing_database['costs'].select { |data| data['id'] == mat_id.to_s.upcase }.first
+      mat_cost_info = @costing_database['costs'].select { |data| data['id'] == mat_id }.first
       regional_material, regional_installation, regional_equipment = get_regional_cost_factors(@costing_report["province_state"], @costing_report["city"], mat_cost_info)
       # puts "regional_material, regional_installation, regional_equipment #{regional_material}, #{regional_installation}, #{regional_equipment}"
 
@@ -673,10 +673,10 @@ module BTAP
         tags << mat_data['description']
       end
       if not tags.empty?
-        add_costed_item(material_id: mat_id.to_s,
+        add_costed_item(material_id: mat_id,
                         quantity: quantity,
-                        material_mult: material_adjust.to_f,
-                        labour_mult: labour_adjust.to_f,
+                        material_mult: material_adjust,
+                        labour_mult: labour_adjust,
                         equip_mult: 1.0,
                         tags: tags)
       end

@@ -13,7 +13,7 @@ module BTAP
       # Get regional cost factors for this province and city
       materials_hvac = @costing_database["materials_hvac"]
       hvac_material = materials_hvac.select {|data|
-        data['Material'].to_s == "WaterGas"}.first  # Get any row from spreadsheet in case of region error
+        data['Material'] == "WaterGas"}.first  # Get any row from spreadsheet in case of region error
       regional_material, regional_installation =
           get_regional_cost_factors(@costing_report['province_state'], @costing_report['city'], hvac_material)
       # Use wiring to get regional cost factors for electrical equipment such as conduit and VFDs
@@ -187,13 +187,13 @@ module BTAP
           if shwTankCostInfo[:Cap_kW] < 200
             # 1/8 hp power vent
             materialHash = materials_hvac.find {|data|
-              data['Material'].to_s == 'Waterheater_power_vent' && data['Size'] == 0.125}
+              data['Material'] == 'Waterheater_power_vent' && data['Size'] == 0.125}
             matCost, labCost = getCost('1/8 hp power vent', materialHash, multiplier)
             flueCost += (matCost * regional_material / 100.0 + labCost * regional_installation / 100.0) * tank[:tank_mult]
           else
             # 1/2 hp power vent
             materialHash = materials_hvac.find {|data|
-              data['Material'].to_s == 'Waterheater_power_vent' && data['Size'] == 0.5}
+              data['Material'] == 'Waterheater_power_vent' && data['Size'] == 0.5}
             matCost, labCost = getCost('1/2 hp power vent', materialHash, multiplier)
             flueCost += (matCost * regional_material / 100.0 + labCost * regional_installation / 100.0) * tank[:tank_mult]
           end
@@ -542,7 +542,7 @@ module BTAP
         # If no tank volume is provided then only look at capacity.
         # Get all capacities hor that type of tank.
         hvac_materials = materials_hvac.select {|data|
-          data['Material'].to_s == materialLookup.to_s && data['Size'] >= materialSize.to_f
+          data['Material'] == materialLookup.to_s && data['Size'] >= materialSize.to_f
         }
         if hvac_materials.empty?
           # If no tanks have a big enough capacity then something is amiss and return an error (this should never happen
@@ -579,7 +579,7 @@ module BTAP
         # We need to find a tank with a big enough capacity and volume.
         # First see if a unique tank with a large enough capacity and volume exists
         hvac_materials = materials_hvac.select {|data|
-          data['Material'].to_s == materialLookup.to_s && data['Size'] >= materialSize.to_f && data['Fuel'].to_f >= tankVol
+          data['Material'] == materialLookup.to_s && data['Size'] >= materialSize.to_f && data['Fuel'].to_f >= tankVol
         }
         if hvac_materials.empty?
           # If none exists see if the tank volume is big enough.  Note that tank capacity was checked earlier so capacity
@@ -593,7 +593,7 @@ module BTAP
           tankVol = revVol
           # Try again to get tanks with a large enough size and capacity
           hvac_materials = materials_hvac.select {|data|
-            data['Material'].to_s == materialLookup.to_s && data['Size'] >= materialSize.to_f && data['Fuel'].to_f >= tankVol
+            data['Material'] == materialLookup.to_s && data['Size'] >= materialSize.to_f && data['Fuel'].to_f >= tankVol
           }
           # You may notice that there is no handling for cases where there is more than one tank with a large enough
           # capacity and volume.  There actually is, it is just a little further below.

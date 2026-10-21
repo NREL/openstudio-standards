@@ -121,7 +121,7 @@ module BTAP
             # COSTING-related step: Find number_fixtures_per_1000_ft2 that
             # should be considered in the daylight_space based on fixture_type
             search_fixtures_per_1000_ft2 = @costing_database['lighting'].select { |data|
-              data['lighting_type_id'].to_f.round(1) == fixture_type.to_f.round(1)
+              data['lighting_type_id'] == fixture_type
             }.first
             if search_fixtures_per_1000_ft2.nil?
               puts("No data found for #{search_fixtures_per_1000_ft2}!")
