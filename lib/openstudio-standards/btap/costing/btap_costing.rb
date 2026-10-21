@@ -143,9 +143,9 @@ module BTAP
       closest_loc = nil
       # province_state	city	latitude	longitude	source
       @costing_database['locations'].each do |location|
-        if distance([lat, long], [location['latitude'].to_f, location['longitude'].to_f]) < dist
+        if distance([lat, long], [location['latitude'], location['longitude']]) < dist
           closest_loc = location
-          dist = distance([lat, long], [location['latitude'].to_f, location['longitude'].to_f])
+          dist = distance([lat, long], [location['latitude'], location['longitude']])
         end
       end
       return closest_loc

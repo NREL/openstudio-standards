@@ -187,13 +187,13 @@ module BTAP
           if shwTankCostInfo[:Cap_kW] < 200
             # 1/8 hp power vent
             materialHash = materials_hvac.find {|data|
-              data['Material'].to_s == 'Waterheater_power_vent' && data['Size'].to_s == '0.125'}
+              data['Material'].to_s == 'Waterheater_power_vent' && data['Size'] == 0.125}
             matCost, labCost = getCost('1/8 hp power vent', materialHash, multiplier)
             flueCost += (matCost * regional_material / 100.0 + labCost * regional_installation / 100.0) * tank[:tank_mult]
           else
             # 1/2 hp power vent
             materialHash = materials_hvac.find {|data|
-              data['Material'].to_s == 'Waterheater_power_vent' && data['Size'].to_s == '0.5'}
+              data['Material'].to_s == 'Waterheater_power_vent' && data['Size'] == 0.5}
             matCost, labCost = getCost('1/2 hp power vent', materialHash, multiplier)
             flueCost += (matCost * regional_material / 100.0 + labCost * regional_installation / 100.0) * tank[:tank_mult]
           end
@@ -542,7 +542,7 @@ module BTAP
         # If no tank volume is provided then only look at capacity.
         # Get all capacities hor that type of tank.
         hvac_materials = materials_hvac.select {|data|
-          data['Material'].to_s == materialLookup.to_s && data['Size'].to_f >= materialSize.to_f
+          data['Material'].to_s == materialLookup.to_s && data['Size'] >= materialSize.to_f
         }
         if hvac_materials.empty?
           # If no tanks have a big enough capacity then something is amiss and return an error (this should never happen
@@ -557,21 +557,21 @@ module BTAP
               labCost: labCost,
               multiplier: multiplier,
               Vol_USGal: tankVol,
-              Cap_kW: hvac_materials[0]['Size'].to_f
+              Cap_kW: hvac_materials[0]['Size']
 
           }
           return ret_hash
         else
           # More than one tank has a big enough capacity.  Find the cost of the one with teh smallest capacity and return
           # it.
-          hvac_material = hvac_materials.min_by {|data| data['Size'].to_f}
+          hvac_material = hvac_materials.min_by {|data| data['Size']}
           matCost, labCost = getCost(name, hvac_material, 1.0)
           ret_hash = {
               matCost: matCost,
               labCost: labCost,
               multiplier: multiplier,
               Vol_USGal: tankVol,
-              Cap_kW: hvac_material['Size'].to_f
+              Cap_kW: hvac_material['Size']
           }
           return ret_hash
         end
@@ -579,7 +579,7 @@ module BTAP
         # We need to find a tank with a big enough capacity and volume.
         # First see if a unique tank with a large enough capacity and volume exists
         hvac_materials = materials_hvac.select {|data|
-          data['Material'].to_s == materialLookup.to_s && data['Size'].to_f >= materialSize.to_f && data['Fuel'].to_f >= tankVol
+          data['Material'].to_s == materialLookup.to_s && data['Size'] >= materialSize.to_f && data['Fuel'].to_f >= tankVol
         }
         if hvac_materials.empty?
           # If none exists see if the tank volume is big enough.  Note that tank capacity was checked earlier so capacity
@@ -593,7 +593,7 @@ module BTAP
           tankVol = revVol
           # Try again to get tanks with a large enough size and capacity
           hvac_materials = materials_hvac.select {|data|
-            data['Material'].to_s == materialLookup.to_s && data['Size'].to_f >= materialSize.to_f && data['Fuel'].to_f >= tankVol
+            data['Material'].to_s == materialLookup.to_s && data['Size'] >= materialSize.to_f && data['Fuel'].to_f >= tankVol
           }
           # You may notice that there is no handling for cases where there is more than one tank with a large enough
           # capacity and volume.  There actually is, it is just a little further below.
@@ -606,7 +606,7 @@ module BTAP
                 labCost: labCost,
                 multiplier: multiplier,
                 Vol_USGal: hvac_materials[0]['Fuel'].to_f,
-                Cap_kW: hvac_materials[0]['Size'].to_f
+                Cap_kW: hvac_materials[0]['Size']
             }
             return ret_hash
           end
@@ -617,7 +617,7 @@ module BTAP
               labCost: labCost,
               multiplier: multiplier,
               Vol_USGal: hvac_materials[0]['Fuel'].to_f,
-              Cap_kW: hvac_materials[0]['Size'].to_f
+              Cap_kW: hvac_materials[0]['Size']
           }
           return ret_hash
         end
@@ -636,7 +636,7 @@ module BTAP
             hvac_material = hvac_materials_vol[0]
           else
             # If more than one tank as a small enough volume choose the one with the smallest capacity.
-            hvac_material = hvac_materials_vol.min_by {|data| data['Size'].to_f}
+            hvac_material = hvac_materials_vol.min_by {|data| data['Size']}
           end
           matCost, labCost = getCost(name, hvac_material, 1.0)
           ret_hash = {
@@ -644,7 +644,7 @@ module BTAP
               labCost: labCost,
               multiplier: multiplier,
               Vol_USGal: hvac_material['Fuel'].to_f,
-              Cap_kW: hvac_material['Size'].to_f
+              Cap_kW: hvac_material['Size']
           }
           return ret_hash
         end
@@ -656,7 +656,7 @@ module BTAP
     def get_SHW_vol_multiplier(materialLookup:, materialSize:, materialVol:)
       multiplier = 1.0
       materials_hvac = @costing_database['materials_hvac'].select {|data|
-        data['Material'].to_s.upcase == materialLookup.to_s.upcase && data['Size'].to_f >= materialSize
+        data['Material'].to_s.upcase == materialLookup.to_s.upcase && data['Size'] >= materialSize
       }
       if materials_hvac.nil? || materials_hvac.empty?
         puts("Error: no hvac information available for equipment #{materialLookup}!")
@@ -678,7 +678,7 @@ module BTAP
       if unit.nil?
         comp_info = @costing_database['materials_hvac'].select {|data|
           data['Material'].to_s.upcase == mat.to_s.upcase and
-            data['Size'].to_f.round(2) == size.to_f.round(2)
+            data['Size'].round(2) == size.to_f.round(2)
         }.first
       elsif size.nil?
         comp_info = @costing_database['materials_hvac'].select {|data|
@@ -692,7 +692,7 @@ module BTAP
       else
         comp_info = @costing_database['materials_hvac'].select {|data|
           data['Material'].to_s.upcase == mat.to_s.upcase and
-            data['Size'].to_f.round(2) == size.to_f.round(2) and
+            data['Size'].round(2) == size.to_f.round(2) and
             data['unit'].to_s.upcase == unit.to_s.upcase
         }.first
       end

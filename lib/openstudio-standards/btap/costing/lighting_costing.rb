@@ -139,10 +139,10 @@ module BTAP
 
                     # Get cost information from lookup.
                     material_cost =
-                      costing_data['materialOpCost'].to_f * layer_mult.to_f * flrArea * zone.multiplier
+                      costing_data['materialOpCost'] * layer_mult.to_f * flrArea * zone.multiplier
 
                     labour_cost =
-                      costing_data['laborOpCost'].to_f * layer_mult.to_f * flrArea * zone.multiplier
+                      costing_data['laborOpCost'] * layer_mult.to_f * flrArea * zone.multiplier
 
                     layer_MaterialCost += material_cost
                     layer_LabourCost   += labour_cost

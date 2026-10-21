@@ -44,7 +44,7 @@ module BTAP
               # Get the closest value in materials_glazing sheet of SolarFilms.
               material_row = @costing_database["materials_glazing"].select { |row|
                 row['material_type'] == 'Solarfilms' }.min_by {|row|
-                  (construction["shgc"].to_f - row['solar_heat_gain_coefficient'].to_f).abs}
+                  (construction["shgc"].to_f - row['solar_heat_gain_coefficient']).abs}
 
               standard_film_cost = getCost(material_row['description'], material_row, 1.0)
               regional_factors   = get_regional_cost_factors(
@@ -185,12 +185,12 @@ module BTAP
               regional_material, regional_installation = get_regional_cost_factors(province_state, city, material)
 
               # Get cost information from lookup.
-              material_cost  = costing_data['materialOpCost'] * material['material_mult'].to_f
-              labour_cost    = costing_data['laborOpCost']    * material['labour_mult'].to_f
+              material_cost  = costing_data['materialOpCost'] * material['material_mult']
+              labour_cost    = costing_data['laborOpCost']    * material['labour_mult']
               equipment_cost = costing_data['equipmentOpCost']
               layer_cost     = (((material_cost * regional_material / 100.0) + \
                                (labour_cost * regional_installation / 100.0) + equipment_cost) * \
-                               material['quantity'].to_f).round(2)
+                               material['quantity']).round(2)
               total_with_op += layer_cost
             end
           end

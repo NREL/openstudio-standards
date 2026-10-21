@@ -645,12 +645,12 @@ module BTAP
       if mat_cost_info['materialOpCost'].nil?
         cost_material = 0.0
       else
-        cost_material = mat_cost_info['materialOpCost'] * (regional_material / 100.0) * material_adjust.to_f
+        cost_material = mat_cost_info['materialOpCost'] * (regional_material / 100.0) * material_adjust
       end
       if mat_cost_info['laborOpCost'].nil?
         cost_labour = 0.0
       else
-        cost_labour = mat_cost_info['laborOpCost'] * (regional_installation / 100.0) * labour_adjust.to_f
+        cost_labour = mat_cost_info['laborOpCost'] * (regional_installation / 100.0) * labour_adjust
       end
       if mat_cost_info['equipmentOpCost'].nil?
         cost_equipment = 0.0

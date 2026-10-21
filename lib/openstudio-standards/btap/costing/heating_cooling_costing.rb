@@ -23,7 +23,7 @@ module BTAP
 
       # Get regional electric cost factors for this province and city.
       hvac_material = materials_hvac.select {|data|
-        data['Material'].to_s.upcase == "BOX" && data['Size'].to_i == 1}.first
+        data['Material'].to_s.upcase == "BOX" && data['Size'] == 1}.first
       reg_mat_elec, reg_lab_elec =
         get_regional_cost_factors(@costing_report['province_state'], @costing_report['city'], hvac_material)
 
@@ -419,7 +419,7 @@ module BTAP
 
       # Get regional electric cost factors for this province and city.
       hvac_material = materials_hvac.select {|data|
-        data['Material'].to_s.upcase == "BOX" && data['Size'].to_i == 1}.first
+        data['Material'].to_s.upcase == "BOX" && data['Size'] == 1}.first
       reg_mat_elec, reg_lab_elec =
         get_regional_cost_factors(@costing_report['province_state'], @costing_report['city'], hvac_material)
 
@@ -817,7 +817,7 @@ module BTAP
 
       # Get regional electric cost factors for this province and city.
       hvac_material = materials_hvac.select {|data|
-        data['Material'].to_s.upcase == "BOX" && data['Size'].to_i == 1}.first
+        data['Material'].to_s.upcase == "BOX" && data['Size'] == 1}.first
       reg_mat_elec, reg_lab_elec =
         get_regional_cost_factors(@costing_report['province_state'], @costing_report['city'], hvac_material)
 
@@ -1127,11 +1127,11 @@ module BTAP
       elsif materials_hvac.empty?
         raise("Error: No HVAC information available for equipment #{materialLookup}!")
       end
-      materials_hvac.length == 1 ? max_size = materials_hvac[0] : max_size = materials_hvac.max_by {|d| d['Size'].to_f}
-      if max_size['Size'].to_f <= 0
+      materials_hvac.length == 1 ? max_size = materials_hvac[0] : max_size = materials_hvac.max_by {|d| d['Size']}
+      if max_size['Size'] <= 0
         raise("Error: #{materialLookup} has a size of 0 or less.")
       end
-      mult = materialSize.to_f / (max_size['Size'].to_f)
+      mult = materialSize.to_f / (max_size['Size'])
 
       # Use next largest integer for multiplier.
       multiplier = (mult.to_i).to_f.round(0) + 1
@@ -1202,18 +1202,18 @@ module BTAP
       else
         if exactMatch
           hvac_material = materials_hvac.select {|data|
-            data['Material'].to_s.upcase == materialLookup.to_s.upcase && data['Size'].to_f == materialSize
+            data['Material'].to_s.upcase == materialLookup.to_s.upcase && data['Size'] == materialSize
           }.first
         else
           hvac_material_info = materials_hvac.select {|data|
-            data['Material'].to_s.upcase == materialLookup.to_s.upcase && data['Size'].to_f >= materialSize
+            data['Material'].to_s.upcase == materialLookup.to_s.upcase && data['Size'] >= materialSize
           }
           if hvac_material_info.empty?
             hvac_material = nil
           elsif hvac_material_info.size == 1
             hvac_material = hvac_material_info[0]
           else
-            hvac_material = hvac_material_info.min_by{|data| data['Size'].to_f}
+            hvac_material = hvac_material_info.min_by{|data| data['Size']}
           end
         end
       end
@@ -1226,8 +1226,8 @@ module BTAP
           # There is no exact match in the costing spreadsheet so redo search
           # for next largest size.
           hvac_material = materials_hvac.select {|data|
-            data['Material'].to_s.upcase == materialLookup.to_s.upcase && data['Size'].to_f >= materialSize.to_f
-          }.min_by{|mat_info| mat_info['Size'].to_f}
+            data['Material'].to_s.upcase == materialLookup.to_s.upcase && data['Size'] >= materialSize.to_f
+          }.min_by{|mat_info| mat_info['Size']}
           if hvac_material.nil?
 
             # The nominal capacity is greater than the maximum value in the API
@@ -1235,7 +1235,7 @@ module BTAP
             # multiple of req'd size/max size.
             multiplier = get_HVAC_multiplier( materialLookup, materialSize )
             hvac_materials = materials_hvac.select {|data|
-              data['Material'].to_s.upcase == materialLookup.to_s.upcase && data['Size'].to_f >= materialSize.to_f / multiplier.to_f
+              data['Material'].to_s.upcase == materialLookup.to_s.upcase && data['Size'] >= materialSize.to_f / multiplier.to_f
             }
             if hvac_materials.size == 0
               puts "HVAC material error! Could not find next largest size for #{name} in #{materials_hvac}"
@@ -1243,7 +1243,7 @@ module BTAP
             elsif hvac_materials.size == 1
               hvac_material = hvac_materials[0]
             else
-              hvac_material = hvac_materials.min_by{|data| data['Size'].to_f}
+              hvac_material = hvac_materials.min_by{|data| data['Size']}
             end
           end
         end
@@ -1275,14 +1275,11 @@ module BTAP
         # Get cost information from lookup.
         # Adjust for material and labour multiplier in costing spreadsheet
         # 'materials_hvac' sheet 'material_mult' and 'labour_mult' columns.
-        (materialHash['material_mult'].nil?) || (materialHash['material_mult'].empty?) ?
-          mat_mult = 1.0 : mat_mult = materialHash['material_mult'].to_f
+        mat_mult = materialHash['material_mult'] || 1.0
+        lab_mult = materialHash['labour_mult']   || 1.0
 
-        (materialHash['labour_mult'].nil?) || (materialHash['labour_mult'].empty?) ?
-          lab_mult = 1.0 : lab_mult = materialHash['labour_mult'].to_f
-
-        material_cost = costing_data['materialOpCost'].to_f * multiplier * mat_mult
-        labour_cost = costing_data['laborOpCost'].to_f * multiplier * lab_mult
+        material_cost = costing_data['materialOpCost'] * multiplier * mat_mult
+        labour_cost = costing_data['laborOpCost'] * multiplier * lab_mult
       end
       return material_cost, labour_cost
     end
@@ -1386,7 +1383,7 @@ module BTAP
 
       # Get regional electric cost factors for this province and city
       hvac_material = materials_hvac.select {|data|
-        data['Material'].to_s.upcase == "BOX" && data['Size'].to_i == 1}.first
+        data['Material'].to_s.upcase == "BOX" && data['Size'] == 1}.first
       reg_mat_elec, reg_lab_elec =
         get_regional_cost_factors(@costing_report['province_state'], @costing_report['city'], hvac_material)
 
@@ -2595,15 +2592,15 @@ module BTAP
       hvac_material = []
       unless hvac_material_con_info.empty?
         # If the materialCon criteria check if any of the selected material meet the mateterialCap criteria
-        hvac_material_cap_info = hvac_material_con_info.select {|data| data['Size'].to_f >= materialCap}
+        hvac_material_cap_info = hvac_material_con_info.select {|data| data['Size'] >= materialCap}
         if hvac_material_cap_info.nil? || hvac_material_cap_info.empty?
           # If none do then select the material with the largest capacity that met the materialCon criteria
-          hvac_material << hvac_material_con_info.max_by {|data| data['Size'].to_f}
+          hvac_material << hvac_material_con_info.max_by {|data| data['Size']}
           con_per_loop = hvac_material[0]['Fuel'].to_f
         else
           # If something met both the materialCon and materialCap then return a hash containing the material and other
           # information and we are done.
-          hvac_material = hvac_material_cap_info.min_by {|data| data['Size'].to_f}
+          hvac_material = hvac_material_cap_info.min_by {|data| data['Size']}
           ret_hash = {
             name: name,
             hvac_material: hvac_material,
@@ -2632,11 +2629,11 @@ module BTAP
       reqMatSize = materialCap/numConLoops
       # Of the equipment that met the (modified or original) materialCan requirement select the equipment the meets the
       # (modified or original) capacity requirement.
-      material_cap = hvac_material.select{|data| data['Size'].to_f >= reqMatSize}
+      material_cap = hvac_material.select{|data| data['Size'] >= reqMatSize}
       if material_cap.empty?
         # If none of the selected materials meet the materialCap requirement find the one with the largest capacity
-        largestMat = hvac_material.max_by{|data| data['Size'].to_f}
-        maxAvailCap = largestMat['Size'].to_f
+        largestMat = hvac_material.max_by{|data| data['Size']}
+        maxAvailCap = largestMat['Size']
         # Find out how many are required to meet the materialCap requirement
         (reqMatSize%maxAvailCap).to_f.round(3) > 0 ? numCapLoops = (((reqMatSize/maxAvailCap).to_i) + 1).to_f.round(0) : numCapLoops = (reqMatSize/maxAvailCap).to_f.round(0)
         # Calculate how many pieces of equipment are now required to meet both the materialCon and materialCap
@@ -2648,31 +2645,31 @@ module BTAP
         modMatCon = (materialCon / totLoops).to_f
         # Search for equipment that meet both the modMatCap and modMatCon criteria
         hvac_material_info = materials_hvac.select {|data| data['Material'].to_s.upcase == materialLookup.to_s.upcase}
-        material_cap = hvac_material_info.select{|data| (data['Size'].to_f >= modMatCap) && (data['Fuel'].to_f >= modMatCon)}
+        material_cap = hvac_material_info.select{|data| (data['Size'] >= modMatCap) && (data['Fuel'].to_f >= modMatCon)}
         if material_cap.empty?
           # It should have gotten something.  If it didn't then select the one with largest capacity and use that.
           ret_mat = largestMat
         else
           # Find the equipment with the smallest capacity that meets the requirement
-          ret_mat = material_cap.min_by{|data| data['Size'].to_f}
+          ret_mat = material_cap.min_by{|data| data['Size']}
         end
       else
         # If something now meets the materialCon and materialCap requirement select the one with the smallest capacity.
         totLoops = numConLoops
-        ret_mat = material_cap.min_by{|data| data['Size'].to_f}
+        ret_mat = material_cap.min_by{|data| data['Size']}
       end
       # If multiple branch distributors are required check if the last one can be smaller than the others and return that
       # in addition to the other branch distributors.
       if totLoops.round(0) > 1.0
         # Check check the remaining size requirements for the last branch distributor
         (materialCon - (totLoops - 1.0)*(ret_mat['Fuel'].to_f)) > 0 ? redCon = (materialCon - (totLoops - 1.0)*(ret_mat['Fuel'].to_f)) : redCon = 0.0
-        (materialCap - (totLoops - 1.0)*(ret_mat['Size'].to_f)) > 0 ? redCap = (materialCap - (totLoops - 1.0)*(ret_mat['Size'].to_f)) : redCap = 0.0
+        (materialCap - (totLoops - 1.0)*(ret_mat['Size'])) > 0 ? redCap = (materialCap - (totLoops - 1.0)*(ret_mat['Size'])) : redCap = 0.0
         # If either are greater than zero (as should be the case) then look for equipment that can meet the remaining
         # connection or capacity requipments.
         if (redCon > 0) || (redCap > 0)
           # Find material that meet the remaining connection and capacity requirements.
           hvac_material_red = materials_hvac.select {|data|
-            data['Material'].to_s.upcase == materialLookup.to_s.upcase && data['Fuel'].to_f >= redCon && data['Size'].to_f >= redCap
+            data['Material'].to_s.upcase == materialLookup.to_s.upcase && data['Fuel'].to_f >= redCon && data['Size'] >= redCap
           }
           if hvac_material_red.size == 0
             # If no equipment could be found which meet the remaining connection and capacity requirements then return
@@ -2685,7 +2682,7 @@ module BTAP
             # If more than one piece of equipment can meet the minimum connection requirement then select the one with the
             # minimum capacity requirement.
             if min_hvac_sel.size > 1
-              red_ret = min_hvac_sel.min_by{|data| data['Size'].to_f}
+              red_ret = min_hvac_sel.min_by{|data| data['Size']}
             end
             red_ret_hash = {
               red_ret_hash: red_ret,

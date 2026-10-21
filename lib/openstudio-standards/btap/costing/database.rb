@@ -30,9 +30,44 @@ module BTAP
       costing_file_names = Paths::COSTING_DATA_PATHS.map { |path| path.basename(".*").to_s }
       costing_file_names.zip(Paths::COSTING_DATA_PATHS).each do |header, path|
         unless File.exist?(path)
-          raise("Error: Could not find #{data_path}")
+          raise("Error: Could not find #{path}")
         end
         @db[header] = CSV.read(path, headers: true)
+
+        # Empty multipliers default to 1.0 (i.e. no adjustment).
+        case header
+        when "locations"
+          ["latitude", "longitude"].each do |column|
+            @db[header][column] = @db[header][column].map(&:to_f)
+          end
+
+        when "materials_opaque"
+          @db[header]["quantity"] = @db[header]["quantity"].map(&:to_f)
+          ["material_mult", "labour_mult"].each do |column|
+            @db[header][column] = @db[header][column].map { |value| value.nil? ? 1.0 : value.to_f }
+          end
+
+        when "materials_glazing"
+          ["quantity", "solar_heat_gain_coefficient"].each do |column|
+            @db[header][column] = @db[header][column].map(&:to_f)
+          end
+          ["material_mult", "labour_mult"].each do |column|
+            @db[header][column] = @db[header][column].map { |value| value.nil? ? 1.0 : value.to_f }
+          end
+
+        when "lighting"
+          @db[header]["Fix_1000ft"] = @db[header]["Fix_1000ft"].map(&:to_i)
+
+        when "hvac_vent_ahu"
+          @db[header]["Sys_type"]   = @db[header]["Sys_type"].map(&:to_i)
+          @db[header]["Supply_air"] = @db[header]["Supply_air"].map(&:to_f)
+
+        when "materials_hvac"
+          @db[header]["Size"] = @db[header]["Size"].map(&:to_f)
+          ["material_mult", "labour_mult"].each do |column|
+            @db[header][column] = @db[header][column].map { |value| value.nil? ? 1.0 : value.to_f }
+          end
+        end
       end
     end
 
@@ -46,7 +81,7 @@ module BTAP
 
       # Find out if there are a different number of items and number oof
       # quantities in any row of the 'hvac_vent_ahu' sheet.
-      diff_id_quantities = @db['raw']['hvac_vent_ahu'].select{ |data|
+      diff_id_quantities = @db['hvac_vent_ahu'].select{ |data|
         data['id_layers'].to_s.split(',').size != data['Id_layers_quantity_multipliers'].to_s.split(',').size}
 
       # If there is a difference (that is the diff_id_quantities has something

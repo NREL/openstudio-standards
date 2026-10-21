@@ -127,7 +127,7 @@ module BTAP
               puts("No data found for #{search_fixtures_per_1000_ft2}!")
               raise
             end
-            number_fixtures_per_1000_ft2 = search_fixtures_per_1000_ft2['Fix_1000ft'].to_i
+            number_fixtures_per_1000_ft2 = search_fixtures_per_1000_ft2['Fix_1000ft']
 
             # Costing-related step: Calculate number_fixtures_space that should
             # be considered in the daylight_space based on
