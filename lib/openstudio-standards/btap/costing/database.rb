@@ -27,7 +27,6 @@ module BTAP
       @db["constructions"] = File.open(Paths::CONSTRUCTIONS_PATH) { |file| JSON.load(file) }
 
       # Load the raw data
-      @db["raw"] = {}
       costing_file_names = Paths::COSTING_DATA_PATHS.map { |path| path.basename(".*").to_s }
       costing_file_names.zip(Paths::COSTING_DATA_PATHS).each do |header, path|
         unless File.exist?(path)
