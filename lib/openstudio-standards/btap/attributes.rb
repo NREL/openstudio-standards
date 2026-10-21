@@ -337,7 +337,10 @@ module BTAP
     # Carbon. Add surface-specific tallies for underatable surfaces.
     # Currently only windows have emissions data for frames.
     def compile_window_perimeter
-      windows = ["ExteriorFixedWindow", "ExteriorOperableWindow"]
+      windows = ["ExteriorFixedWindow", "ExteriorOperableWindow"].filter do |window|
+        !@surface_types_to_assembly_tallies[window][self.class.surface_types_to_assembly_names[window]].nil?
+      end
+
       windows.each do |window|
         @surface_types_to_assembly_tallies[window][self.class.surface_types_to_assembly_names[window]]["perimeter"] = 0
       end

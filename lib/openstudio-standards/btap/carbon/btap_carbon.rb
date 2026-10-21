@@ -16,61 +16,14 @@ module BTAP
       @frame_m_to_kg    = standards_data["constants"]["glazing_frame_m_to_kg"]
 
       # Build the carbon database.
-      carbon_opaque = CSV.read(Paths::CARBON_OPAQUE_PATH)
-      @carbon_database["opaque"] = Array.new
-
-      1.upto carbon_opaque.length - 1 do |i|
-        row   = carbon_opaque[i]
-        index = row.each
-        item  = Hash.new
-
-        item["materials_opaque_id"]                     = index.next
-        item["description"]                             = index.next
-        item["type"]                                    = index.next
-        item["quantity"]                                = index.next.to_f
-        item["per m2"]                                  = index.next.to_f
-        item["Product Category"]                        = index.next
-        item["Embodied Carbon (A1-A5)"]                 = index.next.to_f
-        item["Embodied Carbon (A-C)"]                   = index.next.to_f
-        item["Environmental Product Declaration (EPD)"] = index.next
-
-        @carbon_database["opaque"] << item
-      end
-
-      carbon_glazing = CSV.read(Paths::CARBON_GLAZING_PATH)
-      @carbon_database["glazing"] = Array.new
-
-      1.upto carbon_glazing.length - 1 do |i|
-        row   = carbon_glazing[i]
-        index = row.each
-        item  = Hash.new
-
-        item["materials_glazing_id"]    = index.next
-        item["description"]             = index.next
-        item["per m2"]                  = index.next.to_f
-        item["Embodied Carbon (A1-A5)"] = index.next.to_f
-        item["Embodied Carbon (A-C)"]   = index.next.to_f
-        item["Environmental Product Declaration (EPD)"] = index.next
-
-        @carbon_database["glazing"] << item
-      end
-
-      carbon_frame = CSV.read(Paths::CARBON_FRAME_PATH)
-      @carbon_database["frame"] = Array.new
-
-      1.upto carbon_frame.length - 1 do |i|
-        row   = carbon_frame[i]
-        index = row.each
-        item  = Hash.new
-
-        item["materials_glazing_id"]    = index.next
-        item["description"]             = index.next
-        item["per m2"]                  = index.next.to_f
-        item["Embodied Carbon (A1-A5)"] = index.next.to_f
-        item["Embodied Carbon (A-C)"]   = index.next.to_f
-        item["Environmental Product Declaration (EPD)"] = index.next
-
-        @carbon_database["frame"] << item
+      @carbon_database["opaque"]  = CSV.read(Paths::CARBON_OPAQUE_PATH, headers: true)
+      @carbon_database["glazing"] = CSV.read(Paths::CARBON_GLAZING_PATH, headers: true)
+      @carbon_database["frame"]   = CSV.read(Paths::CARBON_FRAME_PATH, headers: true)
+      @carbon_database["opaque"]["quantity"] = @carbon_database["opaque"]["quantity"].map(&:to_f)
+      ["per m2", "Embodied Carbon (A1-A5)", "Embodied Carbon (A-C)"].each do |header|
+        @carbon_database["opaque"][header]  = @carbon_database["opaque"][header].map(&:to_f)
+        @carbon_database["glazing"][header] = @carbon_database["glazing"][header].map(&:to_f)
+        @carbon_database["frame"][header]   = @carbon_database["frame"][header].map(&:to_f)
       end
     end
 
@@ -138,7 +91,7 @@ module BTAP
       total_emissions += structure_carbon
 
       # Factor in parapets likewise for costing in `envelope_costing.rb`.
-      if @attributes.use_tbd
+      if @attributes.tbd_enabled
         wall_carbon_per_m2 = @carbon_report["exterior_wall_carbon_per_m2"]
         parapet_carbon = @attributes.tbd_edge_tallies["parapet"].values.first * wall_carbon_per_m2
         @carbon_report["parapet_carbon"] = parapet_carbon.round(2)
@@ -221,6 +174,7 @@ module BTAP
       material_entry = @carbon_database[materials_file].find { |row| row[id_column] == id }
 
       if material_entry.nil?
+
         # TODO: This will happen a lot because of the new thermal bridging entries
         # as of nrcan_476. The carbon database needs to be updated. BTAP Carbon
         # will not be very useful until then.
