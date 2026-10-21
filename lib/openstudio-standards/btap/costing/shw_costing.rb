@@ -11,7 +11,7 @@ module BTAP
       totalCost = 0.0
 
       # Get regional cost factors for this province and city
-      materials_hvac = @costing_database["raw"]["materials_hvac"]
+      materials_hvac = @costing_database["materials_hvac"]
       hvac_material = materials_hvac.select {|data|
         data['Material'].to_s == "WaterGas"}.first  # Get any row from spreadsheet in case of region error
       regional_material, regional_installation =
@@ -536,7 +536,7 @@ module BTAP
     # to the cost in the main shw_costing method.
     def getSHWTankCost(name:, materialLookup:, materialSize:, tankVol:)
       multiplier = 1.0
-      materials_hvac = @costing_database['raw']['materials_hvac']
+      materials_hvac = @costing_database['materials_hvac']
       # Get costing spreadsheet data for gas and oil fired mixed shw tanks
       if tankVol.nil?
         # If no tank volume is provided then only look at capacity.
@@ -655,7 +655,7 @@ module BTAP
     # sheet.  The 'Fuel' column is where tank volume information is kept for electric and oil SHW tanks.
     def get_SHW_vol_multiplier(materialLookup:, materialSize:, materialVol:)
       multiplier = 1.0
-      materials_hvac = @costing_database['raw']['materials_hvac'].select {|data|
+      materials_hvac = @costing_database['materials_hvac'].select {|data|
         data['Material'].to_s.upcase == materialLookup.to_s.upcase && data['Size'].to_f >= materialSize
       }
       if materials_hvac.nil? || materials_hvac.empty?
@@ -676,21 +676,21 @@ module BTAP
     def get_cost_info(mat:, size: nil, unit: nil)
       comp_info = nil
       if unit.nil?
-        comp_info = @costing_database['raw']['materials_hvac'].select {|data|
+        comp_info = @costing_database['materials_hvac'].select {|data|
           data['Material'].to_s.upcase == mat.to_s.upcase and
             data['Size'].to_f.round(2) == size.to_f.round(2)
         }.first
       elsif size.nil?
-        comp_info = @costing_database['raw']['materials_hvac'].select {|data|
+        comp_info = @costing_database['materials_hvac'].select {|data|
           data['Material'].to_s.upcase == mat.to_s.upcase and
             data['unit'].to_s.upcase == unit.to_s.upcase
         }.first
       elsif size.nil? && unit.nil?
-        comp_info = @costing_database['raw']['materials_hvac'].select {|data|
+        comp_info = @costing_database['materials_hvac'].select {|data|
           data['Material'].to_s.upcase == mat.to_s.upcase
         }.first
       else
-        comp_info = @costing_database['raw']['materials_hvac'].select {|data|
+        comp_info = @costing_database['materials_hvac'].select {|data|
           data['Material'].to_s.upcase == mat.to_s.upcase and
             data['Size'].to_f.round(2) == size.to_f.round(2) and
             data['unit'].to_s.upcase == unit.to_s.upcase

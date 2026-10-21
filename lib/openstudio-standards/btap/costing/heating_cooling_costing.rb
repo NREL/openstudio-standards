@@ -15,7 +15,7 @@ module BTAP
       totalCost = 0.0
 
       # Get regional cost factors for this province and city.
-      materials_hvac = @costing_database["raw"]["materials_hvac"]
+      materials_hvac = @costing_database["materials_hvac"]
       hvac_material = materials_hvac.select {|data|
         data['Material'].to_s == "GasBoilers"}.first  # Get any row from spreadsheet in case of region error.
       regional_material, regional_installation =
@@ -411,7 +411,7 @@ module BTAP
       totalCost = 0.0
 
       # Get regional cost factors for this province and city.
-      materials_hvac = @costing_database["raw"]["materials_hvac"]
+      materials_hvac = @costing_database["materials_hvac"]
       hvac_material = materials_hvac.select {|data|
         data['Material'].to_s == "GasBoilers"}.first  # Get any row from spreadsheet in case of region error
       regional_material, regional_installation =
@@ -809,7 +809,7 @@ module BTAP
       totalCost = 0.0
 
       # Get regional cost factors for this province and city.
-      materials_hvac = @costing_database["raw"]["materials_hvac"]
+      materials_hvac = @costing_database["materials_hvac"]
       hvac_material = materials_hvac.select {|data|
         data['Material'].to_s == "GasBoilers"}.first  # Get any row from spreadsheet in case of region error.
       regional_material, regional_installation =
@@ -1119,7 +1119,7 @@ module BTAP
     # @return [Float] Number of materialLookup with the largest size required to meet the materialSize.
     def get_HVAC_multiplier(materialLookup, materialSize)
       multiplier = 1.0
-      materials_hvac = @costing_database['raw']['materials_hvac'].select {|data|
+      materials_hvac = @costing_database['materials_hvac'].select {|data|
         data['Material'].to_s.upcase == materialLookup.to_s.upcase
       }
       if materials_hvac.nil?
@@ -1192,7 +1192,7 @@ module BTAP
     # }
     def getHVACDBInfo(name:, materialLookup:, materialSize:, exactMatch: true)
       multiplier = 1.0
-      materials_hvac = @costing_database["raw"]["materials_hvac"]
+      materials_hvac = @costing_database["materials_hvac"]
       if materialSize == 'nil' || materialSize == '' || materialSize == nil
 
         # When materialSize is blank because there is only one row in the data
@@ -1378,7 +1378,7 @@ module BTAP
       totalCost = 0.0
 
       # Get regional cost factors for this province and city.
-      materials_hvac = @costing_database["raw"]["materials_hvac"]
+      materials_hvac = @costing_database["materials_hvac"]
       hvac_material = materials_hvac.select {|data|
         data['Material'].to_s == "GasBoilers"}.first  # Get any row from spreadsheet in case of region error
       regional_material, regional_installation =
@@ -2587,7 +2587,7 @@ module BTAP
       multiplier = 1.0
       numConLoops = 1.0
       # Get the materials_hvac sheet info from the costing spreadsheet
-      materials_hvac = @costing_database["raw"]["materials_hvac"]
+      materials_hvac = @costing_database["materials_hvac"]
       # Find material that meet the materialCon requirement
       hvac_material_con_info = materials_hvac.select {|data|
         data['Material'].to_s.upcase == materialLookup.to_s.upcase && data['Fuel'].to_f >= materialCon
@@ -2712,7 +2712,7 @@ module BTAP
     def vsd_chiller_cost(primaryCap:)
       # Gather a list of VSD chillers that exist in the costing spreadsheet
       vsd_chiller_sizes = []
-      vsd_chiller_options = @costing_database['raw']['materials_hvac'].select {|data|
+      vsd_chiller_options = @costing_database['materials_hvac'].select {|data|
         data['Material'].to_s.upcase == 'ChillerElectricEIR_VSDCentrifugalWaterChiller'.upcase
       }
       vsd_chiller_options[0..-1].each do |a,b|

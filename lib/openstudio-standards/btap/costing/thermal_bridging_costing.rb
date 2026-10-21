@@ -36,7 +36,7 @@ module BTAP
       # Note that no localization facors are used. This is because thermal
       # bridging edge tallies should be costed nationwide.
       material_quantities.each do |id, tbd_quantity|
-        material = @costing_database["raw"]["materials_opaque"].find do |data|
+        material = @costing_database["materials_opaque"].find do |data|
           data["materials_opaque_id"].to_s == id.to_s
         end
 

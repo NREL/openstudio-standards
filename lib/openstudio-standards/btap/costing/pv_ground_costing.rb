@@ -627,7 +627,7 @@ module BTAP
       #-------------------------------------------------------------------------------------------------------------------
       ### Step I: find mat_id
       mat_data = nil
-      mat_data = @costing_database['raw'][sheet_name].select { |data|
+      mat_data = @costing_database[sheet_name].select { |data|
         data[column_1].to_s.upcase == cost_info[:row_id_1].to_s.upcase and
             data[column_2].to_f.round(1) == cost_info[:row_id_2].to_f.round(1)
       }.first

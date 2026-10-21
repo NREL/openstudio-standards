@@ -46,12 +46,11 @@ module BTAP
 
       # Load the raw data
       costing_file_names = Paths::COSTING_DATA_PATHS.map { |path| path.basename(".*").to_s }
-      0.upto(costing_file_names.length - 1) do |i|
-        data_path = BTAP::Paths::COSTING_DATA_PATHS[i]
-        unless File.exist?(data_path)
+      costing_file_names.zip(Paths::COSTING_DATA_PATHS).each do |header, path|
+        unless File.exist?(path)
           raise("Error: Could not find #{data_path}")
         end
-        @db['raw'][costing_file_names[i]] = CSV.read(data_path, headers: true).map { |row| row.to_hash}
+        @db[header] = CSV.read(path, headers: true)
       end
     end
 

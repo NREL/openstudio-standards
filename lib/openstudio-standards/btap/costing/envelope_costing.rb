@@ -42,7 +42,7 @@ module BTAP
             if construction["type"] == "glazing"
 
               # Get the closest value in materials_glazing sheet of SolarFilms.
-              material_row = @costing_database["raw"]["materials_glazing"].select { |row|
+              material_row = @costing_database["materials_glazing"].select { |row|
                 row['material_type'] == 'Solarfilms' }.min_by {|row|
                   (construction["shgc"].to_f - row['solar_heat_gain_coefficient'].to_f).abs}
 
@@ -168,7 +168,7 @@ module BTAP
     # @param city           [String]
     def cost_construction(construction, province_state, city)
       material_id        = "materials_#{construction["type"]}_id"
-      materials_database = @costing_database["raw"]["materials_#{construction["type"]}"]
+      materials_database = @costing_database["materials_#{construction["type"]}"]
       total_with_op      = 0.0
 
       construction["subsets"].each do |subset|

@@ -469,7 +469,7 @@ module BTAP
       ids.each_with_index do |id, index|
         # Get the equipment information from the costing spreadsheet's 'material_hvac' sheet whose 'material_id' matches
         # the id.
-        mat_cost_info = @costing_database['raw']['materials_hvac'].select {|data|
+        mat_cost_info = @costing_database['materials_hvac'].select {|data|
           data['material_id'].to_f.round(0) == id.to_f.round(0)
         }.first
         # If it cannot find it there is an issue with either the 'materials_hvac' sheet or the 'hvac_vent_ahu' sheet which
@@ -507,7 +507,7 @@ module BTAP
     def get_vent_system_mult(loop_equip:, mult_floor: nil)
       # Look for all of the equipment in the materials_hvac sheet that has a 'Material' that matches the cat_search
       # criteria.
-      heat_cool_cost = @costing_database['raw']['materials_hvac'].select {|data|
+      heat_cool_cost = @costing_database['materials_hvac'].select {|data|
         data['Material'].to_s.upcase == loop_equip[:cat_search].to_s.upcase
       }
 
@@ -568,7 +568,7 @@ module BTAP
     # and the maximum number (which will be an integer).
     def get_ahu_mult(loop_equip:)
       # Look for the largest air handler that matches the system type, heating fuel, and cooling type requirements
-      ahu = @costing_database['raw']['hvac_vent_ahu'].select {|data|
+      ahu = @costing_database['hvac_vent_ahu'].select {|data|
         data['Sys_type'].to_f.round(0) == loop_equip[:sys_type].to_f.round(0) and
             data['Htg'].to_s.upcase == loop_equip[:heating_fuel].to_s.upcase and
             data['Clg'].to_s.upcase == loop_equip[:cooling_type].to_s.upcase
@@ -590,7 +590,7 @@ module BTAP
       # Get the revised required air flow rate by dividing the air loop air flow by the number of air handlers
       rev_air_flow = loop_equip[:airloop_flow_lps].to_f / multiplier
       # Find air handlers that can meet that air flow and choose the smallest one that meets the requirement.
-      rev_ahu = @costing_database['raw']['hvac_vent_ahu'].select {|data|
+      rev_ahu = @costing_database['hvac_vent_ahu'].select {|data|
         data['Sys_type'].to_f.round(0) == loop_equip[:sys_type].to_f.round(0) and
           data['Htg'].to_s.upcase == loop_equip[:heating_fuel].to_s.upcase and
           data['Clg'].to_s.upcase == loop_equip[:cooling_type].to_s.upcase and
@@ -720,7 +720,7 @@ module BTAP
       if equipment_info[:heating_fuel] == 'HP'
         if sys_type == 3 || sys_type == 6
           # Remove the DX cooling unit for ashp in type 3 and 6 systems
-          heat_cool_cost = @costing_database['raw']['materials_hvac'].select {|data|
+          heat_cool_cost = @costing_database['materials_hvac'].select {|data|
             data['Material'].to_s.upcase == 'DX' and
                 data['Size'].to_f.round(8) >= equipment_info[:mech_capacity_kw].to_f
           }.first
@@ -730,7 +730,7 @@ module BTAP
           total_cost -= (get_vent_mat_cost(mat_cost_info: heat_cool_cost))*multiplier
 
           # Remove the heating coil for ashp in type 3 and 6 systems
-          heat_cool_cost = @costing_database['raw']['materials_hvac'].select {|data|
+          heat_cool_cost = @costing_database['materials_hvac'].select {|data|
             data['Material'].to_s.upcase == 'COILS' and
                 data['Size'].to_f.round(8) >= equipment_info[:mech_capacity_kw].to_f
           }.first
@@ -744,7 +744,7 @@ module BTAP
         # This needs to be refined as well.  Only add the cost of an electric heat if a heater (presumably of any type) if
         # one is not already explicitly modeled in the air loop (and thus costed already as part of this method).  This is
         # also part of btap_tasks issue 156.
-        heat_cool_cost = @costing_database['raw']['materials_hvac'].select {|data|
+        heat_cool_cost = @costing_database['materials_hvac'].select {|data|
           data['Material'].to_s.upcase == 'ELECHEAT' and
               data['Size'].to_f.round(8) >= equipment_info[:mech_capacity_kw].to_f
         }.first
@@ -779,7 +779,7 @@ module BTAP
       multiplier = 1.0
       # Find the smallest piece of equipment in 'materials_hvac' sheet that matches the equipment type and meets the
       # capacity requirement.
-      heat_cool_cost_data = @costing_database['raw']['materials_hvac'].select {|data|
+      heat_cool_cost_data = @costing_database['materials_hvac'].select {|data|
         data['Material'].to_s.upcase == equipment_info[:cat_search].to_s.upcase and
           data['Size'].to_f.round(8) >= equipment_info[:mech_capacity_kw].to_f
       }.min_by{|heat_cool| heat_cool['Size'].to_f}
@@ -851,7 +851,7 @@ module BTAP
       mult = 1.0
       # Find an air handler in the 'hvac_vent_ahu' sheet that matches the system_type, air flow rate, heating type and
       # cooling type.
-      ahu = @costing_database['raw']['hvac_vent_ahu'].select {|data|
+      ahu = @costing_database['hvac_vent_ahu'].select {|data|
         data['Sys_type'].to_f.round(0) == sys_type.to_f.round(0) and
             data['Supply_air'].to_f >= airloop_flow_lps and
             data['Htg'].to_s == heating_fuel and
@@ -1286,17 +1286,17 @@ module BTAP
       cost_info.each do |comp|
         comp_info = nil
         if comp[:unit].to_s == 'none'
-          comp_info = @costing_database['raw']['materials_hvac'].select {|data|
+          comp_info = @costing_database['materials_hvac'].select {|data|
             data['Material'].to_s.upcase == comp[:mat].to_s.upcase and
                 data['Size'].to_f.round(2) == comp[:size].to_f.round(2)
           }.first
         elsif comp[:size].to_f == 0
-          comp_info = @costing_database['raw']['materials_hvac'].select {|data|
+          comp_info = @costing_database['materials_hvac'].select {|data|
             data['Material'].to_s.upcase == comp[:mat].to_s.upcase and
                 data['unit'].to_s.upcase == comp[:unit].to_s.upcase
           }.first
         else
-          comp_info = @costing_database['raw']['materials_hvac'].select {|data|
+          comp_info = @costing_database['materials_hvac'].select {|data|
             data['Material'].to_s.upcase == comp[:mat].to_s.upcase and
                 data['Size'].to_f.round(2) == comp[:size].to_f.round(2) and
                 data['unit'].to_s.upcase == comp[:unit].to_s.upcase
@@ -1904,13 +1904,13 @@ module BTAP
 
     def get_duct_cost(cost_info:)
       comp_info = nil
-      comp_info_all = @costing_database['raw']['materials_hvac'].select {|data|
+      comp_info_all = @costing_database['materials_hvac'].select {|data|
         data['Material'].to_s.upcase == cost_info[:mat].to_s.upcase and
             data['Size'].to_f.round(1) >= cost_info[:size].to_f.round(1) and
             data['unit'].to_s.upcase == cost_info[:unit].to_s.upcase
       }
       if comp_info_all.nil? || comp_info_all.empty?
-        max_size_info = @costing_database['raw']['materials_hvac'].select {|data|
+        max_size_info = @costing_database['materials_hvac'].select {|data|
           data['Material'].to_s.upcase == cost_info[:mat].to_s.upcase
         }
         if max_size_info.nil?

@@ -56,14 +56,14 @@ module BTAP
           # Get standard lighting sets based on collected information
           # (spacetype, no of stories, etc.).
           if space_has_no_light == false
-            lighting_set = @costing_database['raw']['lighting_sets'].detect {|data|
+            lighting_set = @costing_database['lighting_sets'].detect {|data|
               data['template'].to_s.gsub(/\s*/, '') == template_type and
               data['building_type'].to_s.downcase   == building_type.to_s.downcase and
               data['space_type'].to_s.downcase      == space_type.to_s.downcase and
               data['Type'].to_s.downcase            == light_type.to_s.downcase
             }
           else
-            lighting_set = @costing_database['raw']['lighting_sets'].detect {|data|
+            lighting_set = @costing_database['lighting_sets'].detect {|data|
               data['template'].to_s.gsub(/\s*/, '') == template_type and
               data['building_type'].to_s.downcase   == building_type.to_s.downcase and
               data['space_type'].to_s.downcase      == space_type.to_s.downcase
@@ -100,12 +100,12 @@ module BTAP
           if fixtureType != 'Nil'
 
             # Get lighting type sets based on fixtureType.
-            lighting_type = @costing_database['raw']['lighting'].select {|lighting_layer_data|
+            lighting_type = @costing_database['lighting'].select {|lighting_layer_data|
               lighting_layer_data['lighting_type_id'].to_s == fixtureType.to_s
             }.first
 
             # Scan through layer IDs in id_layers field to get API data from materials_lighting sheet
-            materials_lighting_database = @costing_database["raw"]["materials_lighting"]
+            materials_lighting_database = @costing_database["materials_lighting"]
 
             layer_type_IDs     = []
             layer_type_mult    = []

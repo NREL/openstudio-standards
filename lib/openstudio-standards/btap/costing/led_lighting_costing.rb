@@ -77,7 +77,7 @@ module BTAP
             # Costing-related step: Find 'id_layers' and
             # 'id_layers_quantity_multipliers' based on fixture_type; and
             # calculate LED cost
-            search_id_layers = @costing_database['raw']['lighting'].select { |data|
+            search_id_layers = @costing_database['lighting'].select { |data|
               data['lighting_type_id'].to_f.round(1) == fixture_type.to_f.round(1)
             }.first
             if search_id_layers.nil?
@@ -85,7 +85,7 @@ module BTAP
             end
             ids = search_id_layers['id_layers'].to_s.split(',')
 
-            search_id_layers_quantity_multipliers = @costing_database['raw']['lighting'].select { |data|
+            search_id_layers_quantity_multipliers = @costing_database['lighting'].select { |data|
               data['lighting_type_id'].to_f.round(1) == fixture_type.to_f.round(1)
             }.first
             if search_id_layers_quantity_multipliers.nil?
