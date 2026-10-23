@@ -11,7 +11,7 @@ module OpenstudioStandards
     # @return [Boolean] returns true if successful, false if not
     def self.set_standards_space_type_additional_properties(model, space_type_field: 'StandardsSpaceType', reset_standards_space_type: false)
       # load space types data
-      space_types_data = JSON.parse(File.read("#{File.dirname(__FILE__)}/data/level_1_space_types.json"), symbolize_names: true)
+      space_types_data = JSON.parse(File.read("#{File.dirname(__FILE__)}/data/space_types.json"), symbolize_names: true)
 
       # set additional properties for each space type
       model.getSpaceTypes.each do |space_type|
@@ -40,6 +40,10 @@ module OpenstudioStandards
           space_type.additionalProperties.setFeature('electric_equipment_space_type', electric_equipment_space_type_name)
           natural_gas_equipment_space_type_name = space_type_properties[:natural_gas_equipment_space_type_name].nil? ? 'na' : space_type_properties[:natural_gas_equipment_space_type_name]
           space_type.additionalProperties.setFeature('natural_gas_equipment_space_type', natural_gas_equipment_space_type_name)
+          refrigeration_space_type_name = space_type_properties[:refrigeration_space_type_name].nil? ? 'na' : space_type_properties[:refrigeration_space_type_name]
+          space_type.additionalProperties.setFeature('refrigeration_space_type', refrigeration_space_type_name)
+          service_water_space_type_name = space_type_properties[:service_water_space_type_name].nil? ? 'na' : space_type_properties[:service_water_space_type_name]
+          space_type.additionalProperties.setFeature('service_water_space_type', service_water_space_type_name)
           ventilation_space_type_name = space_type_properties[:ventilation_space_type_name].nil? ? 'na' : space_type_properties[:ventilation_space_type_name]
           space_type.additionalProperties.setFeature('ventilation_space_type', ventilation_space_type_name)
           schedule_set_name = space_type_properties[:schedule_set_name].nil? ? 'na' : space_type_properties[:schedule_set_name]

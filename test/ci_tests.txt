@@ -54,12 +54,13 @@ modules/schedules/test_schedules_information.rb
 modules/schedules/test_schedules_modify.rb
 modules/schedules/test_schedules_parametric.rb
 modules/service_water_heating/test_create_piping_losses.rb
-modules/service_water_heating/test_create_typical.rb
+modules/service_water_heating/test_create_typical_service_water.rb
 modules/service_water_heating/test_create_water_heater.rb
 modules/service_water_heating/test_create_water_heating_loop.rb
 modules/service_water_heating/test_create_water_use.rb
 modules/space/test_space.rb
 modules/space_type/test_space_type.rb
+modules/space_type/test_space_type_information.rb
 modules/thermal_zone/test_thermal_zone_information.rb
 modules/thermal_zone/test_thermostat_schedules.rb
 modules/weather/test_weather_information.rb

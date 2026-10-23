@@ -4,11 +4,6 @@ class TestCreateTypicalServiceWaterHeating < Minitest::Test
   def setup
     @swh = OpenstudioStandards::ServiceWaterHeating
 
-    # load model and set up weather file
-    template = '90.1-2010'
-    @climate_zone = 'ASHRAE 169-2013-2A'
-    @std = Standard.build(template)
-
     # create output directory
     FileUtils.mkdir_p "#{__dir__}/output"
   end
@@ -18,8 +13,12 @@ class TestCreateTypicalServiceWaterHeating < Minitest::Test
     output_dir = "#{__dir__}/output/#{__method__}"
     FileUtils.mkdir_p output_dir
 
-    model = @std.safe_load_model("#{__dir__}/../../os_stds_methods/models/QuickServiceRestaurant_2A_2010.osm")
-    model.save("#{output_dir}/in.osm", true)
+    # load model
+    std = Standard.build('90.1-2013')
+    model = std.safe_load_model("#{__dir__}/../../os_stds_methods/models/QuickServiceRestaurant_2A_2010.osm")
+
+    # add new standards space types and set additional properties
+    std.prototype_space_type_map(model, set_additional_properties: true)
 
     # remove swh loops
     model.getPlantLoops.each(&:remove)
@@ -27,8 +26,6 @@ class TestCreateTypicalServiceWaterHeating < Minitest::Test
     # default water heater
     created_loops = @swh.create_typical_service_water_heating(model)
     assert_equal(1, created_loops.size)
-
-    model.save("#{output_dir}/out.osm", true)
   end
 
   def test_create_typical_service_water_heating_school
@@ -36,8 +33,12 @@ class TestCreateTypicalServiceWaterHeating < Minitest::Test
     output_dir = "#{__dir__}/output/#{__method__}"
     FileUtils.mkdir_p output_dir
 
-    model = @std.safe_load_model("#{__dir__}/../../os_stds_methods/models/test_school.osm")
-    model.save("#{output_dir}/in.osm", true)
+    # load model
+    std = Standard.build('90.1-2013')
+    model = std.safe_load_model("#{__dir__}/../../os_stds_methods/models/test_school.osm")
+
+    # add new standards space types and set additional properties
+    std.prototype_space_type_map(model, set_additional_properties: true)
 
     # remove swh loops
     model.getPlantLoops.each { |swh_loop| swh_loop.remove unless (swh_loop.name == 'Hot Water Loop') }
@@ -45,8 +46,6 @@ class TestCreateTypicalServiceWaterHeating < Minitest::Test
     # default water heater
     created_loops = @swh.create_typical_service_water_heating(model)
     assert(created_loops.size > 1)
-
-    model.save("#{output_dir}/out.osm", true)
   end
 
   def test_create_typical_service_water_heating_apartment_units
@@ -54,8 +53,12 @@ class TestCreateTypicalServiceWaterHeating < Minitest::Test
     output_dir = "#{__dir__}/output/#{__method__}"
     FileUtils.mkdir_p output_dir
 
-    model = @std.safe_load_model("#{__dir__}/../../../data/geometry/ASHRAEMidriseApartment.osm")
-    model.save("#{output_dir}/in.osm", true)
+    # load model
+    std = Standard.build('90.1-2013')
+    model = std.safe_load_model("#{__dir__}/../../../data/geometry/ASHRAEMidriseApartment.osm")
+
+    # add new standards space types and set additional properties
+    std.prototype_space_type_map(model, set_additional_properties: true)
 
     model.getSpaces.each do |space|
       space.additionalProperties.setFeature('num_units', 1) if space.name.get.include?('Apartment')
@@ -64,13 +67,12 @@ class TestCreateTypicalServiceWaterHeating < Minitest::Test
 
     # default water heater
     created_loops = @swh.create_typical_service_water_heating(model)
+    model.save("#{output_dir}/out.osm", true)
     assert(created_loops.size > 10)
 
     space = model.getSpaceByName('G N1 Apartment').get
     water_use_equip_def = space.waterUseEquipment[0].waterUseEquipmentDefinition
     assert(water_use_equip_def.name.get.include?('2 unit(s)'))
-
-    model.save("#{output_dir}/out.osm", true)
   end
 
   def test_create_typical_service_water_heating_secondary_school
@@ -78,12 +80,12 @@ class TestCreateTypicalServiceWaterHeating < Minitest::Test
     output_dir = "#{__dir__}/output/#{__method__}"
     FileUtils.mkdir_p output_dir
 
-    # gather inputs
-    template = 'DOE Ref 1980-2004'
-    standard = Standard.build(template)
+    # load model
+    std = Standard.build('DOE Ref 1980-2004')
+    model = std.safe_load_model("#{__dir__}/../../doe_prototype/models/SecondarySchool_6A_1980-2004.osm")
 
-    model = standard.safe_load_model("#{__dir__}/../../doe_prototype/models/SecondarySchool_6A_1980-2004.osm")
-    model.save("#{output_dir}/in.osm", true)
+    # add new standards space types and set additional properties
+    std.prototype_space_type_map(model, set_additional_properties: true)
 
     # remove swh loops
     model.getPlantLoops.each { |swh_loop| swh_loop.remove unless (swh_loop.name == 'Hot Water Loop') }
@@ -123,7 +125,6 @@ class TestCreateTypicalServiceWaterHeating < Minitest::Test
     # check results
     assert_in_epsilon(264.0, non_booster_capacity_kbtu_hr, 0.40)
     assert_in_epsilon(264.0, non_booster_volume_gal, 0.40)
-    model.save("#{output_dir}/out.osm", true)
   end
 
   def test_create_typical_service_water_heating_large_hotel
@@ -131,12 +132,12 @@ class TestCreateTypicalServiceWaterHeating < Minitest::Test
     output_dir = "#{__dir__}/output/#{__method__}"
     FileUtils.mkdir_p output_dir
 
-    # gather inputs
-    template = '90.1-2010'
-    standard = Standard.build(template)
+    # load model
+    std = Standard.build('90.1-2010')
+    model = std.safe_load_model("#{__dir__}/../../doe_prototype/models/LargeHotel_3A_2010.osm")
 
-    model = standard.safe_load_model("#{__dir__}/../../doe_prototype/models/LargeHotel_3A_2010.osm")
-    model.save("#{output_dir}/in.osm", true)
+    # add new standards space types and set additional properties
+    std.prototype_space_type_map(model, set_additional_properties: true)
 
     # remove swh loops
     model.getPlantLoops.each { |swh_loop| swh_loop.remove unless (swh_loop.name == 'Hot Water Loop') }
@@ -184,12 +185,12 @@ class TestCreateTypicalServiceWaterHeating < Minitest::Test
     output_dir = "#{__dir__}/output/#{__method__}"
     FileUtils.mkdir_p output_dir
 
-    # gather inputs
-    template = '90.1-2013'
-    standard = Standard.build(template)
+    # load model
+    std = Standard.build('90.1-2013')
+    model = std.safe_load_model("#{__dir__}/../../doe_prototype/models/MidriseApartment_2A_2013.osm")
 
-    model = standard.safe_load_model("#{__dir__}/../../doe_prototype/models/MidriseApartment_2A_2013.osm")
-    model.save("#{output_dir}/in.osm", true)
+    # add new standards space types and set additional properties
+    std.prototype_space_type_map(model, set_additional_properties: true)
 
     # remove swh loops
     model.getPlantLoops.each { |swh_loop| swh_loop.remove unless (swh_loop.name == 'Hot Water Loop') }
@@ -198,9 +199,7 @@ class TestCreateTypicalServiceWaterHeating < Minitest::Test
     created_loops = @swh.create_typical_service_water_heating(model)
 
     # check results
-    assert_equal(15, created_loops.size, 'Expected 1 loop per apartment, for a total of 15 loops.')
-
-    model.save("#{output_dir}/out.osm", true)
+    assert_equal(23, created_loops.size, 'Expected 1 loop per apartment, for a total of 23 loops.')
   end
 
   def test_create_typical_service_water_heating_stripmall
@@ -208,12 +207,12 @@ class TestCreateTypicalServiceWaterHeating < Minitest::Test
     output_dir = "#{__dir__}/output/#{__method__}"
     FileUtils.mkdir_p output_dir
 
-    # gather inputs
-    template = '90.1-2004'
-    standard = Standard.build(template)
+    # load model
+    std = Standard.build('90.1-2004')
+    model = std.safe_load_model("#{__dir__}/../../doe_prototype/models/RetailStripmall_2A_2004.osm")
 
-    model = standard.safe_load_model("#{__dir__}/../../doe_prototype/models/RetailStripmall_2A_2004.osm")
-    model.save("#{output_dir}/in.osm", true)
+    # add new standards space types and set additional properties
+    std.prototype_space_type_map(model, set_additional_properties: true)
 
     # remove swh loops
     model.getPlantLoops.each { |swh_loop| swh_loop.remove unless (swh_loop.name == 'Hot Water Loop') }
@@ -222,9 +221,23 @@ class TestCreateTypicalServiceWaterHeating < Minitest::Test
     created_loops = @swh.create_typical_service_water_heating(model)
 
     # check results
-    assert_equal(10, created_loops.size, 'Expected 1 loop per space, for a total of 10 loops.')
+    assert_equal(0, created_loops.size, 'Expected 0 loops for strip mall space type.')
+  end
 
-    model.save("#{output_dir}/out.osm", true)
+  def test_create_typical_service_water_heating_supermarket
+    # set output directory
+    output_dir = "#{__dir__}/output/#{__method__}"
+    FileUtils.mkdir_p output_dir
+
+    # load model
+    std = Standard.build('90.1-2004')
+    model = std.safe_load_model("#{File.dirname(__FILE__)}/../../../data/geometry/ASHRAESuperMarket.osm")
+
+    # add new standards space types and set additional properties
+    std.prototype_space_type_map(model, set_additional_properties: true)
+
+    # create typical service water loops
+    created_loops = @swh.create_typical_service_water_heating(model)
   end
 
   def test_create_typical_service_water_heating_multiuse
@@ -232,20 +245,18 @@ class TestCreateTypicalServiceWaterHeating < Minitest::Test
     output_dir = "#{__dir__}/output/#{__method__}"
     FileUtils.mkdir_p output_dir
 
-    # gather inputs
-    template = '90.1-2010'
-    standard = Standard.build(template)
+    # load model
+    std = Standard.build('90.1-2010')
+    model = std.safe_load_model("#{__dir__}/../../doe_prototype/models/Multiuse_Office_LargeHotel.osm")
 
-    model = standard.safe_load_model("#{__dir__}/../../doe_prototype/models/Multiuse_Office_LargeHotel.osm")
-    model.save("#{output_dir}/in.osm", true)
+    # add new standards space types and set additional properties
+    std.prototype_space_type_map(model, set_additional_properties: true)
 
     # remove swh loops
     model.getPlantLoops.each { |swh_loop| swh_loop.remove unless (swh_loop.name == 'Hot Water Loop') }
 
     # create typical service water loops
     created_loops = @swh.create_typical_service_water_heating(model)
-
-    model.save("#{output_dir}/out.osm", true)
   end
 
   def test_create_typical_service_water_heating_deer_school
@@ -253,16 +264,21 @@ class TestCreateTypicalServiceWaterHeating < Minitest::Test
     output_dir = "#{__dir__}/output/#{__method__}"
     FileUtils.mkdir_p output_dir
 
-    model = @std.safe_load_model("#{__dir__}/../../deer_prototype/models/epr_test.osm")
-    model.save("#{output_dir}/in.osm", true)
+    # create model
+    model = OpenStudio::Model::Model.new
+    args = {}
+    args['total_bldg_floor_area'] = 50000.0
+    args['bldg_type_a'] = 'ESe'
+    args['template'] = 'DEER 2011'
+    result = OpenstudioStandards::Geometry.create_bar_from_building_type_ratios(model, args)
+    model.getBuilding.setStandardsBuildingType('ESe')
 
-    # remove swh loops
-    model.getPlantLoops.each { |swh_loop| swh_loop.remove unless (swh_loop.name == 'Hot Water Loop') }
+    # add new standards space types and set additional properties
+    std = Standard.build('DEER 2011')
+    std.prototype_space_type_map(model, set_additional_properties: true)
 
     # default water heater
     created_loops = @swh.create_typical_service_water_heating(model)
-    assert(created_loops.size > 1, "Expected more than 1 service water heating loop.")
-
-    model.save("#{output_dir}/out.osm", true)
+    assert(created_loops.size > 0, "Expected at least one service water heating loop.")
   end
 end

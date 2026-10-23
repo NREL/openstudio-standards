@@ -59,7 +59,7 @@ module OpenstudioStandards
 
   # ServiceWaterHeating Module
   require_relative 'openstudio-standards/service_water_heating/create_piping_losses'
-  require_relative 'openstudio-standards/service_water_heating/create_typical'
+  require_relative 'openstudio-standards/service_water_heating/create_typical_service_water'
   require_relative 'openstudio-standards/service_water_heating/create_water_heater'
   require_relative 'openstudio-standards/service_water_heating/create_water_heating_loop'
   require_relative 'openstudio-standards/service_water_heating/create_water_use'
@@ -70,6 +70,7 @@ module OpenstudioStandards
 
   # Space Type Module
   require_relative 'openstudio-standards/space_type/standards_space_type'
+  require_relative 'openstudio-standards/space_type/space_type_information'
 
   # Thermal Zone Module
   require_relative 'openstudio-standards/thermal_zone/information'
