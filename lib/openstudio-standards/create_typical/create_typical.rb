@@ -38,6 +38,7 @@ module OpenstudioStandards
     # @param add_thermostat [Boolean] Add thermostats to thermal zones based on the standards space type
     # @param add_refrigeration [Boolean] Add refrigerated cases and walkin refrigeration
     # @param refrigeration_template [String] The refrigeration technology level, either 'old', 'new', or 'advanced'
+    # @param schedule_method [String] The method for creating schedules for internal loads and thermostats. Options are 'prototype' or 'parametric'. 'prototype' uses the default schedules from the legacy DOE Prototype Models. 'parametric' creates schedules based on parametric occupancy schedules and derives internal load schedules from those. 'parametric' is recommend, as it results in more realistic schedules and better alignment between internal loads and occupancy.
     # @param modify_wkdy_op_hrs [Boolean] Modify the default weekday hours of operation
     # @param wkdy_op_hrs_start_time [Double] Weekday operating hours start time. Enter as a fractional value, e.g. 5:15pm is 17.25. Only used if modify_wkdy_op_hrs is true.
     # @param wkdy_op_hrs_duration [Double] Weekday operating hours duration from start time. Enter as a fractional value, e.g. 5:15pm is 17.25. Only used if modify_wkdy_op_hrs is true.
@@ -78,12 +79,14 @@ module OpenstudioStandards
                                                 add_thermostat: true,
                                                 add_refrigeration: true,
                                                 refrigeration_template: 'new',
+                                                schedule_method: 'parametric',
                                                 modify_wkdy_op_hrs: false,
                                                 wkdy_op_hrs_start_time: 8.0,
                                                 wkdy_op_hrs_duration: 8.0,
                                                 modify_wknd_op_hrs: false,
                                                 wknd_op_hrs_start_time: 8.0,
                                                 wknd_op_hrs_duration: 8.0,
+                                                schedule_overrides: nil,
                                                 hoo_var_method: 'hours',
                                                 enable_dst: true,
                                                 unmet_hours_tolerance_r: 1.0,
@@ -92,6 +95,17 @@ module OpenstudioStandards
                                                 sizing_run_directory: nil)
       # sizing run directory
       sizing_run_directory = Dir.pwd if sizing_run_directory.nil?
+
+      # accept schedule_overrides as a Ruby array (API callers) or a JSON string
+      # (flat-typed measure callers). See space_type_apply_parametric_internal_load_schedules.
+      if schedule_overrides.is_a?(String) && !schedule_overrides.strip.empty?
+        begin
+          schedule_overrides = JSON.parse(schedule_overrides, symbolize_names: true)
+        rescue JSON::ParserError => e
+          OpenStudio.logFree(OpenStudio::Error, 'openstudio.standards.CreateTypical', "Could not parse schedule_overrides JSON string: #{e.message}")
+          schedule_overrides = nil
+        end
+      end
 
       # report initial condition of model
       initial_object_size = model.getModelObjects.size
@@ -242,11 +256,39 @@ module OpenstudioStandards
           end
 
           # apply internal load schedules
-          standard.space_type_apply_internal_load_schedules(space_type)
+          if schedule_method == 'prototype'
+            standard.space_type_apply_standard_internal_load_schedules(space_type)
+          else # parametric
+            # Pass the building hours of operation through so parametric schedules shift
+            # to match. Only forward hours the caller asked to modify; otherwise
+            # the parametric expansion falls back to its standalone standards.
+            OpenstudioStandards::Schedules.space_type_apply_parametric_internal_load_schedules(
+              space_type,
+              wkdy_start_time: modify_wkdy_op_hrs ? wkdy_op_hrs_start_time : nil,
+              wkdy_duration: modify_wkdy_op_hrs ? wkdy_op_hrs_duration : nil,
+              wknd_start_time: modify_wknd_op_hrs ? wknd_op_hrs_start_time : nil,
+              wknd_duration: modify_wknd_op_hrs ? wknd_op_hrs_duration : nil,
+              schedule_overrides: schedule_overrides
+            )
+          end
 
-          # extend space type name to include the template. Consider this as well for load defs
-          space_type.setName("#{space_type.name} - #{template}")
-          OpenStudio.logFree(OpenStudio::Info, 'openstudio.standards.CreateTypical', "Adding loads to space type named #{space_type.name}")
+          # Include the template as an additional property on the space type object if present
+          space_type.additionalProperties.setFeature('template', "#{template}")
+        end
+
+        # warn about override entries that matched no space type in the model
+        if schedule_method != 'prototype' && schedule_overrides.is_a?(Array) && !schedule_overrides.empty?
+          available_keys = ['*']
+          model.getSpaceTypes.each do |st|
+            available_keys << st.additionalProperties.getFeatureAsString('schedule_set').get if st.additionalProperties.getFeatureAsString('schedule_set').is_initialized
+            available_keys << st.additionalProperties.getFeatureAsString('standards_space_type').get if st.additionalProperties.getFeatureAsString('standards_space_type').is_initialized
+          end
+          schedule_overrides.each do |entry|
+            key = (entry[:space_type] || entry[:schedule_set] || entry[:standards_space_type]).to_s
+            unless available_keys.include?(key)
+              OpenStudio.logFree(OpenStudio::Warn, 'openstudio.standards.CreateTypical', "schedule_overrides entry '#{key}' did not match any space type's schedule set or standards space type.")
+            end
+          end
         end
 
         # warn if spaces in model without space type
@@ -729,7 +771,10 @@ module OpenstudioStandards
       end
 
       # hours of operation
-      if modify_wkdy_op_hrs || modify_wknd_op_hrs
+      # The parametric schedule method consumes the building hours of operation directly
+      # (per space type, with offsets) when building the load schedules above, so this
+      # legacy hours-of-operation rewrite applies only to the prototype schedule method.
+      if (modify_wkdy_op_hrs || modify_wknd_op_hrs) && schedule_method == 'prototype'
         # Infer the current hours of operation schedule for the building
         op_sch = OpenstudioStandards::Schedules.model_infer_hours_of_operation_building(model)
 
@@ -923,7 +968,12 @@ module OpenstudioStandards
           end
 
           # assign internal load schedules
-          standard.space_type_apply_internal_load_schedules(space_type)
+          # Stub space types intentionally use the prototype schedules.
+          # This helper generates placeholder space types for geometry/space-type creation
+          # and does not carry the schedule_method or the schedule_set additional property
+          # that the parametric orchestrator resolves against, so the parametric path does
+          # not apply here. The parametric method is used in create_typical_building_from_model.
+          standard.space_type_apply_standard_internal_load_schedules(space_type)
 
           # assign colors
           standard.space_type_apply_rendering_color(space_type)
